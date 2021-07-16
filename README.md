@@ -9,6 +9,8 @@ Full documentation of PyXOpto is available [here](https://xopto.github.io/pyxopt
 
 ## Installation
 
+Detailed instructions are available [here](https://xopto.github.io/pyxopto/docs/html/source/installation.html).
+
 ### Python
 PyXOpto requires a Python 3 installation. Most of the Linux OS distributions will come with a preinstalled Python 3. On Windows OS, the easiest way to install the Python 3 programming language is to use the [WinPython](https://github.com/winpython) or [Anaconda](https://docs.anaconda.com/anaconda/install/windows/) distributions. There are numerous integrated development environments that work with Python, among these [Visual Studio Code](https://code.visualstudio.com) and [PyCharm](https://www.jetbrains.com/pycharm/) are two popular cross-platform options. The [WinPython](https://sourceforge.net/projects/winpython/files/WinPython_3.9/3.9.4.0/) distributions can be downloaded with an embedded and preconfigured Visual Studio Code (e.g. [Winpython64-3.9.4.0cod.exe](https://sourceforge.net/projects/winpython/files/WinPython_3.9/3.9.4.0/Winpython64-3.9.4.0cod.exe/download)).
 
