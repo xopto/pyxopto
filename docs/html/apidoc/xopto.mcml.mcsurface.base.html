@@ -1,0 +1,385 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.mcml.mcsurface.base module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.mcml.mcsurface.lambertian module" href="xopto.mcml.mcsurface.lambertian.html" />
+    <link rel="prev" title="xopto.mcml.mcsurface.probe.sixaroundone module" href="xopto.mcml.mcsurface.probe.sixaroundone.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.mcml.mcsurface.base">
+<span id="xopto-mcml-mcsurface-base-module"></span><h1>xopto.mcml.mcsurface.base module<a class="headerlink" href="#module-xopto.mcml.mcsurface.base" title="Permalink to this headline">¶</a></h1>
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.BOTTOM">
+<span class="sig-name descname"><span class="pre">BOTTOM</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'bottom'</span></em><a class="headerlink" href="#xopto.mcml.mcsurface.base.BOTTOM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifier of the bottom sample surface.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.NONE">
+<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'none'</span></em><a class="headerlink" href="#xopto.mcml.mcsurface.base.NONE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifier used for a surface that is not yet assigned.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutAny">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SurfaceLayoutAny</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'none'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayoutAny"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutAny" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutBase" title="xopto.mcml.mcsurface.base.SurfaceLayoutBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcml.mcsurface.base.SurfaceLayoutBase</span></code></a></p>
+<p>Base class of surface layouts that can be used for both the
+top or bottom sample surface.</p>
+<p>Create a layout for the top or bottom sample surface. By default
+the location is not initialized.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutBase">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SurfaceLayoutBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'top'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayoutBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcobject.McObject</span></code></a></p>
+<p>Base class of all the sample surface layouts.</p>
+<p>Complex surface layout at the specified sample surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>location</strong> (<em>TOP</em><em> or </em><em>BOTTOM</em>) – Location of the sample surface to which the layout applies.</p>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutBase.location">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">location</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutBase.location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of the surface layout.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutBottom">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SurfaceLayoutBottom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayoutBottom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutBottom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutBase" title="xopto.mcml.mcsurface.base.SurfaceLayoutBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcml.mcsurface.base.SurfaceLayoutBase</span></code></a></p>
+<p>Base class of the bottom sample surface layout.</p>
+<p>Create a layout for the bottom sample surface.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutDefault">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SurfaceLayoutDefault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'none'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayoutDefault"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutDefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutAny" title="xopto.mcml.mcsurface.base.SurfaceLayoutAny"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcml.mcsurface.base.SurfaceLayoutAny</span></code></a></p>
+<p>Default / dummy layout for the top or bottom sample surface.</p>
+<p>Create a layout for the top or bottom sample surface. By default
+the location is not initialized.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutDefault.cl_declaration">
+<span class="sig-name descname"><span class="pre">cl_declaration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayoutDefault.cl_declaration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutDefault.cl_declaration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structure that defines the dummy reflector in the Monte Carlo simulator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutDefault.cl_implementation">
+<span class="sig-name descname"><span class="pre">cl_implementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayoutDefault.cl_implementation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutDefault.cl_implementation" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenCL implementation of the default surface layout</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutDefault.cl_options">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">cl_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayoutDefault.cl_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutDefault.cl_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raw OpenCL options of the default detector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutDefault.cl_pack">
+<span class="sig-name descname"><span class="pre">cl_pack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayoutDefault.cl_pack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutDefault.cl_pack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills the structure (target) with the data required by the
+Monte Carlo simulator.
+See the <a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutDefault.cl_type" title="xopto.mcml.mcsurface.base.SurfaceLayoutDefault.cl_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SurfaceLayoutDefault.cl_type()</span></code></a> for a detailed
+list of fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mc</strong> (<a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>mcobject.McObject</em></a>) – Monte Carlo simulator instance.</p></li>
+<li><p><strong>target</strong> (<a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><em>cltypes.Structure</em></a>) – Structure that is filled with the source data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>target</strong> – Filled ctypes structure received as an input argument or a new
+instance if the input argument target is None.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure">cltypes.Structure</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutDefault.cl_type">
+<span class="sig-name descname"><span class="pre">cl_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayoutDefault.cl_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutDefault.cl_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structure that is passed to the Monte carlo simulator kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mc</strong> (<a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>McObject</em></a>) – A Monte Carlo simulator instance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>struct</strong> – A structure type that represents the surface layout in
+the Monte Carlo kernel.</p>
+<p>The returned structure type implements the following fields:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>dummy: mc_int_t</dt><dd><p>Dummy field of the dummy detector.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure">cltypes.Structure</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutTop">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SurfaceLayoutTop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayoutTop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutTop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutBase" title="xopto.mcml.mcsurface.base.SurfaceLayoutBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcml.mcsurface.base.SurfaceLayoutBase</span></code></a></p>
+<p>Base class of the top sample surface layout.</p>
+<p>Create a layout for the top sample surface.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayouts">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SurfaceLayouts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">top</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutTop" title="xopto.mcml.mcsurface.base.SurfaceLayoutTop"><span class="pre">xopto.mcml.mcsurface.base.SurfaceLayoutTop</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutBottom" title="xopto.mcml.mcsurface.base.SurfaceLayoutBottom"><span class="pre">xopto.mcml.mcsurface.base.SurfaceLayoutBottom</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayouts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayouts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcobject.McObject</span></code></a></p>
+<p>Container of the top and bottom sample surface layouts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>top</strong> (<a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutTop" title="xopto.mcml.mcsurface.base.SurfaceLayoutTop"><em>SurfaceLayoutTop</em></a><em> or </em><a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutAny" title="xopto.mcml.mcsurface.base.SurfaceLayoutAny"><em>SurfaceLayoutAny</em></a>) – Layout of the top sample surface.</p></li>
+<li><p><strong>bottom</strong> (<a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutBottom" title="xopto.mcml.mcsurface.base.SurfaceLayoutBottom"><em>SurfaceLayoutBottom</em></a><em> or </em><a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutAny" title="xopto.mcml.mcsurface.base.SurfaceLayoutAny"><em>SurfaceLayoutAny</em></a>) – Layout at the bottom sample surface.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayouts.bottom">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">bottom</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcobject.McObject</span></em><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayouts.bottom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bottom sample surface layout.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayouts.cl_declaration">
+<span class="sig-name descname"><span class="pre">cl_declaration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayouts.cl_declaration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayouts.cl_declaration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Declarations of surface layouts in OpenCL.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayouts.cl_implementation">
+<span class="sig-name descname"><span class="pre">cl_implementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayouts.cl_implementation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayouts.cl_implementation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of surface layouts.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayouts.cl_options">
+<span class="sig-name descname"><span class="pre">cl_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayouts.cl_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayouts.cl_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the OpenCL options of the surface layout.</p>
+<p>If the top and / or bottom sample surface layouts are specified
+(not the dummy default layout:py:class:<cite>SurfaceLayoutDefault</cite>),
+the corresponding OpenCL options that activate the use of surface
+layouts are set, i.e. MC_USE_TOP_SURFACE_LAYOUT for the top surface
+and MC_USE_BOTTOM_SURFACE_LAYOUT for the bottom surface.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayouts.cl_pack">
+<span class="sig-name descname"><span class="pre">cl_pack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayouts.cl_pack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayouts.cl_pack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills the structure (target) with the data required by the
+Monte Carlo simulator.
+See the <a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayouts.cl_type" title="xopto.mcml.mcsurface.base.SurfaceLayouts.cl_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SurfaceLayouts.cl_type()</span></code></a> method for a detailed
+list of fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mc</strong> (<a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>mcobject.McObject</em></a>) – Monte Carlo simulator instance.</p></li>
+<li><p><strong>target</strong> (<a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><em>cltypes.Structure</em></a>) – Ctypes structure that is filled with the source data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>target</strong> – Filled structure received as an input argument or a new
+instance if the input argument target is None.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure">cltypes.Structure</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayouts.cl_type">
+<span class="sig-name descname"><span class="pre">cl_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayouts.cl_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayouts.cl_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structure that is passed to the OpenCL simulator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mc</strong> (<a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>McObject</em></a>) – A Monte Carlo simulator instance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>struct</strong> – A structure type that represents surface layouts in the
+Monte Carlo kernel.</p>
+<p>The returned structure type implements the following fields:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>top: SurfaceLayoutTop</dt><dd><p>Layout of the top sample surface (z = 0).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>bottom: SurfaceLayoutBottom</dt><dd><p>Layout of the bottom sample surface (z = 0).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure">cltypes.Structure</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayouts.top">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">top</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcobject.McObject</span></em><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayouts.top" title="Permalink to this definition">¶</a></dt>
+<dd><p>Top sample surface layout.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayouts.types">
+<span class="sig-name descname"><span class="pre">types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">tuple</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayouts.types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayouts.types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a tuple of surface layout types assigned to this instance.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.TOP">
+<span class="sig-name descname"><span class="pre">TOP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'top'</span></em><a class="headerlink" href="#xopto.mcml.mcsurface.base.TOP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifier of the top sample surface.</p>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.mcml.html">xopto.mcml package</a><ul>
+  <li><a href="xopto.mcml.mcsurface.html">xopto.mcml.mcsurface package</a><ul>
+      <li>Previous: <a href="xopto.mcml.mcsurface.probe.sixaroundone.html" title="previous chapter">xopto.mcml.mcsurface.probe.sixaroundone module</a></li>
+      <li>Next: <a href="xopto.mcml.mcsurface.lambertian.html" title="next chapter">xopto.mcml.mcsurface.lambertian module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

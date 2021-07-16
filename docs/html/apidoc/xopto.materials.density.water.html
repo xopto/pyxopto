@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.materials.density.water module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.materials.ri package" href="xopto.materials.ri.html" />
+    <link rel="prev" title="xopto.materials.density.polystyrene module" href="xopto.materials.density.polystyrene.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.materials.density.water">
+<span id="xopto-materials-density-water-module"></span><h1>xopto.materials.density.water module<a class="headerlink" href="#module-xopto.materials.density.water" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.density.water.McCutcheon">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McCutcheon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">293</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/density/water.html#McCutcheon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.density.water.McCutcheon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.materials.density.base.html#xopto.materials.density.base.Density" title="xopto.materials.density.base.Density"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.materials.density.base.Density</span></code></a></p>
+<p>Density of water as given in:
+Water density as function of temperature and salt concentration
+McCutcheon, S.C., Martin, J.L, Barnwell, T.O. Jr. 1993. Water
+Quality in Maidment, D.R. (Editor). Handbook of Hydrology,
+McGraw-Hill, New York, NY (p. 11.3).</p>
+<p>The density of water <img class="math" src="../_images/math/27dc86f9f1b1c3435b2403a869b5870c582facea.png" alt="\rho"/> follows the folowing temperature T
+(C <sup>o</sup>) dependence.
+<img class="math" src="../_images/math/0600cd5331a0a82b0fb323309bdbb21fe0c7ba28.png" alt="\rho = 1000(1 - (T + 288.9414)/(508929.2*(T + 68.12963))*(T - 3.9863)^2)"/></p>
+<p>Water density <img class="math" src="../_images/math/23f2e11be624b5d6a2cd7d32391b243a13c97b35.png" alt="\rho' as a function of temperature and salinity
+:math:"/> kg/m <sup>3</sup> as a function of temperature and
+salinity <img class="math" src="../_images/math/106b04b320e75010b1d8029e59244f234f75e6f9.png" alt="s"/> in g/kg.</p>
+<div class="math">
+<p><img src="../_images/math/19487f2bdbf1fd844fb78ab8b41102c196bdaf24.png" alt="\rho &amp;= \rho + As + Bs^{3/2} + Cs^2
+
+A &amp;= 8.24493 10^{-1} - 4.0899 10^{-3}T + 7.6438 10^{-5}T^2 - 8.2467 10^{-7}T^3 + 5.3675 10^{-9}T^4
+
+B &amp;= -5.724 10^{-3} + 1.0227 10^{-4}T - 1.6546 10^{-6}T^2
+
+C &amp;= 4.8314 10^{-4}"/></p>
+</div><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> (<em>float</em>) – Temperature of the medium (K).</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.density.water.McCutcheon.check_salinity">
+<span class="sig-name descname"><span class="pre">check_salinity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">salinity</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/density/water.html#McCutcheon.check_salinity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.density.water.McCutcheon.check_salinity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the salinity is within valid range and display a warning if
+not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>salinity</strong> (<em>float</em>) – Salinity from 0.0 to 0.035.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.density.water.McCutcheon.is_valid_salinity">
+<span class="sig-name descname"><span class="pre">is_valid_salinity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">salinity</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/xopto/materials/density/water.html#McCutcheon.is_valid_salinity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.density.water.McCutcheon.is_valid_salinity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the salinity is within the valid range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>salinity</strong> (<em>float</em><em> or </em><em>np.ndarray</em>) – Water salinity from 0.0 to 1.0.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>valid</strong> – True if the salinity is within the valid range.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.materials.density.water.McCutcheon.material">
+<span class="sig-name descname"><span class="pre">material</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'water'</span></em><a class="headerlink" href="#xopto.materials.density.water.McCutcheon.material" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.materials.html">xopto.materials package</a><ul>
+  <li><a href="xopto.materials.density.html">xopto.materials.density package</a><ul>
+      <li>Previous: <a href="xopto.materials.density.polystyrene.html" title="previous chapter">xopto.materials.density.polystyrene module</a></li>
+      <li>Next: <a href="xopto.materials.ri.html" title="next chapter">xopto.materials.ri package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,539 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.mcbase.mcutil.axis module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.mcbase.mcutil.boundary module" href="xopto.mcbase.mcutil.boundary.html" />
+    <link rel="prev" title="xopto.mcbase.mcutil package" href="xopto.mcbase.mcutil.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.mcbase.mcutil.axis">
+<span id="xopto-mcbase-mcutil-axis-module"></span><h1>xopto.mcbase.mcutil.axis module<a class="headerlink" href="#module-xopto.mcbase.mcutil.axis" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logscale</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/axis.html#Axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An accumulator/detector axis with linearly or logarithmically spaced
+points/bins.</p>
+<p>Creates a linearly or logarithmically spaced accumulator/detector axis.
+The parameters and data points of the axis can be accessed through
+several properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<em>float</em>) – Start coordinate (left edge) of the accumulator.</p></li>
+<li><p><strong>stop</strong> (<em>float</em>) – Stop coordinate (right edge) of the accumulator.</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Number of bins in the accumulator.</p></li>
+<li><p><strong>logscale</strong> (<em>bool</em>) – Scale of the accumulator. Linear if False (default) or logarithmic
+if True. Note that values of the start and stop parameters are
+threated as unscaled even if logscale is True.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that only the r-axis of RT accumulators supports log-scale.</p>
+<p>Detailed description of the class properties:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>start: float</dt><dd><p>Left edge of the first bin.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>scaled_start: float</dt><dd><p>Logarithm of the start point if bins are distributed
+logarithmically, else equals start.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>stop: float</dt><dd><p>Right edge of the final bin.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>scaled_stop: float</dt><dd><p>Logarithm of the stop point if bins are distributed
+logarithmically, else equals stop.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>span: tuple of two float</dt><dd><p>Full range of the accumulator axis as a tuple (start, stop).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>scaled_span: tuple of two float</dt><dd><p>Full scaled range of the accumulator axis as a tuple
+(scaled_start, scaled_stop).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n: int</dt><dd><p>Number of bins along the axis.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>logscale: bool</dt><dd><p>True, if bins are distributed logarithmically.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>edges: np.ndarray vector</dt><dd><p>Numpy vector of bin edges (number of points is n + 1).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>centers: np.ndarray vector</dt><dd><p>Central positions of the bins.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis.centers">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">centers</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis.centers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Center points of the accumulators.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis.edges">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">edges</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis.edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edges of the accumulators.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><span class="pre">xopto.mcbase.mcutil.axis.Axis</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/axis.html#Axis.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new object from dict. The dict keys must match
+the parameter names defined by the constructor.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis.logscale">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">logscale</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis.logscale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator scale.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis.n">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">n</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis.n" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of accumulators along the axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis.scaled_span">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">scaled_span</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[float,</span> <span class="pre">float]</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis.scaled_span" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scaled accumulator span as [min, max].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis.scaled_start">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">scaled_start</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis.scaled_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scaled accumulator start coordinate.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis.scaled_stop">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">scaled_stop</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis.scaled_stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scaled accumulator stop coordinate.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis.span">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">span</span></span><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis.span" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator span as [min, max].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis.start">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator start coordinate.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis.step">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">step</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator step.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis.stop">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">stop</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator stop coordinate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.Axis.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/axis.html#Axis.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.axis.Axis.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object toa dict.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.RadialAxis">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">RadialAxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logscale</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/axis.html#RadialAxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.axis.RadialAxis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcutil.axis.Axis</span></code></a></p>
+<p>A radial accumulator/detector axis with linearly or logarithmically spaced
+points/bins and corrected accumulator centers.</p>
+<p>Radial axis with corrected bin centers.</p>
+<dl class="simple">
+<dt>The central point of each bin is computed as:</dt><dd><p><img class="math" src="../_images/math/6aa0e8ed3a5d38cbae1cdc403cd3ba276b372130.png" alt="2/3(r_{i}^2 + r_{i}*r_{i + 1} + r_{i + 1}^2)/(r_{i} + r_{i + 1})"/></p>
+</dd>
+</dl>
+<p>For a detailed description of parameters see the Axis documentation.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Correction is based on the assumption that for linear functions of
+reflectance <img class="math" src="../_images/math/f75f80099fd7ac2df661d83295c8841f39a0f876.png" alt="f(r) = a + b r"/> the integral of
+<img class="math" src="../_images/math/8836e812dd28eed5ea9df536da1f6b4540ded4f2.png" alt="f(r) 2 \pi r dr"/> from <img class="math" src="../_images/math/dbc4c429b48dd94e41ee866e1edbf0abededae3a.png" alt="r_i"/> to <img class="math" src="../_images/math/8e0aa728217056ab19e1bab9ea6ce115fd1c43cf.png" alt="r_{i + 1}"/> is equal
+to the integral of <img class="math" src="../_images/math/9eed9bc8c62c2bf223028cc4d5a041fc1003696d.png" alt="f(r_center) 2 \pi r dr"/> from
+<img class="math" src="../_images/math/dbc4c429b48dd94e41ee866e1edbf0abededae3a.png" alt="r_i"/> to <img class="math" src="../_images/math/8e0aa728217056ab19e1bab9ea6ce115fd1c43cf.png" alt="r_{i + 1}"/>, where
+<img class="math" src="../_images/math/8c9b56576110e0ab94e48aeb122c59d86a84b730.png" alt="r_i &lt; r_center &lt; r_{i + 1}"/>.
+Computing the two integrals and equating the terms at coefficients
+<img class="math" src="../_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/> and <img class="math" src="../_images/math/68c7c8c65602677ab56cf7fd88002023f0edc575.png" alt="b"/> yields the “equivalent” center point of the bin
+<img class="math" src="../_images/math/ac7f3e71602e6e9584f876d63264ab386636a489.png" alt="[r_i, r_{i + 1})"/>.
+Note that the two integrals represent surface integral of reflectace.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The spacing of points in the RadialAxis is uneven even if logscale is
+set to False, since correction of the bin centers depends on the
+absolute position of the bin.
+If using data from RadialAxis with the simpson integration method make
+sure to use a version that does not require a fixed step (specify x
+instead of dx in a call to scipy.integrate.simps).
+If using the xopto.utilities.hankel.discreteSimpson method make
+sure to set the value of the uneven parameter to True.</p>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.RadialAxis.centers">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">centers</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.RadialAxis.centers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Corrected centers of the accumulator bins.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.RadialAxis.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcbase.mcutil.axis.RadialAxis" title="xopto.mcbase.mcutil.axis.RadialAxis"><span class="pre">xopto.mcbase.mcutil.axis.RadialAxis</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/axis.html#RadialAxis.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.axis.RadialAxis.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new object from dict. The dict keys must match
+the parameter names defined by the constructor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.RadialAxis.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/axis.html#RadialAxis.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.axis.RadialAxis.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SymmetricAxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_half</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logscale</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/axis.html#SymmetricAxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An accumulator/detector axis with linearly or logarithmically spaced
+points/bins placed symmetrically around a center.</p>
+<p>Creates a linearly or logarithmically spaced symmetric accumulator axis.
+The parameters and data points of the axis can be accessed through
+several properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<em>float</em>) – Position of the axis/accumulator origin.</p></li>
+<li><p><strong>range</strong> (<em>float</em>) – Extent of the axis as [center - range, center + range].</p></li>
+<li><p><strong>n_half</strong> (<em>int</em>) – Number of bins in the interval [center, center + range]. The total
+number of bins equals 2*n_half.</p></li>
+<li><p><strong>logscale</strong> (<em>bool</em>) – Scale of the accumulator. Linear if False (default) or logarithmic
+if True. Note that the values of the center and range parameters
+are threated as unscaled even if logscale is set to True.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that only some RT classes support the SymmetricAxis class.</p>
+<p>Detailed description of the class properties:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>center: float</dt><dd><p>Coordinate of the center/origin of the symmetric accumulator.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>range: float</dt><dd><p>Range of the symmetric accumulator such that the full span of
+the symmetric accumulator is [center - range, center + range].</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>start: float</dt><dd><p>Left edge of the first bin of the positive half interval. Note that
+for logarithmically spaced accumulators the start does not equal
+center but is instead slightly (eps) larger than the center.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>stop: float</dt><dd><p>Right edge of the final bin of the positive interval.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>offset: float</dt><dd><p>Offset of the left edge of the first bin along the
+positive interval. This value is 0 for linearly spaced
+accumulators but is a small nonzero value (eps) for
+logarithmically spaced values.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>scaled_offset: float</dt><dd><p>Logarithm of the offset of the left edge of the first bin along the
+positive interval. This value is 0 for linearly spaced
+accumulators but is a logarithm of a small nonzero value (ln(eps))
+for logarithmically spaced accumulators.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>span: tuple of two float</dt><dd><p>Full range of the accumulators (start, stop).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_half:int</dt><dd><p>Number of bins along the positive axis [center, center + range].</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n: int</dt><dd><p>Number of bins (2*n_half) along the full axis range
+[center - range, center + range].</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>logscale: bool</dt><dd><p>True, if bins are distributed logarithmically.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>edges: np.ndarray vector</dt><dd><p>Numpy vector of bin edges (number of points is n + 1) in the
+full axis interval [center - range, center + range].</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>centers: np.ndarray vector</dt><dd><p>Central positions of the bins in the
+full axis interval [center - range, center + range].</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.center">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">center</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.center" title="Permalink to this definition">¶</a></dt>
+<dd><p>Axis/accumulator origin.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.centers">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">centers</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.centers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Central points of the accumulator bins.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.edges">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">edges</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edges of the accumulator bins.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.from_dict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcbase.mcutil.axis.SymmetricAxis" title="xopto.mcbase.mcutil.axis.SymmetricAxis"><span class="pre">xopto.mcbase.mcutil.axis.SymmetricAxis</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/axis.html#SymmetricAxis.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.from_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new object from dict. The dict keys must match
+the parameter names defined by the constructor.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.logscale">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">logscale</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.logscale" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if the accumulator is defined in log scale.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.n">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">n</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.n" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total number of accumulator bins along the axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.n_half">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">n_half</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.n_half" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total number of accumulator bins along the positive half axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.range">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">range</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Axis/accumulator range.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.scaled_offset">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">scaled_offset</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.scaled_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scaled offset of the first bin of the positive half interval from the center of the accumulator.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.span">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">span</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[float,</span> <span class="pre">float]</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.span" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator positive half axis span as [min, max].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.start">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator positive half interval start coordinate.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.step">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">step</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator step/bin size.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.stop">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">stop</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator positive half interval stop coordinate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.axis.SymmetricAxis.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/axis.html#SymmetricAxis.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.axis.SymmetricAxis.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.mcbase.html">xopto.mcbase package</a><ul>
+  <li><a href="xopto.mcbase.mcutil.html">xopto.mcbase.mcutil package</a><ul>
+      <li>Previous: <a href="xopto.mcbase.mcutil.html" title="previous chapter">xopto.mcbase.mcutil package</a></li>
+      <li>Next: <a href="xopto.mcbase.mcutil.boundary.html" title="next chapter">xopto.mcbase.mcutil.boundary module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.pf.util.pfmapbase module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.pf.util.pfmapgk module" href="xopto.pf.util.pfmapgk.html" />
+    <link rel="prev" title="xopto.pf.util.helpers module" href="xopto.pf.util.helpers.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.pf.util.pfmapbase">
+<span id="xopto-pf-util-pfmapbase-module"></span><h1>xopto.pf.util.pfmapbase module<a class="headerlink" href="#module-xopto.pf.util.pfmapbase" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">PfMap2DBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.pf.pfbase.html#xopto.pf.pfbase.PfBase" title="xopto.pf.pfbase.PfBase"><span class="pre">xopto.pf.pfbase.PfBase</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncostheta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param1</strong> (<em>np.ndarray vector</em>) – Sampling points of the first parameter of the scattering phase
+function.</p></li>
+<li><p><strong>param2</strong> (<em>np.ndarray vector</em>) – Sampling points of the second parameter of the scattering phase
+function.</p></li>
+<li><p><strong>pf</strong> (<em>xopto.pf.PfBase</em>) – Scattering phase function instance used with this parameter map.</p></li>
+<li><p><strong>ncostheta</strong> (<em>int</em>) – Number of nodes used to compute the Legendre moments. Use a
+large number (&gt; 1000) for accurate results. If None, adaptive
+step integration is used, which is accurate but can become slow.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional parameters passed to the constructor of the
+scattering phase function.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.DEFAULT_MAP_FILE">
+<span class="sig-name descname"><span class="pre">DEFAULT_MAP_FILE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.DEFAULT_MAP_FILE" title="Permalink to this definition">¶</a></dt>
+<dd><p>A filename for the default map.
+Overload this static member in derived classes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.DEFAULT_MAP_PATH">
+<span class="sig-name descname"><span class="pre">DEFAULT_MAP_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/.xopto/pyxopto/data/pf'</span></em><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.DEFAULT_MAP_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>A directory for the precalculated default map.
+Overload this static member in derived classes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.PLOTSCALEFACTORX">
+<span class="sig-name descname"><span class="pre">PLOTSCALEFACTORX</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1.0</span></em><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.PLOTSCALEFACTORX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.PLOTSCALEFACTORY">
+<span class="sig-name descname"><span class="pre">PLOTSCALEFACTORY</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1.0</span></em><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.PLOTSCALEFACTORY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for computing maps of scattering phase function quantifiers
+as a function ot the scattering phase functions parameters - only for
+two-parametric scattering phase functions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.XLABEL">
+<span class="sig-name descname"><span class="pre">XLABEL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'$first</span> <span class="pre">parameter$'</span></em><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.XLABEL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.YLABEL">
+<span class="sig-name descname"><span class="pre">YLABEL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'$second</span> <span class="pre">parameter$'</span></em><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.YLABEL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.default_data_file">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">default_data_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.default_data_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.default_data_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a full filename for the default data file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>filename</strong> – Full filename of the default data file.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.delta">
+<span class="sig-name descname"><span class="pre">delta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.delta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the values of delta=(1 - g_3)/(1 - g_1) for the scattering
+phase function using the specified values of the scattering phase
+function parameters.
+If one of the scattering phase function parameters is None,
+the full map is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param1</strong> (<em>float</em><em>, </em><em>ndarray</em>) – Value(s) of the first parameter of the scattering phase function.</p></li>
+<li><p><strong>param2</strong> (<em>float</em><em>, </em><em>ndarray</em>) – Value(s) of the second parameter of the scattering phase function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>g_p</strong> – The value(s) of delta.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.fromfile">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.pf.util.pfmapbase.PfMap2DBase" title="xopto.pf.util.pfmapbase.PfMap2DBase"><span class="pre">xopto.pf.util.pfmapbase.PfMap2DBase</span></a><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.fromfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.fromfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a scattering phase function map from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Source file. If None load the map from the default file or
+create and save a new default map if a default file does not exist.
+Location of the default map file is defined by the
+<a class="reference internal" href="#xopto.pf.util.pfmapbase.PfMap2DBase.DEFAULT_MAP_PATH" title="xopto.pf.util.pfmapbase.PfMap2DBase.DEFAULT_MAP_PATH"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DEFAULT_MAP_PATH</span></code></a> and <a class="reference internal" href="#xopto.pf.util.pfmapbase.PfMap2DBase.DEFAULT_MAP_FILE" title="xopto.pf.util.pfmapbase.PfMap2DBase.DEFAULT_MAP_FILE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DEFAULT_MAP_FILE</span></code></a>
+static attributes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.g">
+<span class="sig-name descname"><span class="pre">g</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.g"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.g" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of the p-the Legendre moment for the scattering
+phase function using the specified values of the scattering phase
+function parameters.
+If one of the scattering phase function parameters is None,
+the full map is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param1</strong> (<em>float</em><em> or </em><em>np.ndarray</em>) – Value(s) of the first phase function parameter.</p></li>
+<li><p><strong>param2</strong> (<em>float</em><em>  or </em><em>np.ndarray</em>) – Value(s) of the second phase function parameter.</p></li>
+<li><p><strong>p</strong> (<em>int</em>) – Requested Legendre moment (p=1 … anisotropy factor g).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>g_p</strong> – The value(s) of the requested Legendre moments.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.gamma">
+<span class="sig-name descname"><span class="pre">gamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.gamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of <img class="math" src="../_images/math/cfc0d78b994620a526e26bde0bdc3c9907dce358.png" alt="\gamma=(1 - g_2)/(1 - g_1)"/> for the
+scattering phase function ussing the specified values of the scattering
+phase function parameters.
+If one of the scattering phase function parameters is None,
+the full map is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param1</strong> (<em>float</em><em> or </em><em>np.ndarray</em>) – Value(s) of the first parameter of the scattering phase function.</p></li>
+<li><p><strong>param2</strong> (<em>float</em><em> or </em><em>np.ndarray</em>) – Value(s) of the second parameter of the scattering phase function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>g_p</strong> – The value(s) of gamma.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.gammadelta">
+<span class="sig-name descname"><span class="pre">gammadelta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.gammadelta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.gammadelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of gamma=(1 - g_2)/(1 - g_1) for the scattering phase
+function using the specified values of the scattering phase function
+parameters.
+If one of the scattering phase function parameters is None,
+the full map is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param1</strong> (<em>float</em><em>, </em><em>ndarray</em>) – Value(s) of the first parameter of the scattering phase function.</p></li>
+<li><p><strong>param2</strong> (<em>float</em><em>, </em><em>ndarray</em>) – Value(s) of the second parameter of the scattering phase function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>g_p</strong> – The value(s) of gammas.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.grid1">
+<span class="sig-name descname"><span class="pre">grid1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.grid1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.grid1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a 2D array (meshgrid) of points defining the grid of
+the first scattering phase function parameter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.grid2">
+<span class="sig-name descname"><span class="pre">grid2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.grid2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.grid2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a 2D array (meshgrid) of points defining the grid of
+the second scattering phase function parameter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.invgamma">
+<span class="sig-name descname"><span class="pre">invgamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.invgamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.invgamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Legendre moments, and from there gamma, are calculated on
+the fly, using the scattering phase function model.
+Calculating the scattering phase function moments on the fly is
+more accurate then using a precalculated map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> (<em>float</em>) – Target value of the first Legendre moment.</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – Target value of parameter gamma.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>param1, param2</strong> – The estimated values of the scattering phase function parameters.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.invgammadelta">
+<span class="sig-name descname"><span class="pre">invgammadelta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.invgammadelta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.invgammadelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Legendre moments, and from there gamma and delta, are calculated on
+the fly, using the scattering phase function model.
+Calculating the scattering phase function moments on the fly is more
+accurate then using a precalculated map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gamma</strong> (<em>float</em>) – Target value of parameter gamma.</p></li>
+<li><p><strong>delta</strong> (<em>float</em>) – Target value of parameter delta.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Keyword arguments passed to the fmin_l_bfgs_b optimization
+function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>param1, param2</strong> – The estimated values of the scattering phase function parameters.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.invsigma">
+<span class="sig-name descname"><span class="pre">invsigma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.invsigma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.invsigma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Legendre moments, and from there sigma, are calculated on
+the fly, using the scattering phase function model.
+Calculating the phase function moments on the fly is more accurate
+then using a precalculated map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> (<em>float</em>) – Target value of the first Legendre moment.</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – Target value of parameter sigma.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>param1, param2</strong> – The estimated values of the scattering phase function parameters.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.n1">
+<span class="sig-name descname"><span class="pre">n1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.n1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.n1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of points defining the grid of
+the first scattering phase function parameter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.n2">
+<span class="sig-name descname"><span class="pre">n2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.n2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.n2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of points defining the grid of
+the second scattering phase function parameter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.ng">
+<span class="sig-name descname"><span class="pre">ng</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.ng"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.ng" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of Legendre moments.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.param1">
+<span class="sig-name descname"><span class="pre">param1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.param1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.param1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector of points defining the grid of
+the first scattering phase function parameter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.param2">
+<span class="sig-name descname"><span class="pre">param2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.param2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.param2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector of points defining the grid of
+the second scattering phase function parameter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.pf">
+<span class="sig-name descname"><span class="pre">pf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.pf.pfbase.html#xopto.pf.pfbase.PfBase" title="xopto.pf.pfbase.PfBase"><span class="pre">xopto.pf.pfbase.PfBase</span></a><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.pf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.pf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type/class of the scattering phase function that is used in this map.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.pf_type_name">
+<span class="sig-name descname"><span class="pre">pf_type_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.pf_type_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.pf_type_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type name of the scattering phase function that is used in this map.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save instance to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The target file name.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the scattering phase function maps using matplotlib.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.PfMap2DBase.sigma">
+<span class="sig-name descname"><span class="pre">sigma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">15</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#PfMap2DBase.sigma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.PfMap2DBase.sigma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of sigma for the scattering phase
+function at the specified values of the scattering phase function
+parameters.
+If one of the scattering phase function parameters is None,
+the full map is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param1</strong> (<em>float</em><em>, </em><em>ndarray</em>) – Value(s) of the GK phase function parameter.</p></li>
+<li><p><strong>param2</strong> (<em>float</em><em>, </em><em>ndarray</em>) – Value(s) of the GK phase function parameter.</p></li>
+<li><p><strong>ng</strong> (<em>int</em>) – The number of Legendre moments that is used for sigma calculation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>g_p</strong> – The value(s) of sigma.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapbase.load_map">
+<span class="sig-name descname"><span class="pre">load_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.pf.util.pfmapbase.PfMap2DBase" title="xopto.pf.util.pfmapbase.PfMap2DBase"><span class="pre">xopto.pf.util.pfmapbase.PfMap2DBase</span></a><a class="reference internal" href="../_modules/xopto/pf/util/pfmapbase.html#load_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapbase.load_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads any of the scattering phase function maps from a file.
+For details see the documentation of MieFractalPolystyreneMap,
+MiePolystyreneMap, MHgMap, GkMap and MPcMap.</p>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.pf.html">xopto.pf package</a><ul>
+  <li><a href="xopto.pf.util.html">xopto.pf.util package</a><ul>
+      <li>Previous: <a href="xopto.pf.util.helpers.html" title="previous chapter">xopto.pf.util.helpers module</a></li>
+      <li>Next: <a href="xopto.pf.util.pfmapgk.html" title="next chapter">xopto.pf.util.pfmapgk module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

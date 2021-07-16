@@ -1,0 +1,7 @@
+xopto.materials.ri.util.model.herzberg module
+=============================================
+
+.. automodule:: xopto.materials.ri.util.model.herzberg
+   :members:
+   :undoc-members:
+   :show-inheritance:

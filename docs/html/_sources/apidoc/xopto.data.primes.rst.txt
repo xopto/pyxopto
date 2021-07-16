@@ -1,0 +1,10 @@
+xopto.data.primes package
+=========================
+
+Module contents
+---------------
+
+.. automodule:: xopto.data.primes
+   :members:
+   :undoc-members:
+   :show-inheritance:

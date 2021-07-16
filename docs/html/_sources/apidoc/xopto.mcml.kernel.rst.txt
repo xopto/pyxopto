@@ -1,0 +1,10 @@
+xopto.mcml.kernel package
+=========================
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcml.kernel
+   :members:
+   :undoc-members:
+   :show-inheritance:

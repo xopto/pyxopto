@@ -1,0 +1,7 @@
+xopto.mcbase.mcutil.boundary module
+===================================
+
+.. automodule:: xopto.mcbase.mcutil.boundary
+   :members:
+   :undoc-members:
+   :show-inheritance:

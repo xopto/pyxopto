@@ -1,0 +1,454 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.cl.cltypes &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.cl.cltypes</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">import</span> <span class="nn">ctypes</span>
+
+<span class="k">class</span> <span class="nc">_CLScalar</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">vector</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;OpenCL vector types must be of length 2, 3, 4, 8 or 16!&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_VECTORS</span><span class="p">[{</span><span class="mi">2</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span><span class="mi">4</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">_CLVector2</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_get_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_set_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_x</span><span class="p">,</span> <span class="n">_set_x</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_set_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="n">y</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_y</span><span class="p">,</span> <span class="n">_set_y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">_CLVector3</span><span class="p">(</span><span class="n">_CLVector2</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_set_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="n">z</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_z</span><span class="p">,</span> <span class="n">_set_z</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+
+<span class="k">class</span> <span class="nc">_CLVector4</span><span class="p">(</span><span class="n">_CLVector3</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_w</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_set_w</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="n">w</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_w</span><span class="p">,</span> <span class="n">_set_w</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">_CLVector8</span><span class="p">(</span><span class="n">_CLVector4</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">_CLVector16</span><span class="p">(</span><span class="n">_CLVector8</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<div class="viewcode-block" id="cl_char2"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_char2">[docs]</a><span class="k">class</span> <span class="nc">cl_char2</span><span class="p">(</span><span class="n">_CLVector2</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span><span class="o">*</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;char2&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int8&#39;</span></div>
+<div class="viewcode-block" id="cl_char3"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_char3">[docs]</a><span class="k">class</span> <span class="nc">cl_char3</span><span class="p">(</span><span class="n">_CLVector3</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;char3&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int8&#39;</span></div>
+<div class="viewcode-block" id="cl_char4"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_char4">[docs]</a><span class="k">class</span> <span class="nc">cl_char4</span><span class="p">(</span><span class="n">_CLVector4</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;char4&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int8&#39;</span></div>
+<div class="viewcode-block" id="cl_char8"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_char8">[docs]</a><span class="k">class</span> <span class="nc">cl_char8</span><span class="p">(</span><span class="n">_CLVector8</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span><span class="o">*</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;char8&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int8&#39;</span></div>
+<div class="viewcode-block" id="cl_char16"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_char16">[docs]</a><span class="k">class</span> <span class="nc">cl_char16</span><span class="p">(</span><span class="n">_CLVector16</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span><span class="o">*</span><span class="mi">16</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;char16&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int8&#39;</span></div>
+<div class="viewcode-block" id="cl_char"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_char">[docs]</a><span class="k">class</span> <span class="nc">cl_char</span><span class="p">(</span><span class="n">_CLScalar</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;char&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int8&#39;</span>
+    <span class="n">_VECTORS</span> <span class="o">=</span> <span class="p">(</span><span class="n">cl_char2</span><span class="p">,</span> <span class="n">cl_char3</span><span class="p">,</span> <span class="n">cl_char4</span><span class="p">,</span> <span class="n">cl_char8</span><span class="p">,</span> <span class="n">cl_char16</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cl_uchar2"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_uchar2">[docs]</a><span class="k">class</span> <span class="nc">cl_uchar2</span><span class="p">(</span><span class="n">_CLVector2</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_ubyte</span><span class="o">*</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;uchar2&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint8&#39;</span></div>
+<div class="viewcode-block" id="cl_uchar3"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_uchar3">[docs]</a><span class="k">class</span> <span class="nc">cl_uchar3</span><span class="p">(</span><span class="n">_CLVector3</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_ubyte</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;uchar3&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint8&#39;</span></div>
+<div class="viewcode-block" id="cl_uchar4"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_uchar4">[docs]</a><span class="k">class</span> <span class="nc">cl_uchar4</span><span class="p">(</span><span class="n">_CLVector4</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_ubyte</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;uchar4&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint8&#39;</span></div>
+<div class="viewcode-block" id="cl_uchar8"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_uchar8">[docs]</a><span class="k">class</span> <span class="nc">cl_uchar8</span><span class="p">(</span><span class="n">_CLVector8</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_ubyte</span><span class="o">*</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;uchar8&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint8&#39;</span></div>
+<div class="viewcode-block" id="cl_uchar16"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_uchar16">[docs]</a><span class="k">class</span> <span class="nc">cl_uchar16</span><span class="p">(</span><span class="n">_CLVector16</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_ubyte</span><span class="o">*</span><span class="mi">16</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;uchar16&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint16&#39;</span></div>
+<div class="viewcode-block" id="cl_uchar"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_uchar">[docs]</a><span class="k">class</span> <span class="nc">cl_uchar</span><span class="p">(</span><span class="n">_CLScalar</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_ubyte</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;uchar&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint8&#39;</span>
+    <span class="n">_VECTORS</span> <span class="o">=</span> <span class="p">(</span><span class="n">cl_uchar2</span><span class="p">,</span> <span class="n">cl_uchar3</span><span class="p">,</span> <span class="n">cl_uchar4</span><span class="p">,</span> <span class="n">cl_uchar8</span><span class="p">,</span> <span class="n">cl_uchar16</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cl_short2"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_short2">[docs]</a><span class="k">class</span> <span class="nc">cl_short2</span><span class="p">(</span><span class="n">_CLVector2</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int16</span><span class="o">*</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;short2&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int16&#39;</span></div>
+<div class="viewcode-block" id="cl_short3"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_short3">[docs]</a><span class="k">class</span> <span class="nc">cl_short3</span><span class="p">(</span><span class="n">_CLVector3</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int16</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;short3&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int16&#39;</span></div>
+<div class="viewcode-block" id="cl_short4"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_short4">[docs]</a><span class="k">class</span> <span class="nc">cl_short4</span><span class="p">(</span><span class="n">_CLVector4</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int16</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;short4&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int16&#39;</span></div>
+<div class="viewcode-block" id="cl_short8"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_short8">[docs]</a><span class="k">class</span> <span class="nc">cl_short8</span><span class="p">(</span><span class="n">_CLVector8</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int16</span><span class="o">*</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;short8&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int16&#39;</span></div>
+<div class="viewcode-block" id="cl_short16"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_short16">[docs]</a><span class="k">class</span> <span class="nc">cl_short16</span><span class="p">(</span><span class="n">_CLVector16</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int16</span><span class="o">*</span><span class="mi">16</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;short16&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int16&#39;</span></div>
+<div class="viewcode-block" id="cl_short"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_short">[docs]</a><span class="k">class</span> <span class="nc">cl_short</span><span class="p">(</span><span class="n">_CLScalar</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int16</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;short&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int16&#39;</span>
+    <span class="n">_VECTORS</span> <span class="o">=</span> <span class="p">(</span><span class="n">cl_short2</span><span class="p">,</span> <span class="n">cl_short3</span><span class="p">,</span> <span class="n">cl_short4</span><span class="p">,</span> <span class="n">cl_short8</span><span class="p">,</span> <span class="n">cl_short16</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cl_ushort2"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_ushort2">[docs]</a><span class="k">class</span> <span class="nc">cl_ushort2</span><span class="p">(</span><span class="n">_CLVector2</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint16</span><span class="o">*</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;ushort2&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint16&#39;</span></div>
+<div class="viewcode-block" id="cl_ushort3"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_ushort3">[docs]</a><span class="k">class</span> <span class="nc">cl_ushort3</span><span class="p">(</span><span class="n">_CLVector3</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint16</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;ushort3&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint16&#39;</span></div>
+<div class="viewcode-block" id="cl_ushort4"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_ushort4">[docs]</a><span class="k">class</span> <span class="nc">cl_ushort4</span><span class="p">(</span><span class="n">_CLVector4</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint16</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;ushort4&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint16&#39;</span></div>
+<div class="viewcode-block" id="cl_ushort8"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_ushort8">[docs]</a><span class="k">class</span> <span class="nc">cl_ushort8</span><span class="p">(</span><span class="n">_CLVector8</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint16</span><span class="o">*</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;ushort8&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int16&#39;</span></div>
+<div class="viewcode-block" id="cl_ushort16"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_ushort16">[docs]</a><span class="k">class</span> <span class="nc">cl_ushort16</span><span class="p">(</span><span class="n">_CLVector16</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint16</span><span class="o">*</span><span class="mi">16</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;ushort16&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint16&#39;</span></div>
+<div class="viewcode-block" id="cl_ushort"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_ushort">[docs]</a><span class="k">class</span> <span class="nc">cl_ushort</span><span class="p">(</span><span class="n">_CLScalar</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint16</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;ushort&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint16&#39;</span>
+    <span class="n">_VECTORS</span> <span class="o">=</span> <span class="p">(</span><span class="n">cl_ushort2</span><span class="p">,</span> <span class="n">cl_ushort3</span><span class="p">,</span> <span class="n">cl_ushort4</span><span class="p">,</span> <span class="n">cl_ushort8</span><span class="p">,</span> <span class="n">cl_ushort16</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cl_int2"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_int2">[docs]</a><span class="k">class</span> <span class="nc">cl_int2</span><span class="p">(</span><span class="n">_CLVector2</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="o">*</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;int2&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int32&#39;</span></div>
+<div class="viewcode-block" id="cl_int3"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_int3">[docs]</a><span class="k">class</span> <span class="nc">cl_int3</span><span class="p">(</span><span class="n">_CLVector3</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;int3&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int32&#39;</span></div>
+<div class="viewcode-block" id="cl_int4"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_int4">[docs]</a><span class="k">class</span> <span class="nc">cl_int4</span><span class="p">(</span><span class="n">_CLVector4</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;int4&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int32&#39;</span></div>
+<div class="viewcode-block" id="cl_int8"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_int8">[docs]</a><span class="k">class</span> <span class="nc">cl_int8</span><span class="p">(</span><span class="n">_CLVector8</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="o">*</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;int8&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int32&#39;</span></div>
+<div class="viewcode-block" id="cl_int16"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_int16">[docs]</a><span class="k">class</span> <span class="nc">cl_int16</span><span class="p">(</span><span class="n">_CLVector16</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="o">*</span><span class="mi">16</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;int16&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int32&#39;</span></div>
+<div class="viewcode-block" id="cl_int"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_int">[docs]</a><span class="k">class</span> <span class="nc">cl_int</span><span class="p">(</span><span class="n">_CLScalar</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;int&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int32&#39;</span>
+    <span class="n">_VECTORS</span> <span class="o">=</span> <span class="p">(</span><span class="n">cl_int2</span><span class="p">,</span> <span class="n">cl_int3</span><span class="p">,</span> <span class="n">cl_int4</span><span class="p">,</span> <span class="n">cl_int8</span><span class="p">,</span> <span class="n">cl_int16</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cl_uint2"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_uint2">[docs]</a><span class="k">class</span> <span class="nc">cl_uint2</span><span class="p">(</span><span class="n">_CLVector2</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="o">*</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;uint2&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint32&#39;</span></div>
+<div class="viewcode-block" id="cl_uint3"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_uint3">[docs]</a><span class="k">class</span> <span class="nc">cl_uint3</span><span class="p">(</span><span class="n">_CLVector3</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;uint3&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint32&#39;</span></div>
+<div class="viewcode-block" id="cl_uint4"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_uint4">[docs]</a><span class="k">class</span> <span class="nc">cl_uint4</span><span class="p">(</span><span class="n">_CLVector4</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;uint4&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint32&#39;</span></div>
+<div class="viewcode-block" id="cl_uint8"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_uint8">[docs]</a><span class="k">class</span> <span class="nc">cl_uint8</span><span class="p">(</span><span class="n">_CLVector8</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="o">*</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;uint8&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint32&#39;</span></div>
+<div class="viewcode-block" id="cl_uint16"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_uint16">[docs]</a><span class="k">class</span> <span class="nc">cl_uint16</span><span class="p">(</span><span class="n">_CLVector16</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="o">*</span><span class="mi">16</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;uint16&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint32&#39;</span></div>
+<div class="viewcode-block" id="cl_uint"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_uint">[docs]</a><span class="k">class</span> <span class="nc">cl_uint</span><span class="p">(</span><span class="n">_CLScalar</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;uint&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint32&#39;</span>
+    <span class="n">_VECTORS</span> <span class="o">=</span> <span class="p">(</span><span class="n">cl_uint2</span><span class="p">,</span> <span class="n">cl_uint3</span><span class="p">,</span> <span class="n">cl_uint4</span><span class="p">,</span> <span class="n">cl_uint8</span><span class="p">,</span> <span class="n">cl_uint16</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cl_long2"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_long2">[docs]</a><span class="k">class</span> <span class="nc">cl_long2</span><span class="p">(</span><span class="n">_CLVector2</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span><span class="o">*</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;long2&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int64&#39;</span></div>
+<div class="viewcode-block" id="cl_long3"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_long3">[docs]</a><span class="k">class</span> <span class="nc">cl_long3</span><span class="p">(</span><span class="n">_CLVector3</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;long3&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int64&#39;</span></div>
+<div class="viewcode-block" id="cl_long4"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_long4">[docs]</a><span class="k">class</span> <span class="nc">cl_long4</span><span class="p">(</span><span class="n">_CLVector4</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;long4&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int64&#39;</span></div>
+<div class="viewcode-block" id="cl_long8"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_long8">[docs]</a><span class="k">class</span> <span class="nc">cl_long8</span><span class="p">(</span><span class="n">_CLVector8</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span><span class="o">*</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;long8&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int64&#39;</span></div>
+<div class="viewcode-block" id="cl_long16"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_long16">[docs]</a><span class="k">class</span> <span class="nc">cl_long16</span><span class="p">(</span><span class="n">_CLVector16</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span><span class="o">*</span><span class="mi">16</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;long16&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int64&#39;</span></div>
+<div class="viewcode-block" id="cl_long"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_long">[docs]</a><span class="k">class</span> <span class="nc">cl_long</span><span class="p">(</span><span class="n">_CLScalar</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;long&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int64&#39;</span>
+    <span class="n">_VECTORS</span> <span class="o">=</span> <span class="p">(</span><span class="n">cl_long2</span><span class="p">,</span> <span class="n">cl_long3</span><span class="p">,</span> <span class="n">cl_long4</span><span class="p">,</span> <span class="n">cl_long8</span><span class="p">,</span> <span class="n">cl_long16</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cl_ulong2"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_ulong2">[docs]</a><span class="k">class</span> <span class="nc">cl_ulong2</span><span class="p">(</span><span class="n">_CLVector2</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="o">*</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;ulong2&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint64&#39;</span></div>
+<div class="viewcode-block" id="cl_ulong3"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_ulong3">[docs]</a><span class="k">class</span> <span class="nc">cl_ulong3</span><span class="p">(</span><span class="n">_CLVector3</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;ulong3&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint64&#39;</span></div>
+<div class="viewcode-block" id="cl_ulong4"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_ulong4">[docs]</a><span class="k">class</span> <span class="nc">cl_ulong4</span><span class="p">(</span><span class="n">_CLVector4</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;ulong4&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint64&#39;</span></div>
+<div class="viewcode-block" id="cl_ulong8"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_ulong8">[docs]</a><span class="k">class</span> <span class="nc">cl_ulong8</span><span class="p">(</span><span class="n">_CLVector8</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="o">*</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;ulong8&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint64&#39;</span></div>
+<div class="viewcode-block" id="cl_ulong16"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_ulong16">[docs]</a><span class="k">class</span> <span class="nc">cl_ulong16</span><span class="p">(</span><span class="n">_CLVector16</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="o">*</span><span class="mi">16</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;ulong16&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint64&#39;</span></div>
+<div class="viewcode-block" id="cl_ulong"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_ulong">[docs]</a><span class="k">class</span> <span class="nc">cl_ulong</span><span class="p">(</span><span class="n">_CLScalar</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;ulong&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;uint64&#39;</span>
+    <span class="n">_VECTORS</span> <span class="o">=</span> <span class="p">(</span><span class="n">cl_ulong2</span><span class="p">,</span> <span class="n">cl_ulong3</span><span class="p">,</span> <span class="n">cl_ulong4</span><span class="p">,</span> <span class="n">cl_ulong8</span><span class="p">,</span> <span class="n">cl_ulong16</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cl_float2"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_float2">[docs]</a><span class="k">class</span> <span class="nc">cl_float2</span><span class="p">(</span><span class="n">_CLVector2</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="o">*</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;float2&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;float32&#39;</span></div>
+<div class="viewcode-block" id="cl_float3"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_float3">[docs]</a><span class="k">class</span> <span class="nc">cl_float3</span><span class="p">(</span><span class="n">_CLVector3</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;float3&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;float32&#39;</span></div>
+<div class="viewcode-block" id="cl_float4"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_float4">[docs]</a><span class="k">class</span> <span class="nc">cl_float4</span><span class="p">(</span><span class="n">_CLVector4</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;float4&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;float32&#39;</span></div>
+<div class="viewcode-block" id="cl_float8"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_float8">[docs]</a><span class="k">class</span> <span class="nc">cl_float8</span><span class="p">(</span><span class="n">_CLVector8</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="o">*</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;float8&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;float32&#39;</span></div>
+<div class="viewcode-block" id="cl_float16"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_float16">[docs]</a><span class="k">class</span> <span class="nc">cl_float16</span><span class="p">(</span><span class="n">_CLVector16</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="o">*</span><span class="mi">16</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;float16&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;float32&#39;</span></div>
+<div class="viewcode-block" id="cl_float"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_float">[docs]</a><span class="k">class</span> <span class="nc">cl_float</span><span class="p">(</span><span class="n">_CLScalar</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;float&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;float32&#39;</span>
+    <span class="n">_VECTORS</span> <span class="o">=</span> <span class="p">(</span><span class="n">cl_float2</span><span class="p">,</span> <span class="n">cl_float3</span><span class="p">,</span> <span class="n">cl_float4</span><span class="p">,</span> <span class="n">cl_float8</span><span class="p">,</span> <span class="n">cl_float16</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cl_double2"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_double2">[docs]</a><span class="k">class</span> <span class="nc">cl_double2</span><span class="p">(</span><span class="n">_CLVector2</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="o">*</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;double2&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;float64&#39;</span></div>
+<div class="viewcode-block" id="cl_double3"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_double3">[docs]</a><span class="k">class</span> <span class="nc">cl_double3</span><span class="p">(</span><span class="n">_CLVector3</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;double3&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;float64&#39;</span></div>
+<div class="viewcode-block" id="cl_double4"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_double4">[docs]</a><span class="k">class</span> <span class="nc">cl_double4</span><span class="p">(</span><span class="n">_CLVector4</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;double4&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;float64&#39;</span></div>
+<div class="viewcode-block" id="cl_double8"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_double8">[docs]</a><span class="k">class</span> <span class="nc">cl_double8</span><span class="p">(</span><span class="n">_CLVector8</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="o">*</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;double8&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;float64&#39;</span></div>
+<div class="viewcode-block" id="cl_double16"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_double16">[docs]</a><span class="k">class</span> <span class="nc">cl_double16</span><span class="p">(</span><span class="n">_CLVector16</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="o">*</span><span class="mi">16</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;double16&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;float64&#39;</span></div>
+<div class="viewcode-block" id="cl_double"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.cl_double">[docs]</a><span class="k">class</span> <span class="nc">cl_double</span><span class="p">(</span><span class="n">_CLScalar</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="p">):</span>
+    <span class="n">TYPENAME</span><span class="o">=</span><span class="s1">&#39;double&#39;</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;float64&#39;</span>
+    <span class="n">_VECTORS</span> <span class="o">=</span> <span class="p">(</span><span class="n">cl_double2</span><span class="p">,</span> <span class="n">cl_double3</span><span class="p">,</span> <span class="n">cl_double4</span><span class="p">,</span> <span class="n">cl_double8</span><span class="p">,</span> <span class="n">cl_double16</span><span class="p">)</span></div>
+
+<span class="c1"># aliases</span>
+<span class="n">cl_byte</span> <span class="o">=</span> <span class="n">cl_char</span>
+<span class="n">cl_ubyte</span> <span class="o">=</span> <span class="n">cl_uchar</span>
+<span class="n">cl_int8_t</span> <span class="o">=</span> <span class="n">cl_char</span>
+<span class="n">cl_uint8_t</span> <span class="o">=</span> <span class="n">cl_uchar</span>
+<span class="n">cl_int16_t</span> <span class="o">=</span> <span class="n">cl_short</span>
+<span class="n">cl_uint16_t</span> <span class="o">=</span> <span class="n">cl_ushort</span>
+<span class="n">cl_int32_t</span> <span class="o">=</span> <span class="n">cl_int</span>
+<span class="n">cl_uint32_t</span> <span class="o">=</span> <span class="n">cl_uint</span>
+<span class="n">cl_int64_t</span> <span class="o">=</span> <span class="n">cl_long</span>
+<span class="n">cl_uint64_t</span> <span class="o">=</span> <span class="n">cl_ulong</span>
+<span class="n">cl_float32_t</span> <span class="o">=</span> <span class="n">cl_float</span>
+<span class="n">cl_float64_t</span> <span class="o">=</span> <span class="n">cl_double</span>
+
+<span class="n">sizeof</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span>
+<span class="n">ARRAY</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">ARRAY</span>
+<span class="n">Array</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">Array</span>
+<span class="n">byref</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span>
+<span class="n">addressof</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span>
+
+<div class="viewcode-block" id="Structure"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cltypes.html#xopto.cl.cltypes.Structure">[docs]</a><span class="k">class</span> <span class="nc">Structure</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fields_</span><span class="p">:</span>
+            <span class="n">field_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">field_value</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">field_value</span><span class="p">)</span>
+
+            <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:s}</span><span class="s1">=</span><span class="si">{:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:s}</span><span class="s1">(</span><span class="si">{:s}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:s}</span><span class="s1"> #id </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">T</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+        <span class="n">_pack_</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">cl_int3</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+        <span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">T</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

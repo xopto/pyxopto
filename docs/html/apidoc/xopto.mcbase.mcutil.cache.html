@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.mcbase.mcutil.cache module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.mcbase.mcutil.fiber module" href="xopto.mcbase.mcutil.fiber.html" />
+    <link rel="prev" title="xopto.mcbase.mcutil.buffer module" href="xopto.mcbase.mcutil.buffer.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.mcbase.mcutil.cache">
+<span id="xopto-mcbase-mcutil-cache-module"></span><h1>xopto.mcbase.mcutil.cache module<a class="headerlink" href="#module-xopto.mcbase.mcutil.cache" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.cache.LutCache">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">LutCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lutsize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cachefile</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/cache.html#LutCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.cache.LutCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcutil.cache.ObjCache" title="xopto.mcbase.mcutil.cache.ObjCache"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcutil.cache.ObjCache</span></code></a></p>
+<p>Initializes a lookup table-based Monte Carlo scattering phase function
+cache (mcpf.LutPhaseFunction objects). This object internally saves
+all created instances of lookup table-based scattering phase
+functions and runs computations only if the requested scattering
+phase function cannot be found in the cache.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lutsize</strong> (<em>int</em>) – The lookup table size.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Print information to stdout isf set to True.</p></li>
+<li><p><strong>cachefile</strong> (<em>str</em><em> or </em><em>file</em>) – File location or a binary file like object from which to
+load LutCache.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.cache.LutCache.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pftype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.pf.pfbase.html#xopto.pf.pfbase.PfBase" title="xopto.pf.pfbase.PfBase"><span class="pre">xopto.pf.pfbase.PfBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pfargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lutsize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/cache.html#LutCache.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.cache.LutCache.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare a new lookup table-based scattering phase function. Computations
+are made only if the requested scattering phase function is not found
+in the cache. This method can be used to pre-populate the cache with
+scattering phase functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pftype</strong> (<em>xopto.pf.PfBase</em>) – Any instance of a scattering phase function that inherits from
+the <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.pf.PfBase</span></code> class.</p></li>
+<li><p><strong>pfargs</strong> (<em>tuple</em>) – Parameters passed to the scattering phase function constructor.</p></li>
+<li><p><strong>lutsize</strong> (<em>int</em>) – Size of the lookup table passed to the
+py:meth:<cite>xopto.mcbase.pf.lut.LutEx</cite>.
+If None, the value passed to the constructor is used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>lut_pf</strong> – Created or from cache loaded lookup table scattering phase function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>LutPhaseFunction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.cache.LutCache.load">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cachefile</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcbase.mcutil.cache.LutCache" title="xopto.mcbase.mcutil.cache.LutCache"><span class="pre">xopto.mcbase.mcutil.cache.LutCache</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/cache.html#LutCache.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.cache.LutCache.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load LutCache object from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cachefile</strong> (<em>str</em><em>, </em><em>file</em>) – File location or a file like object.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Keyword arguments are passed to the LutCache constructor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>cache</strong> – ObjCache instance initialized with data from the specified file.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#xopto.mcbase.mcutil.cache.ObjCache" title="xopto.mcbase.mcutil.cache.ObjCache">ObjCache</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.cache.LutCache.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cachefile</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/cache.html#LutCache.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.cache.LutCache.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save LutCache object to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cachefile</strong> (<em>str</em><em>, </em><em>file</em>) – File location or a binary file like object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.cache.ObjCache">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ObjCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cachefile</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/cache.html#ObjCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.cache.ObjCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>ObjCache constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cachefile</strong> (<em>str</em><em>, </em><em>file</em>) – File location or a binary file like object.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Print information to stdout.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.cache.ObjCache.contains">
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_type</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/cache.html#ObjCache.contains"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.cache.ObjCache.contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the specified object is in the cache.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj_type</strong> (<em>object type</em><em> or </em><em>callable</em>) – Any python class or callable.</p></li>
+<li><p><strong>args</strong> (<em>list</em>) – Parameters passed to the object constructor or callable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>found</strong> – Returns True if the specified object is found in the cache.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.cache.ObjCache.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_type</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/cache.html#ObjCache.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.cache.ObjCache.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request an object of type obj_type and constructor arguments args
+from the cache. Object is created if one is not found in the cache.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj_type</strong> (<em>object type</em><em> or </em><em>callable</em>) – Any python class or callable.</p></li>
+<li><p><strong>args</strong> (<em>list</em>) – Parameters passed to the object constructor or callable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>obj</strong> – An object created as <code class="code docutils literal notranslate"><span class="pre">obj_type(*args)</span></code> or an existing object
+from cache.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.cache.ObjCache.load">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cachefile</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcbase.mcutil.cache.ObjCache" title="xopto.mcbase.mcutil.cache.ObjCache"><span class="pre">xopto.mcbase.mcutil.cache.ObjCache</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/cache.html#ObjCache.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.cache.ObjCache.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load ObjCache object from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cachefile</strong> (<em>str</em><em>, </em><em>file</em>) – File location or a file like object.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Keyword arguments are passed to the <a class="reference internal" href="#xopto.mcbase.mcutil.cache.ObjCache" title="xopto.mcbase.mcutil.cache.ObjCache"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ObjCache()</span></code></a>
+constructor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>cache</strong> – ObjCache instance initialized with data from the specified file.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#xopto.mcbase.mcutil.cache.ObjCache" title="xopto.mcbase.mcutil.cache.ObjCache">ObjCache</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.cache.ObjCache.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cachefile</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/cache.html#ObjCache.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.cache.ObjCache.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save cache data to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cachefile</strong> (<em>str</em><em>, </em><em>file</em>) – File location or a binary file like object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.cache.ObjCache.verbose">
+<span class="sig-name descname"><span class="pre">verbose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/cache.html#ObjCache.verbose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.cache.ObjCache.verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of the verbose flag that was passed
+to the constructor.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.mcbase.html">xopto.mcbase package</a><ul>
+  <li><a href="xopto.mcbase.mcutil.html">xopto.mcbase.mcutil package</a><ul>
+      <li>Previous: <a href="xopto.mcbase.mcutil.buffer.html" title="previous chapter">xopto.mcbase.mcutil.buffer module</a></li>
+      <li>Next: <a href="xopto.mcbase.mcutil.fiber.html" title="next chapter">xopto.mcbase.mcutil.fiber module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

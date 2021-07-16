@@ -1,0 +1,7 @@
+xopto.mcml.mcsource.point module
+================================
+
+.. automodule:: xopto.mcml.mcsource.point
+   :members:
+   :undoc-members:
+   :show-inheritance:

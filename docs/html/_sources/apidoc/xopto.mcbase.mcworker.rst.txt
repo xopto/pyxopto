@@ -1,0 +1,7 @@
+xopto.mcbase.mcworker module
+============================
+
+.. automodule:: xopto.mcbase.mcworker
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,1239 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcbase.mctrace &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcbase.mctrace</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">cltypes</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">mcoptions</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">mcobject</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase.mcutil.buffer</span> <span class="kn">import</span> <span class="n">BufferAllocation</span>
+
+<span class="k">def</span> <span class="nf">_range</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s1">&#39;Range must be specified as a tuple of two float: (low, high)!&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">_origin2</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s1">&#39;Origin must be specified as a tuple of two float: (x, y)!&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">_dir3</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> \
+        <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s1">&#39;Direction must be specified as a tuple of three float: (x, y, z)!&#39;</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">k</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">k</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">*</span><span class="n">k</span>
+
+
+<div class="viewcode-block" id="Filter"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Filter">[docs]</a><span class="k">class</span> <span class="nc">Filter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">z</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">pz</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="nb">dir</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">pl</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Trace filter constructor. Creates a filter of traced photon packets</span>
+<span class="sd">        according to the final position of the photon packet. Set the unused</span>
+<span class="sd">        filter parameters to None - default value. Filters are</span>
+<span class="sd">        connected through a logical and.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: (float, float) or ((float, float), (float, float), ...)</span>
+<span class="sd">            Final x coordinate of the photon packet must be within the</span>
+<span class="sd">            specified interval including the boundaries (xmin, xmax). Multiple</span>
+<span class="sd">            intervals can be specified as a list or tuple of intervals.</span>
+
+<span class="sd">        y: (float, float) or ((float, float), (float, float), ...)</span>
+<span class="sd">            Final y coordinate of the photon packet must be within the</span>
+<span class="sd">            specified interval including the boundaries (ymin, ymax). Multiple</span>
+<span class="sd">            intervals can be specified as a list or tuple of intervals.</span>
+
+<span class="sd">        z: (float, float) or ((float, float), (float, float), ...)</span>
+<span class="sd">            Final z coordinate of the photon packet must be within the</span>
+<span class="sd">            specified interval including the boundaries (zmin, zmax). Multiple</span>
+<span class="sd">            intervals can be specified as a list or tuple of intervals.</span>
+
+<span class="sd">        pz: (float, float)</span>
+<span class="sd">            Final z component of the photon packet propagation direction must</span>
+<span class="sd">            be within the specified interval. Note that the z component of</span>
+<span class="sd">            the propagation direction of photon packets terminated at the</span>
+<span class="sd">            top sample boundary is negative!. Multiple intervals can be</span>
+<span class="sd">            specified as a list or tuple of intervals.</span>
+
+<span class="sd">        dir: (float, float, (float, float, float))</span>
+<span class="sd">            The cosine of the angle between the given direction and the final</span>
+<span class="sd">            direction of the photon packet must be within the specified</span>
+<span class="sd">            interval (cosmin, cosmax, (px, py, pz)).</span>
+<span class="sd">            Multiple filters can be specified as a list or tuple.</span>
+
+<span class="sd">        r: (float, float, (float, float)) or ((float, float, (float, float)), ...)</span>
+<span class="sd">            Final r=sqrt((x-xo)**2 + (y - yo)**2) coordinate of the photon</span>
+<span class="sd">            packet must be within the specified radius (rmin, rmax). The</span>
+<span class="sd">            radius is calculated with respect to the given origin</span>
+<span class="sd">            (x0, y0). Multiple filters can be specified as a list or tuple</span>
+<span class="sd">            of (rmin, rmax, (x0, y0)).</span>
+
+<span class="sd">        pl: (float, float) or ((float, float), (float, float), ...)</span>
+<span class="sd">            Final optical path length traveled by the photon packet must be</span>
+<span class="sd">            within the specified interval including the boundaries</span>
+<span class="sd">            (plmin, plmax). Multiple intervals can be specified as a list or</span>
+<span class="sd">            tuple of intervals.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Filter</span><span class="p">):</span>
+            <span class="n">filt</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">x</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">y</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">z</span>
+            <span class="n">pz</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">pz</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">r</span>
+            <span class="nb">dir</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">dir</span>
+            <span class="n">pl</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">pl</span>
+
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chek_range</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chek_range</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">z</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chek_range</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pz</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chek_range</span><span class="p">(</span><span class="s1">&#39;pz&#39;</span><span class="p">,</span> <span class="n">pz</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chek_r</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chek_dir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chek_range</span><span class="p">(</span><span class="s1">&#39;pl&#39;</span><span class="p">,</span> <span class="n">pl</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_z</span> <span class="o">=</span> <span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pz</span> <span class="o">=</span> <span class="n">pz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_r</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dir</span> <span class="o">=</span> <span class="nb">dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pl</span> <span class="o">=</span> <span class="n">pl</span>
+
+<div class="viewcode-block" id="Filter.todict"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Filter.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Save the filter configuration to a dictionary.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Filter configuration as a dictionary.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_x</span><span class="p">,</span>
+            <span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_y</span><span class="p">,</span>
+            <span class="s1">&#39;z&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_z</span><span class="p">,</span>
+            <span class="s1">&#39;pz&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_pz</span><span class="p">,</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_dir</span><span class="p">,</span>
+            <span class="s1">&#39;r&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_r</span><span class="p">,</span>
+            <span class="s1">&#39;pl&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_pl</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="Filter.fromdict"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Filter.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Filter&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a Filter instance from a dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Dictionary created by the :py:meth:`Filter.todict` method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">filter_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filter_type</span> <span class="o">!=</span> <span class="s1">&#39;Filter&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected &quot;</span><span class="si">{}</span><span class="s1">&quot; type bot got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">filter_type</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_get_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_x</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Filter of the x coordinate as ((x_min, x_max), ...).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_y</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Filter of the y coordinate as ((y_min, y_max), ...).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_z</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_z</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Filter of the z coordinate as ((z_min, z_max), ...).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_pz</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pz</span>
+    <span class="n">pz</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_pz</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Filter of the z component of the propagation direction as &#39;</span>
+                 <span class="s1">&#39;(pz_min, pz_max).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dir</span>
+    <span class="nb">dir</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_dir</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="s1">&#39;Filter of the propagation direction as &#39;</span>
+                   <span class="s1">&#39;(cosmin, cosmax, (px, py, pz)).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_r</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_r</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_r</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Filter of r=sqrt(x*x + y*y) as &#39;</span>
+                 <span class="s1">&#39;((r_min, r_max, (x_origin, y_origin)), ...).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_pl</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pl</span>
+    <span class="n">pl</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_pl</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="s1">&#39;Filter of the optical pathlength as &#39;</span>
+                  <span class="s1">&#39;((pl_min, pl_max), ...).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">:</span> <span class="s1">&#39;Trace&#39;</span><span class="p">,</span> <span class="n">update</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="s1">&#39;Trace&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply the filter to a trace object and create a new trace object for</span>
+<span class="sd">        the filtered data only if the value of update parameter is False.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        trace_obj: Trace</span>
+<span class="sd">            The trace object to filter.</span>
+<span class="sd">        update: bool</span>
+<span class="sd">            If True (default), the existing trace object is updated. If False,</span>
+<span class="sd">            a new trace object is created for the filtered data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        filtered: Trace</span>
+<span class="sd">            Filtered trace.</span>
+<span class="sd">        n_dropped: int</span>
+<span class="sd">            Number of photon packets that matched the filter but exceeded</span>
+<span class="sd">            the maximum length of the trace.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">trace_obj</span><span class="p">,</span> <span class="n">Trace</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s1">&#39;Trace filter can be applied only to Trace objects!&#39;</span><span class="p">)</span>
+
+        <span class="c1"># photon packets that exceed the trace length</span>
+        <span class="n">too_long_mask</span> <span class="o">=</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">overflow</span>
+        <span class="c1"># start with all the photon packets</span>
+        <span class="n">valid_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">too_long_mask</span><span class="p">)</span>
+
+        <span class="n">var_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">valid_mask</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">x_range</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x</span><span class="p">:</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_x_filter</span><span class="p">(</span>
+                        <span class="n">x_range</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">),</span>
+                    <span class="n">var_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">var_mask</span>
+                <span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">var_mask</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">valid_mask</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">var_mask</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">y_range</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y</span><span class="p">:</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_y_filter</span><span class="p">(</span>
+                        <span class="n">y_range</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">),</span>
+                    <span class="n">var_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">var_mask</span>
+                <span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">var_mask</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">valid_mask</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">var_mask</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">z_range</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z</span><span class="p">:</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_z_filter</span><span class="p">(</span>
+                        <span class="n">z_range</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">),</span>
+                    <span class="n">var_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">var_mask</span>
+                <span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">var_mask</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">valid_mask</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pz</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">var_mask</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">pz_range</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pz</span><span class="p">:</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_pz_filter</span><span class="p">(</span>
+                        <span class="n">pz_range</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">),</span>
+                    <span class="n">var_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">var_mask</span>
+                <span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">var_mask</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">valid_mask</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">var_mask</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">r_range</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_r</span><span class="p">:</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_r_filter</span><span class="p">(</span>
+                        <span class="n">r_range</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">),</span>
+                    <span class="n">var_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">var_mask</span>
+                <span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">var_mask</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">valid_mask</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">var_mask</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">dir_cfg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dir</span><span class="p">:</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_dir_filter</span><span class="p">(</span>
+                        <span class="n">dir_cfg</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">),</span>
+                    <span class="n">var_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">var_mask</span>
+                <span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">var_mask</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">valid_mask</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">plon</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pl_range</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pl</span><span class="p">:</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_pl_filter</span><span class="p">(</span>
+                        <span class="n">pl_range</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">),</span>
+                    <span class="n">var_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">var_mask</span>
+                <span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">var_mask</span><span class="p">,</span> <span class="n">valid_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">valid_mask</span><span class="p">)</span>
+
+        <span class="c1"># valid but saturated</span>
+        <span class="n">selected_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">valid_mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">too_long_mask</span><span class="p">))</span>
+        <span class="n">dropped_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">valid_mask</span><span class="p">,</span> <span class="n">too_long_mask</span><span class="p">)</span>
+        <span class="n">n_dropped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">dropped_mask</span><span class="p">)</span>
+
+        <span class="n">valid_data</span> <span class="o">=</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">selected_mask</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">valid_n</span> <span class="o">=</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">selected_mask</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">update</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">Trace</span><span class="p">(</span><span class="n">trace_obj</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">trace_obj</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">valid_data</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">valid_n</span>
+
+        <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">n_dropped</span>
+
+    <span class="k">def</span> <span class="nf">_x_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">x_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_y_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_range</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">):</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="n">y_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_z_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z_range</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">):</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">z</span> <span class="o">&gt;=</span> <span class="n">z_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">z</span> <span class="o">&lt;=</span> <span class="n">z_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_pz_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pz_range</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">):</span>
+        <span class="n">pz</span> <span class="o">=</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;pz&#39;</span><span class="p">]</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">pz</span> <span class="o">&gt;=</span> <span class="n">pz_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pz</span> <span class="o">&lt;=</span> <span class="n">pz_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_r_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_range</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_range</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="n">r_range</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x0</span> <span class="o">=</span> <span class="n">y0</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">x0</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">y0</span>
+        <span class="n">rr</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">rr</span> <span class="o">&gt;=</span> <span class="n">r_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">rr</span> <span class="o">&lt;=</span> <span class="n">r_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_dir_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_cfg</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">):</span>
+        <span class="n">px</span> <span class="o">=</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;px&#39;</span><span class="p">]</span>
+        <span class="n">py</span> <span class="o">=</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;py&#39;</span><span class="p">]</span>
+        <span class="n">pz</span> <span class="o">=</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;pz&#39;</span><span class="p">]</span>
+
+        <span class="n">cosmin</span><span class="p">,</span> <span class="n">cosmax</span> <span class="o">=</span> <span class="n">dir_cfg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dir_cfg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">dir_cfg</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">cos_theta</span> <span class="o">=</span> <span class="n">px</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">py</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">pz</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">cos_theta</span> <span class="o">&gt;=</span> <span class="n">cosmin</span><span class="p">,</span> <span class="n">cos_theta</span> <span class="o">&lt;=</span> <span class="n">cosmax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_pl_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pl_range</span><span class="p">,</span> <span class="n">trace_obj</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">):</span>
+        <span class="n">pl</span> <span class="o">=</span> <span class="n">trace_obj</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;pl&#39;</span><span class="p">]</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">pl</span> <span class="o">&gt;=</span> <span class="n">pl_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pl</span> <span class="o">&lt;=</span> <span class="n">pl_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">input_mask</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_chek_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s1">&#39;Filter parameter </span><span class="si">{}</span><span class="s1"> must be a tuple of two float &#39;</span>\
+                <span class="s1">&#39;values (low, high), or a list of such tuples!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">_range</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">value</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">_range</span><span class="p">(</span><span class="n">value</span><span class="p">),)</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">_chek_r</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s1">&#39;Filter parameter r must be a tuple &#39;</span>\
+                <span class="s1">&#39;(rmin, rmax, (x_origin, y_origin)) or a list or tuple of &#39;</span>\
+                <span class="s1">&#39;such tuples!&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[(</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">_origin2</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+                      <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">r</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">((</span><span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">_origin2</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">])),)</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">_chek_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dir</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s1">&#39;Filter parameter dir must be a tuple &#39;</span>\
+                <span class="s1">&#39;(cosmin, cosmax, (px, py, pz)) or a list or tuple of &#39;</span>\
+                <span class="s1">&#39;such tuples!&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">:</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Direction vector length must not be 0!&#39;</span><span class="p">)</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">_dir3</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">l</span><span class="p">))</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Direction vector length must not be 0!&#39;</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">((</span><span class="nb">float</span><span class="p">(</span><span class="nb">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="nb">dir</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">_dir3</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">l</span><span class="p">)),)</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Filter(x=</span><span class="si">{}</span><span class="s1">, y=</span><span class="si">{}</span><span class="s1">, z=</span><span class="si">{}</span><span class="s1">, pz=</span><span class="si">{}</span><span class="s1">, dir=</span><span class="si">{}</span><span class="s1">, r=</span><span class="si">{}</span><span class="s1">, pl=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pl</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span> <span class="o">+</span> \
+            <span class="s1">&#39; # Filter object at 0x</span><span class="si">{:&gt;08X}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Trace"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace">[docs]</a><span class="k">class</span> <span class="nc">Trace</span><span class="p">(</span><span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Photon packet trace interface.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Trace no events - turns off the photon packet trace functionality.</span>
+    <span class="n">TRACE_NONE</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># Trace start events - immediately after the packet is launched.</span>
+    <span class="n">TRACE_START</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1"># Trace end events - just before the packet simulation is terminated.</span>
+    <span class="n">TRACE_END</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="c1"># Trace all events including start, stop and all in between.</span>
+    <span class="n">TRACE_ALL</span> <span class="o">=</span> <span class="mi">7</span>
+
+    <span class="c1"># Number of fields in a single trace entry.</span>
+    <span class="n">TRACE_ENTRY_LEN</span> <span class="o">=</span> <span class="mi">8</span>
+
+<div class="viewcode-block" id="Trace.cl_type"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that is passed to the Monte carlo simulator kernel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: McObject</span>
+<span class="sd">            A Monte Carlo simulator instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        struct: cltypes.Structure</span>
+<span class="sd">            A structure type that represents a trace in the Monte Carlo kernel.</span>
+
+<span class="sd">            The returned structure type implements the following fields:</span>
+
+<span class="sd">            - max_events: mc_int_t </span>
+<span class="sd">                Maximum number of trace events per photon packet.</span>
+<span class="sd">            - data_buffer_offset: mc_size_t</span>
+<span class="sd">                Offset of the first element of the trace data buffer.</span>
+<span class="sd">            - count_buffer_offset: mc_size_t</span>
+<span class="sd">                Offset of the first element of the trace event counter buffer.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClTrace</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;max_events&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;data_buffer_offset&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;count_buffer_offset&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
+            <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">ClTrace</span></div>
+
+<div class="viewcode-block" id="Trace.cl_declaration"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.cl_declaration">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that defines the trace in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McTrace{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_int_t max_events;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_size_t data_buffer_offset;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_size_t count_buffer_offset;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Trace.cl_implementation"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the trace in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;void dbg_print_trace(__mc_trace_mem const McTrace *trace){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(&quot;McTrace object:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_int(INDENT &quot;max_events:&quot;, trace-&gt;max_events);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;data_buffer_offset:&quot;, trace-&gt;data_buffer_offset);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;count_buffer_offset:&quot;, trace-&gt;count_buffer_offset);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline int mcsim_trace_event(McSim *mcsim, mc_uint_t event_count){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	__mc_trace_mem const McTrace *trace = mcsim_trace(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_size_t pos = mc_min(event_count, trace-&gt;max_events - 1)*TRACE_ENTRY_LEN + &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_packet_index(mcsim)*trace-&gt;max_events*TRACE_ENTRY_LEN + &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		trace-&gt;data_buffer_offset;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(&quot;Tracing photon packet event:&quot;);&#39;</span>
+            <span class="s1">&#39;	dbg_print_cnt(INDENT       &quot;packet index:&quot;, mcsim_packet_index(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_cnt(INDENT       &quot;event index :&quot;, event_count);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(INDENT   &quot;position    :&quot;, mcsim_position(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(INDENT   &quot;direction   :&quot;, mcsim_direction(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT     &quot;weight      :&quot;, mcsim_weight(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	#if MC_TRACK_OPTICAL_PATHLENGTH&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_float(INDENT &quot;path length :&quot;, mcsim_optical_pathlength(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	#endif&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_float_buffer(mcsim)[pos++] = mcsim_position_x(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_float_buffer(mcsim)[pos++] = mcsim_position_y(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_float_buffer(mcsim)[pos++] = mcsim_position_z(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_float_buffer(mcsim)[pos++] = mcsim_direction_x(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_float_buffer(mcsim)[pos++] = mcsim_direction_y(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_float_buffer(mcsim)[pos++] = mcsim_direction_z(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_float_buffer(mcsim)[pos++] = mcsim_weight(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	#if MC_TRACK_OPTICAL_PATHLENGTH&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_float_buffer(mcsim)[pos++] = mcsim_optical_pathlength(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	#else&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_float_buffer(mcsim)[pos++] = FP_0;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	#endif&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	return 1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void mcsim_trace_complete(McSim *mcsim, mc_uint_t event_count){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_integer_buffer(mcsim)[&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_trace(mcsim)-&gt;count_buffer_offset + &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_packet_index(mcsim)] = (mc_int_t)event_count;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(&quot;Trace finished&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_uint(INDENT &quot;total events:&quot;, event_count);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_cnt(INDENT &quot;packet:&quot;, mcsim_packet_index(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Trace.cl_options"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.cl_options">[docs]</a>    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">RawOptions</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;MC_USE_TRACE&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;TRACE_ENTRY_LEN&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_ENTRY_LEN</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;MC_USE_SAMPLING_VOLUME&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;MC_TRACK_OPTICAL_PATHLENGTH&#39;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plon</span><span class="p">))]</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="s1">&#39;Trace&#39;</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">TRACE_ALL</span><span class="p">,</span>
+                 <span class="nb">filter</span><span class="p">:</span> <span class="n">Filter</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">plon</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Photon packet trace object constructor.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        maxlen: int or Trace</span>
+<span class="sd">            Maximum number of trace entries (events) per photon packet.</span>
+<span class="sd">            If maxlen is an instance of Trace, a new copy of the trace object</span>
+<span class="sd">            is created.</span>
+<span class="sd">            Each trace entry is composed of seven fields that describe the</span>
+<span class="sd">            state of the photon packet at the time of the event:</span>
+
+<span class="sd">            &#39;x&#39; - x coordinate of the photon packet</span>
+
+<span class="sd">            &#39;y&#39; - y coordinate of the photon packet</span>
+
+<span class="sd">            &#39;z&#39; - z coordinate of the photon packet</span>
+
+<span class="sd">            &#39;px&#39; - x component of the photon packet propagation direction</span>
+
+<span class="sd">            &#39;py&#39; - y component of the photon packet propagation direction</span>
+
+<span class="sd">            &#39;pz&#39; - z component of the photon packet propagation direction</span>
+
+<span class="sd">            &#39;w&#39;  - photon packet weight</span>
+
+<span class="sd">            &#39;pl&#39; - photon path length</span>
+
+<span class="sd">        options: int</span>
+<span class="sd">            Trace options must be formed by combining (logical or) the</span>
+<span class="sd">            following flags:</span>
+
+<span class="sd">                TRACE_START - trace the initial photon packet state</span>
+
+<span class="sd">                TRACE_END - trace the final/terminal photon packet state</span>
+
+<span class="sd">                TRACE_ALL - trace all (scattering/absorption and boundary transition) events</span>
+
+<span class="sd">        filter: Filter</span>
+<span class="sd">            Filter trace results according to the supplied filter.</span>
+<span class="sd">            A filter class needs to define a __call__ method that returns a</span>
+<span class="sd">            new Trace instance with filtered events.</span>
+<span class="sd">            See the Filter class for details and example.</span>
+
+<span class="sd">        plon: bool</span>
+<span class="sd">            Turn on/off tracking of the optical pathlength. If set to nonzero,</span>
+<span class="sd">            the simulator option MC_TRACK_OPTICAL_PATHLENGTH will be set</span>
+<span class="sd">            turning on the tracking of optical pathlength.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The value of maxlen parameter is automatically adjusted to:</span>
+
+<span class="sd">            (a) 1 - if only the TRACE_START or TRACE_END option flags are set,</span>
+
+<span class="sd">            (b) 2 - if the TRACE_START and the TRACE_END option flags are set,</span>
+
+<span class="sd">            (c) left unchanged if the TRACE_ALL option flag is set.</span>
+
+<span class="sd">        Use the update method to convert raw simulation output buffer into</span>
+<span class="sd">        a numpy structured array with items &#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;px&#39;, &#39;py&#39;, &#39;pz&#39;,</span>
+<span class="sd">        and &#39;w&#39;.</span>
+<span class="sd">        The array shape is (nphotons, length). To access the trace of first</span>
+<span class="sd">        photon packet use obj.data[0]</span>
+
+<span class="sd">        The number of valid trace entries for each photon packet can</span>
+<span class="sd">        be obtained by obj.n (e.g. obj.n[0] for the first photon packet).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">maxlen</span><span class="p">,</span> <span class="n">Trace</span><span class="p">):</span>
+            <span class="n">trace</span> <span class="o">=</span> <span class="n">maxlen</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_maxlen</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">maxlen</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">n</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">options</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">filter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n_dropped</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">dropped</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_plon</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">plon</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">7</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_maxlen</span><span class="p">(</span><span class="n">maxlen</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span> <span class="o">=</span> <span class="nb">filter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n_dropped</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_plon</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">plon</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_overflow_mask</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_update_terminal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">arange_n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <span class="n">last_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxlen</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">arange_n</span><span class="p">,</span> <span class="n">last_indices</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_update_overflow_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_overflow_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxlen</span>
+
+<div class="viewcode-block" id="Trace.todict"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Save the trace configuration without the accumulator data to</span>
+<span class="sd">        a dictionary.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Trace configuration as a dictionary.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">filt</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;Trace&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;maxlen&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_maxlen</span><span class="p">,</span>
+            <span class="s1">&#39;options&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">,</span>
+            <span class="s1">&#39;plon&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plon</span><span class="p">,</span>
+            <span class="s1">&#39;filter&#39;</span><span class="p">:</span><span class="n">filt</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="Trace.fromdict"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Trace&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a Trace instance from a dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Dictionary created by the :py:meth:`Trace.todict` method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">trace_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">trace_type</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected &quot;</span><span class="si">{}</span><span class="s1">&quot; type bot got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">trace_type</span><span class="p">))</span>
+        <span class="n">filter_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;filter&#39;</span><span class="p">)</span>
+        <span class="n">filt</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">filter_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filt</span> <span class="o">=</span> <span class="n">Filter</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">filter_data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="n">filt</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Trace.dtype"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.dtype">[docs]</a>    <span class="k">def</span> <span class="nf">dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return a structure numpy data type that represents the trace data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Instance of the Monte Carlo simulator which will be used with this</span>
+<span class="sd">            trace object.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([</span>
+            <span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">np_float</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">np_float</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">np_float</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;px&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">np_float</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;py&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">np_float</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;pz&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">np_float</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">np_float</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;pl&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">np_float</span><span class="p">)</span>
+        <span class="p">])</span></div>
+
+<div class="viewcode-block" id="Trace.float_len"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.float_len">[docs]</a>    <span class="k">def</span> <span class="nf">float_len</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nphotons</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Number of float values required to save trace data for the given number</span>
+<span class="sd">        of photon packets.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nphotons: int</span>
+<span class="sd">            Number of photon packets to trace</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_ENTRY_LEN</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlen</span><span class="o">*</span><span class="n">nphotons</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_terminal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_terminal</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span>
+    <span class="n">terminal</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_terminal</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Terminal/final state of the photon packets.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_overflow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_overflow_mask</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_overflow_mask</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_overflow_mask</span>
+    <span class="n">overflow</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_overflow</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Binary mask of photon packets that have overflowed &#39;</span>
+                        <span class="s1">&#39;the trace&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Filter</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span>
+    <span class="nb">filter</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_filter</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Trace filter.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_plon</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plon</span>
+    <span class="n">plon</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_plon</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;State of the optical pathlength tracking.&#39;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+    <span class="k">def</span> <span class="nf">_set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_data</span><span class="p">,</span> <span class="n">_set_data</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Trace data.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_n</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+    <span class="k">def</span> <span class="nf">_set_n</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="n">n</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_n</span><span class="p">,</span> <span class="n">_set_n</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Number of trace events for each photon packet.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_options</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Compile time trace options.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_maxlen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxlen</span>
+    <span class="k">def</span> <span class="nf">_set_maxlen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">==</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_ALL</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">==</span> <span class="p">(</span><span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_START</span> <span class="o">|</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_END</span><span class="p">):</span>
+            <span class="n">maxlen</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">maxlen</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">maxlen</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Maximum trace length must be at least 1!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_maxlen</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">maxlen</span><span class="p">)</span>
+    <span class="n">maxlen</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_maxlen</span><span class="p">,</span> <span class="n">_set_maxlen</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Maximum trace length.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_nphotons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">return</span> <span class="n">n</span>
+    <span class="n">nphotons</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_nphotons</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Number of photon packets in the trace.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Trace.np_buffer"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.np_buffer">[docs]</a>    <span class="k">def</span> <span class="nf">np_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">allocation</span><span class="p">:</span> <span class="n">BufferAllocation</span><span class="p">,</span>
+                  <span class="n">nphotons</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Efficient numpy buffer allocation that can be used to directly download</span>
+<span class="sd">        data to the Trace object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Simulator instance that produced the results.</span>
+<span class="sd">        allocation: </span>
+<span class="sd">            Buffer allocation made by the :py:meth:`Trace.cl_pack` method.</span>
+<span class="sd">        nphotons: int</span>
+<span class="sd">            The number of photon packets traced by the simulation.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        np_buffer: np.ndarray</span>
+<span class="sd">            A numpy buffer that can be used to directly download the data</span>
+<span class="sd">            (no copy is required in the :py:meth:`Trace.update_data` method).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">dtype_int</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_int</span><span class="p">)</span>
+        <span class="n">dtype_float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_float</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">allocation</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">dtype_int</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nphotons</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype_int</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">allocation</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">dtype_float</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nphotons</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxlen</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">mc</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Unexpected buffer allocation!&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Trace.n_to_cl"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.n_to_cl">[docs]</a>    <span class="k">def</span> <span class="nf">n_to_cl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Prepare the array with number of events per photon packet for</span>
+<span class="sd">        upload to the OpenCL kernel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Simulator instance that will use the data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        cl_data: np.ndarray</span>
+<span class="sd">            Flat numpy data array of basic type ready for transfer to the</span>
+<span class="sd">            OpenCL device.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_int</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Trace.data_to_cl"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.data_to_cl">[docs]</a>    <span class="k">def</span> <span class="nf">data_to_cl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Prepare the trace data array for upload to the OpenCL kernel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Simulator instance that will use the data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        cl_data: np.ndarray</span>
+<span class="sd">            Flat numpy data array of basic type ready for transfer to the</span>
+<span class="sd">            OpenCL device.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cl_dtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+        <span class="c1">#if self._data.dtype == cl_dtype:</span>
+        <span class="c1">#    return np.frombuffer(self._data, dtype=mc.types.np_float)</span>
+        <span class="c1">#else:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">cl_dtype</span><span class="p">),</span>
+                             <span class="n">dtype</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_float</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Trace.cl_pack"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">nphotons</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the ctypes structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator. See the Trace.cl_type class for a detailed</span>
+<span class="sd">        list of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Ctypes structure that is filled with the source data.</span>
+<span class="sd">        nphotons: int</span>
+<span class="sd">            The number of photon packets that will be run by the simulator.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Filled ctypes structure received as an input argument or a new</span>
+<span class="sd">            instance if the input argument target is None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">nphotons</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The number of photon packets was not defined!&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Allocate a data buffer for the trace events.</span>
+        <span class="n">allocation</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">cl_allocate_rw_float_buffer</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="p">(</span><span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_ENTRY_LEN</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlen</span><span class="o">*</span><span class="n">nphotons</span><span class="p">,))</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">data_buffer_offset</span> <span class="o">=</span> <span class="n">allocation</span><span class="o">.</span><span class="n">offset</span>
+
+        <span class="c1"># Allocate data buffer for holding the number of trace events.</span>
+        <span class="n">allocation</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">cl_allocate_rw_int_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="p">))</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">count_buffer_offset</span> <span class="o">=</span> <span class="n">allocation</span><span class="o">.</span><span class="n">offset</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">max_events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxlen</span>
+
+        <span class="k">return</span> <span class="n">target</span></div>
+
+<div class="viewcode-block" id="Trace.apply_filter"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.apply_filter">[docs]</a>    <span class="k">def</span> <span class="nf">apply_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n_dropped</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_dropped</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_dropped</span>
+    <span class="n">dropped</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">_get_dropped</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s1">&#39;The number of photon packets that matched the filter, but were &#39;</span>\
+        <span class="s1">&#39;dropped due to exceeding the maximum trace length.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Trace.plot"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">,</span> <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Plots the paths of photon packets.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        inds: np.ndarray</span>
+<span class="sd">            A vector of indices or a logical mask for selecting the photon</span>
+<span class="sd">            packet. If a logical mask, the shape of the mask should be</span>
+<span class="sd">            (num_packets).</span>
+<span class="sd">        view: str</span>
+<span class="sd">            A string that specifies the plot view:</span>
+
+<span class="sd">            * &#39;xy&#39; - projection into the x-y plane.</span>
+<span class="sd">            * &#39;xy&#39; - projection into the x-z plane.</span>
+<span class="sd">            * &#39;xy&#39; - projection into the y-z plane.</span>
+<span class="sd">            * &#39;3d&#39; - 3D plot (default).</span>
+<span class="sd">        show: bool</span>
+<span class="sd">            If True, show the plot.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">pp</span>
+        <span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+
+        <span class="k">if</span> <span class="n">inds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">inds</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">inds</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">bool</span><span class="p">:</span>
+                <span class="n">inds</span><span class="p">,</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzeros</span><span class="p">(</span><span class="n">inds</span><span class="p">)</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">view</span> <span class="o">==</span> <span class="s1">&#39;3d&#39;</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">Axes3D</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">photon</span> <span class="ow">in</span> <span class="n">inds</span><span class="p">:</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">[</span><span class="n">photon</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxlen</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][:</span><span class="n">n</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][:</span><span class="n">n</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="s1">&#39;z&#39;</span><span class="p">][:</span><span class="n">n</span><span class="p">])</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span>
+                        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span>
+                        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="s1">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span>
+                        <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]],</span>
+                        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]],</span>
+                        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="s1">&#39;z&#39;</span><span class="p">][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]],</span>
+                        <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">view</span> <span class="ow">in</span><span class="p">(</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="s1">&#39;xz&#39;</span><span class="p">,</span> <span class="s1">&#39;yz&#39;</span><span class="p">):</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">photon</span> <span class="ow">in</span> <span class="n">inds</span><span class="p">:</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">[</span><span class="n">photon</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxlen</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">]][:</span><span class="n">n</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="n">view</span><span class="p">[</span><span class="mi">1</span><span class="p">]][:</span><span class="n">n</span><span class="p">])</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">]],</span>
+                        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="n">view</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">0</span><span class="p">]],</span>
+                        <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]],</span>
+                        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">photon</span><span class="p">][</span><span class="n">view</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]],</span>
+                        <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">view</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">set_window_title</span><span class="p">(</span><span class="s1">&#39;Trace view&#39;</span><span class="p">)</span>
+            <span class="n">pp</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+                <span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Trace.update"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="s1">&#39;Trace&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update the trace with data from the given trace object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        obj: Trace</span>
+<span class="sd">            Update the trace of this instance with the data</span>
+<span class="sd">            from Trace instance obj.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxlen</span> <span class="o">!=</span> <span class="n">obj</span><span class="o">.</span><span class="n">maxlen</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot update the trace with trace data &#39;</span>
+                             <span class="s1">&#39;of different maximum length!&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_overflow_mask</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Cannot update the trace with trace data of &#39;</span>
+                                <span class="s1">&#39;different type!&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">n</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">n</span></div>
+
+<div class="viewcode-block" id="Trace.update_data"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.update_data">[docs]</a>    <span class="k">def</span> <span class="nf">update_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span>
+                    <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
+                    <span class="n">nphotons</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update the content of raw data accumulators with simulation results.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Simulator instance that produced the data.</span>
+<span class="sd">        data: Dict[np.dtype, List[np.ndarray]]</span>
+<span class="sd">            Dict of allocated buffers (this implementation</span>
+<span class="sd">            uses only one integer and one floating point buffer).</span>
+<span class="sd">        nphotons: int</span>
+<span class="sd">            Number of photon packets used in the simulations.</span>
+<span class="sd">        kwargs: dict</span>
+<span class="sd">            Additional keyword arguments not used by this implementation.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1">#int_buffers = data[np.dtype(mc.types.np_int)]</span>
+        <span class="c1">#self._n = np.copy(int_buffers[0])</span>
+
+        <span class="c1">#float_buffers = data[np.dtype(mc.types.np_float)]</span>
+        <span class="c1">#self._data = np.frombuffer(</span>
+        <span class="c1">#    np.copy(float_buffers[0]), dtype=self.dtype(mc))</span>
+        <span class="c1">#self._data.shape = (nphotons, self._maxlen)</span>
+        <span class="n">new_data_dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_float</span><span class="p">)</span>
+        <span class="n">new_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">new_data_dtype</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">new_n</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_int</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_overflow_mask</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">new_data</span><span class="o">.</span><span class="n">dtype</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Cannot update the trace with trace data of &#39;</span>
+                                <span class="s1">&#39;different type!&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">new_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot update the trace with trace data &#39;</span>
+                                 <span class="s1">&#39;of different maximum length!&#39;</span><span class="p">)</span>
+
+            <span class="n">tmp_trace</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">tmp_trace</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">tmp_trace</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">tmp_trace</span><span class="o">.</span><span class="n">update_data</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">nphotons</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span> <span class="n">tmp_trace</span><span class="o">.</span><span class="n">n</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">tmp_trace</span><span class="o">.</span><span class="n">_data</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="n">new_n</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">new_data</span>
+            <span class="c1"># apply filter to the trace data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_filter</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the number of photon packets in the trace.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        n: int</span>
+<span class="sd">            The number of photon packets in the trace.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="o">.</span><span class="n">size</span>
+
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">==</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_ALL</span><span class="p">:</span>
+                <span class="n">flagstr</span> <span class="o">=</span> <span class="s1">&#39;Trace.TRACE_ALL&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">flagstr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">&amp;</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_START</span><span class="p">:</span>
+                    <span class="n">flagstr</span> <span class="o">+=</span> <span class="s1">&#39;Trace.TRACE_START | &#39;</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">&amp;</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_END</span><span class="p">:</span>
+                    <span class="n">flagstr</span> <span class="o">+=</span> <span class="s1">&#39;Trace.TRACE_END | &#39;</span>
+                <span class="n">flagstr</span> <span class="o">=</span> <span class="n">flagstr</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">flagstr</span> <span class="o">=</span> <span class="s1">&#39;Trace.TRACE_NONE&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;Trace(maxlen=</span><span class="si">{}</span><span class="s1">, options=</span><span class="si">{}</span><span class="s1">, filter=</span><span class="si">{}</span><span class="s1">, plon=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">maxlen</span><span class="p">,</span> <span class="n">flagstr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">plon</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span> <span class="o">+</span> \
+            <span class="s1">&#39; # Trace object at 0x</span><span class="si">{:&gt;08X}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

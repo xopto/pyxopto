@@ -1,0 +1,20 @@
+xopto.data package
+==================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.data.mcml
+   xopto.data.mcvox
+   xopto.data.primes
+
+Module contents
+---------------
+
+.. automodule:: xopto.data
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.materials.ri.water &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.materials.ri.water</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
+
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">RefractiveIndex</span>
+
+
+<div class="viewcode-block" id="Daimon"><a class="viewcode-back" href="../../../../apidoc/xopto.materials.ri.water.html#xopto.materials.ri.water.Daimon">[docs]</a><span class="k">class</span> <span class="nc">Daimon</span><span class="p">(</span><span class="n">RefractiveIndex</span><span class="p">):</span>
+    <span class="n">material</span> <span class="o">=</span> <span class="s1">&#39;water&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">293</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Refractive index of water as given in:</span>
+<span class="sd">            Daimon and Masumura, Appl. Opt. 46, 3811-3820 (2007)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t: float</span>
+<span class="sd">            Temperature of the medium.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">trange</span><span class="o">=</span><span class="p">(</span><span class="mi">292</span><span class="p">,</span> <span class="mi">297</span><span class="p">),</span> <span class="n">wrange</span><span class="o">=</span><span class="p">(</span><span class="mf">180e-9</span><span class="p">,</span> <span class="mf">1129e-9</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Calculate the refractive index of the medium.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        wavelength: float or np.ndarray</span>
+<span class="sd">            Wavelength of light (m)</span>
+<span class="sd">        temperature: float or None</span>
+<span class="sd">            Use this temperature instead of the default temperature.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ri: float or np.ndarray</span>
+<span class="sd">            Refractive index at the given wavelength(s).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_wavelengths</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">temperature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">temperature</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_temperature</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="c1"># wavelength must be in units of um</span>
+        <span class="n">inv_w2</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="mf">1e6</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="n">n_19</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">5.672526103e-1</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">5.085550461e-3</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">)</span> <span class="o">+</span>
+                             <span class="mf">1.736581125e-1</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.814938654e-2</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">)</span> <span class="o">+</span>
+                             <span class="mf">2.121531502e-2</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">2.617260739e-2</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">)</span> <span class="o">+</span>
+                             <span class="mf">1.138493213e-1</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.073888649e1</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">))</span>
+
+        <span class="n">n_20</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">5.684027565e-1</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">5.101829712e-3</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">)</span> <span class="o">+</span>
+                             <span class="mf">1.726177391e-1</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.821153936e-2</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">)</span> <span class="o">+</span>
+                             <span class="mf">2.086189578e-2</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">2.620722293e-2</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">)</span> <span class="o">+</span>
+                             <span class="mf">1.130748688e-1</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.069792721e1</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">))</span>
+
+        <span class="n">n_21p5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">5.689093832e-1</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">5.110301794e-3</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">)</span> <span class="o">+</span>
+                            <span class="mf">1.719708856e-1</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.825180155e-2</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">)</span> <span class="o">+</span>
+                            <span class="mf">2.062501582e-2</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">2.624158904e-2</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">)</span> <span class="o">+</span>
+                            <span class="mf">1.123965424e-1</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.067505178e1</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">))</span>
+
+        <span class="n">n_24</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">5.666959820e-1</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">5.084151894e-3</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">)</span> <span class="o">+</span>
+                             <span class="mf">1.731900098e-1</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.818488474e-2</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">)</span> <span class="o">+</span>
+                             <span class="mf">2.095951857e-2</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">2.625439472e-2</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">)</span> <span class="o">+</span>
+                             <span class="mf">1.125228406e-1</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.073842352e1</span><span class="o">*</span><span class="n">inv_w2</span><span class="p">))</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span>
+            <span class="p">[</span><span class="mf">19.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">21.5</span><span class="p">,</span> <span class="mf">24.0</span><span class="p">],</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">n_19</span><span class="p">,</span> <span class="n">n_20</span><span class="p">,</span> <span class="n">n_21p5</span><span class="p">,</span> <span class="n">n_24</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+            <span class="n">assume_sorted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">fill_value</span><span class="o">=</span><span class="s1">&#39;extrapolate&#39;</span>
+        <span class="p">)(</span><span class="n">t</span> <span class="o">-</span> <span class="mf">273.0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="Schiebener"><a class="viewcode-back" href="../../../../apidoc/xopto.materials.ri.water.html#xopto.materials.ri.water.Schiebener">[docs]</a><span class="k">class</span> <span class="nc">Schiebener</span><span class="p">(</span><span class="n">RefractiveIndex</span><span class="p">):</span>
+    <span class="n">material</span> <span class="o">=</span> <span class="s1">&#39;water&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">293</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Refractive index of water as given in:</span>
+<span class="sd">            Schiebener and Straub, J.Phys. Chem. Ref. Data, (1990).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t: float</span>
+<span class="sd">            Temperature of the medium.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">trange</span><span class="o">=</span><span class="p">(</span><span class="mi">273</span><span class="p">,</span> <span class="mi">498</span><span class="p">),</span> <span class="n">wrange</span><span class="o">=</span><span class="p">(</span><span class="mf">200e-9</span><span class="p">,</span> <span class="mf">2500e-9</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Calculate the refractive index of the medium.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        wavelength: float or np.ndarray</span>
+<span class="sd">            Wavelength of light (m)</span>
+<span class="sd">        temperature: float or None</span>
+<span class="sd">            Use this temperature instead of the default temperature.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ri: float or np.ndarray</span>
+<span class="sd">            Refractive index at the given wavelength(s).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_wavelengths</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">temperature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_temperature</span><span class="p">(</span><span class="n">temperature</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">temperature</span><span class="p">)</span>
+
+        <span class="c1"># wavelength must be in (nm)</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">*</span><span class="mf">1e9</span>
+
+        <span class="n">rho_w</span> <span class="o">=</span> <span class="mi">1000</span> <span class="c1"># density of water (kg/m^3)</span>
+
+        <span class="n">lambda_UV</span> <span class="o">=</span> <span class="mf">0.2292020</span>
+        <span class="n">lambda_IR</span> <span class="o">=</span> <span class="mf">5.432937</span>
+
+        <span class="n">a_0</span> <span class="o">=</span> <span class="mf">0.243905091</span>
+        <span class="n">a_1</span> <span class="o">=</span> <span class="mf">9.53518094e-3</span>
+        <span class="n">a_2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">3.64358110e-3</span>
+        <span class="n">a_3</span> <span class="o">=</span> <span class="mf">2.65666426e-4</span>
+        <span class="n">a_4</span> <span class="o">=</span> <span class="mf">1.59189325e-3</span>
+        <span class="n">a_5</span> <span class="o">=</span> <span class="mf">2.45733798e-3</span>
+        <span class="n">a_6</span> <span class="o">=</span> <span class="mf">0.897478251</span>
+        <span class="n">a_7</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.63066183e-2</span>
+
+        <span class="n">lorentz</span> <span class="o">=</span> <span class="n">a_0</span> <span class="o">+</span> <span class="n">a_1</span><span class="o">*</span><span class="n">rho_w</span><span class="o">/</span><span class="mf">1e3</span> <span class="o">+</span> <span class="n">a_2</span><span class="o">*</span><span class="n">t</span><span class="o">/</span><span class="mf">273.15</span> <span class="o">+</span> \
+            <span class="n">a_3</span><span class="o">*</span><span class="p">(</span><span class="n">w</span><span class="o">/</span><span class="mf">589.</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">t</span><span class="o">/</span><span class="mf">273.15</span> <span class="o">+</span> \
+            <span class="n">a_4</span><span class="o">*</span><span class="p">(</span><span class="n">w</span><span class="o">/</span><span class="mf">589.</span><span class="p">)</span><span class="o">**-</span><span class="mi">2</span> <span class="o">+</span> <span class="n">a_5</span><span class="o">*</span><span class="p">((</span><span class="n">w</span><span class="o">/</span><span class="mf">589.</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">lambda_UV</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> \
+            <span class="n">a_6</span><span class="o">*</span><span class="p">((</span><span class="n">w</span><span class="o">/</span><span class="mf">589.</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">lambda_IR</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">a_7</span><span class="o">*</span><span class="p">(</span><span class="n">rho_w</span><span class="o">/</span><span class="mf">1e3</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">lorentz</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">lorentz</span><span class="p">))</span></div>
+
+<span class="c1"># Global instances for immediate use.</span>
+<span class="n">daimon</span> <span class="o">=</span> <span class="n">Daimon</span><span class="p">()</span>
+<span class="n">schiebener</span> <span class="o">=</span> <span class="n">Schiebener</span><span class="p">()</span>
+
+<span class="n">default</span> <span class="o">=</span> <span class="n">daimon</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

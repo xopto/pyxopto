@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcml.mcsource.line &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcml.mcsource.line</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcsource.base</span> <span class="kn">import</span> <span class="n">Source</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">cltypes</span><span class="p">,</span> <span class="n">mcobject</span><span class="p">,</span> <span class="n">mctypes</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">boundary</span>
+
+<div class="viewcode-block" id="Line"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.line.html#xopto.mcml.mcsource.line.Line">[docs]</a><span class="k">class</span> <span class="nc">Line</span><span class="p">(</span><span class="n">Source</span><span class="p">):</span>
+<div class="viewcode-block" id="Line.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.line.html#xopto.mcml.mcsource.line.Line.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClLine</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Ctypes structure that is passed to the Monte Carlo kernel.</span>
+
+<span class="sd">            Fields</span>
+<span class="sd">            ------</span>
+<span class="sd">            position: mc_point3f_t</span>
+<span class="sd">                Source position on the sample surface.</span>
+<span class="sd">            direction_medium: mc_point3f_t</span>
+<span class="sd">                Source direction in the surrounding medium before refraction</span>
+<span class="sd">                into the sample.</span>
+<span class="sd">            direction_sample: mc_point3f_t</span>
+<span class="sd">                Source direction in the sample after refraction from the</span>
+<span class="sd">                surrounding medium.</span>
+<span class="sd">            reflectance: mc_fp_t</span>
+<span class="sd">                Precalculated specular reflectance at the medium -&gt; sample layer</span>
+<span class="sd">                transition.</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;direction_medium&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;direction_sample&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;reflectance&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">ClLine</span></div>
+
+<div class="viewcode-block" id="Line.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.line.html#xopto.mcml.mcsource.line.Line.cl_declaration">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that defines the source in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McSource {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t position;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t direction_medium;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t direction_sample;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t reflectance;&#39;</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Line.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.line.html#xopto.mcml.mcsource.line.Line.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the source in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;void dbg_print_source(__mc_source_mem const McSource *src){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(&quot;Line source:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(INDENT &quot;position        :&quot;, &amp;src-&gt;position);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(INDENT &quot;direction_medium:&quot;, &amp;src-&gt;direction_medium);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(INDENT &quot;direction_sample:&quot;, &amp;src-&gt;direction_sample);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT   &quot;reflectance     :&quot;, src-&gt;reflectance);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void mcsim_launch(McSim *mcsim){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	__mc_source_mem const struct McSource *source = mcsim_source(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_set_weight(mcsim, FP_1 - source-&gt;reflectance);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_set_position(mcsim, &amp;source-&gt;position);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_set_direction(mcsim, &amp;source-&gt;direction_sample);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	#if MC_USE_SPECULAR_DETECTOR&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_point3f_t direction = source-&gt;direction_medium;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_specular_detector_deposit(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mcsim, mcsim_position(mcsim), &amp;direction, source-&gt;reflectance);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	#endif&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_set_current_layer_index(mcsim, 1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                 <span class="n">direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Line photon packet source - equivalent of a spatial delta impulse.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        position: (float, float, float)</span>
+<span class="sd">            Line source position as an array-like object of size 3 (x, y, z).</span>
+
+<span class="sd">        direction: (float, float, float)</span>
+<span class="sd">            Line source direction vector as an array-like object of size 3</span>
+<span class="sd">            (px, py, pz).</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        If the source position lies outside of the sample, the entry point</span>
+<span class="sd">        into the sample is determined by propagating the packet from the source</span>
+<span class="sd">        position along the source direction. The MC simulation will start after</span>
+<span class="sd">        subtracting the specular reflectance at the sample boundary from the</span>
+<span class="sd">        initial weight of the packet.</span>
+<span class="sd">        Note that in case the position lies within the sample,</span>
+<span class="sd">        it will be used as the launch point and the packets will retain the</span>
+<span class="sd">        full initial weight.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">Source</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_position</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_direction</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span>
+    <span class="k">def</span> <span class="nf">_set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">position</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_position</span><span class="p">,</span> <span class="n">_set_position</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Source position.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span>
+    <span class="k">def</span> <span class="nf">_set_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">direction</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">norm</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The norm/length of the propagation direction &#39;</span>
+                             <span class="s1">&#39;vector must not be 0!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span> <span class="o">/=</span> <span class="n">norm</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_direction</span><span class="p">,</span> <span class="n">_set_direction</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="s1">&#39;Source direction.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Line.update"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.line.html#xopto.mcml.mcsource.line.Line.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;Line&#39;</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update this source configuration from the other source. The</span>
+<span class="sd">        other source must be of the same type as this source or a dict with</span>
+<span class="sd">        appropriate fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other: Line or dict</span>
+<span class="sd">            This source is updated with the configuration of the other source.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Line</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">position</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">direction</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;direction&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Line.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.line.html#xopto.mcml.mcsource.line.Line.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the ctypes structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator. See :py:meth:`Line.cl_type` for a detailed</span>
+<span class="sd">        list of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+<span class="sd">        target: mcypes.Structure</span>
+<span class="sd">            Ctypes structure that is filled with the source data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: mctypes.Structures</span>
+<span class="sd">            Filled ctypes structure received as an input argument or a new</span>
+<span class="sd">            instance if the input argument target is None.</span>
+<span class="sd">        topgeometry: None</span>
+<span class="sd">            This source does not use advanced geometry at the top sample surface.</span>
+<span class="sd">        bottomgeometry: None</span>
+<span class="sd">            This source does not use advanced geometry at the bottom sample surface.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="c1"># move the position to the sample surface</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="o">*</span><span class="n">t</span>
+        <span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">reflectance</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">reflectance</span><span class="p">(</span>
+            <span class="n">mc</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">reflectance</span> <span class="o">&gt;=</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The line source is fully reflected from the top &#39;</span>
+                             <span class="s1">&#39;surface of the sample!&#39;</span><span class="p">)</span>
+        <span class="c1"># refract the beam</span>
+        <span class="n">n1</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">n</span>
+        <span class="n">n2</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">n</span>
+        <span class="n">sin1</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="n">sin2</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">n1</span><span class="o">*</span><span class="n">sin1</span><span class="o">/</span><span class="n">n2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="nb">dir</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">n1</span><span class="o">/</span><span class="n">n2</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">n1</span><span class="o">/</span><span class="n">n2</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sin2</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">direction_medium</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">direction_sample</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">reflectance</span> <span class="o">=</span> <span class="n">reflectance</span>
+
+        <span class="k">return</span> <span class="n">target</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Line (position=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">), direction=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">))&#39;</span><span class="o">.</span>\
+            <span class="nb">format</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,23 @@
+xopto.mcvox.mcdetector.probe package
+====================================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcvox.mcdetector.probe.fiberarray
+   xopto.mcvox.mcdetector.probe.fiberarraypl
+   xopto.mcvox.mcdetector.probe.lineararray
+   xopto.mcvox.mcdetector.probe.lineararraypl
+   xopto.mcvox.mcdetector.probe.sixaroundone
+   xopto.mcvox.mcdetector.probe.sixaroundonepl
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcvox.mcdetector.probe
+   :members:
+   :undoc-members:
+   :show-inheritance:

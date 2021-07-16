@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>OpenCL devices &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Layered MC" href="mcml/index.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <span class="target" id="mc-working-with-opencl-devices-label"></span><section id="opencl-devices">
+<span id="opencl-devices-label"></span><h1>OpenCL devices<a class="headerlink" href="#opencl-devices" title="Permalink to this headline">¶</a></h1>
+<p>OpenCL devices can be easily discovered and selected with the help of the
+<a class="reference internal" href="../apidoc/xopto.cl.clinfo.html#module-xopto.cl.clinfo" title="xopto.cl.clinfo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.cl.clinfo</span></code></a> module.</p>
+<p>To list all available OpenCL devices use the
+<a class="reference internal" href="../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.info" title="xopto.cl.clinfo.info"><code class="xref py py-func docutils literal notranslate"><span class="pre">info()</span></code></a> function. The human-readable output contains
+information on the relevant properties of the installed OpenCL devices.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="n">clinfo</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>An example output of the above command on a system with a single integrated
+Intel GPU:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">===============================================================</span>
+Platform name: Intel<span class="o">(</span>R<span class="o">)</span> OpenCL HD Graphics
+Platform profile: FULL_PROFILE
+Platform vendor: Intel<span class="o">(</span>R<span class="o">)</span> Corporation
+Platform version: OpenCL <span class="m">2</span>.1
+---------------------------------------------------------------
+        Device name: Intel<span class="o">(</span>R<span class="o">)</span> Gen9 HD Graphics NEO
+        Device type: ALL <span class="p">|</span> GPU
+        Device available: Yes
+        Device maximum clock frequency: <span class="m">1150</span> MHz
+        Device default address space: <span class="m">64</span> bit
+        Device maximum number of constant kernel arguments: <span class="m">8</span>
+        Device maximum kernel argument size: <span class="m">1024</span> B
+        Device global memory: <span class="m">12559</span> MB
+        Device global memory cache: <span class="m">512</span> kB
+        Device maximum global memory allocation size: <span class="m">4095</span> MB
+        Device <span class="nb">local</span> memory: <span class="m">64</span> kB
+        Device constant memory: <span class="m">4194296</span>.0 kB
+        Device max clock speed: <span class="m">1150</span> MHz
+        Device compute units: <span class="m">24</span>
+        Device maximum work group size: <span class="m">256</span>
+        Maximum number of work-item dimensions <span class="o">(</span>global or <span class="nb">local</span><span class="o">)</span>: <span class="m">3</span>
+        Maximum number of work-items <span class="k">in</span> each dimension of the work group: <span class="o">[</span><span class="m">256</span>, <span class="m">256</span>, <span class="m">256</span><span class="o">]</span>
+        Maximum number of image-objects that can be passed to a kernel: <span class="m">128</span>
+        Device profiling timer resolution: <span class="m">83</span> ns
+        Device supported OpenCL extensions:
+                cl_khr_byte_addressable_store
+                cl_khr_fp16
+                cl_khr_global_int32_base_atomics
+                cl_khr_global_int32_extended_atomics
+                cl_khr_icd
+                cl_khr_local_int32_base_atomics
+                cl_khr_local_int32_extended_atomics
+                cl_intel_subgroups
+                cl_intel_required_subgroup_size
+                cl_intel_subgroups_short
+                cl_khr_spir
+                cl_intel_accelerator
+                cl_intel_driver_diagnostics
+                cl_khr_priority_hints
+                cl_khr_throttle_hints
+                cl_khr_create_command_queue
+                cl_intel_subgroups_char
+                cl_intel_subgroups_long
+                cl_khr_fp64
+                cl_khr_subgroups
+                cl_khr_il_program
+                cl_intel_spirv_device_side_avc_motion_estimation
+                cl_intel_spirv_media_block_io
+                cl_intel_spirv_subgroups
+                cl_khr_spirv_no_integer_wrap_decoration
+                cl_intel_unified_shared_memory_preview
+                cl_khr_mipmap_image
+                cl_khr_mipmap_image_writes
+                cl_intel_planar_yuv
+                cl_intel_packed_yuv
+                cl_intel_motion_estimation
+                cl_intel_device_side_avc_motion_estimation
+                cl_intel_advanced_motion_estimation
+                cl_khr_int64_base_atomics
+                cl_khr_int64_extended_atomics
+                cl_khr_image2d_from_buffer
+                cl_khr_depth_images
+                cl_intel_media_block_io
+                cl_khr_3d_image_writes
+                cl_intel_va_api_media_sharing
+</pre></div>
+</div>
+<p>To get a list of all available OpenCL GPU devices use the
+<a class="reference internal" href="../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.gpus" title="xopto.cl.clinfo.gpus"><code class="xref py py-func docutils literal notranslate"><span class="pre">gpus()</span></code></a> function. Two optional input arguments
+allow filtering of the  OpenCL devices by a platform name
+(<code class="code docutils literal notranslate"><span class="pre">platform</span></code>) and / or device name (<code class="code docutils literal notranslate"><span class="pre">device</span></code>). The matching of the
+given device and / or platform name is done in a case insensitive way. The
+target OpenCL device and / or platform name must contain the given string.</p>
+<p>In the following example we fetch a list of installed OpenCL GPU devices:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="n">gpus</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpus</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In this example, we fetch only the Nvidia GPU devices:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="n">nvidia_gpus</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpus</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the <a class="reference internal" href="../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.gpus" title="xopto.cl.clinfo.gpus"><code class="xref py py-func docutils literal notranslate"><span class="pre">gpus()</span></code></a> returns <code class="code python docutils literal notranslate"><span class="keyword constant"><span class="pre">None</span></span></code> if no
+devices are found that match the search criteria.</p>
+<p>We can use the <a class="reference internal" href="../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.info" title="xopto.cl.clinfo.info"><code class="xref py py-func docutils literal notranslate"><span class="pre">xopto.cl.clinfo.info()</span></code></a> function to print out
+human-readable information on the found OpenCL devices.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="n">nvidia_gpus</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpus</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">)</span>
+
+<span class="n">clinfo</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">devices</span><span class="o">=</span><span class="n">nvidia_gpus</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternatively, the <a class="reference internal" href="../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.gpu" title="xopto.cl.clinfo.gpu"><code class="xref py py-func docutils literal notranslate"><span class="pre">gpu()</span></code></a> function can be used to
+retrieve the n-th OpenCL device that matches the search criteria. The following
+example returns the second installed Nvidia GPU device. Note that the parameter
+<code class="code docutils literal notranslate"><span class="pre">index</span></code> that is used to select a particular device is zero-based
+(0 - 1 <sup>st</sup> device, 1 - 2 <sup>nd</sup> device, …).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="n">nvidia_gpus</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Use the <a class="reference internal" href="../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.cpus" title="xopto.cl.clinfo.cpus"><code class="xref py py-func docutils literal notranslate"><span class="pre">cpus()</span></code></a> and <a class="reference internal" href="../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.cpu" title="xopto.cl.clinfo.cpu"><code class="xref py py-func docutils literal notranslate"><span class="pre">cpu()</span></code></a>
+functions to find or select CPU devices. The two functions take the same
+parameters as the <a class="reference internal" href="../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.gpus" title="xopto.cl.clinfo.gpus"><code class="xref py py-func docutils literal notranslate"><span class="pre">gpus()</span></code></a> and
+<a class="reference internal" href="../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.gpu" title="xopto.cl.clinfo.gpu"><code class="xref py py-func docutils literal notranslate"><span class="pre">gpu()</span></code></a> functions.</p>
+<p>To retrieve OpenCL device information into a <code class="code python docutils literal notranslate"><span class="name builtin"><span class="pre">dict</span></span></code> instead of
+displaying the information in the console, use the
+<a class="reference internal" href="../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.device_info" title="xopto.cl.clinfo.device_info"><code class="xref py py-func docutils literal notranslate"><span class="pre">device_info()</span></code></a> function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="n">nvidia_gpu</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">)</span>
+<span class="n">gpu_info</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">device_info</span><span class="p">(</span><span class="n">nvidia_gpu</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">gpu_info</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gpu_info</span><span class="p">[</span><span class="s1">&#39;platform&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>To check if a device supports one or more OpenCL extensions, use the
+<a class="reference internal" href="../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.device_extension" title="xopto.cl.clinfo.device_extension"><code class="xref py py-func docutils literal notranslate"><span class="pre">device_extension()</span></code></a> function that returns True if
+the extension is supported and False if not (returns a list of boolean values
+if multiple extensions are queried). See the
+<a class="reference external" href="https://www.khronos.org/registry/OpenCL/sdk/1.2/docs/man/xhtml/EXTENSION.html">full list</a>
+of extensions supported by the OpenCL 1.2 programming language.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="n">nvidia_gpu</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">)</span>
+
+<span class="n">supports_double</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">device_extension</span><span class="p">(</span><span class="n">nvidia_gpu</span><span class="p">,</span> <span class="s1">&#39;cl_khr_fp64&#39;</span><span class="p">)</span>
+
+<span class="n">supports_64bit_atomic_operations</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">device_extension</span><span class="p">(</span>
+    <span class="n">nvidia_gpu</span><span class="p">,</span> <span class="s1">&#39;cl_khr_int64_base_atomics&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="installation.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="mcml/index.html" title="next chapter">Layered MC</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

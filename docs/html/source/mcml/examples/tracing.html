@@ -1,0 +1,461 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Photon packet tracing &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Sampling volume simulations" href="sampling_volume.html" />
+    <link rel="prev" title="Reflectance spectrum dependence on scattering phase function" href="scattering_phase_function.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="photon-packet-tracing">
+<span id="example-photon-packet-tracing"></span><h1>Photon packet tracing<a class="headerlink" href="#photon-packet-tracing" title="Permalink to this headline">¶</a></h1>
+<p>This example (available in <cite>examples/mcml/tracing</cite>) covers all the neccessary steps for photon packet tracing in a two-layered turbid medium utilizing multimode optical fibers as sources and detectors.</p>
+<section id="importing-the-required-modules-and-submodules">
+<h2>Importing the required modules and submodules<a class="headerlink" href="#importing-the-required-modules-and-submodules" title="Permalink to this headline">¶</a></h2>
+<p>Firstly, we import the submodule <a class="reference internal" href="../../../apidoc/xopto.mcml.mc.html#module-xopto.mcml.mc" title="xopto.mcml.mc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mc</span></code></a>, which can be conveniently used as an interface to the neccessary submodules for sources, detectors, layers, simulators, etc., the submodule <a class="reference internal" href="../../../apidoc/xopto.mcml.mcutil.fiber.html#module-xopto.mcml.mcutil.fiber" title="xopto.mcml.mcutil.fiber"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcutil.fiber</span></code></a>, which allows utilization of multimode optical fibers and the submodule <a class="reference internal" href="../../../apidoc/xopto.cl.clinfo.html#module-xopto.cl.clinfo" title="xopto.cl.clinfo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.cl.clinfo</span></code></a>, which provides functions for working with OpenCL resources, i.e. available computational devices (CPUs, GPUs, etc.). Subsequently, we import the standard modules <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> for dealing with multidimensional arrays and visualization.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">fiber</span>
+<span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">pp</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Photon packet tracing can be done in the voxelated Monte Carlo model using the <a class="reference internal" href="../../../apidoc/xopto.mcvox.mc.html#module-xopto.mcvox.mc" title="xopto.mcvox.mc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcvox.mc</span></code></a> submodule. For more information regarding the trace functionality, see <a class="reference internal" href="../trace.html#mcml-trace-label"><span class="std std-ref">Trace</span></a>.</p>
+</div>
+</section>
+<section id="computational-device">
+<h2>Computational device<a class="headerlink" href="#computational-device" title="Permalink to this headline">¶</a></h2>
+<p>The function <code class="xref py py-func docutils literal notranslate"><span class="pre">gpu()</span></code> accepts a unique string representation of the desired computational device, which can be found via listing all of the available OpenCL devices (see <a class="reference internal" href="../../opencl_devices.html#opencl-devices-label"><span class="std std-ref">OpenCL devices</span></a>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cl_device</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s1">&#39;NVIDIA GeForce&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this example, we have selected NVIDIA GeForce graphics processing unit. The string should be changed to an available computation device. It is sufficient to provide only a unique part that pertains to the desired computational device.</p>
+</div>
+</section>
+<section id="the-layer-stack">
+<h2>The layer stack<a class="headerlink" href="#the-layer-stack" title="Permalink to this headline">¶</a></h2>
+<p>Next, we define the layer stack and corresponding optical properties. The layer stack of the medium is defined through the <a class="reference internal" href="../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layers" title="xopto.mcml.mclayer.layer.Layers"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layers</span></code></a> constructor, which accepts a list of <a class="reference internal" href="../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layer" title="xopto.mcml.mclayer.layer.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a> objects representing each individual layer. The layers are stacked along the positive direction of the z coordinate axis, which points into the medium. See <a class="reference internal" href="basic_example.html#mcml-basic-example-label"><span class="std std-ref">Basic example</span></a> or <a class="reference internal" href="../layer_stack.html#mcml-layer-stack-label"><span class="std std-ref">The layer stack</span></a> for more information regarding the layer construction. Briefly, the topmost and bottommost layers are used only to provide the optical properties of the surrounding medium, especially to properly reflect/refract the photon packets at the boundaries. Therefore, for a two-layered turbid medium four layers have to be defined. In this example, we set the thickness of the first layer corresponding to the turbid medium to 1 mm and of the second layer similarly to 1 mm. Next, we set the refractive index to 1.33 for the first and 1.4 of the second layer. The surrounding medium refractive index is set to 1.45 to mimick the refractive index of the multimode optical fiber core. This will lead to a proper reflection/refraction at the probe-medium interface (for more complex boundary conidition see example <a class="reference internal" href="reflectance_optical_probes.html#example-reflectance-optical-probes"><span class="std std-ref">Reflectance acquired with optical fibers and probes</span></a>). The absorption and scattering coefficients are set to 1 1/cm and 125 1/cm for the first layer, and 2 1/cm and 125 1/cm for the second layer, respectively. Finally, the Henyey-Greenstein phase function is utilized in the first and second layer of the turbid medium with anistropy factors 0.8 and 0.9, respectively.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">layers</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">([</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">1e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">125e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.4</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">2e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">125e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.9</span><span class="p">)),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All quantities MUST be provided in appropriate units, i.e., distances in m, absorption and scattering coefficients in 1/m.</p>
+</div>
+</section>
+<section id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>Below we define a multimode fiber source from the <a class="reference internal" href="../../../apidoc/xopto.mcml.mcutil.fiber.html#module-xopto.mcml.mcutil.fiber" title="xopto.mcml.mcutil.fiber"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fiber</span></code></a> submodule having a core diameter <code class="code docutils literal notranslate"><span class="pre">dcore</span></code> of 200 μm, combined diameter of core and cladding <code class="code docutils literal notranslate"><span class="pre">dcladding</span></code> of 220 μm, core refractive index <code class="code docutils literal notranslate"><span class="pre">ncore</span></code> of 1.45 and numerical aperture <code class="code docutils literal notranslate"><span class="pre">na</span></code> of 0.22. The defined multimode fiber object <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber" title="xopto.mcbase.mcutil.fiber.MultimodeFiber"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultimodeFiber</span></code></a> is passed to the <a class="reference internal" href="../../../apidoc/xopto.mcml.mcsource.fiber.html#xopto.mcml.mcsource.fiber.UniformFiber" title="xopto.mcml.mcsource.fiber.UniformFiber"><code class="xref py py-class docutils literal notranslate"><span class="pre">UniformFiber</span></code></a> source constructor with specified parameters <code class="code docutils literal notranslate"><span class="pre">position</span></code> and <code class="code docutils literal notranslate"><span class="pre">direction</span></code>. In this case we displaced the source fiber along the <img class="math" src="../../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> coordinate by -440 μm. The source is also positioned normally to the turbid medium, which is the case by default. The uniform fiber means that the photon packets are launched into the medium uniformly over the solid angle spanned by the numerical aperture of the optical fiber. For various other source definitions check <a class="reference internal" href="../source.html#mcml-source-label"><span class="std std-ref">Sources</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">UniformFiber</span><span class="p">(</span>
+    <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.452</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+    <span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">440e-6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="detector">
+<h2>Detector<a class="headerlink" href="#detector" title="Permalink to this headline">¶</a></h2>
+<p>We define a multimode optical fiber detector at the bottom of the turbid medium (note that other types of detectors and their position can be defined, see <a class="reference internal" href="../detector.html#mcml-detector-label"><span class="std std-ref">Detectors</span></a>). For the multimode optical fiber detector we use the same properties as for the source fiber. The <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber" title="xopto.mcbase.mcutil.fiber.MultimodeFiber"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultimodeFiber</span></code></a> is subsequently passed to the <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.FiberLayout" title="xopto.mcbase.mcutil.fiber.FiberLayout"><code class="xref py py-class docutils literal notranslate"><span class="pre">FiberLayout</span></code></a> constructor, which accepts the position and direction of the multimode optical fiber detector. In this case we displaced the detector fiber along the <img class="math" src="../../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> coordinate by 440 μm. A <code class="code docutils literal notranslate"><span class="pre">list</span></code> of <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.FiberLayout" title="xopto.mcbase.mcutil.fiber.FiberLayout"><code class="xref py py-class docutils literal notranslate"><span class="pre">FiberLayout</span></code></a> objects can be passed to the <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.probe.fiberarray.html#xopto.mcml.mcdetector.probe.fiberarray.FiberArray" title="xopto.mcml.mcdetector.probe.fiberarray.FiberArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcml.mcdetector.probe.fiberarray.FiberArray</span></code></a>. However, here we use a single multimode detector. The variable <code class="code docutils literal notranslate"><span class="pre">detector_bottom</span></code> is subsequently passed to <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.Detectors" title="xopto.mcml.mcdetector.base.Detectors"><code class="xref py py-class docutils literal notranslate"><span class="pre">Detectors</span></code></a> constructor as the <code class="code docutils literal notranslate"><span class="pre">bottom</span></code> keyword argument.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">detector_bottom</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">FiberArray</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">fiber</span><span class="o">.</span><span class="n">FiberLayout</span><span class="p">(</span>
+        <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+        <span class="p">),</span>
+        <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">440e-6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">d1</span> <span class="o">+</span> <span class="n">d2</span><span class="p">),</span>
+        <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="p">),]</span>
+<span class="p">)</span>
+<span class="n">detectors</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span>
+    <span class="n">bottom</span><span class="o">=</span><span class="n">detector_bottom</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="trace">
+<h2>Trace<a class="headerlink" href="#trace" title="Permalink to this headline">¶</a></h2>
+<p>Firstly, we define the total number of launched photon packets <code class="code docutils literal notranslate"><span class="pre">nphotons</span></code>, which should be sufficiently small not to overflow the memory. Secondly, we define the number of recorded traces <code class="code docutils literal notranslate"><span class="pre">recorded_traces</span></code>, which comes into play when photon packet traces are filtered and only selected ones satisfy the criterion. In such a case, it can occur that only a small number of photon packets are traced within a single Monte Carlo run and therefore multiple runs are required to satisfy the number of photon packets traces to amount to at least <code class="code docutils literal notranslate"><span class="pre">recorded_traces</span></code>. Finally, the maximum expected number of events <code class="code docutils literal notranslate"><span class="pre">number_of_events</span></code> along each photon packet trace has to be specified beforehand. This number depends on the source-detector position and optical properties. Ideally, one should run the photon packet with as high <code class="code docutils literal notranslate"><span class="pre">number_of_events</span></code> as possible and do an analysis of the traces. In case the photon packets undergo significantly less events that specified initially with <code class="code docutils literal notranslate"><span class="pre">number_of_events</span></code>, the latter can be reduced to conserve with the memory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nphotons</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">recorded_traces</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">number_of_events</span> <span class="o">=</span> <span class="mi">500</span>
+</pre></div>
+</div>
+<p>In this example we utilize two <a class="reference internal" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trace</span></code></a> objects. The first <code class="code docutils literal notranslate"><span class="pre">trace_no_filter</span></code> stores all of the photon packets launched from the source multimode optical fiber, while the second <code class="code docutils literal notranslate"><span class="pre">trace_filter</span></code> stores only the photon packets that were detected in the detector multimode optical fiber specified through a filter object <a class="reference internal" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Filter" title="xopto.mcbase.mctrace.Filter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filter</span></code></a>. The filter object accept various parameters and the reader should refer to the <a class="reference internal" href="../trace.html#mcml-trace-label"><span class="std std-ref">Trace</span></a> for a more detailed description. In this example, the goal is to detect photon packets that are detected through the detector fiber at the bottom of the turbid medium. Therefore, the <code class="code docutils literal notranslate"><span class="pre">z</span></code> parameter, which corresponds to the interval of the <img class="math" src="../../../_images/math/8d051150f8669295ecdbe92367941012175a824d.png" alt="z"/> coordinate at which the photon packet was terminated, is set to the thickness of the turbid medium <code class="code docutils literal notranslate"><span class="pre">d1</span> <span class="pre">+</span> <span class="pre">d2</span></code> with a small offset by 1 nm on both sides of the bottom boundary. The final direction of the detected photon packet should be within the acceptance angle of the multimode detector optical fiber. Since the photon packet is detected within the optical fiber (it has passed through the the bottom boundary), the acceptance angle is <img class="math" src="../../../_images/math/16426f070f314dfc1f773743e12f3b711ca23427.png" alt="\arcsin{(0.22/1.45)}"/> and the <img class="math" src="../../../_images/math/8d051150f8669295ecdbe92367941012175a824d.png" alt="z"/> direction of the photon packet should therefore be between <img class="math" src="../../../_images/math/2821dba7cb5643363eff5b39e048801103e19a05.png" alt="\cos{(\arcsin{(0.22/1.45)})}"/> and <img class="math" src="../../../_images/math/ec830c85a5fbb48028fe797044da6bdfb924c2fa.png" alt="1"/>. Finally, the radius within which the photon packet final position can be provided with a <img class="math" src="../../../_images/math/fa34237e4673f2efade79509ffb3c16410901756.png" alt="(r_1,r_2, (x_0,y_0))"/>, where <img class="math" src="../../../_images/math/df1d630a3325c0a544a24b978ce505d8eb08d98b.png" alt="r_1"/> and <img class="math" src="../../../_images/math/d0f99d970e26b9c3acd9e777c4a6af554b11dcfd.png" alt="r_2"/> represent radius interval and <img class="math" src="../../../_images/math/ed7fb0260e58d3ca5851e823ff991dae4cde5671.png" alt="x_0"/> and <img class="math" src="../../../_images/math/c02d829cecb5c5b40b5a00db3dc936351b671e07.png" alt="y_0"/> represent the displacement of the ring. In this case the radius should correspond to the radius of the fiber core and the displacement should correspond to the displacement of the multimode detector fiber.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># without filter</span>
+<span class="n">trace_no_filter</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span><span class="p">(</span>
+    <span class="n">maxlen</span><span class="o">=</span><span class="n">number_of_events</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_ALL</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># with filter</span>
+<span class="nb">filter</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Filter</span><span class="p">(</span>
+    <span class="n">z</span><span class="o">=</span><span class="p">(</span><span class="n">d1</span><span class="o">+</span><span class="n">d2</span> <span class="o">-</span> <span class="mf">1e-9</span><span class="p">,</span> <span class="n">d1</span><span class="o">+</span><span class="n">d2</span> <span class="o">+</span> <span class="mf">1e-9</span><span class="p">),</span>
+    <span class="n">pz</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mf">0.22</span><span class="o">/</span><span class="mf">1.45</span><span class="p">)),</span> <span class="mf">1.00</span><span class="p">),</span>
+    <span class="n">r</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">100e-6</span><span class="p">,</span> <span class="p">(</span><span class="mf">440e-6</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="p">)</span>
+<span class="n">trace_filter</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span><span class="p">(</span>
+    <span class="n">maxlen</span><span class="o">=</span><span class="n">number_of_events</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_ALL</span><span class="p">,</span>
+    <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="the-monte-carlo-simulator-object">
+<h2>The Monte Carlo simulator object<a class="headerlink" href="#the-monte-carlo-simulator-object" title="Permalink to this headline">¶</a></h2>
+<p>In the following, we define two simulator objects <code class="xref py py-class docutils literal notranslate"><span class="pre">MC</span></code>, which are constructed with the same parameters differing only in the input trace objects corresponding to the <code class="code docutils literal notranslate"><span class="pre">trace_no_filter</span></code> and <code class="code docutils literal notranslate"><span class="pre">trace_filter</span></code>. The <code class="xref py py-class docutils literal notranslate"><span class="pre">MC</span></code> constructor accepts the defined <code class="code docutils literal notranslate"><span class="pre">layers</span></code>, <code class="code docutils literal notranslate"><span class="pre">source</span></code>, <code class="code docutils literal notranslate"><span class="pre">detectors</span></code> and computational device context <code class="code docutils literal notranslate"><span class="pre">cl_device</span></code>. Note that for each simulator object we also set the termination radius attributde <code class="xref py py-attr docutils literal notranslate"><span class="pre">rmax</span></code> of 1 cm. In this case, the photon packets are not propagated beyond the 1 cm radius, which usually also speeds up the simulation times.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># without filter</span>
+<span class="n">mc_obj_no_filter</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span>
+    <span class="n">trace</span><span class="o">=</span><span class="n">trace_no_filter</span><span class="p">,</span>
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+<span class="n">mc_obj_no_filter</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+
+<span class="c1"># with filter</span>
+<span class="n">mc_obj_filter</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span>
+    <span class="n">trace</span><span class="o">=</span><span class="n">trace_filter</span><span class="p">,</span>
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+<span class="n">mc_obj_filter</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+</pre></div>
+</div>
+</section>
+<section id="running-the-monte-carlo-simulations">
+<h2>Running the Monte Carlo simulations<a class="headerlink" href="#running-the-monte-carlo-simulations" title="Permalink to this headline">¶</a></h2>
+<p>Finally, we can run the simulator instance with a given number of photon
+packets <code class="code docutils literal notranslate"><span class="pre">nphotons</span></code>. The <code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code> returns a <code class="code docutils literal notranslate"><span class="pre">list</span></code> of trace, fluence and detector objects. The traces are stored in the trace objects, thus the trace is stored as the second item <code class="code docutils literal notranslate"><span class="pre">trace_no_filter</span> <span class="pre">=</span> <span class="pre">output[0]</span></code>. As already decribed above, the simulation runs with filtered traces can result in a significantly reduced number of traces and the simulations have to be run multiple times to satisfy the desired number of the recorded traces <code class="code docutils literal notranslate"><span class="pre">recorded_traces</span></code>. This is done via a <code class="code docutils literal notranslate"><span class="pre">while</span></code> loop, where at each iteration the number of photon packet traces <code class="code docutils literal notranslate"><span class="pre">len(output[0])</span></code> is compared to the <code class="code docutils literal notranslate"><span class="pre">recorded_traces</span></code>. Note that the second axis <code class="code docutils literal notranslate"><span class="pre">output[0].data.shape[1]</span></code> corresponds to the <code class="code docutils literal notranslate"><span class="pre">number_of_events</span></code> set by <code class="code docutils literal notranslate"><span class="pre">maxlen</span></code>. Within the <code class="code docutils literal notranslate"><span class="pre">while</span></code> loop, we also utilize a collection option of the <code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code> function, which accepts the returned list of trace, fluence and detector objects <code class="code docutils literal notranslate"><span class="pre">output</span></code> and subsequently appends the data to it from a new simulation run.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># without filter</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">mc_obj_no_filter</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">trace_no_filter</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># with filter</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">mc_obj_filter</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="k">while</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">recorded_traces</span><span class="p">:</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">mc_obj_filter</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Photon packet traces deteced:&#39;</span><span class="p">,</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">trace_filter</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="trace-processing-and-visualization">
+<h2>Trace processing and visualization<a class="headerlink" href="#trace-processing-and-visualization" title="Permalink to this headline">¶</a></h2>
+<p>The photon packet traces can easily be visualized using <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> submodule. In this example, we plot the first number of traces according to <code class="code docutils literal notranslate"><span class="pre">recorded_traces</span></code>, which was set to 100. Each trace is plotted using the <code class="code docutils literal notranslate"><span class="pre">for</span></code> loop iterating through the first 100 traces. The traces are ploted in the X-Z plane. The <img class="math" src="../../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> positions of the events for a single photon packet trajectory can be accessed through a keyword, e.g. <code class="code docutils literal notranslate"><span class="pre">trace_no_filter.data['x']</span></code>. Likewise for <img class="math" src="../../../_images/math/8d051150f8669295ecdbe92367941012175a824d.png" alt="z"/> positions or any other recorded properties (see <a class="reference internal" href="../trace.html#mcml-trace-label"><span class="std std-ref">Trace</span></a>). The first axis/index corresponds to photon packet traces, the second axis/index corresponds to the recorded events. It should be noted that each trace can have a different number of recorded events and the trace should be plotted only to the last recorded event before termination. This number is provided for each photon packet trace by the property <a class="reference internal" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.n" title="xopto.mcbase.mctrace.Trace.n"><code class="xref py py-attr docutils literal notranslate"><span class="pre">n</span></code></a> of the object <a class="reference internal" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trace</span></code></a>. Note that the positions are originally in meters and are in this example converted to millimeters by multiplying with 1000.</p>
+<a class="reference internal image-reference" href="../../../_images/trace_fig1.svg"><img alt="Traces of all photon packets" class="align-center" height="360px" src="../../../_images/trace_fig1.svg" width="480px" /></a>
+<a class="reference internal image-reference" href="../../../_images/trace_fig2.svg"><img alt="Traces of filtered photon packets" class="align-center" height="360px" src="../../../_images/trace_fig2.svg" width="480px" /></a>
+</section>
+<section id="the-complete-example">
+<h2>The complete example<a class="headerlink" href="#the-complete-example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="c1"># This example covers the photon packet tracing in a two-layered </span>
+<span class="c1"># turbid medium utilizing multimode optical fibers as sources </span>
+<span class="c1"># and detectors</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">fiber</span>
+<span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">pp</span>
+
+<span class="c1"># DEFINE A COMPUTATIONAL DEVICE</span>
+<span class="c1"># select the first device from the provided platform</span>
+<span class="n">cl_device</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">)</span>
+
+<span class="c1"># DEFINE OPTICAL PROPERTIES FOR EACH LAYER</span>
+<span class="n">d1</span> <span class="o">=</span> <span class="mf">1e-3</span>
+<span class="n">d2</span> <span class="o">=</span> <span class="mf">1e-3</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">([</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>  <span class="c1"># layer above the medium</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">d1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">1e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">125e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">d2</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.4</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">2e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">125e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.9</span><span class="p">)),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>  <span class="c1"># layer below the medium</span>
+<span class="p">])</span>
+
+<span class="c1"># DEFINE UNIFORM MULTIMODE FIBER SOURCE</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">UniformFiber</span><span class="p">(</span>
+    <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+    <span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">440e-6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># DEFINE MULTIMODE FIBER DETECTOR (IN THIS EXAMPLE ONLY BOTTOM IS USED)</span>
+<span class="n">detector_bottom</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">FiberArray</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">fiber</span><span class="o">.</span><span class="n">FiberLayout</span><span class="p">(</span>
+        <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+        <span class="p">),</span>
+        <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">440e-6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">d1</span> <span class="o">+</span> <span class="n">d2</span><span class="p">),</span>
+        <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="p">),]</span>
+<span class="p">)</span>
+
+<span class="n">detectors</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span>
+    <span class="n">bottom</span><span class="o">=</span><span class="n">detector_bottom</span>
+<span class="p">)</span>
+
+<span class="c1"># DEFINE TRACE OBJECT</span>
+<span class="n">nphotons</span> <span class="o">=</span> <span class="mi">10000</span>  <span class="c1"># should be in the order of 10000 for recording traces</span>
+<span class="n">recorded_traces</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># desired number of recorded traces / only useful when filtering traces</span>
+<span class="n">number_of_events</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># maximal number of photon packet interaction events</span>
+
+<span class="c1"># without filter</span>
+<span class="n">trace_no_filter</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span><span class="p">(</span>
+    <span class="n">maxlen</span><span class="o">=</span><span class="n">number_of_events</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_ALL</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># using default simulator data types</span>
+<span class="n">eps</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mctypes</span><span class="o">.</span><span class="n">McDataTypes</span><span class="o">.</span><span class="n">eps</span>
+
+<span class="c1"># with filter</span>
+<span class="nb">filter</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Filter</span><span class="p">(</span>
+    <span class="n">z</span><span class="o">=</span><span class="p">(</span><span class="n">d1</span> <span class="o">+</span> <span class="n">d2</span> <span class="o">-</span> <span class="n">eps</span><span class="p">,</span> <span class="n">d1</span> <span class="o">+</span> <span class="n">d2</span> <span class="o">+</span> <span class="n">eps</span><span class="p">),</span> 
+    <span class="n">pz</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mf">0.22</span><span class="o">/</span><span class="mf">1.45</span><span class="p">)),</span> <span class="mf">1.00</span><span class="p">),</span>
+    <span class="n">r</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">100e-6</span><span class="p">,</span> <span class="p">(</span><span class="mf">440e-6</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="p">)</span>
+<span class="n">trace_filter</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span><span class="p">(</span>
+    <span class="n">maxlen</span><span class="o">=</span><span class="n">number_of_events</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_ALL</span><span class="p">,</span> 
+    <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span>
+<span class="p">)</span>
+
+<span class="c1"># DEFINE MC OBJECT FOR MONTE CARLO SIMULATIONS</span>
+<span class="c1"># without filter</span>
+<span class="n">mc_obj_no_filter</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span> 
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span>
+    <span class="n">trace</span><span class="o">=</span><span class="n">trace_no_filter</span><span class="p">,</span> 
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+<span class="n">mc_obj_no_filter</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+
+<span class="c1"># with filter</span>
+<span class="n">mc_obj_filter</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span> 
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span>
+    <span class="n">trace</span><span class="o">=</span><span class="n">trace_filter</span><span class="p">,</span> 
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+<span class="n">mc_obj_filter</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+
+<span class="c1"># RUN MONTE CARLO SIMULATIONS</span>
+<span class="c1"># without filter</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">mc_obj_no_filter</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">trace_no_filter</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># with filter</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">mc_obj_filter</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">recorded_traces</span><span class="p">:</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">mc_obj_filter</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Photon packet traces detected:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">trace_filter</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># VISUALIZE THE TRACES ONLY FIRST 100 TRACES</span>
+<span class="c1"># (X-Z PLANE)</span>
+<span class="c1"># without filter</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">recorded_traces</span><span class="p">):</span>
+    <span class="n">pp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="mf">1e3</span><span class="o">*</span><span class="n">trace_no_filter</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">,:</span><span class="n">trace_no_filter</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span>
+        <span class="mf">1e3</span><span class="o">*</span><span class="n">trace_no_filter</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">,:</span><span class="n">trace_no_filter</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+    <span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Traces of all photon packets&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x (mm)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;z (mm)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="o">-</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">))</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1e3</span><span class="o">*</span><span class="p">(</span><span class="n">d1</span> <span class="o">+</span> <span class="n">d2</span><span class="p">)))</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+
+<span class="c1"># with filter</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">number_of_events</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">recorded_traces</span><span class="p">):</span>
+    <span class="n">pp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="mf">1e3</span><span class="o">*</span><span class="n">trace_filter</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">,:</span><span class="n">trace_filter</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span>
+        <span class="mf">1e3</span><span class="o">*</span><span class="n">trace_filter</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">,:</span><span class="n">trace_filter</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+    <span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Traces of filtered photon packets&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x (mm)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;z (mm)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="o">-</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">))</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1e3</span><span class="o">*</span><span class="p">(</span><span class="n">d1</span> <span class="o">+</span> <span class="n">d2</span><span class="p">)))</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+
+<span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can run this example from the root directory of the PyXOpto package as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python examples/mcml/tracing.py
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Layered MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../layer_stack.html">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../source.html">Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../detector.html">Detectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../surface_layout.html">Surface layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="basic_example.html">Basic example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reflectance_spectrum_skin.html">Reflectance spectrum simulations of human skin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reflectance_optical_probes.html">Reflectance acquired with optical fibers and probes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scattering_phase_function.html">Reflectance spectrum dependence on scattering phase function</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Photon packet tracing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sampling_volume.html">Sampling volume simulations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Layered MC</a><ul>
+  <li><a href="index.html">Examples</a><ul>
+      <li>Previous: <a href="scattering_phase_function.html" title="previous chapter">Reflectance spectrum dependence on scattering phase function</a></li>
+      <li>Next: <a href="sampling_volume.html" title="next chapter">Sampling volume simulations</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,30 @@
+xopto.mcvox.mcdetector package
+==============================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcvox.mcdetector.probe
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcvox.mcdetector.base
+   xopto.mcvox.mcdetector.cartesian
+   xopto.mcvox.mcdetector.radial
+   xopto.mcvox.mcdetector.symmetric
+   xopto.mcvox.mcdetector.total
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcvox.mcdetector
+   :members:
+   :undoc-members:
+   :show-inheritance:

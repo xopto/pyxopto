@@ -1,0 +1,41 @@
+xopto.mcvox package
+===================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcvox.cltypes
+   xopto.mcvox.kernel
+   xopto.mcvox.mcdetector
+   xopto.mcvox.mcfluence
+   xopto.mcvox.mcgeometry
+   xopto.mcvox.mcmaterial
+   xopto.mcvox.mcobject
+   xopto.mcvox.mcoptions
+   xopto.mcvox.mcpf
+   xopto.mcvox.mcsource
+   xopto.mcvox.mcsurface
+   xopto.mcvox.mcsv
+   xopto.mcvox.mctrace
+   xopto.mcvox.mctypes
+   xopto.mcvox.mcutil
+   xopto.mcvox.test
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcvox.mc
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcvox
+   :members:
+   :undoc-members:
+   :show-inheritance:

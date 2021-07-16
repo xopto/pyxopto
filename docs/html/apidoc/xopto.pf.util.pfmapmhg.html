@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.pf.util.pfmapmhg module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.pf.util.pfmapmie module" href="xopto.pf.util.pfmapmie.html" />
+    <link rel="prev" title="xopto.pf.util.pfmapgk module" href="xopto.pf.util.pfmapgk.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.pf.util.pfmapmhg">
+<span id="xopto-pf-util-pfmapmhg-module"></span><h1>xopto.pf.util.pfmapmhg module<a class="headerlink" href="#module-xopto.pf.util.pfmapmhg" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapmhg.MHgMap">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MHgMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gmhg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncostheta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapmhg.html#MHgMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapmhg.MHgMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.pf.util.pfmapbase.html#xopto.pf.util.pfmapbase.PfMap2DBase" title="xopto.pf.util.pfmapbase.PfMap2DBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.pf.util.pfmapbase.PfMap2DBase</span></code></a></p>
+<p>Prepares maps of the first ng Legendre moments of the
+Modified Henyey-Greenstein (MHG) scattering phase function, over the
+specified range of the MHG parameters g and b. If ng &gt;= 2, a map of
+gamma is preapred and if ng &gt;= 3 maps of delta and sigma are
+prepared as well. The maps are used to obtain an initial estimate
+when calculating the MHG scattering phase function parameters from
+Legendre moments, gamma and/or delta.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gmhg</strong> (<em>np.ndarray vector</em>) – A Vector of equally spaced values defining the grid density of
+parameter gg of the MHG scattering phase function.</p></li>
+<li><p><strong>b</strong> (<em>np.ndarray vector</em>) – A Vector of equally spaced values defining the grid density of
+parameter b of the MHG scattering phase function (HG contribution).</p></li>
+<li><p><strong>ng</strong> (<em>int</em>) – Maps are created for the first ng Legendre moments. If ng &gt;= 2,
+a map of gamma is prepared and if g &gt;= 3 maps of delta and sigma
+are prepared as well.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – File with saved data. The values of all the other parameters are
+ignored and restored from the file.</p></li>
+<li><p><strong>ncostheta</strong> (<em>int</em>) – Number of nodes used to compute the Legendre moments. Use a
+large number (&gt; 1000) for accurate results. If None, adaptive
+step integration is used, which is accurate but can become slow.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The value of parameter ng should be &gt;&gt; 3 to accurately
+estimate the value of parameter sigma.</p>
+</div>
+<p class="rubric">Examples</p>
+<p>Prepares maps of gamma and delta, and estimates the MHG parameters
+given a) g and gamma are known b) gamma and delta are known.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">MHgMap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">ng</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gmhg</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">invgammadelta</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="mf">2.2</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">3.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;gamma=2.2, delta=3.5 ==&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;gmhg:&#39;</span><span class="p">,</span> <span class="n">gmhg</span><span class="p">,</span> <span class="s1">&#39;b:&#39;</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gmhg</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">invgamma</span><span class="p">(</span><span class="n">g</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">2.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;g=0.8, gamma=2.2 ==&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;gmhg:&#39;</span><span class="p">,</span> <span class="n">gmhg</span><span class="p">,</span> <span class="s1">&#39;b:&#39;</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>Load maps from the default file included in the data/pf folder.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">MHgMap</span><span class="o">.</span><span class="n">fromfile</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gmhg</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">invgammadelta</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="mf">2.2</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">3.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;gamma=2.2, delta=3.5 ==&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;gmhg:&#39;</span><span class="p">,</span> <span class="n">gmhg</span><span class="p">,</span> <span class="s1">&#39;b:&#39;</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gmhg</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">invgamma</span><span class="p">(</span><span class="n">g</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">2.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;g=0.8, gamma=2.2 ==&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;gmhg:&#39;</span><span class="p">,</span> <span class="n">gmhg</span><span class="p">,</span> <span class="s1">&#39;b:&#39;</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapmhg.MHgMap.DEFAULT_MAP_FILE">
+<span class="sig-name descname"><span class="pre">DEFAULT_MAP_FILE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'mhg_map.npz'</span></em><a class="headerlink" href="#xopto.pf.util.pfmapmhg.MHgMap.DEFAULT_MAP_FILE" title="Permalink to this definition">¶</a></dt>
+<dd><p>A filename for the default map.
+Overload this static member in derived classes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapmhg.MHgMap.PLOTSCALEFACTORX">
+<span class="sig-name descname"><span class="pre">PLOTSCALEFACTORX</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1.0</span></em><a class="headerlink" href="#xopto.pf.util.pfmapmhg.MHgMap.PLOTSCALEFACTORX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapmhg.MHgMap.PLOTSCALEFACTORY">
+<span class="sig-name descname"><span class="pre">PLOTSCALEFACTORY</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1.0</span></em><a class="headerlink" href="#xopto.pf.util.pfmapmhg.MHgMap.PLOTSCALEFACTORY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for computing maps of scattering phase function quantifiers
+as a function ot the scattering phase functions parameters - only for
+two-parametric scattering phase functions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapmhg.MHgMap.XLABEL">
+<span class="sig-name descname"><span class="pre">XLABEL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'$g_{mhg}$'</span></em><a class="headerlink" href="#xopto.pf.util.pfmapmhg.MHgMap.XLABEL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapmhg.MHgMap.YLABEL">
+<span class="sig-name descname"><span class="pre">YLABEL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'$b_{mgk}$'</span></em><a class="headerlink" href="#xopto.pf.util.pfmapmhg.MHgMap.YLABEL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapmhg.MHgMap.b">
+<span class="sig-name descname"><span class="pre">b</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapmhg.html#MHgMap.b"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapmhg.MHgMap.b" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector of points defining the grid of b parameter of the
+MHg scattering phase function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapmhg.MHgMap.b_grid">
+<span class="sig-name descname"><span class="pre">b_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapmhg.html#MHgMap.b_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapmhg.MHgMap.b_grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a 2D map (meshgrid) of the second scattering phase function
+parameter (b).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapmhg.MHgMap.gmhg">
+<span class="sig-name descname"><span class="pre">gmhg</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapmhg.html#MHgMap.gmhg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapmhg.MHgMap.gmhg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector of points defining the grid of g parameter of the
+MHg scattering phase function</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapmhg.MHgMap.gmhg_grid">
+<span class="sig-name descname"><span class="pre">gmhg_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapmhg.html#MHgMap.gmhg_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapmhg.MHgMap.gmhg_grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a 2D map (meshgrid) of the first scattering phase function
+parameter (gmhg).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapmhg.MHgMap.invgamma">
+<span class="sig-name descname"><span class="pre">invgamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapmhg.html#MHgMap.invgamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapmhg.MHgMap.invgamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloading the base class method with analytical solution to the
+inverse problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> (<em>float</em>) – Target value of the first Legendre moment.</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – Target value of parameter gamma.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>param1, param2</strong> – Phase function input parameters.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapmhg.MHgMap.invgammadelta">
+<span class="sig-name descname"><span class="pre">invgammadelta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapmhg.html#MHgMap.invgammadelta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapmhg.MHgMap.invgammadelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloading the base class method with analytical solution to the
+inverse problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gamma</strong> (<em>float</em>) – Target value of parameter gamma.</p></li>
+<li><p><strong>delta</strong> (<em>float</em>) – Target value of parameter gamma.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Keyword arguments passed to the fmin_l_bfgs_b optimization
+function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>param1, param2</strong> – Phase function input parameters.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.pf.util.pfmapmhg.MHgMap.precalculate">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">precalculate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/pf/util/pfmapmhg.html#MHgMap.precalculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.pfmapmhg.MHgMap.precalculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Precalculate MHg scattering phase function lookup table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>int</em>) – Number of steps along the scattering phase function parameters.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Output file or None to save as the default lookup table.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Turn on verbose progress report.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.pf.html">xopto.pf package</a><ul>
+  <li><a href="xopto.pf.util.html">xopto.pf.util package</a><ul>
+      <li>Previous: <a href="xopto.pf.util.pfmapgk.html" title="previous chapter">xopto.pf.util.pfmapgk module</a></li>
+      <li>Next: <a href="xopto.pf.util.pfmapmie.html" title="next chapter">xopto.pf.util.pfmapmie module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,7 @@
+xopto.mcvox.mc module
+=====================
+
+.. automodule:: xopto.mcvox.mc
+   :members:
+   :undoc-members:
+   :show-inheritance:

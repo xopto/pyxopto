@@ -1,0 +1,10 @@
+xopto.mcvox.mctrace package
+===========================
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcvox.mctrace
+   :members:
+   :undoc-members:
+   :show-inheritance:

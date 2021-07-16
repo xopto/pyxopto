@@ -1,0 +1,7 @@
+xopto.materials.ri.polystyrene module
+=====================================
+
+.. automodule:: xopto.materials.ri.polystyrene
+   :members:
+   :undoc-members:
+   :show-inheritance:

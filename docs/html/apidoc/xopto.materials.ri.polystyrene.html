@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.materials.ri.polystyrene module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.materials.ri.seawater module" href="xopto.materials.ri.seawater.html" />
+    <link rel="prev" title="xopto.materials.ri.pmma module" href="xopto.materials.ri.pmma.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.materials.ri.polystyrene">
+<span id="xopto-materials-ri-polystyrene-module"></span><h1>xopto.materials.ri.polystyrene module<a class="headerlink" href="#module-xopto.materials.ri.polystyrene" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.polystyrene.Ma">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Ma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">293</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/polystyrene.html#Ma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.polystyrene.Ma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.materials.ri.base.html#xopto.materials.ri.base.RefractiveIndex" title="xopto.materials.ri.base.RefractiveIndex"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.materials.ri.base.RefractiveIndex</span></code></a></p>
+<dl class="simple">
+<dt>Refractive index of water as given in:</dt><dd><p>Ma, Lu, Brock: Phys. Med. Biol. 48 (2003) 4165-4172.</p>
+</dd>
+</dl>
+<div class="math">
+<p><img src="../_images/math/483db16cd9f429f38b6d3b088199bb6fcf65696c.png" alt="n &amp;= 1.5725 + 0.0031080/(\lambda*10^{6})^2 + 0.00034779/(\lambda*10^{6})^4"/></p>
+</div><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> (<em>float</em>) – Temperature of the medium.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.materials.ri.polystyrene.Ma.material">
+<span class="sig-name descname"><span class="pre">material</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'polystyrene'</span></em><a class="headerlink" href="#xopto.materials.ri.polystyrene.Ma.material" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.polystyrene.Nikolov">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Nikolov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">293</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/polystyrene.html#Nikolov"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.polystyrene.Nikolov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.materials.ri.base.html#xopto.materials.ri.base.RefractiveIndex" title="xopto.materials.ri.base.RefractiveIndex"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.materials.ri.base.RefractiveIndex</span></code></a></p>
+<dl class="simple">
+<dt>Refractive index of water as given in:</dt><dd><p>Nikolov, Ivanov: Appl. Opt. 39 (2000) 2067-2070</p>
+</dd>
+</dl>
+<p>Refractive indices
+<img class="math" src="../_images/math/777a4e711bbabb099345de4300a571d065e35211.png" alt="n = [1.617, 1.606, 1.596, 1.592, 1.587, 1.586, 1.582, 1.579, 1.578, 1.577, 1.576, 1.572]"/>
+measured at <img class="math" src="../_images/math/5a783b73e6f0bbf7f3b8ec6b6a0941bf3297bada.png" alt="\lambda = [436, 486, 546, 588, 633, 656, 703, 752, 804, 833, 879, 1052]"/> nm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> (<em>float</em>) – Temperature of the medium.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The computation of refractive index is based on the one-term Sellmeier
+approximation:
+.. math:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> \<span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">a</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">b</span><span class="o">/</span>\<span class="k">lambda</span><span class="o">^</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.materials.ri.polystyrene.Nikolov.material">
+<span class="sig-name descname"><span class="pre">material</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'polystyrene'</span></em><a class="headerlink" href="#xopto.materials.ri.polystyrene.Nikolov.material" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.materials.html">xopto.materials package</a><ul>
+  <li><a href="xopto.materials.ri.html">xopto.materials.ri package</a><ul>
+      <li>Previous: <a href="xopto.materials.ri.pmma.html" title="previous chapter">xopto.materials.ri.pmma module</a></li>
+      <li>Next: <a href="xopto.materials.ri.seawater.html" title="next chapter">xopto.materials.ri.seawater module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

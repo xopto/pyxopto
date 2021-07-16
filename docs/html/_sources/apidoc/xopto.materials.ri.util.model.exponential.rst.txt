@@ -1,0 +1,7 @@
+xopto.materials.ri.util.model.exponential module
+================================================
+
+.. automodule:: xopto.materials.ri.util.model.exponential
+   :members:
+   :undoc-members:
+   :show-inheritance:

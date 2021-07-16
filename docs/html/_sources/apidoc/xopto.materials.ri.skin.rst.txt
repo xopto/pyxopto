@@ -1,0 +1,7 @@
+xopto.materials.ri.skin module
+==============================
+
+.. automodule:: xopto.materials.ri.skin
+   :members:
+   :undoc-members:
+   :show-inheritance:

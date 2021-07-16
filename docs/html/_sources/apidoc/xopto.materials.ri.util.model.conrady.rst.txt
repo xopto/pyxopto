@@ -1,0 +1,7 @@
+xopto.materials.ri.util.model.conrady module
+============================================
+
+.. automodule:: xopto.materials.ri.util.model.conrady
+   :members:
+   :undoc-members:
+   :show-inheritance:

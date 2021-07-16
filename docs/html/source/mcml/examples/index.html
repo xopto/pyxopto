@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Examples &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Basic example" href="basic_example.html" />
+    <link rel="prev" title="Simulator options" href="../simulator_options.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="basic_example.html">Basic example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="basic_example.html#the-layer-stack">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_example.html#the-photon-packet-source">The photon packet source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_example.html#the-detector">The detector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_example.html#the-opencl-device">The OpenCL device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_example.html#the-monte-carlo-simulator">The Monte Carlo simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_example.html#visualization-of-results">Visualization of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_example.html#the-complete-example">The complete example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reflectance_spectrum_skin.html">Reflectance spectrum simulations of human skin</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_spectrum_skin.html#importing-the-required-modules-and-submodules">Importing the required modules and submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_spectrum_skin.html#computational-device">Computational device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_spectrum_skin.html#definition-of-simulation-parameters-and-skin-optical-properties">Definition of simulation parameters and skin optical properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_spectrum_skin.html#the-layer-stack">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_spectrum_skin.html#source">Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_spectrum_skin.html#detector">Detector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_spectrum_skin.html#the-monte-carlo-simulator-object-and-simulation-runs">The Monte Carlo simulator object and simulation runs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_spectrum_skin.html#reflectance-spectrum-visualization">Reflectance spectrum visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_spectrum_skin.html#the-complete-example">The complete example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reflectance_optical_probes.html">Reflectance acquired with optical fibers and probes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_optical_probes.html#importing-the-required-modules-and-submodules">Importing the required modules and submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_optical_probes.html#computational-device">Computational device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_optical_probes.html#the-layer-stack">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_optical_probes.html#source">Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_optical_probes.html#detector">Detector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_optical_probes.html#surface">Surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_optical_probes.html#the-monte-carlo-simulator-objects">The Monte Carlo simulator objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_optical_probes.html#running-the-monte-carlo-simulations-and-reflectance-processing">Running the Monte Carlo simulations and reflectance processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_optical_probes.html#comparing-the-obtained-reflectance">Comparing the obtained reflectance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflectance_optical_probes.html#the-complete-example">The complete example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scattering_phase_function.html">Reflectance spectrum dependence on scattering phase function</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scattering_phase_function.html#importing-the-required-modules-and-submodules">Importing the required modules and submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scattering_phase_function.html#calculating-the-spectrum-of-the-scattering-coefficient">Calculating the spectrum of the scattering coefficient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scattering_phase_function.html#computational-device">Computational device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scattering_phase_function.html#the-layer-stack">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scattering_phase_function.html#source">Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scattering_phase_function.html#detector">Detector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scattering_phase_function.html#the-monte-carlo-simulator-objects">The Monte Carlo simulator objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scattering_phase_function.html#running-the-monte-carlo-simulations-and-reflectance-processing">Running the Monte Carlo simulations and reflectance processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scattering_phase_function.html#comparing-the-obtained-reflectance">Comparing the obtained reflectance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scattering_phase_function.html#the-complete-example">The complete example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tracing.html">Photon packet tracing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html#importing-the-required-modules-and-submodules">Importing the required modules and submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html#computational-device">Computational device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html#the-layer-stack">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html#source">Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html#detector">Detector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html#trace">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html#the-monte-carlo-simulator-object">The Monte Carlo simulator object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html#running-the-monte-carlo-simulations">Running the Monte Carlo simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html#trace-processing-and-visualization">Trace processing and visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html#the-complete-example">The complete example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sampling_volume.html">Sampling volume simulations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html#importing-the-required-modules-and-submodules">Importing the required modules and submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html#computational-device">Computational device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html#the-layer-stack">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html#source">Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html#detector">Detector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html#trace">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html#sampling-volume">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html#the-monte-carlo-simulator-object">The Monte Carlo simulator object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html#running-the-monte-carlo-simulations">Running the Monte Carlo simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html#sampling-volume-visualization">Sampling volume visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html#the-complete-example">The complete example</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Layered MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../layer_stack.html">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../source.html">Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../detector.html">Detectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../surface_layout.html">Surface layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="basic_example.html">Basic example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reflectance_spectrum_skin.html">Reflectance spectrum simulations of human skin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reflectance_optical_probes.html">Reflectance acquired with optical fibers and probes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scattering_phase_function.html">Reflectance spectrum dependence on scattering phase function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tracing.html">Photon packet tracing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sampling_volume.html">Sampling volume simulations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Layered MC</a><ul>
+      <li>Previous: <a href="../simulator_options.html" title="previous chapter">Simulator options</a></li>
+      <li>Next: <a href="basic_example.html" title="next chapter">Basic example</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

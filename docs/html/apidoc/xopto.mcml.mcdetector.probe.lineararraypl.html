@@ -1,0 +1,358 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.mcml.mcdetector.probe.lineararraypl module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.mcml.mcdetector.probe.sixaroundone module" href="xopto.mcml.mcdetector.probe.sixaroundone.html" />
+    <link rel="prev" title="xopto.mcml.mcdetector.probe.lineararray module" href="xopto.mcml.mcdetector.probe.lineararray.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.mcml.mcdetector.probe.lineararraypl">
+<span id="xopto-mcml-mcdetector-probe-lineararraypl-module"></span><h1>xopto.mcml.mcdetector.probe.lineararraypl module<a class="headerlink" href="#module-xopto.mcml.mcdetector.probe.lineararraypl" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">LinearArrayPl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fiber</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber" title="xopto.mcbase.mcutil.fiber.MultimodeFiber"><span class="pre">xopto.mcbase.mcutil.fiber.MultimodeFiber</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plaxis</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><span class="pre">xopto.mcbase.mcutil.axis.Axis</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(1.0,</span> <span class="pre">0.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0,</span> <span class="pre">1.0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcml/mcdetector/probe/lineararraypl.html#LinearArrayPl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.Detector" title="xopto.mcml.mcdetector.base.Detector"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcml.mcdetector.base.Detector</span></code></a></p>
+<p>Optical fiber probe detector with a linear array of optical fibers that
+are optionally tilted(direction parameter). The optical fibers are
+always polished in a way that forms a tight optical contact with
+the surface of the sample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fiber</strong> (<a class="reference internal" href="xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber" title="xopto.mcbase.mcutil.fiber.MultimodeFiber"><em>MultimodeFiber</em></a>) – Optical properties of the fibers.</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – The number of optical fibers in the linear array. This option
+is a compile-time feature and caanot be changed once the detector
+object is created.</p></li>
+<li><p><strong>spacing</strong> (<em>float</em>) – Spacing between the optical fibers. If spacing is None,
+a tight layout is used with spacing set to the outer diameter
+of the fiber cladding.</p></li>
+<li><p><strong>plaxis</strong> (<a class="reference internal" href="xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><em>axis.Axis</em></a>) – Object that defines the accumulators along the optical path length
+axis (this axis supports log-scale).</p></li>
+<li><p><strong>orientation</strong> (<em>(</em><em>float</em><em>, </em><em>float</em><em>)</em>) – Vector that points in the direction of the linear fiber array.
+By default the fibers are place in the direction of x axis,
+i.e. vector (1.0, 0.0).
+The orientation must point in the direction from the first to
+the last optical fiber!</p></li>
+<li><p><strong>position</strong> (<em>(</em><em>float</em><em>, </em><em>float</em><em>)</em>) – Position of the center of the linear fiber array.</p></li>
+<li><p><strong>direction</strong> (<em>(</em><em>float</em><em>, </em><em>float</em><em>, </em><em>float</em><em>)</em>) – Reference direction / orientation of the detector fibers. Fibers
+are oriented in this direction and polished to form a tight optical
+contact with the sample (the fiber cross sections are ellipsoids
+if the direction is not perpendicular, i.e different
+from (0, 0, 1).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcml/mcdetector/probe/lineararraypl.html#LinearArrayPl.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the configuration has errors and raise exceptions if so.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.cl_declaration">
+<span class="sig-name descname"><span class="pre">cl_declaration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcml/mcdetector/probe/lineararraypl.html#LinearArrayPl.cl_declaration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.cl_declaration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structure that defines the detector in the Monte Carlo simulator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.cl_implementation">
+<span class="sig-name descname"><span class="pre">cl_implementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcml/mcdetector/probe/lineararraypl.html#LinearArrayPl.cl_implementation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.cl_implementation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of the detector accumulator in the Monte Carlo simulator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.cl_options">
+<span class="sig-name descname"><span class="pre">cl_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/mcml/mcdetector/probe/lineararraypl.html#LinearArrayPl.cl_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.cl_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenCL kernel options defined by this object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.cl_pack">
+<span class="sig-name descname"><span class="pre">cl_pack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><a class="reference internal" href="../_modules/xopto/mcml/mcdetector/probe/lineararraypl.html#LinearArrayPl.cl_pack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.cl_pack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills the structure (target) with the data required by the
+Monte Carlo simulator.
+See the <a class="reference internal" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.cl_type" title="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.cl_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">LinearArrayPl.cl_type()</span></code></a> method for a detailed list
+of fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mc</strong> (<a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>mcobject.McObject</em></a>) – Monte Carlo simulator instance.</p></li>
+<li><p><strong>target</strong> (<a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><em>cltypes.Structure</em></a>) – Ctypes structure that is filled with the source data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>target</strong> – Filled structure received as an input argument or a new
+instance if the input argument target is None.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure">cltypes.Structure</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.cl_type">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">cl_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><a class="reference internal" href="../_modules/xopto/mcml/mcdetector/probe/lineararraypl.html#LinearArrayPl.cl_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.cl_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.direction">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">direction</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[float,</span> <span class="pre">float,</span> <span class="pre">float]</span></em><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detector reference direction.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.fiber">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fiber</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[float,</span> <span class="pre">float]</span></em><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.fiber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Properties of the optical fibers used by the detector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.fiber_position">
+<span class="sig-name descname"><span class="pre">fiber_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/mcml/mcdetector/probe/lineararraypl.html#LinearArrayPl.fiber_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.fiber_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the position of the fiber center as a tuple (x, y).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – Fiber index from 0 to n -1.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>position</strong> – The position of the fiber center as a tuple (x, y).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(float, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.fromdict">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl" title="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl"><span class="pre">xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl</span></a><a class="reference internal" href="../_modules/xopto/mcml/mcdetector/probe/lineararraypl.html#LinearArrayPl.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an accumulator instance from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Dictionary created by the <a class="reference internal" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.todict" title="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.todict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">LinearArrayPl.todict()</span></code></a> method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.n">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">n</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.n" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of optical fiber in the linear array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.normalized">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">normalized</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.normalized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalized.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.npl">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">npl</span></span><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.npl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of accumulators in the optical pathlength axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.orientation">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">orientation</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[float,</span> <span class="pre">float]</span></em><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.orientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Orientation / direction of the linear fiber array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.pl">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pl</span></span><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.pl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Centers of the optical pathlength axis accumulators.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.plaxis">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">plaxis</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcutil.axis.Axis</span></em><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.plaxis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path length axis object.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.pledges">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pledges</span></span><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.pledges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edges of the optical pathlength axis accumulators.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.position">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[float,</span> <span class="pre">float]</span></em><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Position of the fiber array center as a tuple (x, y).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.reflectance">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflectance</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.reflectance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reflectance.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.spacing">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">spacing</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.spacing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spacing between the centers of the optical fibers</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcml/mcdetector/probe/lineararraypl.html#LinearArrayPl.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the accumulator configuration without the accumulator data to
+a dictionary. Use the <a class="reference internal" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.fromdict" title="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.fromdict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">LinearArrayPl.fromdict()</span></code></a> method to create a new
+accumulator instance from the returned data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – Accumulator configuration as a dictionary.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.transmittance">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">transmittance</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.transmittance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transmittance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl" title="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl"><span class="pre">xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcml/mcdetector/probe/lineararraypl.html#LinearArrayPl.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update this detector configuration from the other detector. The
+other detector must be of the same type as this detector or a dict with
+appropriate fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl" title="xopto.mcml.mcdetector.probe.lineararraypl.LinearArrayPl"><em>LinearArrayPl</em></a><em> or </em><em>dict</em>) – This source is updated with the configuration of the other source.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.mcml.html">xopto.mcml package</a><ul>
+  <li><a href="xopto.mcml.mcdetector.html">xopto.mcml.mcdetector package</a><ul>
+  <li><a href="xopto.mcml.mcdetector.probe.html">xopto.mcml.mcdetector.probe package</a><ul>
+      <li>Previous: <a href="xopto.mcml.mcdetector.probe.lineararray.html" title="previous chapter">xopto.mcml.mcdetector.probe.lineararray module</a></li>
+      <li>Next: <a href="xopto.mcml.mcdetector.probe.sixaroundone.html" title="next chapter">xopto.mcml.mcdetector.probe.sixaroundone module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

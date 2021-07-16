@@ -1,0 +1,30 @@
+xopto.cl package
+================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.cl.kernel
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.cl.cleasy
+   xopto.cl.clinfo
+   xopto.cl.clrng
+   xopto.cl.cltest
+   xopto.cl.cltypes
+
+Module contents
+---------------
+
+.. automodule:: xopto.cl
+   :members:
+   :undoc-members:
+   :show-inheritance:

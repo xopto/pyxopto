@@ -1,0 +1,7 @@
+xopto.mcml.mcdetector.totalpl module
+====================================
+
+.. automodule:: xopto.mcml.mcdetector.totalpl
+   :members:
+   :undoc-members:
+   :show-inheritance:

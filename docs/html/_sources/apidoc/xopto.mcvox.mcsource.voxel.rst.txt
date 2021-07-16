@@ -1,0 +1,7 @@
+xopto.mcvox.mcsource.voxel module
+=================================
+
+.. automodule:: xopto.mcvox.mcsource.voxel
+   :members:
+   :undoc-members:
+   :show-inheritance:

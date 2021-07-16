@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.materials.absorption.base module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.materials.absorption.carotenoid module" href="xopto.materials.absorption.carotenoid.html" />
+    <link rel="prev" title="xopto.materials.absorption package" href="xopto.materials.absorption.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.materials.absorption.base">
+<span id="xopto-materials-absorption-base-module"></span><h1>xopto.materials.absorption.base module<a class="headerlink" href="#module-xopto.materials.absorption.base" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Absorption">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Absorption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">293</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trange</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/absorption/base.html#Absorption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.absorption.base.Absorption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class of material density.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>float</em>) – Default medium temperature.</p></li>
+<li><p><strong>trange</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>] or </em><em>None</em>) – Valid temperature range in K as (min, max).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Absorption.check_temperature">
+<span class="sig-name descname"><span class="pre">check_temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/absorption/base.html#Absorption.check_temperature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.absorption.base.Absorption.check_temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the temperature of medium is within the valid range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>temperature</strong> (<em>float</em><em> or </em><em>np.ndarray</em>) – Temperature(s) to check.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Reports a warning if the temperature of the medium is not within the
+valid range. If the temperature input argument is a numpy array,
+the call reports a warning if any of the temperatures are not
+within the valid range.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Absorption.is_valid_temperature">
+<span class="sig-name descname"><span class="pre">is_valid_temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/xopto/materials/absorption/base.html#Absorption.is_valid_temperature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.absorption.base.Absorption.is_valid_temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the temperature of the medium is within the valid range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>temperature</strong> (<em>float</em><em> or </em><em>np.ndarray</em>) – Temperature to check.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>valid</strong> – Returns True if the temperature is within the valid range.
+If the temperature input argument is a numpy array, the call
+returns True only if all the temperatures are within the valid
+range.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Absorption.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/absorption/base.html#Absorption.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.absorption.base.Absorption.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the temperature dependence of the density.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – Keyword arguments passed to the __call__ method of the instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Absorption.t">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">t</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.materials.absorption.base.Absorption.t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default temperature of the material in K.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Absorption.temperature">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">temperature</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.materials.absorption.base.Absorption.temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default temperature of the material in K.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Absorption.trange">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">trange</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[float,</span> <span class="pre">float]</span></em><a class="headerlink" href="#xopto.materials.absorption.base.Absorption.trange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Valid temperature range in K.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.DEFAULT_WAVELENGTHS">
+<span class="sig-name descname"><span class="pre">DEFAULT_WAVELENGTHS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">array([4.00e-07,</span> <span class="pre">4.01e-07,</span> <span class="pre">4.02e-07,</span> <span class="pre">4.03e-07,</span> <span class="pre">4.04e-07,</span> <span class="pre">4.05e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.06e-07,</span> <span class="pre">4.07e-07,</span> <span class="pre">4.08e-07,</span> <span class="pre">4.09e-07,</span> <span class="pre">4.10e-07,</span> <span class="pre">4.11e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.12e-07,</span> <span class="pre">4.13e-07,</span> <span class="pre">4.14e-07,</span> <span class="pre">4.15e-07,</span> <span class="pre">4.16e-07,</span> <span class="pre">4.17e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.18e-07,</span> <span class="pre">4.19e-07,</span> <span class="pre">4.20e-07,</span> <span class="pre">4.21e-07,</span> <span class="pre">4.22e-07,</span> <span class="pre">4.23e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.24e-07,</span> <span class="pre">4.25e-07,</span> <span class="pre">4.26e-07,</span> <span class="pre">4.27e-07,</span> <span class="pre">4.28e-07,</span> <span class="pre">4.29e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.30e-07,</span> <span class="pre">4.31e-07,</span> <span class="pre">4.32e-07,</span> <span class="pre">4.33e-07,</span> <span class="pre">4.34e-07,</span> <span class="pre">4.35e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.36e-07,</span> <span class="pre">4.37e-07,</span> <span class="pre">4.38e-07,</span> <span class="pre">4.39e-07,</span> <span class="pre">4.40e-07,</span> <span class="pre">4.41e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.42e-07,</span> <span class="pre">4.43e-07,</span> <span class="pre">4.44e-07,</span> <span class="pre">4.45e-07,</span> <span class="pre">4.46e-07,</span> <span class="pre">4.47e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.48e-07,</span> <span class="pre">4.49e-07,</span> <span class="pre">4.50e-07,</span> <span class="pre">4.51e-07,</span> <span class="pre">4.52e-07,</span> <span class="pre">4.53e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.54e-07,</span> <span class="pre">4.55e-07,</span> <span class="pre">4.56e-07,</span> <span class="pre">4.57e-07,</span> <span class="pre">4.58e-07,</span> <span class="pre">4.59e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.60e-07,</span> <span class="pre">4.61e-07,</span> <span class="pre">4.62e-07,</span> <span class="pre">4.63e-07,</span> <span class="pre">4.64e-07,</span> <span class="pre">4.65e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.66e-07,</span> <span class="pre">4.67e-07,</span> <span class="pre">4.68e-07,</span> <span class="pre">4.69e-07,</span> <span class="pre">4.70e-07,</span> <span class="pre">4.71e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.72e-07,</span> <span class="pre">4.73e-07,</span> <span class="pre">4.74e-07,</span> <span class="pre">4.75e-07,</span> <span class="pre">4.76e-07,</span> <span class="pre">4.77e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.78e-07,</span> <span class="pre">4.79e-07,</span> <span class="pre">4.80e-07,</span> <span class="pre">4.81e-07,</span> <span class="pre">4.82e-07,</span> <span class="pre">4.83e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.84e-07,</span> <span class="pre">4.85e-07,</span> <span class="pre">4.86e-07,</span> <span class="pre">4.87e-07,</span> <span class="pre">4.88e-07,</span> <span class="pre">4.89e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.90e-07,</span> <span class="pre">4.91e-07,</span> <span class="pre">4.92e-07,</span> <span class="pre">4.93e-07,</span> <span class="pre">4.94e-07,</span> <span class="pre">4.95e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4.96e-07,</span> <span class="pre">4.97e-07,</span> <span class="pre">4.98e-07,</span> <span class="pre">4.99e-07,</span> <span class="pre">5.00e-07,</span> <span class="pre">5.01e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.02e-07,</span> <span class="pre">5.03e-07,</span> <span class="pre">5.04e-07,</span> <span class="pre">5.05e-07,</span> <span class="pre">5.06e-07,</span> <span class="pre">5.07e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.08e-07,</span> <span class="pre">5.09e-07,</span> <span class="pre">5.10e-07,</span> <span class="pre">5.11e-07,</span> <span class="pre">5.12e-07,</span> <span class="pre">5.13e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.14e-07,</span> <span class="pre">5.15e-07,</span> <span class="pre">5.16e-07,</span> <span class="pre">5.17e-07,</span> <span class="pre">5.18e-07,</span> <span class="pre">5.19e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.20e-07,</span> <span class="pre">5.21e-07,</span> <span class="pre">5.22e-07,</span> <span class="pre">5.23e-07,</span> <span class="pre">5.24e-07,</span> <span class="pre">5.25e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.26e-07,</span> <span class="pre">5.27e-07,</span> <span class="pre">5.28e-07,</span> <span class="pre">5.29e-07,</span> <span class="pre">5.30e-07,</span> <span class="pre">5.31e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.32e-07,</span> <span class="pre">5.33e-07,</span> <span class="pre">5.34e-07,</span> <span class="pre">5.35e-07,</span> <span class="pre">5.36e-07,</span> <span class="pre">5.37e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.38e-07,</span> <span class="pre">5.39e-07,</span> <span class="pre">5.40e-07,</span> <span class="pre">5.41e-07,</span> <span class="pre">5.42e-07,</span> <span class="pre">5.43e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.44e-07,</span> <span class="pre">5.45e-07,</span> <span class="pre">5.46e-07,</span> <span class="pre">5.47e-07,</span> <span class="pre">5.48e-07,</span> <span class="pre">5.49e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.50e-07,</span> <span class="pre">5.51e-07,</span> <span class="pre">5.52e-07,</span> <span class="pre">5.53e-07,</span> <span class="pre">5.54e-07,</span> <span class="pre">5.55e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.56e-07,</span> <span class="pre">5.57e-07,</span> <span class="pre">5.58e-07,</span> <span class="pre">5.59e-07,</span> <span class="pre">5.60e-07,</span> <span class="pre">5.61e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.62e-07,</span> <span class="pre">5.63e-07,</span> <span class="pre">5.64e-07,</span> <span class="pre">5.65e-07,</span> <span class="pre">5.66e-07,</span> <span class="pre">5.67e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.68e-07,</span> <span class="pre">5.69e-07,</span> <span class="pre">5.70e-07,</span> <span class="pre">5.71e-07,</span> <span class="pre">5.72e-07,</span> <span class="pre">5.73e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.74e-07,</span> <span class="pre">5.75e-07,</span> <span class="pre">5.76e-07,</span> <span class="pre">5.77e-07,</span> <span class="pre">5.78e-07,</span> <span class="pre">5.79e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.80e-07,</span> <span class="pre">5.81e-07,</span> <span class="pre">5.82e-07,</span> <span class="pre">5.83e-07,</span> <span class="pre">5.84e-07,</span> <span class="pre">5.85e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.86e-07,</span> <span class="pre">5.87e-07,</span> <span class="pre">5.88e-07,</span> <span class="pre">5.89e-07,</span> <span class="pre">5.90e-07,</span> <span class="pre">5.91e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.92e-07,</span> <span class="pre">5.93e-07,</span> <span class="pre">5.94e-07,</span> <span class="pre">5.95e-07,</span> <span class="pre">5.96e-07,</span> <span class="pre">5.97e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">5.98e-07,</span> <span class="pre">5.99e-07,</span> <span class="pre">6.00e-07,</span> <span class="pre">6.01e-07,</span> <span class="pre">6.02e-07,</span> <span class="pre">6.03e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.04e-07,</span> <span class="pre">6.05e-07,</span> <span class="pre">6.06e-07,</span> <span class="pre">6.07e-07,</span> <span class="pre">6.08e-07,</span> <span class="pre">6.09e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.10e-07,</span> <span class="pre">6.11e-07,</span> <span class="pre">6.12e-07,</span> <span class="pre">6.13e-07,</span> <span class="pre">6.14e-07,</span> <span class="pre">6.15e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.16e-07,</span> <span class="pre">6.17e-07,</span> <span class="pre">6.18e-07,</span> <span class="pre">6.19e-07,</span> <span class="pre">6.20e-07,</span> <span class="pre">6.21e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.22e-07,</span> <span class="pre">6.23e-07,</span> <span class="pre">6.24e-07,</span> <span class="pre">6.25e-07,</span> <span class="pre">6.26e-07,</span> <span class="pre">6.27e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.28e-07,</span> <span class="pre">6.29e-07,</span> <span class="pre">6.30e-07,</span> <span class="pre">6.31e-07,</span> <span class="pre">6.32e-07,</span> <span class="pre">6.33e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.34e-07,</span> <span class="pre">6.35e-07,</span> <span class="pre">6.36e-07,</span> <span class="pre">6.37e-07,</span> <span class="pre">6.38e-07,</span> <span class="pre">6.39e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.40e-07,</span> <span class="pre">6.41e-07,</span> <span class="pre">6.42e-07,</span> <span class="pre">6.43e-07,</span> <span class="pre">6.44e-07,</span> <span class="pre">6.45e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.46e-07,</span> <span class="pre">6.47e-07,</span> <span class="pre">6.48e-07,</span> <span class="pre">6.49e-07,</span> <span class="pre">6.50e-07,</span> <span class="pre">6.51e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.52e-07,</span> <span class="pre">6.53e-07,</span> <span class="pre">6.54e-07,</span> <span class="pre">6.55e-07,</span> <span class="pre">6.56e-07,</span> <span class="pre">6.57e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.58e-07,</span> <span class="pre">6.59e-07,</span> <span class="pre">6.60e-07,</span> <span class="pre">6.61e-07,</span> <span class="pre">6.62e-07,</span> <span class="pre">6.63e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.64e-07,</span> <span class="pre">6.65e-07,</span> <span class="pre">6.66e-07,</span> <span class="pre">6.67e-07,</span> <span class="pre">6.68e-07,</span> <span class="pre">6.69e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.70e-07,</span> <span class="pre">6.71e-07,</span> <span class="pre">6.72e-07,</span> <span class="pre">6.73e-07,</span> <span class="pre">6.74e-07,</span> <span class="pre">6.75e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.76e-07,</span> <span class="pre">6.77e-07,</span> <span class="pre">6.78e-07,</span> <span class="pre">6.79e-07,</span> <span class="pre">6.80e-07,</span> <span class="pre">6.81e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.82e-07,</span> <span class="pre">6.83e-07,</span> <span class="pre">6.84e-07,</span> <span class="pre">6.85e-07,</span> <span class="pre">6.86e-07,</span> <span class="pre">6.87e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.88e-07,</span> <span class="pre">6.89e-07,</span> <span class="pre">6.90e-07,</span> <span class="pre">6.91e-07,</span> <span class="pre">6.92e-07,</span> <span class="pre">6.93e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">6.94e-07,</span> <span class="pre">6.95e-07,</span> <span class="pre">6.96e-07,</span> <span class="pre">6.97e-07,</span> <span class="pre">6.98e-07,</span> <span class="pre">6.99e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.00e-07,</span> <span class="pre">7.01e-07,</span> <span class="pre">7.02e-07,</span> <span class="pre">7.03e-07,</span> <span class="pre">7.04e-07,</span> <span class="pre">7.05e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.06e-07,</span> <span class="pre">7.07e-07,</span> <span class="pre">7.08e-07,</span> <span class="pre">7.09e-07,</span> <span class="pre">7.10e-07,</span> <span class="pre">7.11e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.12e-07,</span> <span class="pre">7.13e-07,</span> <span class="pre">7.14e-07,</span> <span class="pre">7.15e-07,</span> <span class="pre">7.16e-07,</span> <span class="pre">7.17e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.18e-07,</span> <span class="pre">7.19e-07,</span> <span class="pre">7.20e-07,</span> <span class="pre">7.21e-07,</span> <span class="pre">7.22e-07,</span> <span class="pre">7.23e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.24e-07,</span> <span class="pre">7.25e-07,</span> <span class="pre">7.26e-07,</span> <span class="pre">7.27e-07,</span> <span class="pre">7.28e-07,</span> <span class="pre">7.29e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.30e-07,</span> <span class="pre">7.31e-07,</span> <span class="pre">7.32e-07,</span> <span class="pre">7.33e-07,</span> <span class="pre">7.34e-07,</span> <span class="pre">7.35e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.36e-07,</span> <span class="pre">7.37e-07,</span> <span class="pre">7.38e-07,</span> <span class="pre">7.39e-07,</span> <span class="pre">7.40e-07,</span> <span class="pre">7.41e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.42e-07,</span> <span class="pre">7.43e-07,</span> <span class="pre">7.44e-07,</span> <span class="pre">7.45e-07,</span> <span class="pre">7.46e-07,</span> <span class="pre">7.47e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.48e-07,</span> <span class="pre">7.49e-07,</span> <span class="pre">7.50e-07,</span> <span class="pre">7.51e-07,</span> <span class="pre">7.52e-07,</span> <span class="pre">7.53e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.54e-07,</span> <span class="pre">7.55e-07,</span> <span class="pre">7.56e-07,</span> <span class="pre">7.57e-07,</span> <span class="pre">7.58e-07,</span> <span class="pre">7.59e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.60e-07,</span> <span class="pre">7.61e-07,</span> <span class="pre">7.62e-07,</span> <span class="pre">7.63e-07,</span> <span class="pre">7.64e-07,</span> <span class="pre">7.65e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.66e-07,</span> <span class="pre">7.67e-07,</span> <span class="pre">7.68e-07,</span> <span class="pre">7.69e-07,</span> <span class="pre">7.70e-07,</span> <span class="pre">7.71e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.72e-07,</span> <span class="pre">7.73e-07,</span> <span class="pre">7.74e-07,</span> <span class="pre">7.75e-07,</span> <span class="pre">7.76e-07,</span> <span class="pre">7.77e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.78e-07,</span> <span class="pre">7.79e-07,</span> <span class="pre">7.80e-07,</span> <span class="pre">7.81e-07,</span> <span class="pre">7.82e-07,</span> <span class="pre">7.83e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.84e-07,</span> <span class="pre">7.85e-07,</span> <span class="pre">7.86e-07,</span> <span class="pre">7.87e-07,</span> <span class="pre">7.88e-07,</span> <span class="pre">7.89e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.90e-07,</span> <span class="pre">7.91e-07,</span> <span class="pre">7.92e-07,</span> <span class="pre">7.93e-07,</span> <span class="pre">7.94e-07,</span> <span class="pre">7.95e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">7.96e-07,</span> <span class="pre">7.97e-07,</span> <span class="pre">7.98e-07,</span> <span class="pre">7.99e-07,</span> <span class="pre">8.00e-07,</span> <span class="pre">8.01e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.02e-07,</span> <span class="pre">8.03e-07,</span> <span class="pre">8.04e-07,</span> <span class="pre">8.05e-07,</span> <span class="pre">8.06e-07,</span> <span class="pre">8.07e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.08e-07,</span> <span class="pre">8.09e-07,</span> <span class="pre">8.10e-07,</span> <span class="pre">8.11e-07,</span> <span class="pre">8.12e-07,</span> <span class="pre">8.13e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.14e-07,</span> <span class="pre">8.15e-07,</span> <span class="pre">8.16e-07,</span> <span class="pre">8.17e-07,</span> <span class="pre">8.18e-07,</span> <span class="pre">8.19e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.20e-07,</span> <span class="pre">8.21e-07,</span> <span class="pre">8.22e-07,</span> <span class="pre">8.23e-07,</span> <span class="pre">8.24e-07,</span> <span class="pre">8.25e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.26e-07,</span> <span class="pre">8.27e-07,</span> <span class="pre">8.28e-07,</span> <span class="pre">8.29e-07,</span> <span class="pre">8.30e-07,</span> <span class="pre">8.31e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.32e-07,</span> <span class="pre">8.33e-07,</span> <span class="pre">8.34e-07,</span> <span class="pre">8.35e-07,</span> <span class="pre">8.36e-07,</span> <span class="pre">8.37e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.38e-07,</span> <span class="pre">8.39e-07,</span> <span class="pre">8.40e-07,</span> <span class="pre">8.41e-07,</span> <span class="pre">8.42e-07,</span> <span class="pre">8.43e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.44e-07,</span> <span class="pre">8.45e-07,</span> <span class="pre">8.46e-07,</span> <span class="pre">8.47e-07,</span> <span class="pre">8.48e-07,</span> <span class="pre">8.49e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.50e-07,</span> <span class="pre">8.51e-07,</span> <span class="pre">8.52e-07,</span> <span class="pre">8.53e-07,</span> <span class="pre">8.54e-07,</span> <span class="pre">8.55e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.56e-07,</span> <span class="pre">8.57e-07,</span> <span class="pre">8.58e-07,</span> <span class="pre">8.59e-07,</span> <span class="pre">8.60e-07,</span> <span class="pre">8.61e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.62e-07,</span> <span class="pre">8.63e-07,</span> <span class="pre">8.64e-07,</span> <span class="pre">8.65e-07,</span> <span class="pre">8.66e-07,</span> <span class="pre">8.67e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.68e-07,</span> <span class="pre">8.69e-07,</span> <span class="pre">8.70e-07,</span> <span class="pre">8.71e-07,</span> <span class="pre">8.72e-07,</span> <span class="pre">8.73e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.74e-07,</span> <span class="pre">8.75e-07,</span> <span class="pre">8.76e-07,</span> <span class="pre">8.77e-07,</span> <span class="pre">8.78e-07,</span> <span class="pre">8.79e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.80e-07,</span> <span class="pre">8.81e-07,</span> <span class="pre">8.82e-07,</span> <span class="pre">8.83e-07,</span> <span class="pre">8.84e-07,</span> <span class="pre">8.85e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.86e-07,</span> <span class="pre">8.87e-07,</span> <span class="pre">8.88e-07,</span> <span class="pre">8.89e-07,</span> <span class="pre">8.90e-07,</span> <span class="pre">8.91e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.92e-07,</span> <span class="pre">8.93e-07,</span> <span class="pre">8.94e-07,</span> <span class="pre">8.95e-07,</span> <span class="pre">8.96e-07,</span> <span class="pre">8.97e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">8.98e-07,</span> <span class="pre">8.99e-07,</span> <span class="pre">9.00e-07,</span> <span class="pre">9.01e-07,</span> <span class="pre">9.02e-07,</span> <span class="pre">9.03e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.04e-07,</span> <span class="pre">9.05e-07,</span> <span class="pre">9.06e-07,</span> <span class="pre">9.07e-07,</span> <span class="pre">9.08e-07,</span> <span class="pre">9.09e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.10e-07,</span> <span class="pre">9.11e-07,</span> <span class="pre">9.12e-07,</span> <span class="pre">9.13e-07,</span> <span class="pre">9.14e-07,</span> <span class="pre">9.15e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.16e-07,</span> <span class="pre">9.17e-07,</span> <span class="pre">9.18e-07,</span> <span class="pre">9.19e-07,</span> <span class="pre">9.20e-07,</span> <span class="pre">9.21e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.22e-07,</span> <span class="pre">9.23e-07,</span> <span class="pre">9.24e-07,</span> <span class="pre">9.25e-07,</span> <span class="pre">9.26e-07,</span> <span class="pre">9.27e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.28e-07,</span> <span class="pre">9.29e-07,</span> <span class="pre">9.30e-07,</span> <span class="pre">9.31e-07,</span> <span class="pre">9.32e-07,</span> <span class="pre">9.33e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.34e-07,</span> <span class="pre">9.35e-07,</span> <span class="pre">9.36e-07,</span> <span class="pre">9.37e-07,</span> <span class="pre">9.38e-07,</span> <span class="pre">9.39e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.40e-07,</span> <span class="pre">9.41e-07,</span> <span class="pre">9.42e-07,</span> <span class="pre">9.43e-07,</span> <span class="pre">9.44e-07,</span> <span class="pre">9.45e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.46e-07,</span> <span class="pre">9.47e-07,</span> <span class="pre">9.48e-07,</span> <span class="pre">9.49e-07,</span> <span class="pre">9.50e-07,</span> <span class="pre">9.51e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.52e-07,</span> <span class="pre">9.53e-07,</span> <span class="pre">9.54e-07,</span> <span class="pre">9.55e-07,</span> <span class="pre">9.56e-07,</span> <span class="pre">9.57e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.58e-07,</span> <span class="pre">9.59e-07,</span> <span class="pre">9.60e-07,</span> <span class="pre">9.61e-07,</span> <span class="pre">9.62e-07,</span> <span class="pre">9.63e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.64e-07,</span> <span class="pre">9.65e-07,</span> <span class="pre">9.66e-07,</span> <span class="pre">9.67e-07,</span> <span class="pre">9.68e-07,</span> <span class="pre">9.69e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.70e-07,</span> <span class="pre">9.71e-07,</span> <span class="pre">9.72e-07,</span> <span class="pre">9.73e-07,</span> <span class="pre">9.74e-07,</span> <span class="pre">9.75e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.76e-07,</span> <span class="pre">9.77e-07,</span> <span class="pre">9.78e-07,</span> <span class="pre">9.79e-07,</span> <span class="pre">9.80e-07,</span> <span class="pre">9.81e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.82e-07,</span> <span class="pre">9.83e-07,</span> <span class="pre">9.84e-07,</span> <span class="pre">9.85e-07,</span> <span class="pre">9.86e-07,</span> <span class="pre">9.87e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.88e-07,</span> <span class="pre">9.89e-07,</span> <span class="pre">9.90e-07,</span> <span class="pre">9.91e-07,</span> <span class="pre">9.92e-07,</span> <span class="pre">9.93e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">9.94e-07,</span> <span class="pre">9.95e-07,</span> <span class="pre">9.96e-07,</span> <span class="pre">9.97e-07,</span> <span class="pre">9.98e-07,</span> <span class="pre">9.99e-07,</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">1.00e-06])</span></em><a class="headerlink" href="#xopto.materials.absorption.base.DEFAULT_WAVELENGTHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default wavelengths for plots.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Interpolator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Interpolator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">absorption</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/absorption/base.html#Interpolator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.absorption.base.Interpolator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Prepare an interpolator for the given x and y data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelength</strong> (<em>np.ndarray</em>) – Wavelengths (m) of light at which the absorption coefficient is
+defined.</p></li>
+<li><p><strong>absorption</strong> (<em>np.ndarray</em>) – Absorption coefficient (1/m) at the wavelengths of light.
+Points that will define the interpolation function.</p></li>
+<li><p><strong>args</strong> (<em>tuple</em><em>, </em><em>dict</em>) – Optional positional and keyword arguments passed to the intep1d
+function of scipy.interpolate module.</p></li>
+<li><p><strong>kwargs</strong> (<em>tuple</em><em>, </em><em>dict</em>) – Optional positional and keyword arguments passed to the intep1d
+function of scipy.interpolate module.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Interpolator.absorption">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">absorption</span></span><a class="headerlink" href="#xopto.materials.absorption.base.Interpolator.absorption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Measured values of the absorption coefficient (1/m).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Interpolator.check_range">
+<span class="sig-name descname"><span class="pre">check_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/absorption/base.html#Interpolator.check_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.absorption.base.Interpolator.check_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the wavelength of light is within the valid range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>wavelength</strong> (<em>float</em><em> or </em><em>np.ndarray</em>) – Temperature(s) to check.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Reports a warning if the wavelength of light is not within the
+valid range. If the wavelength input argument is a numpy array,
+the call reports a warning if any of the wavelengths are not
+within the valid range.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Interpolator.fromfile">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.materials.absorption.base.Interpolator" title="xopto.materials.absorption.base.Interpolator"><span class="pre">xopto.materials.absorption.base.Interpolator</span></a><a class="reference internal" href="../_modules/xopto/materials/absorption/base.html#Interpolator.fromfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.absorption.base.Interpolator.fromfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an interpolator from a numpy data file. The independent variable
+(wavelengths) should be stored in the first column, the dependent
+variable (absorption coefficient) in the second column</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – Source file.</p></li>
+<li><p><strong>args</strong> (<em>tuple</em>) – Positional arguments passed to
+<cite>:py:func:scipy.interpolate.interp1d</cite>.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Keyword arguments passed to
+<cite>:py:func:scipy.interpolate.interp1d</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>interpolator</strong> – Interpolator instance.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#xopto.materials.absorption.base.Interpolator" title="xopto.materials.absorption.base.Interpolator">Interpolator</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Interpolator.is_valid_range">
+<span class="sig-name descname"><span class="pre">is_valid_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/xopto/materials/absorption/base.html#Interpolator.is_valid_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.absorption.base.Interpolator.is_valid_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the wavelngths of light (m) for valid range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>wavelength</strong> (<em>float</em><em>, </em><em>np.ndarray</em>) – Wavelengths of light to check for valid range.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ok</strong> – Returns True if all the wavelengthsare within the valid range.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Interpolator.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/absorption/base.html#Interpolator.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.absorption.base.Interpolator.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the wavelength dependence of the absorption coefficient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavlength</strong> (<em>np.ndarray</em>) – Wavelengths of light.</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – Plot label.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Show the plot window if True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Interpolator.range">
+<span class="sig-name descname"><span class="pre">range</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/absorption/base.html#Interpolator.range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.absorption.base.Interpolator.range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the valid range of wavelengths.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>range</strong> – Valid range of wavelengths as a tuple (low, high).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(float, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.materials.absorption.base.Interpolator.wavelength">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">wavelength</span></span><a class="headerlink" href="#xopto.materials.absorption.base.Interpolator.wavelength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wavelengths of light (m) at which the absorption coefficient was measured.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.materials.html">xopto.materials package</a><ul>
+  <li><a href="xopto.materials.absorption.html">xopto.materials.absorption package</a><ul>
+      <li>Previous: <a href="xopto.materials.absorption.html" title="previous chapter">xopto.materials.absorption package</a></li>
+      <li>Next: <a href="xopto.materials.absorption.carotenoid.html" title="next chapter">xopto.materials.absorption.carotenoid module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

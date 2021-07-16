@@ -1,0 +1,26 @@
+xopto.materials.absorption package
+==================================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.materials.absorption.base
+   xopto.materials.absorption.carotenoid
+   xopto.materials.absorption.deoxyhem
+   xopto.materials.absorption.dermis
+   xopto.materials.absorption.epidermis
+   xopto.materials.absorption.fat
+   xopto.materials.absorption.melanin
+   xopto.materials.absorption.oxyhem
+   xopto.materials.absorption.water
+
+Module contents
+---------------
+
+.. automodule:: xopto.materials.absorption
+   :members:
+   :undoc-members:
+   :show-inheritance:

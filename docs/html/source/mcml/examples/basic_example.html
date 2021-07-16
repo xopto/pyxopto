@@ -1,0 +1,373 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Basic example &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Reflectance spectrum simulations of human skin" href="reflectance_spectrum_skin.html" />
+    <link rel="prev" title="Examples" href="index.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="basic-example">
+<span id="mcml-basic-example-label"></span><h1>Basic example<a class="headerlink" href="#basic-example" title="Permalink to this headline">¶</a></h1>
+<p>This basic example is available in the <cite>examples/mcml/basic.py</cite> file.</p>
+<p>The functionality of layered Monte Carlo (MC) is available through the
+<a class="reference internal" href="../../../apidoc/xopto.mcml.mc.html#module-xopto.mcml.mc" title="xopto.mcml.mc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mc</span></code></a> module.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+</pre></div>
+</div>
+<section id="the-layer-stack">
+<h2>The layer stack<a class="headerlink" href="#the-layer-stack" title="Permalink to this headline">¶</a></h2>
+<p>The layers of the medium can be defined through the
+<a class="reference internal" href="../../../apidoc/xopto.mcml.mclayer.html#module-xopto.mcml.mclayer" title="xopto.mcml.mclayer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mclayer</span></code></a> submodule. The layers are stacked along the
+positive direction of the z coordinate axis.</p>
+<p>The topmost and bottommost layers of the stack are used to describe the
+medium that surrounds the sample at the top and at the bottom surfaces,
+respectively. Therefore, at least three layers must be always defined,
+namely the two layers of the surrounding medium and one sample layer!</p>
+<p>The bottom surface of the topmost layer (the surrounding medium) is
+located at coordinate <img class="math" src="../../../_images/math/68a19273f6a404e1f7e2bd4ad67460bbe5777a93.png" alt="z=0"/>. The positive direction of the z axis points in the
+direction of the sample layer stack.</p>
+<p>The thicknesses of the topmost and bottommost layers will be
+automatically set to infinity regardless of the specified layer thickness.</p>
+<p>Note that all the layers in the stack must use the same scattering phase
+function model. A variety of scattering phase function models is available through the
+<a class="reference internal" href="../../../apidoc/xopto.mcml.mcpf.html#module-xopto.mcml.mcpf" title="xopto.mcml.mcpf"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcpf</span></code></a> submodule.</p>
+<p>An example of a basic turbid sample of thickness d=10.0 mm, with
+an absorption coefficient mua=1.0 cm <sup>-1</sup>, scattering
+coefficient mus=50.0 cm <sup>-1</sup>, a Henyey-Greenstein
+scattering phase function (<a class="reference internal" href="../../../apidoc/xopto.mcbase.mcpf.hg.html#xopto.mcbase.mcpf.hg.Hg" title="xopto.mcbase.mcpf.hg.Hg"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Hg</span></code></a>) with an anisotropy
+g=0.8 and refractive index 1.33 is as follows.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">layers</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1.00</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>  <span class="n">mua</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">50.0e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">10.0e-3</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">50.0e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)),</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1.00</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>  <span class="n">mua</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">50.0e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the absorption coefficient <code class="code docutils literal notranslate"><span class="pre">mua</span></code>, scattering coefficient
+<code class="code docutils literal notranslate"><span class="pre">mus</span></code> and the scattering phase function <code class="code docutils literal notranslate"><span class="pre">pf</span></code> of the
+topmost and bottommost layers are not used in the MC simulations, since the
+photon packets are not propagated through the surrounding medium.
+However, the refractive index <code class="code docutils literal notranslate"><span class="pre">n</span></code> of the two outermost
+layers is used to properly refract/reflect the photon packet at the layer
+boundaries when launched by the source or when escaping the sample.
+The value of the layer thickness <code class="code docutils literal notranslate"><span class="pre">d</span></code> should be given in m and
+the values of the scattering coefficient <code class="code docutils literal notranslate"><span class="pre">mus</span></code> and absorption coefficient
+<code class="code docutils literal notranslate"><span class="pre">mua</span></code> in m <sup>-1</sup>.</p>
+</section>
+<section id="the-photon-packet-source">
+<h2>The photon packet source<a class="headerlink" href="#the-photon-packet-source" title="Permalink to this headline">¶</a></h2>
+<p>Different sources of photon packets are available through the
+<a class="reference internal" href="../../../apidoc/xopto.mcml.mcsource.html#module-xopto.mcml.mcsource" title="xopto.mcml.mcsource"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcsource</span></code></a> module. The following example creates a basic
+line source (infinitely thin collimated beam) at the top sample
+surface (x, y, z)=(0, 0, 0) with a perpendicular incidence (0, 0, 1).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">Line</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="the-detector">
+<h2>The detector<a class="headerlink" href="#the-detector" title="Permalink to this headline">¶</a></h2>
+<p>The photon packets can be collected by a surface detector after exiting the
+top or bottom sample surface. Different types of surface detectors are
+available through the <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.html#module-xopto.mcml.mcdetector" title="xopto.mcml.mcdetector"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcdetector</span></code></a> module. Note that the
+top and bottom sample surface can use different configurations and/or types
+of detectors.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">detectors</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Radial</span><span class="p">(</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0e-3</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">cosmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+    <span class="p">),</span>
+    <span class="n">bottom</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Radial</span><span class="p">(</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0e-3</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>In the above example, we create two radial detectors one at the top and one at
+the bottom sample surface. The spacing between the concentric accumulators of
+the radial detector at the top sample surface is set to 10 μm, while
+the spacing of the concentric accumulators at the bottom sample surface is set
+to 100 μm. Both detectors are accumulating photon packets from
+0.0 to 10.0 mm. The detector at the top sample surface only collects
+photon packets that exit the sample within 20 <sup>o</sup> of the surface
+normal, while the detector at the bottom sample surface collects all the photon
+packets that exit the sample.</p>
+</section>
+<section id="the-opencl-device">
+<h2>The OpenCL device<a class="headerlink" href="#the-opencl-device" title="Permalink to this headline">¶</a></h2>
+<p>The OpenCL device that will run the MC simulations can be selected through the
+<a class="reference internal" href="../../../apidoc/xopto.cl.clinfo.html#module-xopto.cl.clinfo" title="xopto.cl.clinfo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.cl.clinfo</span></code></a> module. In the following example we pick the first
+available GPU device.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gpu</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="the-monte-carlo-simulator">
+<h2>The Monte Carlo simulator<a class="headerlink" href="#the-monte-carlo-simulator" title="Permalink to this headline">¶</a></h2>
+<p>Next, we create a Monte Carlo simulator instance from the created layer stack,
+photon packet source and detectors.</p>
+<p>Optionally, we can limit the maximum simulation radius that is measured from
+the position of the photon packet source. In this example, we limit the
+simulation radius to 25 mm.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mc_obj</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">25.0e-3</span>
+</pre></div>
+</div>
+<p>Finally, we can run the simulator instance with a given number of photon
+packets (10,000,000 in this example) and collect the results. The simulator
+returns three objects/results, namely the trace, fluence and detectors. Since
+in this basic example we only use the surface detectors, the remaining two
+results (fluence and trace) will be returned as <code class="code python docutils literal notranslate"><span class="keyword constant"><span class="pre">None</span></span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">trace_res</span><span class="p">,</span> <span class="n">fluence_res</span><span class="p">,</span> <span class="n">detectors_res</span> <span class="o">=</span> <span class="n">mc_obj</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mf">10e6</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the photon packets that exit the sample within the acceptance cone
+but at a distance / radius that exceeds the maximum radius of the
+detector will be accumulated in the last concentric ring of the
+<a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.radial.html#xopto.mcml.mcdetector.radial.Radial" title="xopto.mcml.mcdetector.radial.Radial"><code class="xref py py-class docutils literal notranslate"><span class="pre">Radial</span></code></a> detector.</p>
+</section>
+<section id="visualization-of-results">
+<h2>Visualization of results<a class="headerlink" href="#visualization-of-results" title="Permalink to this headline">¶</a></h2>
+<p>We can plot the simulation results using the
+<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.html">matplotlib.pyplot</a>
+module. For a better visualization of the reflectance/transmittance a
+logarithmic scale is used in the y axis of the plots.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">detectors_res</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">r</span><span class="o">*</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">detectors_res</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Distance from source (mm)&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Reflectance&#39;</span><span class="p">)</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">detectors_res</span><span class="o">.</span><span class="n">bottom</span><span class="o">.</span><span class="n">r</span><span class="o">*</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">detectors_res</span><span class="o">.</span><span class="n">bottom</span><span class="o">.</span><span class="n">reflectance</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Distance from source (mm)&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Reflectance&#39;</span><span class="p">)</span>
+
+<span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Reflectance and transmittance collected by the surface detectors.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../../_images/detector.svg"><img alt="../../../_images/detector.svg" src="../../../_images/detector.svg" width="100%" /></a>
+</figure>
+</section>
+<section id="the-complete-example">
+<h2>The complete example<a class="headerlink" href="#the-complete-example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">pp</span>
+
+
+<span class="c1"># creating the sample layer and the 2 layers of the surrounding medium</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1.00</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>  <span class="n">mua</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">50.0e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">10.0e-3</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">50.0e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)),</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1.00</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>  <span class="n">mua</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">50.0e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+
+<span class="c1"># creating the source of photon packets</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">Line</span><span class="p">()</span>
+
+
+<span class="c1"># creating surface detectors of backscattered or transmitted light</span>
+<span class="n">detectors</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Radial</span><span class="p">(</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0e-3</span><span class="p">,</span> <span class="mi">1000</span><span class="p">),</span>
+        <span class="n">cosmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">20.0</span><span class="p">))</span>
+    <span class="p">),</span>
+    <span class="n">bottom</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Radial</span><span class="p">(</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0e-3</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+
+<span class="c1"># selecting the first available OpenCL GPU device</span>
+<span class="n">gpu</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">()</span>
+
+
+<span class="c1"># creating a Monte Carlo simulator</span>
+<span class="n">mc_obj</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">detectors</span><span class="p">,</span> <span class="n">cl_devices</span><span class="o">=</span><span class="n">gpu</span><span class="p">)</span>
+<span class="n">mc_obj</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">25.0e-3</span>
+
+
+<span class="c1"># running the MC simulation with 1,000,000 photon packets</span>
+<span class="n">trace_res</span><span class="p">,</span> <span class="n">fluence_res</span><span class="p">,</span> <span class="n">detectors_res</span> <span class="o">=</span> <span class="n">mc_obj</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mf">10e6</span><span class="p">)</span>
+
+
+<span class="c1"># plotting the simulation results</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">detectors_res</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">r</span><span class="o">*</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">detectors_res</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Distance from source (mm)&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Reflectance&#39;</span><span class="p">)</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">detectors_res</span><span class="o">.</span><span class="n">bottom</span><span class="o">.</span><span class="n">r</span><span class="o">*</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">detectors_res</span><span class="o">.</span><span class="n">bottom</span><span class="o">.</span><span class="n">reflectance</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Distance from source (mm)&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Transmittance&#39;</span><span class="p">)</span>
+
+<span class="n">pp</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can run this example from the root directory of the PyXOpto package as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python examples/mcml/basic.py
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Layered MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../layer_stack.html">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../source.html">Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../detector.html">Detectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../surface_layout.html">Surface layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Basic example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reflectance_spectrum_skin.html">Reflectance spectrum simulations of human skin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reflectance_optical_probes.html">Reflectance acquired with optical fibers and probes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scattering_phase_function.html">Reflectance spectrum dependence on scattering phase function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tracing.html">Photon packet tracing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sampling_volume.html">Sampling volume simulations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Layered MC</a><ul>
+  <li><a href="index.html">Examples</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Examples</a></li>
+      <li>Next: <a href="reflectance_spectrum_skin.html" title="next chapter">Reflectance spectrum simulations of human skin</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

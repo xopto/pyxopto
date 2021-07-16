@@ -1,0 +1,7 @@
+xopto.pf.mhg module
+===================
+
+.. automodule:: xopto.pf.mhg
+   :members:
+   :undoc-members:
+   :show-inheritance:

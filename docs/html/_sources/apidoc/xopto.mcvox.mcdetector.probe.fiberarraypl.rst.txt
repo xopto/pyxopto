@@ -1,0 +1,7 @@
+xopto.mcvox.mcdetector.probe.fiberarraypl module
+================================================
+
+.. automodule:: xopto.mcvox.mcdetector.probe.fiberarraypl
+   :members:
+   :undoc-members:
+   :show-inheritance:

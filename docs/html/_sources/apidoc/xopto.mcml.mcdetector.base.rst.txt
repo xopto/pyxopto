@@ -1,0 +1,7 @@
+xopto.mcml.mcdetector.base module
+=================================
+
+.. automodule:: xopto.mcml.mcdetector.base
+   :members:
+   :undoc-members:
+   :show-inheritance:

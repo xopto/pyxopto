@@ -1,0 +1,700 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcbase.mcoptions &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcbase.mcoptions</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">.mcobject</span> <span class="kn">import</span> <span class="n">McObject</span><span class="p">,</span> <span class="n">RawOption</span><span class="p">,</span> <span class="n">RawOptions</span>
+
+<div class="viewcode-block" id="make_defines"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.make_defines">[docs]</a><span class="k">def</span> <span class="nf">make_defines</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RawOption</span><span class="p">],</span> <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Create defines for the given list of options. These defines should be</span>
+<span class="sd">    included at the beginning of the OpenCL source file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    options: List[RawOption]</span>
+<span class="sd">        List of options defined as [(option_name, option_value), ...].</span>
+<span class="sd">    indent: str</span>
+<span class="sd">        Indent to use when creating define directives. </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    defs: str</span>
+<span class="sd">        Options as defines, one per line.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">indent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">indent</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">options</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">McOption</span><span class="o">.</span><span class="n">make_define</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="resolve_cl_options"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.resolve_cl_options">[docs]</a><span class="k">def</span> <span class="nf">resolve_cl_options</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">RawOption</span><span class="p">]</span> <span class="ow">or</span> <span class="n">List</span><span class="p">[</span><span class="n">RawOption</span><span class="p">])</span> \
+        <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">RawOption</span><span class="p">]:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Resolve collections of OpenCL options passed as input arguments.</span>
+<span class="sd">    Check for duplicate options with different values and raise</span>
+<span class="sd">    ValueError if the same option is defined with different values.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    args: Tuple[RawOption]</span>
+<span class="sd">        Each positional argument must be a list of options defined as</span>
+<span class="sd">        [(name, value), ...].</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    options: List[RawOption]</span>
+<span class="sd">        List of resolved options defined as [(name, value), ...]. </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="n">options</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">options</span><span class="p">))</span>
+
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="n">value_</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;The same option cannot be defned with different values!&#39;</span>
+                <span class="s1">&#39;Found multiple definitions of option </span><span class="si">{}</span><span class="s1"> with values &#39;</span>
+                <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> and </span><span class="si">{}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value_</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">options</span></div>
+
+<div class="viewcode-block" id="cl_value"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.cl_value">[docs]</a><span class="k">def</span> <span class="nf">cl_value</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="nb">bool</span> <span class="ow">or</span> <span class="nb">int</span> <span class="ow">or</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    OpenCL representation of the option value that can be set by a define.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    value: str or bool or int or float</span>
+<span class="sd">        Python representation of the option value.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    cl_value: str</span>
+<span class="sd">        Representation of the option value that can be used in a</span>
+<span class="sd">        standard C/OpenCL define.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="p">{</span><span class="kc">False</span><span class="p">:</span><span class="s1">&#39;FALSE&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">:</span><span class="s1">&#39;TRUE&#39;</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:.16g}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">elif</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Option must be of str, bool, int or float type!&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="McOption"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McOption">[docs]</a><span class="k">class</span> <span class="nc">McOption</span><span class="p">(</span><span class="n">McObject</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Base Class of Monte Carlo kernel options that are set up through defines.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="McOption.cl_value"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McOption.cl_value">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_value</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="nb">bool</span> <span class="ow">or</span> <span class="nb">int</span> <span class="ow">or</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL representation of the option value that can be set by a define.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: str or bool or int or float</span>
+<span class="sd">            Python representation of the option value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        cl_value: str</span>
+<span class="sd">            Representation of the option value that can be used in a</span>
+<span class="sd">            standard C/OpenCL define.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">{</span><span class="kc">False</span><span class="p">:</span><span class="s1">&#39;FALSE&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">:</span><span class="s1">&#39;TRUE&#39;</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;FP_LITERAL(</span><span class="si">{:.16g}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Option must be of str, bool, int or float type!&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="McOption.make_define"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McOption.make_define">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">make_define</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create and return a standard C/OpenCL define.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        define: str</span>
+<span class="sd">            A standard C/OpenCL define representing the option.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;#define </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;#define </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">cl_value</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="nb">bool</span> <span class="ow">or</span> <span class="nb">int</span> <span class="ow">or</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes a kernel option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name: str</span>
+<span class="sd">            Option name</span>
+<span class="sd">        value: str, bool, int, float</span>
+<span class="sd">            Option value.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span> <span class="o">=</span> <span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">_get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Option name.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="ow">or</span> <span class="nb">bool</span> <span class="ow">or</span> <span class="nb">int</span> <span class="ow">or</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_value</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Option value.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(&#39;</span><span class="si">{}</span><span class="s2">&#39;, </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> 
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="McBoolOption"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McBoolOption">[docs]</a><span class="k">class</span> <span class="nc">McBoolOption</span><span class="p">(</span><span class="n">McOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Base Class of Monte Carlo kernel options that have a boolean type.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes a boolean kernel option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name: str</span>
+<span class="sd">            Property name</span>
+<span class="sd">        value: bool</span>
+<span class="sd">            Boolean value of the kernel option.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+
+<div class="viewcode-block" id="McBoolOption.get_define"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McBoolOption.get_define">[docs]</a>    <span class="k">def</span> <span class="nf">get_define</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;#define </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="McIntOption"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McIntOption">[docs]</a><span class="k">class</span> <span class="nc">McIntOption</span><span class="p">(</span><span class="n">McOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Base Class of Monte Carlo kernel options that have an integer type.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes an integer kernel option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name: str</span>
+<span class="sd">            Property name</span>
+<span class="sd">        value: int</span>
+<span class="sd">            Integer value of the kernel option.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="McFloatOption"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McFloatOption">[docs]</a><span class="k">class</span> <span class="nc">McFloatOption</span><span class="p">(</span><span class="n">McOption</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes a floating-point kernel option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name: str</span>
+<span class="sd">            Property name</span>
+<span class="sd">        value: float</span>
+<span class="sd">            Floating-point value of the kernel option.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="McTypeOption"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McTypeOption">[docs]</a><span class="k">class</span> <span class="nc">McTypeOption</span><span class="p">(</span><span class="n">McOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Base Class of Monte Carlo kernel options that have a label type</span>
+<span class="sd">    (no quotes in the define).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes a label (no quotes in the define) kernel option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name: str</span>
+<span class="sd">            Property name</span>
+<span class="sd">        value: str</span>
+<span class="sd">            String value of the kernel option.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="McUseBallisticKernel"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseBallisticKernel">[docs]</a><span class="k">class</span> <span class="nc">McUseBallisticKernel</span><span class="p">(</span><span class="n">McBoolOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Turn on or off the use of ballistic Monte Carlo kernel. The ballistic</span>
+<span class="sd">    kernel either scatters or fully absorbs the packet hence the photon</span>
+<span class="sd">    packets do not undergo termination through weight threshold and / or</span>
+<span class="sd">    lottery.</span>
+<span class="sd">    The values of options :py:class:`McMinimumPacketWeight` and</span>
+<span class="sd">    :py:class:`McUseLottery` are not used by the ballistic kernel.</span>
+
+<span class="sd">    Default is off.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    The ballistic Monte Carlo kernel is about 2~3-fold faster but produces</span>
+<span class="sd">    noisy results.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">on</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_BALLISTIC_KERNEL&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">off</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_BALLISTIC_KERNEL&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">default</span> <span class="o">=</span> <span class="n">off</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes the ballistic kernel option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: bool</span>
+<span class="sd">            Use True to enable or False to disable the ballistic implementation</span>
+<span class="sd">            of the Monte Carlo kernel.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;MC_USE_BALLISTIC_KERNEL&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="McUseNativeMath"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseNativeMath">[docs]</a><span class="k">class</span> <span class="nc">McUseNativeMath</span><span class="p">(</span><span class="n">McBoolOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Turn on or off the use of OpenCL native math.</span>
+<span class="sd">    Default is off.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    Native math usually gives some performance benefit, but might not</span>
+<span class="sd">    be fully compliant with precisions defined by the IEEE standards. </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">on</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_NATIVE_MATH&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">off</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_NATIVE_MATH&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">default</span> <span class="o">=</span> <span class="n">off</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes the native math kernel option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: bool</span>
+<span class="sd">            Use True to enable native math or False to disable native math.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;MC_USE_NATIVE_MATH&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="McIntLutMemory"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McIntLutMemory">[docs]</a><span class="k">class</span> <span class="nc">McIntLutMemory</span><span class="p">(</span><span class="n">McTypeOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    OpenCL memory type used to hold the floating-point lookup table data.</span>
+<span class="sd">    Use one of :py:attr:`__constant` or :py:attr:`__global`.</span>
+<span class="sd">    Default is :py:attr:`__global`.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    Selecting &quot;__global&quot; memory will likely lead to a significant performance</span>
+<span class="sd">    degradation, in particular on older GPUs.</span>
+<span class="sd">    The amount of available &quot;__constant&quot; memory on GPUs is typically limited</span>
+<span class="sd">    to about 64k.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1">#class global(McObject):</span>
+    <span class="c1">#    cl_options = [(&#39;MC_INT_LUT_ARRAY_MEMORY&#39;, &#39;__global&#39;)]</span>
+
+    <span class="n">__constant</span> <span class="o">=</span> <span class="n">McTypeOption</span><span class="p">(</span><span class="s1">&#39;MC_INT_LUT_ARRAY_MEMORY&#39;</span><span class="p">,</span> <span class="s1">&#39;constant&#39;</span><span class="p">)</span>
+
+    <span class="n">__global</span> <span class="o">=</span> <span class="n">McTypeOption</span><span class="p">(</span><span class="s1">&#39;MC_INT_LUT_ARRAY_MEMORY&#39;</span><span class="p">,</span> <span class="s1">&#39;global&#39;</span><span class="p">)</span>
+
+    <span class="n">default</span> <span class="o">=</span> <span class="n">__constant</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;global&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes the integer type lookup table memory type kernel option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: str</span>
+<span class="sd">            Use &quot;global&quot; to move integer type lookup table data to the</span>
+<span class="sd">            __global OpenCL memory or use &quot;constant&quot; to move the lookup table</span>
+<span class="sd">            data to the __constant OpenCL memory.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;global&#39;</span><span class="p">:</span> <span class="s1">&#39;__global&#39;</span><span class="p">,</span> <span class="s1">&#39;__global&#39;</span><span class="p">:</span><span class="s1">&#39;__global&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;constant&#39;</span><span class="p">:</span><span class="s1">&#39;__constant&#39;</span><span class="p">,</span> <span class="s1">&#39;__constant&#39;</span><span class="p">:</span><span class="s1">&#39;__constant&#39;</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Lookup table memory type must be one of &#39;</span>
+                <span class="s1">&#39;&quot;constant&quot; or &quot;global&quot;, but got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;MC_INT_LUT_ARRAY_MEMORY&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="McFloatLutMemory"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McFloatLutMemory">[docs]</a><span class="k">class</span> <span class="nc">McFloatLutMemory</span><span class="p">(</span><span class="n">McTypeOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    OpenCL memory type used to hold the floating-point lookup table data.</span>
+<span class="sd">    Use one of &quot;constant_mem&quot; or &quot;global_mem&quot;.</span>
+<span class="sd">    Default is &quot;global_mem&quot;.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    Selecting &quot;global_mem&quot; memory will likely lead to a significant performance</span>
+<span class="sd">    degradation, in particular on older GPUs.</span>
+<span class="sd">    The amount of available &quot;constant_mem&quot; memory on GPUs is typically limited</span>
+<span class="sd">    to about 64k.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1">#class global(McObject):</span>
+    <span class="c1">#    cl_options = [(&#39;MC_FP_LUT_ARRAY_MEMORY&#39;, &#39;__global&#39;)]</span>
+
+    <span class="n">constant_mem</span> <span class="o">=</span> <span class="n">McTypeOption</span><span class="p">(</span><span class="s1">&#39;MC_FP_LUT_ARRAY_MEMORY&#39;</span><span class="p">,</span> <span class="s1">&#39;__constant&#39;</span><span class="p">)</span>
+
+    <span class="n">global_mem</span> <span class="o">=</span> <span class="n">McTypeOption</span><span class="p">(</span><span class="s1">&#39;MC_FP_LUT_ARRAY_MEMORY&#39;</span><span class="p">,</span> <span class="s1">&#39;__global&#39;</span><span class="p">)</span>
+
+    <span class="n">default</span> <span class="o">=</span> <span class="n">constant_mem</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;global&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes the floating-point lookup table memory type kernel option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: str</span>
+<span class="sd">            Use &quot;global_mem&quot; to move integer lookup table data to the __global</span>
+<span class="sd">            OpenCL memory or use &quot;constant_mem&quot; to move the lookup table data</span>
+<span class="sd">            to the __constant OpenCL memory.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;global&#39;</span><span class="p">:</span> <span class="s1">&#39;__global&#39;</span><span class="p">,</span> <span class="s1">&#39;__global&#39;</span><span class="p">:</span><span class="s1">&#39;__global&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;constant&#39;</span><span class="p">:</span><span class="s1">&#39;__constant&#39;</span><span class="p">,</span> <span class="s1">&#39;__constant&#39;</span><span class="p">:</span><span class="s1">&#39;__constant&#39;</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Lookup table memory type must be one of &#39;</span>
+                <span class="s1">&#39;&quot;constant&quot; or &quot;global&quot;, but got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;MC_FP_LUT_ARRAY_MEMORY&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="McDebugMode"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McDebugMode">[docs]</a><span class="k">class</span> <span class="nc">McDebugMode</span><span class="p">(</span><span class="n">McBoolOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Switch the kernel debug mode on or off. Use only for kernel development.</span>
+<span class="sd">    Default is off.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">on</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_ENABLE_DEBUG&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">off</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_ENABLE_DEBUG&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">default</span> <span class="o">=</span> <span class="n">off</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes the debug mode kernel option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: bool</span>
+<span class="sd">            Use True to enable the debug mode or False to disable the debug mode.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;MC_ENABLE_DEBUG&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="McUseSoft64Atomics"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseSoft64Atomics">[docs]</a><span class="k">class</span> <span class="nc">McUseSoft64Atomics</span><span class="p">(</span><span class="n">McBoolOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Force software implementation of 64-bit atomic operations.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">on</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_SOFT_64_ATOMICS&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">off</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_SOFT_64_ATOMICS&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">default</span> <span class="o">=</span> <span class="n">off</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes the software-based 64-bit integer atomics usage option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: bool</span>
+<span class="sd">            Use True to force software-implemented 64-bit integer atomics.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;MC_USE_SOFT_64_ATOMICS&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="McUseLottery"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseLottery">[docs]</a><span class="k">class</span> <span class="nc">McUseLottery</span><span class="p">(</span><span class="n">McBoolOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Switch on or off photon packet termination by lottery.</span>
+<span class="sd">    Default is on.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">on</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_LOTTERY&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">off</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_LOTTERY&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">default</span> <span class="o">=</span> <span class="n">on</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes the lottery kernel option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: bool</span>
+<span class="sd">            Use True to enable the lottery or False to disable the lottery.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;MC_USE_LOTTERY&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="McMinimumPacketWeight"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McMinimumPacketWeight">[docs]</a><span class="k">class</span> <span class="nc">McMinimumPacketWeight</span><span class="p">(</span><span class="n">McFloatOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Minimum packet weight allowed before starting packet termination or lottery.</span>
+<span class="sd">    Default value is 1e-4.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">default</span> <span class="o">=</span> <span class="n">McFloatOption</span><span class="p">(</span><span class="s1">&#39;MC_PACKET_WEIGHT_MIN&#39;</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">):</span>
+        <span class="k">if</span> <span class="mf">0.0</span> <span class="o">&gt;=</span> <span class="n">value</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Minimum photon packet weight must be &gt; 0.0 and &lt;= 1.0, &#39;</span>
+                <span class="s1">&#39;but got </span><span class="si">{}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;MC_PACKET_WEIGHT_MIN&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="McPacketLotteryChance"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McPacketLotteryChance">[docs]</a><span class="k">class</span> <span class="nc">McPacketLotteryChance</span><span class="p">(</span><span class="n">McFloatOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Terminate photon packet by lottery if the value of a uniform random</span>
+<span class="sd">    number from [0, 1] exceeds this value.</span>
+<span class="sd">    Default value is 0.1.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">default</span> <span class="o">=</span> <span class="n">McFloatOption</span><span class="p">(</span><span class="s1">&#39;MC_PACKET_LOTTERY_CHANCE&#39;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes the lottery chance kernel option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: float</span>
+<span class="sd">            Lottery survival fraction from 0.0 to 1.0.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span>  <span class="mf">0.0</span> <span class="o">&gt;</span> <span class="n">value</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Lottery chance must be a value from 0.0 to 1.0, &#39;</span>
+                <span class="s1">&#39;but got </span><span class="si">{}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;MC_PACKET_LOTTERY_CHANCE&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="McUsePackedStructures"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUsePackedStructures">[docs]</a><span class="k">class</span> <span class="nc">McUsePackedStructures</span><span class="p">(</span><span class="n">McBoolOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Turn on/off the use of tightly packed structures.</span>
+<span class="sd">    Default value is off.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    Note that packed structures can lead to significant performance</span>
+<span class="sd">    degradation of the MonteCarlo kernel. This option is the last resort if</span>
+<span class="sd">    the fields of the OpenCL and host structures cannot be properly aligned.</span>
+<span class="sd">    When declaring OPenCL or host structures always start with the</span>
+<span class="sd">    largest data type and move towards smaller data types. Use data types</span>
+<span class="sd">    that are of size no less than 4 bytes.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">on</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_PACKED_STRUCTURES&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">off</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_PACKED_STRUCTURES&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">default</span> <span class="o">=</span> <span class="n">off</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span><span class="nb">bool</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes the packed structures kernel option.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: bool</span>
+<span class="sd">            Use True to enable packed structures or</span>
+<span class="sd">            False to disable packed structures.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;MC_USE_PACKED_STRUCTURES&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
+
+<span class="n">Options</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">McOption</span><span class="p">]</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

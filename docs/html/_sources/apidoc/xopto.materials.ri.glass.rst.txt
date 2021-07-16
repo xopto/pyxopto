@@ -1,0 +1,19 @@
+xopto.materials.ri.glass package
+================================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.materials.ri.glass.fusedsilica
+   xopto.materials.ri.glass.nbk7
+
+Module contents
+---------------
+
+.. automodule:: xopto.materials.ri.glass
+   :members:
+   :undoc-members:
+   :show-inheritance:

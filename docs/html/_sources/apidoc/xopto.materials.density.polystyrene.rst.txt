@@ -1,0 +1,7 @@
+xopto.materials.density.polystyrene module
+==========================================
+
+.. automodule:: xopto.materials.density.polystyrene
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,20 @@
+xopto.mcvox.mcsurface.probe package
+===================================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcvox.mcsurface.probe.fiberarray
+   xopto.mcvox.mcsurface.probe.lineararray
+   xopto.mcvox.mcsurface.probe.sixaroundone
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcvox.mcsurface.probe
+   :members:
+   :undoc-members:
+   :show-inheritance:

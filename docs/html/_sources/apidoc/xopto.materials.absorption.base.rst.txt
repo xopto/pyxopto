@@ -1,0 +1,7 @@
+xopto.materials.absorption.base module
+======================================
+
+.. automodule:: xopto.materials.absorption.base
+   :members:
+   :undoc-members:
+   :show-inheritance:

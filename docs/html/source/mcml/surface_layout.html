@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Surface layouts &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Fluence" href="fluence.html" />
+    <link rel="prev" title="Detectors" href="detector.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <span class="target" id="mcml-surface-label"></span><section id="surface-layouts">
+<h1>Surface layouts<a class="headerlink" href="#surface-layouts" title="Permalink to this headline">¶</a></h1>
+<p>Surface layouts can be used to describe complex interfaces at the top and
+bottom sample surfaces, such as the surface of the optical fiber probe tip.
+The surface layouts are subclasses of
+<a class="reference internal" href="../../apidoc/xopto.mcml.mcsurface.base.html#xopto.mcml.mcsurface.base.SurfaceLayoutBase" title="xopto.mcml.mcsurface.base.SurfaceLayoutBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcml.mcsurface.base.SurfaceLayoutBase</span></code></a>. Note that the top
+and bottom sample surface can be assigned a different surface layout.</p>
+<p>Readily available surface layots are conveniently imported into the
+<a class="reference internal" href="../../apidoc/xopto.mcml.mc.html#module-xopto.mcml.mc" title="xopto.mcml.mc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mc</span></code></a> and <a class="reference internal" href="../../apidoc/xopto.mcml.mcsurface.html#module-xopto.mcml.mcsurface" title="xopto.mcml.mcsurface"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcsurface</span></code></a> modules and include:</p>
+<ul>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcml.mcsurface.lambertian.html#xopto.mcml.mcsurface.lambertian.LambertianReflector" title="xopto.mcml.mcsurface.lambertian.LambertianReflector"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcsurface.lambertian.LambertianReflector</span></code></a>
+implements a uniform surface with optical properties varying
+from an ideal first surface mirror to a an ideal Lambertian surface with
+an optional absorption.</p></li>
+<li><p>The surface layouts of optical fiber probes are implemented in:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘py:mod:<cite>xopto.mcml.mcsurface.probe.sixaroundone.SixAroundOne</cite> implements a
+parameterized layout of a six-around-one optical fiber probe.</p></li>
+<li><p>‘py:mod:<cite>mcml.mcsurface.probe.lineararray.LinearArray</cite> implements a
+parameterized layout of probe with linear placement of optical fibers.</p></li>
+<li><p>‘py:mod:<cite>mcml.mcsurface.probe.fiberarray.FiberArray</cite> implements a general
+parameterized layout of differnt optical fibers in an optical fiber probe.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>In this example we create a layout of a tightly packed six-around-one optical
+fiber probe with 7 multimode fused silica fibers. The multimode optical fibers
+have a core diameter of 400 μm, a cladding diameter of 420 μm
+and a numerical aperture 0.22. The stainless
+steel tip of the optical fiber probe has a 6 mm diameter and a
+reflectivity of 65%. Note that we utilize the
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcutil.fiber.html#module-xopto.mcbase.mcutil.fiber" title="xopto.mcbase.mcutil.fiber"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcbase.mcutil.fiber</span></code></a> module to create an instance of
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber" title="xopto.mcbase.mcutil.fiber.MultimodeFiber"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultimodeFiber</span></code></a> that represents a
+multimode fiber.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">fiber</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+
+<span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+    <span class="mf">400e-6</span><span class="p">,</span>
+    <span class="mf">420e-6</span><span class="p">,</span>
+    <span class="n">ncore</span><span class="o">=</span><span class="n">ri</span><span class="o">.</span><span class="n">glass</span><span class="o">.</span><span class="n">fusedsilica</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="mf">550e-9</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">mc</span><span class="o">.</span><span class="n">mcsurface</span><span class="o">.</span><span class="n">SixAroundOne</span><span class="p">(</span><span class="n">fiber</span><span class="p">,</span> <span class="n">diameter</span><span class="o">=</span><span class="mf">6.0e-3</span><span class="p">,</span> <span class="n">reflectivity</span><span class="o">=</span><span class="mf">0.65</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="use-in-monte-carlo-simulator">
+<h2>Use in Monte Carlo simulator<a class="headerlink" href="#use-in-monte-carlo-simulator" title="Permalink to this headline">¶</a></h2>
+<p>The complex layouts at the top and / or bottom sample surface are passed to the
+Monte Carlo simulator through
+<a class="reference internal" href="../../apidoc/xopto.mcml.mcsurface.base.html#xopto.mcml.mcsurface.base.SurfaceLayouts" title="xopto.mcml.mcsurface.base.SurfaceLayouts"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcml.mcsurface.base.SurfaceLayouts</span></code></a>. In the following example
+we set the layout at the top sample surface to a six-around-one probe
+<a class="reference internal" href="../../apidoc/xopto.mcml.mcsurface.probe.sixaroundone.html#xopto.mcml.mcsurface.probe.sixaroundone.SixAroundOne" title="xopto.mcml.mcsurface.probe.sixaroundone.SixAroundOne"><code class="xref py py-class docutils literal notranslate"><span class="pre">SixAroundOne</span></code></a> and the
+layout at the bottom sample surface to a Lambertian reflector
+<a class="reference internal" href="../../apidoc/xopto.mcml.mcsurface.lambertian.html#xopto.mcml.mcsurface.lambertian.LambertianReflector" title="xopto.mcml.mcsurface.lambertian.LambertianReflector"><code class="xref py py-class docutils literal notranslate"><span class="pre">LambertianReflector</span></code></a> that absorbs
+30% of the incident light and reflects the remaining 70% as an ideal Lambertian
+reflector. Note that it is not required to populate  both the top and bottom
+sample surface layouts as illustrated in this example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">fiber</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+
+<span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+    <span class="mf">400e-6</span><span class="p">,</span>
+    <span class="mf">420e-6</span><span class="p">,</span>
+    <span class="n">ncore</span><span class="o">=</span><span class="n">ri</span><span class="o">.</span><span class="n">glass</span><span class="o">.</span><span class="n">fusedsilica</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="mf">550e-9</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">layouts</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsurface</span><span class="o">.</span><span class="n">SurfaceLayouts</span><span class="p">(</span>
+    <span class="n">top</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcsurface</span><span class="o">.</span><span class="n">SixAroundOne</span><span class="p">(</span><span class="n">fiber</span><span class="p">,</span> <span class="n">diameter</span><span class="o">=</span><span class="mf">6.0e-3</span><span class="p">,</span> <span class="n">reflectivity</span><span class="o">=</span><span class="mf">0.65</span><span class="p">),</span>
+    <span class="n">bottom</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcsurface</span><span class="o">.</span><span class="n">LambertianReflector</span><span class="p">(</span><span class="n">reflectance</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Layered MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="layer_stack.html">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source.html">Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="detector.html">Detectors</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Surface layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#use-in-monte-carlo-simulator">Use in Monte Carlo simulator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/index.html">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Layered MC</a><ul>
+      <li>Previous: <a href="detector.html" title="previous chapter">Detectors</a></li>
+      <li>Next: <a href="fluence.html" title="next chapter">Fluence</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

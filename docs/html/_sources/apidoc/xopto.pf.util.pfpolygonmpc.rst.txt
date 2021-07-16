@@ -1,0 +1,7 @@
+xopto.pf.util.pfpolygonmpc module
+=================================
+
+.. automodule:: xopto.pf.util.pfpolygonmpc
+   :members:
+   :undoc-members:
+   :show-inheritance:

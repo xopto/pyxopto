@@ -1,0 +1,7 @@
+xopto.mcml.mcsurface.lambertian module
+======================================
+
+.. automodule:: xopto.mcml.mcsurface.lambertian
+   :members:
+   :undoc-members:
+   :show-inheritance:

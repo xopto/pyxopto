@@ -1,0 +1,7 @@
+xopto.cl.clrng module
+=====================
+
+.. automodule:: xopto.cl.clrng
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.mcbase.mcpf.lut module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.mcbase.mcpf.mgk module" href="xopto.mcbase.mcpf.mgk.html" />
+    <link rel="prev" title="xopto.mcbase.mcpf.hg module" href="xopto.mcbase.mcpf.hg.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.mcbase.mcpf.lut">
+<span id="xopto-mcbase-mcpf-lut-module"></span><h1>xopto.mcbase.mcpf.lut module<a class="headerlink" href="#module-xopto.mcbase.mcpf.lut" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.Lut">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Lut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lut</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcpf/lut.html#Lut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcpf.lut.Lut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcpf.pfbase.html#xopto.mcbase.mcpf.pfbase.PfBase" title="xopto.mcbase.mcpf.pfbase.PfBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.pfbase.PfBase</span></code></a></p>
+<p>Lookup table-based scattering phase function constructor.
+Lookuptable is used for efficient computation of deflection
+angle cosines.
+A nonlinear transformation is used to compute linear lookup table
+(floating point) index from a uniform random number F:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">index</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">F</span> <span class="o">-</span> <span class="n">params</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">size</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>list</em><em>, </em><em>tuple</em><em> or </em><em>ndarray vector of 3 float</em>) – Nonlinear index transformation function parameters provided as
+an array of size 3.</p></li>
+<li><p><strong>lut</strong> (<em>np.ndarray vector</em>) – Lookuptable data.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The offset of the first lookup table entry is stored in
+the 45th user-defined scattering phase function parameter.
+The lookup table size is stored in the 4th user-defined
+scattering phase function parameter.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.Lut.cl_declaration">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">cl_declaration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mcpf/lut.html#Lut.cl_declaration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcpf.lut.Lut.cl_declaration" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenCL declarations of the scattering phase function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.Lut.cl_implementation">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">cl_implementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mcpf/lut.html#Lut.cl_implementation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcpf.lut.Lut.cl_implementation" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenCL implementation of the scattering phase function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.Lut.cl_options">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">cl_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/mcbase/mcpf/lut.html#Lut.cl_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcpf.lut.Lut.cl_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.Lut.cl_pack">
+<span class="sig-name descname"><span class="pre">cl_pack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcpf/lut.html#Lut.cl_pack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcpf.lut.Lut.cl_pack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills the an OpenCL cltypes.Structure (target) with the data required by the
+Monte Carlo simulator. See the <a class="reference internal" href="#xopto.mcbase.mcpf.lut.Lut.cl_type" title="xopto.mcbase.mcpf.lut.Lut.cl_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cl_type()</span></code></a> method
+for a detailed list of fields.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Calls the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Mc.pack_fp_lut()</span></code> method to pack the lookup table
+array data.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mc</strong> (<a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>McObject</em></a>) – Simulator instance.</p></li>
+<li><p><strong>target</strong> (<a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><em>cltypes.Structure</em></a>) – Target OpenCL structure for packing.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>target</strong> – Target structure received as an input argument or a new
+instance of ClLut if the input argument target is None.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure">cltypes.Structure</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.Lut.cl_type">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">cl_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcpf/lut.html#Lut.cl_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcpf.lut.Lut.cl_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an OpenCL structure that can be passed to the Monte carlo
+simulator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mc</strong> (<a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>McObject</em></a>) – A Monte Carlo simulator instance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>struct</strong> – A structure type that represents the scattering phase function in
+the Monte Carlo kernel.</p>
+<p>The returned structure type implements the following fields:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>a: mc_fp_t</dt><dd><p>Parameter of the nonlinear lookup table index transformation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>b: mc_fp_t</dt><dd><p>Parameter of the nonlinear lookup table index transformation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>c: mc_fp_t</dt><dd><p>Parameter of the nonlinear lookup table index transformation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>offset: mc_int_t</dt><dd><p>Location of the lookuptable as an offset from the start of
+the lookup table buffer.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>size: mc_int_t</dt><dd><p>Number of entries in the lookup table.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure">cltypes.Structure</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that this implementation of the lookup
+table uses the following nonlinear transformation to compute
+the lookup table index from a uniform random number
+<img class="math" src="../_images/math/980f458a0f92f6fe25bf591bb46a27294db9d0fe.png" alt="\xi \in [0, 1]"/>.</p>
+<div class="math">
+<p><img src="../_images/math/22669000f03fbc40a77aab1dda2018dd3ecd598f.png" alt="index &amp;= \frac{1}{2}(\frac{a}/{\xi - c} - b + 1)N,"/></p>
+</div><p>where <img class="math" src="../_images/math/f3e9c0f8802f9478f66d29f8d7f658d87ab684a1.png" alt="a, b, c"/> are the parameters of the nonlinear index
+transformation and <img class="math" src="../_images/math/3bfb3a64189a14b2704f4610827762d5e3145114.png" alt="N"/> is the size of the lookup table</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.Lut.lut">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">lut</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcpf.lut.Lut.lut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup table object or None.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.Lut.offset">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">offset</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mcpf.lut.Lut.offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Offset of the first element in the lookup table.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.Lut.params">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">params</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#xopto.mcbase.mcpf.lut.Lut.params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup table index trasnformation parameters.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.Lut.size">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mcpf.lut.Lut.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lookup table size.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.Lut.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcbase/mcpf/lut.html#Lut.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcpf.lut.Lut.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.LutEx">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">LutEx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pftype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcpf.pfbase.html#xopto.mcbase.mcpf.pfbase.PfBase" title="xopto.mcbase.mcpf.pfbase.PfBase"><span class="pre">xopto.mcbase.mcpf.pfbase.PfBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pfargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lutsize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcpf/lut.html#LutEx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcpf.lut.LutEx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcpf.lut.Lut" title="xopto.mcbase.mcpf.lut.Lut"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.lut.Lut</span></code></a></p>
+<p>Creates a Monte Carlo lookup table-based scattering phase function
+instance from a standard scattering phase function instance
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.pf.PfBase</span></code> subclass).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pftype</strong> (<em>PfBase subclass</em><em> or </em><em>str</em>) – Scattering phase function type. Use one defined in the
+<a class="reference internal" href="xopto.pf.html#module-xopto.pf" title="xopto.pf"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.pf</span></code></a> module.</p></li>
+<li><p><strong>pfargs</strong> (<em>list</em><em>, </em><em>tuple</em>) – A list of scattering phase function parameters passed to the pftype.</p></li>
+<li><p><strong>lutsize</strong> (<em>int</em>) – Number of elements in the lookup table.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional keyword arguments passed to the lut method of the
+scattering phase function as
+<code class="code docutils literal notranslate"><span class="pre">pftype(*pfargs).lut(lutsize,</span> <span class="pre">**kwargs)</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.LutEx.pf">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pf</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcpf.pfbase.PfBase</span></em><a class="headerlink" href="#xopto.mcbase.mcpf.lut.LutEx.pf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scattering phase function object that was used to create a lookup table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.LutEx.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcbase/mcpf/lut.html#LutEx.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcpf.lut.LutEx.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.mcbase.html">xopto.mcbase package</a><ul>
+  <li><a href="xopto.mcbase.mcpf.html">xopto.mcbase.mcpf package</a><ul>
+      <li>Previous: <a href="xopto.mcbase.mcpf.hg.html" title="previous chapter">xopto.mcbase.mcpf.hg module</a></li>
+      <li>Next: <a href="xopto.mcbase.mcpf.mgk.html" title="next chapter">xopto.mcbase.mcpf.mgk module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

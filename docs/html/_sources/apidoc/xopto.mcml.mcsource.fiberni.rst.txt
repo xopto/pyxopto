@@ -1,0 +1,7 @@
+xopto.mcml.mcsource.fiberni module
+==================================
+
+.. automodule:: xopto.mcml.mcsource.fiberni
+   :members:
+   :undoc-members:
+   :show-inheritance:

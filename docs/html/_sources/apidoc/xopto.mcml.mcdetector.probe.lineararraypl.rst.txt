@@ -1,0 +1,7 @@
+xopto.mcml.mcdetector.probe.lineararraypl module
+================================================
+
+.. automodule:: xopto.mcml.mcdetector.probe.lineararraypl
+   :members:
+   :undoc-members:
+   :show-inheritance:

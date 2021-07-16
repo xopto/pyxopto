@@ -1,0 +1,18 @@
+xopto.src package
+=================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.src.rng
+
+Module contents
+---------------
+
+.. automodule:: xopto.src
+   :members:
+   :undoc-members:
+   :show-inheritance:

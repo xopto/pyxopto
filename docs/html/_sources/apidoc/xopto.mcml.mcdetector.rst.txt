@@ -1,0 +1,32 @@
+xopto.mcml.mcdetector package
+=============================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcml.mcdetector.probe
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcml.mcdetector.base
+   xopto.mcml.mcdetector.cartesian
+   xopto.mcml.mcdetector.radial
+   xopto.mcml.mcdetector.radialpl
+   xopto.mcml.mcdetector.symmetric
+   xopto.mcml.mcdetector.total
+   xopto.mcml.mcdetector.totalpl
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcml.mcdetector
+   :members:
+   :undoc-members:
+   :show-inheritance:

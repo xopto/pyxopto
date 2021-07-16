@@ -1,0 +1,46 @@
+xopto.pf package
+================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.pf.util
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.pf.discrete
+   xopto.pf.distribution
+   xopto.pf.doublehg
+   xopto.pf.gk
+   xopto.pf.hg
+   xopto.pf.mgk
+   xopto.pf.mhg
+   xopto.pf.mie
+   xopto.pf.miefractal
+   xopto.pf.miemixture
+   xopto.pf.mieml
+   xopto.pf.miemlfractal
+   xopto.pf.miemlnormal
+   xopto.pf.miemlpd
+   xopto.pf.mienormal
+   xopto.pf.miepd
+   xopto.pf.miepolystyrene
+   xopto.pf.mpc
+   xopto.pf.pc
+   xopto.pf.pfbase
+   xopto.pf.rayleigh
+
+Module contents
+---------------
+
+.. automodule:: xopto.pf
+   :members:
+   :undoc-members:
+   :show-inheritance:

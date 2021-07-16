@@ -1,0 +1,7 @@
+xopto.materials.ri.glass.fusedsilica module
+===========================================
+
+.. automodule:: xopto.materials.ri.glass.fusedsilica
+   :members:
+   :undoc-members:
+   :show-inheritance:

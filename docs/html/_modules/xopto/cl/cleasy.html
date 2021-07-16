@@ -1,0 +1,776 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.cl.cleasy &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.cl.cleasy</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">pyopencl</span> <span class="k">as</span> <span class="nn">cl</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+<span class="kn">from</span> <span class="nn">xopto</span> <span class="kn">import</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">USER_TMP_PATH</span>
+
+
+<div class="viewcode-block" id="ArgScalar"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.ArgScalar">[docs]</a><span class="k">class</span> <span class="nc">ArgScalar</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argtype</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                 <span class="n">initializer</span><span class="p">:</span> <span class="nb">bool</span> <span class="ow">or</span> <span class="nb">int</span> <span class="ow">or</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Used to declare a scalar kernel argument with the</span>
+<span class="sd">        :py:meth:`Program.declare` method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        argtype: numpy.dtype</span>
+<span class="sd">            Argument data type.</span>
+<span class="sd">        initializer: int, float, scalar numpy types</span>
+<span class="sd">            Initializer for the OpenCL buffer.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">argtype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_access</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">initializer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">initializer</span> <span class="o">=</span> <span class="n">argtype</span><span class="p">(</span><span class="n">initializer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initializer</span> <span class="o">=</span> <span class="n">initializer</span>
+
+<div class="viewcode-block" id="ArgScalar.initializer"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.ArgScalar.initializer">[docs]</a>    <span class="k">def</span> <span class="nf">initializer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="ow">or</span> <span class="nb">int</span> <span class="ow">or</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the initializer passed to the constructor.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initializer</span></div>
+
+<div class="viewcode-block" id="ArgScalar.access"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.ArgScalar.access">[docs]</a>    <span class="k">def</span> <span class="nf">access</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Access mode of the argument (&quot;r&quot;, &quot;w&quot;, &quot;rw&quot; or &quot;&quot;) as seen by the</span>
+<span class="sd">        kernel (NOT by the host/python).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access</span></div>
+
+<div class="viewcode-block" id="ArgScalar.todevice"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.ArgScalar.todevice">[docs]</a>    <span class="k">def</span> <span class="nf">todevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">cl</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">queue</span><span class="p">:</span> <span class="n">cl</span><span class="o">.</span><span class="n">CommandQueue</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">buffer</span><span class="p">:</span> <span class="n">cl</span><span class="o">.</span><span class="n">Buffer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">argind</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Transfer data to OpenCL device.</span>
+
+<span class="sd">        This method is called by the :py:class:`Program` instance before</span>
+<span class="sd">        executing an OpenCL kernel and should not be called directly.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ctx: cl.Context</span>
+<span class="sd">            OpenCL context.</span>
+<span class="sd">        queue: cl.CommandQueue</span>
+<span class="sd">            OpenCL command queue.</span>
+<span class="sd">        value: bool or int or float or np.ndarray</span>
+<span class="sd">            Value that is used to update the argument before it is passed to</span>
+<span class="sd">            the kernel. Use existing value if None.</span>
+<span class="sd">        buffer: cl,Buffer</span>
+<span class="sd">            Target OpenCL device buffer or None to create a new one.</span>
+<span class="sd">        argind: int</span>
+<span class="sd">            Index of this argument.</span>
+<span class="sd">        verbose:</span>
+<span class="sd">            Turn on verbose reporting.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        buffer: cl.Buffer</span>
+<span class="sd">            The input buffer or a new buffer that is properly initialized</span>
+<span class="sd">            with the data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span>
+
+        <span class="k">return</span> <span class="n">buffer</span></div></div>
+
+<div class="viewcode-block" id="ArgArray"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.ArgArray">[docs]</a><span class="k">class</span> <span class="nc">ArgArray</span><span class="p">:</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_clMemFlags</span><span class="p">(</span><span class="n">rwstr</span><span class="p">):</span>
+        <span class="n">mf</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">mem_flags</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;r&#39;</span><span class="p">:</span><span class="n">mf</span><span class="o">.</span><span class="n">READ_ONLY</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">:</span><span class="n">mf</span><span class="o">.</span><span class="n">WRITE_ONLY</span><span class="p">,</span>
+                <span class="s1">&#39;rw&#39;</span><span class="p">:</span><span class="n">mf</span><span class="o">.</span><span class="n">READ_WRITE</span><span class="p">,</span> <span class="s1">&#39;wr&#39;</span><span class="p">:</span><span class="n">mf</span><span class="o">.</span><span class="n">READ_WRITE</span><span class="p">}[</span><span class="n">rwstr</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argtype</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">access</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;rw&quot;</span><span class="p">,</span>
+                 <span class="n">initializer</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Used to declare an array kernel argument with the </span>
+<span class="sd">        :py:meth:`Program.declare` method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        argtype: np.dtype</span>
+<span class="sd">            Argument data type as a numpy dtype.</span>
+<span class="sd">        access: str</span>
+<span class="sd">            Access specifier for the argument. Must be one of &quot;r&quot;, &quot;w&quot; or &quot;rw&quot;.</span>
+<span class="sd">            Note that the access flags are defined as seen by the OpenCL kernel</span>
+<span class="sd">            (not as seen by the host/python).</span>
+<span class="sd">        initializer: np.ndarray</span>
+<span class="sd">            Initializer for the OpenCL buffer.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">argtype</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_access</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">access</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;rw&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Argument access flags mus be one of &#39;</span>
+                             <span class="s1">&#39;&quot;r&quot;, &quot;w&quot; or &quot;rw&quot;!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">initializer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">initializer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">initializer</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_type</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initializer</span> <span class="o">=</span> <span class="n">initializer</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clbuffer</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="ArgArray.access"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.ArgArray.access">[docs]</a>    <span class="k">def</span> <span class="nf">access</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Access flags of the variable (&quot;r&quot;, &quot;w&quot;, &quot;rw&quot; or &quot;&quot;) as seen by the</span>
+<span class="sd">        OpenCL kernel (NOT as seen by the host/python)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access</span></div>
+
+<div class="viewcode-block" id="ArgArray.initializer"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.ArgArray.initializer">[docs]</a>    <span class="k">def</span> <span class="nf">initializer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the initializer passed to the constructor.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initializer</span></div>
+
+
+<div class="viewcode-block" id="ArgArray.todevice"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.ArgArray.todevice">[docs]</a>    <span class="k">def</span> <span class="nf">todevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">cl</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">queue</span><span class="p">:</span> <span class="n">cl</span><span class="o">.</span><span class="n">CommandQueue</span><span class="p">,</span>
+                 <span class="n">npdata</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">clbuffer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">argind</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cl</span><span class="o">.</span><span class="n">Buffer</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Transfer data to OpenCL device. </span>
+<span class="sd">        </span>
+<span class="sd">        This method is called by the :py:class:`Program` instance before</span>
+<span class="sd">        executing an OpenCL kernel and should not be called directly</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ctx: cl.Context</span>
+<span class="sd">            OpenCL context.</span>
+<span class="sd">        queue: cl.CommandQueue</span>
+<span class="sd">            OpenCL queue.</span>
+<span class="sd">        npdata: np.ndarray</span>
+<span class="sd">            Value that is used to update the argument before it is passed to</span>
+<span class="sd">            the kernel. Use existing value if None.</span>
+<span class="sd">        buffer: cl.Buffer</span>
+<span class="sd">            Target OpenCL device buffer or None to create a new one.</span>
+<span class="sd">        argind: int</span>
+<span class="sd">            Index of this argument.</span>
+<span class="sd">        verbose: bool</span>
+<span class="sd">            Turn on verbose reporting.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        buffer: cl.Buffer</span>
+<span class="sd">            The input buffer or a new buffer that is properly initialized</span>
+<span class="sd">            with the data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">clbuffer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">clbuffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clbuffer</span>
+            <span class="c1"># if we have an existing buffer and array is None, we are done</span>
+            <span class="k">if</span> <span class="n">clbuffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">npdata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">clbuffer</span>
+
+        <span class="n">copyflag</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="s1">&#39;r&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access</span> <span class="ow">and</span> <span class="n">npdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">copyflag</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">mem_flags</span><span class="o">.</span><span class="n">COPY_HOST_PTR</span>
+
+        <span class="k">if</span> <span class="n">npdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">!=</span> <span class="n">npdata</span><span class="o">.</span><span class="n">dtype</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Kernel argument no. </span><span class="si">{}</span><span class="s1"> should be an array &#39;</span>\
+                <span class="s1">&#39;of type </span><span class="si">{}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">argind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">clbuffer</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                <span class="n">npdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">clbuffer</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">npdata</span><span class="o">.</span><span class="n">nbytes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Kernel argument no. </span><span class="si">{}</span><span class="s1"> requires a new &#39;</span>\
+                      <span class="s1">&#39;device buffer allocation.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">argind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">clbuffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">clbuffer</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">copyflag</span><span class="p">:</span>
+                <span class="n">clbuffer</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">Buffer</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clMemFlags</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_access</span><span class="p">)</span> <span class="o">|</span>
+                                     <span class="n">copyflag</span><span class="p">,</span> <span class="n">hostbuf</span><span class="o">=</span><span class="n">npdata</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">clbuffer</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">Buffer</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clMemFlags</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_access</span><span class="p">),</span>
+                                     <span class="n">size</span><span class="o">=</span><span class="n">npdata</span><span class="o">.</span><span class="n">nbytes</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">copyflag</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Kernel argument no. </span><span class="si">{}</span><span class="s1"> is &#39;</span>\
+                          <span class="s1">&#39;being initialized with data.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">argind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">cl</span><span class="o">.</span><span class="n">enqueue_copy</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">clbuffer</span><span class="p">,</span> <span class="n">npdata</span><span class="p">)</span>
+
+        <span class="c1"># update the local buffer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clbuffer</span> <span class="o">=</span> <span class="n">clbuffer</span>
+
+        <span class="k">return</span> <span class="n">clbuffer</span></div>
+
+<div class="viewcode-block" id="ArgArray.fromdevice"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.ArgArray.fromdevice">[docs]</a>    <span class="k">def</span> <span class="nf">fromdevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queue</span><span class="p">:</span> <span class="n">cl</span><span class="o">.</span><span class="n">CommandQueue</span><span class="p">,</span> <span class="n">npdata</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                   <span class="n">clbuffer</span><span class="p">:</span> <span class="n">cl</span><span class="o">.</span><span class="n">Buffer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Transfer data from OpenCL device into a numpy buffer.</span>
+
+<span class="sd">        This method is called by the :py:class:`Program` instance after</span>
+<span class="sd">        executing an OpenCL kernel and should not be called directly.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        queue: cl.CommandQueue</span>
+<span class="sd">            OpenCL queue.</span>
+<span class="sd">        npdata: np.ndarray</span>
+<span class="sd">            Target numpy array.</span>
+<span class="sd">        buffer: cl.Buffer</span>
+<span class="sd">            OpenCL buffer that will be transferred to the npdata numpy array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        npdata: np.ndarray</span>
+<span class="sd">            The input numpy array filled with the contents of the OpenCL buffer. </span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Data will be transferred only if the OpenCL buffer has a write flag</span>
+<span class="sd">        (&quot;w&quot;). OpenCL buffers with no write flag cannot be modified and there</span>
+<span class="sd">        is no point in transfering the data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="s1">&#39;w&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access</span><span class="p">:</span>
+            <span class="n">cl</span><span class="o">.</span><span class="n">enqueue_copy</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">npdata</span><span class="p">,</span> <span class="n">clbuffer</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="ArgLocalMemory"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.ArgLocalMemory">[docs]</a><span class="k">class</span> <span class="nc">ArgLocalMemory</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byte_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Used to declare a local memory buffer kernel argument</span>
+<span class="sd">        with the Program.declare method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        byte_size: int</span>
+<span class="sd">            Size of the local buffer in bytes.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_byte_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">byte_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_access</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initializer</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clbuffer</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="ArgLocalMemory.access"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.ArgLocalMemory.access">[docs]</a>    <span class="k">def</span> <span class="nf">access</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the argument access mode passed to the constructor.</span>
+<span class="sd">        Note that local memory buffers do not support access attributes.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_access</span></div>
+
+<div class="viewcode-block" id="ArgLocalMemory.initializer"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.ArgLocalMemory.initializer">[docs]</a>    <span class="k">def</span> <span class="nf">initializer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the initializer passed to the constructor.</span>
+<span class="sd">        Note that initializers are not supported by local memory buffers.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initializer</span></div>
+
+<div class="viewcode-block" id="ArgLocalMemory.todevice"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.ArgLocalMemory.todevice">[docs]</a>    <span class="k">def</span> <span class="nf">todevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">cl</span><span class="o">.</span><span class="n">Context</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">queue</span><span class="p">:</span> <span class="n">cl</span><span class="o">.</span><span class="n">CommandQueue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">nparray</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">clbuffer</span><span class="p">:</span> <span class="n">cl</span><span class="o">.</span><span class="n">Buffer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">argind</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cl</span><span class="o">.</span><span class="n">Buffer</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Transfer data to the OpenCL device.</span>
+
+<span class="sd">        This method is called by the :py:class:`Program` instance before</span>
+<span class="sd">        executing an OpenCL kernel and should not be called directly</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ctx: cl.Context</span>
+<span class="sd">            OpenCL context.</span>
+<span class="sd">        queue: cl.CommandQueue</span>
+<span class="sd">            OpenCL queue.</span>
+<span class="sd">        nparray: np.ndarray</span>
+<span class="sd">            Value that is used to update the argument before it is passed to</span>
+<span class="sd">            the kernel. Use existing value if None.</span>
+<span class="sd">            Cannot be used with local OpenCL memory type.</span>
+<span class="sd">        clbuffer: cl.Buffer</span>
+<span class="sd">            OpenCL device buffer that will be used or None.</span>
+<span class="sd">        verbose: bool</span>
+<span class="sd">            Turn on verbose reporting.</span>
+<span class="sd">        argind: int</span>
+<span class="sd">            Index of the kernel argument.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        buffer: cl.Buffer</span>
+<span class="sd">            OpenCL device buffer.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clbuffer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_clbuffer</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">LocalMemory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_byte_size</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clbuffer</span></div></div>
+
+
+<div class="viewcode-block" id="Program"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.Program">[docs]</a><span class="k">class</span> <span class="nc">Program</span><span class="p">:</span>
+    <span class="n">DEFAULT_CL_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s1">&#39;cl&#39;</span><span class="p">,</span> <span class="s1">&#39;kernel&#39;</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39; Place to look for the OpenCL kernels related to this class. &#39;&#39;&#39;</span>
+
+    <span class="n">DEFAULT_EXPORT_FILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">USER_TMP_PATH</span><span class="p">,</span> <span class="s1">&#39;clprogram.c&#39;</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39; Default filename suffix for auto-generated OpenCL source code &#39;&#39;&#39;</span> 
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DEFAULT_CL_DIR</span><span class="p">,</span> <span class="s1">&#39;clbase.h&#39;</span><span class="p">),</span> <span class="s1">&#39;rt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
+        <span class="n">BASE_LIB</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="sd">&#39;&#39;&#39; Load the required OpenCL code on import. &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="Program.clbase"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.Program.clbase">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">clbase</span><span class="p">(</span><span class="n">doubleprecision</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the class-related OpenCL source code in the requested precision.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        doubleprecision: bool</span>
+<span class="sd">            Turns on double precision if set to True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        clcode: str</span>
+<span class="sd">            OpenCL code in requested precision.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">doubleprecision</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;#define USE_DOUBLE_PRECISION</span><span class="se">\n\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">Program</span><span class="o">.</span><span class="n">BASE_LIB</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Program</span><span class="o">.</span><span class="n">BASE_LIB</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="nb">list</span> <span class="ow">or</span> <span class="nb">tuple</span> <span class="ow">or</span> <span class="n">cl</span><span class="o">.</span><span class="n">Device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">buildopts</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">exportsrc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Creates a new instance of an OpenCL program.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        code: str</span>
+<span class="sd">            OpenCL code as a string.</span>
+<span class="sd">        device: str or list or tuple or cl.Device</span>
+<span class="sd">            A list of devices on which the code is to be executed. Can use</span>
+<span class="sd">            the same arguments as with the :py:func:`xopto.cl.clinfo.device`</span>
+<span class="sd">            function.</span>
+<span class="sd">        buildopts: list</span>
+<span class="sd">            A list of build options passed to the OpenCL compiler.</span>
+<span class="sd">        verbose: bool</span>
+<span class="sd">            If set to True, additional information is displayed during the</span>
+<span class="sd">            build and kernel calls.</span>
+<span class="sd">        exportsrc, bool, src</span>
+<span class="sd">            A path (default is used if True) where the target OpnCL source</span>
+<span class="sd">            code is saved.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ctx</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">create_some_context</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> \
+                    <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span>  <span class="nb">isinstance</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> <span class="ow">and</span> \
+                    <span class="nb">isinstance</span><span class="p">(</span><span class="n">device</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">device</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">device</span> <span class="o">=</span> <span class="p">[</span><span class="n">device</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ctx</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">Context</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using OpenCL device(s): </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ctx</span><span class="o">.</span><span class="n">devices</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">CommandQueue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ctx</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">exportsrc</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exportsrc</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                <span class="n">exportsrc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_EXPORT_FILE</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">exportsrc</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
+                <span class="n">fid</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clprg</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">Program</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ctx</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">buildopts</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kernels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clprg</span><span class="o">.</span><span class="n">kernel_names</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Code build in </span><span class="si">{:.1f}</span><span class="s1"> ms.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span><span class="o">*</span><span class="mf">1000.0</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Kernels in the compiled source: </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kernels</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_declarations</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Program.kernelinfo"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.Program.kernelinfo">[docs]</a>    <span class="k">def</span> <span class="nf">kernelinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns information about the arguments of the specified kernel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kernel: str</span>
+<span class="sd">            Kernel name as in the OpenCL source file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        info: List[dict]</span>
+<span class="sd">            A list of dicts with information on the kernel arguments.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">kernel</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_clprg</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="n">info</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">kernel</span><span class="o">.</span><span class="n">num_args</span><span class="p">):</span>
+            <span class="n">aq</span> <span class="o">=</span> <span class="n">kernel</span><span class="o">.</span><span class="n">get_arg_info</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">cl</span><span class="o">.</span><span class="n">kernel_arg_info</span><span class="o">.</span><span class="n">ADDRESS_QUALIFIER</span><span class="p">)</span>
+            <span class="n">aq</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">kernel_arg_address_qualifier</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">aq</span><span class="p">)</span>
+
+            <span class="n">acq</span> <span class="o">=</span> <span class="n">kernel</span><span class="o">.</span><span class="n">get_arg_info</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">cl</span><span class="o">.</span><span class="n">kernel_arg_info</span><span class="o">.</span><span class="n">ACCESS_QUALIFIER</span><span class="p">)</span>
+            <span class="n">acq</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">kernel_arg_access_qualifier</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">acq</span><span class="p">)</span>
+
+            <span class="n">tn</span> <span class="o">=</span> <span class="n">kernel</span><span class="o">.</span><span class="n">get_arg_info</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">cl</span><span class="o">.</span><span class="n">kernel_arg_info</span><span class="o">.</span><span class="n">TYPE_NAME</span><span class="p">)</span>
+
+            <span class="n">an</span> <span class="o">=</span> <span class="n">kernel</span><span class="o">.</span><span class="n">get_arg_info</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">cl</span><span class="o">.</span><span class="n">kernel_arg_info</span><span class="o">.</span><span class="n">NAME</span><span class="p">)</span>
+
+            <span class="n">tq</span> <span class="o">=</span> <span class="n">kernel</span><span class="o">.</span><span class="n">get_arg_info</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">cl</span><span class="o">.</span><span class="n">kernel_arg_info</span><span class="o">.</span><span class="n">TYPE_QUALIFIER</span><span class="p">)</span>
+            <span class="n">tq</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">kernel_arg_type_qualifier</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">tq</span><span class="p">)</span>
+
+            <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;address&#39;</span><span class="p">:</span><span class="n">aq</span><span class="p">,</span> <span class="s1">&#39;access&#39;</span><span class="p">:</span><span class="n">acq</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="n">tn</span><span class="p">,</span>
+                         <span class="s1">&#39;qualifier&#39;</span><span class="p">:</span><span class="n">tq</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="n">an</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">info</span></div>
+
+<div class="viewcode-block" id="Program.device"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.Program.device">[docs]</a>    <span class="k">def</span> <span class="nf">device</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cl</span><span class="o">.</span><span class="n">Device</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the OpenCL context device.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctx</span><span class="o">.</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Program.declare"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.Program.declare">[docs]</a>    <span class="k">def</span> <span class="nf">declare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ArgScalar</span> <span class="ow">or</span> <span class="n">ArgArray</span> <span class="ow">or</span> <span class="n">ArgLocalMemory</span><span class="p">])</span> \
+                    <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ArgScalar</span> <span class="ow">or</span> <span class="n">ArgArray</span> <span class="ow">or</span> <span class="n">ArgLocalMemory</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Use this function to declare a kernel by name. Use the same name as in</span>
+<span class="sd">        the OpenCL code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kernel: str</span>
+<span class="sd">            Kernel name as in the OpenCL file.</span>
+<span class="sd">        args: list/tuple of arguments</span>
+<span class="sd">            Define a list of arguments in terms of :py:class:`ArgScalar`,</span>
+<span class="sd">            :py:class:`ArgArray` or :py:class:`ArgLocalMemory` instances.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        decl: list</span>
+<span class="sd">            Declaration of kernel arguments.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">kernel</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kernels</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Kernel &quot;</span><span class="si">{}</span><span class="s1">&quot; does not exist in the &#39;</span>\
+                <span class="s1">&#39;compiled source!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kernel</span><span class="p">))</span>
+        <span class="n">clBuffers</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">initializer</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">clBuffers</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">todevice</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_ctx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">initializer</span><span class="p">(),</span>
+                    <span class="n">clBuffers</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">,</span> <span class="n">argind</span><span class="o">=</span><span class="n">ind</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_declarations</span><span class="p">[</span><span class="n">kernel</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">kernel</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">clBuffers</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_declarations</span><span class="p">[</span><span class="n">kernel</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_declarations</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exec</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kernels</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s1">&#39;Kernel &quot;</span><span class="si">{}</span><span class="s1">&quot; was not declared yet! &#39;</span>
+                <span class="s1">&#39;Declare a kernel by invoking the &quot;declare&quot; method!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">name</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s2">&quot;&#39;Program&#39; object has no attribute &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_exec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+              <span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ArgScalar</span> <span class="ow">or</span> <span class="n">ArgArray</span> <span class="ow">or</span> <span class="n">ArgLocalMemory</span><span class="p">],</span>
+              <span class="n">globalwg</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="ow">or</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+              <span class="n">localwg</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="ow">or</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Executes an OpenCL kernel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kernel: str</span>
+<span class="sd">            OpenCL kernel name that will be executed.</span>
+<span class="sd">        args: List[ArgScalar or ArgArray or ArgLocalMemory]</span>
+<span class="sd">            A list of kernel arguments. If None is used for a particular</span>
+<span class="sd">            argument, the existing buffer content is used by the kernel. If</span>
+<span class="sd">            an OpenCL buffer cannot be created an error is raised.</span>
+
+<span class="sd">            Numpy arrays of arguments with &quot;r&quot; or &quot;rw&quot; access passed in the</span>
+<span class="sd">            list will be transferred to the OpenCL device before executing</span>
+<span class="sd">            the kernel.</span>
+
+<span class="sd">            Numpy arrays of arguments with &quot;w&quot; or &quot;rw&quot; access passed in the</span>
+<span class="sd">            list will be updated with data from the OpenCL after executing the</span>
+<span class="sd">            kernel.</span>
+<span class="sd">        globalwg: int or Tuple[int] or List[int]</span>
+<span class="sd">            Global work group size.</span>
+<span class="sd">        localwg: int or Tuple[int] or List[int]</span>
+<span class="sd">            Local work group size. If None, an optimal value is selected by</span>
+<span class="sd">            the OpenCL runtime.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="n">t1_exec</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">globalwg</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">globalwg</span> <span class="o">=</span> <span class="p">[</span><span class="n">globalwg</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">localwg</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">localwg</span> <span class="o">=</span> <span class="p">[</span><span class="n">localwg</span><span class="p">]</span>
+
+        <span class="n">kernel</span><span class="p">,</span> <span class="n">declaredArgs</span><span class="p">,</span> <span class="n">clBuffers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_declarations</span><span class="p">[</span><span class="n">kernel</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="c1"># transfer data to the device</span>
+        <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">declaredArg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">declaredArgs</span><span class="p">):</span>
+
+            <span class="n">clBuffers</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">declaredArg</span><span class="o">.</span><span class="n">todevice</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ctx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span> <span class="n">clBuffers</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">,</span> <span class="n">argind</span><span class="o">=</span><span class="n">ind</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">clBuffers</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Kernel argument no. </span><span class="si">{}</span><span class="s1"> &#39;</span>\
+                                   <span class="s1">&#39;is undefined&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Arguments of kernel &quot;</span><span class="si">{}</span><span class="s1">&quot; uploaded to OpenCL device &#39;</span>
+                  <span class="s1">&#39;in </span><span class="si">{:.1f}</span><span class="s1"> ms.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                      <span class="n">kernel</span><span class="p">,</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span><span class="o">*</span><span class="mf">1000.0</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_clprg</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">,</span> <span class="n">globalwg</span><span class="p">,</span> <span class="n">localwg</span><span class="p">,</span>
+                                     <span class="o">*</span><span class="n">clBuffers</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Kernel &quot;</span><span class="si">{}</span><span class="s1">&quot; executed in </span><span class="si">{:.1f}</span><span class="s1"> ms.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">kernel</span><span class="p">,</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span><span class="o">*</span><span class="mf">1000.0</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="c1"># read data from the device</span>
+        <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;w&#39;</span> <span class="ow">in</span> <span class="n">declaredArgs</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">access</span><span class="p">()</span> <span class="ow">and</span> <span class="n">arg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">declaredArgs</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">fromdevice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">,</span>
+                                             <span class="n">arg</span><span class="p">,</span> <span class="n">clBuffers</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Arguments of kernel &quot;</span><span class="si">{}</span><span class="s1">&quot; downloaded from OpenCL device &#39;</span>
+                  <span class="s1">&#39;in </span><span class="si">{:.1f}</span><span class="s1"> ms.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                      <span class="n">kernel</span><span class="p">,</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span><span class="o">*</span><span class="mf">1000.0</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total python + kernel execution time </span><span class="si">{:.1f}</span><span class="s1"> ms.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="mf">1000.0</span><span class="o">*</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1_exec</span><span class="p">)))</span>
+
+<div class="viewcode-block" id="Program.upload_kernel_arg"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cleasy.html#xopto.cl.cleasy.Program.upload_kernel_arg">[docs]</a>    <span class="k">def</span> <span class="nf">upload_kernel_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">arg_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                          <span class="n">np_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Updates the contents of the OpenCL buffer for the given kernel</span>
+<span class="sd">        argument.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kernel: str</span>
+<span class="sd">            A declared OpenCL kernel name.</span>
+<span class="sd">        arg_inex: int</span>
+<span class="sd">            Index of the kernel argument.</span>
+<span class="sd">        np_data: npy.ndarray</span>
+<span class="sd">            Numpy data to transfer to the kernel argument.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">kernel</span><span class="p">,</span> <span class="n">declaredArgs</span><span class="p">,</span> <span class="n">clBuffers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_declarations</span><span class="p">[</span><span class="n">kernel</span><span class="p">]</span>
+
+        <span class="n">declaredArgs</span><span class="p">[</span><span class="n">arg_index</span><span class="p">]</span><span class="o">.</span><span class="n">todevice</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ctx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">,</span> <span class="n">np_data</span><span class="p">,</span> <span class="n">clBuffers</span><span class="p">[</span><span class="n">arg_index</span><span class="p">],</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">,</span> <span class="n">argind</span><span class="o">=</span><span class="n">arg_index</span><span class="p">)</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+
+    <span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clrng</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYOPENCL_COMPILER_OUTPUT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+
+    <span class="c1"># Make a kernel code that executes the random number generator in</span>
+    <span class="c1"># parallel.</span>
+    <span class="n">code</span> <span class="o">=</span> \
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    __kernel void rng(__global uint64_t *X, __global uint32_t const *A,</span>
+<span class="sd">                      __global float *rnd){</span>
+<span class="sd">      /* load the random number generator state for this thread */</span>
+<span class="sd">      uint64_t x = X[get_global_id(0)];</span>
+<span class="sd">      uint32_t a = A[get_global_id(0)];</span>
+
+<span class="sd">      rnd[get_global_id(0)] = mlrngccf(&amp;x, a);</span>
+
+<span class="sd">      /* save the random number generator state of this thread */</span>
+<span class="sd">      X[get_global_id(0)] = x;</span>
+<span class="sd">    };</span>
+
+
+<span class="sd">    __kernel void test(cl_fp_t k, __global cl_fp_t *in_out){</span>
+<span class="sd">        in_out[get_global_id(0)] *= k;</span>
+<span class="sd">    };</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># Load the OpenCL source code, select OpenCL device and build the program</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">Program</span><span class="p">(</span><span class="n">Program</span><span class="o">.</span><span class="n">clbase</span><span class="p">()</span> <span class="o">+</span> <span class="n">code</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">exportsrc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nvidia&#39;</span><span class="p">,</span> <span class="s1">&#39;amd&#39;</span><span class="p">,</span> <span class="s1">&#39;hd&#39;</span><span class="p">,</span> <span class="s1">&#39;cpu&#39;</span><span class="p">])</span>
+
+    <span class="c1"># Get some seeds for the Opencl random number generator. </span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">clrng</span><span class="o">.</span><span class="n">Random</span><span class="p">()</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">seeds</span><span class="p">()</span> <span class="c1"># get the maximum number of seeeds</span>
+    <span class="n">rngdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="n">rng</span><span class="o">.</span><span class="n">maxseeds</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="c1"># Declare the kernel arguments.</span>
+    <span class="c1"># 1st argument - seed X array (the OpenCL kernel reeds and updates these seeds)</span>
+    <span class="c1"># 2nd argument - seed a array (the OpenCL kernel only reads these seeds)</span>
+    <span class="c1"># 3rd argument - empty numpy array for the random numbers (the OpenCL kernel will write into this array)</span>
+    <span class="n">k</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;rng&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">ArgArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span> <span class="s1">&#39;rw&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span>
+                      <span class="n">ArgArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">a</span><span class="p">),</span> <span class="n">ArgArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)])</span>
+
+    <span class="c1"># Call the random number generator.</span>
+    <span class="n">k</span><span class="o">.</span><span class="n">rng</span><span class="p">([</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rngdata</span><span class="p">],</span> <span class="n">rngdata</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">rngdata</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">rngdata</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+    <span class="c1">#%%</span>
+    <span class="n">np_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="n">k</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">ArgScalar</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">),</span>
+                       <span class="n">ArgArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="s1">&#39;rw&#39;</span><span class="p">)])</span>
+
+    <span class="n">k</span><span class="o">.</span><span class="n">test</span><span class="p">([</span><span class="mi">1</span><span class="o">/</span><span class="mi">10</span><span class="p">,</span> <span class="n">np_in</span><span class="p">],</span> <span class="n">np_in</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

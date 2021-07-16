@@ -1,0 +1,940 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.mcbase.mcworker module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.mcml package" href="xopto.mcml.html" />
+    <link rel="prev" title="xopto.mcbase.mctypes module" href="xopto.mcbase.mctypes.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.mcbase.mcworker">
+<span id="xopto-mcbase-mcworker-module"></span><h1>xopto.mcbase.mcworker module<a class="headerlink" href="#module-xopto.mcbase.mcworker" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ClWorker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">types:</span> <span class="pre">xopto.mcbase.mctypes.McDataTypesBase</span> <span class="pre">=</span> <span class="pre">class</span> <span class="pre">McDataTypes(McInt32</span></em>, <em class="sig-param"><span class="pre">McAccu64</span></em>, <em class="sig-param"><span class="pre">McCnt32</span></em>, <em class="sig-param"><span class="pre">McFloat)</span></em>, <em class="sig-param"><span class="pre">cl_devices=None</span></em>, <em class="sig-param"><span class="pre">cl_build_options=None</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcobject.McObject</span></code></a></p>
+<p>OpenCL worker with support for allocation of read-write data buffers
+of arbitrary types and management of read-only lookup tables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>types</strong> (<a class="reference internal" href="xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDataTypes" title="xopto.mcbase.mctypes.McDataTypes"><em>mctypes.McDataTypes</em></a>) – <p>A class that defines all the simulator data types.
+Use one of the following predefined type classes derived from
+mctypes.McDataTypes:</p>
+<ul>
+<li><p>mctypes.McDataTypesSingle</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>32-bit size type</p></li>
+<li><p>32-bit default integers,</p></li>
+<li><p>64-bit detector accumulators,</p></li>
+<li><p>single precision floating-point arithmetics,</p></li>
+<li><dl class="simple">
+<dt>32-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call limited to 4,294,967,295)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>mctypes.McDataTypesDouble</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>32-bit size type,</p></li>
+<li><p>32-bit default integers,</p></li>
+<li><p>64-bit detector accumulators,</p></li>
+<li><p>double precision floating-point arithmetics,</p></li>
+<li><dl class="simple">
+<dt>32-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call limited to 4,294,967,295)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>mctypes.McDataTypesSingleCnt64</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>64-bit size type,</p></li>
+<li><p>32-bit default integers,</p></li>
+<li><p>64-bit detector accumulators,</p></li>
+<li><p>single precision floating-point arithmetics,</p></li>
+<li><dl class="simple">
+<dt>64-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call virtually unlimited)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>mctypes.McDataTypesDoubleCnt64</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>64-bit size type,</p></li>
+<li><p>32-bit default integers,</p></li>
+<li><p>64-bit detector accumulators,</p></li>
+<li><p>double precision floating-point arithmetics,</p></li>
+<li><dl class="simple">
+<dt>32-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call virtually unlimited)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</p></li>
+<li><p><strong>cl_devices</strong> (<em>List</em><em>[</em><em>cl.Device</em><em>] or </em><em>cl.Device</em><em> or </em><em>str</em>) – A python list of OpenCL devices that are used for
+conducting the simulation.See the clGpuDevices and clCpuDevices
+functions of the <code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.clinfo</span></code> module for details on
+obtaining a list of OpenCl capable devices. If None is provided,
+the first available device is used (GPU devices have priority over
+CPU devices). Use function <code class="xref py py-func docutils literal notranslate"><span class="pre">xopto.clinfo.device()</span></code> to get
+a desired device by simple keywords, e.g. a call
+clinfo.device([‘amd’, ‘nvidia’, ‘hd’, ‘cpu’], that will search
+for an AMD GPU, Nvidia GPU, Intel Hd GPU, any CPU and return
+the first device found.</p></li>
+<li><p><strong>cl_build_options</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – A list of OpenCL build option as specified by the OpenCl manuals at
+<a class="reference external" href="https://www.khronos.org/">https://www.khronos.org/</a>.
+An example of commonly used build options:
+cloptions=[‘-cl-opt-disable’, ‘-Werror’, ‘-cl-fast-relaxed-math’, ‘-cl-mad-enable’].</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Keyword arguments passed to the Mixin classes.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Use the <code class="xref py py-meth docutils literal notranslate"><span class="pre">create_allocator()</span></code> method to create buffer allocators
+and the <code class="xref py py-meth docutils literal notranslate"><span class="pre">create_lut_manager()</span></code> method to create managers of
+lookup tables.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.append_r_lut_data">
+<span class="sig-name descname"><span class="pre">append_r_lut_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcbase.mcutil.lut.html#xopto.mcbase.mcutil.lut.LutEntry" title="xopto.mcbase.mcutil.lut.LutEntry"><span class="pre">xopto.mcbase.mcutil.lut.LutEntry</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.append_r_lut_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.append_r_lut_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a read-only lookup table data array to the list of managed
+lookup table arrays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> (<em>np.dtype</em>) – Data type of the lookup table manager.</p></li>
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – Lookup table data to be added to the managed list. The numpy
+array must be of a type that can be converted to the data
+type of the lookup table manager.</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – Add the array to the managed list even if an existing entry for the
+given data array is found.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>lutentry</strong> – Lookup table entry. Use the :py:attr:LutEntry.offset
+to get the offset of the first element in the common data array.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.mcbase.mcutil.lut.html#xopto.mcbase.mcutil.lut.LutEntry" title="xopto.mcbase.mcutil.lut.LutEntry">LutEntry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_allocate_rw_buffer">
+<span class="sig-name descname"><span class="pre">cl_allocate_rw_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">owner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.cl_allocate_rw_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_allocate_rw_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocate a read-write OpenCL buffer of the given data type using
+the related OpenCL buffer allocator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> (<em>np.dtype</em>) – Numpy data type of the buffer allocator.</p></li>
+<li><p><strong>owner</strong> (<em>any</em>) – Object that will own the allocated buffer.</p></li>
+<li><p><strong>shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Shape of the buffer array to allocate.</p></li>
+<li><p><strong>download</strong> (<em>bool</em>) – Set to True if the data buffer should be downloaded after
+executing the kernel.
+The downloaded data will be passed to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">update_data()</span></code>
+of the owner.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>allocation</strong> – Buffer allocation object with information on the allocation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.mcbase.mcutil.buffer.html#xopto.mcbase.mcutil.buffer.BufferAllocation" title="xopto.mcbase.mcutil.buffer.BufferAllocation">BufferAllocation</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_allocation_download">
+<span class="sig-name descname"><span class="pre">cl_allocation_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">allocation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcutil.buffer.html#xopto.mcbase.mcutil.buffer.BufferAllocation" title="xopto.mcbase.mcutil.buffer.BufferAllocation"><span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.cl_allocation_download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_allocation_download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the content of the allocated buffer from the OpenCL device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>allocation</strong> (<a class="reference internal" href="xopto.mcbase.mcutil.buffer.html#xopto.mcbase.mcutil.buffer.BufferAllocation" title="xopto.mcbase.mcutil.buffer.BufferAllocation"><em>BufferAllocation</em></a>) – Buffer allocation as returned by the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">allocate_buffer()</span></code> methods.</p></li>
+<li><p><strong>out</strong> (<em>np.ndarray</em>) – Optional target numpy data array that will be filled with the
+content of the OpenCL buffer.
+The type and size of the numpy array must match the allocation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>out</strong> – Numpy data array that is filled with the OpenCL buffer content.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_allocation_upload">
+<span class="sig-name descname"><span class="pre">cl_allocation_upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">allocation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcutil.buffer.html#xopto.mcbase.mcutil.buffer.BufferAllocation" title="xopto.mcbase.mcutil.buffer.BufferAllocation"><span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.cl_allocation_upload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_allocation_upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload an allocated OpenCL buffer from host to the OpenCL device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>allocation</strong> (<a class="reference internal" href="xopto.mcbase.mcutil.buffer.html#xopto.mcbase.mcutil.buffer.BufferAllocation" title="xopto.mcbase.mcutil.buffer.BufferAllocation"><em>BufferAllocation</em></a>) – Buffer allocation as returned by the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">cl_allocate_rw_int_buffer()</span></code> or
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">cl_allocate_rw_accumulator_buffer()</span></code> or
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">cl_allocate_rw_accumulator_buffer()</span></code> methods.</p></li>
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – Data array to be uploaded. The type and size of the numpy array
+must match the allocation.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_buffers">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cl_buffers</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_buffers" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenCL data buffers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_build">
+<span class="sig-name descname"><span class="pre">cl_build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cl_src</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyopencl.Program</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.cl_build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build OpenCL source code. A context and command queue are created on
+the first run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cl_src</strong> (<em>str</em>) – OpenCL source code as a string.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Turns on verbose reporting.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>program</strong> – OpenCL executable.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cl.Program</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_context">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cl_context</span></span><em class="property"><span class="pre">:</span> <span class="pre">pyopencl._cl.Context</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenCL context.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_device">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cl_device</span></span><em class="property"><span class="pre">:</span> <span class="pre">List[pyopencl._cl.Device]</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_device" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenCL device that is used to run this simulator instance.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_exec">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cl_exec</span></span><em class="property"><span class="pre">:</span> <span class="pre">pyopencl.Program</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_exec" title="Permalink to this definition">¶</a></dt>
+<dd><p>The latest OpenCL program built with this worker.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_queue">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cl_queue</span></span><em class="property"><span class="pre">:</span> <span class="pre">pyopencl._cl.CommandQueue</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenCL command queue.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_r_buffer">
+<span class="sig-name descname"><span class="pre">cl_r_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyopencl._cl.Buffer</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.cl_r_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_r_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a read-only OpenCL buffer and optionally initialize the buffer
+with data. If a buffer of equal or larger size is found for the
+given name, a new buffer is not created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – A unique name for the buffer.</p></li>
+<li><p><strong>data</strong> (<em>any object with a buffer interface</em>) – Initializer for the OpenCl buffer.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – Size of the buffer in bytes.</p></li>
+<li><p><strong>buffer</strong> (<em>cl.Buffer</em>) – The OpenCL buffer.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>One of the size or data input arguments must be defined. If both
+are defined, data will be used to derive the size and initialize
+the OpenCL buffer.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_r_lut_buffer">
+<span class="sig-name descname"><span class="pre">cl_r_lut_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.cl_r_lut_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_r_lut_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an OpenCL buffer (create if not exist) representing the
+read-only data arrays managed by the related read-only lookup
+table manager.
+The value of update argument controls if the content of the OpenCL
+buffer is updated with the content of the managed arrays.
+If an OpenCL buffer does not exist, a new one is created and updated
+regardless of the value of the update argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> (<em>np.dtype</em>) – Data type of the lookup table manager.</p></li>
+<li><p><strong>update</strong> (<em>bool</em>) – If True, update the flat numpy array  with the
+current content of the managed lookup tables.
+If an OpenCL buffer does not exist, a new is created and updated
+regardless of the value of the update argument.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>cl_float_lut</strong> – OpenCL buffer of the floating-point lookup table array.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cl.Buffer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_rw_allocator">
+<span class="sig-name descname"><span class="pre">cl_rw_allocator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.dtype</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcbase.mcutil.buffer.html#xopto.mcbase.mcutil.buffer.BufferAllocator" title="xopto.mcbase.mcutil.buffer.BufferAllocator"><span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocator</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.cl_rw_allocator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_rw_allocator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns OpenCL read-write buffer allocator for the give data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>np.dtype</em>) – Numpy data type used with the allocator.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>allocator</strong> – Buffer allocator for the given data type.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.mcbase.mcutil.buffer.html#xopto.mcbase.mcutil.buffer.BufferAllocator" title="xopto.mcbase.mcutil.buffer.BufferAllocator">BufferAllocator</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_rw_allocator_buffer">
+<span class="sig-name descname"><span class="pre">cl_rw_allocator_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyopencl._cl.Buffer</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.cl_rw_allocator_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_rw_allocator_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the OpenCL read-write buffer of the allocator for the given
+data type.
+A new OpenCL buffer is created on the first call. A new OpenCL buffer
+is also allocated if the size of the existing buffer is too small for
+the allocations.
+The fill argument can be used to initialize the buffer with the given
+value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> (<em>np.dtype</em>) – Buffer allocator data type.</p></li>
+<li><p><strong>fill</strong> (<em>np.dtype.type</em>) – If not None, initialize the buffer with the given value / fill.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buffer</strong> – OpenCL read-write buffer of the allocator.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cl.Buffer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_rw_allocators">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cl_rw_allocators</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcutil.buffer.RestrictedBufferAllocators</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_rw_allocators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocators of OpenCL buffers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_rw_buffer">
+<span class="sig-name descname"><span class="pre">cl_rw_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyopencl._cl.Buffer</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.cl_rw_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_rw_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a read-write OpenCL buffer and optionally initialize the buffer
+with data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – A unique name for the buffer.</p></li>
+<li><p><strong>data</strong> (<em>any object with a buffer interface</em>) – Initializer for the OpenCl buffer.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – Size of the buffer in bytes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buffer</strong> – The OpenCL buffer.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cl.Buffer</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>One of the size or data input arguments must be defined. If both
+are defined, data will be used to derive the size and initialize
+the OpenCL buffer.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_w_buffer">
+<span class="sig-name descname"><span class="pre">cl_w_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyopencl._cl.Buffer</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.cl_w_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_w_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a write only OpenCL buffer and optionally initialize the buffer
+with data. If a buffer of equal or larger size is found for the
+given name, a new buffer is not created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – A unique name for the buffer.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – Size of the buffer in bytes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buffer</strong> – The opencl buffer.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cl.Buffer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_w_buffer_fill">
+<span class="sig-name descname"><span class="pre">cl_w_buffer_fill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cl_buffer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyopencl._cl.Buffer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.cl_w_buffer_fill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_w_buffer_fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fast fill of writable OpenCL buffers with a given scalar value.</p>
+<p>The OpenCL buffer must be writable, since the initialization is
+performed in an OpenCL kernel!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cl_buffer</strong> (<em>cl.Buffer</em>) – The OpenCL buffer to fill.</p></li>
+<li><p><strong>dtype</strong> (<em>np.dtype</em>) – Numpy dtype of a buffer element/item.</p></li>
+<li><p><strong>fill</strong> (<em>int</em><em> or </em><em>float</em>) – Scalar value used as a buffer fill. Must be convertible to
+the given data type (dtype).</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – The last item of the buffer relative to the offset that will be
+filled. If None, the entire buffer from the offset will be filled.
+Note that the size is given in buffer items not bytes!</p></li>
+<li><p><strong>offset</strong> (<em>int</em>) – First item of the buffer that will be filled.
+Note that the size is given in buffer items not bytes!</p></li>
+<li><p><strong>cl_kernel</strong> (<em>cl.Kernel</em>) – <p>OpenCL kernel that will be used to fill the buffer. If None,
+a matching kernel will be searched in the current executable
+<a class="reference internal" href="#xopto.mcbase.mcworker.ClWorker.cl_exec" title="xopto.mcbase.mcworker.ClWorker.cl_exec"><code class="xref py py-attr docutils literal notranslate"><span class="pre">cl_exec</span></code></a>. The fill kernels must follow the
+following footprint:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fill_</span><span class="o">&lt;</span><span class="n">dtype</span><span class="o">&gt;</span><span class="p">(</span><span class="n">__global</span> <span class="n">T</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span> <span class="n">T</span> <span class="n">fill_value</span><span class="p">,</span>
+             <span class="n">mc_size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">mc_size_t</span> <span class="n">offset</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where dtype should be one of (double, float, int64, uint64,
+int32 or uint32).</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that the size and offset are given in buffer items not bytes!</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.dtype_to_typename">
+<span class="sig-name descname"><span class="pre">dtype_to_typename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.dtype</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.dtype_to_typename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.dtype_to_typename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a standard short type name for the given numpy data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>np.dtype</em>) – Numpy data type.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>typename</strong> – A short standard type name for the given numpy data type.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.np_allocators">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">np_allocators</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcutil.buffer.NumpyAllocators</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.np_allocators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocators of temporary numpy buffers.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.np_buffers">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">np_buffers</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.np_buffers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numpy data buffers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.r_lut_manager">
+<span class="sig-name descname"><span class="pre">r_lut_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.dtype</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcbase.mcutil.lut.html#xopto.mcbase.mcutil.lut.LutManager" title="xopto.mcbase.mcutil.lut.LutManager"><span class="pre">xopto.mcbase.mcutil.lut.LutManager</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker.r_lut_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.r_lut_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a read-only lookup table manager that matches the given
+data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>np.dtype</em>) – Data type managed by the lookup table manager.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.types">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">types</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mctypes.McDataTypesBase</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data types used by the OpenCL kernel.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerRngMixin">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ClWorkerRngMixin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorkerRngMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerRngMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>ClWorker class mixin that can be used to create an OpenCl Random number
+generator.</p>
+<p>Random number generator mixin for an OpenCL worker. Use the
+<a class="reference internal" href="#xopto.mcbase.mcworker.ClWorkerRngMixin.rng" title="xopto.mcbase.mcworker.ClWorkerRngMixin.rng"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rng</span></code></a> to access the random number generator and
+<a class="reference internal" href="#xopto.mcbase.mcworker.ClWorkerRngMixin.cl_max_threads" title="xopto.mcbase.mcworker.ClWorkerRngMixin.cl_max_threads"><code class="xref py py-attr docutils literal notranslate"><span class="pre">cl_max_threads</span></code></a> to determine the maximum number
+of threads that can be run concurrently with this random number
+generator. The mutable seeeds can be accessed through the
+<a class="reference internal" href="#xopto.mcbase.mcworker.ClWorkerRngMixin.rng_seeds_x" title="xopto.mcbase.mcworker.ClWorkerRngMixin.rng_seeds_x"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rng_seeds_x</span></code></a> property and the immutable seeds through
+the <a class="reference internal" href="#xopto.mcbase.mcworker.ClWorkerRngMixin.rng_seeds_a" title="xopto.mcbase.mcworker.ClWorkerRngMixin.rng_seeds_a"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rng_seeds_a</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rnginit</strong> (<em>np.uint64</em>) – OpenCL random number generator initializer as a 64-bit unsigned
+integer.
+Use this initializer if there is a need to put the random, number
+generator into a known initial state.</p>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerRngMixin.cl_max_threads">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cl_max_threads</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerRngMixin.cl_max_threads" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number of OpenCl threads that can be run concurrently with this random number generator.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerRngMixin.rng">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">rng</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.cl.clrng.Random</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerRngMixin.rng" title="Permalink to this definition">¶</a></dt>
+<dd><p>Random number generator for OpenCL.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerRngMixin.rng_seeds_a">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">rng_seeds_a</span></span><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerRngMixin.rng_seeds_a" title="Permalink to this definition">¶</a></dt>
+<dd><p>Immutable random number generator seeds A.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerRngMixin.rng_seeds_x">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">rng_seeds_x</span></span><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerRngMixin.rng_seeds_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mutable random number generator seeds X.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ClWorkerStandardBufferLutMixin</span></span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorkerStandardBufferLutMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>ClWorker class mixin that creates interfaces for a
+standard set of OpenCL read-write buffer allocators and read-ony lookup
+table managers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.append_r_float_lut">
+<span class="sig-name descname"><span class="pre">append_r_float_lut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcbase.mcutil.lut.html#xopto.mcbase.mcutil.lut.LutEntry" title="xopto.mcbase.mcutil.lut.LutEntry"><span class="pre">xopto.mcbase.mcutil.lut.LutEntry</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorkerStandardBufferLutMixin.append_r_float_lut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.append_r_float_lut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append data to the floating-point type read-only lookuptable.
+The OpenCL data type of the read-only lookup table is mc_float_t.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – Lookup table data to manage.</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – If True, append the data array even if it is already managed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>lut_entry</strong> (<em>LutEntry</em>) – Lookup table entry. Use the offset property to locate the
+first element of the entry in the lookup table buffer.</p></li>
+<li><p><strong>new</strong> (<em>bool</em>) – True if a lookup table entry with the same data was not
+found among the existing managed lookup table entries.
+If the value of the force argument is True,
+this value is always returned as True.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.append_r_int_lut">
+<span class="sig-name descname"><span class="pre">append_r_int_lut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcbase.mcutil.lut.html#xopto.mcbase.mcutil.lut.LutEntry" title="xopto.mcbase.mcutil.lut.LutEntry"><span class="pre">xopto.mcbase.mcutil.lut.LutEntry</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorkerStandardBufferLutMixin.append_r_int_lut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.append_r_int_lut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append data to the integer type read-only lookuptable with
+The OpenCL data type of the read-only lookup table is mc_int_t.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – Lookup table data to manage.</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – If True, append the data array even if it is already managed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>lut_entry</strong> (<em>LutEntry</em>) – Lookup table entry. Use the offset property to locate the
+first element of the entry in the lookup table buffer.</p></li>
+<li><p><strong>new</strong> (<em>bool</em>) – True if a lookup table entry with the same data was not
+found among the existing managed lookup table entries.
+If the value of the force argument is True,
+this value is always returned as True.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_allocate_rw_accumulator_buffer">
+<span class="sig-name descname"><span class="pre">cl_allocate_rw_accumulator_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcbase.mcutil.buffer.html#xopto.mcbase.mcutil.buffer.BufferAllocation" title="xopto.mcbase.mcutil.buffer.BufferAllocation"><span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocation</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorkerStandardBufferLutMixin.cl_allocate_rw_accumulator_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_allocate_rw_accumulator_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocate a new read-write accumulator buffer with OpenCL type mc_accu_t.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>owner</strong> (<em>any</em>) – Allocation owner / caller.</p></li>
+<li><p><strong>shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Allocation buffer shape.</p></li>
+<li><p><strong>download</strong> (<em>bool</em>) – Set to True if download is required after executing the kernel.
+The downloaded data will be passed to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">update_data()</span></code>
+method of the owner.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>allocation</strong> – The buffer allocation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.mcbase.mcutil.buffer.html#xopto.mcbase.mcutil.buffer.BufferAllocation" title="xopto.mcbase.mcutil.buffer.BufferAllocation">BufferAllocation</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_allocate_rw_float_buffer">
+<span class="sig-name descname"><span class="pre">cl_allocate_rw_float_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcbase.mcutil.buffer.html#xopto.mcbase.mcutil.buffer.BufferAllocator" title="xopto.mcbase.mcutil.buffer.BufferAllocator"><span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocator</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorkerStandardBufferLutMixin.cl_allocate_rw_float_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_allocate_rw_float_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocate a new read-write floating-point buffer with OpenCL type mc_fp_t.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>owner</strong> (<em>any</em>) – Allocation owner / caller.</p></li>
+<li><p><strong>shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Allocation buffer shape.</p></li>
+<li><p><strong>download</strong> (<em>bool</em>) – Set to True if download is required after executing the kernel.
+The downloaded data will be passed to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">update_data()</span></code>
+method of the owner.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>allocation</strong> – The buffer allocation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.mcbase.mcutil.buffer.html#xopto.mcbase.mcutil.buffer.BufferAllocation" title="xopto.mcbase.mcutil.buffer.BufferAllocation">BufferAllocation</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_allocate_rw_int_buffer">
+<span class="sig-name descname"><span class="pre">cl_allocate_rw_int_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcbase.mcutil.buffer.html#xopto.mcbase.mcutil.buffer.BufferAllocator" title="xopto.mcbase.mcutil.buffer.BufferAllocator"><span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocator</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorkerStandardBufferLutMixin.cl_allocate_rw_int_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_allocate_rw_int_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocate a new read-write integer buffer with OpenCL type mc_int_t.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>owner</strong> (<em>any</em>) – Allocation owner / caller.</p></li>
+<li><p><strong>shape</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em>) – Allocation buffer shape.</p></li>
+<li><p><strong>download</strong> (<em>bool</em>) – Set to True if download is required after executing the kernel.
+The downloaded data will be passed to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">update_data()</span></code>
+method of the owner.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>allocation</strong> – The buffer allocation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.mcbase.mcutil.buffer.html#xopto.mcbase.mcutil.buffer.BufferAllocation" title="xopto.mcbase.mcutil.buffer.BufferAllocation">BufferAllocation</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_r_float_lut">
+<span class="sig-name descname"><span class="pre">cl_r_float_lut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyopencl._cl.Buffer</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorkerStandardBufferLutMixin.cl_r_float_lut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_r_float_lut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an OpenCL buffer (create if not exist) representing the
+read-only data arrays managed by the floating-point lookup table
+manager.
+The value of update argument controls if the content of the OpenCL
+buffer is updated with the content of the managed arrays.
+If an OpenCL buffer does not exist, a new is created and updated
+regardless of the value of the update argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>update</strong> (<em>bool</em>) – If True, update the flat numpy array of lookup tables with the
+current content of the managed lookup tables.
+If an OpenCL buffer does not exist, a new one is created and
+updated regardless of the value of the update argument.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>cl_float_lut</strong> – OpenCL buffer of the floating-point lookup table array.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cl.Buffer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_r_int_lut">
+<span class="sig-name descname"><span class="pre">cl_r_int_lut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyopencl._cl.Buffer</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorkerStandardBufferLutMixin.cl_r_int_lut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_r_int_lut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an OpenCL buffer (create if not exist) representing the
+read-only integer arrays managed by the integer lookup table
+manager.
+The value of update argument controls if the content of the OpenCL
+buffer is updated with the content of the managed arrays.
+If an OpenCL buffer does not exist, a new one is created and updated
+regardless of the value of the update argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>update</strong> (<em>bool</em>) – If True, update the flat numpy array of lookup tables with the
+current content of the managed lookup tables.
+If an OpenCL buffer does not exist, a new one is created and
+updated regardless of the value of the update argument.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>cl_float_lut</strong> – OpenCL buffer of the floating-point lookup table array.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cl.Buffer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_rw_accumulator_allocator">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cl_rw_accumulator_allocator</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocator</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_rw_accumulator_allocator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocator of read-write accumulator type OpenCL buffers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_rw_accumulator_buffer">
+<span class="sig-name descname"><span class="pre">cl_rw_accumulator_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyopencl._cl.Buffer</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorkerStandardBufferLutMixin.cl_rw_accumulator_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_rw_accumulator_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the OpenCL buffer of the accumulator allocator.
+A new OpenCL buffer is created on the first call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fill</strong> (<em>int</em>) – Scalar value used to fill the buffer. Must be convertible to
+the given data type (dtype).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buffer</strong> – OpenCL buffer.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cl.Buffer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_rw_float_allocator">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cl_rw_float_allocator</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocator</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_rw_float_allocator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocator of read-write floating-point type OpenCL buffers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_rw_float_buffer">
+<span class="sig-name descname"><span class="pre">cl_rw_float_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyopencl._cl.Buffer</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorkerStandardBufferLutMixin.cl_rw_float_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_rw_float_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the OpenCL buffer of the floating-point allocator.
+A new OpenCL buffer is created on the first call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fill</strong> (<em>float</em>) – Scalar value used to fill the buffer. Must be convertible to
+the given data type (dtype).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buffer</strong> – OpenCL buffer.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cl.Buffer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_rw_int_allocator">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cl_rw_int_allocator</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocator</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_rw_int_allocator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocator of read-write integer type OpenCL buffers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_rw_int_buffer">
+<span class="sig-name descname"><span class="pre">cl_rw_int_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyopencl._cl.Buffer</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorkerStandardBufferLutMixin.cl_rw_int_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.cl_rw_int_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the OpenCL buffer of the integer allocator.
+A new OpenCL buffer is created on the first call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fill</strong> (<em>int</em>) – Scalar value used to fill the buffer. Must be convertible to
+the given data type (dtype).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buffer</strong> – OpenCL buffer.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cl.Buffer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.float_r_lut_manager">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">float_r_lut_manager</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcutil.lut.LutManager</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.float_r_lut_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Floating-point read-only data lookup table manager.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.int_r_lut_manager">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">int_r_lut_manager</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcutil.lut.LutManager</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.int_r_lut_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integer read-only data lookup table manager.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.np_r_float_lut">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">np_r_float_lut</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.np_r_float_lut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numpy data buffer of the read-only floating-point type lookup table.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.np_r_int_lut">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">np_r_int_lut</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.np_r_int_lut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numpy data buffer of the read-only integer type lookup table.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.mcbase.html">xopto.mcbase package</a><ul>
+      <li>Previous: <a href="xopto.mcbase.mctypes.html" title="previous chapter">xopto.mcbase.mctypes module</a></li>
+      <li>Next: <a href="xopto.mcml.html" title="next chapter">xopto.mcml package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

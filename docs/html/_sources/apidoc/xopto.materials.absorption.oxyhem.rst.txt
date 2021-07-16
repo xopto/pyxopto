@@ -1,0 +1,7 @@
+xopto.materials.absorption.oxyhem module
+========================================
+
+.. automodule:: xopto.materials.absorption.oxyhem
+   :members:
+   :undoc-members:
+   :show-inheritance:

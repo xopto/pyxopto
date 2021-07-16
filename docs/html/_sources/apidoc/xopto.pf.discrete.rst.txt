@@ -1,0 +1,7 @@
+xopto.pf.discrete module
+========================
+
+.. automodule:: xopto.pf.discrete
+   :members:
+   :undoc-members:
+   :show-inheritance:

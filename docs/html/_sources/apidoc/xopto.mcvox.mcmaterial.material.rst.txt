@@ -1,0 +1,7 @@
+xopto.mcvox.mcmaterial.material module
+======================================
+
+.. automodule:: xopto.mcvox.mcmaterial.material
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+xopto.mcvox.mcsource.fiber module
+=================================
+
+.. automodule:: xopto.mcvox.mcsource.fiber
+   :members:
+   :undoc-members:
+   :show-inheritance:

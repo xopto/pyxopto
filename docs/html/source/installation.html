@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Installation &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="OpenCL devices" href="opencl_devices.html" />
+    <link rel="prev" title="Welcome to PyXOpto’s documentation!" href="../index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <span class="target" id="installation-label"></span><section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<section id="opencl">
+<span id="installation-opencl-label"></span><h2>OpenCL<a class="headerlink" href="#opencl" title="Permalink to this headline">¶</a></h2>
+<p>OpenCL programming language and development tools are available for a number
+of platforms.</p>
+<section id="nvidia">
+<h3>Nvidia<a class="headerlink" href="#nvidia" title="Permalink to this headline">¶</a></h3>
+<p>Windows OS</p>
+<p>On Windows OS Nvidia distributes OpenCL with the CUDA Toolkit. Note that that
+<a class="reference external" href="https://developer.nvidia.com/cuda-10.2-download-archive?target_os=Windows&amp;target_arch=x86_64">Cuda Tolkit 10.2</a>
+is the last version that supports older Windows OS,
+such as Windows 7, Windows 8 and Windows 8.1.
+<a class="reference external" href="https://developer.nvidia.com/cuda-downloads?target_os=Windows&amp;target_arch=x86_64">The latest</a>
+version of CUDA toolkit only supports Windows 10. Follow the above links to
+download the CUDA Toolkit installer executable for your Windows. Run the
+installer and follow the dialogs to install the CUDA Toolkit.</p>
+<p>Linux OS</p>
+<p>You can install the CUDA toolkit by downloading the distribution from
+<a class="reference external" href="https://developer.nvidia.com/cuda-downloads?target_os=Linux">NVIDIA Developer site</a>
+and  follow the <a class="reference external" href="https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#package-manager-installation">instructions</a>.</p>
+<p>Some distributions, such as Ubuntu, also have good native support for installing
+the NVIDIA drivers using <code class="code docutils literal notranslate"><span class="pre">ubuntu-drivers</span></code> and the autoinstall option that
+will install the appropriate driver version for the installed hardware.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo ubuntu-drivers autoinstall
+</pre></div>
+</div>
+<p>Cuda Toolkit can be installed using the package manager:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt update
+sudo apt install nvidia-cuda-toolkit
+</pre></div>
+</div>
+<p>To enable OpenCL, you will also have to install <code class="code docutils literal notranslate"><span class="pre">ocl-icd-libopencl1</span></code> and
+optionally a command line tool <code class="code docutils literal notranslate"><span class="pre">clinfo</span></code> that can be used to display all
+the installed OpenCL devices.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt update
+sudo apt install ocl-icd-libopencl1
+sudo apt install clinfo
+</pre></div>
+</div>
+</section>
+<section id="amd">
+<span id="installation-python-label"></span><h3>AMD<a class="headerlink" href="#amd" title="Permalink to this headline">¶</a></h3>
+<p>Drivers and the OpenCL runtime for AMD devices along with installation instructions
+can be downloaded  from <a class="reference external" href="https://www.amd.com/en/support">https://www.amd.com/en/support</a>.</p>
+</section>
+<section id="intel">
+<h3>Intel<a class="headerlink" href="#intel" title="Permalink to this headline">¶</a></h3>
+<p>Instructions for installing Intel OpenCL runtime can be found
+<a class="reference external" href="https://software.intel.com/content/www/us/en/develop/articles/opencl-drivers.html">here</a>.
+Note that some distributions of Linux have native support for installing the
+required packages through the system package manager. On Ubuntu distribution
+the drivers and OpenCL runtime are available through the
+<code class="code docutils literal notranslate"><span class="pre">intel-opencl-icd</span></code> and <code class="code docutils literal notranslate"><span class="pre">beignet-opencl-icd</span></code> packages.</p>
+</section>
+</section>
+<section id="python">
+<h2>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
+<p>PyXOpto requires <a class="reference external" href="https://www.python.org/">Python 3</a> (version &gt;= 3.7)
+programming language and at least the following extension packages:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://scipy.org/">Scipy</a> version &gt;= 1.4.1</p></li>
+<li><p><a class="reference external" href="https://matplotlib.org">Matplotlib</a> version &gt;= 1.18.1</p></li>
+<li><p><a class="reference external" href="www.nupy.org">Numpy</a> version &gt;= 1.18.4</p></li>
+<li><p><a class="reference external" href="https://documen.tician.de/pyopencl">PyOpencl</a> version &gt;= 2019.1.2</p></li>
+<li><p><a class="reference external" href="https://shapely.readthedocs.io/en/latest/">Shapely</a> version &gt;= 1.6.4</p></li>
+<li><p><a class="reference external" href="https://jinja2docs.readthedocs.io/en/stable/">Jinja2</a> version &gt;= 2.9.8</p></li>
+<li><p><a class="reference external" href="https://numba.pydata.org/">Numba</a> version &gt;= 0.34.0</p></li>
+</ul>
+<p>Additional packages are required to use modules that enable scattering phase
+function calculations for layered spherical particles:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/ovidiopr/scattnlay">Scattnlay</a> version &gt;= 2.2</p></li>
+</ul>
+<p>Note that the distribution is tested with the listed versions.</p>
+<section id="windows-os">
+<h3>Windows OS<a class="headerlink" href="#windows-os" title="Permalink to this headline">¶</a></h3>
+<p>On Windows OS you can conveniently use
+<a class="reference external" href="https://sourceforge.net/projects/winpython/files/">WinPython</a>,
+a portable distribution of the Python programming language for Windows 7/8/10.
+The <a class="reference external" href="https://sourceforge.net/projects/winpython/files/">WinPython</a>
+distribution comes with many commonly used Python extension packages including
+the ones required by the PyXOpto package. The installation also comes with
+<a class="reference external" href="https://www.spyder-ide.org/">Spyder</a> and
+<a class="reference external" href="https://code.visualstudio.com/">Visual Studio Code</a> integrated development
+environments.</p>
+<p>Alternatively, use the <a class="reference external" href="https://anaconda.org/anaconda/python">Anaconda</a>
+Python distribution that is available for a wide range of operating systems.
+Follow the <a class="reference external" href="https://docs.anaconda.com/anaconda/navigator/tutorials/manage-packages/">instructions</a>
+to install the required extension packages.</p>
+<p><a class="reference external" href="https://www.lfd.uci.edu/~gohlke/pythonlibs/">Here</a> you can find many 32-
+and 64-bit Windows binaries of open-source Python extension packages.</p>
+<p>The following two examples should install the Python 3 programming language and the required packages on Windows OS.</p>
+<p>Anaconda Python Distribution:</p>
+<ol class="arabic simple">
+<li><p>Install the <a class="reference external" href="​https://www.anaconda.com/products/individual-b">Anaconda Individual Edition</a>.</p></li>
+<li><p>Run Anaconda Prompt.</p></li>
+<li><p>Add <em>conda-forge</em> channel:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda config -add channels conda-forge
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Create a new conda environment named <em>custom_env</em>:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n custom_env
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Install the required Python packages:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda install -n custom_env scipy matplotlib numpy pyopencl shapely jinja2 numba
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>The custom environment <em>custom_env</em> can be activated:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>activate custom_env
+</pre></div>
+</div>
+<p>WinPython distribution:</p>
+<ol class="arabic simple">
+<li><p>Download and extract the WinPython distribution (available at <a class="reference external" href="https://winpython.github.io/">https://winpython.github.io/</a> and make sure that it contains preinstalled packages scipy, matplotlib, numpy, shapely, jinja2 and numba)</p></li>
+<li><p>The package <em>pyopencl</em> is not included and has to be downloaded separately from Gohlke’s website <a class="reference external" href="https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopencl">https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopencl</a>. Download the latest version that corresponds to the extracted Python version and architecture.</p></li>
+<li><p>Run WinPython Control Panel from the extracted WinPython folder.</p></li>
+<li><p>Add and install the package <em>pyopencl</em> by locating the downloaded .whl file.</p></li>
+</ol>
+</section>
+<section id="linux-os">
+<h3>Linux OS<a class="headerlink" href="#linux-os" title="Permalink to this headline">¶</a></h3>
+<p>On Linux operating systems, Python is very likely already installed.
+If not, use the OS package manager to install Python 3.
+Individual Python packages can be installed through the Python package manager
+<a class="reference external" href="https://pypi.org/project/pip/">pip</a>.
+Note that on some Linux distribution the Python 3 and related Pip executables
+are named python3 and pip3. In this case, the python and pip executables are
+reserved for the deprecated Python 2 programming language.</p>
+<p>The following example should install the latest Python 3 programming language
+and related packages on Ubuntu or Debian distributions:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt update
+sudo apt install python3
+sudo apt install python3-pip
+
+sudo pip3 install scipy
+sudo pip3 install matplotlib
+sudo pip3 install numpy
+sudo pip3 install Shapely
+sudo pip3 install numba
+sudo pip3 install pyopencl
+sudo pip3 install Jinja2
+sudo pip3 install python-scattnlay
+</pre></div>
+</div>
+<p>Alternatively, install one of the supported Python distributions such
+as <a class="reference external" href="https://anaconda.org/anaconda/python">Anaconda</a> and follow
+the <a class="reference external" href="https://docs.anaconda.com/anaconda/navigator/tutorials/manage-packages/">instructions</a>
+to install the required extension packages.</p>
+</section>
+<section id="integrated-development-environments">
+<h3>Integrated development environments<a class="headerlink" href="#integrated-development-environments" title="Permalink to this headline">¶</a></h3>
+<p>There are numerous Integrated development environments (IDE) that support the
+Python programming language. As already pointed out,
+<a class="reference external" href="https://sourceforge.net/projects/winpython/files/">Winpython</a>
+distribution comes with <a class="reference external" href="https://www.spyder-ide.org/">Spyder</a> IDE
+and <a class="reference external" href="https://code.visualstudio.com/">Visual Studio Code</a> that are also
+supported by the Anaconda distribution.
+Other popular full-featured IDEs supported across different operating systems:</p>
+<ul class="simple">
+<li><p>Eclipse with <a class="reference external" href="http://www.pydev.org/">PyDev</a></p></li>
+<li><p><a class="reference external" href="https://www.jetbrains.com/pycharm/">PyCharm</a></p></li>
+</ul>
+</section>
+</section>
+<section id="pyxopto">
+<h2>PyXOpto<a class="headerlink" href="#pyxopto" title="Permalink to this headline">¶</a></h2>
+<p>First, download or clone the PyXOpto source repository to a local directory.
+The source code can be installed as a Python package or used directly from
+the downloaded source.</p>
+<section id="as-a-python-package">
+<h3>As a Python package<a class="headerlink" href="#as-a-python-package" title="Permalink to this headline">¶</a></h3>
+<p>PyXOpto can be installed as a package using the setup.py file. Run the
+following command from the root directory of PyXOpto (the one with the
+setup.py file).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py install
+</pre></div>
+</div>
+<p>This will also install the dependencies that include several popular
+Python packages (scipy, matplotlib, numpy, pyopencl, shapely, numba,
+and jinja2).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using Windows OS and Anaconda Pytohon distribution, PyXOpto should be installed by running the Anaconda Prompt and activating the custom environment created in the Python installation section. When using the WinPython distribution, the WinPython Command Prompt found in the extracted WinPython folder should be run instead.</p>
+</div>
+<p>The PyXOpto installation can be verified by running an example found in <em>examples</em> folder, e.g., examples/mcml/basic.py:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python basic.py
+</pre></div>
+</div>
+</section>
+<section id="using-from-source">
+<h3>Using from source<a class="headerlink" href="#using-from-source" title="Permalink to this headline">¶</a></h3>
+<p>To use the PyXOpto package from source, you will have to manually install all
+the Python packages listed in the setup.py file. Follow the
+the installation instructions for <a class="reference internal" href="#installation-python-label"><span class="std std-ref">Python</span></a>.</p>
+<p>You will also have to manually include the root directory of the PyXOpto
+package into the Python search path. This can be conveniently
+accomplished through setting the <code class="code docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> environment variable.</p>
+<p>On Linux operating system use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PTYTHONPATH</span><span class="o">=</span>path/to/pyxopto:<span class="nv">$PYTHONPATH</span>
+</pre></div>
+</div>
+<p>On Windows operating systems use:</p>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="k">set</span> <span class="nv">PTYTHONPATH</span><span class="p">=</span>path\to\pyxopto;<span class="nv">%PYTHONPATH%</span>
+</pre></div>
+</div>
+<p>After installing the dependencies and setting the environment variable
+<code class="code docutils literal notranslate"><span class="pre">PYTHONPATH</span></code>, you should be able to import PyXOpto.</p>
+</section>
+</section>
+<section id="binaries">
+<h2>Binaries<a class="headerlink" href="#binaries" title="Permalink to this headline">¶</a></h2>
+<p>PyXOpto does not require compilation of C/C++ sources. However, performance
+critical parts of the random number generator module <a class="reference internal" href="../apidoc/xopto.cl.clrng.html#module-xopto.cl.clrng" title="xopto.cl.clrng"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.cl.clrng</span></code></a>
+can optionally benefit from a binary library. The build process is fully
+automated and can be executed by running the <a class="reference internal" href="../apidoc/xopto.html#xopto.rebuild" title="xopto.rebuild"><code class="xref py py-func docutils literal notranslate"><span class="pre">xopto.rebuild()</span></code></a> function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xopto</span>
+<span class="n">xopto</span><span class="o">.</span><span class="n">rebuild</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The build process requires <a class="reference external" href="https://gcc.gnu.org/">GCC</a> or <a class="reference external" href="https://docs.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-160">The Microsoft C++
+(MSVC) compiler toolset</a>.</p>
+</section>
+<section id="local-pyxopto-data">
+<h2>Local PyXOpto data<a class="headerlink" href="#local-pyxopto-data" title="Permalink to this headline">¶</a></h2>
+<p>PyXOpto will save a small amount of data (built libraries, temporary files and
+performance-critical precalculated data) in the home directory
+of the current user <code class="code docutils literal notranslate"><span class="pre">~/.xopto</span></code>. This location can be customized through
+the <code class="code docutils literal notranslate"><span class="pre">PYXOPTO_USER_PATH</span></code> environment variable.</p>
+</section>
+<section id="environment-variables">
+<h2>Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
+<p>Some properties of PyXOpto can be customized through the use of environment
+variables:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">PYXOPTO_VERBOSE=0</span></code> -
+Turns on (<code class="code docutils literal notranslate"><span class="pre">PYXOPTO_VERBOSE=1</span></code>) or off (<code class="code docutils literal notranslate"><span class="pre">PYXOPTO_VERBOSE=1</span></code>)
+the verbose initialization mode.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">PYXOPTO_USER_PATH=&quot;~/.xopto&quot;</span></code> -
+Location for storing temporary files, built libraries and
+performance-critical precalculated data.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="citing-pyxopto">
+<h2>Citing PyXOpto<a class="headerlink" href="#citing-pyxopto" title="Permalink to this headline">¶</a></h2>
+<p>We, the authors of PyXOpto, expect that the package is used in accordance with
+the <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0-standalone.html">GPL3+</a>
+license and that any work using the PyXOpto package also cites the project
+and at least one of the following references:</p>
+<ol class="arabic simple">
+<li><p>P. Naglič, F. Pernuš, B. Likar, and M. Bürmen, <em>Limitations of the commonly</em>
+<em>used simplified laterally uniform optical fiber probe-tissue interface in</em>
+<em>Monte Carlo simulations of diffuse reflectance</em>, Biomed. Opt. Expres,
+<strong>6</strong> (10), 3973-3988 (2015), <a class="reference external" href="https://doi.org/10.1364/BOE.6.003973">https://doi.org/10.1364/BOE.6.003973</a>.</p></li>
+<li><p>P. Naglič, F. Pernuš, B. Likar, and M. Bürmen, <em>Lookup table-based sampling</em>
+<em>of the phase function for Monte Carlo simulations of light propagation in</em>
+<em>turbid media</em>, Biomed. Opt. Expres, <strong>8</strong> (3), 1895-1910 (2017),
+<a class="reference external" href="https://doi.org/10.1364/BOE.8.001895">https://doi.org/10.1364/BOE.8.001895</a>.</p></li>
+</ol>
+<p>For commercial use or alternative licensing of PyXOpto please contact us at
+<a class="reference external" href="mailto:info&#37;&#52;&#48;xopto&#46;eu">info<span>&#64;</span>xopto<span>&#46;</span>eu</a>.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#opencl">OpenCL</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nvidia">Nvidia</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amd">AMD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#intel">Intel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#python">Python</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#windows-os">Windows OS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linux-os">Linux OS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#integrated-development-environments">Integrated development environments</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pyxopto">PyXOpto</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#as-a-python-package">As a Python package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-from-source">Using from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#binaries">Binaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#local-pyxopto-data">Local PyXOpto data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citing-pyxopto">Citing PyXOpto</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">Welcome to PyXOpto’s documentation!</a></li>
+      <li>Next: <a href="opencl_devices.html" title="next chapter">OpenCL devices</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,529 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.materials.ri.util.fit &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.materials.ri.util.fit</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.materials.ri.util</span> <span class="kn">import</span> <span class="n">model</span>
+
+
+<div class="viewcode-block" id="Fit"><a class="viewcode-back" href="../../../../../apidoc/xopto.materials.ri.util.fit.html#xopto.materials.ri.util.fit.Fit">[docs]</a><span class="k">class</span> <span class="nc">Fit</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span>
+                 <span class="n">wavelengths</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">x0</span><span class="p">:</span> <span class="n">Tuple</span> <span class="ow">or</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fit one of the models to the measured values of the refractive index</span>
+<span class="sd">        as a function of wavelength.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kind: model.Model</span>
+<span class="sd">            Model of the refractive index as a function of wavelength.</span>
+<span class="sd">            Use one of the predefined models:</span>
+
+<span class="sd">            - &quot;Conrady_1&#39;: Conrady 1 model :math:`n^{2} = A_{1} + A_{2}/\\lambda + A_{3}/\\lambda^{3.5}`</span>
+<span class="sd">            - &quot;Conrady_2&#39;: Conrady 2 model :math:`n^{2} = A_{1} + A_{2}/\\lambda^{2} + A_{3}/\\lambda^{3.5}`</span>
+<span class="sd">            - &quot;ConradyEx_1&#39;: Extended Conrady 1 model :math:`n^{2} = A_{1} + A_{2}/\\lambda + A_{3}/\\lambda^{A_{4}}`</span>
+<span class="sd">            - &quot;ConradyEx_2&#39;: Extended Conrady 2 model :math:`n^{2} = A_{1} + A_{2}/\\lambda^{2} + A_{3}/\\lambda^{A_{4}}`</span>
+<span class="sd">            - &quot;Exponential&quot;: Exponential model :math:`n = a + b*e^{-\\lambda/c}`</span>
+<span class="sd">            - &quot;Cauchy&#39;: Cauchy’s model :math:`n^{2} = A_{1} + A_{2}\\lambda^{2} + A_{3}/\\lambda^{2} + A_{4}/\\lambda^{4} + A_{5}/\\lambda^{6} + A_6/\\lambda^{8}`</span>
+<span class="sd">            - &quot;Sellmeier_1&quot;: 1 term Sellmeier formula :math:`n^{2} = 1 + B_{1}\\lambda^{2}/(\\lambda^2 - C_{1})`</span>
+<span class="sd">            - &quot;SellmeierEx_1&quot;: 1 term extended Sellmeier formula :math:`n^{2} = A + B_{1}\\lambda^{2}/(\\lambda^2 - C_{1})`</span>
+<span class="sd">            - &quot;Sellmeier_2&quot;: 2 term Sellmeier formula :math:`n^{2} = 1 + B_{1}\\lambda^{2}/(\\lambda^2 - C_{1}) + B_{2}\\lambda^{2}/(\\lambda^{2} - C_{2})`</span>
+<span class="sd">            - &quot;SellmeierEx_2&quot;: 2 term extended Sellmeier formula :math:`n^{2} = A + B_{1}\\lambda^{2}/(\\lambda^2 - C_{1}) + B_{2}\\lambda^{2}/(\\lambda^{2} - C_{2})`</span>
+<span class="sd">            - &quot;Sellmeier_3&quot;: 3 term Sellmeier formula :math:`n^{2} = 1 + B_{1}\\lambda^{2}/(\\lambda^2 - C_{1}) + B_{2}\\lambda^{2}/(\\lambda^{2} - C_{2}) + B_{3}\\lambda^{2}/(\\lambda^{2} - C_{3})`</span>
+<span class="sd">            - &quot;SellmeierEx_3&quot;: 3 term extended Sellmeier formula :math:`n^{2} = A + B_{1}\\lambda^{2}/(\\lambda^2 - C_{1}) + B_{2}\\lambda^{2}/(\\lambda^{2} - C_{2}) + B_{3}\\lambda^{2}/(\\lambda^{2} - C_{3})`</span>
+<span class="sd">            - &quot;Sellmeier_4&quot;: 4 term Sellmeier formula :math:`n^{2} = 1 + B_{1}\\lambda^{2}/(\\lambda^2 - C_{1}) + B_{2}\\lambda^{2}/(\\lambda^{2} - C_{2}) + B_{3}\\lambda^{2}/(\\lambda^{2} - C_{3} + B_{4}\\lambda^{2}/(\\lambda^{2} - C_{4})`</span>
+<span class="sd">            - &quot;SellmeierEx_4&quot;: 4 term extended Sellmeier formula :math:`n^{2} = A + B_{1}\\lambda^{2}/(\\lambda^2 - C_{1}) + B_{2}\\lambda^{2}/(\\lambda^{2} - C_{2}) + B_{3}\\lambda^{2}/(\\lambda^{2} - C_{3} + B_{4}\\lambda^{2}/(\\lambda^{2} - C_{4})`</span>
+<span class="sd">            - &quot;Sellmeier_5&quot;: 5 term Sellmeier formula :math:`n^{2} = 1 + B_{1}\\lambda^{2}/(\\lambda^2 - C_{1}) + B_{2}\\lambda^{2}/(\\lambda^{2} - C_{2}) + B_{3}\\lambda^{2}/(\\lambda^{2} - C_{3} + B_{4}\\lambda^{2}/(\\lambda^{2} - C_{4} + B_{5}\\lambda^{2}/(\\lambda^{2} - C_{5})`</span>
+<span class="sd">            - &quot;SellmeierEx_5&quot;: 5 term extended Sellmeier formula :math:`n^{2} = A + B_{1}\\lambda^{2}/(\\lambda^2 - C_{1}) + B_{2}\\lambda^{2}/(\\lambda^{2} - C_{2}) + B_{3}\\lambda^{2}/(\\lambda^{2} - C_{3} + B_{4}\\lambda^{2}/(\\lambda^{2} - C_{4} + B_{5}\\lambda^{2}/(\\lambda^{2} - C_{5})`</span>
+<span class="sd">            - &quot;Herzberger_3_2&quot;: Herzberger 4 x 2 formula :math:`n = A + B\\lambda^{2} + C\\lambda^{4} + D/(\\lambda^{2} - 0.028) + E/(\\lambda^{2} - 0.028)^{2}`</span>
+<span class="sd">            - &quot;HerzbergerEx_3_2&quot;: Extended Herzberger 4 x 2 formula :math:`n = A + B\\lambda^{2} + C\\lambda^{4} + D/(\\lambda^{2} - E) + F/(\\lambda^{2} - G)^{2}`</span>
+<span class="sd">            - &quot;Herzberger_4_2&quot;: Herzberger 4 x 2 formula :math:`n = A + B\\lambda^{2} + C\\lambda^{4} + D\\lambda^{6} + E/(\\lambda^{2} - 0.028) + F/(\\lambda^{2} - 0.028)^{2}`</span>
+<span class="sd">            - &quot;HerzbergerEx_4_2&quot;: Extended Herzberger 4 x 2 formula :math:`n = A + B\\lambda^{2} + C\\lambda^{4} + D\\lambda^{6} + E/(\\lambda^{2} - F) + G/(\\lambda^{2} - H)^{2}`</span>
+
+<span class="sd">        wavelengths: np.ndarray vector</span>
+<span class="sd">            Wavelengths at which the refractive index was measured. The</span>
+<span class="sd">            wavelengths must be ordered in ascending order.</span>
+<span class="sd">        n: np.ndarray vector</span>
+<span class="sd">            The measured values of refractive index at the specified</span>
+<span class="sd">            wavelengths.</span>
+<span class="sd">        x0: list, tuple or np.ndarray vector</span>
+<span class="sd">            Initial guess of the model parameters.</span>
+<span class="sd">        verbose: bool</span>
+<span class="sd">            Verbose mode.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        For better convergence of the fit process use an appropriate</span>
+<span class="sd">        preprocessor with the supplied refractive index model.</span>
+<span class="sd">        A preprocessor that scales the wavelengths by the inverse of the first</span>
+<span class="sd">        (shortest) wavelength usually produces good results, e.g.</span>
+<span class="sd">        :code:`Sellmeier_1(pp=Scale(1.0/wavelengths[0]))`</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s1">&#39;Unsupported refractive index model type: &quot;</span><span class="si">{}</span><span class="s1">&quot;! &#39;</span> \
+                <span class="s1">&#39;Must be an instance of model.Model!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">kind</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="n">wavelengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">x0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x0</span> <span class="o">=</span> <span class="n">kind</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fit_model</span> <span class="o">=</span> <span class="n">kind</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Initial condition x0:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fit_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;L-BFGS-B&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Results of the model fit:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fit_model</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_model</span><span class="o">.</span><span class="n">pp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_wavelengths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span>
+
+    <span class="n">wavelengths</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_wavelengths</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s1">&#39;Wavelengths at which the refractive index was measured &#39;</span>
+        <span class="s1">&#39;Returns values as passed to the constructor.&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_n</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">_get_n</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s1">&#39;The measured values of refractive index at the specified wavelengths. &#39;</span>
+        <span class="s1">&#39;The values are returned as passed to the constructor.&#39;</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="Fit.error"><a class="viewcode-back" href="../../../../../apidoc/xopto.materials.ri.util.fit.html#xopto.materials.ri.util.fit.Fit.error">[docs]</a>    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fit error at the wavelengths passed to the constructor.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        err: np.ndarray of length wavelengths.size</span>
+<span class="sd">            Fit errors defined as :math:`(n_{fit} - n_{measured})`.</span>
+<span class="sd">        rel_err: np.ndarray of length wavelengths.size</span>
+<span class="sd">            Relative fit error defined as</span>
+<span class="sd">            :math:`(n_{fit} - n_{measured})/n_{measured}`.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">n_fit</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span><span class="p">)</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">n_fit</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+        <span class="n">rerr</span> <span class="o">=</span> <span class="n">err</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+
+        <span class="k">return</span> <span class="n">err</span><span class="p">,</span> <span class="n">rerr</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">_get_model</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s1">&#39;Model instance obtained by the fit to the measured data.&#39;</span>
+    <span class="p">)</span>
+        
+
+<div class="viewcode-block" id="Fit.visualize"><a class="viewcode-back" href="../../../../../apidoc/xopto.materials.ri.util.fit.html#xopto.materials.ri.util.fit.Fit.visualize">[docs]</a>    <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelengths</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Plots the quality of fit.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        wavelengths: np.ndarray vector</span>
+<span class="sd">            Wavelengths (m) at which to visualize the fit. If None, the</span>
+<span class="sd">            wavelengths passed to the constructor are used.</span>
+<span class="sd">        show: bool</span>
+<span class="sd">            If nonzero, calls pp.show().</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">pp</span>
+
+        <span class="k">if</span> <span class="n">wavelengths</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">wavelengths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span>
+
+        <span class="n">err</span><span class="p">,</span> <span class="n">rerr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">()</span>
+
+        <span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span><span class="o">*</span><span class="mf">1e9</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span> <span class="s1">&#39;ok&#39;</span><span class="p">)</span>
+        <span class="n">n_visualize</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wavelengths</span><span class="o">*</span><span class="mf">1e9</span><span class="p">,</span> <span class="n">n_visualize</span><span class="p">)</span>
+
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span><span class="o">*</span><span class="mf">1e9</span><span class="p">,</span> <span class="mf">100.0</span><span class="o">*</span><span class="n">rerr</span><span class="p">,</span> <span class="s1">&#39;-o&#39;</span><span class="p">)</span>
+
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Model fit - &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Wavelength (nm)&#39;</span><span class="p">)</span>
+
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Relative fit error as (fit - measured)/measured (%)&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Wavelength (nm)&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+        <span class="n">pp</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelengths</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Evaluate the refractive index model at the given wavelengths of light.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        wavelength: float or np.ndarray</span>
+<span class="sd">            Wavelength of light (m).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Fit of </span><span class="si">{:s}</span><span class="s1"> model:</span><span class="se">\n</span><span class="s1">  </span><span class="se">\&quot;</span><span class="si">{:s}</span><span class="se">\&quot;\n</span><span class="s1">where wn is:</span><span class="se">\n</span><span class="s1">  </span><span class="se">\&quot;</span><span class="si">{:}</span><span class="se">\&quot;</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">render</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> # id </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ThermalFit"><a class="viewcode-back" href="../../../../../apidoc/xopto.materials.ri.util.fit.html#xopto.materials.ri.util.fit.ThermalFit">[docs]</a><span class="k">class</span> <span class="nc">ThermalFit</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span>
+                 <span class="n">wavelengths</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">temperatures</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pk_order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+                 <span class="n">x0</span><span class="p">:</span> <span class="n">Tuple</span> <span class="ow">or</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fit a temperature dependent refractive index model. Each parameter of</span>
+<span class="sd">        the selected refractive index model is modelled as a polynomial</span>
+<span class="sd">        function of the temperature.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kind: model.Model</span>
+<span class="sd">            Refractive index model instance.</span>
+<span class="sd">        wavelengths: np.ndarray vector</span>
+<span class="sd">            Wavelengths of light (m). The first wavelength in the vector</span>
+<span class="sd">            is used by the model preprocessor to normalize/divide all</span>
+<span class="sd">            the wavelengths.</span>
+<span class="sd">        n: numpy_ndarray of shape (wavelengths.size, temperatures.size)</span>
+<span class="sd">            The measured refractive indices.</span>
+<span class="sd">        temperatures: np.ndarray vector</span>
+<span class="sd">            Temperatures (should be in K, but accepts any units).</span>
+<span class="sd">        pk_order: int</span>
+<span class="sd">            Order of the polynomial that models the temperature dependence of</span>
+<span class="sd">            the refractive index model parameters.</span>
+<span class="sd">        x0: list, tuple ndarray vector</span>
+<span class="sd">            Initial guess of the refractive index model parameters.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fit_model</span> <span class="o">=</span> <span class="n">kind</span> 
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span> <span class="o">=</span> <span class="n">wavelengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+            <span class="n">wavelengths</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_temperatures</span> <span class="o">=</span> <span class="n">temperatures</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+            <span class="n">temperatures</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+        <span class="n">fits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">temperature</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">temperatures</span><span class="p">):</span>
+            <span class="n">fits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Fit</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">wavelengths</span><span class="p">,</span> <span class="n">n</span><span class="p">[:,</span> <span class="n">index</span><span class="p">],</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">))</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fits</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fits</span> <span class="o">=</span> <span class="n">fits</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ri_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span>
+
+        <span class="c1"># polyfit for temperatures</span>
+        <span class="c1"># polynomial coefficients of each model parmeter are in columns of pk</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">temperatures</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pk_order</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ThermalFit.error"><a class="viewcode-back" href="../../../../../apidoc/xopto.materials.ri.util.fit.html#xopto.materials.ri.util.fit.ThermalFit.error">[docs]</a>    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fit error at the wavelengths and temperatures passed to the constructor.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        err: np.ndarray of shape (wavelengths.size, temperatures.size)</span>
+<span class="sd">            Fit errors defined as :math:`(n_{fit} - n_{measured})`.</span>
+<span class="sd">        rel_err: np.ndarray of shape (wavelengths.size, temperatures.size)</span>
+<span class="sd">            Relative fit error defined as</span>
+<span class="sd">            :math:`(n_{fit} - n_{measured})/n_{measured}`.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">n_fit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temperatures</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">temperature</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_temperatures</span><span class="p">):</span>
+            <span class="n">n_fit</span><span class="p">[:,</span> <span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span><span class="p">,</span> <span class="n">temperature</span><span class="p">)</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">n_fit</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+        <span class="n">rel_err</span> <span class="o">=</span> <span class="n">err</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+
+        <span class="k">return</span> <span class="n">err</span><span class="p">,</span> <span class="n">rel_err</span></div>
+
+<div class="viewcode-block" id="ThermalFit.visualize"><a class="viewcode-back" href="../../../../../apidoc/xopto.materials.ri.util.fit.html#xopto.materials.ri.util.fit.ThermalFit.visualize">[docs]</a>    <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelengths</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Plots the quality of fit.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        wavelengths: np.ndarray vector</span>
+<span class="sd">            Wavelengths (m) at which to visualize the fit. If None, the</span>
+<span class="sd">            wavelengths passed to the constructor are used.</span>
+<span class="sd">        show: bool</span>
+<span class="sd">            If nonzero, calls pp.show().</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">pp</span>
+
+        <span class="k">if</span> <span class="n">wavelengths</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">wavelengths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span>
+
+        <span class="n">err</span><span class="p">,</span> <span class="n">rerr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">()</span>
+
+        <span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">temperature</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_temperatures</span><span class="p">):</span>
+            <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span><span class="o">*</span><span class="mf">1e9</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span> <span class="s1">&#39;ok&#39;</span><span class="p">)</span>
+            <span class="n">n_visualize</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">,</span> <span class="n">temperature</span><span class="p">)</span>
+            <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wavelengths</span><span class="o">*</span><span class="mf">1e9</span><span class="p">,</span> <span class="n">n_visualize</span><span class="p">,</span>
+                     <span class="n">label</span><span class="o">=</span><span class="s1">&#39;T </span><span class="si">{:.1f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">temperature</span><span class="p">))</span>
+
+            <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span><span class="o">*</span><span class="mf">1e9</span><span class="p">,</span> <span class="mf">100.0</span><span class="o">*</span><span class="n">rerr</span><span class="p">[:,</span> <span class="n">index</span><span class="p">],</span> <span class="s1">&#39;-o&#39;</span><span class="p">)</span>
+
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Model fit - &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ri_model</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Wavelength (nm)&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Relative fit error as (fit - measured)/measued (%)&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Wavelength (nm)&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+        <span class="n">pp</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ThermalFit.polynomial_coefficients"><a class="viewcode-back" href="../../../../../apidoc/xopto.materials.ri.util.fit.html#xopto.materials.ri.util.fit.ThermalFit.polynomial_coefficients">[docs]</a>    <span class="k">def</span> <span class="nf">polynomial_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the polynomial coefficients that model the temperature</span>
+<span class="sd">        dependence of the refractive index model parameters.</span>
+<span class="sd">        Use np.polyval to determine the values of polynomial coefficients</span>
+<span class="sd">        at a given temperature (use the same temperture units as for</span>
+<span class="sd">        the temperatures that were passed to the constructor).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pk: np.ndarray of shape (pk_order + 1, num_terms*2)</span>
+<span class="sd">            The polynomial coefficients of each model parameter</span>
+<span class="sd">            are stored in columns.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pk</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_wavelengths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wavelengths</span>
+
+    <span class="nb">property</span><span class="p">(</span><span class="n">_get_wavelengths</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s1">&#39;Wavelengths of light at which the refractive index was measured. &#39;</span>\
+        <span class="s1">&#39;The values are returned as passed to the constructor.&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_n</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">_get_n</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s1">&#39;The measured values of refractive index as passed to the constructor.&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get__temperatures</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temperatures</span>
+
+    <span class="n">temperatures</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">_get_n</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s1">&#39;The temperatures at which the refractive index was measured. &#39;</span>
+        <span class="s1">&#39;Returns the values as passed to the constructor.&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Computes the refractive index at the given wavelength and temperature.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        wavelength: float</span>
+<span class="sd">            Wavelength of light (m).</span>
+<span class="sd">        temperature: float</span>
+<span class="sd">            Temperature in same units as used for the constructor parameter</span>
+<span class="sd">            temperatures. If None, the value of the first element of the</span>
+<span class="sd">            parameter temperatures passed to the constructor is used.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">temperature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temperatures</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ri_model</span><span class="p">(</span>
+            <span class="n">wavelength</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pk</span><span class="p">,</span> <span class="n">temperature</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">xopto.materials</span> <span class="kn">import</span> <span class="n">ri</span>
+
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">400e-9</span><span class="p">,</span> <span class="mf">800e-9</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">ri</span><span class="o">.</span><span class="n">water</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+    <span class="c1"># Fit the wavelength dependence at a single temperature</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Conrady_2</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span> <span class="n">w</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">render</span><span class="p">())</span>
+
+    <span class="c1"># Fit the temperature dependence - polynomial modelling of the </span>
+    <span class="c1"># refractive index model parameters.</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="p">[</span><span class="mi">293</span><span class="p">,</span> <span class="mi">298</span><span class="p">,</span> <span class="mi">303</span><span class="p">]</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ri</span><span class="o">.</span><span class="n">siliglass</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                  <span class="n">ri</span><span class="o">.</span><span class="n">siliglass</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                  <span class="n">ri</span><span class="o">.</span><span class="n">siliglass</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">])])</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="n">ft</span> <span class="o">=</span> <span class="n">ThermalFit</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Conrady_2</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span> <span class="n">w</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+    <span class="n">ft</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../../index.html">
+    <img class="logo" src="../../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  <li><a href="../../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

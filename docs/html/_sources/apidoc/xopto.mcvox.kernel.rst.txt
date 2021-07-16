@@ -1,0 +1,10 @@
+xopto.mcvox.kernel package
+==========================
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcvox.kernel
+   :members:
+   :undoc-members:
+   :show-inheritance:

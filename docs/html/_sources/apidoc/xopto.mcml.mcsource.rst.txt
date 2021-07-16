@@ -1,0 +1,25 @@
+xopto.mcml.mcsource package
+===========================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcml.mcsource.base
+   xopto.mcml.mcsource.fiber
+   xopto.mcml.mcsource.fiberni
+   xopto.mcml.mcsource.gaussianbeam
+   xopto.mcml.mcsource.line
+   xopto.mcml.mcsource.point
+   xopto.mcml.mcsource.rectangular
+   xopto.mcml.mcsource.uniformbeam
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcml.mcsource
+   :members:
+   :undoc-members:
+   :show-inheritance:

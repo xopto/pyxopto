@@ -1,0 +1,579 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.mcbase.mcutil.buffer module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.mcbase.mcutil.cache module" href="xopto.mcbase.mcutil.cache.html" />
+    <link rel="prev" title="xopto.mcbase.mcutil.boundary module" href="xopto.mcbase.mcutil.boundary.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.mcbase.mcutil.buffer">
+<span id="xopto-mcbase-mcutil-buffer-module"></span><h1>xopto.mcbase.mcutil.buffer module<a class="headerlink" href="#module-xopto.mcbase.mcutil.buffer" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocation">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">BufferAllocation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">owner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allocator</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#xopto.mcbase.mcutil.buffer.BufferAllocator" title="xopto.mcbase.mcutil.buffer.BufferAllocator"><span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocator</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#BufferAllocation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Buffer allocation instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>offset</strong> (<em>int</em>) – Offset of the first element of the allocated buffer from the
+start of the common memory buffer (in number of elements).</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – Size of the allocated buffer in number of items.</p></li>
+<li><p><strong>shape</strong> (<em>tuple</em>) – Shape of the allocated buffer.</p></li>
+<li><p><strong>dtype</strong> (<em>np.dtype</em>) – Numpy data type of the allocated buffer.</p></li>
+<li><p><strong>owner</strong> (<em>any</em>) – Owner of the allocation.</p></li>
+<li><p><strong>initializer</strong> (<em>np.ndarray</em><em> or </em><em>None</em>) – Initializer for the allocation.</p></li>
+<li><p><strong>allocator</strong> (<a class="reference internal" href="#xopto.mcbase.mcutil.buffer.BufferAllocator" title="xopto.mcbase.mcutil.buffer.BufferAllocator"><em>BufferAllocator</em></a>) – Buffer allocator that created this buffer.</p></li>
+<li><p><strong>download</strong> (<em>bool</em>) – Set to True if the data buffer should be downloaded after
+executing the kernel.
+The downloaded data will be passed to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">update_data()</span></code>
+of the owner.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocation.allocator">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">allocator</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocator</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocation.allocator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocation allocator.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocation.download">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">download</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocation.download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download required after execution.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocation.dtype">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.dtype</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocation.dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numpy data type as dtype.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocation.free">
+<span class="sig-name descname"><span class="pre">free</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#BufferAllocation.free"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocation.free" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the allocation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocation.initializer">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">initializer</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocation.initializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Buffer initializer.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocation.offset">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">offset</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocation.offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Offset of the buffer start.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocation.owner">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">owner</span></span><em class="property"><span class="pre">:</span> <span class="pre">any</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocation.owner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocation owner.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocation.shape">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">shape</span></span><em class="property"><span class="pre">:</span> <span class="pre">tuple</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocation.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Buffer shape.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocation.size">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocation.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Size of the allocated buffer.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">BufferAllocator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">dtype=&lt;class</span> <span class="pre">'float'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#BufferAllocator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocator.allocate">
+<span class="sig-name descname"><span class="pre">allocate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#BufferAllocator.allocate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocator.allocate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocate a new data buffer for the owner. The allocations
+cannot be cleared individually. Each owner can allocate
+multiple buffers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>owner</strong> (<em>any</em>) – Owner of the allocated buffer.</p></li>
+<li><p><strong>shape</strong> (<em>tuple</em>) – Shape of the data buffer.</p></li>
+<li><p><strong>download</strong> (<em>bool</em>) – Set to True if the data buffer should be downloaded after
+executing the kernel.
+The downloaded data will be passed to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">update_data()</span></code>
+of the owner.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>allocation</strong> – Buffer allocation object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#xopto.mcbase.mcutil.buffer.BufferAllocation" title="xopto.mcbase.mcutil.buffer.BufferAllocation">BufferAllocation</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocator.allocations">
+<span class="sig-name descname"><span class="pre">allocations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#BufferAllocator.allocations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocator.allocations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of existing allocations for the owner.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>owner</strong> (<em>any</em>) – Allocation owner.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>allocation</strong> –</p>
+<dl class="simple">
+<dt>List of allocation dicts with the following keys:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>size: int</dt><dd><p>Allocation buffer size.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>shape: tuple</dt><dd><p>Allocation buffer shape</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>offset: int</dt><dd><p>Offset of the first buffer element in the common data
+buffer array.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>owner: any</dt><dd><p>Allocation owner.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<p>The returned value is an empty list if no allocations for
+the given owner are found.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocator.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#BufferAllocator.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocator.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all allocations.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocator.create_buffer">
+<span class="sig-name descname"><span class="pre">create_buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#BufferAllocator.create_buffer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocator.create_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new numpy buffer or return the existing buffer if the size
+and type match the requirements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mc</strong> (<a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>McObject</em></a>) – Monte Carlo simulator instance.</p></li>
+<li><p><strong>out</strong> (<em>np.ndarray</em>) – Optional existing buffer array.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buffer</strong> – Existing buffer if passed as an input argument and matches the
+required size and data type, else a new buffer</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocator.defragment">
+<span class="sig-name descname"><span class="pre">defragment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#BufferAllocator.defragment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocator.defragment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defragment allocations. Note that this will change the location
+of buffers.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocator.dtype">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.dtype</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocator.dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocator data type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocator.extract">
+<span class="sig-name descname"><span class="pre">extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">owner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#BufferAllocator.extract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocator.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract buffers of the owner from the full memory buffer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – Common data buffer.</p></li>
+<li><p><strong>owner</strong> (<em>any</em>) – Find and return buffers that were allocated by this owner.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>owner_buffers</strong> – Buffers that were allocated by the owner.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[np.ndarray]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocator.free">
+<span class="sig-name descname"><span class="pre">free</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">allocation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.mcbase.mcutil.buffer.BufferAllocation" title="xopto.mcbase.mcutil.buffer.BufferAllocation"><span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocation</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#BufferAllocator.free"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocator.free" title="Permalink to this definition">¶</a></dt>
+<dd><p>Free a buffer allocation. This will not change the total
+buffer size. The memory space will be left unused.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocator.size">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocator.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current buffer size.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocators">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">BufferAllocators</span></span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#BufferAllocators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages multiple general Buffer allocators of type
+<a class="reference internal" href="#xopto.mcbase.mcutil.buffer.BufferAllocator" title="xopto.mcbase.mcutil.buffer.BufferAllocator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BufferAllocator</span></code></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.BufferAllocators.allocator">
+<span class="sig-name descname"><span class="pre">allocator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.dtype</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcbase.mcutil.buffer.BufferAllocator" title="xopto.mcbase.mcutil.buffer.BufferAllocator"><span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocator</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#BufferAllocators.allocator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.BufferAllocators.allocator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return allocator for the given buffer data type.
+Allocators are created on the first demand/use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>np.dtype</em>) – Numpy data type of the buffer allocator.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>allocator</strong> – Buffer allocator.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ContiguousNumpyAllocator</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Allocators can be retrieved by the [] operator that takes the
+numpy data type of the allocator.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.NumpyAllocator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">NumpyAllocator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#NumpyAllocator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.NumpyAllocator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages temporary allocations of contiguous numpy-based buffers.
+The initial size of the buffer grows as required by the allocations.
+The internal buffer is never released.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> (<em>np.dtype</em>) – Data type of the allocator.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – Initial minimum size of the internal buffer created on the first
+allocation.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.NumpyAllocator.allocate">
+<span class="sig-name descname"><span class="pre">allocate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#NumpyAllocator.allocate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.NumpyAllocator.allocate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocates a buffer with the given size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> (<em>int</em>) – Size of the allocated buffer in number of buffer items (NOT bytes).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buffer</strong> – Allocated numpy buffer</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.NumpyAllocator.available">
+<span class="sig-name descname"><span class="pre">available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#NumpyAllocator.available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.NumpyAllocator.available" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the size available for allocation before a new internal
+buffer allocation is required.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.NumpyAllocator.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#NumpyAllocator.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.NumpyAllocator.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release all allocations made by <a class="reference internal" href="#xopto.mcbase.mcutil.buffer.NumpyAllocator.allocate" title="xopto.mcbase.mcutil.buffer.NumpyAllocator.allocate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">allocate()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The internal numpy buffer is not released, only the internal buffer
+manager will clear all allocations.</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.NumpyAllocator.size">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.NumpyAllocator.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Currently allocated size.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.NumpyAllocators">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">NumpyAllocators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtypes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#NumpyAllocators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.NumpyAllocators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages temporary allocations of contiguous numpy-based buffers.
+The initial size of the internal numpy buffers grows as required by the
+allocations but is never released (reduced in size).</p>
+<p>If a list of data types (dtypes) is passed to the constructor, only
+buffers of the listed types can be allocated (restricted allocator).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> (<em>int</em>) – Initial minimum size of the internal buffers created on the
+first allocation.</p></li>
+<li><p><strong>dtype</strong> (<em>np.dtype</em>) – Data types of the allocator. If None, any data type is allowed.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.NumpyAllocators.allocate">
+<span class="sig-name descname"><span class="pre">allocate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#NumpyAllocators.allocate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.NumpyAllocators.allocate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocates a buffer of the given data type and size.
+Raises TypeError if allocating a data type that is not allowed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> (<em>np.dtype</em>) – Data type of the buffer.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – Size of the allocated buffer in number of buffer items (NOT bytes).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buffer</strong> – Allocated numpy buffer</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.NumpyAllocators.available">
+<span class="sig-name descname"><span class="pre">available</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.dtype'&gt;</span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#NumpyAllocators.available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.NumpyAllocators.available" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the size available for allocation before a new internal
+buffer allocation is required for the given data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>np.dtype</em>) – Data type of the allocations.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>size</strong> – Total buffer size available before a new internal buffer allocation
+is required.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.NumpyAllocators.release">
+<span class="sig-name descname"><span class="pre">release</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#NumpyAllocators.release"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.NumpyAllocators.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release all allocations made by <a class="reference internal" href="#xopto.mcbase.mcutil.buffer.NumpyAllocators.allocate" title="xopto.mcbase.mcutil.buffer.NumpyAllocators.allocate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">allocate()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>np.dtype</em>) – If not None, only the allocations of the specified data type
+will be cleared. If None, all allocations are cleared.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The internal numpy buffers are not released, only the internal buffer
+manager will clear all allocations.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.NumpyAllocators.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.dtype</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#NumpyAllocators.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.NumpyAllocators.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total size of all allocations of the given data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>np.dtype</em>) – Data type of the allocations.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>size</strong> – Total size of the allocations for the given data type.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.RestrictedBufferAllocators">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">RestrictedBufferAllocators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtypes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#RestrictedBufferAllocators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.RestrictedBufferAllocators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcutil.buffer.BufferAllocators" title="xopto.mcbase.mcutil.buffer.BufferAllocators"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocators</span></code></a></p>
+<p>Manages multiple general Buffer allocators of type
+<a class="reference internal" href="#xopto.mcbase.mcutil.buffer.BufferAllocator" title="xopto.mcbase.mcutil.buffer.BufferAllocator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BufferAllocator</span></code></a>. The buffer types are restricted to a list
+of types passed to the constructor.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.buffer.RestrictedBufferAllocators.allocator">
+<span class="sig-name descname"><span class="pre">allocator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.dtype</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcbase.mcutil.buffer.BufferAllocator" title="xopto.mcbase.mcutil.buffer.BufferAllocator"><span class="pre">xopto.mcbase.mcutil.buffer.BufferAllocator</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/buffer.html#RestrictedBufferAllocators.allocator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.buffer.RestrictedBufferAllocators.allocator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return allocator for the given buffer data type.
+Allocators are created on the first demand/use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>np.dtype</em>) – Numpy data type of the buffer allocator.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>allocator</strong> – Buffer allocator.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ContiguousNumpyAllocator</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Allocators can be retrieved by the [] operator that takes the
+numpy data type of the allocator.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.mcbase.html">xopto.mcbase package</a><ul>
+  <li><a href="xopto.mcbase.mcutil.html">xopto.mcbase.mcutil package</a><ul>
+      <li>Previous: <a href="xopto.mcbase.mcutil.boundary.html" title="previous chapter">xopto.mcbase.mcutil.boundary module</a></li>
+      <li>Next: <a href="xopto.mcbase.mcutil.cache.html" title="next chapter">xopto.mcbase.mcutil.cache module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

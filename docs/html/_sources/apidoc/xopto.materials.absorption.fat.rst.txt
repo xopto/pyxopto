@@ -1,0 +1,7 @@
+xopto.materials.absorption.fat module
+=====================================
+
+.. automodule:: xopto.materials.absorption.fat
+   :members:
+   :undoc-members:
+   :show-inheritance:

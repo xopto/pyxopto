@@ -1,0 +1,7 @@
+xopto.pf.pfbase module
+======================
+
+.. automodule:: xopto.pf.pfbase
+   :members:
+   :undoc-members:
+   :show-inheritance:

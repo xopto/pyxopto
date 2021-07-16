@@ -1,0 +1,10 @@
+xopto.mcbase.kernel package
+===========================
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcbase.kernel
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,27 @@
+xopto.mcml.mcsurface package
+============================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcml.mcsurface.probe
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcml.mcsurface.base
+   xopto.mcml.mcsurface.lambertian
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcml.mcsurface
+   :members:
+   :undoc-members:
+   :show-inheritance:

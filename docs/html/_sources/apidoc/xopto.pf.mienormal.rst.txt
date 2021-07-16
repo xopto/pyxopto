@@ -1,0 +1,7 @@
+xopto.pf.mienormal module
+=========================
+
+.. automodule:: xopto.pf.mienormal
+   :members:
+   :undoc-members:
+   :show-inheritance:

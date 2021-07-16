@@ -1,0 +1,10 @@
+xopto.cl.kernel package
+=======================
+
+Module contents
+---------------
+
+.. automodule:: xopto.cl.kernel
+   :members:
+   :undoc-members:
+   :show-inheritance:

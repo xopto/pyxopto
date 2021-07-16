@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.mcbase.mcobject module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.mcbase.mcoptions module" href="xopto.mcbase.mcoptions.html" />
+    <link rel="prev" title="xopto.mcbase.mcfluence module" href="xopto.mcbase.mcfluence.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.mcbase.mcobject">
+<span id="xopto-mcbase-mcobject-module"></span><h1>xopto.mcbase.mcobject module<a class="headerlink" href="#module-xopto.mcbase.mcobject" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcobject.McObject">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McObject</span></span><a class="reference internal" href="../_modules/xopto/mcbase/mcobject.html#McObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcobject.McObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class of all Monte Carlo objects that interface with the OpenCL
+simulator kernel.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcobject.McObject.cl_declaration">
+<span class="sig-name descname"><span class="pre">cl_declaration</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#xopto.mcbase.mcobject.McObject.cl_declaration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Declaration of one or more OpenCL data types exposed by the class.
+This can be a str of valid OpenCL code or a callable that takes a simulator
+instance as the first input argument and returns a str
+(can be a regular method, static method or a class method).
+Default implementation (None) - no exposed OpenCL declarations.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcobject.McObject.cl_implementation">
+<span class="sig-name descname"><span class="pre">cl_implementation</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#xopto.mcbase.mcobject.McObject.cl_implementation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of one or more OpenCL functions exposed by
+the class.
+This can be a str of valid OpenCL code or a callable that takes a simulator
+instance as the first input argument and returns a str
+(can be a regular method, static method or a class method).
+Default implementation (None) - no exposed OpenCL implementation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcobject.McObject.cl_options">
+<span class="sig-name descname"><span class="pre">cl_options</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#xopto.mcbase.mcobject.McObject.cl_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Definition of one or simulator options exposed by the class.
+This attribute can be a list of options defined as
+[(name, value), (name, value), …] or a callable that takes a simulator
+instance as the first input argument and returns a list of options
+(can be a regular method, static method or a class method).
+The options will be coverted to defines (“#define &lt;name&gt; &lt;value&gt;”)
+Default implementation (None) - no exposed OpenCL options.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcobject.McObject.cl_type">
+<span class="sig-name descname"><span class="pre">cl_type</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#xopto.mcbase.mcobject.McObject.cl_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Definition of OpenCL data type (a basic cltypes or a Structure type)
+exposed by the class.
+This attribute can be a str or a callable that takes a simulator instance
+as the first input argument and returns a basic cltypes object or a
+Structure type.
+(can be a regular method, static method or a class method).
+Default implementation (None) - no exposed OpenCL types.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcobject.McObject.fetch_cl_declaration">
+<span class="sig-name descname"><span class="pre">fetch_cl_declaration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mcobject.html#McObject.fetch_cl_declaration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcobject.McObject.fetch_cl_declaration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch OpenCL declarations of the object.
+OpenCL declaration is defined through the cl_declaration attribute that
+can be a callable or a string.
+A callable attribute will be called with a target simulator instance as
+the first input argument and should return a str (valid OpenCL code).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mc</strong> (<a class="reference internal" href="#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>McObject</em></a>) – Simulator instance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>declaration</strong> – OpenCl declarations.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcobject.McObject.fetch_cl_implementation">
+<span class="sig-name descname"><span class="pre">fetch_cl_implementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mcobject.html#McObject.fetch_cl_implementation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcobject.McObject.fetch_cl_implementation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch OpenCL implementation of the object.
+OpenCl implementation is defined through the cl_declaration attribute
+that can be a callable or a string.
+A callable attribute will be called with a target simulator instance as
+the first input argument and should return a str (valid OpenCL code).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mc</strong> (<a class="reference internal" href="#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>McObject</em></a>) – Simulator instance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>implementation</strong> – OpenCl implementation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcobject.McObject.fetch_cl_options">
+<span class="sig-name descname"><span class="pre">fetch_cl_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/mcbase/mcobject.html#McObject.fetch_cl_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcobject.McObject.fetch_cl_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch OpenCL options of the object.
+OpenCl options of an object are defined through the cl_options
+attribute that can be a callable or a list of options defined as
+[(name, value), …].
+A callable attribute will be called with a simulator instance
+as the first input argument and should return a list of options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mc</strong> (<a class="reference internal" href="#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>McObject</em></a>) – Simulator instance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>options</strong> – A list of OpenCl options defined as [(name, value), …].</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[RawOption]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcobject.McObject.fetch_cl_type">
+<span class="sig-name descname"><span class="pre">fetch_cl_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcobject.html#McObject.fetch_cl_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcobject.McObject.fetch_cl_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the OpenCL type representation of this object.
+The type representation of an object is defined through the cl_type
+attribute that can be a basic cltypes or Structure, or a callable.
+A callable attribute will be called with a simulator instance
+as the first input argument and should return a data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mc</strong> (<a class="reference internal" href="#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>McObject</em></a>) – Simulator instance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>cl_type</strong> – OpenCL type representing this object in the OpenCL kernel.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure">Structure</a> or basic ctypes object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.mcbase.html">xopto.mcbase package</a><ul>
+      <li>Previous: <a href="xopto.mcbase.mcfluence.html" title="previous chapter">xopto.mcbase.mcfluence module</a></li>
+      <li>Next: <a href="xopto.mcbase.mcoptions.html" title="next chapter">xopto.mcbase.mcoptions module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

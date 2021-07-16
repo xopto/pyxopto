@@ -1,0 +1,7 @@
+xopto.cl.clinfo module
+======================
+
+.. automodule:: xopto.cl.clinfo
+   :members:
+   :undoc-members:
+   :show-inheritance:

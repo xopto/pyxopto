@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Reflectance acquired with optical fibers and probes &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Reflectance spectrum dependence on scattering phase function" href="scattering_phase_function.html" />
+    <link rel="prev" title="Reflectance spectrum simulations of human skin" href="reflectance_spectrum_skin.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="reflectance-acquired-with-optical-fibers-and-probes">
+<span id="example-reflectance-optical-probes"></span><h1>Reflectance acquired with optical fibers and probes<a class="headerlink" href="#reflectance-acquired-with-optical-fibers-and-probes" title="Permalink to this headline">¶</a></h1>
+<p>This example (available in <cite>examples/mcml/reflectance_optical_probes</cite>) shows how to simulate reflectance as acquired with optical fiber probes using four approaches. All approaches utilize a multimode optical fiber source, but different detection schemes. The first detection scheme is a multimode optical fiber situated 220 μm from the center of the source fiber as is commonly the case in a six-around-one optical probe. The second detection scheme utilizes a radial accumulator annular rings which can be integrated over the detector fiber to yield equal reflectance as acquired with the first detection scheme. The third detection scheme utilizes <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.probe.sixaroundone.html#xopto.mcml.mcdetector.probe.sixaroundone.SixAroundOne" title="xopto.mcml.mcdetector.probe.sixaroundone.SixAroundOne"><code class="xref py py-class docutils literal notranslate"><span class="pre">SixAroundOne</span></code></a> object which accumulates photon packet weights into seven multimode optical fiber detectors (including the central optical fiber). Finally, the fourth detections scheme is the same as in the third case, however, the top surface model is changed to a realistic case which mimicks the layout of the materials comprising the tip of the six-around-one optical fiber probe, i.e., epoxy filling and stainless steel as shown in the image below.</p>
+<a class="reference internal image-reference" href="../../../_images/probe-six-around-one.png"><img alt="Realistic optical probe layout" class="align-center" src="../../../_images/probe-six-around-one.png" style="width: 183.0px; height: 183.0px;" /></a>
+<section id="importing-the-required-modules-and-submodules">
+<h2>Importing the required modules and submodules<a class="headerlink" href="#importing-the-required-modules-and-submodules" title="Permalink to this headline">¶</a></h2>
+<p>The required modules and submodules used in this example are listed below. The submodule <a class="reference internal" href="../../../apidoc/xopto.mcml.mc.html#module-xopto.mcml.mc" title="xopto.mcml.mc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mc</span></code></a> can be conveniently used as an interface to the neccessary submodules for sources, detectors, layers, simulators, etc. The submodule <a class="reference internal" href="../../../apidoc/xopto.mcml.mcutil.fiber.html#module-xopto.mcml.mcutil.fiber" title="xopto.mcml.mcutil.fiber"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcutil.fiber</span></code></a> enables utilization of multimode optical fibers, while the submodule <a class="reference internal" href="../../../apidoc/xopto.mcml.mcutil.axis.html#module-xopto.mcml.mcutil.axis" title="xopto.mcml.mcutil.axis"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcutil.axis</span></code></a> enables straightforward definitions of axes objects that are important as input parameters to photon packet accumulators. The submodule <a class="reference internal" href="../../../apidoc/xopto.util.convolve.html#module-xopto.util.convolve" title="xopto.util.convolve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.util.convolve</span></code></a> holds a helper function for integration of radial annular accumulators to reflectance as acquired through a specified optical fiber probe. Finally, the submodule <a class="reference internal" href="../../../apidoc/xopto.cl.clinfo.html#module-xopto.cl.clinfo" title="xopto.cl.clinfo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.cl.clinfo</span></code></a> provides functions for working with OpenCL resources, i.e., available computational devices (CPUs, GPUs, etc.). Finally, the standard <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> module provides mathematical functions used in this example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">fiber</span><span class="p">,</span> <span class="n">axis</span>
+<span class="kn">from</span> <span class="nn">xopto.util</span> <span class="kn">import</span> <span class="n">convolve</span>
+<span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</section>
+<section id="computational-device">
+<h2>Computational device<a class="headerlink" href="#computational-device" title="Permalink to this headline">¶</a></h2>
+<p>Select the desired OpenCL computational device (see also <a class="reference internal" href="../../opencl_devices.html#opencl-devices-label"><span class="std std-ref">OpenCL devices</span></a>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cl_device</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this example we have selected the first computational device listed under the Nvidia platform. The string should be changed according to the installed hardware devices.</p>
+</div>
+</section>
+<section id="the-layer-stack">
+<h2>The layer stack<a class="headerlink" href="#the-layer-stack" title="Permalink to this headline">¶</a></h2>
+<p>In this example we use a single-layered turbid medium of 1 cm thickness. The refractive index of the single layer was set to 1.33, while the surrounding medium refractive index is set to 1.45, which corresponds to a uniform boundary with an optical fiber core. The absorption is set to zero, while the scattering coefficient of the single layer is set to 100 1/cm. Finally, the Henyey-Greenstein phase function is utilized with anistropy factor of 0.8 in the single layer turbid medium. Note that each layer is defined using an instance of <a class="reference internal" href="../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layer" title="xopto.mcml.mclayer.layer.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a>, which are then packet into a list and passed to the <a class="reference internal" href="../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layers" title="xopto.mcml.mclayer.layer.Layers"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layers</span></code></a> constructor. The order of the layers is ascending along the positive z axis, which points into the medium. In all cases the top and bottom layers must be provided and correspond to the medium surrounding the single-layer specified in the middle.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="mf">1e-2</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">([</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">100e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All quantities MUST be provided in appropriate units, i.e., distances in m, absorption and scattering coefficients in 1/m.</p>
+</div>
+</section>
+<section id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>The  multimode optical fiber source is defined using the class <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber" title="xopto.mcbase.mcutil.fiber.MultimodeFiber"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultimodeFiber</span></code></a> with a core diameter <code class="code docutils literal notranslate"><span class="pre">dcore</span></code> of 200 μm, combined diameter of core and cladding <code class="code docutils literal notranslate"><span class="pre">dcladding</span></code> of 220 μm, core refractive index <code class="code docutils literal notranslate"><span class="pre">ncore</span></code> of 1.45 and numerical aperture <code class="code docutils literal notranslate"><span class="pre">na</span></code> of 0.22. The multimode optical fiber source is centered at the origin and positioned normally to the turbid medium as noted by the <code class="code docutils literal notranslate"><span class="pre">direction</span></code> and <code class="code docutils literal notranslate"><span class="pre">position</span></code> keyword arguments passed to the <a class="reference internal" href="../../../apidoc/xopto.mcml.mcsource.fiber.html#xopto.mcml.mcsource.fiber.UniformFiber" title="xopto.mcml.mcsource.fiber.UniformFiber"><code class="xref py py-class docutils literal notranslate"><span class="pre">UniformFiber</span></code></a> source constructor. Note that these are the default values of <code class="code docutils literal notranslate"><span class="pre">direction</span></code> and <code class="code docutils literal notranslate"><span class="pre">position</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">UniformFiber</span><span class="p">(</span>
+    <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+    <span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="detector">
+<h2>Detector<a class="headerlink" href="#detector" title="Permalink to this headline">¶</a></h2>
+<p>In this example, we define three detectors or accumulators assigned to variables <code class="code docutils literal notranslate"><span class="pre">detector_top_fiber</span></code>, <code class="code docutils literal notranslate"><span class="pre">detector_top_radial</span></code> and <code class="code docutils literal notranslate"><span class="pre">detector_top_probe</span></code>. The <code class="code docutils literal notranslate"><span class="pre">detector_top_fiber</span></code> corresponds to a multimode optical fiber detector situated 220 μm from a source fiber representing a single detector fiber in a common six-around-one optical probe. Note that multiple multimode detector fibers could be defined and passed using a list to the <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.probe.fiberarray.html#xopto.mcml.mcdetector.probe.fiberarray.FiberArray" title="xopto.mcml.mcdetector.probe.fiberarray.FiberArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">FiberArray</span></code></a> constructor. The <code class="code docutils literal notranslate"><span class="pre">detector_top_radial</span></code> corresponds to a radial accumulator annular rings defined by class <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.radial.html#xopto.mcml.mcdetector.radial.Radial" title="xopto.mcml.mcdetector.radial.Radial"><code class="xref py py-class docutils literal notranslate"><span class="pre">Radial</span></code></a>, which accepts a radial axis constructor <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.RadialAxis" title="xopto.mcbase.mcutil.axis.RadialAxis"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcutil.axis.RadialAxis</span></code></a> (constructed by specifying start, stop and number of intervals) and <code class="code docutils literal notranslate"><span class="pre">cosmin</span></code> keyword argument, which is cosine of the maximum acceptance angle and can be calculated from the numerical aperture. Note that the refractive index of the outer medium (1.45) is used since the photon packet is propagated over the medium-probe interface prior to detection. Finally, the <code class="code docutils literal notranslate"><span class="pre">detector_top_probe</span></code> utilizes <code class="xref py py-class docutils literal notranslate"><span class="pre">SixAroundOne</span></code> object which accumulates photon packet weights into six multimode optical fiber detectors specified via the <code class="code docutils literal notranslate"><span class="pre">fiber</span></code> keyword argument. Additionally, the position of the center of the probe and direction of the probe tip can be specified. In this case we have used default values, i.e., the six-around-one probe centered at origin and perpendicular to the turbid medium interface.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">detector_top_fiber</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">FiberArray</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">fiber</span><span class="o">.</span><span class="n">FiberLayout</span><span class="p">(</span>
+        <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+        <span class="p">),</span>
+        <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">220e-6</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="p">),]</span>
+<span class="p">)</span>
+
+<span class="n">detector_top_radial</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Radial</span><span class="p">(</span>
+    <span class="n">raxis</span><span class="o">=</span><span class="n">axis</span><span class="o">.</span><span class="n">RadialAxis</span><span class="p">(</span>
+        <span class="n">start</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">250</span>
+    <span class="p">),</span>
+    <span class="n">cosmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mf">0.22</span><span class="o">/</span><span class="mf">1.45</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="n">detector_top_probe</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">SixAroundOne</span><span class="p">(</span>
+    <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+    <span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="surface">
+<h2>Surface<a class="headerlink" href="#surface" title="Permalink to this headline">¶</a></h2>
+<p>One of the four cases studied in this example is based on a realistic top surface model. The realistic surface model takes into account the layout of the materials comprising the tip of the optical fiber probe, i.e., the epoxy filling and stainless steel. For a six-around-one optical fiber probe, the fiber properties are specified using the <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber" title="xopto.mcbase.mcutil.fiber.MultimodeFiber"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcutil.fiber.MultimodeFiber</span></code></a> contructor with a core diameter of 200 μm, joint core and cladding diameter 220 μm, core refractive index of 1.45 and numerical aperture 0.22. The constructor <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber" title="xopto.mcbase.mcutil.fiber.MultimodeFiber"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcutil.fiber.MultimodeFiber</span></code></a> and other parameters are passed to the <a class="reference internal" href="../../../apidoc/xopto.mcml.mcsurface.probe.sixaroundone.html#xopto.mcml.mcsurface.probe.sixaroundone.SixAroundOne" title="xopto.mcml.mcsurface.probe.sixaroundone.SixAroundOne"><code class="xref py py-class docutils literal notranslate"><span class="pre">SixAroundOne</span></code></a> constructor. Other parameters include position of the center of the probe layout, direction, fiber-to-fiber spacing, diameter of the optical fiber probe, reflectivity of the stainless steel, inner circular cutout diameter to accomodate six-around-one optical fibers and epoxy resin refractive index, which is used to fix the optical fibers in place.</p>
+<p>Finally, the optical fiber probe surface layout is passed to the surfaces constructor <a class="reference internal" href="../../../apidoc/xopto.mcml.mcsurface.base.html#xopto.mcml.mcsurface.base.SurfaceLayouts" title="xopto.mcml.mcsurface.base.SurfaceLayouts"><code class="xref py py-class docutils literal notranslate"><span class="pre">SurfaceLayouts</span></code></a> as a top surface keyword argument.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">surface_realistic</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsurface</span><span class="o">.</span><span class="n">SixAroundOne</span><span class="p">(</span>
+    <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+    <span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">spacing</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span>
+    <span class="n">diameter</span><span class="o">=</span><span class="mf">6e-3</span><span class="p">,</span>
+    <span class="n">reflectivity</span><span class="o">=</span><span class="mf">0.55</span><span class="p">,</span>
+    <span class="n">cutout</span><span class="o">=</span><span class="mf">330e-6</span><span class="p">,</span>
+    <span class="n">cutoutn</span><span class="o">=</span><span class="mf">1.6</span>
+<span class="p">)</span>
+
+<span class="n">surface</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsurface</span><span class="o">.</span><span class="n">SurfaceLayouts</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">surface_realistic</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="the-monte-carlo-simulator-objects">
+<h2>The Monte Carlo simulator objects<a class="headerlink" href="#the-monte-carlo-simulator-objects" title="Permalink to this headline">¶</a></h2>
+<p>Four Monte Carlo simulator objects <code class="xref py py-class docutils literal notranslate"><span class="pre">MC</span></code> are constructed corresponding to different detectors defined above with the same layers and sources. The fourth simulator is also passed a surface layout constructor, which describes the realistic top probe-medium interface. Finally, termination radius is set for each simulator object to 1 cm.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mc_obj_fiber</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">detector_top_fiber</span><span class="p">),</span>
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+
+<span class="n">mc_obj_radial</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">detector_top_radial</span><span class="p">),</span>
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+
+<span class="n">mc_obj_probe</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">detector_top_probe</span><span class="p">),</span>
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+
+<span class="n">mc_obj_probe_realistic</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">surface</span><span class="o">=</span><span class="n">surface</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">detector_top_probe</span><span class="p">),</span>
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+
+<span class="c1"># set the termination radius for all Monte Carlo simulator objects</span>
+<span class="n">mc_obj_fiber</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+<span class="n">mc_obj_radial</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+<span class="n">mc_obj_probe</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+<span class="n">mc_obj_probe_realistic</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+</pre></div>
+</div>
+</section>
+<section id="running-the-monte-carlo-simulations-and-reflectance-processing">
+<h2>Running the Monte Carlo simulations and reflectance processing<a class="headerlink" href="#running-the-monte-carlo-simulations-and-reflectance-processing" title="Permalink to this headline">¶</a></h2>
+<p>Each simulator is run by launching <code class="code docutils literal notranslate"><span class="pre">nphotons=1e8</span></code> photon packets. Only the last returned item that corresponds to the detector from each simulation run is selected. Thus each simulation run call is indexed by <code class="code docutils literal notranslate"><span class="pre">[-1]</span></code>. Each returned <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.Detectors" title="xopto.mcml.mcdetector.base.Detectors"><code class="xref py py-class docutils literal notranslate"><span class="pre">Detectors</span></code></a> object separately stores top and bottom detectors that were initially defined above. The reflectance can then be easily accessed for each detector via <code class="code docutils literal notranslate"><span class="pre">reflectance</span></code> attribute. In the case of <code class="code docutils literal notranslate"><span class="pre">detector_fiber</span></code>, only a single reflectance point was accumulated through the multimode optical fiber detector as was defined by the object <code class="code docutils literal notranslate"><span class="pre">detector_top_fiber</span></code>, thus the reflectance value is accessed with index 0. The <code class="code docutils literal notranslate"><span class="pre">detector_radial</span></code> stores an annular ring accumulator. The function :py:func`~xopto.util.convolve.fiber_reflectance` integrates over annular rings that overlap the detector fiber which is specified by the source-detector separation parameter <code class="code docutils literal notranslate"><span class="pre">sds</span></code> and radius of the core <code class="code docutils literal notranslate"><span class="pre">dcore</span></code>. It should be noted that each annular ring is properly weighted as to how much its area overlaps with the detector optical fiber. Finally, the <code class="code docutils literal notranslate"><span class="pre">detector_probe</span></code> and <code class="code docutils literal notranslate"><span class="pre">detector_probe_realistic</span></code> store the six-around-one optical fiber accumulators defined by the object <code class="code docutils literal notranslate"><span class="pre">detector_top_probe</span></code>. To obtain reflectance only from the surrounding 6 fibers, the reflectance has to be sliced using <code class="code docutils literal notranslate"><span class="pre">[1:]</span></code>, since the 0 index corresponds to the central fiber, and subsequently averaged for a better signal-to-noise ratio. The surrounding six fibers simmetrically detect photon packets.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nphotons</span> <span class="o">=</span> <span class="mf">1e8</span>
+<span class="n">detector_fiber</span> <span class="o">=</span> <span class="n">mc_obj_fiber</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">detector_radial</span> <span class="o">=</span> <span class="n">mc_obj_radial</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">detector_probe</span> <span class="o">=</span> <span class="n">mc_obj_probe</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">detector_probe_realistic</span> <span class="o">=</span> <span class="n">mc_obj_probe_realistic</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">reflectance_fiber</span> <span class="o">=</span> <span class="n">detector_fiber</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">reflectance_fiber2</span> <span class="o">=</span> <span class="n">convolve</span><span class="o">.</span><span class="n">fiber_reflectance</span><span class="p">(</span>
+    <span class="n">detector_radial</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">r</span><span class="p">,</span>
+    <span class="n">detector_radial</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">,</span>
+    <span class="n">sds</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span>
+    <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span>
+<span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">reflectance_probe</span> <span class="o">=</span> <span class="n">detector_probe</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">reflectance_probe_realistic</span> <span class="o">=</span> <span class="n">detector_probe_realistic</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="comparing-the-obtained-reflectance">
+<h2>Comparing the obtained reflectance<a class="headerlink" href="#comparing-the-obtained-reflectance" title="Permalink to this headline">¶</a></h2>
+<p>Finally, the reflectance obtained using different detectors and top surface properties can be compared (see values give an the bottom). As expected, the reflectance obtained with first three Monte Carlo simulations is similar within the fluctuations due to the stochastic noise. However, with the fourth Monte Carlo simulation, the obtained reflectance is clearly higher. This is due to the additional reflections of the photon packets that occur due to the stainless steel housing at the probe-medium interface. There is thus a higher chance that a photon packet will propagate to the stainless steel part, reflect and be subsequently detected within the detector fiber.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.4e}</span><span class="s1"> - Reflectance for uniform multimode fiber detector.&#39;</span>
+    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reflectance_fiber</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.4e}</span><span class="s1"> - Reflectance for uniform mutlimode fiber detector obtained&#39;</span>
+    <span class="s1">&#39; via annular ring integration&#39;</span><span class="o">.</span> <span class="nb">format</span><span class="p">(</span><span class="n">reflectance_fiber2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.4e}</span><span class="s1"> - Reflectance for optical probe.&#39;</span>
+    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reflectance_probe</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.4e}</span><span class="s1"> - Reflectance for optical probe with realistic boundary.&#39;</span>
+    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reflectance_probe_realistic</span><span class="p">))</span>
+
+<span class="c1"># 2.9472e-04 - Reflectance detected with uniform multimode fiber detector.</span>
+<span class="c1"># 2.9483e-04 - Reflectance detected with uniform mutlimode fiber detector obtained via annular ring integration</span>
+<span class="c1"># 2.9375e-04 - Reflectance detected with six-around-one optical probe with uniform medium-probe interface.</span>
+<span class="c1"># 3.1453e-04 - Reflectance detected with optical probe with realistic boundary.</span>
+</pre></div>
+</div>
+</section>
+<section id="the-complete-example">
+<h2>The complete example<a class="headerlink" href="#the-complete-example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="c1"># This example shows how to simulate reflectance as acquired with optical fibers </span>
+<span class="c1"># and optical fiber probes. </span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">fiber</span><span class="p">,</span> <span class="n">axis</span>
+<span class="kn">from</span> <span class="nn">xopto.util</span> <span class="kn">import</span> <span class="n">convolve</span>
+<span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># DEFINE A COMPUTATIONAL DEVICE</span>
+<span class="c1"># select the first device from the provided platform</span>
+<span class="n">cl_device</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">)</span>
+
+<span class="c1"># DEFINE OPTICAL PROPERTIES FOR A SINGLE-LAYER MEDIUM</span>
+<span class="n">d</span> <span class="o">=</span> <span class="mf">1e-2</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">([</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">100e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>
+<span class="p">])</span>
+
+<span class="c1"># DEFINE UNIFORM MULTIMODE FIBER SOURCE</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">UniformFiber</span><span class="p">(</span>
+    <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+    <span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># DEFINE SEVERAL DETECTORS (IN THIS EXAMPLE ONLY TOP IS USED)</span>
+<span class="n">detector_top_fiber</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">FiberArray</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">fiber</span><span class="o">.</span><span class="n">FiberLayout</span><span class="p">(</span>
+        <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+        <span class="p">),</span>
+        <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">220e-6</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="p">),]</span>
+<span class="p">)</span>
+
+<span class="n">detector_top_radial</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Radial</span><span class="p">(</span>
+    <span class="n">raxis</span><span class="o">=</span><span class="n">axis</span><span class="o">.</span><span class="n">RadialAxis</span><span class="p">(</span>
+        <span class="n">start</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">250</span>
+    <span class="p">),</span>
+    <span class="n">cosmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mf">0.22</span><span class="o">/</span><span class="mf">1.45</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="n">detector_top_probe</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">SixAroundOne</span><span class="p">(</span>
+    <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+    <span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># DEFINE SURFACE TO REALISTIC OPTICAL PROBE CASE</span>
+<span class="n">surface_realistic</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsurface</span><span class="o">.</span><span class="n">SixAroundOne</span><span class="p">(</span>
+    <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+    <span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">spacing</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span>
+    <span class="n">diameter</span><span class="o">=</span><span class="mf">6e-3</span><span class="p">,</span>
+    <span class="n">reflectivity</span><span class="o">=</span><span class="mf">0.55</span><span class="p">,</span>
+    <span class="n">cutout</span><span class="o">=</span><span class="mf">330e-6</span><span class="p">,</span>
+    <span class="n">cutoutn</span><span class="o">=</span><span class="mf">1.6</span>
+<span class="p">)</span>
+
+<span class="n">surface</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsurface</span><span class="o">.</span><span class="n">SurfaceLayouts</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">surface_realistic</span><span class="p">)</span>
+
+<span class="c1"># DEFINE MC OBJECT FOR MONTE CARLO SIMULATIONS</span>
+<span class="n">mc_obj_fiber</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span> 
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> 
+    <span class="n">detectors</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">detector_top_fiber</span><span class="p">),</span> 
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+
+<span class="n">mc_obj_radial</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span> 
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> 
+    <span class="n">detectors</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">detector_top_radial</span><span class="p">),</span> 
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+
+<span class="n">mc_obj_probe</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span> 
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> 
+    <span class="n">detectors</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">detector_top_probe</span><span class="p">),</span> 
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+
+<span class="n">mc_obj_probe_realistic</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span> 
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">surface</span><span class="o">=</span><span class="n">surface</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">detector_top_probe</span><span class="p">),</span> 
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+
+<span class="c1"># set the termination radius for all Monte Carlo simulator objects</span>
+<span class="n">mc_obj_fiber</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+<span class="n">mc_obj_radial</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+<span class="n">mc_obj_probe</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+<span class="n">mc_obj_probe_realistic</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+
+<span class="c1"># RUN MONTE CARLO SIMULATIONS AND COMPUTE THE SAMPLING VOLUME</span>
+<span class="n">nphotons</span> <span class="o">=</span> <span class="mf">1e8</span>
+<span class="n">detector_fiber</span> <span class="o">=</span> <span class="n">mc_obj_fiber</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">detector_radial</span> <span class="o">=</span> <span class="n">mc_obj_radial</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">detector_probe</span> <span class="o">=</span> <span class="n">mc_obj_probe</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">detector_probe_realistic</span> <span class="o">=</span> <span class="n">mc_obj_probe_realistic</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># each returned detector object </span>
+<span class="n">reflectance_fiber</span> <span class="o">=</span> <span class="n">detector_fiber</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  
+<span class="n">reflectance_fiber2</span> <span class="o">=</span> <span class="n">convolve</span><span class="o">.</span><span class="n">fiber_reflectance</span><span class="p">(</span> 
+    <span class="n">detector_radial</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">r</span><span class="p">,</span>
+    <span class="n">detector_radial</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">,</span>
+    <span class="n">sds</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span>
+    <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span>
+<span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">reflectance_probe</span> <span class="o">=</span> <span class="n">detector_probe</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">reflectance_probe_realistic</span> <span class="o">=</span> <span class="n">detector_probe_realistic</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="c1"># COMPARE OBTAINED REFLECTANCE</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.4e}</span><span class="s1"> - Reflectance for uniform multimode fiber detector.&#39;</span>
+    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reflectance_fiber</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.4e}</span><span class="s1"> - Reflectance for uniform mutlimode fiber detector obtained&#39;</span>
+    <span class="s1">&#39; via annular ring integration&#39;</span><span class="o">.</span> <span class="nb">format</span><span class="p">(</span><span class="n">reflectance_fiber2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.4e}</span><span class="s1"> - Reflectance for optical probe.&#39;</span>
+    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reflectance_probe</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:.4e}</span><span class="s1"> - Reflectance for optical probe with realrealisticsitic boundary.&#39;</span>
+    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reflectance_probe_realistic</span><span class="p">))</span>
+
+<span class="c1"># 2.9472e-04 - Reflectance detected with uniform multimode fiber detector.</span>
+<span class="c1"># 2.9483e-04 - Reflectance detected with uniform mutlimode fiber detector obtained via annular ring integration</span>
+<span class="c1"># 2.9375e-04 - Reflectance detected with six-around-one optical probe with uniform medium-probe interface.</span>
+<span class="c1"># 3.1453e-04 - Reflectance detected with optical probe with realistic boundary.</span>
+</pre></div>
+</div>
+<p>You can run this example from the root directory of the PyXOpto package as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python examples/mcml/reflectance_optical_probes.py
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Layered MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../layer_stack.html">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../source.html">Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../detector.html">Detectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../surface_layout.html">Surface layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="basic_example.html">Basic example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reflectance_spectrum_skin.html">Reflectance spectrum simulations of human skin</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Reflectance acquired with optical fibers and probes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scattering_phase_function.html">Reflectance spectrum dependence on scattering phase function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tracing.html">Photon packet tracing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sampling_volume.html">Sampling volume simulations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Layered MC</a><ul>
+  <li><a href="index.html">Examples</a><ul>
+      <li>Previous: <a href="reflectance_spectrum_skin.html" title="previous chapter">Reflectance spectrum simulations of human skin</a></li>
+      <li>Next: <a href="scattering_phase_function.html" title="next chapter">Reflectance spectrum dependence on scattering phase function</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

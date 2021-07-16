@@ -1,0 +1,7 @@
+xopto.mcvox.mcdetector.probe.sixaroundonepl module
+==================================================
+
+.. automodule:: xopto.mcvox.mcdetector.probe.sixaroundonepl
+   :members:
+   :undoc-members:
+   :show-inheritance:

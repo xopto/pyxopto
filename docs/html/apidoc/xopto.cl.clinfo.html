@@ -1,0 +1,419 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.cl.clinfo module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.cl.clrng module" href="xopto.cl.clrng.html" />
+    <link rel="prev" title="xopto.cl.cleasy module" href="xopto.cl.cleasy.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.cl.clinfo">
+<span id="xopto-cl-clinfo-module"></span><h1>xopto.cl.clinfo module<a class="headerlink" href="#module-xopto.cl.clinfo" title="Permalink to this headline">¶</a></h1>
+<p>This module provides functions for working with OpenCL resources.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#xopto.cl.clinfo.info" title="xopto.cl.clinfo.info"><code class="xref py py-func docutils literal notranslate"><span class="pre">info()</span></code></a> - lists the available OpenCL platforms and devices</p></li>
+<li><p><a class="reference internal" href="#xopto.cl.clinfo.all_devices" title="xopto.cl.clinfo.all_devices"><code class="xref py py-func docutils literal notranslate"><span class="pre">all_devices()</span></code></a> - lists all the available OpenCL devices</p></li>
+<li><p><a class="reference internal" href="#xopto.cl.clinfo.gpus" title="xopto.cl.clinfo.gpus"><code class="xref py py-func docutils literal notranslate"><span class="pre">gpus()</span></code></a> - lists the available OpenCL GPU devices</p></li>
+<li><p><a class="reference internal" href="#xopto.cl.clinfo.cpus" title="xopto.cl.clinfo.cpus"><code class="xref py py-func docutils literal notranslate"><span class="pre">cpus()</span></code></a> - lists the available OpenCL CPU devices</p></li>
+<li><p><a class="reference internal" href="#xopto.cl.clinfo.device_info" title="xopto.cl.clinfo.device_info"><code class="xref py py-func docutils literal notranslate"><span class="pre">device_info()</span></code></a> - returns a dictionary with information on the specified device</p></li>
+<li><p><a class="reference internal" href="#xopto.cl.clinfo.device" title="xopto.cl.clinfo.device"><code class="xref py py-func docutils literal notranslate"><span class="pre">device()</span></code></a> - find a device that matches the given search criteria</p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.cl.clinfo.all_devices">
+<span class="sig-name descname"><span class="pre">all_devices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">pyopencl._cl.Device</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/cl/clinfo.html#all_devices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.clinfo.all_devices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all available OpenCl devices (a list of cl.Device).
+Devices can be filtered by the platform and device name. The matching of
+names is case insensitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>platform</strong> (<em>str</em>) – If not None, the platform name of the returned devices must include
+this string (matching is case insensitive).</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – If not None, the device name of the returned devices must include
+this string (matching is case insensitive).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>devices</strong> – List of found OpenCL devices.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[cl.Device]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.cl.clinfo.cpu">
+<span class="sig-name descname"><span class="pre">cpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyopencl._cl.Device</span><a class="reference internal" href="../_modules/xopto/cl/clinfo.html#cpu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.clinfo.cpu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an available OpenCL CPU device at the specified index.
+Devices can be filtered by the platform and
+device name. The matching of names is case insensitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>platform</strong> (<em>str</em>) – If not None, the platform name of the returned devices must include
+this string (matching is case insensitive).</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – If not None, the device name of the returned devices must include
+this string (matching is case insensitive).</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – Sets the number of matching OpenCL devices that will be skipped during
+the search. Useful for hosts with multiple equal OpenCL devices.
+Default value is 0 (return the first matching OpenCL device).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>device</strong> – The first founfd OpenCL CPU device.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cp.Device</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.cl.clinfo.cpus">
+<span class="sig-name descname"><span class="pre">cpus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">pyopencl._cl.Device</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/cl/clinfo.html#cpus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.clinfo.cpus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all available OpenCL CPU devices
+(a list of pyopencl.Device). Devices can be filtered by the platform and
+device name. The matching of names is case insensitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>platform</strong> (<em>str</em>) – If not None, the platform name of the returned devices must include
+this string (matching is case insensitive).</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – If not None, the device name of the returned devices must include
+this string (matching is case insensitive).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>devices</strong> – List of found OpenCL CPU devices.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[cl.Device]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.cl.clinfo.device">
+<span class="sig-name descname"><span class="pre">device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">what</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyopencl._cl.Device</span><a class="reference internal" href="../_modules/xopto/cl/clinfo.html#device"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.clinfo.device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds an OpenCl device according to the given keyword(s).
+The keywords are compared to the OpenCL device name, device vendor name and
+device platform name of each available OpenCL device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>device</strong> (<em>str</em><em> or </em><em>list</em><em>[</em><em>str</em><em>] or </em><em>cl.Device</em>) – A keyword or a list of keywords that are compared to the OpenCL
+device name, device vendor name and device platform name
+(comparison is case insensitive).
+The first OpenCL device that contains the keyword is returned if
+the index argument is set to 0.
+If this parameter is an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">pyopencl.Device</span></code>,
+the instance is immediately returned without any further action.</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – Sets the number of matching OpenCL devices that will be skipped during
+the search. Useful for hosts with multiple equal OpenCL devices.
+Default value is 0 (return the first matching OpenCL device).</p></li>
+<li><p><strong>what</strong> (<em>str</em><em> or </em><em>a list/tuple of str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dev</strong> – An OpenCl device if one that matches the keywords is found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cl.Device</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Searches through all available OpenCL devices for the “amd” keyword. If
+none is found, the next keyword “nvidia” is used, and finally the “cpu”
+keyword is used if the first two keywords are not found in any of the
+available OpenCL device name, vendor name or platform name.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">clinfo</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dev</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">device</span><span class="p">([</span><span class="s2">&quot;amd&quot;</span><span class="p">,</span> <span class="s2">&quot;nvidia&quot;</span><span class="p">,</span> <span class="s2">&quot;cpu&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.cl.clinfo.device_extension">
+<span class="sig-name descname"><span class="pre">device_extension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyopencl._cl.Device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/xopto/cl/clinfo.html#device_extension"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.clinfo.device_extension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the OpenCL device supports the given extension. See
+<a class="reference external" href="https://www.khronos.org/registry/OpenCL/sdk/1.2/docs/man/xhtml/EXTENSION.html">https://www.khronos.org/registry/OpenCL/sdk/1.2/docs/man/xhtml/EXTENSION.html</a>
+for a list of extensions supported by the OpenCl 1.2 language version.
+Some frequently used extensions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>cl_khr_fp64</dt><dd><p>Double precision floating point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>cl_khr_fp16</dt><dd><p>Half precision floating point.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>cl_khr_int64_base_atomics</dt><dd><p>64-bit integer atomic operations.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>cl_khr_int64_extended_atomics</dt><dd><p>64-bit integer extended atomic operations that include “min”, “max”
+“and”, “or” and “xor” operations.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>device</strong> (<em>cl.Device</em>) – OpenCl device instance.</p></li>
+<li><p><strong>extension</strong> (<em>str</em><em> or </em><em>list/tuple of str</em>) – OpenCL extensions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>available</strong> – True, if the extension is supported by the device, else False.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool or list of bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.cl.clinfo.device_info">
+<span class="sig-name descname"><span class="pre">device_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyopencl._cl.Device</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/cl/clinfo.html#device_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.clinfo.device_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dict with information on the given OpenCL device. the returned
+dict will have the following fields:</p>
+<ul class="simple">
+<li><p>name: str</p></li>
+<li><p>vendor: str</p></li>
+<li><p>available: bool</p></li>
+<li><p>extensions: List[str],</p></li>
+<li><p>addressSpace: int,</p></li>
+<li><p>platform: str,</p></li>
+<li><p>maxConstKernelArgs: int,</p></li>
+<li><p>maxKernelArgSize: int,</p></li>
+<li><p>type: str,</p></li>
+<li><p>globalMemory: int,</p></li>
+<li><p>globalMemoryCacheSize: int,</p></li>
+<li><p>maxAllocationSize: int,</p></li>
+<li><p>localMemory: int,</p></li>
+<li><p>constantMemory: int,</p></li>
+<li><p>maxClkFrequency: int,</p></li>
+<li><p>computeUnits: int,</p></li>
+<li><p>maxWorkGroupSize: int</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>device</strong> (<em>cl.Device</em>) – An OpenCL device. Use the all_devices, gpus or cpus functions to get
+a list of all available OpenCl or just GPU or CPU devices, respectively.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>info</strong> – A dictionary with device information.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.cl.clinfo.gpu">
+<span class="sig-name descname"><span class="pre">gpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pyopencl._cl.Device</span><a class="reference internal" href="../_modules/xopto/cl/clinfo.html#gpu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.clinfo.gpu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an available OpenCl GPU device at the specified index.
+Devices can be filtered by the platform and
+device name. The matching of names is case insensitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>platform</strong> (<em>str</em>) – If not None, the platform name of the returned devices must include
+this string (matching is case insensitive).</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – If not None, the device name of the returned devices must include
+this string (matching is case insensitive).</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – Sets the number of matching OpenCL devices that will be skipped during
+the search. Useful for hosts with multiple equal OpenCL devices.
+Default value is 0 (return the first matching OpenCL device).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>device</strong> – The first founfd OpenCL GPU device.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>cl.Device</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.cl.clinfo.gpus">
+<span class="sig-name descname"><span class="pre">gpus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">pyopencl._cl.Device</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/cl/clinfo.html#gpus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.clinfo.gpus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all available OpenCl GPU devices
+(a list of cl.Device). Devices can be filtered by the platform and
+device name. The matching of names is case insensitive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>platform</strong> (<em>str</em>) – If not None, the platform name of the returned devices must include
+this string (matching is case insensitive).</p></li>
+<li><p><strong>device</strong> (<em>str</em>) – If not None, the device name of the returned devices must include
+this string (matching is case insensitive).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>devices</strong> – List of found OpenCL GPU devices.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[cl.Device]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.cl.clinfo.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">devices</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/cl/clinfo.html#info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.clinfo.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string descriptor of all installed OpenCl devices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>show</strong> (<em>bool</em>) – If set to True, the information is displayed on screen.</p></li>
+<li><p><strong>devices</strong> (<em>list</em><em>[</em><em>cl.Device</em><em>]</em>) – List of OpenCL devices or None. If None (default), all OpenCL
+devices are listed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>descriptor</strong> – If parameter show is False, a string descriptor is returned,
+otherwise the information is displayed on screen.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Dispalys information of all available OpenCL devices.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">clinfo</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clinfo</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.cl.html">xopto.cl package</a><ul>
+      <li>Previous: <a href="xopto.cl.cleasy.html" title="previous chapter">xopto.cl.cleasy module</a></li>
+      <li>Next: <a href="xopto.cl.clrng.html" title="next chapter">xopto.cl.clrng module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

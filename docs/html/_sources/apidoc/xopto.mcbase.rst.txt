@@ -1,0 +1,37 @@
+xopto.mcbase package
+====================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcbase.kernel
+   xopto.mcbase.mcpf
+   xopto.mcbase.mcutil
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcbase.cltypes
+   xopto.mcbase.mcfluence
+   xopto.mcbase.mcobject
+   xopto.mcbase.mcoptions
+   xopto.mcbase.mcsrc
+   xopto.mcbase.mcsv
+   xopto.mcbase.mctest
+   xopto.mcbase.mctrace
+   xopto.mcbase.mctypes
+   xopto.mcbase.mcworker
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcbase
+   :members:
+   :undoc-members:
+   :show-inheritance:

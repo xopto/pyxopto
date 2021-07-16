@@ -1,0 +1,7 @@
+xopto.materials.absorption.carotenoid module
+============================================
+
+.. automodule:: xopto.materials.absorption.carotenoid
+   :members:
+   :undoc-members:
+   :show-inheritance:

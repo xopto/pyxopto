@@ -1,0 +1,7 @@
+xopto.mcvox.mcsurface.base module
+=================================
+
+.. automodule:: xopto.mcvox.mcsurface.base
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,555 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Reflectance spectrum dependence on scattering phase function &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Photon packet tracing" href="tracing.html" />
+    <link rel="prev" title="Reflectance acquired with optical fibers and probes" href="reflectance_optical_probes.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="reflectance-spectrum-dependence-on-scattering-phase-function">
+<span id="example-scattering-phase-function"></span><h1>Reflectance spectrum dependence on scattering phase function<a class="headerlink" href="#reflectance-spectrum-dependence-on-scattering-phase-function" title="Permalink to this headline">¶</a></h1>
+<p>This example covers the influence of the scattering phase function on the reflectance spectrum as acquired with optical fiber probes with small source-detector separations. The wavelength dependency of the scattering phase function and the scattering coefficient is calculated using Mie theory for a water suspension of 1 μm diameter polystyrene microspheres which are readily available from suppliers such as Polysciences, MicroParticles GmbH, Bangs Laboratories Inc., etc. The reflectance spectrum simulated using the scattering phase function obtained by Mie theory is compared to the most commonly used Henyey-Greenstein scattering phase function which takes into account only the anisotropy factor <img class="math" src="../../../_images/math/157ba5711de84b4c715a0478fd8ae440e596d96e.png" alt="g"/>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This example might run several minutes, depending on the available computational equipment.</p>
+</div>
+<section id="importing-the-required-modules-and-submodules">
+<h2>Importing the required modules and submodules<a class="headerlink" href="#importing-the-required-modules-and-submodules" title="Permalink to this headline">¶</a></h2>
+<p>In this example, we import submodules from xopto, which enable an interface to Monte Carlo simulations (<a class="reference internal" href="../../../apidoc/xopto.mcml.mc.html#module-xopto.mcml.mc" title="xopto.mcml.mc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mc</span></code></a>), definitions of optical fibers (<code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcutil.fibers</span></code>), detection accumulators axes (<a class="reference internal" href="../../../apidoc/xopto.mcml.mcutil.axis.html#module-xopto.mcml.mcutil.axis" title="xopto.mcml.mcutil.axis"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcutil.axis</span></code></a>), utilities for mathematical integration of accumulators (<a class="reference internal" href="../../../apidoc/xopto.util.convolve.html#module-xopto.util.convolve" title="xopto.util.convolve"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.util.convolve</span></code></a>), functions and materials for scattering phase function calculations based on Mie theory (<a class="reference internal" href="../../../apidoc/xopto.pf.miepolystyrene.html#module-xopto.pf.miepolystyrene" title="xopto.pf.miepolystyrene"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.pf.miepolystyrene</span></code></a>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.materials.ri.polystryene</span></code> and <a class="reference internal" href="../../../apidoc/xopto.materials.ri.water.html#module-xopto.materials.ri.water" title="xopto.materials.ri.water"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.materials.ri.water</span></code></a>) and finally submodule for computational device definitions (<a class="reference internal" href="../../../apidoc/xopto.cl.clinfo.html#module-xopto.cl.clinfo" title="xopto.cl.clinfo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.cl.clinfo</span></code></a>). We also require the <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> modules for mathematical functions and plotting.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">fiber</span><span class="p">,</span> <span class="n">axis</span>
+<span class="kn">from</span> <span class="nn">xopto.util</span> <span class="kn">import</span> <span class="n">convolve</span>
+<span class="kn">from</span> <span class="nn">xopto.pf</span> <span class="kn">import</span> <span class="n">miepolystyrene</span>
+<span class="kn">from</span> <span class="nn">xopto.materials.ri</span> <span class="kn">import</span> <span class="n">polystyrene</span><span class="p">,</span> <span class="n">water</span>
+<span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">pp</span>
+</pre></div>
+</div>
+</section>
+<section id="calculating-the-spectrum-of-the-scattering-coefficient">
+<h2>Calculating the spectrum of the scattering coefficient<a class="headerlink" href="#calculating-the-spectrum-of-the-scattering-coefficient" title="Permalink to this headline">¶</a></h2>
+<p>The spectrum or wavelength dependency of the scattering coefficient from 1 μm diameter polystyrene microspheres suspended in water can be calculated using the Mie theory. For this, we first require the wavelength dependency of the refractive index of polystryene and water. The refractive index is available within the <a class="reference internal" href="../../../apidoc/xopto.materials.ri.html#module-xopto.materials.ri" title="xopto.materials.ri"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.materials.ri</span></code></a> package. We import the submodules <a class="reference internal" href="../../../apidoc/xopto.materials.ri.polystyrene.html#module-xopto.materials.ri.polystyrene" title="xopto.materials.ri.polystyrene"><code class="xref py py-mod docutils literal notranslate"><span class="pre">polystyrene</span></code></a> and <a class="reference internal" href="../../../apidoc/xopto.materials.ri.water.html#module-xopto.materials.ri.water" title="xopto.materials.ri.water"><code class="xref py py-mod docutils literal notranslate"><span class="pre">water</span></code></a> within which various refractive index models are available as measured by different authors. In this example, we utilize Nikolov’s measurements of wavelength dependent refractive index of polystyrene and Daimon’s measurements of wavelength dependent refractive index of water. It should be noted that variables <code class="code docutils literal notranslate"><span class="pre">ri_poly</span></code> and <code class="code docutils literal notranslate"><span class="pre">ri_water</span></code> are now instances of  <a class="reference internal" href="../../../apidoc/xopto.materials.ri.polystyrene.html#xopto.materials.ri.polystyrene.Nikolov" title="xopto.materials.ri.polystyrene.Nikolov"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Nikolov()</span></code></a> and <a class="reference internal" href="../../../apidoc/xopto.materials.ri.water.html#xopto.materials.ri.water.Daimon" title="xopto.materials.ri.water.Daimon"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Daimon()</span></code></a>. Initialization also accepts a temperature parameter <code class="code docutils literal notranslate"><span class="pre">t</span></code> in K. For this example we used the default value that corresponds to 20°C.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ri_poly</span> <span class="o">=</span> <span class="n">polystyrene</span><span class="o">.</span><span class="n">Nikolov</span><span class="p">()</span>
+<span class="n">ri_water</span> <span class="o">=</span> <span class="n">water</span><span class="o">.</span><span class="n">Daimon</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Next, we choose a single wavelength (600 nm) and set the desired value of the reduced scattering coefficient at this wavelength (15 1/cm). This will help us determine a multiplicative factor that will be used to obtain the scattering coefficient at each wavelength from the scattering cross section. According to the input keyword parameters <code class="code docutils literal notranslate"><span class="pre">diameter</span></code>, <code class="code docutils literal notranslate"><span class="pre">wavelength˙</span></code> and refractive indices of polystyrene <code class="code docutils literal notranslate"><span class="pre">ripolystyrene</span></code> and water <code class="code docutils literal notranslate"><span class="pre">riliquid</span></code>, we construct a Mie theory model for polystryene microspheres suspended in water using <a class="reference internal" href="../../../apidoc/xopto.pf.miepolystyrene.html#xopto.pf.miepolystyrene.MiePolystyrene" title="xopto.pf.miepolystyrene.MiePolystyrene"><code class="xref py py-class docutils literal notranslate"><span class="pre">MiePolystyrene</span></code></a>. The Mie theory model <a class="reference internal" href="../../../apidoc/xopto.pf.miepolystyrene.html#xopto.pf.miepolystyrene.MiePolystyrene" title="xopto.pf.miepolystyrene.MiePolystyrene"><code class="xref py py-class docutils literal notranslate"><span class="pre">MiePolystyrene</span></code></a> allows us to calculate the anisotropy factor and scattering cross section at the chosen wavelength using methods <code class="xref py py-meth docutils literal notranslate"><span class="pre">g()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">scs()</span></code>. Note that input indices in method <code class="xref py py-meth docutils literal notranslate"><span class="pre">g()</span></code> correspond to different scattering phase function moments. Input index 1 corresponds to the anisotropy factor.</p>
+<p>In principle, the scattering coefficient can be calculated from the scattering cross section (<img class="math" src="../../../_images/math/985f6b330f28dfaf9a334a68f1bd2503736b6d18.png" alt="\sigma_s"/>), if the number density <img class="math" src="../../../_images/math/2f61701c5948ac78e9486639f98cb39c26284200.png" alt="[1/m^3]"/> of polystyrene microspheres is known:</p>
+<div class="math">
+<p><img src="../../../_images/math/733a23431065fdb519769706c142ac5e3001f393.png" alt="\mu_s = n \; \sigma_s"/></p>
+</div><p>However, in our case we are interested to obtain a reduced scattering coefficient of 15 1/cm at 600 nm, which is a common value for biological tissues. In this case we can calculate a multiplicative factor that takes the role of the number density. Firstly, we calculate the target scattering coefficient <code class="code docutils literal notranslate"><span class="pre">mus_target</span></code> from the target reduced scattering coefficient by dividing the latter with the <code class="code docutils literal notranslate"><span class="pre">1-mie.g(1)</span></code>. Subsequently, we can obtain the number density (<code class="code docutils literal notranslate"><span class="pre">n</span></code>) by dividing the target scattering coefficient <code class="code docutils literal notranslate"><span class="pre">mus_target</span></code> by the scattering cross section <code class="code docutils literal notranslate"><span class="pre">mie.scs()</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">wavelength</span> <span class="o">=</span> <span class="mf">600e-9</span>
+<span class="n">musr_target</span> <span class="o">=</span> <span class="mf">15e2</span>
+<span class="n">mie</span> <span class="o">=</span> <span class="n">miepolystyrene</span><span class="o">.</span><span class="n">MiePolystyrene</span><span class="p">(</span>
+    <span class="n">diameter</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">,</span>
+    <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">,</span>
+    <span class="n">ripolystyrene</span><span class="o">=</span><span class="n">ri_poly</span><span class="p">(</span><span class="n">wavelength</span><span class="p">),</span>
+    <span class="n">riliquid</span><span class="o">=</span><span class="n">ri_water</span><span class="p">(</span><span class="n">wavelength</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">mus_target</span> <span class="o">=</span> <span class="n">musr_target</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">mie</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">mus_target</span><span class="o">/</span><span class="n">mie</span><span class="o">.</span><span class="n">scs</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Finally, we can calculate the spectrum of the scattering coefficient. Firstly, we define the array of wavelength points spanning from 450 to 800 nm in 2 nm steps. We also define zero-initialized 1D arrays <code class="code docutils literal notranslate"><span class="pre">mus</span></code> and <code class="code docutils literal notranslate"><span class="pre">g</span></code> into which we will store the scattering coefficients and anisotropy factors as calculated by the Mie theory. Using the <code class="code docutils literal notranslate"><span class="pre">for</span></code> loop, we iterate through the wavelength points and at each iteration define a new object of Mie theory model with new input parameters that depend on the wavelength, i.e., the wavelength point <code class="code docutils literal notranslate"><span class="pre">wavelength</span></code> and refractive indices of polystyrene <code class="code docutils literal notranslate"><span class="pre">ripolystyrene</span></code> and water <code class="code docutils literal notranslate"><span class="pre">riliquid</span></code>.</p>
+<p>Since the number density does not change with wavelength, the previously calculated multiplicative factor <code class="code docutils literal notranslate"><span class="pre">n</span></code> representing the number density can be used to multiply the scattering cross section at each wavelength, thus resulting in the scattering coefficient. The scattering coefficient and also the anisotropy factor are then stored in separate arrays <code class="code docutils literal notranslate"><span class="pre">mus</span></code> and <code class="code docutils literal notranslate"><span class="pre">g</span></code> at each iteration.</p>
+<p>The obtained spectrum of the reduced scattering coefficient is shown in the figure below. Note that at 600 nm the reduced scattering is 15 1/cm as expected.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">wavelengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">450e-9</span><span class="p">,</span> <span class="mf">801e-9</span><span class="p">,</span> <span class="mf">2e-9</span><span class="p">)</span>
+<span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">):</span>
+
+    <span class="n">mie</span> <span class="o">=</span> <span class="n">miepolystyrene</span><span class="o">.</span><span class="n">MiePolystyrene</span><span class="p">(</span>
+        <span class="n">diameter</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">,</span>
+        <span class="n">wavelength</span><span class="o">=</span><span class="n">w</span><span class="p">,</span>
+        <span class="n">ripolystyrene</span><span class="o">=</span><span class="n">ri_poly</span><span class="p">(</span><span class="n">w</span><span class="p">),</span>
+        <span class="n">riliquid</span><span class="o">=</span><span class="n">ri_water</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">mus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span>  <span class="n">factor</span> <span class="o">*</span> <span class="n">mie</span><span class="o">.</span><span class="n">scs</span><span class="p">()</span>
+    <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mie</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">,</span> <span class="n">mus</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">g</span><span class="p">))</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../../_images/red_scat_spectrum_pf.svg"><img alt="Scattering phase function" class="align-center" height="360px" src="../../../_images/red_scat_spectrum_pf.svg" width="480px" /></a>
+</section>
+<section id="computational-device">
+<h2>Computational device<a class="headerlink" href="#computational-device" title="Permalink to this headline">¶</a></h2>
+<p>In this section we select the desired OpenCL computational device (see also <a class="reference internal" href="../../opencl_devices.html#opencl-devices-label"><span class="std std-ref">OpenCL devices</span></a>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cl_device</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this example we have selected the first computational device listed under the Nvidia platform. The string should be changed according to the installed hardware devices.</p>
+</div>
+</section>
+<section id="the-layer-stack">
+<h2>The layer stack<a class="headerlink" href="#the-layer-stack" title="Permalink to this headline">¶</a></h2>
+<p>We define two instances of the layer stack, the first instance <code class="code docutils literal notranslate"><span class="pre">layers_hg</span></code> corresponds to a simple case of using the Henyey-Greenstein scattering phase function, the second instance <code class="code docutils literal notranslate"><span class="pre">layers_mie</span></code> corresponds to the Mie scattering phase function. Other optical properties between the two instances of the layer stack are the same. Each instance is defined by the <a class="reference internal" href="../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layers" title="xopto.mcml.mclayer.layer.Layers"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcml.mclayer.layer.Layers</span></code></a> constructor, which accepts a list of <a class="reference internal" href="../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layer" title="xopto.mcml.mclayer.layer.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcml.mclayer.layer.Layer</span></code></a> objects in an ascending order along the z axis, which points into the medium. The top and bottom layers corresponding to the top and bottom surrounding medium should always be defined. While all the optical properties of the top and bottom layers are set, only the refractive index is used to properly refract/reflect the photon packet at the turbid medium boundary. In this example we define a single layer of turbid medium of thickness 1 cm to which we initially assign some arbitrary absorption and scattering coefficients. These are going to be dynamically changed at each simulation for a particular wavelength point.</p>
+<p>The type of the scattering phase function must be the same for all of the layers, while the phase function specific parameter can be changed from layer to layer. For the first layer stack instance <code class="code docutils literal notranslate"><span class="pre">layers_hg</span></code> we specify the Henyey-Greenstein scattering phase function by using the constructor <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcpf.hg.html#xopto.mcbase.mcpf.hg.Hg" title="xopto.mcbase.mcpf.hg.Hg"><code class="xref py py-class docutils literal notranslate"><span class="pre">Hg</span></code></a>. The anisotropy factor will be changed at each wavelength interation according to the one stored in the array <code class="code docutils literal notranslate"><span class="pre">g</span></code>. For the second layer stack instance <code class="code docutils literal notranslate"><span class="pre">layers_mie</span></code>, we set a general lookup table based sampling scheme of a Mie scattering phase function cumulative distribution function using the constructor <code class="xref py py-class docutils literal notranslate"><span class="pre">Lut</span></code>. The lookup table based sampling is required since the Mie scattering phase function does not exhibit an analytical inverse of the cumulative distribution function. The constructor <code class="xref py py-class docutils literal notranslate"><span class="pre">Lut</span></code> accepts parameters that are returned by the <code class="xref py py-meth docutils literal notranslate"><span class="pre">mclut()</span></code> method.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="mf">1e-2</span>
+<span class="n">layers_hg</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">([</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>
+<span class="p">])</span>
+
+<span class="n">mie</span> <span class="o">=</span> <span class="n">miepolystyrene</span><span class="o">.</span><span class="n">MiePolystyrene</span><span class="p">(</span>
+    <span class="n">diameter</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">,</span>
+    <span class="n">wavelength</span><span class="o">=</span><span class="n">w</span><span class="p">,</span>
+    <span class="n">ripolystyrene</span><span class="o">=</span><span class="n">ri_poly</span><span class="p">(</span><span class="n">w</span><span class="p">),</span>
+    <span class="n">riliquid</span><span class="o">=</span><span class="n">ri_water</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">mie_pf</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Lut</span><span class="p">(</span><span class="o">*</span><span class="n">mie</span><span class="o">.</span><span class="n">mclut</span><span class="p">())</span>
+<span class="n">layers_mie</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">([</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mie_pf</span><span class="p">),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mie_pf</span><span class="p">),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mie_pf</span><span class="p">),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>We define a multimode optical fiber source having a core diameter <code class="code docutils literal notranslate"><span class="pre">dcore</span></code> of 200 μm, combined diameter of core and cladding <code class="code docutils literal notranslate"><span class="pre">dcladding</span></code> of 220 μm, core refractive index <code class="code docutils literal notranslate"><span class="pre">ncore</span></code> of 1.45 and numerical aperture <code class="code docutils literal notranslate"><span class="pre">na</span></code> of 0.22. The multimode optical fiber is constructed by <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber" title="xopto.mcbase.mcutil.fiber.MultimodeFiber"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultimodeFiber</span></code></a>. It is then passed to the optical fiber source, which launches photon packets uniformly into the solid angle <a class="reference internal" href="../../../apidoc/xopto.mcml.mcsource.fiber.html#xopto.mcml.mcsource.fiber.UniformFiber" title="xopto.mcml.mcsource.fiber.UniformFiber"><code class="xref py py-class docutils literal notranslate"><span class="pre">UniformFiber</span></code></a>. The optical fiber source is positioned normally to the turbid medium as assigned by the <code class="code docutils literal notranslate"><span class="pre">direction</span></code> and <code class="code docutils literal notranslate"><span class="pre">position</span></code> keyword arguments. Note that these are the default values of <code class="code docutils literal notranslate"><span class="pre">direction</span></code> and <code class="code docutils literal notranslate"><span class="pre">position</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">UniformFiber</span><span class="p">(</span>
+    <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+    <span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="detector">
+<h2>Detector<a class="headerlink" href="#detector" title="Permalink to this headline">¶</a></h2>
+<p>As a detector, we define a radial accumulator spanning from 0 to 1 mm with 250 bins. We will utilize this detector to integrate over the annular accumulator rings that overlap with a virtual multimode fiber detector. Such an approach effectively collects all of the photon packets that remit within a certain radius interval and thus significantly improves the signal-to-noise ratio in comparison to a single multimode optical fiber detector placed tightly to the source fiber. The radial accumulator is defined using an instance of <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.radial.html#xopto.mcml.mcdetector.radial.Radial" title="xopto.mcml.mcdetector.radial.Radial"><code class="xref py py-class docutils literal notranslate"><span class="pre">Radial</span></code></a> which accepts the radial axis instance <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.RadialAxis" title="xopto.mcbase.mcutil.axis.RadialAxis"><code class="xref py py-class docutils literal notranslate"><span class="pre">RadialAxis</span></code></a> and a <code class="code docutils literal notranslate"><span class="pre">cosmin</span></code> parameter, which defines the minimal cosine of the polar angle within which the photon packets are accepted. Note that this parameter is related to the numerical aperture of the fiber.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">detector_top_radial</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Radial</span><span class="p">(</span>
+    <span class="n">raxis</span><span class="o">=</span><span class="n">axis</span><span class="o">.</span><span class="n">RadialAxis</span><span class="p">(</span>
+        <span class="n">start</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">250</span>
+    <span class="p">),</span>
+    <span class="n">cosmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mf">0.22</span><span class="o">/</span><span class="mf">1.45</span><span class="p">))</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="the-monte-carlo-simulator-objects">
+<h2>The Monte Carlo simulator objects<a class="headerlink" href="#the-monte-carlo-simulator-objects" title="Permalink to this headline">¶</a></h2>
+<p>We define two <code class="xref py py-class docutils literal notranslate"><span class="pre">MC</span></code> simulator objects, which accept the defined layer stacks, sources, detectors and OpenCL ready device context. The <code class="code docutils literal notranslate"><span class="pre">detector</span></code> keyword argument accepts an instance of <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.Detectors" title="xopto.mcml.mcdetector.base.Detectors"><code class="xref py py-class docutils literal notranslate"><span class="pre">Detectors</span></code></a>, which in turn accepts a top, bottom and specular detectors. In this example we have set only the top detector <code class="code docutils literal notranslate"><span class="pre">detector_top_radial</span></code>, which we have defined above.</p>
+<p>In both cases we also define a maximum simulation radius <a class="reference internal" href="../../../apidoc/xopto.mcml.mc.html#xopto.mcml.mc.Mc.rmax" title="xopto.mcml.mc.Mc.rmax"><code class="xref py py-attr docutils literal notranslate"><span class="pre">xopto.mcml.mc.Mc.rmax</span></code></a> beyond which the photon packets are not propagated since they likely do not contribute to the reflectance signal.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mc_obj_hg</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers_hg</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">detector_top_radial</span><span class="p">),</span>
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+
+<span class="n">mc_obj_mie</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers_mie</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">detector_top_radial</span><span class="p">),</span>
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+
+<span class="n">mc_obj_hg</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+<span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+</pre></div>
+</div>
+</section>
+<section id="running-the-monte-carlo-simulations-and-reflectance-processing">
+<h2>Running the Monte Carlo simulations and reflectance processing<a class="headerlink" href="#running-the-monte-carlo-simulations-and-reflectance-processing" title="Permalink to this headline">¶</a></h2>
+<p>Before the simulations are run, we define two arrays that will store reflectance <code class="code docutils literal notranslate"><span class="pre">reflectance_hg</span></code> and <code class="code docutils literal notranslate"><span class="pre">reflectance_mie</span></code> and correspond to the case with Henyey-Greenstein and Mie scattering phase functions, respectively. Next, using the <code class="code docutils literal notranslate"><span class="pre">for</span></code> loop, we iterate over the wavelengths and at each iteration change the scattering coefficient and the scattering phase function of the single layer stored within the  <a class="reference internal" href="../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layers" title="xopto.mcml.mclayer.layer.Layers"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layers</span></code></a> object returned by the attribute <a class="reference internal" href="../../../apidoc/xopto.mcml.mc.html#xopto.mcml.mc.Mc.layers" title="xopto.mcml.mc.Mc.layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">layers</span></code></a>. Note that the turbid medium single layer <a class="reference internal" href="../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layer" title="xopto.mcml.mclayer.layer.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a> is accessed with an index 1. In the case of Henyey-Greenstein phase function only the anisotropy factor is changed according to the one calculated by the Mie theory. In the case of Mie scattering phase function the lookup table for sampling the cumulative distribution function has to be recalculated at each wavelength point, since the shape of the scattering phase function changes. Each simulation is run with <img class="math" src="../../../_images/math/4ab319b8ffcfc6de23092d698c335f347028e39f.png" alt="10^8"/> launched photon packets. Note that we only access the last returned parameter which corresponds to the <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.Detectors" title="xopto.mcml.mcdetector.base.Detectors"><code class="xref py py-class docutils literal notranslate"><span class="pre">Detectors</span></code></a> object and separately stores top and bottom detectors, if defined. In this example we have defined only the top detector <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.radial.html#xopto.mcml.mcdetector.radial.Radial" title="xopto.mcml.mcdetector.radial.Radial"><code class="xref py py-class docutils literal notranslate"><span class="pre">Radial</span></code></a> that can be accessed via the attribute <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.Detectors.top" title="xopto.mcml.mcdetector.base.Detectors.top"><code class="xref py py-attr docutils literal notranslate"><span class="pre">top</span></code></a>. The acquired reflectance and radial positions of the <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.radial.html#xopto.mcml.mcdetector.radial.Radial" title="xopto.mcml.mcdetector.radial.Radial"><code class="xref py py-class docutils literal notranslate"><span class="pre">Radial</span></code></a> accumulator bins can be acessed via, e.g., <code class="code docutils literal notranslate"><span class="pre">detector_hg.top.r</span></code> and <code class="code docutils literal notranslate"><span class="pre">detector_hg.top.r</span></code>, respectively. Since we are interested in the reflectance as detected by a multimode optical fiber detector located tightly next to the source fiber, we utilize the function <a class="reference internal" href="../../../apidoc/xopto.util.convolve.html#xopto.util.convolve.fiber_reflectance" title="xopto.util.convolve.fiber_reflectance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fiber_reflectance()</span></code></a>, which accepts the bin positions, acquired signal at each corresponding radial accumulator, source-detector separation (<code class="code docutils literal notranslate"><span class="pre">sds</span></code>) and diameter of the multimode fiber detector core (<code class="code docutils literal notranslate"><span class="pre">dcore</span></code>). The returned reflectance is then stored to the <code class="code docutils literal notranslate"><span class="pre">reflectance_hg</span></code> and <code class="code docutils literal notranslate"><span class="pre">reflectance_mie</span></code> arrays. It should be noted that <a class="reference internal" href="../../../apidoc/xopto.util.convolve.html#xopto.util.convolve.fiber_reflectance" title="xopto.util.convolve.fiber_reflectance"><code class="xref py py-func docutils literal notranslate"><span class="pre">fiber_reflectance()</span></code></a> function returns a 2D array of shape (number of radial reflectance accumulator arrays, number of detector fibers). Since a single radial reflectance accumulator and single detector fibers is used, we access the desired calculated reflectance via <code class="code docutils literal notranslate"><span class="pre">[0,0]</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">reflectance_hg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span>
+<span class="n">reflectance_mie</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span>
+
+<span class="n">nphotons</span> <span class="o">=</span> <span class="mf">1e8</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">):</span>
+
+    <span class="n">mc_obj_hg</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mus</span> <span class="o">=</span> <span class="n">mus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">mc_obj_hg</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mus</span> <span class="o">=</span> <span class="n">mus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="n">mie</span> <span class="o">=</span> <span class="n">miepolystyrene</span><span class="o">.</span><span class="n">MiePolystyrene</span><span class="p">(</span>
+        <span class="n">diameter</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">,</span>
+        <span class="n">wavelength</span><span class="o">=</span><span class="n">w</span><span class="p">,</span>
+        <span class="n">ripolystyrene</span><span class="o">=</span><span class="n">ri_poly</span><span class="p">(</span><span class="n">w</span><span class="p">),</span>
+        <span class="n">riliquid</span><span class="o">=</span><span class="n">ri_water</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">mie_pf</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Lut</span><span class="p">(</span><span class="o">*</span><span class="n">mie</span><span class="o">.</span><span class="n">mclut</span><span class="p">())</span>
+    <span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span> <span class="o">=</span> <span class="n">mie_pf</span>
+
+    <span class="n">detector_hg</span> <span class="o">=</span> <span class="n">mc_obj_hg</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">detector_mie</span> <span class="o">=</span> <span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">reflectance_hg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">convolve</span><span class="o">.</span><span class="n">fiber_reflectance</span><span class="p">(</span>
+        <span class="n">detector_hg</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">r</span><span class="p">,</span>
+        <span class="n">detector_hg</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">,</span>
+        <span class="n">sds</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">reflectance_mie</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">convolve</span><span class="o">.</span><span class="n">fiber_reflectance</span><span class="p">(</span>
+        <span class="n">detector_mie</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">r</span><span class="p">,</span>
+        <span class="n">detector_mie</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">,</span>
+        <span class="n">sds</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="comparing-the-obtained-reflectance">
+<h2>Comparing the obtained reflectance<a class="headerlink" href="#comparing-the-obtained-reflectance" title="Permalink to this headline">¶</a></h2>
+<p>Finally, we compare the reflectance acquired with a multimode fiber when the two underlying turbid media exhibit the same scattering coefficients and anisotropy factors and thus the same reduced scattering coefficient, while the only difference is the utilized scattering phase function. As can be observed in the plot below, the two reflectance spectra differ significantly. This is due to the small source-detector separations that render reflectance highly sensitive to the scattering phase function. By increasing the source-detector separations, the different should become less obvious, especially when the separations would be in the so called diffusion regime, where reflectance only depends on the absorption and reduced scattering coefficients, which are the same for both media.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelengths</span><span class="p">,</span> <span class="mi">100</span><span class="o">*</span><span class="n">reflectance_hg</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Henyey-Greenstein pf&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelengths</span><span class="p">,</span> <span class="mi">100</span><span class="o">*</span><span class="n">reflectance_mie</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Mie pf&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Wavelength (nm)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Reflectance (%)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../../_images/reflectance_phase_function.svg"><img alt="Traces of filtered photon packets" class="align-center" height="360px" src="../../../_images/reflectance_phase_function.svg" width="480px" /></a>
+</section>
+<section id="the-complete-example">
+<h2>The complete example<a class="headerlink" href="#the-complete-example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="c1"># This example shows reflectance simulations from a suspension of </span>
+<span class="c1"># 1 μm polystyrene microspheres as detected via a multimode optical</span>
+<span class="c1"># fiber position tightly next to the source fiber. The example</span>
+<span class="c1"># gives a comparison how the selection of the scattering phase function</span>
+<span class="c1"># (in this case Mie and Henyey-Greenstein) can affect the simulated </span>
+<span class="c1"># reflectance even though the scattering coefficient and anistropy factor </span>
+<span class="c1"># are the same</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">fiber</span><span class="p">,</span> <span class="n">axis</span>
+<span class="kn">from</span> <span class="nn">xopto.util</span> <span class="kn">import</span> <span class="n">convolve</span>
+<span class="kn">from</span> <span class="nn">xopto.pf</span> <span class="kn">import</span> <span class="n">miepolystyrene</span>
+<span class="kn">from</span> <span class="nn">xopto.materials.ri</span> <span class="kn">import</span> <span class="n">polystyrene</span><span class="p">,</span> <span class="n">water</span>
+<span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">pp</span>
+
+<span class="c1"># CALCULATE THE SPECTRUM OF THE SCATTERING COEFFICIENT</span>
+<span class="c1"># initialize the refractive index functions</span>
+<span class="n">ri_poly</span> <span class="o">=</span> <span class="n">polystyrene</span><span class="o">.</span><span class="n">Nikolov</span><span class="p">()</span>
+<span class="n">ri_water</span> <span class="o">=</span> <span class="n">water</span><span class="o">.</span><span class="n">Daimon</span><span class="p">()</span>
+
+<span class="c1"># determine the target reduced scattering coefficient</span>
+<span class="c1"># and calculate the multiplikative factor</span>
+<span class="n">wavelength</span> <span class="o">=</span> <span class="mf">600e-9</span>
+<span class="n">musr_target</span> <span class="o">=</span> <span class="mf">15e2</span>
+<span class="n">mie</span> <span class="o">=</span> <span class="n">miepolystyrene</span><span class="o">.</span><span class="n">MiePolystyrene</span><span class="p">(</span>
+    <span class="n">diameter</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">,</span>
+    <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">,</span>
+    <span class="n">ripolystyrene</span><span class="o">=</span><span class="n">ri_poly</span><span class="p">(</span><span class="n">wavelength</span><span class="p">),</span>
+    <span class="n">riliquid</span><span class="o">=</span><span class="n">ri_water</span><span class="p">(</span><span class="n">wavelength</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">mus_target</span> <span class="o">=</span> <span class="n">musr_target</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">mie</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">mus_target</span><span class="o">/</span><span class="n">mie</span><span class="o">.</span><span class="n">scs</span><span class="p">()</span>
+
+<span class="c1"># determine the scattering coefficient spectrum</span>
+<span class="n">wavelengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">450e-9</span><span class="p">,</span> <span class="mf">801e-9</span><span class="p">,</span> <span class="mf">2e-9</span><span class="p">)</span>
+<span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">):</span>
+
+    <span class="n">mie</span> <span class="o">=</span> <span class="n">miepolystyrene</span><span class="o">.</span><span class="n">MiePolystyrene</span><span class="p">(</span>
+        <span class="n">diameter</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">,</span>
+        <span class="n">wavelength</span><span class="o">=</span><span class="n">w</span><span class="p">,</span>
+        <span class="n">ripolystyrene</span><span class="o">=</span><span class="n">ri_poly</span><span class="p">(</span><span class="n">w</span><span class="p">),</span>
+        <span class="n">riliquid</span><span class="o">=</span><span class="n">ri_water</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">mus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span>  <span class="n">n</span> <span class="o">*</span> <span class="n">mie</span><span class="o">.</span><span class="n">scs</span><span class="p">()</span>
+    <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mie</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># plot the reduced scattering coefficient spectrum</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Spectrum of the reduced scattering coefficient&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mf">1e9</span> <span class="o">*</span> <span class="n">wavelengths</span><span class="p">,</span> <span class="mf">1e-2</span> <span class="o">*</span> <span class="n">mus</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">g</span><span class="p">))</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Reduced scattering coefficient (1/cm)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Wavelength (nm)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># DEFINE A COMPUTATIONAL DEVICE</span>
+<span class="c1"># select the first device from the provided platform</span>
+<span class="n">cl_device</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">)</span>
+
+<span class="c1"># DEFINE OPTICAL PROPERTIES FOR A SINGLE-LAYER MEDIUM </span>
+<span class="c1"># (DYNAMICALLY CHANGED AT SIMULATION RUNS)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="mf">1e-2</span>
+<span class="n">layers_hg</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">([</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>
+<span class="p">])</span>
+
+<span class="n">mie</span> <span class="o">=</span> <span class="n">miepolystyrene</span><span class="o">.</span><span class="n">MiePolystyrene</span><span class="p">(</span>
+    <span class="n">diameter</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">,</span>
+    <span class="n">wavelength</span><span class="o">=</span><span class="n">w</span><span class="p">,</span>
+    <span class="n">ripolystyrene</span><span class="o">=</span><span class="n">ri_poly</span><span class="p">(</span><span class="n">w</span><span class="p">),</span>
+    <span class="n">riliquid</span><span class="o">=</span><span class="n">ri_water</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">mie_pf</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Lut</span><span class="p">(</span><span class="o">*</span><span class="n">mie</span><span class="o">.</span><span class="n">mclut</span><span class="p">())</span>
+<span class="n">layers_mie</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">([</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mie_pf</span><span class="p">),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mie_pf</span><span class="p">),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mie_pf</span><span class="p">),</span>
+<span class="p">])</span>
+
+<span class="c1"># DEFINE UNIFORM MULTIMODE FIBER SOURCE</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">UniformFiber</span><span class="p">(</span>
+    <span class="n">fiber</span><span class="o">=</span><span class="n">fiber</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">(</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span><span class="p">,</span> <span class="n">dcladding</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span> <span class="n">ncore</span><span class="o">=</span><span class="mf">1.45</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="mf">0.22</span>
+    <span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># DEFINE DETECTOR (IN THIS EXAMPLE TOP IS USED)</span>
+<span class="n">detector_top_radial</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Radial</span><span class="p">(</span>
+    <span class="n">raxis</span><span class="o">=</span><span class="n">axis</span><span class="o">.</span><span class="n">RadialAxis</span><span class="p">(</span>
+        <span class="n">start</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">250</span>
+    <span class="p">),</span>
+    <span class="n">cosmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mf">0.22</span><span class="o">/</span><span class="mf">1.45</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="c1"># DEFINE MC OBJECT FOR MONTE CARLO SIMULATIONS</span>
+<span class="n">mc_obj_hg</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers_hg</span><span class="p">,</span> 
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> 
+    <span class="n">detectors</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">detector_top_radial</span><span class="p">),</span> 
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+
+<span class="n">mc_obj_mie</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers_mie</span><span class="p">,</span> 
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> 
+    <span class="n">detectors</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">detector_top_radial</span><span class="p">),</span> 
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+
+<span class="n">mc_obj_hg</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+<span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">1e-2</span>
+
+<span class="c1"># DEFINE REFLECTANCE ARRAYS, RUN SIMULATIONS</span>
+<span class="c1"># AND PROCESS THE REFLECTANCE</span>
+<span class="n">reflectance_hg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span>
+<span class="n">reflectance_mie</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span>
+
+<span class="n">nphotons</span> <span class="o">=</span> <span class="mf">1e8</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">):</span>
+
+    <span class="n">mc_obj_hg</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mus</span> <span class="o">=</span> <span class="n">mus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">mc_obj_hg</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mus</span> <span class="o">=</span> <span class="n">mus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="n">mie</span> <span class="o">=</span> <span class="n">miepolystyrene</span><span class="o">.</span><span class="n">MiePolystyrene</span><span class="p">(</span>
+        <span class="n">diameter</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">,</span>
+        <span class="n">wavelength</span><span class="o">=</span><span class="n">w</span><span class="p">,</span>
+        <span class="n">ripolystyrene</span><span class="o">=</span><span class="n">ri_poly</span><span class="p">(</span><span class="n">w</span><span class="p">),</span>
+        <span class="n">riliquid</span><span class="o">=</span><span class="n">ri_water</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">mie_pf</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Lut</span><span class="p">(</span><span class="o">*</span><span class="n">mie</span><span class="o">.</span><span class="n">mclut</span><span class="p">())</span>
+    <span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span> <span class="o">=</span> <span class="n">mie_pf</span>
+
+    <span class="n">detector_hg</span> <span class="o">=</span> <span class="n">mc_obj_hg</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">detector_mie</span> <span class="o">=</span> <span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">reflectance_hg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">convolve</span><span class="o">.</span><span class="n">fiber_reflectance</span><span class="p">(</span> 
+        <span class="n">detector_hg</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">r</span><span class="p">,</span>
+        <span class="n">detector_hg</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">,</span>
+        <span class="n">sds</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">reflectance_mie</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">convolve</span><span class="o">.</span><span class="n">fiber_reflectance</span><span class="p">(</span> 
+        <span class="n">detector_mie</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">r</span><span class="p">,</span>
+        <span class="n">detector_mie</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">,</span>
+        <span class="n">sds</span><span class="o">=</span><span class="mf">220e-6</span><span class="p">,</span>
+        <span class="n">dcore</span><span class="o">=</span><span class="mf">200e-6</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># PLOT THE REFLECTANCE SPECTRUM</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelengths</span><span class="p">,</span> <span class="mi">100</span><span class="o">*</span><span class="n">reflectance_hg</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Henyey-Greenstein pf&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelengths</span><span class="p">,</span> <span class="mi">100</span><span class="o">*</span><span class="n">reflectance_mie</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Mie pf&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Wavelength (nm)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Reflectance (%)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can run this example from the root directory of the PyXOpto package as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python examples/mcml/reflectance_phase_function.py
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Layered MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../layer_stack.html">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../source.html">Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../detector.html">Detectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../surface_layout.html">Surface layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="basic_example.html">Basic example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reflectance_spectrum_skin.html">Reflectance spectrum simulations of human skin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reflectance_optical_probes.html">Reflectance acquired with optical fibers and probes</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Reflectance spectrum dependence on scattering phase function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tracing.html">Photon packet tracing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sampling_volume.html">Sampling volume simulations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Layered MC</a><ul>
+  <li><a href="index.html">Examples</a><ul>
+      <li>Previous: <a href="reflectance_optical_probes.html" title="previous chapter">Reflectance acquired with optical fibers and probes</a></li>
+      <li>Next: <a href="tracing.html" title="next chapter">Photon packet tracing</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

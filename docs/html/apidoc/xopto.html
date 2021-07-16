@@ -1,0 +1,599 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto package &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.cl package" href="xopto.cl.html" />
+    <link rel="prev" title="xopto" href="modules.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="xopto-package">
+<h1>xopto package<a class="headerlink" href="#xopto-package" title="Permalink to this headline">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="xopto.cl.html">xopto.cl package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xopto.cl.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.cl.kernel.html">xopto.cl.kernel package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.cl.kernel.html#module-xopto.cl.kernel">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.cl.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.cl.cleasy.html">xopto.cl.cleasy module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.cl.clinfo.html">xopto.cl.clinfo module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.cl.clrng.html">xopto.cl.clrng module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.cl.cltest.html">xopto.cl.cltest module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.cl.cltypes.html">xopto.cl.cltypes module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.cl.html#module-xopto.cl">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xopto.data.html">xopto.data package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xopto.data.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.data.mcml.html">xopto.data.mcml package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.data.mcml.html#module-xopto.data.mcml">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.data.mcvox.html">xopto.data.mcvox package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.data.mcvox.html#module-xopto.data.mcvox">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.data.primes.html">xopto.data.primes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.data.primes.html#module-xopto.data.primes">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.data.html#module-xopto.data">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xopto.materials.html">xopto.materials package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xopto.materials.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.materials.absorption.html">xopto.materials.absorption package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.absorption.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.absorption.html#module-xopto.materials.absorption">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.materials.density.html">xopto.materials.density package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.density.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.density.html#module-xopto.materials.density">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.materials.ri.html">xopto.materials.ri package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.ri.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.ri.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.ri.html#module-xopto.materials.ri">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.materials.html#module-xopto.materials">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xopto.mcbase.html">xopto.mcbase package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xopto.mcbase.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.kernel.html">xopto.mcbase.kernel package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcbase.kernel.html#module-xopto.mcbase.kernel">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mcpf.html">xopto.mcbase.mcpf package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcbase.mcpf.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcbase.mcpf.html#module-xopto.mcbase.mcpf">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mcutil.html">xopto.mcbase.mcutil package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcbase.mcutil.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcbase.mcutil.html#module-xopto.mcbase.mcutil">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.mcbase.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.cltypes.html">xopto.mcbase.cltypes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mcfluence.html">xopto.mcbase.mcfluence module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mcobject.html">xopto.mcbase.mcobject module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mcoptions.html">xopto.mcbase.mcoptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mcsrc.html">xopto.mcbase.mcsrc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mcsv.html">xopto.mcbase.mcsv module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mctest.html">xopto.mcbase.mctest module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mctrace.html">xopto.mcbase.mctrace module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mctypes.html">xopto.mcbase.mctypes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mcworker.html">xopto.mcbase.mcworker module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.mcbase.html#module-xopto.mcbase">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xopto.mcml.html">xopto.mcml package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xopto.mcml.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.cltypes.html">xopto.mcml.cltypes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.cltypes.html#module-xopto.mcml.cltypes">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.kernel.html">xopto.mcml.kernel package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.kernel.html#module-xopto.mcml.kernel">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.mcdetector.html">xopto.mcml.mcdetector package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcdetector.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcdetector.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcdetector.html#module-xopto.mcml.mcdetector">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.mcfluence.html">xopto.mcml.mcfluence package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcfluence.html#module-xopto.mcml.mcfluence">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.mclayer.html">xopto.mcml.mclayer package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mclayer.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mclayer.html#module-xopto.mcml.mclayer">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.mcobject.html">xopto.mcml.mcobject package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcobject.html#module-xopto.mcml.mcobject">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.mcoptions.html">xopto.mcml.mcoptions package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcoptions.html#module-xopto.mcml.mcoptions">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.mcpf.html">xopto.mcml.mcpf package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcpf.html#module-xopto.mcml.mcpf">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.mcsource.html">xopto.mcml.mcsource package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcsource.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcsource.html#module-xopto.mcml.mcsource">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.mcsurface.html">xopto.mcml.mcsurface package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcsurface.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcsurface.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcsurface.html#module-xopto.mcml.mcsurface">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.mcsv.html">xopto.mcml.mcsv package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcsv.html#module-xopto.mcml.mcsv">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.mctrace.html">xopto.mcml.mctrace package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mctrace.html#module-xopto.mcml.mctrace">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.mctypes.html">xopto.mcml.mctypes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mctypes.html#module-xopto.mcml.mctypes">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.mcutil.html">xopto.mcml.mcutil package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcutil.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.mcutil.html#module-xopto.mcml.mcutil">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.test.html">xopto.mcml.test package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.test.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.test.html#module-xopto.mcml.test">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.mcml.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcml.mc.html">xopto.mcml.mc module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.mcml.html#module-xopto.mcml">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xopto.mcvox.html">xopto.mcvox package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xopto.mcvox.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.cltypes.html">xopto.mcvox.cltypes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.cltypes.html#module-xopto.mcvox.cltypes">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.kernel.html">xopto.mcvox.kernel package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.kernel.html#module-xopto.mcvox.kernel">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mcdetector.html">xopto.mcvox.mcdetector package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcdetector.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcdetector.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcdetector.html#module-xopto.mcvox.mcdetector">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mcfluence.html">xopto.mcvox.mcfluence package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcfluence.html#module-xopto.mcvox.mcfluence">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mcgeometry.html">xopto.mcvox.mcgeometry package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcgeometry.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcgeometry.html#module-xopto.mcvox.mcgeometry">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mcmaterial.html">xopto.mcvox.mcmaterial package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcmaterial.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcmaterial.html#module-xopto.mcvox.mcmaterial">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mcobject.html">xopto.mcvox.mcobject package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcobject.html#module-xopto.mcvox.mcobject">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mcoptions.html">xopto.mcvox.mcoptions package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcoptions.html#module-xopto.mcvox.mcoptions">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mcpf.html">xopto.mcvox.mcpf package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcpf.html#module-xopto.mcvox.mcpf">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mcsource.html">xopto.mcvox.mcsource package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcsource.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcsource.html#module-xopto.mcvox.mcsource">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mcsurface.html">xopto.mcvox.mcsurface package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcsurface.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcsurface.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcsurface.html#module-xopto.mcvox.mcsurface">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mcsv.html">xopto.mcvox.mcsv package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcsv.html#module-xopto.mcvox.mcsv">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mctrace.html">xopto.mcvox.mctrace package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mctrace.html#module-xopto.mcvox.mctrace">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mctypes.html">xopto.mcvox.mctypes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mctypes.html#module-xopto.mcvox.mctypes">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mcutil.html">xopto.mcvox.mcutil package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcutil.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcutil.html#module-xopto.mcvox.mcutil">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.test.html">xopto.mcvox.test package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.test.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.test.html#module-xopto.mcvox.test">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.mcvox.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mc.html">xopto.mcvox.mc module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.mcvox.html#module-xopto.mcvox">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xopto.pf.html">xopto.pf package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xopto.pf.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.util.html">xopto.pf.util package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.pf.util.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.pf.util.html#module-xopto.pf.util">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.pf.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.discrete.html">xopto.pf.discrete module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.distribution.html">xopto.pf.distribution module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.doublehg.html">xopto.pf.doublehg module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.gk.html">xopto.pf.gk module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.hg.html">xopto.pf.hg module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.mgk.html">xopto.pf.mgk module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.mhg.html">xopto.pf.mhg module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.mie.html">xopto.pf.mie module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.miefractal.html">xopto.pf.miefractal module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.miemixture.html">xopto.pf.miemixture module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.mieml.html">xopto.pf.mieml module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.miemlfractal.html">xopto.pf.miemlfractal module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.miemlnormal.html">xopto.pf.miemlnormal module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.miemlpd.html">xopto.pf.miemlpd module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.mienormal.html">xopto.pf.mienormal module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.miepd.html">xopto.pf.miepd module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.miepolystyrene.html">xopto.pf.miepolystyrene module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.mpc.html">xopto.pf.mpc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.pc.html">xopto.pf.pc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.pfbase.html">xopto.pf.pfbase module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.pf.rayleigh.html">xopto.pf.rayleigh module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.pf.html#module-xopto.pf">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xopto.src.html">xopto.src package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xopto.src.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.src.rng.html">xopto.src.rng package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.src.rng.html#module-xopto.src.rng">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.src.html#module-xopto.src">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xopto.util.html">xopto.util package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xopto.util.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="xopto.util.build.html">xopto.util.build module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.util.convolve.html">xopto.util.convolve module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.util.sliceview.html">xopto.util.sliceview module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="xopto.util.html#module-xopto.util">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-xopto">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-xopto" title="Permalink to this headline">¶</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.BIN_PATH">
+<span class="sig-name descname"><span class="pre">BIN_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/src/pyxopto/xopto/bin'</span></em><a class="headerlink" href="#xopto.BIN_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Directory of binary/executable files.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.DATA_PATH">
+<span class="sig-name descname"><span class="pre">DATA_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/src/pyxopto/xopto/data'</span></em><a class="headerlink" href="#xopto.DATA_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main data storage directory.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.MCBASE_PATH">
+<span class="sig-name descname"><span class="pre">MCBASE_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/src/pyxopto/xopto/mcbase'</span></em><a class="headerlink" href="#xopto.MCBASE_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Root directory of MC base</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.MCML_PATH">
+<span class="sig-name descname"><span class="pre">MCML_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/src/pyxopto/xopto/mcml'</span></em><a class="headerlink" href="#xopto.MCML_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Root directory of MC ML</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.MCVOX_PATH">
+<span class="sig-name descname"><span class="pre">MCVOX_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/src/pyxopto/xopto/mcvox'</span></em><a class="headerlink" href="#xopto.MCVOX_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Root directory of MC VOX</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.PICKLE_PROTOCOL">
+<span class="sig-name descname"><span class="pre">PICKLE_PROTOCOL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#xopto.PICKLE_PROTOCOL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default pickle protocol of the package.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.PRIMES_PATH">
+<span class="sig-name descname"><span class="pre">PRIMES_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/src/pyxopto/xopto/data/primes'</span></em><a class="headerlink" href="#xopto.PRIMES_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of OpenCL random number generator seeds.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.ROOT_PATH">
+<span class="sig-name descname"><span class="pre">ROOT_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/src/pyxopto/xopto'</span></em><a class="headerlink" href="#xopto.ROOT_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>The package directory.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.SRC_PATH">
+<span class="sig-name descname"><span class="pre">SRC_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/src/pyxopto/xopto/src'</span></em><a class="headerlink" href="#xopto.SRC_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of compilable source code.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.USER_BIN_PATH">
+<span class="sig-name descname"><span class="pre">USER_BIN_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/.xopto/pyxopto/bin'</span></em><a class="headerlink" href="#xopto.USER_BIN_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>User directory for built libraries or executables.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.USER_BUILD_PATH">
+<span class="sig-name descname"><span class="pre">USER_BUILD_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/.xopto/pyxopto/build'</span></em><a class="headerlink" href="#xopto.USER_BUILD_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>User directory for build.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.USER_DATA_PATH">
+<span class="sig-name descname"><span class="pre">USER_DATA_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/.xopto/pyxopto/data'</span></em><a class="headerlink" href="#xopto.USER_DATA_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>User directory for precalculated data</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.USER_PATH">
+<span class="sig-name descname"><span class="pre">USER_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/.xopto/pyxopto'</span></em><a class="headerlink" href="#xopto.USER_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Root path of user data storage</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.USER_PRIMES_PATH">
+<span class="sig-name descname"><span class="pre">USER_PRIMES_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/.xopto/pyxopto/data/primes'</span></em><a class="headerlink" href="#xopto.USER_PRIMES_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>User directory for RNG primes.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.USER_TMP_PATH">
+<span class="sig-name descname"><span class="pre">USER_TMP_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/.xopto/pyxopto/tmp'</span></em><a class="headerlink" href="#xopto.USER_TMP_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>User directory for temporary data.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.VERBOSE">
+<span class="sig-name descname"><span class="pre">VERBOSE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">True</span></em><a class="headerlink" href="#xopto.VERBOSE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verbose reporting.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.make_user_dirs">
+<span class="sig-name descname"><span class="pre">make_user_dirs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto.html#make_user_dirs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.make_user_dirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create all the user directories for data, binary and temporary files.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.rebuild">
+<span class="sig-name descname"><span class="pre">rebuild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">envvars</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto.html#rebuild"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.rebuild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rebuilds all the external dependencies of xopto (rng).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>envvars</strong> (<em>dict</em>) – Additional environmental variables for the build process.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Build with default settings and external library installation paths.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">xopto</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xopto</span><span class="o">.</span><span class="n">rebuild</span><span class="p">()</span>
+<span class="go">        Compiling rng.cpp ...</span>
+<span class="go">        Linking rng.o ...</span>
+<span class="go">        Moving rng64.so to xopto/bin ...</span>
+<span class="go">        Cleanup ...</span>
+<span class="go">        All done.</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.rebuild_">
+<span class="sig-name descname"><span class="pre">rebuild_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">envvars</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto.html#rebuild_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.rebuild_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rebuilds all the external dependencies of xopto (rng).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>envvars</strong> (<em>dict</em>) – Additional environmental variables for the build process.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Build with default settings and external library installation paths.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">xopto</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xopto</span><span class="o">.</span><span class="n">rebuild</span><span class="p">()</span>
+<span class="go">        Compiling rng.cpp ...</span>
+<span class="go">        Linking rng.o ...</span>
+<span class="go">        Moving rng64.so to xopto/bin ...</span>
+<span class="go">        Cleanup ...</span>
+<span class="go">        All done.</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">xopto package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">xopto</a></li>
+      <li>Next: <a href="xopto.cl.html" title="next chapter">xopto.cl package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

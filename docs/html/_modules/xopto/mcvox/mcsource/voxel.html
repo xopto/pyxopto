@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcvox.mcsource.voxel &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcvox.mcsource.voxel</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcvox.mcsource.base</span> <span class="kn">import</span> <span class="n">Source</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">cltypes</span><span class="p">,</span> <span class="n">mcobject</span>
+
+
+<div class="viewcode-block" id="IsotropicVoxel"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.voxel.html#xopto.mcvox.mcsource.voxel.IsotropicVoxel">[docs]</a><span class="k">class</span> <span class="nc">IsotropicVoxel</span><span class="p">(</span><span class="n">Source</span><span class="p">):</span>
+<div class="viewcode-block" id="IsotropicVoxel.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.voxel.html#xopto.mcvox.mcsource.voxel.IsotropicVoxel.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClIsotropicVoxel</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Ctypes structure that is passed to the Monte Carlo kernel.</span>
+
+<span class="sd">            Fields</span>
+<span class="sd">            ------</span>
+<span class="sd">            voxel: mc_point3f_t</span>
+<span class="sd">                The source voxel (center) position as (x, y, z).</span>
+<span class="sd">            voxel: mc_point3_t</span>
+<span class="sd">                The source voxel indices as (ind_z, ind_y, ind_x).</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;voxel&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3_t</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">ClIsotropicVoxel</span></div>
+
+<div class="viewcode-block" id="IsotropicVoxel.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.voxel.html#xopto.mcvox.mcsource.voxel.IsotropicVoxel.cl_declaration">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that defines the source in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McSource {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t position;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3_t voxel;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="IsotropicVoxel.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.voxel.html#xopto.mcvox.mcsource.voxel.IsotropicVoxel.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the source in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;void dbg_print_source(__mc_source_mem const McSource *src){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	printf(&quot;IsotropicVoxel source:</span><span class="se">\\</span><span class="s1">n&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(INDENT &quot;position:&quot;, &amp;src-&gt;position);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3(INDENT  &quot;voxel   :&quot;, &amp;src-&gt;voxel);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void mcsim_launch(McSim *mcsim){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	__mc_source_mem const struct McSource *source = mcsim_source(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t sin_fi, cos_fi;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t sin_theta, cos_theta;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_set_position_coordinates(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		(source-&gt;voxel.x + mc_fmin(mcsim_random(mcsim), FP_1 - FP_EPS))*&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mcsim_voxel_size_x(mcsim) + mcsim_top_left_x(mcsim),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		(source-&gt;voxel.y + mc_fmin(mcsim_random(mcsim), FP_1 - FP_EPS))*&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mcsim_voxel_size_y(mcsim) + mcsim_top_left_y(mcsim),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		(source-&gt;voxel.z + mc_fmin(mcsim_random(mcsim), FP_1 - FP_EPS))*&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mcsim_voxel_size_z(mcsim) + mcsim_top_left_z(mcsim)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_sincos(mcsim_random(mcsim)*FP_2PI, &amp;sin_fi, &amp;cos_fi);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	cos_theta = FP_1 - FP_2*mcsim_random(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	sin_theta = mc_sqrt(FP_1 - cos_theta*cos_theta);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_set_direction_coordinates(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		cos_fi*sin_theta,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		sin_fi*sin_theta,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		cos_theta&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_set_weight(mcsim, FP_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_status(mcsim, &quot;Launch IsotropicVoxel&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voxel</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Isotropic voxel source of photon packets.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        voxel: (int, int, int)</span>
+<span class="sd">            Source voxel position as an integer array-like object of size 3</span>
+<span class="sd">            (ind_z, ind_y, ind_x).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">Source</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_voxel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_voxel</span><span class="p">(</span><span class="n">voxel</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_voxel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxel</span>
+    <span class="k">def</span> <span class="nf">_set_voxel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voxel</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_voxel</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">voxel</span>
+    <span class="n">voxel</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_voxel</span><span class="p">,</span> <span class="n">_set_voxel</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Source voxel indices.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IsotropicVoxel.update"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.voxel.html#xopto.mcvox.mcsource.voxel.IsotropicVoxel.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;IsotropicVoxel&#39;</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update this source configuration from the other source. The</span>
+<span class="sd">        other source must be of the same type as this source or a dict with</span>
+<span class="sd">        appropriate fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other: xopto.mcvox.mcsource.voxel.IsotropicVoxel or dict</span>
+<span class="sd">            This source is updated with the configuration of the other source.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">IsotropicVoxel</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">voxel</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">voxel</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">voxel</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;voxel&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">voxel</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IsotropicVoxel.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.voxel.html#xopto.mcvox.mcsource.voxel.IsotropicVoxel.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the ctypes structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator. See :py:meth:`IsotropicVoxel.cl_type` for</span>
+<span class="sd">        a detailed list of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+<span class="sd">        target: mcypes.Structure</span>
+<span class="sd">            Ctypes structure that is filled with the source data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: mctypes.Structures</span>
+<span class="sd">            Filled ctypes structure received as an input argument or a new</span>
+<span class="sd">            instance if the input argument target is None.</span>
+<span class="sd">        topgeometry: None</span>
+<span class="sd">            This source does not use advanced geometry at the top sample surface.</span>
+<span class="sd">        bottomgeometry: None</span>
+<span class="sd">            This source does not use advanced geometry at the bottom sample surface.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mc</span><span class="o">.</span><span class="n">voxels</span><span class="o">.</span><span class="n">isvalid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_voxel</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The voxel index (</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">) is not &#39;</span>
+                             <span class="s1">&#39;valid!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_voxel</span><span class="p">))</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">voxel</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_voxel</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">voxels</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_voxel</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">target</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;IsotropicVoxel(voxel=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">))&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_voxel</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

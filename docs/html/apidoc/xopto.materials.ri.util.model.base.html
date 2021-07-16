@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.materials.ri.util.model.base module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.materials.ri.util.model.cauchy module" href="xopto.materials.ri.util.model.cauchy.html" />
+    <link rel="prev" title="xopto.materials.ri.util.model package" href="xopto.materials.ri.util.model.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.materials.ri.util.model.base">
+<span id="xopto-materials-ri-util-model-base-module"></span><h1>xopto.materials.ri.util.model.base module<a class="headerlink" href="#module-xopto.materials.ri.util.model.base" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.base.Model">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formatstr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><span class="pre">xopto.materials.ri.util.model.base.Scale</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/base.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.base.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Creates a refractive index model with the give wavelength preprocessor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>formatstr</strong> (<em>str</em>) – Format string that can be used to print the model equation.</p></li>
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Default values of the model parameters.</p></li>
+<li><p><strong>pp</strong> (<a class="reference internal" href="#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><em>Scale</em></a><em> or </em><a class="reference internal" href="#xopto.materials.ri.util.model.base.Normalize" title="xopto.materials.ri.util.model.base.Normalize"><em>Normalize</em></a>) – Wavelength preprocesor.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.base.Model.formatstr">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">formatstr</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#xopto.materials.ri.util.model.base.Model.formatstr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format string for rendering the model equation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.base.Model.guess">
+<span class="sig-name descname"><span class="pre">guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/base.html#Model.guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.base.Model.guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an initial guess for optimization/fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – The wavelengths of light at which the values of refractive index
+are defined.</p></li>
+<li><p><strong>n</strong> (<em>np.ndarray</em>) – The values of refractive index at the given wavelengths of light.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params0</strong> – Initial guess for the values of the model parameters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.base.Model.name">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#xopto.materials.ri.util.model.base.Model.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model name.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.base.Model.params">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">params</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.materials.ri.util.model.base.Scale</span></em><a class="headerlink" href="#xopto.materials.ri.util.model.base.Model.params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default parameter values of the model.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.base.Model.pp">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pp</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.materials.ri.util.model.base.Scale</span></em><a class="headerlink" href="#xopto.materials.ri.util.model.base.Model.pp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocessor that scales/normalizes the wavelengths</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.base.Model.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/base.html#Model.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.base.Model.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render the model equation with the given set of parameters
+(use default parameter values passed to the constructor if None).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>params</strong> (<em>np.ndarray</em><em> or </em><em>None</em>) – Model parameters. If None, use the default parameter values as
+passed to the constructor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>eq</strong> (<em>str</em>) – Model equation rendered as a string.</p></li>
+<li><p><strong>pp</strong> (<em>str</em>) – Preprocessor equation rendered as a string.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.base.Normalize">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_range</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_range</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(-</span> <span class="pre">1.0,</span> <span class="pre">1.0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/base.html#Normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.base.Normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Linearly transforms the input data range so that they tightly fit the
+specified output range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_range</strong> (<em>numpy.ndarray</em><em>, </em><em>list</em><em> or </em><em>tuple of 2 values</em>) – The range of input values as [min, max]. Can also be a full
+array of values in which case the minimum and maximum values
+are taken as the range.</p></li>
+<li><p><strong>dest_range</strong> (<em>numpy.ndarray</em><em>, </em><em>list</em><em> or </em><em>tuple of 2 values</em>) – The range of normalized values as [min, max].</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.base.Normalize.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wavelength'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wn'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/base.html#Normalize.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.base.Normalize.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render the preprocessor equation to a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<em>str</em>) – Input symbol as a string.</p></li>
+<li><p><strong>output</strong> (<em>str</em>) – Output symbol as a string.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.base.Normalize.undo">
+<span class="sig-name descname"><span class="pre">undo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/base.html#Normalize.undo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.base.Normalize.undo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply inverse of the normalization/transformation to the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>numpy.ndarray</em><em>, </em><em>list</em><em> or </em><em>tuple</em>) – Data to transfor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>denormalized</strong> – The input data inversely transformed to the input range specified
+in the constructor call.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray, list or tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.base.Scale">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/base.html#Scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.base.Scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Constructs an object that transforms the input data as
+(data - offset)*factor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factor</strong> (<em>float</em>) – The multiplicative term.</p></li>
+<li><p><strong>offset</strong> (<em>float</em>) – The additive term.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.base.Scale.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wavelength'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wn'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/base.html#Scale.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.base.Scale.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render the preprocessor equation to a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<em>str</em>) – Input symbol as a string.</p></li>
+<li><p><strong>output</strong> (<em>str</em>) – Output symbol as a string.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.base.Scale.undo">
+<span class="sig-name descname"><span class="pre">undo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/base.html#Scale.undo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.base.Scale.undo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply inverse of the transformation to the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>numpy.ndarray</em><em>, </em><em>list</em><em> or </em><em>tuple</em>) – Data to transfor.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>descaled</strong> – The input data inversely transformed.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray, list or tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.materials.html">xopto.materials package</a><ul>
+  <li><a href="xopto.materials.ri.html">xopto.materials.ri package</a><ul>
+  <li><a href="xopto.materials.ri.util.html">xopto.materials.ri.util package</a><ul>
+  <li><a href="xopto.materials.ri.util.model.html">xopto.materials.ri.util.model package</a><ul>
+      <li>Previous: <a href="xopto.materials.ri.util.model.html" title="previous chapter">xopto.materials.ri.util.model package</a></li>
+      <li>Next: <a href="xopto.materials.ri.util.model.cauchy.html" title="next chapter">xopto.materials.ri.util.model.cauchy module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,10 @@
+xopto.src.rng package
+=====================
+
+Module contents
+---------------
+
+.. automodule:: xopto.src.rng
+   :members:
+   :undoc-members:
+   :show-inheritance:

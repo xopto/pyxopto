@@ -1,0 +1,26 @@
+xopto package
+=============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.cl
+   xopto.data
+   xopto.materials
+   xopto.mcbase
+   xopto.mcml
+   xopto.mcvox
+   xopto.pf
+   xopto.src
+   xopto.util
+
+Module contents
+---------------
+
+.. automodule:: xopto
+   :members:
+   :undoc-members:
+   :show-inheritance:

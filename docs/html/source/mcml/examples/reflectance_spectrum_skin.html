@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Reflectance spectrum simulations of human skin &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Reflectance acquired with optical fibers and probes" href="reflectance_optical_probes.html" />
+    <link rel="prev" title="Basic example" href="basic_example.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="reflectance-spectrum-simulations-of-human-skin">
+<span id="example-reflectance-spectrum-skin"></span><h1>Reflectance spectrum simulations of human skin<a class="headerlink" href="#reflectance-spectrum-simulations-of-human-skin" title="Permalink to this headline">¶</a></h1>
+<p>This example (available in <cite>examples/mcml/reflectance_spectrum_skin</cite>) shows how to simulate a reflectance spectrum of a simple two-layered human skin comprising epidermis and dermis. The reflectance is acquired with an integrating sphere. Note that the number of skin layers and their optical properties can be changed as desired. Moreover, the reflectance detection scheme can be changed from an integrating sphere to other types of detectors such as optical fiber probes.</p>
+<section id="importing-the-required-modules-and-submodules">
+<h2>Importing the required modules and submodules<a class="headerlink" href="#importing-the-required-modules-and-submodules" title="Permalink to this headline">¶</a></h2>
+<p>We import the submodule <a class="reference internal" href="../../../apidoc/xopto.mcml.mc.html#module-xopto.mcml.mc" title="xopto.mcml.mc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mc</span></code></a> which enables an interface to a selection of sources, detectors, the Monte Carlo simulator, etc. The submodule <a class="reference internal" href="../../../apidoc/xopto.cl.clinfo.html#module-xopto.cl.clinfo" title="xopto.cl.clinfo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.cl.clinfo</span></code></a> comprises helper functions for dealing with OpenCL computational devices. The submodules <a class="reference internal" href="../../../apidoc/xopto.materials.absorption.oxyhem.html#module-xopto.materials.absorption.oxyhem" title="xopto.materials.absorption.oxyhem"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.materials.absorption.oxyhem</span></code></a> and <a class="reference internal" href="../../../apidoc/xopto.materials.absorption.deoxyhem.html#module-xopto.materials.absorption.deoxyhem" title="xopto.materials.absorption.deoxyhem"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.materials.absorption.deoxyhem</span></code></a> are imported for calculations of blood absorption coefficients which we will require for definition of absorption in human skin. Finally, we import the standard modules <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> for mathematical functions and plotting.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+<span class="kn">from</span> <span class="nn">xopto.materials.absorption</span> <span class="kn">import</span> <span class="n">oxyhem</span><span class="p">,</span> <span class="n">deoxyhem</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">pp</span>
+</pre></div>
+</div>
+</section>
+<section id="computational-device">
+<h2>Computational device<a class="headerlink" href="#computational-device" title="Permalink to this headline">¶</a></h2>
+<p>Select the desired OpenCL computational device. (see also <a class="reference internal" href="../../opencl_devices.html#opencl-devices-label"><span class="std std-ref">OpenCL devices</span></a>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cl_device</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this example we have selected the first computational device listed under the Nvidia platform. The string should be changed according to the installed hardware devices.</p>
+</div>
+</section>
+<section id="definition-of-simulation-parameters-and-skin-optical-properties">
+<h2>Definition of simulation parameters and skin optical properties<a class="headerlink" href="#definition-of-simulation-parameters-and-skin-optical-properties" title="Permalink to this headline">¶</a></h2>
+<p>Below we define parameters related to the simulation properties and optical and structural properties of skin layers. The parameter <code class="code docutils literal notranslate"><span class="pre">nphotons</span></code> denotes the number of photon packets launched for each simulation, while the parameter <code class="code docutils literal notranslate"><span class="pre">wavelengths</span></code> provides an array of wavelength points at which reflectance is simulated.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nphotons</span> <span class="o">=</span> <span class="mf">1e6</span>
+<span class="n">wavelengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">450e-9</span><span class="p">,</span> <span class="mf">801e-9</span><span class="p">,</span> <span class="mf">2e-9</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The properties of the epidermis (first) and dermis (second) layer are thickness <code class="code docutils literal notranslate"><span class="pre">d1</span></code> and <code class="code docutils literal notranslate"><span class="pre">d2</span></code>, refractive index <code class="code docutils literal notranslate"><span class="pre">n1</span></code> and <code class="code docutils literal notranslate"><span class="pre">n2</span></code>, melanin volume fraction <code class="code docutils literal notranslate"><span class="pre">m</span></code>, anisotropy factor <code class="code docutils literal notranslate"><span class="pre">g1</span></code> and <code class="code docutils literal notranslate"><span class="pre">g2</span></code>, blood volume fraction <code class="code docutils literal notranslate"><span class="pre">bl</span></code>, blood oxygenation <code class="code docutils literal notranslate"><span class="pre">oxy</span></code>, Henyey-Greenstein scattering phase functions <code class="code docutils literal notranslate"><span class="pre">pf1</span></code> and <code class="code docutils literal notranslate"><span class="pre">pf2</span></code>, absorption coefficients <code class="code docutils literal notranslate"><span class="pre">mua1</span></code> and <code class="code docutils literal notranslate"><span class="pre">mua2</span></code>, and, finally, scattering coefficients <code class="code docutils literal notranslate"><span class="pre">mus1</span></code> and <code class="code docutils literal notranslate"><span class="pre">mus2</span></code>.</p>
+<p>The absorption coefficients for epidermis and dermis can be calculated according to a simple model given by Steven Jacques that can be accessed through <a class="reference external" href="https://omlc.org/news/jan98/skinoptics.html">Skin Optics Summary</a>. The epidermis absorption coefficient <code class="code docutils literal notranslate"><span class="pre">mua1</span></code> of epidermis depends on the melanin volume fraction <code class="code docutils literal notranslate"><span class="pre">m</span></code> and is in the code given by a <code class="code docutils literal notranslate"><span class="pre">lambda</span></code> function enabling a call at each wavelegth. The absorption is given by:</p>
+<div class="math">
+<p><img src="../../../_images/math/322e3ad816e61375169b8e34f9fbb39f1e7f04bd.png" alt="\mu_{a1}(\lambda) = m \; 6.6 \cdot 10^{13} \; (10^9\;\lambda)^{-3.33} + (1-m) \; 10^2 \; (0.244 + 85.3 \; e^{(10^9\;\lambda - 154)/66.2})  \;[m^{-1}]"/></p>
+</div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Units of length must be in meters!</p>
+</div>
+<p>The epidermis scattering coefficient <code class="code docutils literal notranslate"><span class="pre">mus1</span></code> is given by the below formula and is again used in the script as a lambda function to enable calls by different wavelengths.</p>
+<div class="math">
+<p><img src="../../../_images/math/c6d04b84e3d55786b653a5d3fa2849bbf87e26ac.png" alt="\mu_{s1}(\lambda) = (2 \cdot 10^7 \; (10^9\;\lambda)^{-1.5} + 2 \cdot 10^{14}\;(10^9\;\lambda)^{-4})/(1-g_1)  \;[m^{-1}]"/></p>
+</div><p>The dermis absoprtion coefficient <code class="code docutils literal notranslate"><span class="pre">mua2</span></code> is given by a combination of oxygenated and deoxygenated blood and depends on the blood volume fraction <code class="code docutils literal notranslate"><span class="pre">bl</span></code> and level of blood oxygenation <code class="code docutils literal notranslate"><span class="pre">oxy</span></code>. The blood absorption spectra are stored in <code class="code docutils literal notranslate"><span class="pre">mua_oxy</span></code> and <code class="code docutils literal notranslate"><span class="pre">mua_deoxy</span></code> variables, which are instances of the classes <a class="reference internal" href="../../../apidoc/xopto.materials.absorption.oxyhem.html#xopto.materials.absorption.oxyhem.OxyHem" title="xopto.materials.absorption.oxyhem.OxyHem"><code class="xref py py-class docutils literal notranslate"><span class="pre">OxyHem</span></code></a> and <a class="reference internal" href="../../../apidoc/xopto.materials.absorption.deoxyhem.html#xopto.materials.absorption.deoxyhem.DeOxyHem" title="xopto.materials.absorption.deoxyhem.DeOxyHem"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeOxyHem</span></code></a> that offer calculation and interpolation of blood absorption coefficient for arbitrary wavelengths within a valid range. The returned absorption coefficients are in units 1/m.</p>
+<div class="math">
+<p><img src="../../../_images/math/c42e41b910a7d6331ff5bdaa8c6f2bc090c06e38.png" alt="\mu_{a2}(\lambda) = bl \; (oxy\; \mu_{a,oxy} + (1-oxy)\; \mu_{a,deoxy}) +
+    (1-bl) \; 10^2 \; (0.244 + 16.82 \; e^{(10^9\;\lambda - 400)/80.5})"/></p>
+</div><p>The dermis scattering coefficient <code class="code docutils literal notranslate"><span class="pre">mus2</span></code> is assumed the same as in epidermis.</p>
+<div class="math">
+<p><img src="../../../_images/math/dd34a130b48587147fd2565428946e37137def75.png" alt="\mu_{s2}(\lambda) = (2 \cdot 10^7 \; (10^9\;\lambda)^{-1.5} + 2 \cdot 10^{14}\;(10^9\;\lambda)^{-4})/(1-g_2)  \;[m^{-1}]"/></p>
+</div><p>Refer to the code below for specific values of the parameters.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># layer 1 - EPIDERMIS</span>
+<span class="n">d1</span> <span class="o">=</span> <span class="mf">100e-6</span>  <span class="c1"># layer thickness in m</span>
+<span class="n">n1</span> <span class="o">=</span> <span class="mf">1.4</span>  <span class="c1"># refractive index</span>
+<span class="n">m</span> <span class="o">=</span> <span class="mf">0.02</span>  <span class="c1"># melanin volume fraction</span>
+<span class="n">g1</span> <span class="o">=</span> <span class="mf">0.8</span>  <span class="c1"># anisotropy factor constant with wavelength</span>
+<span class="n">pf1</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span>  <span class="c1"># Henyey-Greenstein scatterin phase function</span>
+
+<span class="c1"># epidermis absortpion coefficient</span>
+<span class="n">mua1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">wavelength</span><span class="p">:</span> <span class="n">m</span> <span class="o">*</span> <span class="mf">6.6</span><span class="o">*</span><span class="mf">1e13</span><span class="o">*</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span><span class="p">)</span><span class="o">**-</span><span class="mf">3.33</span> <span class="o">+</span> \
+    <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">m</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e2</span><span class="o">*</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.244</span> <span class="o">+</span> <span class="mf">85.3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span> <span class="o">-</span> <span class="mi">154</span><span class="p">)</span><span class="o">/</span><span class="mf">66.2</span><span class="p">))</span>
+
+<span class="c1"># epidermis scattering coefficient</span>
+<span class="n">mus1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">wavelength</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mf">1e7</span><span class="o">*</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span><span class="p">)</span><span class="o">**-</span><span class="mf">1.5</span> <span class="o">+</span> \
+    <span class="mi">2</span><span class="o">*</span><span class="mf">1e14</span><span class="o">*</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span><span class="p">)</span><span class="o">**-</span><span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">g1</span><span class="p">)</span>
+
+<span class="c1"># layer 2 - DERMIS</span>
+<span class="n">d2</span> <span class="o">=</span> <span class="mf">10e-3</span>  <span class="c1"># layer thickness in m</span>
+<span class="n">n2</span> <span class="o">=</span> <span class="mf">1.4</span>  <span class="c1"># refractive index</span>
+<span class="n">bl</span> <span class="o">=</span> <span class="mf">0.02</span>  <span class="c1"># blood volume fraction</span>
+<span class="n">oxy</span> <span class="o">=</span> <span class="mf">0.90</span>  <span class="c1"># oxygenation</span>
+<span class="n">g2</span> <span class="o">=</span> <span class="mf">0.8</span>  <span class="c1"># anisotropy factor</span>
+<span class="n">pf2</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>  <span class="c1"># Henyey-Greenstein scatterin phase function</span>
+
+<span class="c1"># dermis absorption coefficient</span>
+<span class="n">mua_oxy</span> <span class="o">=</span> <span class="n">oxyhem</span><span class="o">.</span><span class="n">OxyHem</span><span class="p">()</span>
+<span class="n">mua_deoxy</span> <span class="o">=</span> <span class="n">deoxyhem</span><span class="o">.</span><span class="n">DeOxyHem</span><span class="p">()</span>
+
+<span class="n">mua2</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">wavelength</span><span class="p">:</span> <span class="n">bl</span> <span class="o">*</span> <span class="p">(</span><span class="n">oxy</span> <span class="o">*</span> <span class="n">mua_oxy</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">+</span> \
+    <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">oxy</span><span class="p">)</span> <span class="o">*</span> <span class="n">mua_deoxy</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span> <span class="o">+</span> \
+    <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">bl</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.244</span> <span class="o">+</span> <span class="mf">16.82</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span> <span class="o">-</span> <span class="mi">400</span><span class="p">)</span> <span class="o">/</span> <span class="mf">80.5</span><span class="p">))</span>
+
+<span class="c1"># dermis scattering coefficient</span>
+<span class="n">mus2</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">wavelength</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mf">1e7</span><span class="o">*</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span><span class="p">)</span><span class="o">**-</span><span class="mf">1.5</span> <span class="o">+</span> \
+    <span class="mi">2</span><span class="o">*</span><span class="mf">1e14</span><span class="o">*</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span><span class="p">)</span><span class="o">**-</span><span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">g2</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="the-layer-stack">
+<h2>The layer stack<a class="headerlink" href="#the-layer-stack" title="Permalink to this headline">¶</a></h2>
+<p>Each layer is an instance of <a class="reference internal" href="../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layer" title="xopto.mcml.mclayer.layer.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a> with optical properties as specified above. Note that the absorption and scattering coefficients have to be updated at each iteration through the wavelengths given by the <code class="code docutils literal notranslate"><span class="pre">wavelengths</span></code> parameter. All of the layers are passed as a <code class="code docutils literal notranslate"><span class="pre">list</span></code> to the <code class="xref py py-class docutils literal notranslate"><span class="pre">Layers</span></code> constructor. The topmost and bottommost layers correspond to the surrounding media above and below the two-layered skin. Therefore, in total 4 layers are provided in an ascending order along the positive z axis, which points into the medium.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">layers</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">([</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">pf1</span><span class="p">),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">d1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n1</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">pf1</span><span class="p">),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">d2</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n2</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">pf2</span><span class="p">),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">pf1</span><span class="p">),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>Source is an instance of <a class="reference internal" href="../../../apidoc/xopto.mcml.mcsource.line.html#xopto.mcml.mcsource.line.Line" title="xopto.mcml.mcsource.line.Line"><code class="xref py py-class docutils literal notranslate"><span class="pre">Line</span></code></a> and is defined as a pencil beam situated at the origin and perpendicularly oriented to the layered turbid medium.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">Line</span><span class="p">(</span>
+    <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="detector">
+<h2>Detector<a class="headerlink" href="#detector" title="Permalink to this headline">¶</a></h2>
+<p>The reflectance in this example is acquired with an integrating sphere that accumulates all of the photon packets within a certain radius. We assume an integrating sphere with a 1 cm diameter opening, which is in the code provided by the parameter <code class="code docutils literal notranslate"><span class="pre">sp_r</span></code>. For the purpose of detecting only photons within a certain radius, we construct a radial accumulator spanning from 0 to <code class="code docutils literal notranslate"><span class="pre">2*sp_r</span></code> with 2 radial bins. Each radial bin is therefore the width of <code class="code docutils literal notranslate"><span class="pre">sp_r</span></code>. We selected two bins because the last bin collects all the photon packets that exited the turbid medium, even the ones beyond the last bin. The radial accumulator constructor <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.radial.html#xopto.mcml.mcdetector.radial.Radial" title="xopto.mcml.mcdetector.radial.Radial"><code class="xref py py-class docutils literal notranslate"><span class="pre">Radial</span></code></a> accepts an instance of <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.RadialAxis" title="xopto.mcbase.mcutil.axis.RadialAxis"><code class="xref py py-class docutils literal notranslate"><span class="pre">RadialAxis</span></code></a>, which stores the radial axis positions and related information of the accumulator bins. The radial accumulator <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.radial.html#xopto.mcml.mcdetector.radial.Radial" title="xopto.mcml.mcdetector.radial.Radial"><code class="xref py py-class docutils literal notranslate"><span class="pre">Radial</span></code></a> is then passed to the simulator detector <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.Detectors" title="xopto.mcml.mcdetector.base.Detectors"><code class="xref py py-class docutils literal notranslate"><span class="pre">Detectors</span></code></a> as a top detector via the <code class="code docutils literal notranslate"><span class="pre">top</span></code> keyword argument.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sp_r</span> <span class="o">=</span> <span class="mf">0.5e-2</span>  <span class="c1"># integrating sphere opening in m</span>
+<span class="n">detector_top</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Radial</span><span class="p">(</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">RadialAxis</span><span class="p">(</span>
+        <span class="n">start</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">stop</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">sp_r</span><span class="p">,</span>
+        <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">detectors</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span>
+    <span class="n">top</span><span class="o">=</span><span class="n">detector_top</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="the-monte-carlo-simulator-object-and-simulation-runs">
+<h2>The Monte Carlo simulator object and simulation runs<a class="headerlink" href="#the-monte-carlo-simulator-object-and-simulation-runs" title="Permalink to this headline">¶</a></h2>
+<p>We initiliaze the Monte Carlo simulator object <a class="reference internal" href="../../../apidoc/xopto.mcml.mc.html#xopto.mcml.mc.Mc" title="xopto.mcml.mc.Mc"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mc</span></code></a> with the specified layers, source and detector objects. We also provide the desired computational device via the keyword parameter <code class="code docutils literal notranslate"><span class="pre">cl_devices</span></code>.To conserve with the simulations time, the photon packets that travel 10 cm away from the source are terminated by setting the maximum radius attribute <code class="code docutils literal notranslate"><span class="pre">rmax</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mc_obj</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span>
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+<span class="n">mc_obj</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">10e-2</span>
+</pre></div>
+</div>
+<p>Simulation runs with the above Monte Carlo simulator object have to be done at each wavelength since the absorption and reduced scattering coefficient are wavelength dependent. To store reflectance at each wavelength point, we thus define an empty numpy array <code class="code docutils literal notranslate"><span class="pre">reflectacne_spectrum</span></code>. Subsequently, we iterate over all the wavelengths in the <code class="code docutils literal notranslate"><span class="pre">for</span></code> loop changing the absorption and scattering coefficients for the epidermis and dermis layers. Finally, the simulation is run with <code class="code docutils literal notranslate"><span class="pre">nphotons</span></code> and only the last output parameter of the method call <a class="reference internal" href="../../../apidoc/xopto.mcml.mc.html#xopto.mcml.mc.Mc.run" title="xopto.mcml.mc.Mc.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> which corresponds to the detectors object <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.Detectors" title="xopto.mcml.mcdetector.base.Detectors"><code class="xref py py-class docutils literal notranslate"><span class="pre">Detectors</span></code></a> with separate detectors stored at the top and bottom. The reflectance as stored by the previously defined <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.radial.html#xopto.mcml.mcdetector.radial.Radial" title="xopto.mcml.mcdetector.radial.Radial"><code class="xref py py-class docutils literal notranslate"><span class="pre">Radial</span></code></a> detector object can be accessed as the top detector reflectance by using the <code class="code docutils literal notranslate"><span class="pre">detector.top.reflectance</span></code>. Only the first accumulator corresponds to the reflectance acquired through the integrating sphere opening. Since the <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.radial.html#xopto.mcml.mcdetector.radial.Radial" title="xopto.mcml.mcdetector.radial.Radial"><code class="xref py py-class docutils literal notranslate"><span class="pre">Radial</span></code></a> accumulator stores reflectance per area, we have to multiply the reflectance also by the area of the accumulator to obtain pure reflectance relative to the amount of launched photon packets. At each step <code class="code docutils literal notranslate"><span class="pre">i</span></code> this is then saved to the variable <code class="code docutils literal notranslate"><span class="pre">reflectacne_spectrum</span></code>.</p>
+</section>
+<section id="reflectance-spectrum-visualization">
+<h2>Reflectance spectrum visualization<a class="headerlink" href="#reflectance-spectrum-visualization" title="Permalink to this headline">¶</a></h2>
+<p>The reflectance spectrum can be easily visualized using wavelengths and reflectance_spectrum arrays.</p>
+<a class="reference internal image-reference" href="../../../_images/reflectance_spectrum_skin.svg"><img alt="Reflectance spectrum skin" class="align-center" height="360px" src="../../../_images/reflectance_spectrum_skin.svg" width="480px" /></a>
+</section>
+<section id="the-complete-example">
+<h2>The complete example<a class="headerlink" href="#the-complete-example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="c1"># This is a sample script for Monte Carlo calculations and</span>
+<span class="c1"># visualization for reflectance as acquired with a 1 cm</span>
+<span class="c1"># diameter opening integrating sphere from a </span>
+<span class="c1"># sample of human skin</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+<span class="kn">from</span> <span class="nn">xopto.materials.absorption</span> <span class="kn">import</span> <span class="n">oxyhem</span><span class="p">,</span> <span class="n">deoxyhem</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">pp</span>
+
+<span class="c1"># DEFINE A COMPUTATIONAL DEVICE</span>
+<span class="c1"># select the first device from the provided platform</span>
+<span class="n">cl_device</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">)</span>
+
+<span class="c1"># DEFINE RELEVANT SIMULATION PARAMETERS</span>
+<span class="n">nphotons</span> <span class="o">=</span> <span class="mf">1e6</span>
+<span class="n">wavelengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">450e-9</span><span class="p">,</span> <span class="mf">801e-9</span><span class="p">,</span> <span class="mf">2e-9</span><span class="p">)</span>
+
+<span class="c1"># DEFINE OPTICAL PROPERTIES FOR TWO-LAYERED HUMAN SKIN</span>
+<span class="c1"># layer 1 - EPIDERMIS</span>
+<span class="n">d1</span> <span class="o">=</span> <span class="mf">100e-6</span>  <span class="c1"># layer thickness in m</span>
+<span class="n">n1</span> <span class="o">=</span> <span class="mf">1.4</span>  <span class="c1"># refractive index</span>
+<span class="n">m</span> <span class="o">=</span> <span class="mf">0.02</span>  <span class="c1"># melanin volume fraction</span>
+<span class="n">g1</span> <span class="o">=</span> <span class="mf">0.8</span>  <span class="c1"># anisotropy factor constant with wavelength</span>
+<span class="n">pf1</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span>  <span class="c1"># Henyey-Greenstein scatterin phase function</span>
+
+<span class="c1"># epidermis absortpion coefficient</span>
+<span class="n">mua1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">wavelength</span><span class="p">:</span> <span class="n">m</span> <span class="o">*</span> <span class="mf">6.6</span><span class="o">*</span><span class="mf">1e13</span><span class="o">*</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span><span class="p">)</span><span class="o">**-</span><span class="mf">3.33</span> <span class="o">+</span> \
+    <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">m</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e2</span><span class="o">*</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.244</span> <span class="o">+</span> <span class="mf">85.3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span> <span class="o">-</span> <span class="mi">154</span><span class="p">)</span><span class="o">/</span><span class="mf">66.2</span><span class="p">))</span>
+
+<span class="c1"># epidermis scattering coefficient</span>
+<span class="n">mus1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">wavelength</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mf">1e7</span><span class="o">*</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span><span class="p">)</span><span class="o">**-</span><span class="mf">1.5</span> <span class="o">+</span> \
+    <span class="mi">2</span><span class="o">*</span><span class="mf">1e14</span><span class="o">*</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span><span class="p">)</span><span class="o">**-</span><span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">g1</span><span class="p">)</span>
+
+<span class="c1"># layer 2 - DERMIS</span>
+<span class="n">d2</span> <span class="o">=</span> <span class="mf">10e-3</span>  <span class="c1"># layer thickness in m</span>
+<span class="n">n2</span> <span class="o">=</span> <span class="mf">1.4</span>  <span class="c1"># refractive index</span>
+<span class="n">bl</span> <span class="o">=</span> <span class="mf">0.02</span>  <span class="c1"># blood volume fraction</span>
+<span class="n">oxy</span> <span class="o">=</span> <span class="mf">0.90</span>  <span class="c1"># oxygenation</span>
+<span class="n">g2</span> <span class="o">=</span> <span class="mf">0.8</span>  <span class="c1"># anisotropy factor</span>
+<span class="n">pf2</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>  <span class="c1"># Henyey-Greenstein scatterin phase function</span>
+
+<span class="c1"># dermis absorption coefficient</span>
+<span class="n">mua_oxy</span> <span class="o">=</span> <span class="n">oxyhem</span><span class="o">.</span><span class="n">OxyHem</span><span class="p">()</span>
+<span class="n">mua_deoxy</span> <span class="o">=</span> <span class="n">deoxyhem</span><span class="o">.</span><span class="n">DeOxyHem</span><span class="p">()</span>
+
+<span class="n">mua2</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">wavelength</span><span class="p">:</span> <span class="n">bl</span> <span class="o">*</span> <span class="p">(</span><span class="n">oxy</span> <span class="o">*</span> <span class="n">mua_oxy</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">+</span> \
+    <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">oxy</span><span class="p">)</span> <span class="o">*</span> <span class="n">mua_deoxy</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span> <span class="o">+</span> \
+    <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">bl</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.244</span> <span class="o">+</span> <span class="mf">16.82</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span> <span class="o">-</span> <span class="mi">400</span><span class="p">)</span> <span class="o">/</span> <span class="mf">80.5</span><span class="p">))</span>
+
+<span class="c1"># dermis scattering coefficient</span>
+<span class="n">mus2</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">wavelength</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mf">1e7</span><span class="o">*</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span><span class="p">)</span><span class="o">**-</span><span class="mf">1.5</span> <span class="o">+</span> \
+    <span class="mi">2</span><span class="o">*</span><span class="mf">1e14</span><span class="o">*</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelength</span><span class="p">)</span><span class="o">**-</span><span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">g2</span><span class="p">)</span>
+
+<span class="c1"># DEFINE TWO-LAYERED SKIN MODEL LAYER STACK</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">([</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">pf1</span><span class="p">),</span>  <span class="c1"># layer above the medium</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">d1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n1</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">pf1</span><span class="p">),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">d2</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n2</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">pf2</span><span class="p">),</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">pf1</span><span class="p">),</span>  <span class="c1"># layer below the medium</span>
+<span class="p">])</span>
+
+<span class="c1"># DEFINE SOURCE</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">Line</span><span class="p">(</span>
+    <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># DEFINE A DETECTOR FOR INTEGRATING SPHERE</span>
+<span class="n">sp_r</span> <span class="o">=</span> <span class="mf">0.5e-2</span>  <span class="c1"># integrating sphere opening in m</span>
+<span class="n">detector_top</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Radial</span><span class="p">(</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">RadialAxis</span><span class="p">(</span>
+        <span class="n">start</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">stop</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">sp_r</span><span class="p">,</span>
+        <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">detectors</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span>
+    <span class="n">top</span><span class="o">=</span><span class="n">detector_top</span>
+<span class="p">)</span>
+
+<span class="c1"># DEFINE THE MC OBJECT FOR SIMULATIONS</span>
+<span class="n">mc_obj</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span> 
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span> 
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span>
+<span class="p">)</span>
+<span class="n">mc_obj</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="mf">10e-2</span>
+
+<span class="c1"># DO SIMULATIONS FOR DESIRED WAVELENGTH RANGE</span>
+<span class="n">reflectance_spectrum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">wavelengths</span><span class="p">):</span>
+
+    <span class="c1"># for each wavelength redefine optical properties</span>
+    <span class="n">mc_obj</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mua</span> <span class="o">=</span> <span class="n">mua1</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="n">mc_obj</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mus</span> <span class="o">=</span> <span class="n">mus1</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="n">mc_obj</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">mua</span> <span class="o">=</span> <span class="n">mua2</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="n">mc_obj</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">mus</span> <span class="o">=</span> <span class="n">mus2</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+    <span class="n">detector</span> <span class="o">=</span> <span class="n">mc_obj</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">reflectance_spectrum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">sp_r</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="c1"># PLOT THE REFLECTANCE SPECTRUM</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Reflectance spectrum of human skin&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mf">1e9</span><span class="o">*</span><span class="n">wavelengths</span><span class="p">,</span> <span class="mi">100</span><span class="o">*</span><span class="n">reflectance_spectrum</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Wavelength (nm)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Reflectance (%)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can run this example from the root directory of the PyXOpto package as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python examples/mcml/reflectance_spectrum_skin.py
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Layered MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../layer_stack.html">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../source.html">Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../detector.html">Detectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../surface_layout.html">Surface layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="basic_example.html">Basic example</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Reflectance spectrum simulations of human skin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reflectance_optical_probes.html">Reflectance acquired with optical fibers and probes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scattering_phase_function.html">Reflectance spectrum dependence on scattering phase function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tracing.html">Photon packet tracing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sampling_volume.html">Sampling volume simulations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Layered MC</a><ul>
+  <li><a href="index.html">Examples</a><ul>
+      <li>Previous: <a href="basic_example.html" title="previous chapter">Basic example</a></li>
+      <li>Next: <a href="reflectance_optical_probes.html" title="next chapter">Reflectance acquired with optical fibers and probes</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

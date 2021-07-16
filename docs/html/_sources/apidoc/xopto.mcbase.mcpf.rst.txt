@@ -1,0 +1,26 @@
+xopto.mcbase.mcpf package
+=========================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcbase.mcpf.gk
+   xopto.mcbase.mcpf.hg
+   xopto.mcbase.mcpf.lut
+   xopto.mcbase.mcpf.mgk
+   xopto.mcbase.mcpf.mhg
+   xopto.mcbase.mcpf.mpc
+   xopto.mcbase.mcpf.pc
+   xopto.mcbase.mcpf.pfbase
+   xopto.mcbase.mcpf.rayleigh
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcbase.mcpf
+   :members:
+   :undoc-members:
+   :show-inheritance:

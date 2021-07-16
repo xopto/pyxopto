@@ -1,0 +1,20 @@
+xopto.util package
+==================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.util.build
+   xopto.util.convolve
+   xopto.util.sliceview
+
+Module contents
+---------------
+
+.. automodule:: xopto.util
+   :members:
+   :undoc-members:
+   :show-inheritance:

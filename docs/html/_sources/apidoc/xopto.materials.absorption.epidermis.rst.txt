@@ -1,0 +1,7 @@
+xopto.materials.absorption.epidermis module
+===========================================
+
+.. automodule:: xopto.materials.absorption.epidermis
+   :members:
+   :undoc-members:
+   :show-inheritance:

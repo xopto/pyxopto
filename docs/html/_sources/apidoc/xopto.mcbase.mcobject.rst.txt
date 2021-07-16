@@ -1,0 +1,7 @@
+xopto.mcbase.mcobject module
+============================
+
+.. automodule:: xopto.mcbase.mcobject
+   :members:
+   :undoc-members:
+   :show-inheritance:

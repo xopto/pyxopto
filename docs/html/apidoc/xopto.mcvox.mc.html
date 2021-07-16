@@ -1,0 +1,662 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.mcvox.mc module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.pf package" href="xopto.pf.html" />
+    <link rel="prev" title="xopto.mcvox.test.validate module" href="xopto.mcvox.test.validate.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.mcvox.mc">
+<span id="xopto-mcvox-mc-module"></span><h1>xopto.mcvox.mc module<a class="headerlink" href="#module-xopto.mcvox.mc" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Mc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">voxels:</span> <span class="pre">xopto.mcvox.mcgeometry.voxel.Voxels</span></em>, <em class="sig-param"><span class="pre">materials:</span> <span class="pre">xopto.mcvox.mcmaterial.material.Materials</span></em>, <em class="sig-param"><span class="pre">source:</span> <span class="pre">xopto.mcvox.mcsource.base.Source</span></em>, <em class="sig-param"><span class="pre">detectors:</span> <span class="pre">Optional[xopto.mcvox.mcdetector.base.Detectors]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">trace:</span> <span class="pre">Optional[xopto.mcbase.mctrace.Trace]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">fluence:</span> <span class="pre">Optional[xopto.mcbase.mcfluence.Fluence]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">surface:</span> <span class="pre">Optional[xopto.mcvox.mcsurface.base.SurfaceLayouts]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">types:</span> <span class="pre">xopto.mcbase.mctypes.McDataTypesBase</span> <span class="pre">=</span> <span class="pre">class</span> <span class="pre">McDataTypes(McInt32</span></em>, <em class="sig-param"><span class="pre">McAccu64</span></em>, <em class="sig-param"><span class="pre">McCnt32</span></em>, <em class="sig-param"><span class="pre">McFloat)</span></em>, <em class="sig-param"><span class="pre">options:</span> <span class="pre">Optional[List[xopto.mcbase.mcoptions.McOption]]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">rnginit:</span> <span class="pre">Optional[numpy.uint64]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">cl_devices:</span> <span class="pre">Optional[List[pyopencl._cl.Device]]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">cl_build_options:</span> <span class="pre">Optional[List[str]]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcworker.html#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin" title="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin</span></code></a>, <a class="reference internal" href="xopto.mcbase.mcworker.html#xopto.mcbase.mcworker.ClWorkerRngMixin" title="xopto.mcbase.mcworker.ClWorkerRngMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcworker.ClWorkerRngMixin</span></code></a>, <a class="reference internal" href="xopto.mcbase.mcworker.html#xopto.mcbase.mcworker.ClWorker" title="xopto.mcbase.mcworker.ClWorker"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcworker.ClWorker</span></code></a></p>
+<p>Location of the OpenCL source template file.</p>
+<p>Voxelized Monte Carlo light propagation simulator object constructor.
+The object uses existing OpenCL kernel code in the mcvox.template.h and
+mcvox.template.c files and adds additional code and kernel
+configuration options generated by the source, detector, trace, fluence
+and other objects passed to the constructor.
+The generated OpenCL code is compiled just before the first call to
+the kernel/simulation invoked by the run method.
+Public attributes of all the publically accessible properties
+(voxels, materials, source, detector, trace, fluence, …) can be
+changed between simulations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>voxels</strong> (<em>mcgeometry.Voxels</em>) – Object representing the voxelized ample volume.</p></li>
+<li><p><strong>materials</strong> (<em>mcmaterial.Materials</em><em> or </em><em>list</em><em>[</em><em>mcmaterial.Material</em><em>]</em>) – Object representing sample Materials or a python list of materials.
+The list must contain at least one material. The first material
+in the list represents the medium taht surrounds the voxelized
+sample.</p></li>
+<li><p><strong>source</strong> (<em>mcsource.Source</em>) – <p>One of the available photon packet source object:</p>
+<ul>
+<li><p>LineSource - infinity thin beam</p></li>
+<li><p>BeamSource - finite diameter uniform beam</p></li>
+<li><p>FiberSource - uniform intensity fiber with given numercial aperture</p></li>
+<li><p>SingleFiberSourceEx - single fiber optical probe with advanced boundary</p></li>
+<li><p>SixLinearFiberSourceEx - linear arrangement of 6 optical fibers</p></li>
+</ul>
+</p></li>
+<li><p><strong>detectors</strong> (<em>mcdetector.Detectors</em>) – <p>A set of detectors for the top and bottom sample surfaces and
+specular reflections..</p>
+<p>The Detector object will set the following simulator options:</p>
+<ul>
+<li><p>MC_USE_DETECTORS</p></li>
+<li><p>MC_USE_TOP_DETECTOR</p></li>
+<li><p>MC_USE_BOTTOM_DETECTOR</p></li>
+<li><p>MC_USE_SPECULAR_DETECTOR</p></li>
+<li><p>MC_USE_FP_LUT (if a lookup table is used)</p></li>
+</ul>
+</p></li>
+<li><p><strong>trace</strong> (<a class="reference internal" href="xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><em>mctrace.Trace</em></a>) – <p>Trace object that can collect the various states of the photon
+packet including the initial, all intermediate and/or the final.</p>
+<p>The Trace object will set the following simulator options:</p>
+<ul>
+<li><p>MC_USE_TRACE</p></li>
+</ul>
+</p></li>
+<li><p><strong>fluence</strong> (<a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><em>mcfluence.Fluence</em></a>) – <p>Fluence object that collects the energy deposited by the photon
+packets on a regular 3D grid.</p>
+<p>The Fluence object will set the following simulator options:</p>
+<ul>
+<li><p>MC_USE_FLUENCE</p></li>
+</ul>
+</p></li>
+<li><p><strong>surface</strong> (<em>mcsurface.SurfaceLayouts</em>) – <p>Spetial geometry that is applied to the top and / or bottom
+surfaces of the sample.</p>
+<p>The Fluence object will set the following simulator options as
+required:</p>
+<ul>
+<li><p>MC_USE_TOP_SURFACE_LAYOUT</p></li>
+<li><p>MC_USE_BOTTOM_SURFACE_LAYOUT</p></li>
+<li><p>MC_USE_SURFACE_LAYOUTS</p></li>
+</ul>
+</p></li>
+<li><p><strong>types</strong> (<a class="reference internal" href="xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDataTypes" title="xopto.mcbase.mctypes.McDataTypes"><em>mctypes.McDataTypes</em></a>) – <p>A class that defines all the simulator data types. Use one
+of the following predefined type classes derived from
+mctypes.McDataTypes:</p>
+<blockquote>
+<div><ul>
+<li><p>mctypes.McDataTypesSingle</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>32-bit size type</p></li>
+<li><p>32-bit default integers,</p></li>
+<li><p>64-bit detector accumulators,</p></li>
+<li><p>32-bit single precision floating-point arithmetics,</p></li>
+<li><dl class="simple">
+<dt>32-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call limited to 4,294,967,295)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>mctypes.McDataTypesDouble</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>32-bit size type</p></li>
+<li><p>32-bit default integers,</p></li>
+<li><p>64-bit detector accumulators,</p></li>
+<li><p>64-bit double precision floating-point arithmetics,</p></li>
+<li><dl class="simple">
+<dt>32-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call limited to 4,294,967,295)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>mctypes.McDataTypesSingleCnt64</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>64-bit size type</p></li>
+<li><p>32-bit default integers,</p></li>
+<li><p>64-bit detector accumulators,</p></li>
+<li><p>32-bit single precision floating-point arithmetics,</p></li>
+<li><dl class="simple">
+<dt>64-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call virtually unlimited)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>mctypes.McDataTypesDoubleCnt64</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>64-bit size type</p></li>
+<li><p>32-bit default integers,</p></li>
+<li><p>64-bit detector accumulators,</p></li>
+<li><p>64-bit double precision floating-point arithmetics,</p></li>
+<li><dl class="simple">
+<dt>32-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call virtually unlimited)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p>A custom combination of data types can be defined by the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">mctypes.McDataTypes.custom()</span></code> method.</p>
+</p></li>
+<li><p><strong>options</strong> (<em>List</em><em>[</em><a class="reference internal" href="xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McOption" title="xopto.mcbase.mcoptions.McOption"><em>mcoptions.McOption</em></a><em>]</em>) – <p>A list of compile-time options for the simulator core.</p>
+<ul>
+<li><dl class="simple">
+<dt>mcoptions.McUseNativeMath: mcoptions.McUseNativeMath.on or mcoptions.McUseNativeMath.off</dt><dd><p>Use of native math functions.
+Native functions are usually faster but less accurate.
+Default value is mcoptions.McUseNativeMath.off.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>mcoptions.McMinimumPacketWeight: mcoptions.McMinimumPacketWeight(float)</dt><dd><p>Minimum photon packet weight
+before going through photon packet termination or lottery.
+Default value is mcoptions.McMinimumPacketWeight(1e-4).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>mcoptions.McUseLottery: mcoptions.McUseLottery(float)</dt><dd><p>Terminate photon packet by lottery.
+Default value is mcoptions.McUseLottery.on.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>mcoptions.McPacketLotteryChance: mcoptions.McPacketLotteryChance(float)</dt><dd><p>Used if photon packets are terminated by lottery.
+If the value of a uniform random number exceeds the specified
+chance, the photon packet is terminated.
+Default value is mcoptions.McPacketLotteryChance(0.01).</p>
+</dd>
+</dl>
+</li>
+<li><p>mcoptions.McLutMemory: mcoptions.McLutMemory.global_mem or mcoptions.McLutMemory.constant_mem</p></li>
+<li><dl class="simple">
+<dt>McMaterialMemory: mcoptions.McMaterialMemory.global_mem or mcoptions.McMaterialMemory.constant_mem</dt><dd><p>Set the OpenCL memory type for the material
+Note that the default setting is mcoptions.McMaterialMemory.global_mem
+Using the constant memory (mcoptions.McMaterialMemory.constant_mem)
+can be significantly faster, in particular on
+older GPUs. However, note that the amount of constant
+memory available on GPUs is typically limited to about 64k.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>McFpLutMemory: mcoptions.McFpLutMemory.global_mem or mcoptions.McFpLutMemory.constant_mem</dt><dd><p>Set the OpenCL memory type for integer and floating-point
+data lookup tables that are used by some scattering phase
+functions, accumulators with custom angular sensitivity and
+photon packet sources with custom emission characteristics.
+Note that the default setting is mcoptions.McFpLutMemory.global_mem
+Using the constant memory (mcoptions.McFpLutMemory.constant_mem)
+can be significantly (10x or more) faster, in particular on
+older GPUs. However, note that the amount of constant
+memory available on GPUs is typically limited to about 64k.</p>
+<p>If using lookup table-based scattering phase
+functions that can be fit into the constant memory, then
+set this option to mcoptions.McFpLutMemory.constant_mem.
+This can significantly speed up the MC simulations (~ 10x).
+To further reduce the amount of constant GPU memory required
+by the lookup table data arrays, set the scattering phase
+functions of the first material (the sourrounding medium)
+to one that is used by the sample materials.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>mcoptions.McDebugMode: mcoptions.McDebugMode.on or mcoptions.McDebugMode.off</dt><dd><p>Enables stdout debug information on some devices.
+Default value is mcoptions.McDebugMode.off.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p></li>
+<li><p><strong>rnginit</strong> (<em>np.uint64</em>) – OpenCL random number generator initializer as a 64-bit unsigned
+integer.
+Use this initializer if there is a need to put the random, number
+generator into a known state.</p></li>
+<li><p><strong>cl_devices</strong> (<em>list/tuple</em>) – A python list of OpenCL devices that are used for
+conducting the simulation.See the clGpuDevices and clCpuDevices
+functions of the clinfo module for details on obtaining a
+list of OpenCl capable devices. If None is provided, the
+first available device is used (GPU devices have priority over
+CPU devices). Use function clinfo.device to get a desired
+device by simple keywords, e.g. a call
+clinfo.device([‘amd’, ‘nvidia’, ‘hd’, ‘cpu’], that will search
+for an AMD GPU, Nvidia GPU, Intel Hd GPU, any CPU and return
+the first device found.</p></li>
+<li><p><strong>cl_build_options</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – A list of OpenCL build option as specified by the OpenCl manuals at
+<a class="reference external" href="https://www.khronos.org/">https://www.khronos.org/</a>.
+An example of commonly used build options:
+cloptions=[‘-cl-opt-disable’, ‘-Werror’, ‘-cl-fast-relaxed-math’, ‘-cl-mad-enable’].
+Note that “-cl-fast-relaxed-math” canlead to broken results on some platforms.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>See the test/example.py for additional examples.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">mcgeometry</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span> <span class="c1"># x axis: 500 voxels of size 0.1 mm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">mcgeometry</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span> <span class="c1"># y axis: 500 voxels of size 0.1 mm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">mcgeometry</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>     <span class="c1"># z axis: 5 voxel of size 1 mm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">voxels</span> <span class="o">=</span> <span class="n">mcgeometry</span><span class="o">.</span><span class="n">Voxels</span><span class="p">(,</span> <span class="n">mcgeometry</span><span class="o">.</span><span class="n">Axis</span><span class="p">())</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source</span> <span class="o">=</span> <span class="n">mcsource</span><span class="o">.</span><span class="n">GaussianBeam</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.22</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m0</span> <span class="o">=</span> <span class="n">mcmaterial</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>  <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>   <span class="n">pf</span><span class="o">=</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m1</span> <span class="o">=</span> <span class="n">mcmaterial</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">1e2</span><span class="p">,</span>  <span class="n">mus</span><span class="o">=</span><span class="mf">100e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.8</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m2</span> <span class="o">=</span> <span class="n">mcmaterial</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>  <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>   <span class="n">pf</span><span class="o">=</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">materials</span> <span class="o">=</span> <span class="n">mcmaterial</span><span class="o">.</span><span class="n">Materials</span><span class="p">([</span><span class="n">m0</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trace</span> <span class="o">=</span> <span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_ALL</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mc</span> <span class="o">=</span> <span class="n">Mc</span><span class="p">(</span><span class="n">voxels</span><span class="p">,</span> <span class="n">matrials</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">voxels</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:][</span><span class="s1">&#39;material_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>   <span class="c1"># the first spatial index runs along the z axis</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:,</span> <span class="p">:][</span><span class="s1">&#39;material_index&#39;</span><span class="p">]</span><span class="o">=</span> <span class="mi">2</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trace_data</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.AUTOGEN_PATH">
+<span class="sig-name descname"><span class="pre">AUTOGEN_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/src/pyxopto/xopto/data/mcvox/auto'</span></em><a class="headerlink" href="#xopto.mcvox.mc.Mc.AUTOGEN_PATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.MC_CL_TEMPLATE_FILE">
+<span class="sig-name descname"><span class="pre">MC_CL_TEMPLATE_FILE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/src/pyxopto/xopto/mcvox/kernel/mc.template.h'</span></em><a class="headerlink" href="#xopto.mcvox.mc.Mc.MC_CL_TEMPLATE_FILE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.append_r_lut">
+<span class="sig-name descname"><span class="pre">append_r_lut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcbase.mcutil.lut.html#xopto.mcbase.mcutil.lut.LutEntry" title="xopto.mcbase.mcutil.lut.LutEntry"><span class="pre">xopto.mcbase.mcutil.lut.LutEntry</span></a><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc.append_r_lut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc.append_r_lut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a read-only lookup table data array to the list of managed
+lookup table arrays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – Lookup table data to be added to the managed list. The numpy
+array must be of integer or floating-point type.</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – Add the array to the managed list even if an existing entry for the
+given data array is found.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>lutetry</strong> – Lookup table entry. Use the offset property to locate the
+first element of the entry in the lookup table buffer.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.mcbase.mcutil.lut.html#xopto.mcbase.mcutil.lut.LutEntry" title="xopto.mcbase.mcutil.lut.LutEntry">LutEntry</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.cl_exec">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cl_exec</span></span><em class="property"><span class="pre">:</span> <span class="pre">pyopencl.Program</span></em><a class="headerlink" href="#xopto.mcvox.mc.Mc.cl_exec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compiled OpenCL code / executable with kernels.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.dbg">
+<span class="sig-name descname"><span class="pre">dbg</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc.dbg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc.dbg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.detectors">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">detectors</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcvox.mcdetector.base.Detectors</span></em><a class="headerlink" href="#xopto.mcvox.mc.Mc.detectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detectors object if available.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.devDataTypes">
+<span class="sig-name descname"><span class="pre">devDataTypes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc.devDataTypes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc.devDataTypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.export_src">
+<span class="sig-name descname"><span class="pre">export_src</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc.export_src"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc.export_src" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export the OpenCL source to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The OpenCl source code will be saved to this file. If a file
+name is not provided, the OpenCL source will be saved to
+<a class="reference internal" href="#xopto.mcvox.mc.Mc.AUTOGEN_PATH" title="xopto.mcvox.mc.Mc.AUTOGEN_PATH"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Mc.AUTOGEN_PATH</span></code></a> directory with a name
+“mcvox_&lt;random&gt;.cl”</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>filename</strong> – The filename that was used to save the OpenCL source code.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.fluence">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fluence</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcfluence.Fluence</span></em><a class="headerlink" href="#xopto.mcvox.mc.Mc.fluence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fluence object if available.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.material">
+<span class="sig-name descname"><span class="pre">material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Material" title="xopto.mcvox.mcmaterial.material.Material"><span class="pre">xopto.mcvox.mcmaterial.material.Material</span></a><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc.material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc.material" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the material at the specified index or spatial position.
+Material can be also accessed by the <a class="reference internal" href="#xopto.mcvox.mc.Mc.materials" title="xopto.mcvox.mc.Mc.materials"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Mc.materials</span></code></a>
+property and the [] operator. Note that the operator can only take
+the material index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em><em> or </em><em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>, </em><em>float</em><em>]</em>) – Index of the material or position.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>material</strong> – Material at the specified index.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>mcmaterial.Material</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.materials">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">materials</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcvox.mcmaterial.material.Materials</span></em><a class="headerlink" href="#xopto.mcvox.mc.Mc.materials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Materials.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.rmax">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">rmax</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcvox.mc.Mc.rmax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum simulation radius measured from the photon packet source position (m).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.rng_test">
+<span class="sig-name descname"><span class="pre">rng_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc.rng_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc.rng_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate random numbers on the OpenCL device. The random number
+generator is the same as used by the Monte Carlo kernel. The
+precision is inherited from the Simulator.
+The states / seeds x and a can be optionally generated with the
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">rng</span></code> property that is an instance of
+<a class="reference internal" href="xopto.cl.clrng.html#xopto.cl.clrng.Random" title="xopto.cl.clrng.Random"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.clrng.Random</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>int</em>) – The number of random numbers to generate.</p></li>
+<li><p><strong>x</strong> (<em>np.uint64</em>) – Mutable state of the random number generator.</p></li>
+<li><p><strong>a</strong> (<em>np.uint32</em>) – Immutable state of the random number generator.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>data</strong> – A vector of random numbers.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray of length n</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nphotons</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><span class="pre">xopto.mcbase.mctrace.Trace</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><span class="pre">xopto.mcbase.mcfluence.Fluence</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcvox.mcdetector.base.html#xopto.mcvox.mcdetector.base.Detector" title="xopto.mcvox.mcdetector.base.Detector"><span class="pre">xopto.mcvox.mcdetector.base.Detector</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wgsize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxthreads</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copyseeds</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exportsrc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><span class="pre">xopto.mcbase.mctrace.Trace</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><span class="pre">xopto.mcbase.mcfluence.Fluence</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcvox.mcdetector.base.html#xopto.mcvox.mcdetector.base.Detector" title="xopto.mcvox.mcdetector.base.Detector"><span class="pre">xopto.mcvox.mcdetector.base.Detector</span></a><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a simulation with the specified number of photon packets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nphotons</strong> (<em>int</em>) – Number of photon packets to simulate. Note that the maximum number
+of photon packets is limited to <code class="xref py py-attr docutils literal notranslate"><span class="pre">Mc.types.mc_cnt_max</span></code>.</p></li>
+<li><p><strong>wgsize</strong> (<em>int</em>) – Local work group size. If None (default), the optimal work group
+size is determined automatically.</p></li>
+<li><p><strong>out</strong> (<em>Tuple</em><em>[</em><a class="reference internal" href="xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><em>mctrace.Trace</em></a><em>, </em><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><em>mcfluence.Fluence</em></a><em>, </em><em>mcdetector.Detector</em><em>] or </em><em>None</em>) – Existing trace, fluence and/or detector objects that will be
+updated with the simulation results if not None. Pass objects
+that were returned after the previous/first call of the
+<a class="reference internal" href="#xopto.mcvox.mc.Mc.run" title="xopto.mcvox.mc.Mc.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> method.
+Do NOT pass any of the objects that were used as input arguments
+of the <a class="reference internal" href="#xopto.mcvox.mc.Mc" title="xopto.mcvox.mc.Mc"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Mc()</span></code></a> constructor!.</p></li>
+<li><p><strong>maxthreads</strong> (<em>int</em>) – Total number of threads to use. Limited by the
+number of available random number generators (150,000).</p></li>
+<li><p><strong>copyseeds</strong> (<em>bool</em>) – If True, copy the mutable seeds of the random number generator
+from the OpenCL kernel to the host. This is only required if the
+seeds need to be reused or inspected (for debug purposes).</p></li>
+<li><p><strong>exportsrc</strong> (<em>str</em><em> or </em><em>bool</em>) – Optional location to save the OpenCL source code. The source file
+is saved only on the first run of the simulator.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If set to True, additional debug information is displayed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>trace</strong> (<em>mctrace.Trace</em>) – Trace object instance with simulation results or None if not used
+by the simulator.</p></li>
+<li><p><strong>fluence</strong> (<em>mcfluence.Fluence</em>) – Fluence object instance with simulation results or None if not used
+by the simulator.</p></li>
+<li><p><strong>detector</strong> (<em>mcdetector.Detector</em>) – Detector object instance with simulation results or None if not
+used by the simulator.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The returned <code class="xref py py-class docutils literal notranslate"><span class="pre">mctrace.Trace</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">mcfluence.Fluence</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">mcdetector.Detector</span></code>
+objects are not the same instances as were passed to the
+constructor <a class="reference internal" href="#xopto.mcvox.mc.Mc" title="xopto.mcvox.mc.Mc"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Mc()</span></code></a>. A new set of instances is created
+for each run of the simulator.</p>
+<p>The maximum number of photon packets that can be simulated in a
+single run is limited by the kernel data type used as the photon
+packet counter. The maximum value is limited to
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">Mc.types.mc_cnt_max</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.sampling_volume">
+<span class="sig-name descname"><span class="pre">sampling_volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trace</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><span class="pre">xopto.mcbase.mctrace.Trace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sv</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcsv.html#xopto.mcbase.mcsv.SamplingVolume" title="xopto.mcbase.mcsv.SamplingVolume"><span class="pre">xopto.mcbase.mcsv.SamplingVolume</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">wgsize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxthreads</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exportsrc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcbase.mcsv.html#xopto.mcbase.mcsv.SamplingVolume" title="xopto.mcbase.mcsv.SamplingVolume"><span class="pre">xopto.mcbase.mcsv.SamplingVolume</span></a><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc.sampling_volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc.sampling_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the sampling volume from the given simulation trace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trace</strong> (<a class="reference internal" href="xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><em>mctrace.Trace</em></a>) – Simulation trace object to process.</p></li>
+<li><p><strong>sv</strong> (<a class="reference internal" href="xopto.mcbase.mcsv.html#xopto.mcbase.mcsv.SamplingVolume" title="xopto.mcbase.mcsv.SamplingVolume"><em>mcsv.SamplingVolume</em></a>) – Target sampling volume that will be updated with the results.</p></li>
+<li><p><strong>wgsize</strong> (<em>int</em>) – Local work group size. If None (default), the optimal work group
+size is determined automatically.</p></li>
+<li><p><strong>maxthreads</strong> (<em>int</em>) – Total number of parallel threads to use. Limited by the
+number of available random number generators (150,000).</p></li>
+<li><p><strong>exportsrc</strong> (<em>str</em><em> or </em><em>bool</em>) – Optional location to save the OpenCL source code. The source file
+is saved only on the first run of the simulator.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If set to True, additional debug information is displayed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sv</strong> – Input sampling volume updated with the data from the trace.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.mcbase.mcsv.html#xopto.mcbase.mcsv.SamplingVolume" title="xopto.mcbase.mcsv.SamplingVolume">mcsv.SamplingVolume</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.source">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcvox.mcsource.base.Source</span></em><a class="headerlink" href="#xopto.mcvox.mc.Mc.source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Photon packet source object.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.surface">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">surface</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcvox.mcsurface.base.SurfaceLayouts</span></em><a class="headerlink" href="#xopto.mcvox.mc.Mc.surface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample surface layout.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.testMcFpDiv">
+<span class="sig-name descname"><span class="pre">testMcFpDiv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">native</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc.testMcFpDiv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc.testMcFpDiv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.testMcLog">
+<span class="sig-name descname"><span class="pre">testMcLog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">native</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc.testMcLog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc.testMcLog" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.testMcRSqrt">
+<span class="sig-name descname"><span class="pre">testMcRSqrt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">native</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc.testMcRSqrt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc.testMcRSqrt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.testMcSinCos">
+<span class="sig-name descname"><span class="pre">testMcSinCos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc.testMcSinCos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc.testMcSinCos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.testMcSqrt">
+<span class="sig-name descname"><span class="pre">testMcSqrt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">native</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcvox/mc.html#Mc.testMcSqrt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mc.Mc.testMcSqrt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.trace">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">trace</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mctrace.Trace</span></em><a class="headerlink" href="#xopto.mcvox.mc.Mc.trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trace object if available.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.types">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">types</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mctypes.McDataTypes</span></em><a class="headerlink" href="#xopto.mcvox.mc.Mc.types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulator data types.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcvox.mc.Mc.voxels">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">voxels</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcvox.mcgeometry.voxel.Voxels</span></em><a class="headerlink" href="#xopto.mcvox.mc.Mc.voxels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample voxels.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.mcvox.html">xopto.mcvox package</a><ul>
+      <li>Previous: <a href="xopto.mcvox.test.validate.html" title="previous chapter">xopto.mcvox.test.validate module</a></li>
+      <li>Next: <a href="xopto.pf.html" title="next chapter">xopto.pf package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

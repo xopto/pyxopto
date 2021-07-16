@@ -1,0 +1,7 @@
+xopto.materials.absorption.melanin module
+=========================================
+
+.. automodule:: xopto.materials.absorption.melanin
+   :members:
+   :undoc-members:
+   :show-inheritance:

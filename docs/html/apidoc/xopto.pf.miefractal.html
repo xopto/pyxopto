@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.pf.miefractal module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.pf.miemixture module" href="xopto.pf.miemixture.html" />
+    <link rel="prev" title="xopto.pf.mie module" href="xopto.pf.mie.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.pf.miefractal">
+<span id="xopto-pf-miefractal-module"></span><h1>xopto.pf.miefractal module<a class="headerlink" href="#module-xopto.pf.miefractal" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.pf.miefractal.MieFractal">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MieFractal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsphere</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmedium</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drange</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(1e-08,</span> <span class="pre">1e-05)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nd</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/pf/miefractal.html#MieFractal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.miefractal.MieFractal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.pf.miepd.html#xopto.pf.miepd.MiePd" title="xopto.pf.miepd.MiePd"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.pf.miepd.MiePd</span></code></a></p>
+<p>Scattering phase function of fractally distributed (number density)
+spherical particles:</p>
+<div class="math">
+<p><img src="../_images/math/9f818d4a8e90a660e15fe89db7b4299790e636c5.png" alt="p(d) = A\frac{1}{d^{\alpha}}"/></p>
+</div><p>The value of parameter <img class="math" src="../_images/math/211284f68205c3e66773eaf026f32a0acdd3dfb3.png" alt="A"/> is computed so as to normalize the
+integral of the number density function on the specified interval
+drange = <img class="math" src="../_images/math/5f8f5beaccda222bfa1952969e3ce19e386c3d63.png" alt="(d_1, d_2)"/> to 1:</p>
+<div class="math">
+<p><img src="../_images/math/c96cbc455a3e7c4183b8c5c0fed83227fbbd5847.png" alt="A = \frac{d_1^{\alpha + 1}}{\alpha\left(1 - \left(\frac{d_1}{d_2}\right)^{\alpha + 1}\right)}"/></p>
+</div><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<em>float</em>) – Parameter alpha of the fractal distribution.</p></li>
+<li><p><strong>nsphere</strong> – Parameters passed to the <a class="reference internal" href="xopto.pf.miepd.html#xopto.pf.miepd.MiePd" title="xopto.pf.miepd.MiePd"><code class="xref py py-meth docutils literal notranslate"><span class="pre">xopto.pf.miepd.MiePd()</span></code></a>
+base class constructor.
+See help of <a class="reference internal" href="xopto.pf.miepd.html#xopto.pf.miepd.MiePd" title="xopto.pf.miepd.MiePd"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.pf.miepd.MiePd</span></code></a> class for more details.</p></li>
+<li><p><strong>nmedium</strong> – Parameters passed to the <a class="reference internal" href="xopto.pf.miepd.html#xopto.pf.miepd.MiePd" title="xopto.pf.miepd.MiePd"><code class="xref py py-meth docutils literal notranslate"><span class="pre">xopto.pf.miepd.MiePd()</span></code></a>
+base class constructor.
+See help of <a class="reference internal" href="xopto.pf.miepd.html#xopto.pf.miepd.MiePd" title="xopto.pf.miepd.MiePd"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.pf.miepd.MiePd</span></code></a> class for more details.</p></li>
+<li><p><strong>wavelength</strong> – Parameters passed to the <a class="reference internal" href="xopto.pf.miepd.html#xopto.pf.miepd.MiePd" title="xopto.pf.miepd.MiePd"><code class="xref py py-meth docutils literal notranslate"><span class="pre">xopto.pf.miepd.MiePd()</span></code></a>
+base class constructor.
+See help of <a class="reference internal" href="xopto.pf.miepd.html#xopto.pf.miepd.MiePd" title="xopto.pf.miepd.MiePd"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.pf.miepd.MiePd</span></code></a> class for more details.</p></li>
+<li><p><strong>drange</strong> – Parameters passed to the <a class="reference internal" href="xopto.pf.miepd.html#xopto.pf.miepd.MiePd" title="xopto.pf.miepd.MiePd"><code class="xref py py-meth docutils literal notranslate"><span class="pre">xopto.pf.miepd.MiePd()</span></code></a>
+base class constructor.
+See help of <a class="reference internal" href="xopto.pf.miepd.html#xopto.pf.miepd.MiePd" title="xopto.pf.miepd.MiePd"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.pf.miepd.MiePd</span></code></a> class for more details.</p></li>
+<li><p><strong>nd</strong> – Parameters passed to the <a class="reference internal" href="xopto.pf.miepd.html#xopto.pf.miepd.MiePd" title="xopto.pf.miepd.MiePd"><code class="xref py py-meth docutils literal notranslate"><span class="pre">xopto.pf.miepd.MiePd()</span></code></a>
+base class constructor.
+See help of <a class="reference internal" href="xopto.pf.miepd.html#xopto.pf.miepd.MiePd" title="xopto.pf.miepd.MiePd"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.pf.miepd.MiePd</span></code></a> class for more details.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Scattering phase function of fractally distributed microspherical
+particles with alpha=2.4 and diameter from 10 nm to 10 um.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">pp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cos_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fmie</span> <span class="o">=</span> <span class="n">MieFractal</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span> <span class="n">drange</span><span class="o">=</span><span class="p">[</span><span class="mf">10e-9</span><span class="p">,</span> <span class="mf">10e-6</span><span class="p">],</span> <span class="n">nsphere</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">nmedium</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span> <span class="n">wavelength</span><span class="o">=</span><span class="mf">550e-9</span><span class="p">,</span> <span class="n">nd</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">cos_theta</span><span class="p">,</span> <span class="n">fmie</span><span class="p">(</span><span class="n">cos_theta</span><span class="p">))</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.pf.html">xopto.pf package</a><ul>
+      <li>Previous: <a href="xopto.pf.mie.html" title="previous chapter">xopto.pf.mie module</a></li>
+      <li>Next: <a href="xopto.pf.miemixture.html" title="next chapter">xopto.pf.miemixture module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.pf.miemlpd &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.pf.miemlpd</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">simps</span><span class="p">,</span> <span class="n">quad</span>
+
+<span class="kn">from</span> <span class="nn">.pfbase</span> <span class="kn">import</span> <span class="n">PfBase</span>
+<span class="kn">from</span> <span class="nn">.mieml</span> <span class="kn">import</span> <span class="n">MieMl</span><span class="p">,</span> <span class="n">ComplexVector</span><span class="p">,</span> <span class="n">FloatVector</span>
+
+
+<div class="viewcode-block" id="MieMlPd"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miemlpd.html#xopto.pf.miemlpd.MieMlPd">[docs]</a><span class="k">class</span> <span class="nc">MieMlPd</span><span class="p">(</span><span class="n">PfBase</span><span class="p">):</span>
+<div class="viewcode-block" id="MieMlPd.scale"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miemlpd.html#xopto.pf.miemlpd.MieMlPd.scale">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="n">diameters</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">diameter</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Multiplicatively scale the diameters of the layer stack to</span>
+<span class="sd">        match the outer diameter of the stack with the specified diameter.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        diameters: np.ndarray</span>
+<span class="sd">            Diameters of the layer stack.</span>
+<span class="sd">        diameter: float</span>
+<span class="sd">            Target outer diameter.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        scaled_diameters: np.ndarray</span>
+<span class="sd">            Diameters of the layer stack scaled to the specified outer diameter.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">diameter</span><span class="o">/</span><span class="n">diameters</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></div>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nlayers</span><span class="p">:</span> <span class="n">ComplexVector</span><span class="p">,</span> <span class="n">nmedium</span><span class="p">:</span> <span class="n">ComplexVector</span><span class="p">,</span>
+                 <span class="n">diameters</span><span class="p">:</span> <span class="n">FloatVector</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">pd</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span> <span class="n">drange</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+                 <span class="n">nd</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+                 <span class="n">dscalefun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Mie scattering phase function for layered spherical particles that</span>
+<span class="sd">        follow the given size probability density function within the given</span>
+<span class="sd">        range of outer diameters.</span>
+<span class="sd">        By default, the layer stack is multiplicatively scaled to the current</span>
+<span class="sd">        value of the outer diameter.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nlayers: float, complex, list, tuple, numpy.ndarray vector</span>
+<span class="sd">            Refractive indices (complex) of the concentric spherical layers,</span>
+<span class="sd">            starting with the refractive index of the innermost layer.</span>
+<span class="sd">        nmedium: float, complex</span>
+<span class="sd">            Refractive index (complex) of the surrounding medium.</span>
+<span class="sd">        diameters: float, list, tuple, numpy.ndarray vector</span>
+<span class="sd">            Diameters of the concentric spherical layers (m), starting with</span>
+<span class="sd">            the innermost layer. The layer stack is scaled according</span>
+<span class="sd">            to the current diameter of the distribution. A custom scaling</span>
+<span class="sd">            function can be passed in the scalefum parameter.</span>
+<span class="sd">            A multiplicative scaling of the layer stack to the current</span>
+<span class="sd">            outer diameter given by the distribution is used by default.</span>
+<span class="sd">        wavelength: float</span>
+<span class="sd">            Wavelength of light (m).</span>
+<span class="sd">        pd: Callable[[float], float]</span>
+<span class="sd">            Particlne number density distribution function. Integral</span>
+<span class="sd">            of pd over diameter range given in drange should equal 1.0.</span>
+<span class="sd">        drange: [float, float] or (float, float)</span>
+<span class="sd">            Layered spherical particle outer diameter range as [dmin, dmax],</span>
+<span class="sd">            where dmin and dmax stand for the minimum and maximum diameter of</span>
+<span class="sd">            spherical particles, respectively.</span>
+<span class="sd">        nd: int</span>
+<span class="sd">            Number of equally spaced control points between dmin and dmax that</span>
+<span class="sd">            are used to estimate the phase function. A fixed-step Simpson</span>
+<span class="sd">            numerical integration is used to estimate the phase function at</span>
+<span class="sd">            the given deflection angle cosines. If nd is None, adaptive-step</span>
+<span class="sd">            numerical integration is used (note that the computational time</span>
+<span class="sd">            might increase dramatically!!!).</span>
+<span class="sd">        scalefun: Callable[[np.ndarray, float], float]</span>
+<span class="sd">            A function that scales the layer stack to the current outer diameter</span>
+<span class="sd">            of the distribution.</span>
+<span class="sd">            If None (default), multiplicative scaling is used to transfor</span>
+<span class="sd">            the layer stack so that the outermost layer diameter matches the</span>
+<span class="sd">            current distribution diameter.</span>
+<span class="sd">        limit: int</span>
+<span class="sd">            An upper bound on the number of subintervals used in the quad</span>
+<span class="sd">            adaptive algorithm. Set to None for default value.</span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Mie scattering phase function for a normal distribution of</span>
+<span class="sd">        hollow spherical particles with a mean outer diameter of 1 um, standard</span>
+<span class="sd">        deviation of 100 nm, a wall thickness that equals 5% of the outer</span>
+<span class="sd">        diameter, wall refractive index of 1.45, for 550 nm monochromatic light</span>
+<span class="sd">        (vacuum) suspended in water (refractive index 1.33). A 7-sigma</span>
+<span class="sd">        diameter range is used for numerical computation.</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from matplotlib import pyplot as pp</span>
+<span class="sd">        &gt;&gt;&gt; from xopto.pf.distribution import Normal</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; dmean = 1e-6    # normal particle distrbution mean</span>
+<span class="sd">        &gt;&gt;&gt; dsigma = 0.1e-6 # normal particle distribution standard deviation</span>
+<span class="sd">        &gt;&gt;&gt; pd = Normal(dmean, dsigma)</span>
+<span class="sd">        &gt;&gt;&gt; cos_theta = np.linspace(-1.0, 1.0, 1000)</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; miemlpd = MieMlPd([1.0, 1.45], 1.33, [0.9e-6, 1.0e-6], 550e-9, pd, pd.range)</span>
+<span class="sd">        &gt;&gt;&gt; pf_values = miemlpd(cos_theta)</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; pp.figure()</span>
+<span class="sd">        &gt;&gt;&gt; pp.semilogy(cos_theta, pf_values)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nlayers</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)):</span>
+            <span class="n">nlayers</span> <span class="o">=</span> <span class="p">(</span><span class="n">nlayers</span><span class="p">,)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)):</span>
+            <span class="n">diameters</span> <span class="o">=</span> <span class="p">(</span><span class="n">diameters</span><span class="p">,)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nlayers</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">diameters</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The number of values/layers in the nlayers and &#39;</span>\
+                             <span class="s1">&#39;diameters arguments must be the same!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">limit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">limit</span> <span class="o">=</span> <span class="mi">50</span>
+
+        <span class="k">if</span> <span class="n">dscalefun</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dscalefun</span> <span class="o">=</span> <span class="n">MieMlPd</span><span class="o">.</span><span class="n">scale</span>
+
+        <span class="n">nmedium</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">nmedium</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="n">nlayers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">nlayers</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="n">diameters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nd</span> <span class="o">=</span> <span class="n">nd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_drange</span> <span class="o">=</span> <span class="n">drange</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pd</span> <span class="o">=</span> <span class="n">pd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wavelength</span> <span class="o">=</span> <span class="n">wavelength</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nmedium</span> <span class="o">=</span> <span class="n">nmedium</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nlayers</span> <span class="o">=</span> <span class="n">nlayers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_diameters</span> <span class="o">=</span> <span class="n">diameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dscalefun</span> <span class="o">=</span> <span class="n">dscalefun</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scs</span> <span class="o">=</span> <span class="n">quad</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">pd</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">*</span><span class="n">MieMl</span><span class="p">(</span>
+                    <span class="n">nlayers</span><span class="p">,</span> <span class="n">nmedium</span><span class="p">,</span> <span class="n">dscalefun</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span>
+                    <span class="n">wavelength</span><span class="p">)</span><span class="o">.</span><span class="n">scs</span><span class="p">(),</span> <span class="n">drange</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">drange</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ecs</span> <span class="o">=</span> <span class="n">quad</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">pd</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">*</span><span class="n">MieMl</span><span class="p">(</span>
+                    <span class="n">nlayers</span><span class="p">,</span> <span class="n">nmedium</span><span class="p">,</span> <span class="n">dscalefun</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span>
+                    <span class="n">wavelength</span><span class="p">)</span><span class="o">.</span><span class="n">ecs</span><span class="p">(),</span> <span class="n">drange</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">drange</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_g1</span> <span class="o">=</span> <span class="n">quad</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">pd</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">*</span><span class="n">MieMlPd</span><span class="o">.</span><span class="n">_g1_scs</span><span class="p">(</span>
+                    <span class="n">nlayers</span><span class="p">,</span> <span class="n">nmedium</span><span class="p">,</span> <span class="n">dscalefun</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="n">wavelength</span><span class="p">),</span>
+                    <span class="n">drange</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">drange</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_scs</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_drange</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Particle diameter range must not be None!&#39;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+                <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_drange</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_drange</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nd</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dd</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pdpts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mieml</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_D</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">G1_mieml</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_D</span><span class="o">.</span><span class="n">size</span><span class="p">,))</span>
+            <span class="n">Scs_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_D</span><span class="o">.</span><span class="n">size</span><span class="p">,))</span>
+            <span class="n">Ecs_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">Scs_p</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mieml</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mieml</span> <span class="o">=</span> <span class="n">MieMl</span><span class="p">(</span><span class="n">nlayers</span><span class="p">,</span> <span class="n">nmedium</span><span class="p">,</span>
+                                               <span class="n">dscalefun</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span>
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">_wavelength</span><span class="p">)</span>
+                <span class="n">G1_mieml</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mieml</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">Scs_p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mieml</span><span class="o">.</span><span class="n">scs</span><span class="p">()</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_pdpts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">Ecs_p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mieml</span><span class="o">.</span><span class="n">ecs</span><span class="p">()</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_pdpts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scs</span> <span class="o">=</span> <span class="n">simps</span><span class="p">(</span><span class="n">Scs_p</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dd</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ecs</span> <span class="o">=</span> <span class="n">simps</span><span class="p">(</span><span class="n">Ecs_p</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dd</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_g1</span> <span class="o">=</span> <span class="n">simps</span><span class="p">(</span><span class="n">G1_mieml</span><span class="o">*</span><span class="n">Scs_p</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dd</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_scs</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_g1_scs</span><span class="p">(</span><span class="n">nlayers</span><span class="p">,</span> <span class="n">nmedium</span><span class="p">:</span> <span class="n">ComplexVector</span><span class="p">,</span> <span class="n">diameters</span><span class="p">:</span> <span class="n">FloatVector</span><span class="p">,</span>
+                <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">mieml</span> <span class="o">=</span> <span class="n">MieMl</span><span class="p">(</span><span class="n">nlayers</span><span class="p">,</span> <span class="n">nmedium</span><span class="p">,</span> <span class="n">diameters</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mieml</span><span class="o">.</span><span class="n">scs</span><span class="p">()</span><span class="o">*</span><span class="n">mieml</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MieMlPd.distribution"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miemlpd.html#xopto.pf.miemlpd.MieMlPd.distribution">[docs]</a>    <span class="k">def</span> <span class="nf">distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the underlaying size distribution object.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd: Callable[[float], float]</span>
+<span class="sd">            A callable size distribution that takes the size</span>
+<span class="sd">            parameter/diameter and returns the corresponding probability</span>
+<span class="sd">            density.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pd</span></div>
+
+<div class="viewcode-block" id="MieMlPd.pd"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miemlpd.html#xopto.pf.miemlpd.MieMlPd.pd">[docs]</a>    <span class="k">def</span> <span class="nf">pd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diameter</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Evaluates the number density function at the specified particle</span>
+<span class="sd">        diameter.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        diameter: float</span>
+<span class="sd">            Particle diameter (m).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd: float</span>
+<span class="sd">            The value of number density function at the specified</span>
+<span class="sd">            particle diameter.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pd</span><span class="p">(</span><span class="n">diameter</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MieMlPd.g"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miemlpd.html#xopto.pf.miemlpd.MieMlPd.g">[docs]</a>    <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overloads the :py:meth:`PfBase.g` method of the base class.</span>
+<span class="sd">        Computes the n-th Legendre moment of the scattering phase function.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        If n is 1, a precalculated g1 is returned.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_g1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MieMlPd.fastg"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miemlpd.html#xopto.pf.miemlpd.MieMlPd.fastg">[docs]</a>    <span class="k">def</span> <span class="nf">fastg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overloads the :py:meth:`PfBase.fastg` method of the base class.</span>
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        If n is 1, a precalculated g1 is returned.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_g1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">fastg</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MieMlPd.scs"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miemlpd.html#xopto.pf.miemlpd.MieMlPd.scs">[docs]</a>    <span class="k">def</span> <span class="nf">scs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the scattering cross section.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scs</span></div>
+
+<div class="viewcode-block" id="MieMlPd.ecs"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miemlpd.html#xopto.pf.miemlpd.MieMlPd.ecs">[docs]</a>    <span class="k">def</span> <span class="nf">ecs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the extinction cross section.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ecs</span></div>
+
+<div class="viewcode-block" id="MieMlPd.acs"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miemlpd.html#xopto.pf.miemlpd.MieMlPd.acs">[docs]</a>    <span class="k">def</span> <span class="nf">acs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the absorption cross section.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ecs</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scs</span></div>
+
+    <span class="k">def</span> <span class="nf">_mieml_pd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Pf</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pdpts</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">pf</span> <span class="o">=</span> <span class="n">simps</span><span class="p">(</span><span class="n">Pf</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_pdpts</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dd</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pf</span>
+
+    <span class="k">def</span> <span class="nf">_mieml_quad_pd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">costheta</span><span class="p">):</span>
+        <span class="c1"># Multiplication with scs is within MieMl.__call__(), the second bool</span>
+        <span class="c1">#   parameter forces multiplication.</span>
+        <span class="n">pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">quad</span><span class="p">(</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pd</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">*</span><span class="n">MieMl</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_nlayers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nmedium</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dscalefun</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_diameters</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_wavelength</span><span class="p">)(</span><span class="n">cost</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_drange</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_drange</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">cost</span> <span class="ow">in</span> <span class="n">costheta</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">pf</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">costheta</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Call method of the scattering phase function.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        costheta: float or np.ndarray</span>
+<span class="sd">            Scattering angle cosines at which the scattering phase function is evaluated.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pf: float or np.ndarray</span>
+<span class="sd">            The Scattering phase function at the specified scattering</span>
+<span class="sd">            angle cosines.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">costheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">costheta</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ndmin</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mieml_quad_pd</span><span class="p">(</span><span class="n">costheta</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_scs</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">costheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">costheta</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_D</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">costheta</span><span class="o">.</span><span class="n">size</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+                <span class="n">mie_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mieml</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">Pf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mie_i</span><span class="p">(</span><span class="n">costheta</span><span class="p">)</span><span class="o">*</span><span class="n">mie_i</span><span class="o">.</span><span class="n">scs</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mieml_pd</span><span class="p">(</span><span class="n">Pf</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_scs</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;PdMie(nlayers=</span><span class="si">{}</span><span class="s1">, nmedium=</span><span class="si">{}</span><span class="s1">, diameters=</span><span class="si">{}</span><span class="s1">, wavelength=</span><span class="si">{}</span><span class="s1">, &#39;</span>\
+               <span class="s1">&#39;pd=</span><span class="si">{}</span><span class="s1">, drange=</span><span class="si">{}</span><span class="s1">, nd=</span><span class="si">{}</span><span class="s1">, dscalefun=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_nlayers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nmedium</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diameters</span><span class="p">,</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_wavelength</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_drange</span><span class="p">,</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_nd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dscalefun</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

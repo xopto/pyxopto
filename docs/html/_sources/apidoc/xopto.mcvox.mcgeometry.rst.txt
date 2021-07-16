@@ -1,0 +1,18 @@
+xopto.mcvox.mcgeometry package
+==============================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcvox.mcgeometry.voxel
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcvox.mcgeometry
+   :members:
+   :undoc-members:
+   :show-inheritance:

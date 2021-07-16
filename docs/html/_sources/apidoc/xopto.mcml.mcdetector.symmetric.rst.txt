@@ -1,0 +1,7 @@
+xopto.mcml.mcdetector.symmetric module
+======================================
+
+.. automodule:: xopto.mcml.mcdetector.symmetric
+   :members:
+   :undoc-members:
+   :show-inheritance:

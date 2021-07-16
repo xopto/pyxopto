@@ -1,0 +1,7 @@
+xopto.mcvox.mcdetector.probe.lineararray module
+===============================================
+
+.. automodule:: xopto.mcvox.mcdetector.probe.lineararray
+   :members:
+   :undoc-members:
+   :show-inheritance:

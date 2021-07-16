@@ -1,0 +1,564 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.cl.clinfo &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.cl.clinfo</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This module provides functions for working with OpenCL resources.</span>
+
+<span class="sd">- :py:func:`info` - lists the available OpenCL platforms and devices</span>
+<span class="sd">- :py:func:`all_devices` - lists all the available OpenCL devices</span>
+<span class="sd">- :py:func:`gpus` - lists the available OpenCL GPU devices</span>
+<span class="sd">- :py:func:`cpus` - lists the available OpenCL CPU devices</span>
+<span class="sd">- :py:func:`device_info` - returns a dictionary with information on the specified device</span>
+<span class="sd">- :py:func:`device` - find a device that matches the given search criteria</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">pyopencl</span> <span class="k">as</span> <span class="nn">cl</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+
+<div class="viewcode-block" id="info"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.info">[docs]</a><span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">devices</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns a string descriptor of all installed OpenCl devices.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    show: bool</span>
+<span class="sd">        If set to True, the information is displayed on screen.</span>
+<span class="sd">    devices: list[cl.Device]</span>
+<span class="sd">        List of OpenCL devices or None. If None (default), all OpenCL</span>
+<span class="sd">        devices are listed.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    descriptor: str</span>
+<span class="sd">        If parameter show is False, a string descriptor is returned,</span>
+<span class="sd">        otherwise the information is displayed on screen.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Dispalys information of all available OpenCL devices.</span>
+
+<span class="sd">    &gt;&gt;&gt; import clinfo</span>
+<span class="sd">    &gt;&gt;&gt; clinfo.info()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">info_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">platform</span> <span class="ow">in</span> <span class="n">cl</span><span class="o">.</span><span class="n">get_platforms</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">platform</span><span class="o">.</span><span class="n">get_devices</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">devices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">device</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">===========================&#39;</span> \
+                <span class="s1">&#39;====================================</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;Platform name: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">platform</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;Platform profile: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">platform</span><span class="o">.</span><span class="n">profile</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;Platform vendor: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">platform</span><span class="o">.</span><span class="n">vendor</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;Platform version: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">platform</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;----------------------------&#39;</span> \
+                <span class="s1">&#39;-----------------------------------</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device name: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device type: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">cl</span><span class="o">.</span><span class="n">device_type</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device available: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="p">{</span><span class="kc">False</span><span class="p">:</span><span class="s1">&#39;No&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">:</span><span class="s1">&#39;Yes&#39;</span><span class="p">}[</span><span class="nb">bool</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">available</span><span class="p">)])</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device maximum clock frequency: </span><span class="si">{}</span><span class="s1"> MHz</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">device</span><span class="o">.</span><span class="n">max_clock_frequency</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device default address space: </span><span class="si">{}</span><span class="s1"> bit</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">device</span><span class="o">.</span><span class="n">address_bits</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device maximum number of constant kernel &#39;</span>\
+                <span class="s1">&#39;arguments: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">max_constant_args</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device maximum kernel argument size: &#39;</span>\
+                <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> B</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">max_parameter_size</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device global memory: </span><span class="si">{}</span><span class="s1"> MB</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">device</span><span class="o">.</span><span class="n">global_mem_size</span><span class="o">//</span><span class="mi">1024</span><span class="o">//</span><span class="mi">1024</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device global memory cache: </span><span class="si">{}</span><span class="s1"> kB</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">device</span><span class="o">.</span><span class="n">global_mem_cache_size</span><span class="o">//</span><span class="mi">1024</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device maximum global memory allocation size: &#39;</span>\
+                <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> MB</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">max_mem_alloc_size</span><span class="o">//</span><span class="mi">1024</span><span class="o">//</span><span class="mi">1024</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device local memory: </span><span class="si">{}</span><span class="s1"> kB</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">device</span><span class="o">.</span><span class="n">local_mem_size</span><span class="o">//</span><span class="mi">1024</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device constant memory: </span><span class="si">{}</span><span class="s1"> kB</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">device</span><span class="o">.</span><span class="n">max_constant_buffer_size</span><span class="o">/</span><span class="mi">1024</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device max clock speed: </span><span class="si">{}</span><span class="s1"> MHz</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">device</span><span class="o">.</span><span class="n">max_clock_frequency</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device compute units: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">device</span><span class="o">.</span><span class="n">max_compute_units</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device maximum work group size: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">device</span><span class="o">.</span><span class="n">max_work_group_size</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Maximum number of work-item dimensions &#39;</span>\
+                <span class="s1">&#39;(global or local): </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">device</span><span class="o">.</span><span class="n">max_work_item_dimensions</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Maximum number of work-items in each dimension &#39;</span>\
+                <span class="s1">&#39;of the work group: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">device</span><span class="o">.</span><span class="n">max_work_item_sizes</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Maximum number of image-objects that can be &#39;</span>\
+                <span class="s1">&#39;passed to a kernel: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">device</span><span class="o">.</span><span class="n">max_write_image_args</span><span class="p">)</span>
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device profiling timer resolution: </span><span class="si">{}</span><span class="s1"> ns</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">device</span><span class="o">.</span><span class="n">profiling_timer_resolution</span><span class="p">)</span>
+
+            <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Device supported OpenCL extensions:</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">extensions</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">extension</span> <span class="ow">in</span> <span class="n">extensions</span><span class="p">:</span>
+                <span class="n">info_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1"> </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extension</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">info_str</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">info_str</span></div>
+
+<span class="k">def</span> <span class="nf">_find_device</span><span class="p">(</span><span class="n">device_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">platform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="n">devices</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">device_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;gpu&#39;</span><span class="p">,</span> <span class="s1">&#39;cpu&#39;</span><span class="p">,</span> <span class="s1">&#39;accelerator&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">):</span>
+        <span class="n">device_type</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;gpu&#39;</span><span class="p">:</span><span class="n">cl</span><span class="o">.</span><span class="n">device_type</span><span class="o">.</span><span class="n">GPU</span><span class="p">,</span> <span class="s1">&#39;cpu&#39;</span><span class="p">:</span><span class="n">cl</span><span class="o">.</span><span class="n">device_type</span><span class="o">.</span><span class="n">CPU</span><span class="p">,</span>
+                       <span class="s1">&#39;accelerator&#39;</span><span class="p">:</span><span class="n">cl</span><span class="o">.</span><span class="n">device_type</span><span class="o">.</span><span class="n">ACCELERATOR</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                           <span class="n">device_type</span><span class="p">,</span> <span class="n">cl</span><span class="o">.</span><span class="n">device_type</span><span class="o">.</span><span class="n">DEFAULT</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">platform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">platform</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">platform</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">platform_item</span> <span class="ow">in</span> <span class="n">cl</span><span class="o">.</span><span class="n">get_platforms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">platform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">platform</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">platform_item</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="k">continue</span>
+        <span class="k">for</span> <span class="n">device_item</span> <span class="ow">in</span> <span class="n">platform_item</span><span class="o">.</span><span class="n">get_devices</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">device</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">device_item</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">device_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">device_item</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="n">device_type</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">devices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">device_item</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">devices</span>
+
+<div class="viewcode-block" id="all_devices"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.all_devices">[docs]</a><span class="k">def</span> <span class="nf">all_devices</span><span class="p">(</span><span class="n">platform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">cl</span><span class="o">.</span><span class="n">Device</span><span class="p">]:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns a list of all available OpenCl devices (a list of cl.Device).</span>
+<span class="sd">    Devices can be filtered by the platform and device name. The matching of</span>
+<span class="sd">    names is case insensitive.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    platform: str</span>
+<span class="sd">        If not None, the platform name of the returned devices must include</span>
+<span class="sd">        this string (matching is case insensitive).</span>
+<span class="sd">    device: str</span>
+<span class="sd">        If not None, the device name of the returned devices must include</span>
+<span class="sd">        this string (matching is case insensitive).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    devices: List[cl.Device]</span>
+<span class="sd">        List of found OpenCL devices.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">_find_device</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="gpus"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.gpus">[docs]</a><span class="k">def</span> <span class="nf">gpus</span><span class="p">(</span><span class="n">platform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">cl</span><span class="o">.</span><span class="n">Device</span><span class="p">]:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns a list of all available OpenCl GPU devices</span>
+<span class="sd">    (a list of cl.Device). Devices can be filtered by the platform and</span>
+<span class="sd">    device name. The matching of names is case insensitive.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    platform: str</span>
+<span class="sd">        If not None, the platform name of the returned devices must include</span>
+<span class="sd">        this string (matching is case insensitive).</span>
+<span class="sd">    device: str</span>
+<span class="sd">        If not None, the device name of the returned devices must include</span>
+<span class="sd">        this string (matching is case insensitive).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    devices: List[cl.Device]</span>
+<span class="sd">        List of found OpenCL GPU devices.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">_find_device</span><span class="p">(</span><span class="n">cl</span><span class="o">.</span><span class="n">device_type</span><span class="o">.</span><span class="n">GPU</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="gpu"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.gpu">[docs]</a><span class="k">def</span> <span class="nf">gpu</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cl</span><span class="o">.</span><span class="n">Device</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns an available OpenCl GPU device at the specified index.</span>
+<span class="sd">    Devices can be filtered by the platform and</span>
+<span class="sd">    device name. The matching of names is case insensitive.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    platform: str</span>
+<span class="sd">        If not None, the platform name of the returned devices must include</span>
+<span class="sd">        this string (matching is case insensitive).</span>
+<span class="sd">    device: str</span>
+<span class="sd">        If not None, the device name of the returned devices must include</span>
+<span class="sd">        this string (matching is case insensitive).</span>
+<span class="sd">    index: int</span>
+<span class="sd">        Sets the number of matching OpenCL devices that will be skipped during</span>
+<span class="sd">        the search. Useful for hosts with multiple equal OpenCL devices.</span>
+<span class="sd">        Default value is 0 (return the first matching OpenCL device).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    device: cl.Device</span>
+<span class="sd">        The first founfd OpenCL GPU device.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">_find_device</span><span class="p">(</span><span class="n">cl</span><span class="o">.</span><span class="n">device_type</span><span class="o">.</span><span class="n">GPU</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="n">device</span><span class="p">)[</span><span class="n">index</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="cpus"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.cpus">[docs]</a><span class="k">def</span> <span class="nf">cpus</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">cl</span><span class="o">.</span><span class="n">Device</span><span class="p">]:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns a list of all available OpenCL CPU devices</span>
+<span class="sd">    (a list of pyopencl.Device). Devices can be filtered by the platform and</span>
+<span class="sd">    device name. The matching of names is case insensitive.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    platform: str</span>
+<span class="sd">        If not None, the platform name of the returned devices must include</span>
+<span class="sd">        this string (matching is case insensitive).</span>
+<span class="sd">    device: str</span>
+<span class="sd">        If not None, the device name of the returned devices must include</span>
+<span class="sd">        this string (matching is case insensitive).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    devices: List[cl.Device]</span>
+<span class="sd">        List of found OpenCL CPU devices.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">_find_device</span><span class="p">(</span><span class="n">cl</span><span class="o">.</span><span class="n">device_type</span><span class="o">.</span><span class="n">CPU</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cpu"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.cpu">[docs]</a><span class="k">def</span> <span class="nf">cpu</span><span class="p">(</span><span class="n">platform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cl</span><span class="o">.</span><span class="n">Device</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns an available OpenCL CPU device at the specified index.</span>
+<span class="sd">    Devices can be filtered by the platform and</span>
+<span class="sd">    device name. The matching of names is case insensitive.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    platform: str</span>
+<span class="sd">        If not None, the platform name of the returned devices must include</span>
+<span class="sd">        this string (matching is case insensitive).</span>
+<span class="sd">    device: str</span>
+<span class="sd">        If not None, the device name of the returned devices must include</span>
+<span class="sd">        this string (matching is case insensitive).</span>
+<span class="sd">    index: int</span>
+<span class="sd">        Sets the number of matching OpenCL devices that will be skipped during</span>
+<span class="sd">        the search. Useful for hosts with multiple equal OpenCL devices.</span>
+<span class="sd">        Default value is 0 (return the first matching OpenCL device).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    device: cp.Device</span>
+<span class="sd">        The first founfd OpenCL CPU device.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">_find_device</span><span class="p">(</span><span class="n">cl</span><span class="o">.</span><span class="n">device_type</span><span class="o">.</span><span class="n">CPU</span><span class="p">,</span> <span class="n">platform</span><span class="p">,</span> <span class="n">device</span><span class="p">)[</span><span class="n">index</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="device_info"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.device_info">[docs]</a><span class="k">def</span> <span class="nf">device_info</span><span class="p">(</span><span class="n">device</span><span class="p">:</span> <span class="n">cl</span><span class="o">.</span><span class="n">Device</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns a dict with information on the given OpenCL device. the returned</span>
+<span class="sd">    dict will have the following fields:</span>
+
+<span class="sd">    * name: str</span>
+<span class="sd">    * vendor: str</span>
+<span class="sd">    * available: bool</span>
+<span class="sd">    * extensions: List[str],</span>
+<span class="sd">    * addressSpace: int,</span>
+<span class="sd">    * platform: str,</span>
+<span class="sd">    * maxConstKernelArgs: int,</span>
+<span class="sd">    * maxKernelArgSize: int,</span>
+<span class="sd">    * type: str,</span>
+<span class="sd">    * globalMemory: int,</span>
+<span class="sd">    * globalMemoryCacheSize: int,</span>
+<span class="sd">    * maxAllocationSize: int,</span>
+<span class="sd">    * localMemory: int,</span>
+<span class="sd">    * constantMemory: int,</span>
+<span class="sd">    * maxClkFrequency: int,</span>
+<span class="sd">    * computeUnits: int,</span>
+<span class="sd">    * maxWorkGroupSize: int</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    device: cl.Device</span>
+<span class="sd">        An OpenCL device. Use the all_devices, gpus or cpus functions to get</span>
+<span class="sd">        a list of all available OpenCl or just GPU or CPU devices, respectively.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    info: dict</span>
+<span class="sd">        A dictionary with device information.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="s1">&#39;vendor&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">vendor</span><span class="p">,</span>
+        <span class="s1">&#39;available&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">available</span><span class="p">,</span>
+        <span class="s1">&#39;extensions&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">),</span>
+        <span class="s1">&#39;addressSpace&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">address_bits</span><span class="p">,</span>
+        <span class="s1">&#39;platform&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">platform</span><span class="p">,</span>
+        <span class="s1">&#39;maxConstKernelArgs&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">max_constant_args</span><span class="p">,</span>
+        <span class="s1">&#39;maxKernelArgSize&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">max_parameter_size</span><span class="p">,</span>
+        <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="n">cl</span><span class="o">.</span><span class="n">device_type</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">type</span><span class="p">),</span>
+        <span class="s1">&#39;globalMemory&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">global_mem_size</span><span class="p">,</span>
+        <span class="s1">&#39;globalMemoryCacheSize&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">global_mem_cache_size</span><span class="p">,</span>
+        <span class="s1">&#39;maxAllocationSize&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">max_mem_alloc_size</span><span class="p">,</span>
+        <span class="s1">&#39;localMemory&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">local_mem_size</span><span class="p">,</span>
+        <span class="s1">&#39;constantMemory&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">max_constant_buffer_size</span><span class="p">,</span>
+        <span class="s1">&#39;maxClkFrequency&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">max_clock_frequency</span><span class="p">,</span>
+        <span class="s1">&#39;computeUnits&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">max_compute_units</span><span class="p">,</span>
+        <span class="s1">&#39;maxWorkGroupSize&#39;</span><span class="p">:</span><span class="n">device</span><span class="o">.</span><span class="n">max_work_group_size</span>
+    <span class="p">}</span></div>
+
+<div class="viewcode-block" id="device"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.device">[docs]</a><span class="k">def</span> <span class="nf">device</span><span class="p">(</span><span class="n">what</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="ow">or</span> <span class="n">cl</span><span class="o">.</span><span class="n">Device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> \
+        <span class="o">-&gt;</span> <span class="n">cl</span><span class="o">.</span><span class="n">Device</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Finds an OpenCl device according to the given keyword(s).</span>
+<span class="sd">    The keywords are compared to the OpenCL device name, device vendor name and</span>
+<span class="sd">    device platform name of each available OpenCL device.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    device: str or list[str] or cl.Device</span>
+<span class="sd">        A keyword or a list of keywords that are compared to the OpenCL</span>
+<span class="sd">        device name, device vendor name and device platform name</span>
+<span class="sd">        (comparison is case insensitive).</span>
+<span class="sd">        The first OpenCL device that contains the keyword is returned if</span>
+<span class="sd">        the index argument is set to 0.</span>
+<span class="sd">        If this parameter is an instance of :class:`pyopencl.Device`,</span>
+<span class="sd">        the instance is immediately returned without any further action.</span>
+<span class="sd">    index: int</span>
+<span class="sd">        Sets the number of matching OpenCL devices that will be skipped during</span>
+<span class="sd">        the search. Useful for hosts with multiple equal OpenCL devices.</span>
+<span class="sd">        Default value is 0 (return the first matching OpenCL device).</span>
+<span class="sd">    what: str or a list/tuple of str</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dev: cl.Device</span>
+<span class="sd">        An OpenCl device if one that matches the keywords is found.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Searches through all available OpenCL devices for the &quot;amd&quot; keyword. If</span>
+<span class="sd">    none is found, the next keyword &quot;nvidia&quot; is used, and finally the &quot;cpu&quot;</span>
+<span class="sd">    keyword is used if the first two keywords are not found in any of the</span>
+<span class="sd">    available OpenCL device name, vendor name or platform name.</span>
+
+<span class="sd">    &gt;&gt;&gt; import clinfo</span>
+<span class="sd">    &gt;&gt;&gt; dev = clinfo.device([&quot;amd&quot;, &quot;nvidia&quot;, &quot;cpu&quot;])</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">what</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">what</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">what</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">what</span> <span class="o">=</span> <span class="p">[</span><span class="n">what</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">what</span><span class="p">,</span> <span class="n">cl</span><span class="o">.</span><span class="n">Device</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">what</span>
+
+    <span class="n">clgpus</span> <span class="o">=</span> <span class="n">gpus</span><span class="p">()</span>
+    <span class="n">clcpus</span> <span class="o">=</span> <span class="n">cpus</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">what</span><span class="p">:</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">gpu</span> <span class="ow">in</span> <span class="n">clgpus</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">gpu</span><span class="o">.</span><span class="n">vendor</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> \
+                    <span class="nb">str</span><span class="p">(</span><span class="n">gpu</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> \
+                    <span class="nb">str</span><span class="p">(</span><span class="n">gpu</span><span class="o">.</span><span class="n">platform</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">gpu</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">index</span> <span class="o">-=</span> <span class="mi">1</span>
+
+        <span class="k">for</span> <span class="n">cpu</span> <span class="ow">in</span> <span class="n">clcpus</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">cpu</span><span class="o">.</span><span class="n">vendor</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> \
+                    <span class="nb">str</span><span class="p">(</span><span class="n">cpu</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> \
+                    <span class="nb">str</span><span class="p">(</span><span class="n">cpu</span><span class="o">.</span><span class="n">platform</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">cpu</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">index</span> <span class="o">-=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="device_extension"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clinfo.html#xopto.cl.clinfo.device_extension">[docs]</a><span class="k">def</span> <span class="nf">device_extension</span><span class="p">(</span><span class="n">device</span><span class="p">:</span> <span class="n">cl</span><span class="o">.</span><span class="n">Device</span><span class="p">,</span> <span class="n">extension</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="nb">list</span> <span class="ow">or</span> <span class="nb">tuple</span><span class="p">)</span> \
+        <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="ow">or</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Checks if the OpenCL device supports the given extension. See</span>
+<span class="sd">    https://www.khronos.org/registry/OpenCL/sdk/1.2/docs/man/xhtml/EXTENSION.html</span>
+<span class="sd">    for a list of extensions supported by the OpenCl 1.2 language version.</span>
+<span class="sd">    Some frequently used extensions:</span>
+
+<span class="sd">        - cl_khr_fp64</span>
+<span class="sd">            Double precision floating point.</span>
+
+<span class="sd">        - cl_khr_fp16</span>
+<span class="sd">            Half precision floating point.</span>
+
+<span class="sd">        - cl_khr_int64_base_atomics</span>
+<span class="sd">            64-bit integer atomic operations.</span>
+
+<span class="sd">        - cl_khr_int64_extended_atomics</span>
+<span class="sd">            64-bit integer extended atomic operations that include &quot;min&quot;, &quot;max&quot;</span>
+<span class="sd">            &quot;and&quot;, &quot;or&quot; and &quot;xor&quot; operations.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    device: cl.Device</span>
+<span class="sd">        OpenCl device instance.</span>
+<span class="sd">    extension: str or list/tuple of str</span>
+<span class="sd">        OpenCL extensions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    available: bool or list of bool</span>
+<span class="sd">        True, if the extension is supported by the device, else False.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">extension</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">extension</span> <span class="ow">in</span> <span class="n">device</span><span class="o">.</span><span class="n">extensions</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">item</span> <span class="ow">in</span> <span class="n">device</span><span class="o">.</span><span class="n">extensions</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">extension</span><span class="p">]</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">argparse</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="s1">&#39;Find and list capabilities of OpenCL devices&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-g&#39;</span><span class="p">,</span> <span class="s1">&#39;--gpus&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Search for GPUs only.&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;--cpus&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Search for CPUs only.&#39;</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">gpus</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">info</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">devices</span><span class="o">=</span><span class="n">gpus</span><span class="p">()))</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">cpus</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">info</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">devices</span><span class="o">=</span><span class="n">cpus</span><span class="p">()))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">info</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

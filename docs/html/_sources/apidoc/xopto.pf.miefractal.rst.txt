@@ -1,0 +1,7 @@
+xopto.pf.miefractal module
+==========================
+
+.. automodule:: xopto.pf.miefractal
+   :members:
+   :undoc-members:
+   :show-inheritance:

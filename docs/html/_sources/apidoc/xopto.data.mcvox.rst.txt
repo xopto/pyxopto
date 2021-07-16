@@ -1,0 +1,10 @@
+xopto.data.mcvox package
+========================
+
+Module contents
+---------------
+
+.. automodule:: xopto.data.mcvox
+   :members:
+   :undoc-members:
+   :show-inheritance:

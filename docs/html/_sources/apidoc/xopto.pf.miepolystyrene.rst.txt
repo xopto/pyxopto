@@ -1,0 +1,7 @@
+xopto.pf.miepolystyrene module
+==============================
+
+.. automodule:: xopto.pf.miepolystyrene
+   :members:
+   :undoc-members:
+   :show-inheritance:

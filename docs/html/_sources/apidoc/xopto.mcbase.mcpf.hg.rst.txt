@@ -1,0 +1,7 @@
+xopto.mcbase.mcpf.hg module
+===========================
+
+.. automodule:: xopto.mcbase.mcpf.hg
+   :members:
+   :undoc-members:
+   :show-inheritance:

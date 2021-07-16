@@ -1,0 +1,922 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.cl.clrng &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.cl.clrng</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numba</span> <span class="k">as</span> <span class="nn">nb</span>
+
+<span class="kn">from</span> <span class="nn">xopto</span> <span class="kn">import</span> <span class="n">PRIMES_PATH</span><span class="p">,</span> <span class="n">USER_PRIMES_PATH</span><span class="p">,</span> <span class="n">USER_BIN_PATH</span><span class="p">,</span> <span class="n">VERBOSE</span>
+
+
+<div class="viewcode-block" id="generate_primes"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clrng.html#xopto.cl.clrng.generate_primes">[docs]</a><span class="k">def</span> <span class="nf">generate_primes</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generates n safe primes used by the random number generator.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n: int</span>
+<span class="sd">        Number of safe primes to generate.</span>
+<span class="sd">    out: np.ndarray of type np.uint64</span>
+<span class="sd">        Optional output array for safe primes that must be of type</span>
+<span class="sd">        np.uint64 and shape (3, n).</span>
+<span class="sd">    verbose: bool</span>
+<span class="sd">        Verbose mode.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out: np.ndarray of type np.uint64</span>
+<span class="sd">        Output array with the safe random numbers.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    Generating a typical batch of 150,000 primes takes about 5 min. This</span>
+<span class="sd">    function requires gmpy2 module.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="kn">import</span> <span class="nn">gmpy2</span>
+
+    <span class="k">def</span> <span class="nf">is_prime</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">41</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">is_prime</span><span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">mpz</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="n">n</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;The output array must be of type np.uint64!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">out</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Output array must be of type np.uint64!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The shape of the output array must be (3, n)!&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span>
+
+    <span class="n">tstart</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Searcing for </span><span class="si">{:d}</span><span class="s1"> primes&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="n">tstart</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">mpz</span><span class="p">(</span><span class="s2">&quot;4294967118&quot;</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+        <span class="n">n2</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">mpz</span><span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">mul_2exp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+        <span class="n">n2</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">mpz</span><span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">n2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">is_prime</span><span class="p">(</span><span class="n">n2</span><span class="p">):</span>
+            <span class="n">n1</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">mpz</span><span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">n2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">n1</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">mpz</span><span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">f_div_2exp</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">is_prime</span><span class="p">(</span><span class="n">n1</span><span class="p">):</span>
+                <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">n2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">n1</span><span class="p">))</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">Found </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1"> primes ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="n">a</span> <span class="o">=</span> <span class="n">gmpy2</span><span class="o">.</span><span class="n">mpz</span><span class="p">(</span><span class="n">gmpy2</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Done in </span><span class="si">{:.3f}</span><span class="s1"> s</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">tstart</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="generate_primes_fast"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clrng.html#xopto.cl.clrng.generate_primes_fast">[docs]</a><span class="k">def</span> <span class="nf">generate_primes_fast</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">cdll</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Linux&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span> <span class="o">&gt;</span> <span class="mh">0xFFFFFFFF</span><span class="p">:</span>
+                <span class="c1"># print(&#39;64-bit os&#39;)</span>
+                <span class="n">dllFullName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">USER_BIN_PATH</span><span class="p">,</span> <span class="s2">&quot;rng64.so&quot;</span><span class="p">)</span>
+                <span class="n">cdll</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">dllFullName</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># print(&#39;32-bit os&#39;)</span>
+                <span class="n">dllFullName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">USER_BIN_PATH</span><span class="p">,</span> <span class="s2">&quot;rng32.so&quot;</span><span class="p">)</span>
+                <span class="n">cdll</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">dllFullName</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Windows&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span> <span class="o">&gt;</span> <span class="mh">0xFFFFFFFF</span><span class="p">:</span>
+                <span class="c1"># print(&#39;64-bit os&#39;)</span>
+                <span class="n">dllFullName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">USER_BIN_PATH</span><span class="p">,</span> <span class="s2">&quot;rng64.dll&quot;</span><span class="p">)</span>
+                <span class="n">cdll</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">dllFullName</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># print(&#39;32-bit os&#39;)</span>
+                <span class="n">dllFullName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">USER_BIN_PATH</span><span class="p">,</span> <span class="s2">&quot;rng32.dll&quot;</span><span class="p">)</span>
+                <span class="n">cdll</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">dllFullName</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s1">&#39;Your operating system is not supported &#39;</span>
+                <span class="s1">&#39;at the moment. </span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s1">&#39;Program is tested only on Windows and Linux&#39;</span>
+                <span class="s1">&#39;operating systems. </span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s1">&#39;You must configure rng.dll or rng.so manually &#39;</span>
+                <span class="s1">&#39;for your system. You can find the random numbe &#39;</span>
+                <span class="s1">&#39;generator code in xopto/src/rng/rng/rng.cpp.&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">VERBOSE</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Found no compatible build of the random number library.&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using pure Python implementation of the random number generator.&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Run xopto.rebuild() to build the library.&#39;</span><span class="p">)</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">a</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">=</span> <span class="n">find_primes</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">cdll</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># int generate_primes(</span>
+        <span class="c1">#   unsigned int n, uint32_t *vec_a, uint64_t vec_n2, uint64_t vec_n3);</span>
+        <span class="n">find_primes</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">find_primes</span> <span class="o">=</span> <span class="n">cdll</span><span class="o">.</span><span class="n">find_primes</span>
+            <span class="n">find_primes</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">find_primes</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="nb">int</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">if</span> <span class="n">find_primes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+            <span class="n">n1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span>
+            <span class="n">n2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">find_primes</span><span class="p">(</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+                <span class="n">a</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">)),</span>
+                <span class="n">n1</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">)),</span>
+                <span class="n">n2</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">[:</span><span class="n">n</span><span class="p">],</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n2</span><span class="p">[:</span><span class="n">n</span><span class="p">],</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n1</span><span class="p">[:</span><span class="n">n</span><span class="p">],</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="p">])</span>
+    <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">generate_primes</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+<span class="nd">@nb</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span> <span class="nf">_rng_init</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">,</span> <span class="n">fora</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">,</span> <span class="n">n_rng</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">xinit</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">begin</span> <span class="o">=</span> <span class="n">fora</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">ui32_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ui32_0xFFFFFFFF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0xFFFFFFFF</span><span class="p">)</span>
+    <span class="n">ui64_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ui64_32</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+    <span class="n">ui64_0xFFFFFFFF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0xFFFFFFFF</span><span class="p">)</span>
+    <span class="n">ui64_0x100000000</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x100000000</span><span class="p">)</span>
+    <span class="n">double_0x100000000</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">ui64_0x100000000</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">xinit</span> <span class="o">==</span> <span class="n">ui64_0</span> <span class="ow">or</span> \
+            <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">xinit</span> <span class="o">&gt;&gt;</span> <span class="n">ui64_32</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">begin</span> <span class="o">-</span> <span class="n">ui32_1</span> <span class="ow">or</span> \
+            <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">xinit</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">ui64_0xFFFFFFFF</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rng</span><span class="p">):</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fora</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ui64_0</span>
+
+        <span class="k">while</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">ui64_0</span> <span class="ow">or</span> \
+                <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="n">ui64_32</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">fora</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ui32_1</span> <span class="ow">or</span> \
+                <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="n">ui32_0xFFFFFFFF</span><span class="p">:</span>
+
+            <span class="c1"># generate a random number</span>
+            <span class="n">xinit</span> <span class="o">=</span> <span class="p">(</span><span class="n">xinit</span> <span class="o">&amp;</span> <span class="n">ui64_0xFFFFFFFF</span><span class="p">)</span><span class="o">*</span><span class="n">begin</span> <span class="o">+</span> <span class="p">(</span><span class="n">xinit</span> <span class="o">&gt;&gt;</span> <span class="n">ui64_32</span><span class="p">)</span>
+
+            <span class="c1"># Calculate c and store in the upper 32 bits of x[i].</span>
+            <span class="c1"># Make sure 0&lt;=c&lt;a.</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span>
+                <span class="c1"># np.floor(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">xinit</span><span class="p">))</span><span class="o">/</span>
+                    <span class="n">double_0x100000000</span><span class="o">*</span><span class="n">fora</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="c1"># )</span>
+            <span class="p">)</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">ui64_32</span>
+
+            <span class="c1"># Generate a random number and store in the lower 32 bits of x[i]</span>
+            <span class="c1"># (as the initial x of the generator)</span>
+            <span class="c1"># x will be 0&lt;=x&lt;b, where b is the base 2^32</span>
+            <span class="n">xinit</span> <span class="o">=</span> <span class="p">(</span><span class="n">xinit</span> <span class="o">&amp;</span> <span class="n">ui64_0xFFFFFFFF</span><span class="p">)</span><span class="o">*</span><span class="n">begin</span> <span class="o">+</span> <span class="p">(</span><span class="n">xinit</span> <span class="o">&gt;&gt;</span> <span class="n">ui64_32</span><span class="p">)</span>
+
+            <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">xinit</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">_rand_cc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="n">ui64_0xFFFFFFFF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0xFFFFFFFF</span><span class="p">)</span>
+    <span class="n">ui64_32</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+    <span class="n">ui32_0x7FFFFF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x7FFFFF</span><span class="p">)</span>
+    <span class="n">single_0x7FFFFF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">single</span><span class="p">(</span><span class="mh">0x7FFFFF</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">ui64_0xFFFFFFFF</span><span class="p">)</span><span class="o">*</span><span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">ui64_32</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">single</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ui32_0x7FFFFF</span><span class="p">)</span>
+            <span class="p">)</span><span class="o">/</span><span class="n">single_0x7FFFFF</span>
+            
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span>
+
+<span class="k">def</span> <span class="nf">_rand_co</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="n">ui64_0xFFFFFFFF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0xFFFFFFFF</span><span class="p">)</span>
+    <span class="n">ui64_32</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+    <span class="n">ui32_0x7FFFFF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x7FFFFF</span><span class="p">)</span>
+    <span class="n">single_0x800000</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">single</span><span class="p">(</span><span class="mh">0x800000</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">ui64_0xFFFFFFFF</span><span class="p">)</span><span class="o">*</span><span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">ui64_32</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">single</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ui32_0x7FFFFF</span><span class="p">)</span>
+            <span class="p">)</span><span class="o">/</span><span class="n">single_0x800000</span>
+            
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span>
+
+
+<span class="k">def</span> <span class="nf">_rand_oc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="n">ui64_0xFFFFFFFF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0xFFFFFFFF</span><span class="p">)</span>
+    <span class="n">ui64_32</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+    <span class="n">ui32_0x7FFFFF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x7FFFFF</span><span class="p">)</span>
+    <span class="n">single_0x7FFFFF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">single</span><span class="p">(</span><span class="mh">0x7FFFFF</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">ui64_0xFFFFFFFF</span><span class="p">)</span><span class="o">*</span><span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">ui64_32</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">single</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ui32_0x7FFFFF</span><span class="p">)</span>
+            <span class="p">)</span><span class="o">/</span><span class="n">single_0x7FFFFF</span>
+            
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span>
+
+<span class="k">def</span> <span class="nf">_rand_oo</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="n">ui64_0xFFFFFFFF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0xFFFFFFFF</span><span class="p">)</span>
+    <span class="n">ui64_32</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+    <span class="n">ui32_0x7FFFFF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x7FFFFF</span><span class="p">)</span>
+    <span class="n">single_0x800000</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">single</span><span class="p">(</span><span class="mh">0x800000</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">ui64_0xFFFFFFFF</span><span class="p">)</span><span class="o">*</span><span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">ui64_32</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">single</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">ui32_0x7FFFFF</span><span class="p">)</span>
+            <span class="p">)</span><span class="o">/</span><span class="n">single_0x800000</span>
+            
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span>
+
+
+<div class="viewcode-block" id="Random"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clrng.html#xopto.cl.clrng.Random">[docs]</a><span class="k">class</span> <span class="nc">Random</span><span class="p">:</span>
+    <span class="n">PRIMES_FILE</span> <span class="o">=</span> <span class="s1">&#39;safeprimes_base32_500k.npz&#39;</span>
+    <span class="sd">&#39;&#39;&#39; Default npz file with primes. &#39;&#39;&#39;</span>
+
+    <span class="n">NPRIMES</span> <span class="o">=</span> <span class="mi">500000</span>
+    <span class="sd">&#39;&#39;&#39; Default number of primes to generate. &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">primes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">forcepy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create an instance of a random number generator.</span>
+
+<span class="sd">        Class depends on external rng64.dll (rng64.so) and rng32.dll (rng32.so)</span>
+<span class="sd">        that can be generated/built by calling :py:func:`xopto.rebuild`.</span>
+<span class="sd">        The built shared library will be placed into</span>
+<span class="sd">        :py:const:`xopto.USER_BIN_PATH` folder.</span>
+<span class="sd">        If an external library is not found, a slower python implementation</span>
+<span class="sd">        of the required functions is used instead.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        primes: np.ndarray</span>
+<span class="sd">            If provided, the primes must be organized into a numpy array</span>
+<span class="sd">            of shape (nprimes, 2). Type of the array should be uint32 or</span>
+<span class="sd">            uint64. See the one of the safeprimes_base32_&lt;&gt;.npz files</span>
+<span class="sd">            for more details.</span>
+
+<span class="sd">        forcepy: bool</span>
+<span class="sd">            If True, use python implementation of the random number</span>
+<span class="sd">            helper functions even if a shared library is available.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Use the seeds method to generate seed pairs X and A for a</span>
+<span class="sd">        a GPU-based random number generator. Each GPU thread should take one</span>
+<span class="sd">        pair of values, e.g. X[i], A[i], to use with the random number</span>
+<span class="sd">        generator. Note that the value of seed x is changed on each call to the</span>
+<span class="sd">        random number generator and should be saved before the GPU thread</span>
+<span class="sd">        returns, e.g. to the global memory. The value of seed a is not changed</span>
+<span class="sd">        during the calls to the random number generator.</span>
+
+<span class="sd">        Examples of different uniform random number generators can be found</span>
+<span class="sd">        in xopto/cl/kernels/ml.h file.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cdll</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">forcepy</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Linux&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span> <span class="o">&gt;</span> <span class="mh">0xFFFFFFFF</span><span class="p">:</span>
+                        <span class="c1"># print(&#39;64-bit os&#39;)</span>
+                        <span class="n">dllFullName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">USER_BIN_PATH</span><span class="p">,</span> <span class="s2">&quot;rng64.so&quot;</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_cdll</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">dllFullName</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># print(&#39;32-bit os&#39;)</span>
+                        <span class="n">dllFullName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">USER_BIN_PATH</span><span class="p">,</span> <span class="s2">&quot;rng32.so&quot;</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_cdll</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">dllFullName</span><span class="p">)</span>
+
+                <span class="k">elif</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Windows&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span> <span class="o">&gt;</span> <span class="mh">0xFFFFFFFF</span><span class="p">:</span>
+                        <span class="c1"># print(&#39;64-bit os&#39;)</span>
+                        <span class="n">dllFullName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">USER_BIN_PATH</span><span class="p">,</span> <span class="s2">&quot;rng64.dll&quot;</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_cdll</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">dllFullName</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># print(&#39;32-bit os&#39;)</span>
+                        <span class="n">dllFullName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">USER_BIN_PATH</span><span class="p">,</span> <span class="s2">&quot;rng32.dll&quot;</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_cdll</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">dllFullName</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                        <span class="s1">&#39;Your operating system is not supported &#39;</span>
+                        <span class="s1">&#39;at the moment. </span><span class="se">\n</span><span class="s1">&#39;</span>
+                        <span class="s1">&#39;Program is tested only on Windows and Linux&#39;</span>
+                        <span class="s1">&#39;operating systems. </span><span class="se">\n</span><span class="s1">&#39;</span>
+                        <span class="s1">&#39;You must configure rng.dll or rng.so manually &#39;</span>
+                        <span class="s1">&#39;for your system. You can find the random number &#39;</span>
+                        <span class="s1">&#39;generator code in xopto/src/rng/rng/rng.cpp.&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">VERBOSE</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Found no compatible build of the random number library.&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using python implementation of the random number generator.&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Run xopto.rebuild() to build the library.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_RNG</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rand_cc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rand_co</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rand_oc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rand_oo</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cdll</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># create api</span>
+            <span class="c1"># int init_RNG(uint64_t *x, uint32_t *a, uint32_t *fora,</span>
+            <span class="c1">#   const uint32_t n_rng, uint64_t xinit){</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_init_RNG</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cdll</span><span class="o">.</span><span class="n">init_RNG</span>
+            <span class="c1">#self._init_RNG.argtypes = [ctypes.POINTER(ctypes.c_uint64),</span>
+            <span class="c1">#    ctypes.POINTER(ctypes.c_uint32), ctypes.POINTER(ctypes.c_uint32),</span>
+            <span class="c1">#    ctypes.c_uint32, ctypes.c_uint64]</span>
+            <span class="c1">#self._init_RNG.restype = ctypes.c_int</span>
+
+            <span class="c1"># int rand_cc(float *data, uint32_t n, uint64_t* x, uint32_t a)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rand_cc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cdll</span><span class="o">.</span><span class="n">rand_cc</span>
+            <span class="c1">#self._rand_co.argtypes = [ctypes.POINTER(ctypes.c_float),</span>
+            <span class="c1">#    ctypes.c_uint32, ctypes.POINTER(ctypes.c_uint64),</span>
+            <span class="c1">#    ctypes.c_uint32]</span>
+            <span class="c1">#self._rand_co.restype = ctypes.c_int</span>
+
+            <span class="c1"># int rand_co(float *data, uint32_t n, uint64_t* x, uint32_t a)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rand_co</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cdll</span><span class="o">.</span><span class="n">rand_co</span>
+            <span class="c1">#self._rand_co.argtypes = [ctypes.POINTER(ctypes.c_float),</span>
+            <span class="c1">#    ctypes.c_uint32, ctypes.POINTER(ctypes.c_uint64),</span>
+            <span class="c1">#    ctypes.c_uint32]</span>
+            <span class="c1">#self._rand_co.restype = ctypes.c_int</span>
+
+            <span class="c1"># int rand_oc(float *data, uint32_t n, uint64_t* x, uint32_t a)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rand_oc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cdll</span><span class="o">.</span><span class="n">rand_oc</span>
+            <span class="c1">#self._rand_oc.argtypes = [ctypes.POINTER(ctypes.c_float),</span>
+            <span class="c1">#    ctypes.c_uint32, ctypes.POINTER(ctypes.c_uint64),</span>
+            <span class="c1">#    ctypes.c_uint32]</span>
+            <span class="c1">#self._rand_oc.restype = ctypes.c_int</span>
+
+            <span class="c1"># int rand_oc(float *data, uint32_t n, uint64_t* x, uint32_t a)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rand_oo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cdll</span><span class="o">.</span><span class="n">rand_oo</span>
+            <span class="c1">#self._rand_oo.argtypes = [ctypes.POINTER(ctypes.c_float),</span>
+            <span class="c1">#    ctypes.c_uint32, ctypes.POINTER(ctypes.c_uint64),</span>
+            <span class="c1">#    ctypes.c_uint32]</span>
+            <span class="c1">#self._rand_oo.restype = ctypes.c_int</span>
+
+        <span class="k">if</span> <span class="n">primes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fullfilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PRIMES_PATH</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRIMES_FILE</span><span class="p">)</span>
+            <span class="n">primes</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fullfilename</span><span class="p">)</span>
+                <span class="n">primes</span><span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">if</span> <span class="n">primes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Failed to load primes from </span><span class="si">{:s}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fullfilename</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Generating primes ... this will take a few minutes ...&#39;</span><span class="p">)</span>
+                <span class="n">primes</span> <span class="o">=</span> <span class="n">generate_primes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NPRIMES</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving primes to </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fullfilename</span><span class="p">))</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span><span class="n">fullfilename</span><span class="p">,</span> <span class="n">primes</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+            <span class="k">if</span> <span class="n">primes</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># supporting flat format</span>
+                <span class="n">primes</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">primes</span><span class="o">.</span><span class="n">size</span><span class="o">//</span><span class="mi">2</span><span class="p">),</span> <span class="mi">2</span><span class="p">,)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_primes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">primes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+        <span class="c1"># must be contiguous - passed to a C function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fora</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_primes</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span>
+
+    <span class="k">def</span> <span class="nf">_get_maxseeds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_primes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="n">maxseeds</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">_get_maxseeds</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s1">&#39;Maximum number of random generator seeds that can be produced &#39;</span>
+        <span class="s1">&#39;by the available primes.&#39;</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="Random.initializer"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clrng.html#xopto.cl.clrng.Random.initializer">[docs]</a>    <span class="k">def</span> <span class="nf">initializer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Creates an initializer (32-bit unsigned integer) required to</span>
+<span class="sd">        compute seeds (see the seeds method) of the random number generator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mh">0xFFFFFFFF</span><span class="p">)</span>
+            <span class="n">xinit</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0xFFFFFFFF</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span>  <span class="p">((</span><span class="n">xinit</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="o">|</span> \
+                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">xinit</span> <span class="o">&gt;&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span> <span class="o">&gt;=</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fora</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span> <span class="o">|</span> \
+                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">xinit</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0xFFFFFFFF</span><span class="p">))):</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">xinit</span></div>
+
+<div class="viewcode-block" id="Random.seeds"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clrng.html#xopto.cl.clrng.Random.seeds">[docs]</a>    <span class="k">def</span> <span class="nf">seeds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">xinit</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Generates the requested number of seeds. Each generator requires two</span>
+<span class="sd">        initializer/seeds (x, a), one 64-bit unsigned integer (x) and one</span>
+<span class="sd">        32-bit unsigned integer (a). The seed x is updated on each call to</span>
+<span class="sd">        the random number generator, while seed a remains unchanged.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n: int</span>
+<span class="sd">            The requested number of seeds - must not exceed the value of</span>
+<span class="sd">            property :py:attr:`~Random.maxseeds`. Use -1 to</span>
+<span class="sd">            generate all available seeds.</span>
+<span class="sd">        xinit: int</span>
+<span class="sd">            A 64-bit unsigned integer random number as initializer. If</span>
+<span class="sd">            none is provided the builtin numpy random generator is used</span>
+<span class="sd">            to create one.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x: np.uint64 vector</span>
+<span class="sd">            A vector of n 64-bit unsigned integers representing x seeds.</span>
+<span class="sd">        a: np.uint32 vector</span>
+<span class="sd">            A vector of n 32-bit unsigned integers representing a seeds.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Each random number generator should be initialized by a pair</span>
+<span class="sd">        odf seeds x[i], a[i].</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxseeds</span>
+
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_primes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot generate more than </span><span class="si">{}</span><span class="s1"> seeds ... &#39;</span>\
+            <span class="s1">&#39;requested </span><span class="si">{}</span><span class="s1"> seeds!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_primes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+
+        <span class="n">canReinitialize</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">xinit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># tmp = np.uint64(np.random.rand(2)*0xFFFFFFFF)</span>
+            <span class="c1"># xinit = tmp[0] + tmp[1]*np.uint64(0xFFFFFFFF)</span>
+            <span class="n">xinit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initializer</span><span class="p">()</span>
+            <span class="n">canReinitialize</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">xinit</span><span class="p">)</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">res</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_RNG</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_RNG</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">)),</span>
+                    <span class="n">a</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">)),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_fora</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">)),</span>
+                    <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">(</span><span class="n">xinit</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">_rng_init</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fora</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">xinit</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">res</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">canReinitialize</span><span class="p">:</span>
+                    <span class="c1"># the autogenerated initializer is bad</span>
+                    <span class="c1"># try with a new initializer</span>
+                    <span class="n">xinit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initializer</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># user provided initializer is invalid ... stop</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s1">&#39;The provided initializer </span><span class="si">{}</span><span class="s1"> is not valid. &#39;</span>
+                        <span class="s1">&#39;Try a different 64-bit unsigned integer!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">xinit</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span></div>
+
+<div class="viewcode-block" id="Random.cc"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clrng.html#xopto.cl.clrng.Random.cc">[docs]</a>    <span class="k">def</span> <span class="nf">cc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Generate n random numbers from [0.0, 1.0] using seeds x and a.</span>
+<span class="sd">        If provided, the two seeds should be generated by the</span>
+<span class="sd">        :py:meth:`~Random.seeds` method function.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n: int</span>
+<span class="sd">            Generates n random number.</span>
+<span class="sd">        x: int</span>
+<span class="sd">            64-bit unsigned integer seed updated and returned on</span>
+<span class="sd">            completion.</span>
+<span class="sd">        a: int</span>
+<span class="sd">            32-bit unsigned integer seed updated and returned on</span>
+<span class="sd">            completion.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: np.float32</span>
+<span class="sd">            A vector of n random numbers.</span>
+<span class="sd">        xnew: int</span>
+<span class="sd">            Updated value of the input seed x.</span>
+<span class="sd">        a: int</span>
+<span class="sd">            The input seed a.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rand_cc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cx</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rand_cc</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="p">)),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">cx</span><span class="p">),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">cx</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">_rand_cc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span></div>
+
+<div class="viewcode-block" id="Random.co"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clrng.html#xopto.cl.clrng.Random.co">[docs]</a>    <span class="k">def</span> <span class="nf">co</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Generate n random numbers from [0.0, 1.0) using seeds x and a.</span>
+<span class="sd">        If provided, the two seeds should be generated by the</span>
+<span class="sd">        :py:meth:`~Random.seeds` method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n: int</span>
+<span class="sd">            Generates n random number.</span>
+<span class="sd">        x: int</span>
+<span class="sd">            64-bit unsigned integer seed updated and returned on</span>
+<span class="sd">            completion.</span>
+<span class="sd">        a: int</span>
+<span class="sd">            32-bit unsigned integer seed updated and returned on</span>
+<span class="sd">            completion.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: np.float32</span>
+<span class="sd">            A vector of n random numbers.</span>
+<span class="sd">        xnew: int</span>
+<span class="sd">            Updated value of the input seed x.</span>
+<span class="sd">        a: int</span>
+<span class="sd">            The input seed a.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rand_co</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cx</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rand_co</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="p">)),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">cx</span><span class="p">),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">cx</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">_rand_co</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span></div>
+
+<div class="viewcode-block" id="Random.oc"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clrng.html#xopto.cl.clrng.Random.oc">[docs]</a>    <span class="k">def</span> <span class="nf">oc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Generate n random numbers from (0.0, 1.0] using seeds x and a.</span>
+<span class="sd">        If provided, the two seeds shoud be generated by the</span>
+<span class="sd">        :py:meth:`~Random.seeds` method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n: int</span>
+<span class="sd">            Generates n random number.</span>
+<span class="sd">        x: int</span>
+<span class="sd">            64-bit unsigned integer seed updated and returned on</span>
+<span class="sd">            completion.</span>
+<span class="sd">        a: int</span>
+<span class="sd">            32-bit unsigned integer seed updated and returned on</span>
+<span class="sd">            completion.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: np.float32</span>
+<span class="sd">            A vector of n random numbers.</span>
+<span class="sd">        xnew: int</span>
+<span class="sd">            Updated value of the input seed x.</span>
+<span class="sd">        a: int</span>
+<span class="sd">            The input seed a.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rand_cc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cx</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rand_oc</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="p">)),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">cx</span><span class="p">),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">cx</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">_rand_cc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span></div>
+
+<div class="viewcode-block" id="Random.oo"><a class="viewcode-back" href="../../../apidoc/xopto.cl.clrng.html#xopto.cl.clrng.Random.oo">[docs]</a>    <span class="k">def</span> <span class="nf">oo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Generate n random numbers from (0.0, 1.0) using seeds x and a.</span>
+<span class="sd">        If provided, the two seeds should be generated by the</span>
+<span class="sd">        :py:meth:`~Random.seeds` method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n: int</span>
+<span class="sd">            Generates n random number.</span>
+<span class="sd">        x: int</span>
+<span class="sd">            64-bit unsigned integer seed updated and returned on</span>
+<span class="sd">            completion.</span>
+<span class="sd">        a: int</span>
+<span class="sd">            32-bit unsigned integer seed updated and returned on</span>
+<span class="sd">            completion.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: np.float32</span>
+<span class="sd">            A vector of n random numbers.</span>
+<span class="sd">        xnew: int</span>
+<span class="sd">            Updated value of the input seed x.</span>
+<span class="sd">        a: int</span>
+<span class="sd">            The input seed a.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rand_oo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cx</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rand_oo</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="p">)),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">cx</span><span class="p">),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">cx</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">_rand_oo</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">argparse</span>
+    <span class="kn">import</span> <span class="nn">time</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">USER_PRIMES_PATH</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">USER_PRIMES_PATH</span><span class="p">)</span>
+
+    <span class="n">default_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">USER_PRIMES_PATH</span><span class="p">,</span> <span class="s1">&#39;safeprimes_base32.npz&#39;</span><span class="p">)</span>
+    <span class="n">n_default</span> <span class="o">=</span> <span class="mi">150000</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;OpenCL random number generator&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;command&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;COMMAND&#39;</span><span class="p">,</span>
+                        <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;primes&#39;</span><span class="p">],</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Use &quot;primes&quot; to generate primes or &quot;test&quot; to &#39;</span>
+                        <span class="s1">&#39;test the performance/initialization of the generator.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="s1">&#39;--nprimes&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;NUM_PRIMES&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">n_default</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Generate the specified number of primes. Use -1 &#39;</span>
+                        <span class="s1">&#39;for default number of primes (</span><span class="si">{}</span><span class="s1">).&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_default</span><span class="p">))</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="s1">&#39;--output&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;OUTPUT_FILE&#39;</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output npz file name for the generated seeds! &#39;</span>
+                             <span class="s1">&#39;Defaults to &quot;</span><span class="si">{}</span><span class="s1">&quot;.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">default_out</span><span class="p">))</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-v&#39;</span><span class="p">,</span> <span class="s1">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Turn on verbose mode.&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="s1">&#39;--python&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Force python implementation of the random number &#39;</span>
+                             <span class="s1">&#39;generator initialization!&#39;</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">command</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">nprimes</span>
+    <span class="n">verbose</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">output</span>
+    <span class="n">forcepy</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">python</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">n_default</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">out</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">default_out</span>
+
+    <span class="n">tstart</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">command</span> <span class="o">==</span> <span class="s1">&#39;primes&#39;</span><span class="p">:</span>
+        <span class="n">seeds</span> <span class="o">=</span> <span class="n">generate_primes</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">seeds</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Generated </span><span class="si">{}</span><span class="s1"> primes in </span><span class="si">{:.3f}</span><span class="s1"> s&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">n</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">tstart</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Primes saved to &quot;</span><span class="si">{:s}</span><span class="s1">&quot;.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s1">&#39;test&#39;</span><span class="p">:</span>
+        <span class="n">mcrng</span> <span class="o">=</span> <span class="n">Random</span><span class="p">(</span><span class="n">forcepy</span><span class="o">=</span><span class="n">forcepy</span><span class="p">)</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">A</span> <span class="o">=</span> <span class="n">mcrng</span><span class="o">.</span><span class="n">seeds</span><span class="p">(</span>
+            <span class="n">mcrng</span><span class="o">.</span><span class="n">maxseeds</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">12343546457474</span><span class="p">))</span>    
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Generated </span><span class="si">{}</span><span class="s1"> seeds in </span><span class="si">{:.3f}</span><span class="s1"> ms&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">X</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mf">1000.0</span><span class="o">*</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">tstart</span><span class="p">)))</span>
+
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    ngens = mcrnd.maxseeds</span>
+<span class="sd">    nvals = 0</span>
+
+<span class="sd">    X, A = mcrnd.seeds(ngens, xinit=np.uint64(12343546457474))</span>
+<span class="sd">    t2 = time.perf_counter()</span>
+<span class="sd">    print(&#39;Generated {} seeds in {:.3f} ms&#39;.format(ngens, 1000.0*(t2-t1)))</span>
+
+
+<span class="sd">    if nvals &gt; 0:</span>
+<span class="sd">        R = np.zeros([ngens, nvals], dtype=np.float32)</span>
+<span class="sd">        for i in range(ngens):</span>
+<span class="sd">            data, xnew, a = mcrnd.oo(nvals, X[i], A[i])</span>
+<span class="sd">            R[i] = data</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

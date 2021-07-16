@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcbase.mcutil.boundary &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcbase.mcutil.boundary</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="cos_critical"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.boundary.html#xopto.mcbase.mcutil.boundary.cos_critical">[docs]</a><span class="k">def</span> <span class="nf">cos_critical</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Cosine of the critical angle of incidence beyond which the incident</span>
+<span class="sd">    beam is reflected at the boundary n1 =&gt; n2.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n1: fload</span>
+<span class="sd">        Refractive index of the material on the incident side of the </span>
+<span class="sd">        boundary.</span>
+<span class="sd">    n2: float</span>
+<span class="sd">        Refractive index of the material across the boundary.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">if</span> <span class="n">n1</span> <span class="o">&gt;</span> <span class="n">n2</span><span class="p">:</span>
+        <span class="n">cc</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">n2</span><span class="o">/</span><span class="n">n1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="k">return</span> <span class="n">cc</span></div>
+
+<div class="viewcode-block" id="reflectance"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.boundary.html#xopto.mcbase.mcutil.boundary.reflectance">[docs]</a><span class="k">def</span> <span class="nf">reflectance</span><span class="p">(</span>
+            <span class="n">n1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">costheta</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Computes reflectance of unpolarized light at the specified boundary.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n1: float</span>
+<span class="sd">        Refractive index of the material on the side of the incident beam.</span>
+<span class="sd">    n2: float</span>
+<span class="sd">        Refractive index of the material across the boundary.</span>
+<span class="sd">    costheta: float</span>
+<span class="sd">        Cosine of the angle of incidence -</span>
+<span class="sd">        perpendicular incidence by default (90 deg, cosine is 1).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Returns the reflectance of unpolarized light.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">costheta</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The incidence angle cosine must not be negative!&#39;</span><span class="p">)</span>
+
+    <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">n1</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">n2</span><span class="p">)</span>
+    <span class="n">sintheta</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">costheta</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">sincritical</span> <span class="o">=</span> <span class="n">n2</span><span class="o">/</span><span class="n">n1</span>
+
+    <span class="k">if</span> <span class="n">n1</span> <span class="o">&gt;</span> <span class="n">n2</span> <span class="ow">and</span> <span class="n">sintheta</span> <span class="o">&gt;=</span> <span class="n">sincritical</span><span class="p">:</span>
+        <span class="n">Rs</span> <span class="o">=</span> <span class="n">Rp</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span> <span class="o">=</span> <span class="n">n1</span><span class="o">*</span><span class="n">costheta</span><span class="p">,</span> <span class="n">n2</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">n1</span><span class="o">/</span><span class="n">n2</span><span class="o">*</span><span class="n">sintheta</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="n">Rs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">a1</span> <span class="o">-</span> <span class="n">a2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">a1</span> <span class="o">+</span> <span class="n">a2</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span> <span class="o">=</span> <span class="n">n1</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">n1</span><span class="o">/</span><span class="n">n2</span><span class="o">*</span><span class="n">sintheta</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">n2</span><span class="o">*</span><span class="n">costheta</span>
+        <span class="n">Rp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">b1</span> <span class="o">-</span> <span class="n">b2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">b1</span> <span class="o">+</span> <span class="n">b2</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">Rs</span> <span class="o">+</span> <span class="n">Rp</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span></div>
+
+<div class="viewcode-block" id="refract"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.boundary.html#xopto.mcbase.mcutil.boundary.refract">[docs]</a><span class="k">def</span> <span class="nf">refract</span><span class="p">(</span><span class="n">direction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">normal</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">n1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> \
+        <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Refract the beam acros the given boundary with refractive indices</span>
+<span class="sd">    n1 and n2.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    direction: np.ndarray</span>
+<span class="sd">        Propagation direction of the incident beam.</span>
+<span class="sd">    normal: np.ndarray</span>
+<span class="sd">        Boundary surface normal (pointing inwards or outwards).</span>
+<span class="sd">    n1: float</span>
+<span class="sd">        Refractive index on the incident side of the medium.</span>
+<span class="sd">    n2: float</span>
+<span class="sd">        Refractive index across the boundary.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    direction: np.ndarray</span>
+<span class="sd">        Propagation direction of the refracted beam.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">direction_len</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+
+    <span class="n">normal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">normal_len</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span>
+
+    <span class="c1"># For outwards pointing normal, cos1 is negative.</span>
+    <span class="n">cos1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">normal</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">direction_len</span><span class="o">*</span><span class="n">normal_len</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cos1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">cos_critical</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot refract, the incidence angle &#39;</span>
+                         <span class="s1">&#39;exceeds the critical angle!&#39;</span><span class="p">)</span> 
+    <span class="n">n1_d_n2</span> <span class="o">=</span> <span class="n">n1</span><span class="o">/</span><span class="n">n2</span>
+    <span class="n">sin2_squared</span> <span class="o">=</span> <span class="n">n1_d_n2</span><span class="o">*</span><span class="n">n1_d_n2</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cos1</span><span class="o">*</span><span class="n">cos1</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">n1_d_n2</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">cos1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">sin2_squared</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">n1_d_n2</span><span class="o">*</span><span class="n">direction</span><span class="o">/</span><span class="n">direction_len</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">cos1</span><span class="p">)</span><span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">normal</span><span class="o">/</span><span class="n">normal_len</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

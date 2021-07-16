@@ -1,0 +1,40 @@
+xopto.mcml package
+==================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcml.cltypes
+   xopto.mcml.kernel
+   xopto.mcml.mcdetector
+   xopto.mcml.mcfluence
+   xopto.mcml.mclayer
+   xopto.mcml.mcobject
+   xopto.mcml.mcoptions
+   xopto.mcml.mcpf
+   xopto.mcml.mcsource
+   xopto.mcml.mcsurface
+   xopto.mcml.mcsv
+   xopto.mcml.mctrace
+   xopto.mcml.mctypes
+   xopto.mcml.mcutil
+   xopto.mcml.test
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcml.mc
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcml
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+xopto.mcvox.mcgeometry.voxel module
+===================================
+
+.. automodule:: xopto.mcvox.mcgeometry.voxel
+   :members:
+   :undoc-members:
+   :show-inheritance:

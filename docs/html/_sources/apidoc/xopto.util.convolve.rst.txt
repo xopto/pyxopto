@@ -1,0 +1,7 @@
+xopto.util.convolve module
+==========================
+
+.. automodule:: xopto.util.convolve
+   :members:
+   :undoc-members:
+   :show-inheritance:

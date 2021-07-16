@@ -1,0 +1,7 @@
+xopto.pf.rayleigh module
+========================
+
+.. automodule:: xopto.pf.rayleigh
+   :members:
+   :undoc-members:
+   :show-inheritance:

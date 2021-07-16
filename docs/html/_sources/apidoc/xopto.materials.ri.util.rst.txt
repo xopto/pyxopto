@@ -1,0 +1,26 @@
+xopto.materials.ri.util package
+===============================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.materials.ri.util.model
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.materials.ri.util.fit
+
+Module contents
+---------------
+
+.. automodule:: xopto.materials.ri.util
+   :members:
+   :undoc-members:
+   :show-inheritance:

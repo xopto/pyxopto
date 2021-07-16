@@ -1,0 +1,736 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.materials.ri.util.model.sellmeier module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.materials.ri.util.fit module" href="xopto.materials.ri.util.fit.html" />
+    <link rel="prev" title="xopto.materials.ri.util.model.herzberg module" href="xopto.materials.ri.util.model.herzberg.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.materials.ri.util.model.sellmeier">
+<span id="xopto-materials-ri-util-model-sellmeier-module"></span><h1>xopto.materials.ri.util.model.sellmeier module<a class="headerlink" href="#module-xopto.materials.ri.util.model.sellmeier" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_1">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SellmeierEx_1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><span class="pre">xopto.materials.ri.util.model.base.Scale</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Model" title="xopto.materials.ri.util.model.base.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.materials.ri.util.model.base.Model</span></code></a></p>
+<p>Extended one term Sellmeier model of the refractive index.</p>
+<p><img class="math" src="../_images/math/d18c42dc02f1d71c05cc7742869dbc3f2a104d45.png" alt="n^{2} = A + B_{1}\lambda^{2}/(\lambda^2 - C_{1})"/></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Default model parameters.</p></li>
+<li><p><strong>pp</strong> (<a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><em>Scale</em></a><em> or </em><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Normalize" title="xopto.materials.ri.util.model.base.Normalize"><em>Normalize</em></a>) – Wavelength preprocessor instance.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Parameters passed to the baseclass.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_1.guess">
+<span class="sig-name descname"><span class="pre">guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_1.guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_1.guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an initial guess of the model parameters for optimization/fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – The wavelengths of light at which the values of refractive index
+are defined.</p></li>
+<li><p><strong>n</strong> (<em>np.ndarray</em>) – The values of refractive index at the given wavelengths of light.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params0</strong> – Initial guess for the values of the model parameters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_1.ri">
+<span class="sig-name descname"><span class="pre">ri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_1.ri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_1.ri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the refractive index for the given model parameters
+and wavelengths of light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Model parameters.</p></li>
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – Wavelengths of light (m).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>n</strong> – Refractive index estimated for the given model parameters and
+at the given wavelengths of light.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_2">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SellmeierEx_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><span class="pre">xopto.materials.ri.util.model.base.Scale</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Model" title="xopto.materials.ri.util.model.base.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.materials.ri.util.model.base.Model</span></code></a></p>
+<p>Extended two term Sellmeier model of the refractive index.</p>
+<p><img class="math" src="../_images/math/6bdde699b82b46e300da20fb1004cadbde22d47e.png" alt="n^{2} = A + B_{1}\lambda^{2}/(\lambda^2 - C_{1}) + B_{2}\lambda^{2}/(\lambda^{2} - C_{2})"/></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Default model parameters.</p></li>
+<li><p><strong>pp</strong> (<a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><em>Scale</em></a><em> or </em><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Normalize" title="xopto.materials.ri.util.model.base.Normalize"><em>Normalize</em></a>) – Wavelength preprocessor instance.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Parameters passed to the baseclass.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_2.guess">
+<span class="sig-name descname"><span class="pre">guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_2.guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_2.guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an initial guess of the model parameters for optimization/fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – The wavelengths of light at which the values of refractive index
+are defined.</p></li>
+<li><p><strong>n</strong> (<em>np.ndarray</em>) – The values of refractive index at the given wavelengths of light.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params0</strong> – Initial guess for the values of the model parameters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_2.ri">
+<span class="sig-name descname"><span class="pre">ri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_2.ri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_2.ri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the refractive index for the given model parameters
+and wavelengths of light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Model parameters.</p></li>
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – Wavelengths of light (m).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>n</strong> – Refractive index estimated for the given model parameters and
+at the given wavelengths of light.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_3">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SellmeierEx_3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><span class="pre">xopto.materials.ri.util.model.base.Scale</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Model" title="xopto.materials.ri.util.model.base.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.materials.ri.util.model.base.Model</span></code></a></p>
+<p>Extended three term Sellmeier model of the refractive index.</p>
+<p><img class="math" src="../_images/math/6e49354bb5b098f3f7b0cf554ea4988f621ac2e6.png" alt="n^{2} = A + B_{1}\lambda^{2}/(\lambda^2 - C_{1}) + B_{2}\lambda^{2}/(\lambda^{2} - C_{2}) + B_{3}\lambda^{2}/(\lambda^{2} - C_{3})"/></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Default model parameters.</p></li>
+<li><p><strong>pp</strong> (<a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><em>Scale</em></a><em> or </em><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Normalize" title="xopto.materials.ri.util.model.base.Normalize"><em>Normalize</em></a>) – Wavelength preprocessor instance.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Parameters passed to the baseclass.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_3.guess">
+<span class="sig-name descname"><span class="pre">guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_3.guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_3.guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an initial guess of the model parameters for optimization/fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – The wavelengths of light at which the values of refractive index
+are defined.</p></li>
+<li><p><strong>n</strong> (<em>np.ndarray</em>) – The values of refractive index at the given wavelengths of light.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params0</strong> – Initial guess for the values of the model parameters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_3.ri">
+<span class="sig-name descname"><span class="pre">ri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_3.ri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_3.ri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the refractive index for the given model parameters
+and wavelengths of light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Model parameters.</p></li>
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – Wavelengths of light (m).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>n</strong> – Refractive index estimated for the given model parameters and
+at the given wavelengths of light.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_4">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SellmeierEx_4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><span class="pre">xopto.materials.ri.util.model.base.Scale</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Model" title="xopto.materials.ri.util.model.base.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.materials.ri.util.model.base.Model</span></code></a></p>
+<p>Four term Sellmeier model of the refractive index.</p>
+<p><img class="math" src="../_images/math/7b56e6631355b66f52718c108b94f8393f23e509.png" alt="n^{2} = A + B_{1}\lambda^{2}/(\lambda^2 - C_{1}) + B_{2}\lambda^{2}/(\lambda^{2} - C_{2}) + B_{3}\lambda^{2}/(\lambda^{2} - C_{3} + B_{4}\lambda^{2}/(\lambda^{2} - C_{4})"/></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Default model parameters.</p></li>
+<li><p><strong>pp</strong> (<a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><em>Scale</em></a><em> or </em><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Normalize" title="xopto.materials.ri.util.model.base.Normalize"><em>Normalize</em></a>) – Wavelength preprocessor instance.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Parameters passed to the baseclass.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_4.guess">
+<span class="sig-name descname"><span class="pre">guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_4.guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_4.guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an initial guess of the model parameters for optimization/fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – The wavelengths of light at which the values of refractive index
+are defined.</p></li>
+<li><p><strong>n</strong> (<em>np.ndarray</em>) – The values of refractive index at the given wavelengths of light.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params0</strong> – Initial guess for the values of the model parameters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_4.ri">
+<span class="sig-name descname"><span class="pre">ri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_4.ri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_4.ri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the refractive index for the given model parameters
+and wavelengths of light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Model parameters.</p></li>
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – Wavelengths of light (m).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>n</strong> – Refractive index estimated for the given model parameters and
+at the given wavelengths of light.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_5">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SellmeierEx_5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><span class="pre">xopto.materials.ri.util.model.base.Scale</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Model" title="xopto.materials.ri.util.model.base.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.materials.ri.util.model.base.Model</span></code></a></p>
+<p>Five term Sellmeier model of the refractive index.</p>
+<p><img class="math" src="../_images/math/ae8ba47d558f555fd855bc646f1142088215380c.png" alt="n^{2} = A + B_{1}\lambda^{2}/(\lambda^2 - C_{1}) + B_{2}\lambda^{2}/(\lambda^{2} - C_{2}) + B_{3}\lambda^{2}/(\lambda^{2} - C_{3} + B_{4}\lambda^{2}/(\lambda^{2} - C_{4} + B_{5}\lambda^{2}/(\lambda^{2} - C_{5})"/></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Default model parameters.</p></li>
+<li><p><strong>pp</strong> (<a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><em>Scale</em></a><em> or </em><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Normalize" title="xopto.materials.ri.util.model.base.Normalize"><em>Normalize</em></a>) – Wavelength preprocessor instance.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Parameters passed to the baseclass.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_5.guess">
+<span class="sig-name descname"><span class="pre">guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_5.guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_5.guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an initial guess of the model parameters for optimization/fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – The wavelengths of light at which the values of refractive index
+are defined.</p></li>
+<li><p><strong>n</strong> (<em>np.ndarray</em>) – The values of refractive index at the given wavelengths of light.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params0</strong> – Initial guess for the values of the model parameters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.SellmeierEx_5.ri">
+<span class="sig-name descname"><span class="pre">ri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#SellmeierEx_5.ri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.SellmeierEx_5.ri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the refractive index for the given model parameters
+and wavelengths of light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Model parameters.</p></li>
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – Wavelengths of light (m).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>n</strong> – Refractive index estimated for the given model parameters and
+at the given wavelengths of light.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_1">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Sellmeier_1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><span class="pre">xopto.materials.ri.util.model.base.Scale</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Model" title="xopto.materials.ri.util.model.base.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.materials.ri.util.model.base.Model</span></code></a></p>
+<p>One term Sellmeier model of the refractive index.</p>
+<p><img class="math" src="../_images/math/d6d04938e76c353f6103cc2774dbba3ab08c65c6.png" alt="n^{2} = 1 + B_{1}\lambda^{2}/(\lambda^2 - C_{1})"/></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Default model parameters.</p></li>
+<li><p><strong>pp</strong> (<a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><em>Scale</em></a><em> or </em><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Normalize" title="xopto.materials.ri.util.model.base.Normalize"><em>Normalize</em></a>) – Wavelength preprocessor instance.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Parameters passed to the baseclass.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_1.guess">
+<span class="sig-name descname"><span class="pre">guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_1.guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_1.guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an initial guess of the model parameters for optimization/fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – The wavelengths of light at which the values of refractive index
+are defined.</p></li>
+<li><p><strong>n</strong> (<em>np.ndarray</em>) – The values of refractive index at the given wavelengths of light.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params0</strong> – Initial guess for the values of the model parameters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_1.ri">
+<span class="sig-name descname"><span class="pre">ri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_1.ri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_1.ri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the refractive index for the given model parameters
+and wavelengths of light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Model parameters.</p></li>
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – Wavelengths of light (m).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>n</strong> – Refractive index estimated for the given model parameters and
+at the given wavelengths of light.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_2">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Sellmeier_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><span class="pre">xopto.materials.ri.util.model.base.Scale</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Model" title="xopto.materials.ri.util.model.base.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.materials.ri.util.model.base.Model</span></code></a></p>
+<p>Two term Sellmeier model of the refractive index.</p>
+<p><img class="math" src="../_images/math/7a5cc5ccd5a15e24662908ed66aa11e60c6e27d7.png" alt="n^{2} = 1 + B_{1}\lambda^{2}/(\lambda^2 - C_{1}) + B_{2}\lambda^{2}/(\lambda^{2} - C_{2})"/></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Default model parameters.</p></li>
+<li><p><strong>pp</strong> (<a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><em>Scale</em></a><em> or </em><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Normalize" title="xopto.materials.ri.util.model.base.Normalize"><em>Normalize</em></a>) – Wavelength preprocessor instance.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Parameters passed to the baseclass.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_2.guess">
+<span class="sig-name descname"><span class="pre">guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_2.guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_2.guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an initial guess of the model parameters for optimization/fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – The wavelengths of light at which the values of refractive index
+are defined.</p></li>
+<li><p><strong>n</strong> (<em>np.ndarray</em>) – The values of refractive index at the given wavelengths of light.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params0</strong> – Initial guess for the values of the model parameters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_2.ri">
+<span class="sig-name descname"><span class="pre">ri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_2.ri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_2.ri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the refractive index for the given model parameters
+and wavelengths of light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Model parameters.</p></li>
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – Wavelengths of light (m).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>n</strong> – Refractive index estimated for the given model parameters and
+at the given wavelengths of light.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_3">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Sellmeier_3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><span class="pre">xopto.materials.ri.util.model.base.Scale</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Model" title="xopto.materials.ri.util.model.base.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.materials.ri.util.model.base.Model</span></code></a></p>
+<p>Three term Sellmeier model of the refractive index.</p>
+<p><img class="math" src="../_images/math/22e44902e5ab8cbab6a3a4ac96c8620e1c70523c.png" alt="n^{2} = 1 + B_{1}\lambda^{2}/(\lambda^2 - C_{1}) + B_{2}\lambda^{2}/(\lambda^{2} - C_{2}) + B_{3}\lambda^{2}/(\lambda^{2} - C_{3})"/></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Default model parameters.</p></li>
+<li><p><strong>pp</strong> (<a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><em>Scale</em></a><em> or </em><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Normalize" title="xopto.materials.ri.util.model.base.Normalize"><em>Normalize</em></a>) – Wavelength preprocessor instance.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Parameters passed to the baseclass.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_3.guess">
+<span class="sig-name descname"><span class="pre">guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_3.guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_3.guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an initial guess of the model parameters for optimization/fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – The wavelengths of light at which the values of refractive index
+are defined.</p></li>
+<li><p><strong>n</strong> (<em>np.ndarray</em>) – The values of refractive index at the given wavelengths of light.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params0</strong> – Initial guess for the values of the model parameters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_3.ri">
+<span class="sig-name descname"><span class="pre">ri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_3.ri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_3.ri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the refractive index for the given model parameters
+and wavelengths of light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Model parameters.</p></li>
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – Wavelengths of light (m).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>n</strong> – Refractive index estimated for the given model parameters and
+at the given wavelengths of light.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_4">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Sellmeier_4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><span class="pre">xopto.materials.ri.util.model.base.Scale</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Model" title="xopto.materials.ri.util.model.base.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.materials.ri.util.model.base.Model</span></code></a></p>
+<p>Four term Sellmeier model of the refractive index.</p>
+<p><img class="math" src="../_images/math/4f674c50541d02c78db18e8ec96d3bc069e114af.png" alt="n^{2} = 1 + B_{1}\lambda^{2}/(\lambda^2 - C_{1}) + B_{2}\lambda^{2}/(\lambda^{2} - C_{2}) + B_{3}\lambda^{2}/(\lambda^{2} - C_{3} + B_{4}\lambda^{2}/(\lambda^{2} - C_{4})"/></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Default model parameters.</p></li>
+<li><p><strong>pp</strong> (<a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><em>Scale</em></a><em> or </em><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Normalize" title="xopto.materials.ri.util.model.base.Normalize"><em>Normalize</em></a>) – Wavelength preprocessor instance.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Parameters passed to the baseclass.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_4.guess">
+<span class="sig-name descname"><span class="pre">guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_4.guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_4.guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an initial guess of the model parameters for optimization/fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – The wavelengths of light at which the values of refractive index
+are defined.</p></li>
+<li><p><strong>n</strong> (<em>np.ndarray</em>) – The values of refractive index at the given wavelengths of light.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params0</strong> – Initial guess for the values of the model parameters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_4.ri">
+<span class="sig-name descname"><span class="pre">ri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_4.ri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_4.ri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the refractive index for the given model parameters
+and wavelengths of light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Model parameters.</p></li>
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – Wavelengths of light (m).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>n</strong> – Refractive index estimated for the given model parameters and
+at the given wavelengths of light.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_5">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Sellmeier_5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><span class="pre">xopto.materials.ri.util.model.base.Scale</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Model" title="xopto.materials.ri.util.model.base.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.materials.ri.util.model.base.Model</span></code></a></p>
+<p>Five term Sellmeier model of the refractive index.</p>
+<p><img class="math" src="../_images/math/e782cf0900b451b8e538dfdab7e065ae4d6920ae.png" alt="n^{2} = 1 + B_{1}\lambda^{2}/(\lambda^2 - C_{1}) + B_{2}\lambda^{2}/(\lambda^{2} - C_{2}) + B_{3}\lambda^{2}/(\lambda^{2} - C_{3} + B_{4}\lambda^{2}/(\lambda^{2} - C_{4} + B_{5}\lambda^{2}/(\lambda^{2} - C_{5})"/></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Default model parameters.</p></li>
+<li><p><strong>pp</strong> (<a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Scale" title="xopto.materials.ri.util.model.base.Scale"><em>Scale</em></a><em> or </em><a class="reference internal" href="xopto.materials.ri.util.model.base.html#xopto.materials.ri.util.model.base.Normalize" title="xopto.materials.ri.util.model.base.Normalize"><em>Normalize</em></a>) – Wavelength preprocessor instance.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Parameters passed to the baseclass.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_5.guess">
+<span class="sig-name descname"><span class="pre">guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_5.guess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_5.guess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an initial guess of the model parameters for optimization/fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – The wavelengths of light at which the values of refractive index
+are defined.</p></li>
+<li><p><strong>n</strong> (<em>np.ndarray</em>) – The values of refractive index at the given wavelengths of light.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params0</strong> – Initial guess for the values of the model parameters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.materials.ri.util.model.sellmeier.Sellmeier_5.ri">
+<span class="sig-name descname"><span class="pre">ri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelengths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/materials/ri/util/model/sellmeier.html#Sellmeier_5.ri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.materials.ri.util.model.sellmeier.Sellmeier_5.ri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the refractive index for the given model parameters
+and wavelengths of light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>np.ndarray</em>) – Model parameters.</p></li>
+<li><p><strong>wavelengths</strong> (<em>np.ndarray</em>) – Wavelengths of light (m).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>n</strong> – Refractive index estimated for the given model parameters and
+at the given wavelengths of light.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.materials.html">xopto.materials package</a><ul>
+  <li><a href="xopto.materials.ri.html">xopto.materials.ri package</a><ul>
+  <li><a href="xopto.materials.ri.util.html">xopto.materials.ri.util package</a><ul>
+  <li><a href="xopto.materials.ri.util.model.html">xopto.materials.ri.util.model package</a><ul>
+      <li>Previous: <a href="xopto.materials.ri.util.model.herzberg.html" title="previous chapter">xopto.materials.ri.util.model.herzberg module</a></li>
+      <li>Next: <a href="xopto.materials.ri.util.fit.html" title="next chapter">xopto.materials.ri.util.fit module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

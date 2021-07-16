@@ -1,0 +1,385 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.pf.util.helpers module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.pf.util.pfmapbase module" href="xopto.pf.util.pfmapbase.html" />
+    <link rel="prev" title="xopto.pf.util package" href="xopto.pf.util.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.pf.util.helpers">
+<span id="xopto-pf-util-helpers-module"></span><h1>xopto.pf.util.helpers module<a class="headerlink" href="#module-xopto.pf.util.helpers" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.pf.util.helpers.delta2g3">
+<span class="sig-name descname"><span class="pre">delta2g3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/pf/util/helpers.html#delta2g3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.helpers.delta2g3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the third Legendre moment from delta and the first Legendre
+moment of the scattering phase function.</p>
+<blockquote>
+<div><p>delta = (1 - g3)/(1 - g1)</p>
+<p>g3 = 1 - delta*(1 - g1)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g1</strong> (<em>float</em>) – First Legendre moment of the scattering phase function.</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – Parameter gamma.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>g3</strong> – Third Legendre moment of the scattering phase function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.pf.util.helpers.g2delta">
+<span class="sig-name descname"><span class="pre">g2delta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g3</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/pf/util/helpers.html#g2delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.helpers.g2delta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes and delta from the first and third Legendre moment.</p>
+<blockquote>
+<div><p>delta = (1 - g3)/(1 - g1)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g1</strong> (<em>float</em>) – First Legendre moment of the scattering phase function.</p></li>
+<li><p><strong>g3</strong> (<em>float</em>) – Third Legendre moment of the scattering phase function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>delta</strong> – Similarity parameter delta.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.pf.util.helpers.g2gamma">
+<span class="sig-name descname"><span class="pre">g2gamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/pf/util/helpers.html#g2gamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.helpers.g2gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes and return gamma from the first and second Legendre moment.</p>
+<blockquote>
+<div><p>gamma = (1 - g2)/(1 - g1)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g1</strong> (<em>float</em>) – First Legendre moment of the scattering phase function.</p></li>
+<li><p><strong>g2</strong> (<em>float</em>) – Second Legendre moment of the scattering phase function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>gamma</strong> – Similarity parameter gamma.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.pf.util.helpers.g2gammadelta">
+<span class="sig-name descname"><span class="pre">g2gammadelta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g3</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/pf/util/helpers.html#g2gammadelta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.helpers.g2gammadelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the gamma and delta from the first three Legendre moments of the
+scattering phase function. Returns (g1, gamma, delta).</p>
+<blockquote>
+<div><p>gamma = (1 - g2)/(1 - g1)</p>
+<p>delta = (1 - g3)/(1 - g1)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g1</strong> (<em>float</em>) – First Legendre moment of the scattering phase function.</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – Parameter gamma.</p></li>
+<li><p><strong>delta</strong> (<em>float</em>) – Parameter delta.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>g</strong> – The first three Legendre moments (g1, gamma, delta).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple of 3 elements</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.pf.util.helpers.gamma2g2">
+<span class="sig-name descname"><span class="pre">gamma2g2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/pf/util/helpers.html#gamma2g2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.helpers.gamma2g2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the second Legendre moment from gamma and the first Legendre
+moment of the scattering phase function.</p>
+<blockquote>
+<div><p>gamma = (1 - g2)/(1 - g1)</p>
+<p>g2 = 1 - gamma*(1 - g1)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g1</strong> (<em>float</em>) – First Legendre moment of the scattering phase function.</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – Parameter gamma.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>g2</strong> – Second Legendre moment of the scattering phase function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.pf.util.helpers.gammadelta2g">
+<span class="sig-name descname"><span class="pre">gammadelta2g</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/pf/util/helpers.html#gammadelta2g"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.helpers.gammadelta2g" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the second and third Legendre moment from gamma and delta
+parameters.
+Returns (g1, g2, g3).</p>
+<blockquote>
+<div><p>gamma = (1 - g2)/(1 - g1)</p>
+<p>delta = (1 - g3)/(1 - g1)</p>
+<p>g2 = 1 - gamma*(1 - g1)</p>
+<p>g3 = 1 - delta*(1 - g1)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g1</strong> (<em>float</em>) – First Legendre moment of the scattering phase function.</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – Parameter gamma.</p></li>
+<li><p><strong>delta</strong> (<em>float</em>) – Parameter delta.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>g</strong> – The first three Legendre moments (g1, g2, g3).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple of 3 elements</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.pf.util.helpers.mhg_inverse_g1gamma">
+<span class="sig-name descname"><span class="pre">mhg_inverse_g1gamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/pf/util/helpers.html#mhg_inverse_g1gamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.helpers.mhg_inverse_g1gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the parameters g and b of the modified Henyey-Greenstein (MHG)
+scattering phase function that best fit the given values of g1 and gamma,
+where g1 is the first Legendre moment of the MHG phase function and gamma:</p>
+<blockquote>
+<div><p>gamma = (1 - g2) / (1 - g1).</p>
+</div></blockquote>
+<p>Parameters g and b of the scattering phase function MHG can be computed
+analytically.</p>
+<p>Forward analytical model (Calabro et al. JBO 19(7) 2014):</p>
+<p>g1 = b * g</p>
+<p>g2 = b * g^2 + 2/5 (1 - b)</p>
+<p>g3 = b * g^3</p>
+<p>g_k = b * g^k    where   k &gt; 2</p>
+<p>…</p>
+<p>Parameters g and b can be derived from a quadratic equation. The
+obtained values are valid only if:</p>
+<p>b &lt; 1  (if b == 1 … MHG simplifies to HG) or gamma &lt; 1 + g1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g1</strong> (<em>float</em>) – Target value of the first Legendre moment.</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – Target value of parameter gamma = (1 - g2)/(1 - g1).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>g</strong> (<em>float</em>) – Estimated values of parameter g.</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – Estimated values of parameter b.</p></li>
+<li><p><strong>valid</strong> (<em>bool</em>) – A binary mask indicating valid values of g and b.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.pf.util.helpers.mhg_inverse_gammadelta">
+<span class="sig-name descname"><span class="pre">mhg_inverse_gammadelta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/pf/util/helpers.html#mhg_inverse_gammadelta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.helpers.mhg_inverse_gammadelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the parameters g and b of the modified Henyey-Greenstein (MHG)
+scattering phase function that best fit the given values of gamma and delta,
+where gamma is</p>
+<blockquote>
+<div><p>gamma = (1 - g2) / (1 - g1),</p>
+</div></blockquote>
+<p>and delta is:</p>
+<blockquote>
+<div><p>delta = (1 - g3) / (1 - g1),</p>
+</div></blockquote>
+<p>Parameters g and b of the scattering phase function MHG can be computed
+analytically.</p>
+<p>Forward analytical model (Calabro et al. JBO 19(7) 2014):</p>
+<p>g1 = b * g</p>
+<p>g2 = b * g^2 + 2/5 (1 - b)</p>
+<p>g3 = b * g^3</p>
+<p>g_k = b * g^k    where   k &gt; 2</p>
+<p>…</p>
+<p>Parameters g and b can be derived from a third-order equation. The
+obtained values are valid only if 0 &lt;= b &lt;= 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gamma</strong> (<em>float</em><em> or </em><em>np.ndarray</em>) – Target value of parameter gamma = (1 - g2)/(1 - g1).</p></li>
+<li><p><strong>delta</strong> (<em>float</em><em> or </em><em>np.ndarray</em>) – Target value of parameter delta = (1 - g3)/(1 - g1).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>g</strong> (<em>float or np.ndarray</em>) – Estimated values of parameter g.</p></li>
+<li><p><strong>b</strong> (<em>float or np.ndarray</em>) – Estimated values of parameter b.</p></li>
+<li><p><strong>valid</strong> (<em>bool or np.ndarray</em>) – A binary mask indicating valid values of g and b.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.pf.util.helpers.sigma">
+<span class="sig-name descname"><span class="pre">sigma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/pf/util/helpers.html#sigma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.util.helpers.sigma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes parameter sigma from the given Legendre moments.</p>
+<blockquote>
+<div><p>sigma = sum( (-0.5)^(i - 2) (1 - gi)/(1 - g1), for i = 2, 3, …</p>
+<p>where gi is the i-th Legendre moment.</p>
+</div></blockquote>
+<p>References:</p>
+<p>Bodenschatz et al, JBO, 21(3) 2016.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gs</strong> (<em>tuple</em><em>, </em><em>list</em><em>, </em><em>ndarray</em>) – First n Legendre moments as (g0, g1, g2, g3, …, gn)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sigma</strong> – Parameter sigma</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.pf.html">xopto.pf package</a><ul>
+  <li><a href="xopto.pf.util.html">xopto.pf.util package</a><ul>
+      <li>Previous: <a href="xopto.pf.util.html" title="previous chapter">xopto.pf.util package</a></li>
+      <li>Next: <a href="xopto.pf.util.pfmapbase.html" title="next chapter">xopto.pf.util.pfmapbase module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

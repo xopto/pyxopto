@@ -1,0 +1,7 @@
+xopto.mcvox.mcsource.line module
+================================
+
+.. automodule:: xopto.mcvox.mcsource.line
+   :members:
+   :undoc-members:
+   :show-inheritance:

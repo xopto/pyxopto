@@ -1,0 +1,23 @@
+xopto.materials.ri.util.model package
+=====================================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.materials.ri.util.model.base
+   xopto.materials.ri.util.model.cauchy
+   xopto.materials.ri.util.model.conrady
+   xopto.materials.ri.util.model.exponential
+   xopto.materials.ri.util.model.herzberg
+   xopto.materials.ri.util.model.sellmeier
+
+Module contents
+---------------
+
+.. automodule:: xopto.materials.ri.util.model
+   :members:
+   :undoc-members:
+   :show-inheritance:

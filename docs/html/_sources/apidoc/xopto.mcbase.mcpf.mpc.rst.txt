@@ -1,0 +1,7 @@
+xopto.mcbase.mcpf.mpc module
+============================
+
+.. automodule:: xopto.mcbase.mcpf.mpc
+   :members:
+   :undoc-members:
+   :show-inheritance:

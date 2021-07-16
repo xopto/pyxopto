@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.pf.miepolystyrene module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.pf.mpc module" href="xopto.pf.mpc.html" />
+    <link rel="prev" title="xopto.pf.miepd module" href="xopto.pf.miepd.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.pf.miepolystyrene">
+<span id="xopto-pf-miepolystyrene-module"></span><h1>xopto.pf.miepolystyrene module<a class="headerlink" href="#module-xopto.pf.miepolystyrene" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.pf.miepolystyrene.MieFractalPolystyrene">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MieFractalPolystyrene</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drange</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ripolystyrene</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">riliquid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nd</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/pf/miepolystyrene.html#MieFractalPolystyrene"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.miepolystyrene.MieFractalPolystyrene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.pf.miefractal.html#xopto.pf.miefractal.MieFractal" title="xopto.pf.miefractal.MieFractal"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.pf.miefractal.MieFractal</span></code></a></p>
+<p>Fractal scattering phase function for spherical polystyrene
+microparticles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<em>float</em>) – Parameter alpha of the fractal distribution.</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – Wavelength (m).</p></li>
+<li><p><strong>drange</strong> (<em>list</em><em>, </em><em>tuple of two float</em>) – Finite range (m) of the particle diameter used to compute the
+scattering phase function given as (dmin, dmax). If None, default
+a range [5e-9, 30e-6] m is used.</p></li>
+<li><p><strong>ripolystyrene</strong> (<em>float</em>) – Refrective index of polystyrene at the specified wavelength.
+If None, the builtin polystyrene refractive index is used.</p></li>
+<li><p><strong>riliquid</strong> (<em>float</em>) – Refrective index of the liquid phase (water by default).
+If None, the builtin refractive index of water is used.</p></li>
+<li><p><strong>nd</strong> (<em>int</em>) – Number of equally spaced control points between dmin and dmax that
+are used to estimate the phase function. A fixed-step Simpson
+numerical integration is used to estimate the phase function at
+the given deflection angle cosines. If nd is None, adaptive-step
+numerical integration is used (note that the computational time
+might increase dramatically!!!).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.pf.miepolystyrene.MieNormalPolystyrene">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MieNormalPolystyrene</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ripolystyrene</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">riliquid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nd</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/pf/miepolystyrene.html#MieNormalPolystyrene"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.miepolystyrene.MieNormalPolystyrene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.pf.mienormal.html#xopto.pf.mienormal.MieNormal" title="xopto.pf.mienormal.MieNormal"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.pf.mienormal.MieNormal</span></code></a></p>
+<p>Fractal scattering phase function for spherical polystyrene
+microparticles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<em>float</em>) – Distribution/diameter mean (m).</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – Distribution/diameter standard deviation (m).</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – Wavelength of light (m).</p></li>
+<li><p><strong>ripolystyrene</strong> (<em>float</em>) – Refrective index of polystyrene at the specified wavelength.
+If None, the builtin polystyrene refractive index is used.</p></li>
+<li><p><strong>riliquid</strong> (<em>float</em>) – Refrective index of the liquid phase (water by default).
+If None, the builtin refractive index of water is used.</p></li>
+<li><p><strong>clip</strong> (<em>float</em>) – Distribution/diameter range used to estimate the phase function
+defined as [center - clip*sigma, center + clip*sigma].</p></li>
+<li><p><strong>nd</strong> (<em>int</em>) – Number of equally spaced control points between dmin and dmax that
+are used to estimate the phase function. A fixed-step Simpson
+numerical integration is used to estimate the phase function at
+the given deflection angle cosines. If nd is None, adaptive-step
+numerical integration is used (note that the computational time
+might increase dramatically!!!).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.pf.miepolystyrene.MiePolystyrene">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MiePolystyrene</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diameter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ripolystyrene</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">riliquid</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/pf/miepolystyrene.html#MiePolystyrene"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.miepolystyrene.MiePolystyrene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.pf.mie.html#xopto.pf.mie.Mie" title="xopto.pf.mie.Mie"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.pf.mie.Mie</span></code></a></p>
+<p>Scattering phase function of monodisperse polystyrene microspherical
+particles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>diameter</strong> (<em>float</em>) – Diameter of the Microspherical particle (m).</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em><em> or </em><em>complex</em>) – Wavelength (m).</p></li>
+<li><p><strong>ripolystyrene</strong> (<em>float</em><em> or </em><em>complex</em>) – Refractive index of polystyrene at the specified wavelength.
+If None, the builtin polystyrene refractive index is used.</p></li>
+<li><p><strong>riliquid</strong> (<em>float</em>) – Refrective index of the liquid phase (water by default).
+If None, the builtin refractive index of water is used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.pf.html">xopto.pf package</a><ul>
+      <li>Previous: <a href="xopto.pf.miepd.html" title="previous chapter">xopto.pf.miepd module</a></li>
+      <li>Next: <a href="xopto.pf.mpc.html" title="next chapter">xopto.pf.mpc module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

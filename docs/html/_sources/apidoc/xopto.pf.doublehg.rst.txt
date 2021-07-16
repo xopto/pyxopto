@@ -1,0 +1,7 @@
+xopto.pf.doublehg module
+========================
+
+.. automodule:: xopto.pf.doublehg
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+xopto.mcml.mcutil.geometry module
+=================================
+
+.. automodule:: xopto.mcml.mcutil.geometry
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+xopto.materials.density.base module
+===================================
+
+.. automodule:: xopto.materials.density.base
+   :members:
+   :undoc-members:
+   :show-inheritance:

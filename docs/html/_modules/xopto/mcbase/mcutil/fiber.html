@@ -1,0 +1,526 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcbase.mcutil.fiber &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcbase.mcutil.fiber</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcbase.mcutil.lut</span> <span class="kn">import</span> <span class="n">EmissionLut</span><span class="p">,</span> <span class="n">CollectionLut</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">cltypes</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">mcobject</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">mctypes</span>
+
+
+<div class="viewcode-block" id="MultimodeFiber"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber">[docs]</a><span class="k">class</span> <span class="nc">MultimodeFiber</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Class representing Multimode step-index fibers with an ideal</span>
+<span class="sd">    emission and collection characteristics defined by the numerical</span>
+<span class="sd">    aperture. </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="MultimodeFiber.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClMultimodeFiber</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="n">_field_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;ncore&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;ncladding&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;rcore&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;rcladding&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;na&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">ClMultimodeFiber</span></div>
+
+<div class="viewcode-block" id="MultimodeFiber.compute_na"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber.compute_na">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">compute_na</span><span class="p">(</span><span class="n">ncore</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ncladding</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Computes the numerical aperture of the fiber core given the refractive</span>
+<span class="sd">        indices of the fiber core and fiber cladding.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ncore: float</span>
+<span class="sd">            Refractive index of the fiber core.</span>
+<span class="sd">        ncladding: float</span>
+<span class="sd">            Refractive index of the fiber cladding.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        na: float</span>
+<span class="sd">            Numerical aperture of the fiber core.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">ncore</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">ncladding</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span></div>
+
+<div class="viewcode-block" id="MultimodeFiber.compute_ncladding"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber.compute_ncladding">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">compute_ncladding</span><span class="p">(</span><span class="n">ncore</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">na</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Computes the refractive index of the fiber cladding given the</span>
+<span class="sd">        refractive index and numerical aperture of the fiber core.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ncore: float</span>
+<span class="sd">            Refractive index of the fiber core.</span>
+<span class="sd">        na: float</span>
+<span class="sd">            Numerical aperture of the fiber core.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ncladding: float</span>
+<span class="sd">            Refractive index of the fiber cladding.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">ncore</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">na</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dcore</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dcladding</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ncore</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">na</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Multimode fiber constructor.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dcore: float</span>
+<span class="sd">            Diameter (m) of the fiber core.</span>
+<span class="sd">        dcladding: float</span>
+<span class="sd">            Diameter (m) of the fiber cladding.</span>
+<span class="sd">        ncore: float</span>
+<span class="sd">            Refractive index of the fiber core.</span>
+<span class="sd">        na: float</span>
+<span class="sd">            Numerical aperture of the fiber core.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dcore</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dcore</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dcladding</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dcladding</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ncore</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ncore</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_na</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">na</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MultimodeFiber.validate"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Check the integrity of the object parameters. Raises ValueError.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcore</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcladding</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Fiber core diameter must be smaller than the fiber &#39;</span>
+            <span class="s1">&#39;cladding diameter!&#39;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_dcore</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcore</span>
+    <span class="k">def</span> <span class="nf">_set_dcore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dcore</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">dcore</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_dcore</span><span class="p">,</span> <span class="n">_set_dcore</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Diameter (m) of the fiber core.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_dcladding</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcladding</span>
+    <span class="k">def</span> <span class="nf">_set_dcladding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dcladding</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">dcladding</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_dcladding</span><span class="p">,</span> <span class="n">_set_dcladding</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="s1">&#39;Diameter (m) of the fiber cladding.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_ncore</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ncore</span>
+    <span class="k">def</span> <span class="nf">_set_ncore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ncore</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">ncore</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_ncore</span><span class="p">,</span> <span class="n">_set_ncore</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Refractive index of the fiber core.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_ncladding</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">MultimodeFiber</span><span class="o">.</span><span class="n">compute_ncladding</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ncore</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_na</span><span class="p">)</span>
+    <span class="n">ncladding</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_ncladding</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="s1">&#39;Refractive index of the fiber cladding computed as &#39;</span>
+                         <span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">sqrt(ncore^2 - na^2)$&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_na</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_na</span>
+    <span class="k">def</span> <span class="nf">_set_na</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_na</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">na</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_na</span><span class="p">,</span> <span class="n">_set_na</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="s1">&#39;Numerical aperture (NA) of the fiber core.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MultimodeFiber.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the OpenCL Structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator. See the :py:meth:`~MultimodeFiber.cl_type`</span>
+<span class="sd">        method for a detailed list of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: McObject</span>
+<span class="sd">            Simulator instance.</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Target OpenCL structure for packing.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Target structure received as an input argument or a new</span>
+<span class="sd">            instance of ClMultimodeFiber if the input argument target is None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_type</span><span class="p">()</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">ncore</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncore</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">ncladding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncladding</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">rcore</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dcore</span><span class="o">*</span><span class="mf">0.5</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">dcladding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dcladding</span><span class="o">*</span><span class="mf">0.5</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">na</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">na</span>
+
+        <span class="k">return</span> <span class="n">target</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;MultimodeFiber(dcore=</span><span class="si">{:f}</span><span class="s1">, dcladding=</span><span class="si">{:f}</span><span class="s1">, &#39;</span> \
+               <span class="s1">&#39;ncore=</span><span class="si">{:f}</span><span class="s1">, na=</span><span class="si">{:f}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_dcore</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcladding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ncore</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_na</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MultimodeFiberLut"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiberLut">[docs]</a><span class="k">class</span> <span class="nc">MultimodeFiberLut</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Class representing multimode fibers with arbitrary emission and</span>
+<span class="sd">    collection characteristics defined by a linear lookup table.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="MultimodeFiberLut.compute_na"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiberLut.compute_na">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">compute_na</span><span class="p">(</span><span class="n">ncore</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ncladding</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Computes the numerical aperture of the fiber core given the refractive</span>
+<span class="sd">        indices of the fiber core and fiber cladding.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ncore: float</span>
+<span class="sd">            Refractive index of the fiber core.</span>
+<span class="sd">        ncladding: float</span>
+<span class="sd">            Refractive index of the fiber cladding.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        na: float</span>
+<span class="sd">            Numerical aperture of the fiber core.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">ncore</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">ncladding</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span></div>
+
+<div class="viewcode-block" id="MultimodeFiberLut.compute_ncladding"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiberLut.compute_ncladding">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">compute_ncladding</span><span class="p">(</span><span class="n">ncore</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">na</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Computes the refractive index of the fiber cladding given the</span>
+<span class="sd">        refractive index and numerical aperture of the fiber core.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ncore: float</span>
+<span class="sd">            Refractive index of the fiber core.</span>
+<span class="sd">        na: float</span>
+<span class="sd">            Numerical aperture of the fiber core.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ncladding: float</span>
+<span class="sd">            Refractive index of the fiber cladding.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">ncore</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">na</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dcore</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dcladding</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">ncore</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ncladding</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">emission</span><span class="p">:</span> <span class="n">EmissionLut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">collection</span><span class="p">:</span> <span class="n">CollectionLut</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Multimode fiber constructor.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dcore: float</span>
+<span class="sd">            Diameter (m) of the fiber core.</span>
+<span class="sd">        dcladding: float</span>
+<span class="sd">            Diameter (m) of the fiber cladding.</span>
+<span class="sd">        ncore: float</span>
+<span class="sd">            Refractive index of the fiber core.</span>
+<span class="sd">        ncladding: float</span>
+<span class="sd">            Refractive index of the fiber cladding.</span>
+<span class="sd">        emission: EmissionLut or np.ndarray or str</span>
+<span class="sd">            Lookup table for numerical sampling of the emission angles. Can</span>
+<span class="sd">            be an instance of EmissionLut or a file from which to load the</span>
+<span class="sd">            EmissionLut.</span>
+<span class="sd">        collection: CollectionLut or str</span>
+<span class="sd">            Collection sensitivity/efficiency of the fiber defined by a linear</span>
+<span class="sd">            lookup table array.</span>
+<span class="sd">            Can be an instance of CollectionLut or a file from which to load</span>
+<span class="sd">            the CollectionLut.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dcore</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dcore</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dcladding</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dcladding</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ncore</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ncore</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ncladding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ncladding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ncore</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">emission</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">emission</span> <span class="o">=</span> <span class="n">EmissionLut</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="n">emission</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">emission</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">emission</span> <span class="o">=</span> <span class="n">EmissionLut</span><span class="p">(</span><span class="n">emission</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">collection</span> <span class="o">=</span> <span class="n">CollectionLut</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_emission_lut</span> <span class="o">=</span> <span class="n">emission</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collection_lut</span> <span class="o">=</span> <span class="n">collection</span>
+
+<div class="viewcode-block" id="MultimodeFiberLut.validate"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiberLut.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Check the integrity of parameters. Raises a ValueError.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcore</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcladding</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Fiber core diameter must be smaller than the fiber &#39;</span>
+            <span class="s1">&#39;cladding diameter!&#39;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_dcore</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcore</span>
+    <span class="k">def</span> <span class="nf">_set_dcore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span><span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dcore</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">dcore</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_dcore</span><span class="p">,</span> <span class="n">_set_dcore</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Diameter (m) of the fiber core.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_dcladding</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcladding</span>
+    <span class="k">def</span> <span class="nf">_set_dcladding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dcladding</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">dcladding</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_dcladding</span><span class="p">,</span> <span class="n">_set_dcladding</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="s1">&#39;Diameter (m) of the fiber cladding.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_ncore</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ncore</span>
+    <span class="k">def</span> <span class="nf">_set_ncore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ncore</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">ncore</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_ncore</span><span class="p">,</span> <span class="n">_set_ncore</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Refractive index of the fiber core.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_ncladding</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ncladding</span>
+    <span class="n">ncladding</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_ncladding</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="s1">&#39;Refractive index of the fiber cladding computed as &#39;</span>
+                         <span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">sqrt(ncore^2 - na^2)$&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_emission_lut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EmissionLut</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_emission_lut</span>
+    <span class="k">def</span> <span class="nf">_set_emission_lut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">EmissionLut</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nemission_lut</span> <span class="o">=</span> <span class="n">EmissionLut</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">emission</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_emission_lut</span><span class="p">,</span> <span class="n">_set_emission_lut</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Emission lookup table.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_collection_lut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CollectionLut</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collection_lut</span>
+    <span class="k">def</span> <span class="nf">_set_collection_lut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">CollectionLut</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collection_lut</span> <span class="o">=</span> <span class="n">CollectionLut</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">collection</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_collection_lut</span><span class="p">,</span> <span class="n">_set_collection_lut</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="s1">&#39;Collection lookup table.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;MultimodeFiberLut(dcore=</span><span class="si">{:f}</span><span class="s1">, dcladding=</span><span class="si">{:f}</span><span class="s1">, &#39;</span> \
+               <span class="s1">&#39;ncore=</span><span class="si">{:f}</span><span class="s1">, emission=</span><span class="si">{}</span><span class="s1">, collection=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_dcore</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcladding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ncore</span><span class="p">,</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_emission_lut</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collection_lut</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="FiberLayout"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.FiberLayout">[docs]</a><span class="k">class</span> <span class="nc">FiberLayout</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fiber</span><span class="p">:</span> <span class="n">MultimodeFiber</span> <span class="ow">or</span> <span class="s1">&#39;FiberLayout&#39;</span><span class="p">,</span>
+                 <span class="n">position</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                 <span class="n">direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">,</span> <span class="mf">1.0</span><span class="p">)):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Optical fiber layout constructor.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fiber: MultimodeFiber or FiberLayout</span>
+<span class="sd">            A multimode optical fiber instance or a fiber layout instance.</span>
+<span class="sd">            If a fiber layout instance, a new copy is created.</span>
+<span class="sd">        position: tuple(float, float, float)</span>
+<span class="sd">            Position of the fiber tip center.</span>
+<span class="sd">        direction:</span>
+<span class="sd">            Direction/orientation of the fiber. </span>
+<span class="sd">        --------</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fiber</span><span class="p">,</span> <span class="n">FiberLayout</span><span class="p">):</span>
+            <span class="n">af</span> <span class="o">=</span> <span class="n">fiber</span>
+            <span class="n">fiber</span> <span class="o">=</span> <span class="n">af</span><span class="o">.</span><span class="n">fiber</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">af</span><span class="o">.</span><span class="n">position</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="n">af</span><span class="o">.</span><span class="n">direction</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span> <span class="o">=</span> <span class="n">fiber</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_position</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_direction</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_fiber</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span>
+    <span class="k">def</span> <span class="nf">_set_fiber</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="n">fiber</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_fiber</span><span class="p">,</span> <span class="n">_set_fiber</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Properties of the optical fiber.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span>
+    <span class="k">def</span> <span class="nf">_set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;__len__&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_position</span><span class="p">,</span> <span class="n">_set_position</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="s1">&#39;Position of the fiber as a tuple (x, y, z).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span>
+    <span class="k">def</span> <span class="nf">_set_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">direction</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">norm</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Fiber direction vector norm/length must not be 0!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span> <span class="o">*=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">norm</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_direction</span><span class="p">,</span> <span class="n">_set_direction</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="s1">&#39;Fiber reference direction.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;FiberLayout(fiber=</span><span class="si">{}</span><span class="s1">, position=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">), &#39;</span> \
+               <span class="s1">&#39;direction=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">))&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> #</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

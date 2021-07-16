@@ -1,0 +1,7 @@
+xopto.pf.util.prepare module
+============================
+
+.. automodule:: xopto.pf.util.prepare
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+xopto.materials.absorption.water module
+=======================================
+
+.. automodule:: xopto.materials.absorption.water
+   :members:
+   :undoc-members:
+   :show-inheritance:

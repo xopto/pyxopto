@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.pf.miepolystyrene &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.pf.miepolystyrene</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.mie</span> <span class="kn">import</span> <span class="n">Mie</span>
+<span class="kn">from</span> <span class="nn">.miefractal</span> <span class="kn">import</span> <span class="n">MieFractal</span>
+<span class="kn">from</span> <span class="nn">.mienormal</span> <span class="kn">import</span> <span class="n">MieNormal</span>
+
+<span class="kn">from</span> <span class="nn">xopto.materials</span> <span class="kn">import</span> <span class="n">ri</span>
+
+<div class="viewcode-block" id="MiePolystyrene"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miepolystyrene.html#xopto.pf.miepolystyrene.MiePolystyrene">[docs]</a><span class="k">class</span> <span class="nc">MiePolystyrene</span><span class="p">(</span><span class="n">Mie</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diameter</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                <span class="n">ripolystyrene</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="nb">complex</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">riliquid</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="nb">complex</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Scattering phase function of monodisperse polystyrene microspherical</span>
+<span class="sd">        particles.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        diameter: float</span>
+<span class="sd">            Diameter of the Microspherical particle (m).</span>
+
+<span class="sd">        wavelength: float or complex</span>
+<span class="sd">            Wavelength (m).</span>
+
+<span class="sd">        ripolystyrene: float or complex</span>
+<span class="sd">            Refractive index of polystyrene at the specified wavelength.</span>
+<span class="sd">            If None, the builtin polystyrene refractive index is used.</span>
+
+<span class="sd">        riliquid: float</span>
+<span class="sd">            Refrective index of the liquid phase (water by default).</span>
+<span class="sd">            If None, the builtin refractive index of water is used.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">ripolystyrene</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ripolystyrene</span> <span class="o">=</span> <span class="n">ri</span><span class="o">.</span><span class="n">polystyrene</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">wavelength</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">riliquid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">riliquid</span> <span class="o">=</span> <span class="n">ri</span><span class="o">.</span><span class="n">water</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">wavelength</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">ripolystyrene</span><span class="p">,</span> <span class="n">riliquid</span><span class="p">,</span> <span class="n">diameter</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;MiePolystyrene(diameter=</span><span class="si">{}</span><span class="s1">, wavelength=</span><span class="si">{}</span><span class="s1">)&#39;</span>\
+            <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wavelength</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> # object @</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="MieNormalPolystyrene"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miepolystyrene.html#xopto.pf.miepolystyrene.MieNormalPolystyrene">[docs]</a><span class="k">class</span> <span class="nc">MieNormalPolystyrene</span><span class="p">(</span><span class="n">MieNormal</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">ripolystyrene</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="nb">complex</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">riliquid</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="nb">complex</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">clip</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span><span class="n">nd</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fractal scattering phase function for spherical polystyrene</span>
+<span class="sd">        microparticles.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        center: float</span>
+<span class="sd">            Distribution/diameter mean (m).</span>
+<span class="sd">        sigma: float</span>
+<span class="sd">            Distribution/diameter standard deviation (m).</span>
+<span class="sd">        wavelength: float</span>
+<span class="sd">            Wavelength of light (m).</span>
+<span class="sd">        ripolystyrene: float</span>
+<span class="sd">            Refrective index of polystyrene at the specified wavelength.</span>
+<span class="sd">            If None, the builtin polystyrene refractive index is used.</span>
+<span class="sd">        riliquid: float</span>
+<span class="sd">            Refrective index of the liquid phase (water by default).</span>
+<span class="sd">            If None, the builtin refractive index of water is used.</span>
+<span class="sd">        clip: float</span>
+<span class="sd">            Distribution/diameter range used to estimate the phase function</span>
+<span class="sd">            defined as [center - clip*sigma, center + clip*sigma].</span>
+<span class="sd">        nd: int</span>
+<span class="sd">            Number of equally spaced control points between dmin and dmax that</span>
+<span class="sd">            are used to estimate the phase function. A fixed-step Simpson</span>
+<span class="sd">            numerical integration is used to estimate the phase function at</span>
+<span class="sd">            the given deflection angle cosines. If nd is None, adaptive-step</span>
+<span class="sd">            numerical integration is used (note that the computational time</span>
+<span class="sd">            might increase dramatically!!!).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">ripolystyrene</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ripolystyrene</span> <span class="o">=</span> <span class="n">ri</span><span class="o">.</span><span class="n">polystyrene</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">wavelength</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">riliquid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">riliquid</span> <span class="o">=</span> <span class="n">ri</span><span class="o">.</span><span class="n">water</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">wavelength</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">cnter</span><span class="o">=</span><span class="n">center</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span>
+                         <span class="n">nsphere</span><span class="o">=</span><span class="n">ripolystyrene</span><span class="p">,</span>
+                         <span class="n">nmedium</span><span class="o">=</span><span class="n">riliquid</span><span class="p">,</span>
+                         <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">,</span>
+                         <span class="n">clip</span><span class="o">=</span><span class="n">clip</span><span class="p">,</span> <span class="n">nd</span><span class="o">=</span><span class="n">nd</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;MieNormalPolystyrene(center=</span><span class="si">{}</span><span class="s1">, sigma=</span><span class="si">{}</span><span class="s1">, wavelength=</span><span class="si">{}</span><span class="s1">)&#39;</span>\
+            <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_center</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wavelength</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> # object @</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="MieFractalPolystyrene"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miepolystyrene.html#xopto.pf.miepolystyrene.MieFractalPolystyrene">[docs]</a><span class="k">class</span> <span class="nc">MieFractalPolystyrene</span><span class="p">(</span><span class="n">MieFractal</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">drange</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">ripolystyrene</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="nb">complex</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">riliquid</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="nb">complex</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">nd</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fractal scattering phase function for spherical polystyrene</span>
+<span class="sd">        microparticles.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        alpha: float</span>
+<span class="sd">            Parameter alpha of the fractal distribution.</span>
+
+<span class="sd">        wavelength: float</span>
+<span class="sd">            Wavelength (m).</span>
+
+<span class="sd">        drange: list, tuple of two float</span>
+<span class="sd">            Finite range (m) of the particle diameter used to compute the</span>
+<span class="sd">            scattering phase function given as (dmin, dmax). If None, default</span>
+<span class="sd">            a range [5e-9, 30e-6] m is used.</span>
+
+<span class="sd">        ripolystyrene: float</span>
+<span class="sd">            Refrective index of polystyrene at the specified wavelength.</span>
+<span class="sd">            If None, the builtin polystyrene refractive index is used.</span>
+
+<span class="sd">        riliquid: float</span>
+<span class="sd">            Refrective index of the liquid phase (water by default).</span>
+<span class="sd">            If None, the builtin refractive index of water is used.</span>
+
+<span class="sd">        nd: int</span>
+<span class="sd">            Number of equally spaced control points between dmin and dmax that</span>
+<span class="sd">            are used to estimate the phase function. A fixed-step Simpson</span>
+<span class="sd">            numerical integration is used to estimate the phase function at</span>
+<span class="sd">            the given deflection angle cosines. If nd is None, adaptive-step</span>
+<span class="sd">            numerical integration is used (note that the computational time</span>
+<span class="sd">            might increase dramatically!!!).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># drange = np.array([10e-9, 20e-6])  # Calabro, JBO, 2014</span>
+        <span class="k">if</span> <span class="n">drange</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">drange</span> <span class="o">=</span> <span class="p">[</span><span class="mf">5e-9</span><span class="p">,</span> <span class="mf">30e-6</span><span class="p">]</span>  <span class="c1"># Naglic, OL, 2017</span>
+
+        <span class="k">if</span> <span class="n">ripolystyrene</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ripolystyrene</span> <span class="o">=</span> <span class="n">ri</span><span class="o">.</span><span class="n">polystyrene</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">wavelength</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">riliquid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">riliquid</span> <span class="o">=</span> <span class="n">ri</span><span class="o">.</span><span class="n">water</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">wavelength</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">drange</span><span class="o">=</span><span class="n">drange</span><span class="p">,</span>
+                         <span class="n">nsphere</span><span class="o">=</span><span class="n">ripolystyrene</span><span class="p">,</span>
+                         <span class="n">nmedium</span><span class="o">=</span><span class="n">riliquid</span><span class="p">,</span>
+                         <span class="n">wavelength</span><span class="o">=</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">nd</span><span class="o">=</span><span class="n">nd</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;MieFractalPolystyrene(alpha=</span><span class="si">{}</span><span class="s1">, wavelength=</span><span class="si">{}</span><span class="s1">)&#39;</span>\
+            <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wavelength</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> # object @</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcbase.mcpf.mgk &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcbase.mcpf.mgk</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.pfbase</span> <span class="kn">import</span> <span class="n">PfBase</span><span class="p">,</span> <span class="n">cltypes</span><span class="p">,</span> <span class="n">McObject</span>
+
+
+<div class="viewcode-block" id="MGk"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.mgk.html#xopto.mcbase.mcpf.mgk.MGk">[docs]</a><span class="k">class</span> <span class="nc">MGk</span><span class="p">(</span><span class="n">PfBase</span><span class="p">):</span>
+<div class="viewcode-block" id="MGk.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.mgk.html#xopto.mcbase.mcpf.mgk.MGk.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns an OpenCL structure that can be passed to the Monte carlo</span>
+<span class="sd">        simulator.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: McObject</span>
+<span class="sd">            A Monte Carlo simulator instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        struct: cltypes.Structure</span>
+<span class="sd">            A structure type that represents the scattering phase function in</span>
+<span class="sd">            the Monte Carlo kernel.</span>
+
+<span class="sd">        Structure fields</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        g: mc_fp_t</span>
+<span class="sd">            Parameter of the Gegenbauer kernel scattering phase function.</span>
+
+<span class="sd">        a: mc_fp_t</span>
+<span class="sd">            Parameter of the Gegenbauer kernel scattering phase function.</span>
+
+<span class="sd">        beta: mc_fp_t</span>
+<span class="sd">            Contribution of the Gegenbauer kernel scattering phase function.</span>
+
+<span class="sd">        inv_a, a1, a2: mc_fp_t</span>
+<span class="sd">            Precalculated constants used to speed up the computation.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClMGk</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;beta&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;inv_a&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;a2&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+            <span class="p">]</span>
+        
+        <span class="k">return</span> <span class="n">ClMGk</span></div>
+
+<div class="viewcode-block" id="MGk.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.mgk.html#xopto.mcbase.mcpf.mgk.MGk.cl_declaration">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL declarations of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McPf{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t g;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t beta;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t inv_a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a2;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="MGk.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.mgk.html#xopto.mcbase.mcpf.mgk.MGk.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL implementation of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;void dbg_print_pf(const McPf *pf) {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(&quot;MGk scattering phase function:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;g:&quot;, pf-&gt;g);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;a:&quot;, pf-&gt;a);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;beta:&quot;, pf-&gt;beta);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;inv_a:&quot;, pf-&gt;inv_a);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;a1:&quot;, pf-&gt;a1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;a2:&quot;, pf-&gt;a2);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline mc_fp_t mcsim_sample_pf(McSim *mcsim, mc_fp_t *azimuth){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t tmp, cos_theta;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t g = mcsim_current_pf(mcsim)-&gt;g;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a = mcsim_current_pf(mcsim)-&gt;a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t beta = mcsim_current_pf(mcsim)-&gt;beta;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t inv_a = mcsim_current_pf(mcsim)-&gt;inv_a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a1 = mcsim_current_pf(mcsim)-&gt;a1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a2 = mcsim_current_pf(mcsim)-&gt;a2;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	*azimuth = FP_2PI*mcsim_random(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if (mcsim_random(mcsim) &lt;= beta){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		if (g == FP_0) {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			cos_theta = FP_1 - FP_2*mcsim_random(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		} else if(a == FP_0) {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			cos_theta = a1 + mc_pow(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;				mc_fdiv(FP_1 - g, FP_1 + g),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;				FP_2*mcsim_random(mcsim)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			)*a2;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		} else {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			tmp = a1*mcsim_random(mcsim) + a2;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			tmp = FP_1 + g*g - mc_pow(tmp, -inv_a);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			cos_theta = mc_fdiv(tmp, FP_2*g);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	} else {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		/* Isotropic rayleigh scattering phase fun.: 3.0/(2.0)*costheta**2 */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		cos_theta = mc_cbrt(FP_2*mcsim_random(mcsim) - FP_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	return mc_fclip(cos_theta, -FP_1, FP_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Modified Gegenbauer kernel scattering phase function constructor.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            Gk(g, a) b + \\frac{2}{3}\\cos(\\theta)^{2}(1 - b)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        g: float</span>
+<span class="sd">            Parameter of the Gegenbauer kernel scattering phase function.</span>
+<span class="sd">            :math:`|g| &lt;= 1`</span>
+<span class="sd">        a: float</span>
+<span class="sd">            Parameter of the Gegenbauer kernel scattering phase function.</span>
+<span class="sd">            :math:`a &gt; - 1/2`</span>
+<span class="sd">            A value of 0.5 produces the Henyey-Greenstein scattering</span>
+<span class="sd">            phase function.</span>
+<span class="sd">        b: float</span>
+<span class="sd">            Contribution of the Gegenbauer kernel scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_precalculated</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_g</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_a</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_b</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_recalculate</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_get_g</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_g</span>
+    <span class="k">def</span> <span class="nf">_set_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_g</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_recalculate</span><span class="p">()</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_g</span><span class="p">,</span> <span class="n">_set_g</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Anisotropy factor when a=0.5.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_a</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span>
+    <span class="k">def</span> <span class="nf">_set_a</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_a</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_recalculate</span><span class="p">()</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_a</span><span class="p">,</span> <span class="n">_set_a</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Parameter alpha.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_b</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span>
+    <span class="k">def</span> <span class="nf">_set_b</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_b</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_b</span><span class="p">,</span> <span class="n">_set_b</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Contribution of the Gegenbauer kernel &#39;</span>\
+                                       <span class="s1">&#39;scattering phase function.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_recalculate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="c1"># precalculate some values</span>
+        <span class="n">g</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span>
+        <span class="k">if</span> <span class="n">g</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># cosTheta = 1 - 2*random</span>
+            <span class="n">invA</span> <span class="o">=</span> <span class="n">a1</span> <span class="o">=</span> <span class="n">a2</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="n">a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># cosTheta = (1+g^2)/(2*g) - ((1-g)/(1+g)).^(2*random)*(1+2*g+g^2)/(2*g)</span>
+            <span class="n">a1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">g</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">g</span><span class="p">)</span>
+            <span class="n">a2</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">g</span> <span class="o">+</span> <span class="n">g</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">g</span><span class="p">)</span>
+            <span class="n">invA</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># tmp = a1 * random + a2</span>
+            <span class="c1"># tmp = 1 + g * g - pow(tmp, -inva)</span>
+            <span class="c1"># cosTheta = tmp / (2*g)</span>
+
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">g</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">g</span><span class="o">*</span><span class="n">g</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">((</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">g</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">g</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">a</span><span class="p">)))</span>
+            <span class="n">a1</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">g</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">temp</span><span class="p">)</span>
+            <span class="n">a2</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">g</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
+            <span class="n">invA</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">a</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_precalculated</span> <span class="o">=</span> <span class="p">[</span><span class="n">invA</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">]</span>
+
+<div class="viewcode-block" id="MGk.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.mgk.html#xopto.mcbase.mcpf.mgk.MGk.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the an OpenCL Structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator. See the :py:meth:`~MGk.cl_type` method</span>
+<span class="sd">        for a detailed list of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: McObject</span>
+<span class="sd">            Simulator instance.</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Target OpenCL structure for packing.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Target structure received as an input argument or a new</span>
+<span class="sd">            instance of ClMGk if the input argument target is None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetch_cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_g</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">inv_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_precalculated</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">a1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_precalculated</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">a2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_precalculated</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">target</span></div>
+
+<div class="viewcode-block" id="MGk.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.mgk.html#xopto.mcbase.mcpf.mgk.MGk.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_g</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span><span class="p">,</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;MGk(g=</span><span class="si">{}</span><span class="s1">, a=</span><span class="si">{}</span><span class="s1">, b=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

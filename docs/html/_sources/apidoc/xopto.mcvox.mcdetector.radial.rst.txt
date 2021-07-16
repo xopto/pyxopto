@@ -1,0 +1,7 @@
+xopto.mcvox.mcdetector.radial module
+====================================
+
+.. automodule:: xopto.mcvox.mcdetector.radial
+   :members:
+   :undoc-members:
+   :show-inheritance:

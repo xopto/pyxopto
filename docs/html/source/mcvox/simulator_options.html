@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Simulator options &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Examples" href="examples/index.html" />
+    <link rel="prev" title="Simulator data types" href="simulator_data_types.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <span class="target" id="mcvox-simulator-options-label"></span><section id="simulator-options">
+<h1>Simulator options<a class="headerlink" href="#simulator-options" title="Permalink to this headline">¶</a></h1>
+<p>Simulator options are used to customize the OpenCL kernel. All kernel
+options are derived from the <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McOption" title="xopto.mcbase.mcoptions.McOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McOption</span></code></a> class.
+The boolean options are implemented
+by subclassing <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McBoolOption" title="xopto.mcbase.mcoptions.McBoolOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">McBoolOption</span></code></a>,
+the integer options
+by subclassing <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McIntOption" title="xopto.mcbase.mcoptions.McIntOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">McIntOption</span></code></a>,
+the floating-point
+options by subclassing <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McFloatOption" title="xopto.mcbase.mcoptions.McFloatOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">McFloatOption</span></code></a> and
+the data type options
+by subclassing <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McTypeOption" title="xopto.mcbase.mcoptions.McTypeOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">McTypeOption</span></code></a>.</p>
+<p>The <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#module-xopto.mcbase.mcoptions" title="xopto.mcbase.mcoptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions</span></code></a> is also conveniently imported into the
+<a class="reference internal" href="../../apidoc/xopto.mcvox.mc.html#module-xopto.mcvox.mc" title="xopto.mcvox.mc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcvox.mc</span></code></a> and <a class="reference internal" href="../../apidoc/xopto.mcvox.mcoptions.html#module-xopto.mcvox.mcoptions" title="xopto.mcvox.mcoptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcvox.mcoptions</span></code></a> modules.</p>
+<p>The list of available options is as follows:</p>
+<ul>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseBallisticKernel" title="xopto.mcbase.mcoptions.McUseBallisticKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">McUseBallisticKernel</span></code></a>
+(default is <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseBallisticKernel.off" title="xopto.mcbase.mcoptions.McUseBallisticKernel.off"><code class="xref py py-class docutils literal notranslate"><span class="pre">off</span></code></a>) -
+can be used to switch to ballistic implementation of the Monte Carlo kernel.
+The ballistic Monte Carlo kernel either scatters or fully absorbs the packet
+in each simulation step that does not intersect the boundaries of the current
+material (e.g. voxel or layer). The probability of the outcome depends on
+the values of the absorption coefficient <img class="math" src="../../_images/math/03f2425342c1b5f54bdfd371c829e14a53da0681.png" alt="\mu_a"/>, scattering
+coefficient <img class="math" src="../../_images/math/77d8b7a781290f8bd4df7a401927d515644fa3c4.png" alt="\mu_s"/> and a random number <img class="math" src="../../_images/math/4b0fcdf5bbee5b94367e76452870b31d7c74f348.png" alt="\xi"/> sampled from a
+uniform distribution <img class="math" src="../../_images/math/8027137b3073a7f5ca4e45ba2d030dcff154eca4.png" alt="[0, 1]"/>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>if <img class="math" src="../../_images/math/084b10f310db23c2987ba2bd86574f49154f8177.png" alt="\frac{\mu_a}{\mu_a + \mu_s} \geq \xi"/> - fully absorb else scatter
+the packet according to the scattering phase function</p></li>
+</ul>
+</div></blockquote>
+<p>Note that in the ballistic Monte Carlo kernel the photon packets do not
+undergo termination through weight threshold and / or lottery and hence the
+values of options <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McMinimumPacketWeight" title="xopto.mcbase.mcoptions.McMinimumPacketWeight"><code class="xref py py-class docutils literal notranslate"><span class="pre">McMinimumPacketWeight</span></code></a>
+and <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseLottery" title="xopto.mcbase.mcoptions.McUseLottery"><code class="xref py py-class docutils literal notranslate"><span class="pre">McUseLottery</span></code></a> are not used by the
+ballistic kernel.
+In contrast, the regular Monte Carlo kernel terminates the photon packets
+through the mechanisms of weight threshold and lottery. In each simulation
+step that does not intersect with the boundaries of the current material, the
+weight <img class="math" src="../../_images/math/cc87ee665749db882f94e0d3707eb23e39638650.png" alt="w"/> of the photon packet is reduced by
+<img class="math" src="../../_images/math/3f21410c9848d7227ab4f6abf13a9ad7783ca393.png" alt="w\frac{\mu_a}{\mu_a + \mu_s}"/>.
+The ballistic and regular Monte Carlo kernel converge towards the same
+solution. While the ballistic kernel is faster it produces significantly
+more noisy results than the regular kernel.</p>
+</li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseNativeMath" title="xopto.mcbase.mcoptions.McUseNativeMath"><code class="xref py py-class docutils literal notranslate"><span class="pre">McUseNativeMath</span></code></a>
+(default is <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseNativeMath.off" title="xopto.mcbase.mcoptions.McUseNativeMath.off"><code class="xref py py-class docutils literal notranslate"><span class="pre">off</span></code></a>) -
+can be used to enable device-native math functions. Native math usually gives
+some performance benefit, but might not be fully compliant with precisions
+defined by the IEEE standards.</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">McMaterialMemory</span></code>
+(default is <code class="xref py py-attr docutils literal notranslate"><span class="pre">global_mem</span></code>) -
+OpenCL memory type used to store the array of materials.
+Selecting <code class="xref py py-attr docutils literal notranslate"><span class="pre">constant_mem</span></code> memory
+will likely lead to a performance boost, in particular on
+older GPUs. However, note that the amount of available constant
+(<code class="xref py py-attr docutils literal notranslate"><span class="pre">constant_mem</span></code>)
+memory on GPUs is typically limited to about 64k. The constant memory is
+also used to hold some performance-critical simulator data and can be also
+used to hold lookup table data of integer or floating-point type.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McIntLutMemory" title="xopto.mcbase.mcoptions.McIntLutMemory"><code class="xref py py-class docutils literal notranslate"><span class="pre">McIntLutMemory</span></code></a>
+(default is <code class="xref py py-attr docutils literal notranslate"><span class="pre">constant_mem</span></code>) -
+OpenCL memory type used to hold the integer type lookup table data.
+Selecting <code class="xref py py-attr docutils literal notranslate"><span class="pre">global_mem</span></code> memory
+will likely lead to a significant performance degradation, in particular on
+older GPUs. Note that the amount of available “constant_mem” memory on GPUs is
+typically limited to about 64k.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McFloatLutMemory" title="xopto.mcbase.mcoptions.McFloatLutMemory"><code class="xref py py-class docutils literal notranslate"><span class="pre">McFloatLutMemory</span></code></a>
+(default is <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McFloatLutMemory.constant_mem" title="xopto.mcbase.mcoptions.McFloatLutMemory.constant_mem"><code class="xref py py-attr docutils literal notranslate"><span class="pre">constant_mem</span></code></a>) -
+OpenCL memory type used to hold the floating-point type lookup table data.
+Selecting <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McFloatLutMemory.global_mem" title="xopto.mcbase.mcoptions.McFloatLutMemory.global_mem"><code class="xref py py-attr docutils literal notranslate"><span class="pre">global_mem</span></code></a> memory
+will likely lead to a significant performance degradation, in particular on
+older GPUs. Note that the amount of available “constant_mem” memory on GPUs is
+typically limited to about 64 kB.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McDebugMode" title="xopto.mcbase.mcoptions.McDebugMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">McDebugMode</span></code></a>
+(default is <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McDebugMode.off" title="xopto.mcbase.mcoptions.McDebugMode.off"><code class="xref py py-class docutils literal notranslate"><span class="pre">off</span></code></a>) -
+Can be used to enable kernel debug mode that will print information to
+the console output. Note that this mode requires printf functionality in
+the  OpenCL kernel that might not be supported by all OpenCL devices.
+If this mode is turned on <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McDebugMode.on" title="xopto.mcbase.mcoptions.McDebugMode.on"><code class="xref py py-class docutils literal notranslate"><span class="pre">on</span></code></a>,
+run the Monte Carlo simulator with one or a small number of photon packets.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseSoft64Atomics" title="xopto.mcbase.mcoptions.McUseSoft64Atomics"><code class="xref py py-class docutils literal notranslate"><span class="pre">McUseSoft64Atomics</span></code></a>
+(default is <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseSoft64Atomics.off" title="xopto.mcbase.mcoptions.McUseSoft64Atomics.off"><code class="xref py py-class docutils literal notranslate"><span class="pre">off</span></code></a>) -
+Can be used to force software implementation of 64-bit atomic operations.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseLottery" title="xopto.mcbase.mcoptions.McUseLottery"><code class="xref py py-class docutils literal notranslate"><span class="pre">McUseLottery</span></code></a>
+(default is <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseSoft64Atomics.on" title="xopto.mcbase.mcoptions.McUseSoft64Atomics.on"><code class="xref py py-class docutils literal notranslate"><span class="pre">on</span></code></a>) -
+Can be used to disable termination of photon packets through lottery.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McMinimumPacketWeight" title="xopto.mcbase.mcoptions.McMinimumPacketWeight"><code class="xref py py-class docutils literal notranslate"><span class="pre">McMinimumPacketWeight</span></code></a>
+(default is 10 <sup>-4</sup>) -
+Sets the minimum photon packet weight allowed before starting packet
+termination or lottery.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McPacketLotteryChance" title="xopto.mcbase.mcoptions.McPacketLotteryChance"><code class="xref py py-class docutils literal notranslate"><span class="pre">McPacketLotteryChance</span></code></a>
+(default is 0.1) -
+Terminate photon packet by lottery if the value of a uniform random
+number from [0, 1] exceeds this value.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUsePackedStructures" title="xopto.mcbase.mcoptions.McUsePackedStructures"><code class="xref py py-class docutils literal notranslate"><span class="pre">McUsePackedStructures</span></code></a>
+(default is <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUsePackedStructures.off" title="xopto.mcbase.mcoptions.McUsePackedStructures.off"><code class="xref py py-class docutils literal notranslate"><span class="pre">off</span></code></a>) -
+Can be used to force the use of tightly packed structures in the OpenCL code.
+Note that packed structures can lead to significant performance
+degradation of the MonteCarlo kernel. This option is the last resort if
+the fields of the OpenCL and host structures cannot be properly aligned.
+When declaring OPenCL or host structures always start with the
+largest data type and move towards smaller data types. Use data types
+that are of size no less than 4 bytes.</p></li>
+</ul>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Voxelized MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Simulator options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/index.html">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Voxelized MC</a><ul>
+      <li>Previous: <a href="simulator_data_types.html" title="previous chapter">Simulator data types</a></li>
+      <li>Next: <a href="examples/index.html" title="next chapter">Examples</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

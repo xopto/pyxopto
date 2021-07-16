@@ -1,0 +1,762 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcvox.mcgeometry.voxel &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcvox.mcgeometry.voxel</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">mcobject</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">mctypes</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">cltypes</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">mcpf</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox.mcutil.axis</span> <span class="kn">import</span> <span class="n">Axis</span>
+
+<div class="viewcode-block" id="Voxel"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxel">[docs]</a><span class="k">class</span> <span class="nc">Voxel</span><span class="p">(</span><span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Minimal implementation of a ctypes structure that represents</span>
+<span class="sd">    a singe voxel in the Monte Carlo simulations.</span>
+<span class="sd">    All the fields defined by this implementation are required.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="Voxel.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxel.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClVoxel</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Ctypes structure that represents a singe voxel.</span>
+
+<span class="sd">            Fields</span>
+<span class="sd">            ------</span>
+<span class="sd">            material: mc_int_t</span>
+<span class="sd">                Voxel material as an index into the array of materials.</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;material_index&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">ClVoxel</span></div>
+
+<div class="viewcode-block" id="Voxel.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxel.cl_declaration">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that represents a single voxel in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McVoxel {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_int_t material_index; /* &lt; @brief Index of the voxel material. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Voxel.np_dtype"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxel.np_dtype">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">np_dtype</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Numpy data type representing a single voxel. This implementation</span>
+<span class="sd">        uses structured numpy array that can be directly/efficiently</span>
+<span class="sd">        mapped to OpenCL data arrays.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Target simulator instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dtype: np.dtype</span>
+<span class="sd">            Numpy data type representing a single voxel.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;material_index&#39;</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_int</span><span class="p">)])</span></div></div>
+
+
+<div class="viewcode-block" id="Voxels"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels">[docs]</a><span class="k">class</span> <span class="nc">Voxels</span><span class="p">(</span><span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Minimal implementation of a voxelized sample.</span>
+<span class="sd">    All the fields defined by this implementation are</span>
+<span class="sd">    required by the Monte Carlo simulator.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="Voxels.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClVoxels</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Ctypes structure that is passed to the Monte Carlo kernel.</span>
+
+<span class="sd">            Fields</span>
+<span class="sd">            ------</span>
+<span class="sd">            top_left: mc_point3f_t</span>
+<span class="sd">                Coordinates of the top left corner of the voxelized sample volume.</span>
+<span class="sd">            bottom_right: mc_point3f_t</span>
+<span class="sd">                Coordinates of the bottom right corner of the voxelized sample volume.</span>
+<span class="sd">            direction: mc_point3f_t</span>
+<span class="sd">                Size of the voxels along the x, y and z axis.</span>
+<span class="sd">            reflectance: shape</span>
+<span class="sd">                Shape of the voxelized sample volume along the x, y and z</span>
+<span class="sd">                axis.</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;top_left&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;bottom_right&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3_t</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">ClVoxels</span></div>
+
+<div class="viewcode-block" id="Voxels.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.cl_declaration">[docs]</a>    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that defines the source in the Monte Carlo simulator and</span>
+<span class="sd">        the data type that represents a single voxel.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">voxel_cl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_instance</span><span class="o">.</span><span class="n">fetch_cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">voxel_cl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">voxel_cl</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="n">voxel_cl</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McVoxelConfig {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t top_left; /**&lt; @brief Coordinates of the top left corner. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t bottom_right; /**&lt; @brief Coordinates of the bottom right corner. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t size;     /**&lt; @brief Size of a voxel. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3_t shape;     /**&lt; @brief Shape of the voxelized space. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Voxels.cl_options"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.cl_options">[docs]</a>    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL options of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_instance</span><span class="o">.</span><span class="n">fetch_cl_options</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Voxels.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.cl_implementation">[docs]</a>    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL options of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">voxel_cl</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_instance</span><span class="o">.</span><span class="n">fetch_cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">voxel_cl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">voxel_cl</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="n">voxel_cl</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;void dbg_print_voxel_cfg(__constant const McVoxelConfig *cfg){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(&quot;McVoxelConfig:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(INDENT &quot;top_left:&quot;, &amp;cfg-&gt;top_left);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(INDENT &quot;bottom_right:&quot;, &amp;cfg-&gt;bottom_right);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(INDENT &quot;size:&quot;, &amp;cfg-&gt;size);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3(INDENT &quot;shape:&quot;, &amp;cfg-&gt;shape);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xaxis</span><span class="p">:</span> <span class="n">Axis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">:</span> <span class="n">Axis</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">:</span> <span class="n">Axis</span><span class="p">,</span>
+                 <span class="n">voxel</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Voxel</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Object that manages the voxelized sample volume. Each voxel item</span>
+<span class="sd">        is of integer type that represents the index of material filling</span>
+<span class="sd">        the voxel volume.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xaxis, yaxis, zaxis: Axis</span>
+<span class="sd">            Objects that specify the voxelized grid along the three orthogonal</span>
+<span class="sd">            coordinate axis.</span>
+<span class="sd">            Note that the Axis constructor takes the outer boundaries of the</span>
+<span class="sd">            range and not of the voxel centers. Use Axis(-20e-3, 20e-3, 40) to</span>
+<span class="sd">            have 40 voxels from -20 to 20 mm (voxel size is 1 mm).</span>
+<span class="sd">            It is recommended to start the zaxis at z=0.</span>
+
+<span class="sd">        voxel: type</span>
+<span class="sd">            Data type representing a single voxel</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Initially the material_index of all voxels is set to 0, referencing the</span>
+<span class="sd">        material of the surrounding medium. The data array indexing follows</span>
+<span class="sd">        C scheme, i.e [z, y, x]. Use the data method to get the numpy voxel</span>
+<span class="sd">        array.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">xaxis</span><span class="o">.</span><span class="n">logscale</span> <span class="ow">or</span> <span class="n">yaxis</span><span class="o">.</span><span class="n">logscale</span> <span class="ow">or</span> <span class="n">zaxis</span><span class="o">.</span><span class="n">logscale</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Logarithmic scale is not supported!&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span> <span class="o">=</span> <span class="n">xaxis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span> <span class="o">=</span> <span class="n">yaxis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span> <span class="o">=</span> <span class="n">zaxis</span>
+
+        <span class="k">if</span> <span class="n">voxel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">voxel</span> <span class="o">=</span> <span class="n">Voxel</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_size</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">step</span><span class="p">),</span>
+            <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">step</span><span class="p">),</span>
+            <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_top_left</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">span</span><span class="p">),</span>
+            <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">span</span><span class="p">),</span>
+            <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">span</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bottom_right</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">span</span><span class="p">),</span>
+            <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">span</span><span class="p">),</span>
+            <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">span</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_type</span> <span class="o">=</span> <span class="n">voxel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_type</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">_create_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">n</span><span class="p">),</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="Voxels.index"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> \
+            <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns index of the voxel at the given position.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        position: (float, float, float)</span>
+<span class="sd">            Position as a tuple of three coordinates (x, y, z).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        index: (int, int, int)</span>
+<span class="sd">            A tuple of indices into the voxel array.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">indx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">_voxel_size</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">indy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">_voxel_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">indz</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">_voxel_size</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">indz</span><span class="p">,</span> <span class="n">indy</span><span class="p">,</span> <span class="n">indx</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Voxels.center"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.center">[docs]</a>    <span class="k">def</span> <span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> \
+            <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the center of the voxel at the given index.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        index: (int, int, int)</span>
+<span class="sd">            Voxel index as a tuple of three indices (ind_x, ind_y, ind_z).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        position: (float, float, float)</span>
+<span class="sd">            A tuple of indices into the voxel array.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_voxel_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_voxel_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_voxel_size</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Voxels.isvalid"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.isvalid">[docs]</a>    <span class="k">def</span> <span class="nf">isvalid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns True if the given index is valid for the voxel array.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        index: (int, int, int)</span>
+<span class="sd">            Index into the voxel array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        valid: bool</span>
+<span class="sd">            True if index is valid.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> \
+               <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> \
+               <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">index</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Voxels.contains"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.contains">[docs]</a>    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns True if the position is within the voxel array boundaries. Note</span>
+<span class="sd">        that the lower bound is included but the upper bound is not.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        position: (float, float, float)</span>
+<span class="sd">            Position as a tuple of three coordinates (x, y, z).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        contains: bool</span>
+<span class="sd">            Returns True if the given position lies within the voxel array</span>
+<span class="sd">            boundaries.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">start</span> <span class="o">&lt;=</span> <span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">stop</span> <span class="ow">and</span> \
+               <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">start</span> <span class="o">&lt;=</span> <span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">stop</span> <span class="ow">and</span> \
+               <span class="bp">self</span><span class="o">.</span><span class="n">zaxis</span><span class="o">.</span><span class="n">start</span> <span class="o">&lt;=</span> <span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">zaxis</span><span class="o">.</span><span class="n">stop</span></div>
+
+<div class="viewcode-block" id="Voxels.intersect"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.intersect">[docs]</a>    <span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+                  <span class="nb">dir</span><span class="p">:</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> \
+                      <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> \
+                            <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Intersect the voxelized box with the ray and return the intersection.</span>
+<span class="sd">        Intersection is considered to exist only if the distance to</span>
+<span class="sd">        the intersection is positive.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pos: (float, float, float)</span>
+<span class="sd">            Ray origin.</span>
+<span class="sd">        dir: (float, float, float)</span>
+<span class="sd">            Ray direction.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        intersection: (float, float, float) or None</span>
+<span class="sd">            Returns intersection if one exists, else None.</span>
+<span class="sd">        normal: (float, float, float) or None</span>
+<span class="sd">            Surface normal of the voxelized sample box that points in the</span>
+<span class="sd">            propagation direction.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">invdir</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">dir</span><span class="p">[</span><span class="n">ax</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">invdir</span><span class="p">[</span><span class="n">ax</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="nb">dir</span><span class="p">[</span><span class="n">ax</span><span class="p">]</span>
+
+        <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">edges</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">edges</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zaxis</span><span class="o">.</span><span class="n">edges</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+
+        <span class="n">t1</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmin</span> <span class="o">-</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">invdir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">t2</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">invdir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">t3</span> <span class="o">=</span> <span class="p">(</span><span class="n">ymin</span> <span class="o">-</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">invdir</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">t4</span> <span class="o">=</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">invdir</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">t5</span> <span class="o">=</span> <span class="p">(</span><span class="n">zmin</span> <span class="o">-</span> <span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">*</span><span class="n">invdir</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">t6</span> <span class="o">=</span> <span class="p">(</span><span class="n">zmax</span> <span class="o">-</span> <span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">*</span><span class="n">invdir</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">txmin</span><span class="p">,</span> <span class="n">txmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span>
+        <span class="n">tymin</span><span class="p">,</span> <span class="n">tymax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">t3</span><span class="p">,</span> <span class="n">t4</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t3</span><span class="p">,</span> <span class="n">t4</span><span class="p">)</span>
+        <span class="n">tzmin</span><span class="p">,</span> <span class="n">tzmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">t5</span><span class="p">,</span> <span class="n">t6</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">t5</span><span class="p">,</span> <span class="n">t6</span><span class="p">)</span>
+
+        <span class="n">tmin</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">txmin</span><span class="p">,</span> <span class="n">tymin</span><span class="p">,</span> <span class="n">tzmin</span><span class="p">)</span>
+        <span class="n">tmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">txmax</span><span class="p">,</span> <span class="n">tymax</span><span class="p">,</span> <span class="n">tzmax</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">tmax</span> <span class="o">&lt;</span> <span class="n">tmin</span> <span class="ow">or</span> <span class="n">tmax</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">tmin</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">tmin</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">tmax</span>
+
+        <span class="n">intersection</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">t</span><span class="o">*</span><span class="nb">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">t</span><span class="o">*</span><span class="nb">dir</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">t</span><span class="o">*</span><span class="nb">dir</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">normal</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+        <span class="n">normal</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">txmin</span> <span class="o">&gt;=</span> <span class="n">tymin</span> <span class="ow">and</span> <span class="n">txmin</span> <span class="o">&gt;=</span> <span class="n">tzmin</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="nb">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">normal</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="ow">not</span> <span class="n">normal</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">tymin</span> <span class="o">&gt;=</span> <span class="n">tzmin</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="nb">dir</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">normal</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="ow">not</span> <span class="p">(</span><span class="n">normal</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">normal</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="nb">dir</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">intersection</span><span class="p">,</span> <span class="n">normal</span></div>
+
+<div class="viewcode-block" id="Voxels.update_required"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.update_required">[docs]</a>    <span class="k">def</span> <span class="nf">update_required</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clear</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns True if the voxel data have been changed and need to be</span>
+<span class="sd">        uploaded to the OpenCL device before running the next simulation.</span>
+<span class="sd">        The update flag is cleared (set to False) if the value of the clear</span>
+<span class="sd">        argument is True.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        clear: bool</span>
+<span class="sd">            If True, the update flag is cleared (set to False) after returning</span>
+<span class="sd">            its value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        update_required: bool</span>
+<span class="sd">            True if the voxel data have changed and need to be uploaded to</span>
+<span class="sd">            tho OpenCL device before running a new simulation.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span>
+        <span class="k">if</span> <span class="n">clear</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Voxels.update"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Call this method if the voxel data needs to be updated/uploaded to</span>
+<span class="sd">        the OpenCL device.</span>
+<span class="sd">        This function should be called if the voxel data have been changed</span>
+<span class="sd">        after the last simulation call. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_voxel_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">Voxel</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_type</span>
+    <span class="n">voxel_type</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_voxel_type</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                          <span class="s1">&#39;Voxel data type used by this voxelized sample.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_voxel_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Voxel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_instance</span>
+    <span class="n">voxel</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_voxel_instance</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Instance of the Voxel data type.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_x_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axis</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span>
+    <span class="n">xaxis</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_x_axis</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Axis x of the voxel array.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">centers</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_x</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Coordinates of the voxel centers along the x axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_dx</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_dx</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;The size of voxels along the x axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_y_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axis</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span>
+    <span class="n">yaxis</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_y_axis</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Axis y of the voxel array.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">centers</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_y</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Coordinates of the voxel centers along the y axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_dy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_dy</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;The size of voxels along the y axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_z_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axis</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span>
+    <span class="n">zaxis</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_z_axis</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Axis z of the voxel array.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_z</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">centers</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_z</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Coordinates of the voxel centers along the z axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_dz</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_size</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">dz</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_dz</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;The size of voxels along the z axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_voxel_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_size</span>
+    <span class="n">voxel_size</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_voxel_size</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                          <span class="s1">&#39;Size of a voxel (m) as (dx, dy, dz).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_shape</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Voxel array shape (z, y, x).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_size</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Total number of voxels.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">()</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_grid</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;Coordinate matrices Z, Y and X of voxel centers as &#39;</span>
+                    <span class="s1">&#39;returned by the :py:meth:`Voxels.meshgrid` method.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_top_left</span><span class="p">)</span>
+    <span class="n">top_left</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_top_left</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Coordinates (x, y, z) of the top left corner of &#39;</span>
+                        <span class="s1">&#39;the voxel array.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Voxels.meshgrid"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.meshgrid">[docs]</a>    <span class="k">def</span> <span class="nf">meshgrid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Coordinate matrices with x, y and z coordinates of all the voxels.</span>
+<span class="sd">        The shape of the matrices equals the shape of the voxel array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Z: np.ndarray</span>
+<span class="sd">            Z coordinates of all the voxels as a 3D array.</span>
+<span class="sd">        Y: np.ndarray</span>
+<span class="sd">            Y coordinates of all the voxels as a 3D array.</span>
+<span class="sd">        X: np.ndarray</span>
+<span class="sd">            X coordinates of all the voxels as a 3D array.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The coordinate matrices are created on the first call.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">centers</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">centers</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">centers</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span></div>
+
+<div class="viewcode-block" id="Voxels.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the ctypes structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator. See :py:meth:`Voxels.cl_type` for a detailed</span>
+<span class="sd">        list of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+<span class="sd">        target: mcypes.Structure</span>
+<span class="sd">            Ctypes structure that is filled with the voxelization configuration.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: mctypes.Structures</span>
+<span class="sd">            Filled ctypes structure received as an input argument or a new</span>
+<span class="sd">            instance if the input argument target is None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_top_left</span><span class="p">)</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bottom_right</span><span class="p">)</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_voxel_size</span><span class="p">)</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">n</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">n</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">n</span>
+
+        <span class="k">return</span> <span class="n">target</span></div>
+
+<div class="viewcode-block" id="Voxels.data"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.data">[docs]</a>    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the voxel data as a 3D array representing the voxelized sample</span>
+<span class="sd">        space.</span>
+
+<span class="sd">        The data array should be addressed as data[z, y, x], wher x, y and z</span>
+<span class="sd">        are the indices along the corresponding spatial axes passed to the</span>
+<span class="sd">        constructor. The individual data fields of the selected voxels</span>
+<span class="sd">        are addressed as data[x, y, z][&#39;field_name&#39;],</span>
+<span class="sd">        e.g. data[0, :, :][&#39;material_index&#39;] = 1 sets the material of the</span>
+<span class="sd">        first layer of voxels along the z axis to 1 (the second material in</span>
+<span class="sd">        the materials list). </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            A simulator instance that is required only during the first call</span>
+<span class="sd">            to derive the proper voxel data type and allocate the a 3D</span>
+<span class="sd">            structured array that represents the voxels.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: np.ndarray</span>
+<span class="sd">            Voxel data as a 3D numpy array.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s1">&#39;Cannot allocate voxel data array without a &#39;</span>
+                    <span class="s1">&#39;simulator instance!&#39;</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_voxel_instance</span><span class="o">.</span><span class="n">np_dtype</span><span class="p">(</span><span class="n">mc</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_instance</span><span class="o">.</span><span class="n">np_dtype</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">dtype</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;The data type of voxels cannot be changed!&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_material_index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">()[</span><span class="s1">&#39;material_index&#39;</span><span class="p">]</span>
+    <span class="n">material</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_material_index</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> 
+                        <span class="s1">&#39;3D array of material indices.&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Voxels.plot"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">autoscale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+             <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Show slices through the materials array.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        scale: str</span>
+<span class="sd">            Data scaling can be &quot;log&quot; for logarithmic or &quot;lin&quot; for linear.</span>
+<span class="sd">        axis: str</span>
+<span class="sd">            The axis of slicing (&quot;x&quot;, &quot;y&quot; or &quot;z&quot;).</span>
+<span class="sd">        autoscale: bool</span>
+<span class="sd">            Scale the color coding of individual slices to the corresponding</span>
+<span class="sd">            range of weights. If True, the color coding changes from slice</span>
+<span class="sd">            to slice.</span>
+<span class="sd">        show: bool </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">xopto.util</span> <span class="kn">import</span> <span class="n">sliceview</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">material</span>
+
+        <span class="n">ax</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;z&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Slice {{slice}}/</span><span class="si">{}</span><span class="s1"> @ </span><span class="si">{}</span><span class="s1"> = {{pos:.6f}}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">ax</span><span class="p">],</span> <span class="n">axis</span><span class="p">)</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span>
+            <span class="n">slices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">centers</span>
+            <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span>
+        <span class="k">elif</span> <span class="n">ax</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span>
+            <span class="n">slices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">centers</span>
+            <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span>
+        <span class="k">elif</span> <span class="n">ax</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span>
+            <span class="n">slices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">centers</span>
+            <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span>
+
+        <span class="n">sv</span> <span class="o">=</span> <span class="n">sliceview</span><span class="o">.</span><span class="n">SliceView</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">slices</span><span class="o">=</span><span class="n">slices</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">logscale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
+            <span class="n">autoscale</span><span class="o">=</span><span class="n">autoscale</span><span class="p">)</span>
+        <span class="n">sv</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">set_window_title</span><span class="p">(</span><span class="s1">&#39;Voxel Material SliceView&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="n">sv</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Voxels(xaxis=</span><span class="si">{}</span><span class="s1">, yaxis=</span><span class="si">{}</span><span class="s1">, zaxis=</span><span class="si">{}</span><span class="s1">, voxel=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxel_type</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:s}</span><span class="s1"> # id 0x</span><span class="si">{:&gt;08X}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

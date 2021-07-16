@@ -1,0 +1,7 @@
+xopto.materials.ri.util.model.base module
+=========================================
+
+.. automodule:: xopto.materials.ri.util.model.base
+   :members:
+   :undoc-members:
+   :show-inheritance:

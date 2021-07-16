@@ -1,0 +1,7 @@
+xopto.mcbase.mcsv module
+========================
+
+.. automodule:: xopto.mcbase.mcsv
+   :members:
+   :undoc-members:
+   :show-inheritance:

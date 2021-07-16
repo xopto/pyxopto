@@ -1,0 +1,7 @@
+xopto.mcvox.mcdetector.cartesian module
+=======================================
+
+.. automodule:: xopto.mcvox.mcdetector.cartesian
+   :members:
+   :undoc-members:
+   :show-inheritance:

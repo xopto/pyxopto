@@ -1,0 +1,28 @@
+xopto.pf.util package
+=====================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.pf.util.helpers
+   xopto.pf.util.pfmapbase
+   xopto.pf.util.pfmapgk
+   xopto.pf.util.pfmapmhg
+   xopto.pf.util.pfmapmie
+   xopto.pf.util.pfmapmpc
+   xopto.pf.util.pfpolygonbase
+   xopto.pf.util.pfpolygongk
+   xopto.pf.util.pfpolygonmhg
+   xopto.pf.util.pfpolygonmpc
+   xopto.pf.util.prepare
+
+Module contents
+---------------
+
+.. automodule:: xopto.pf.util
+   :members:
+   :undoc-members:
+   :show-inheritance:

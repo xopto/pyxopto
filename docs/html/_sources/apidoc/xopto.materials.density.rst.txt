@@ -1,0 +1,20 @@
+xopto.materials.density package
+===============================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.materials.density.base
+   xopto.materials.density.polystyrene
+   xopto.materials.density.water
+
+Module contents
+---------------
+
+.. automodule:: xopto.materials.density
+   :members:
+   :undoc-members:
+   :show-inheritance:

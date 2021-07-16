@@ -1,0 +1,7 @@
+xopto.mcml.mcutil.fourier module
+================================
+
+.. automodule:: xopto.mcml.mcutil.fourier
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Fluence &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Trace" href="trace.html" />
+    <link rel="prev" title="Surface layouts" href="surface_layout.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <span class="target" id="mcml-fluence-label"></span><section id="fluence">
+<h1>Fluence<a class="headerlink" href="#fluence" title="Permalink to this headline">¶</a></h1>
+<p>Fluence detector is used to obtain the spatial distribution of the
+energy (packet weights) deposited into the sample through the process of
+absorption. The fluence detector is implemented in the
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcfluence.Fluence</span></code></a> class. The observed volume
+voxelization is axis-aligned and allows independent adjustment of the voxel
+size along the x, y and z axis.</p>
+<p>The <a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fluence</span></code></a> is also conveniently
+imported into the <a class="reference internal" href="../../apidoc/xopto.mcml.mcfluence.html#module-xopto.mcml.mcfluence" title="xopto.mcml.mcfluence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcfluence</span></code></a> and
+<a class="reference internal" href="../../apidoc/xopto.mcvox.mcfluence.html#module-xopto.mcvox.mcfluence" title="xopto.mcvox.mcfluence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcvox.mcfluence</span></code></a> modules.</p>
+<p>In the following example we voxelize a volume that extends along the
+x axis from -5 to 5 mm, along the y axis from -5 to 5 mm and along
+the z axis from 0 to 10 mm. The voxel size along all the three axis is
+set to 0.1 mm.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+
+<span class="n">fluence</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcfluence</span><span class="o">.</span><span class="n">Fluence</span><span class="p">(</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcfluence</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="o">-</span><span class="mf">5.0e-3</span><span class="p">,</span> <span class="mf">5.0e-3</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+    <span class="n">yaxis</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcfluence</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="o">-</span><span class="mf">5.0e-3</span><span class="p">,</span> <span class="mf">5.0e-3</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+    <span class="n">zaxis</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcfluence</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0e-3</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><code class="xref py py-class docutils literal notranslate"><span class="pre">Axis</span></code></a> instances along the x, y and z
+axis can be accessed through the
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.xaxis" title="xopto.mcbase.mcfluence.Fluence.xaxis"><code class="xref py py-class docutils literal notranslate"><span class="pre">xaxis</span></code></a>,
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.yaxis" title="xopto.mcbase.mcfluence.Fluence.yaxis"><code class="xref py py-class docutils literal notranslate"><span class="pre">yaxis</span></code></a> and
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.zaxis" title="xopto.mcbase.mcfluence.Fluence.zaxis"><code class="xref py py-class docutils literal notranslate"><span class="pre">zaxis</span></code></a> properties. Likewise, the
+centers of the voxels along the x, y and z axis can be accessed through the
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.x" title="xopto.mcbase.mcfluence.Fluence.x"><code class="xref py py-class docutils literal notranslate"><span class="pre">x</span></code></a>,
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.y" title="xopto.mcbase.mcfluence.Fluence.y"><code class="xref py py-class docutils literal notranslate"><span class="pre">y</span></code></a> and
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.z" title="xopto.mcbase.mcfluence.Fluence.z"><code class="xref py py-class docutils literal notranslate"><span class="pre">z</span></code></a> properties.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xaxis</span> <span class="o">=</span> <span class="n">fluence</span><span class="o">.</span><span class="n">xaxis</span>
+<span class="n">yaxis</span> <span class="o">=</span> <span class="n">fluence</span><span class="o">.</span><span class="n">yaxis</span>
+<span class="n">zaxis</span> <span class="o">=</span> <span class="n">fluence</span><span class="o">.</span><span class="n">zaxis</span>
+
+<span class="n">x_centers</span> <span class="o">=</span> <span class="n">fluence</span><span class="o">.</span><span class="n">x</span>    <span class="c1"># or as xaxis.centers</span>
+<span class="n">y_centers</span> <span class="o">=</span> <span class="n">fluence</span><span class="o">.</span><span class="n">y</span>    <span class="c1"># or as yaxis.centers</span>
+<span class="n">z_centers</span> <span class="o">=</span> <span class="n">fluence</span><span class="o">.</span><span class="n">z</span>    <span class="c1"># or as zaxis.centers</span>
+</pre></div>
+</div>
+<p>The fluence data are stored in a 3D numpy array that can be accessed through the
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.data" title="xopto.mcbase.mcfluence.Fluence.data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code></a> property. The individual voxels
+are addressed / sliced as <code class="code python docutils literal notranslate"><span class="name"><span class="pre">data</span></span><span class="punctuation"><span class="pre">[</span></span><span class="name"><span class="pre">z_slice</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="name"><span class="pre">y_slice</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="name"><span class="pre">x_slice</span></span><span class="punctuation"><span class="pre">]</span></span></code>. Note that
+the values in the fluence data array are the unscaled sums of
+deposited / absorbed photon packet weights.</p>
+<p>After completing the Monte Carlo simulation, the fluence accumulator can be
+viewed using the <a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.plot" title="xopto.mcbase.mcfluence.Fluence.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a> method. The
+method allows slicing across the voxelized volume along one of the main
+coordinate axis. Use the <code class="code docutils literal notranslate"><span class="pre">axis</span></code> parameter to set the coordinate
+axis:</p>
+<ul class="simple">
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">axis</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’x’</span></span></code> slice along the x axis,</p></li>
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">axis</span></span><span class="operator"><span class="pre">=</span></span><span class="name"><span class="pre">y</span></span></code> slice along the y axis,</p></li>
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">axis</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’z’</span></span></code> slice along the z axis.</p></li>
+</ul>
+<p>To show integral projections along one of the main coordinate axis call with:</p>
+<ul class="simple">
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">axis</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’xproj’</span></span></code> for an integral projection along the x axis,</p></li>
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">axis</span></span><span class="operator"><span class="pre">=</span></span><span class="name"><span class="pre">yproj</span></span></code> for an integral projection along the y axis,</p></li>
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">axis</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’zproj’</span></span></code> for an integral projection along the z axis.</p></li>
+</ul>
+<p>The slices can be viewed in a linear or logarithmic scale. Call with
+<code class="code python docutils literal notranslate"><span class="name"><span class="pre">scale</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’lin’</span></span></code> to show the slices in a linear intensity scale.
+By default the color coding of each slice is automatically scaled to the range
+of weights (<code class="code python docutils literal notranslate"><span class="name"><span class="pre">autoscale</span></span><span class="operator"><span class="pre">=</span></span><span class="keyword constant"><span class="pre">True</span></span></code>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fluence</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>    <span class="c1"># slice along the z axis</span>
+<span class="n">fluence</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>    <span class="c1"># slice along the y axis</span>
+<span class="n">fluence</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>    <span class="c1"># slice along the x axis</span>
+
+<span class="n">fluence</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;zproj&#39;</span><span class="p">)</span>    <span class="c1"># integral projection / sum along the z axis</span>
+<span class="n">fluence</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;yproj&#39;</span><span class="p">)</span>    <span class="c1"># integral projection / sum along the y axis</span>
+<span class="n">fluence</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;xproj&#39;</span><span class="p">)</span>    <span class="c1"># integral projection / sum along the x axis</span>
+</pre></div>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Layered MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="layer_stack.html">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source.html">Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="detector.html">Detectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surface_layout.html">Surface layouts</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/index.html">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Layered MC</a><ul>
+      <li>Previous: <a href="surface_layout.html" title="previous chapter">Surface layouts</a></li>
+      <li>Next: <a href="trace.html" title="next chapter">Trace</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

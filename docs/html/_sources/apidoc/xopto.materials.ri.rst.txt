@@ -1,0 +1,33 @@
+xopto.materials.ri package
+==========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.materials.ri.glass
+   xopto.materials.ri.util
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.materials.ri.base
+   xopto.materials.ri.pmma
+   xopto.materials.ri.polystyrene
+   xopto.materials.ri.seawater
+   xopto.materials.ri.siliglass
+   xopto.materials.ri.skin
+   xopto.materials.ri.water
+
+Module contents
+---------------
+
+.. automodule:: xopto.materials.ri
+   :members:
+   :undoc-members:
+   :show-inheritance:

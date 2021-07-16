@@ -1,0 +1,1228 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.cl.cltypes module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.data package" href="xopto.data.html" />
+    <link rel="prev" title="xopto.cl.cltest module" href="xopto.cl.cltest.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.cl.cltypes">
+<span id="xopto-cl-cltypes-module"></span><h1>xopto.cl.cltypes module<a class="headerlink" href="#module-xopto.cl.cltypes" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.Structure">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Structure</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#Structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.Structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_ctypes.Structure</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_byte">
+<span class="sig-name descname"><span class="pre">cl_byte</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_byte" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#xopto.cl.cltypes.cl_char" title="xopto.cl.cltypes.cl_char"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.cl_char</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_char</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_char"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_char" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLScalar</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ctypes.c_char</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'char'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_char.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_char.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char16">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_char16</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_char16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_char16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector16</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_char_Array_16</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char16.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'char16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_char16.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char16.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_char16.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char16.raw">
+<span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_char16.raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>value</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char16.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_char16.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>string value</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char2">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_char2</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_char2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_char2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector2</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_char_Array_2</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char2.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'char2'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_char2.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char2.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_char2.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char2.raw">
+<span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_char2.raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>value</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char2.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_char2.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>string value</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char3">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_char3</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_char3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_char3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector3</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_char_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char3.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'char3'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_char3.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char3.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_char3.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char3.raw">
+<span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_char3.raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>value</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char3.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_char3.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>string value</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char4">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_char4</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_char4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_char4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector4</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_char_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char4.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'char4'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_char4.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char4.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_char4.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char4.raw">
+<span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_char4.raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>value</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char4.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_char4.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>string value</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char8">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_char8</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_char8"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_char8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector8</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_char_Array_8</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char8.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'char8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_char8.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char8.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_char8.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char8.raw">
+<span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_char8.raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>value</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_char8.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_char8.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>string value</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_double</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_double"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_double" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLScalar</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ctypes.c_double</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'double'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_double.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_double.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double16">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_double16</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_double16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_double16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector16</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_double_Array_16</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double16.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'double16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_double16.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double16.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_double16.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double2">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_double2</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_double2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_double2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector2</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_double_Array_2</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double2.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'double2'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_double2.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double2.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_double2.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double3">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_double3</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_double3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_double3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector3</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_double_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double3.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'double3'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_double3.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double3.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_double3.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double4">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_double4</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_double4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_double4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector4</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_double_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double4.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'double4'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_double4.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double4.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_double4.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double8">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_double8</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_double8"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_double8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector8</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_double_Array_8</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double8.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'double8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_double8.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_double8.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_double8.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_float</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_float"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLScalar</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ctypes.c_float</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_float.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_float.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float16">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_float16</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_float16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_float16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector16</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_float_Array_16</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float16.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_float16.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float16.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_float16.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float2">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_float2</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_float2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_float2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector2</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_float_Array_2</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float2.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float2'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_float2.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float2.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_float2.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float3">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_float3</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_float3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_float3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector3</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_float_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float3.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float3'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_float3.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float3.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_float3.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float32_t">
+<span class="sig-name descname"><span class="pre">cl_float32_t</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_float32_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#xopto.cl.cltypes.cl_float" title="xopto.cl.cltypes.cl_float"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.cl_float</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float4">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_float4</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_float4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_float4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector4</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_float_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float4.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float4'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_float4.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float4.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_float4.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float64_t">
+<span class="sig-name descname"><span class="pre">cl_float64_t</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_float64_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#xopto.cl.cltypes.cl_double" title="xopto.cl.cltypes.cl_double"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.cl_double</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float8">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_float8</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_float8"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_float8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector8</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_float_Array_8</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float8.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_float8.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_float8.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_float8.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_int</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLScalar</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ctypes.c_int</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_int.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_int.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int16">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_int16</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_int16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_int16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector16</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_int_Array_16</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int16.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_int16.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int16.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_int16.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int16_t">
+<span class="sig-name descname"><span class="pre">cl_int16_t</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_int16_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#xopto.cl.cltypes.cl_short" title="xopto.cl.cltypes.cl_short"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.cl_short</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int2">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_int2</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_int2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_int2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector2</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_int_Array_2</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int2.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int2'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_int2.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int2.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_int2.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int3">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_int3</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_int3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_int3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector3</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_int_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int3.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int3'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_int3.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int3.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_int3.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int32_t">
+<span class="sig-name descname"><span class="pre">cl_int32_t</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_int32_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#xopto.cl.cltypes.cl_int" title="xopto.cl.cltypes.cl_int"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.cl_int</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int4">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_int4</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_int4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_int4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector4</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_int_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int4.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int4'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_int4.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int4.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_int4.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int64_t">
+<span class="sig-name descname"><span class="pre">cl_int64_t</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_int64_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#xopto.cl.cltypes.cl_long" title="xopto.cl.cltypes.cl_long"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.cl_long</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int8">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_int8</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_int8"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_int8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector8</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_int_Array_8</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int8.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_int8.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int8.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_int8.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_int8_t">
+<span class="sig-name descname"><span class="pre">cl_int8_t</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_int8_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#xopto.cl.cltypes.cl_char" title="xopto.cl.cltypes.cl_char"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.cl_char</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_long</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_long"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_long" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLScalar</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ctypes.c_long</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'long'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_long.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_long.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long16">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_long16</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_long16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_long16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector16</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_long_Array_16</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long16.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'long16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_long16.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long16.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_long16.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long2">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_long2</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_long2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_long2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector2</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_long_Array_2</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long2.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'long2'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_long2.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long2.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_long2.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long3">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_long3</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_long3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_long3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector3</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_long_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long3.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'long3'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_long3.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long3.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_long3.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long4">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_long4</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_long4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_long4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector4</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_long_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long4.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'long4'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_long4.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long4.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_long4.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long8">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_long8</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_long8"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_long8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector8</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_long_Array_8</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long8.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'long8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_long8.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_long8.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_long8.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_short</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_short"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_short" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLScalar</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ctypes.c_short</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'short'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_short.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_short.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short16">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_short16</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_short16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_short16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector16</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_short_Array_16</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short16.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'short16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_short16.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short16.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_short16.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short2">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_short2</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_short2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_short2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector2</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_short_Array_2</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short2.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'short2'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_short2.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short2.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_short2.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short3">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_short3</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_short3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_short3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector3</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_short_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short3.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'short3'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_short3.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short3.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_short3.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short4">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_short4</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_short4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_short4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector4</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_short_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short4.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'short4'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_short4.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short4.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_short4.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short8">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_short8</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_short8"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_short8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector8</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_short_Array_8</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short8.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'short8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_short8.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_short8.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_short8.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ubyte">
+<span class="sig-name descname"><span class="pre">cl_ubyte</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_ubyte" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#xopto.cl.cltypes.cl_uchar" title="xopto.cl.cltypes.cl_uchar"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.cl_uchar</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_uchar</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_uchar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLScalar</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ctypes.c_ubyte</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uchar'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar16">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_uchar16</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_uchar16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector16</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">numba.cpython.hashing.c_ubyte_Array_16</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar16.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uchar16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar16.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar16.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar16.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar2">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_uchar2</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_uchar2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector2</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ubyte_Array_2</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar2.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uchar2'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar2.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar2.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar2.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar3">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_uchar3</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_uchar3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector3</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ubyte_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar3.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uchar3'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar3.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar3.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar3.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar4">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_uchar4</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_uchar4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector4</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ubyte_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar4.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uchar4'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar4.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar4.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar4.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar8">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_uchar8</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_uchar8"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector8</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ubyte_Array_8</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar8.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uchar8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar8.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uchar8.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uchar8.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_uint</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_uint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_uint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLScalar</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ctypes.c_uint</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uint.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uint.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint16">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_uint16</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_uint16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_uint16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector16</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_uint_Array_16</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint16.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uint16.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint16.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uint16.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint16_t">
+<span class="sig-name descname"><span class="pre">cl_uint16_t</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_uint16_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#xopto.cl.cltypes.cl_ushort" title="xopto.cl.cltypes.cl_ushort"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.cl_ushort</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint2">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_uint2</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_uint2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_uint2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector2</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_uint_Array_2</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint2.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint2'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uint2.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint2.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uint2.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint3">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_uint3</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_uint3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_uint3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector3</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_uint_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint3.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint3'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uint3.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint3.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uint3.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint32_t">
+<span class="sig-name descname"><span class="pre">cl_uint32_t</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_uint32_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#xopto.cl.cltypes.cl_uint" title="xopto.cl.cltypes.cl_uint"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.cl_uint</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint4">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_uint4</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_uint4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_uint4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector4</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_uint_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint4.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint4'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uint4.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint4.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uint4.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint64_t">
+<span class="sig-name descname"><span class="pre">cl_uint64_t</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_uint64_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#xopto.cl.cltypes.cl_ulong" title="xopto.cl.cltypes.cl_ulong"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.cl_ulong</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint8">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_uint8</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_uint8"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_uint8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector8</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_uint_Array_8</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint8.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uint8.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint8.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint32'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_uint8.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_uint8_t">
+<span class="sig-name descname"><span class="pre">cl_uint8_t</span></span><a class="headerlink" href="#xopto.cl.cltypes.cl_uint8_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#xopto.cl.cltypes.cl_uchar" title="xopto.cl.cltypes.cl_uchar"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.cl_uchar</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_ulong</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_ulong"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLScalar</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ctypes.c_ulong</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ulong'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong16">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_ulong16</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_ulong16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector16</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ulong_Array_16</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong16.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ulong16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong16.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong16.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong16.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong2">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_ulong2</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_ulong2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector2</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ulong_Array_2</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong2.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ulong2'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong2.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong2.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong2.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong3">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_ulong3</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_ulong3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector3</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ulong_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong3.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ulong3'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong3.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong3.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong3.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong4">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_ulong4</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_ulong4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector4</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ulong_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong4.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ulong4'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong4.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong4.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong4.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong8">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_ulong8</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_ulong8"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector8</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ulong_Array_8</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong8.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ulong8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong8.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ulong8.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint64'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ulong8.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_ushort</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_ushort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLScalar</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ctypes.c_ushort</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ushort'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort16">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_ushort16</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_ushort16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector16</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ushort_Array_16</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort16.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ushort16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort16.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort16.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort16.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort2">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_ushort2</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_ushort2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector2</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ushort_Array_2</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort2.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ushort2'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort2.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort2.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort2.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort3">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_ushort3</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_ushort3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector3</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ushort_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort3.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ushort3'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort3.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort3.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort3.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort4">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_ushort4</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_ushort4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector4</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ushort_Array_4</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort4.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ushort4'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort4.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort4.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort4.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort8">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">cl_ushort8</span></span><a class="reference internal" href="../_modules/xopto/cl/cltypes.html#cl_ushort8"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes._CLVector8</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.cl.cltypes.c_ushort_Array_8</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort8.TYPENAME">
+<span class="sig-name descname"><span class="pre">TYPENAME</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'ushort8'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort8.TYPENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.cl.cltypes.cl_ushort8.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'int16'</span></em><a class="headerlink" href="#xopto.cl.cltypes.cl_ushort8.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.cl.html">xopto.cl package</a><ul>
+      <li>Previous: <a href="xopto.cl.cltest.html" title="previous chapter">xopto.cl.cltest module</a></li>
+      <li>Next: <a href="xopto.data.html" title="next chapter">xopto.data package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

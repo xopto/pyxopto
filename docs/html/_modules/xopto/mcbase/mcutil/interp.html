@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcbase.mcutil.interp &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcbase.mcutil.interp</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">map_coordinates</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="interp1"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.interp.html#xopto.mcbase.mcutil.interp.interp1">[docs]</a><span class="k">def</span> <span class="nf">interp1</span><span class="p">(</span><span class="n">xi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Interpolates 1D functions that are defined on a uniform grid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    xi: np.ndarray</span>
+<span class="sd">        Points at which to interpolate f.</span>
+<span class="sd">    x: np.ndarray</span>
+<span class="sd">        A vector of uniformly distributed points at which the values</span>
+<span class="sd">        of f are defined.</span>
+<span class="sd">    f: np.ndarray</span>
+<span class="sd">        Function values at x. The shape of f should be (x.size,).</span>
+<span class="sd">    order: int</span>
+<span class="sd">        Interpolation order. 0 - nearest neighbour, 1 - linear, ...</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        Keyword arguments passed to map_coordinates.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fxi : np.ndarray</span>
+<span class="sd">        Interpolated values of f at xi.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from matplotlib import pyplot as pp</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; x = np.linspace(0, np.pi, 5)</span>
+<span class="sd">    &gt;&gt;&gt; x_ref = np.linspace(x[0], x[-1], 1000)</span>
+<span class="sd">    &gt;&gt;&gt; f = np.cos(x)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; xi = np.linspace(0, np.pi, 50)</span>
+<span class="sd">    &gt;&gt;&gt; fi_lin = interp1(xi, x, f)</span>
+<span class="sd">    &gt;&gt;&gt; fi_quad = interp1(xi, x, f, 2)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; pp.figure()</span>
+<span class="sd">    &gt;&gt;&gt; pp.plot(x_ref, np.cos(x_ref), &#39;-k&#39;, label=&#39;cos(x)&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pp.plot(x, f, &#39;or&#39;, label=&#39;sample points&#39;, markersize=6)</span>
+<span class="sd">    &gt;&gt;&gt; pp.plot(xi, fi_lin, &#39;xg&#39;, label=&#39;linear&#39;, markersize=6)</span>
+<span class="sd">    &gt;&gt;&gt; pp.plot(xi, fi_quad, &#39;xb&#39;, label=&#39;quadratic&#39;, markersize=6)</span>
+<span class="sd">    &gt;&gt;&gt; pp.legend()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">f</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;Length of vector x and f must be the same.&#39;</span><span class="p">)</span>
+        <span class="n">indx</span> <span class="o">=</span> <span class="p">(</span><span class="n">xi</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">indx</span> <span class="o">=</span> <span class="n">xi</span>
+
+    <span class="k">return</span> <span class="n">map_coordinates</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">indx</span><span class="p">]),</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="interp2"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.interp.html#xopto.mcbase.mcutil.interp.interp2">[docs]</a><span class="k">def</span> <span class="nf">interp2</span><span class="p">(</span><span class="n">xi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">yi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+            <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Interpolates 2D functions that are defined on a uniform grid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ---------</span>
+<span class="sd">    xi: np.ndarray</span>
+<span class="sd">        X coordinates of the points at which to interpolate f.</span>
+<span class="sd">    yi: np.ndarray</span>
+<span class="sd">        Y coordinates of the points at which to interpolate f.</span>
+<span class="sd">    x: np.ndarray</span>
+<span class="sd">        A vector of uniformly distributed points along the x axis at which</span>
+<span class="sd">        the values of f are defined.</span>
+<span class="sd">    y: np.ndarray</span>
+<span class="sd">        A vector of uniformly distributed points along the y axis at which</span>
+<span class="sd">        the values of f are defined.</span>
+<span class="sd">    f: np.ndarray</span>
+<span class="sd">        Function values at points (x, y).</span>
+<span class="sd">        The shape of f should be (y.size, x.size).</span>
+<span class="sd">    order: int</span>
+<span class="sd">        Interpolation order. 0 - nearest neighbour, 1 - linear, ...</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        Keyword arguments passed to map_coordinates.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fxyi: np.ndarray</span>
+<span class="sd">        Interpolated values of f at (xi, yi).</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from matplotlib import pyplot as pp</span>
+<span class="sd">    &gt;&gt;&gt; from mpl_toolkits.mplot3d import Axes3D</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; x = np.linspace(-1, 1, 10)</span>
+<span class="sd">    &gt;&gt;&gt; y = np.linspace(-1, 1, 10)</span>
+<span class="sd">    &gt;&gt;&gt; Y, X = np.meshgrid(y, x, indexing=&#39;ij&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; f = 1.0/(X**2 + Y**2 + 1)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; xi = np.linspace(0, 1, 30)</span>
+<span class="sd">    &gt;&gt;&gt; yi = np.linspace(0, 1, 30)</span>
+<span class="sd">    &gt;&gt;&gt; Yi, Xi = np.meshgrid(yi, xi, indexing=&#39;ij&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; fi = interp2(Xi, Yi, x, y, f)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; fig = pp.figure()</span>
+<span class="sd">    &gt;&gt;&gt; ax = fig.add_subplot(111, projection=&#39;3d&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax.plot_wireframe(X, Y, f, color=&#39;r&#39;, label=&#39;sample points&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax.plot_wireframe(Xi, Yi, fi, color=&#39;g&#39;, label=&#39;interpolated values&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax.legend()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">ndmin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">yi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">yi</span><span class="p">,</span> <span class="n">ndmin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;Length of vector x must match &#39;</span> \
+                <span class="s1">&#39;the number of columns of f.&#39;</span><span class="p">)</span>
+        <span class="n">indx</span> <span class="o">=</span> <span class="p">(</span><span class="n">xi</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">indx</span> <span class="o">=</span> <span class="n">xi</span>
+
+    <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">y</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;Length of vector y must match &#39;</span> \
+                <span class="s1">&#39;the number of rows of f.&#39;</span><span class="p">)</span>
+        <span class="n">indy</span> <span class="o">=</span> <span class="p">(</span><span class="n">yi</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">((</span><span class="n">y</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">indy</span> <span class="o">=</span> <span class="n">yi</span>
+
+    <span class="k">return</span> <span class="n">map_coordinates</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">indy</span><span class="p">,</span> <span class="n">indx</span><span class="p">]),</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="interp3"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.interp.html#xopto.mcbase.mcutil.interp.interp3">[docs]</a><span class="k">def</span> <span class="nf">interp3</span><span class="p">(</span><span class="n">xi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">yi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">zi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+            <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+            <span class="n">order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Interpolates 3D functions that are defined on a uniform grid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ---------</span>
+<span class="sd">    xi: np.ndarray</span>
+<span class="sd">        X coordinates of the points at which to interpolate f.</span>
+<span class="sd">    yi: np.ndarray</span>
+<span class="sd">        Y coordinates of the points at which to interpolate f.</span>
+<span class="sd">    zi: np.ndarray</span>
+<span class="sd">        Z coordinates of the points at which to interpolate f.</span>
+<span class="sd">    x: np.ndarray</span>
+<span class="sd">        A vector of uniformly distributed points along the x axis at which</span>
+<span class="sd">        the values of f are defined.</span>
+<span class="sd">    y: np.ndarray</span>
+<span class="sd">        A vector of uniformly distributed points along the y axis at which</span>
+<span class="sd">        the values of f are defined.</span>
+<span class="sd">    z: np.ndarray</span>
+<span class="sd">        A vector of uniformly distributed points along the z axis at which</span>
+<span class="sd">        the values of f are defined.</span>
+<span class="sd">    f: np.ndarray</span>
+<span class="sd">        Function values at points (x, y, z).</span>
+<span class="sd">        The shape of f should be (z.size, y.size, x.size).</span>
+<span class="sd">    order: int</span>
+<span class="sd">        Interpolation order. 0 - nearest neighbour, 1 - linear, ...</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        Keyword arguments passed to map_coordinates.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fxyzi: np.ndarray</span>
+<span class="sd">        Interpolated values of f at (xi, yi, zi).</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; x = np.linspace(-1, 1, 10)</span>
+<span class="sd">    &gt;&gt;&gt; y = np.linspace(-1, 1, 10)</span>
+<span class="sd">    &gt;&gt;&gt; z = np.linspace(-1, 1, 10)</span>
+<span class="sd">    &gt;&gt;&gt; Z, Y, X = np.meshgrid(z, y, x, indexing=&#39;ij&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; f = 1.0/(X**2 + Y**2 + Z**2 + 1)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; xi = np.linspace(0, 1, 30)</span>
+<span class="sd">    &gt;&gt;&gt; yi = np.linspace(0, 1, 30)</span>
+<span class="sd">    &gt;&gt;&gt; zi = np.linspace(0, 1, 30)</span>
+<span class="sd">    &gt;&gt;&gt; Zi, Yi, Xi = np.meshgrid(zi, yi, xi, indexing=&#39;ij&#39;)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; fi = interp3(Xi, Yi, Zi, x, y, z, f)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xi</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">yi</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;Length of vector x must match &#39;</span> \
+                <span class="s1">&#39;the number of columns in f.&#39;</span><span class="p">)</span>
+        <span class="n">indx</span> <span class="o">=</span> <span class="p">(</span><span class="n">xi</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">indx</span> <span class="o">=</span> <span class="n">xi</span>
+
+    <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">y</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;Length of vector y must match &#39;</span> \
+                <span class="s1">&#39;the number of rows in f.&#39;</span><span class="p">)</span>
+        <span class="n">indy</span> <span class="o">=</span> <span class="p">(</span><span class="n">yi</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">((</span><span class="n">y</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">indy</span> <span class="o">=</span> <span class="n">yi</span>
+
+    <span class="k">if</span> <span class="n">z</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">z</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">f</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;Length of vector z must match &#39;</span> \
+                <span class="s1">&#39;the number of slices in f.&#39;</span><span class="p">)</span>
+        <span class="n">indz</span> <span class="o">=</span> <span class="p">(</span><span class="n">zi</span> <span class="o">-</span> <span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">((</span><span class="n">z</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">indy</span> <span class="o">=</span> <span class="n">zi</span>
+
+    <span class="k">return</span> <span class="n">map_coordinates</span><span class="p">(</span>
+        <span class="n">f</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">indz</span><span class="p">,</span> <span class="n">indy</span><span class="p">,</span> <span class="n">indx</span><span class="p">]),</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="interpn"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.interp.html#xopto.mcbase.mcutil.interp.interpn">[docs]</a><span class="k">def</span> <span class="nf">interpn</span><span class="p">(</span><span class="n">ti</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Interpolates ND functions that are defined on a uniform grid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ---------</span>
+<span class="sd">    ti: list</span>
+<span class="sd">        A list of coordinates at which to interpolate f ([zi, yi, xi, ...]).</span>
+<span class="sd">    t: list</span>
+<span class="sd">        List of uniformly distributed points along each axis of f.</span>
+<span class="sd">        (z, y, x, ..)</span>
+<span class="sd">    f: np.ndarray</span>
+<span class="sd">        Function values at points (x, y, z, ...).</span>
+<span class="sd">        The shape of f should be (z.size, y.size, x.size, ...).</span>
+<span class="sd">    order: int</span>
+<span class="sd">        Interpolation order. 0 - nearest neighbour, 1 - linear, ...</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        Keyword arguments passed to map_coordinates.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fti: np.ndarray</span>
+<span class="sd">        Interpolated values of f at f[t[0], t[1], ..., t[-1]].</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from matplotlib import pyplot as pp</span>
+<span class="sd">    &gt;&gt;&gt; from mpl_toolkits.mplot3d import Axes3D</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; x = np.linspace(-1, 1, 15)</span>
+<span class="sd">    &gt;&gt;&gt; y = np.linspace(-1, 1, 10)</span>
+<span class="sd">    &gt;&gt;&gt; Y, X = np.meshgrid(y, x, indexing=&#39;ij&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; f = 1.0/(X**2 + Y**2 + 1)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; xi = np.linspace(0, 1, 30)</span>
+<span class="sd">    &gt;&gt;&gt; yi = np.linspace(0, 1, 30)</span>
+<span class="sd">    &gt;&gt;&gt; Yi, Xi = np.meshgrid(yi, xi, indexing=&#39;ij&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; fi = interpn([Yi, Xi], [y, x], f)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; fig = pp.figure()</span>
+<span class="sd">    &gt;&gt;&gt; ax = fig.add_subplot(111, projection=&#39;3d&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax.plot_wireframe(X, Y, f, color=&#39;r&#39;, label=&#39;sample points&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax.plot_wireframe(Xi, Yi, fi, color=&#39;g&#39;, label=&#39;interpolated values&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; ax.legend()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="c1"># space dimensionality</span>
+        <span class="k">if</span> <span class="n">N</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ti</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;Dimensions of the coordinates must agree!&#39;</span><span class="p">)</span>
+
+        <span class="n">tind</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+                <span class="n">tind</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ti</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span>
+                            <span class="p">((</span><span class="n">tmp</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tind</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ti</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tind</span> <span class="o">=</span> <span class="n">ti</span>
+    <span class="k">return</span> <span class="n">map_coordinates</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">tind</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

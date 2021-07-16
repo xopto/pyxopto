@@ -1,0 +1,504 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Voxelized Monte Carlo simulations &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="xopto" href="../../../apidoc/modules.html" />
+    <link rel="prev" title="Examples" href="index.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="voxelized-monte-carlo-simulations">
+<span id="example-voxelized-vessel"></span><h1>Voxelized Monte Carlo simulations<a class="headerlink" href="#voxelized-monte-carlo-simulations" title="Permalink to this headline">¶</a></h1>
+<p>In this example we simulate the deposited energy in a voxelized two-layered skin model comprising epidermis and dermis with an embedded blood vessel.</p>
+<section id="importing-the-required-modules-and-submodules">
+<h2>Importing the required modules and submodules<a class="headerlink" href="#importing-the-required-modules-and-submodules" title="Permalink to this headline">¶</a></h2>
+<p>From <code class="code docutils literal notranslate"><span class="pre">xopto.mcvox</span></code> we import the module <a class="reference internal" href="../../../apidoc/xopto.mcvox.mc.html#module-xopto.mcvox.mc" title="xopto.mcvox.mc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mc</span></code></a>, which enables an interface to Monte Carlo voxelized simulations, definitions of voxel grids, fluence accumulators, materials and so on, from <code class="code docutils literal notranslate"><span class="pre">xopto.mcvox.mcutil</span></code> we import module <a class="reference internal" href="../../../apidoc/xopto.mcvox.mcutil.axis.html#module-xopto.mcvox.mcutil.axis" title="xopto.mcvox.mcutil.axis"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcvox.mcutil.axis</span></code></a>, which allows axes definitions for voxels and fluence accumulators and finally, we import the module <a class="reference internal" href="../../../apidoc/xopto.cl.clinfo.html#module-xopto.cl.clinfo" title="xopto.cl.clinfo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.cl.clinfo</span></code></a> from <code class="code docutils literal notranslate"><span class="pre">xopto.cl</span></code> for computational device definition. Additionally, we require modules <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> for mathematical functions and visualization.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox.mcutil</span> <span class="kn">import</span> <span class="n">axis</span>
+<span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">pp</span>
+</pre></div>
+</div>
+</section>
+<section id="computational-device">
+<h2>Computational device<a class="headerlink" href="#computational-device" title="Permalink to this headline">¶</a></h2>
+<p>In this section we select the desired OpenCL computational device (see also <a class="reference internal" href="../../opencl_devices.html#opencl-devices-label"><span class="std std-ref">OpenCL devices</span></a>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cl_device</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this example we have selected the first computational device listed under the Nvidia platform. The string should be changed according to the installed hardware devices.</p>
+</div>
+</section>
+<section id="voxel-grid-and-tissue-structure">
+<h2>Voxel grid and tissue structure<a class="headerlink" href="#voxel-grid-and-tissue-structure" title="Permalink to this headline">¶</a></h2>
+<p>For the definition of the voxel grid, we firstly define the number of bins in each axis direction <code class="code docutils literal notranslate"><span class="pre">nx</span></code>, <code class="code docutils literal notranslate"><span class="pre">ny</span></code> and <code class="code docutils literal notranslate"><span class="pre">nz</span></code>. We chose odd number of bins <code class="code docutils literal notranslate"><span class="pre">nx</span></code> and <code class="code docutils literal notranslate"><span class="pre">ny</span></code> in order to have the center of the central voxel at <img class="math" src="../../../_images/math/f3eac4fba17f24a2708760de2f05d0e44e6c70c3.png" alt="x=0.0"/> and <img class="math" src="../../../_images/math/f7714822bf7322f58e24ab87d0c99786d7e3244b.png" alt="y=0.0"/>. Using the <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><code class="xref py py-class docutils literal notranslate"><span class="pre">Axis</span></code></a> constructor, we define the axes in x, y and z direction. These are defined in a way that there is an equal number of voxels on each side of the origin in the x and y direction and a single central voxel. Note that the leftmost and rightmost edges are provided as keyword arguments <code class="code docutils literal notranslate"><span class="pre">start</span></code> and <code class="code docutils literal notranslate"><span class="pre">stop</span></code> and that the rightmost edge is included in the provided interval. The keyword parameter <code class="code docutils literal notranslate"><span class="pre">n</span></code> provides the number of bins. The voxel object is then defined using the <a class="reference internal" href="../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels" title="xopto.mcvox.mcgeometry.voxel.Voxels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Voxels</span></code></a> contructor by passing the axes.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># number of bins and size</span>
+<span class="n">nx</span> <span class="o">=</span> <span class="mi">201</span>
+<span class="n">ny</span> <span class="o">=</span> <span class="mi">201</span>
+<span class="n">nz</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">binsize</span> <span class="o">=</span> <span class="mf">5e-6</span>
+
+<span class="c1"># define each axis</span>
+<span class="n">xaxis</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span>
+    <span class="n">start</span><span class="o">=-</span><span class="n">nx</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">binsize</span><span class="p">,</span>
+    <span class="n">stop</span><span class="o">=</span><span class="n">nx</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">binsize</span><span class="p">,</span>
+    <span class="n">n</span><span class="o">=</span><span class="n">nx</span>
+<span class="p">)</span>
+
+<span class="n">yaxis</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span>
+    <span class="n">start</span><span class="o">=-</span><span class="n">ny</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">binsize</span><span class="p">,</span>
+    <span class="n">stop</span><span class="o">=</span><span class="n">ny</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">binsize</span><span class="p">,</span>
+    <span class="n">n</span><span class="o">=</span><span class="n">ny</span>
+<span class="p">)</span>
+
+<span class="n">zaxis</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span>
+    <span class="n">start</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">stop</span><span class="o">=</span><span class="n">nz</span> <span class="o">*</span> <span class="n">binsize</span><span class="p">,</span>
+    <span class="n">n</span><span class="o">=</span><span class="n">nz</span>
+<span class="p">)</span>
+
+<span class="c1"># define voxels</span>
+<span class="n">voxels</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcgeometry</span><span class="o">.</span><span class="n">Voxels</span><span class="p">(</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="n">xaxis</span><span class="p">,</span>
+    <span class="n">yaxis</span><span class="o">=</span><span class="n">yaxis</span><span class="p">,</span>
+    <span class="n">zaxis</span><span class="o">=</span><span class="n">zaxis</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Once the voxels are defined, we can set the structure of the tissue. This can be easily done by logical indexing that is readily available within the <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> library. Firstly, we can obtain x, y, z coordinate matrices or a mesh by calling a <a class="reference internal" href="../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.meshgrid" title="xopto.mcvox.mcgeometry.voxel.Voxels.meshgrid"><code class="xref py py-class docutils literal notranslate"><span class="pre">meshgrid</span></code></a> method. These can then be used to impose geometrical logical conditions under which we can specify optical properties only to selected voxels. In this example, the tissue will resemble human skin comprising epidermis, dermis and a blood vessel. The blood vessel can be desribed by a cylinder of radius <code class="code docutils literal notranslate"><span class="pre">r_vessels</span></code> equal to  100 μm placed along the y axis at <code class="code docutils literal notranslate"><span class="pre">x0</span></code> and <code class="code docutils literal notranslate"><span class="pre">z0</span></code>. The depth <code class="code docutils literal notranslate"><span class="pre">z0</span></code> is at half of the total thickness of the voxelized medium in z direction.</p>
+<p>Subsequently, we define logical matrices of the same shape and size as the voxelized medium mesh. The matrix of logical indices <code class="code docutils literal notranslate"><span class="pre">logical_epi</span></code> corresponds to the epidermis and has <code class="code docutils literal notranslate"><span class="pre">True</span></code> values only for z coordinates lower than 60 μm, <code class="code docutils literal notranslate"><span class="pre">logical_der</span></code> corresponds to the dermis having <code class="code docutils literal notranslate"><span class="pre">True</span></code> values beyond 60 μm. Finally, the matrix of logical indices <code class="code docutils literal notranslate"><span class="pre">logical_vessel</span></code> contains logical <code class="code docutils literal notranslate"><span class="pre">True</span></code> values within the cylinder representing the blood vessel. These logical matrices will be utilized to assign the optical properties later in this example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># get mesh</span>
+<span class="n">z</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">voxels</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">()</span>
+
+<span class="c1"># set logical indices for material assignment</span>
+<span class="n">r_vessels</span> <span class="o">=</span> <span class="mf">100e-6</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">z0</span> <span class="o">=</span> <span class="n">nz</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">binsize</span>
+
+<span class="n">logical_epi</span> <span class="o">=</span> <span class="n">z</span> <span class="o">&lt;=</span> <span class="mf">60e-6</span>
+<span class="n">logical_der</span> <span class="o">=</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="mf">60e-6</span>
+<span class="n">logical_vessel</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">z</span><span class="o">-</span><span class="n">z0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">r_vessels</span><span class="o">**</span><span class="mi">2</span>
+</pre></div>
+</div>
+</section>
+<section id="materials">
+<h2>Materials<a class="headerlink" href="#materials" title="Permalink to this headline">¶</a></h2>
+<p>Each material that will be utilized within the structured tissue can be constructed using the <a class="reference internal" href="../../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Material" title="xopto.mcvox.mcmaterial.material.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a> class, which accepts refractive index <code class="code docutils literal notranslate"><span class="pre">n</span></code>, absorption coefficient <code class="code docutils literal notranslate"><span class="pre">mua</span></code> in 1/m, scattering coefficient <code class="code docutils literal notranslate"><span class="pre">mua</span></code> in 1/m and scattering phase function. Various scattering phase functions that are available in the package <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcpf.html#module-xopto.mcbase.mcpf" title="xopto.mcbase.mcpf"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf</span></code></a> can be chosen. In this case we select Henyey-Greenstein phase function for all materials. We define optical properties for surrounding medium <code class="code docutils literal notranslate"><span class="pre">material_sm</span></code>, epidermis <code class="code docutils literal notranslate"><span class="pre">material_epi</span></code>, dermis <code class="code docutils literal notranslate"><span class="pre">material_der</span></code> and blood <code class="code docutils literal notranslate"><span class="pre">material_bl</span></code>. These values were obtained from the Steven Jacques’ example for <a class="reference external" href="https://omlc.org/software/mc/mcxyz/index.html">mcxyz</a> under the section How to use mcxyz.c. Finally, it should be noted that the defined materials have to be packed by using the :py:class`~xopto.mcvox.mcmaterial.material.Materials` constructor, which accepts a <code class="code docutils literal notranslate"><span class="pre">lsit</span></code> of <a class="reference internal" href="../../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Material" title="xopto.mcvox.mcmaterial.material.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a> objects and is later in this example passed to the Monte Carlo simulator constructor <code class="xref py py-class docutils literal notranslate"><span class="pre">MC</span></code>. Note that the order of the <a class="reference internal" href="../../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Material" title="xopto.mcvox.mcmaterial.material.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a> objects is important, since voxels will be assigned indices that correspond to the order of these materials in the list. Initially, all voxels are assigned an index 0, which corresponds to the first material or in our case the surrounding medium <code class="code docutils literal notranslate"><span class="pre">material_sm</span></code>. The proper material assignment to each voxel will be done later in this example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># surrounding medium</span>
+<span class="n">material_sm</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcmaterial</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span>
+    <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span>
+    <span class="n">mua</span><span class="o">=</span><span class="mf">0.0001e2</span><span class="p">,</span>
+    <span class="n">mus</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span>
+    <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># epidermis</span>
+<span class="n">material_epi</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcmaterial</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span>
+    <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span>
+    <span class="n">mua</span><span class="o">=</span><span class="mf">16.5724e2</span><span class="p">,</span>
+    <span class="n">mus</span><span class="o">=</span><span class="mf">375.9398e2</span><span class="p">,</span>
+    <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># dermis</span>
+<span class="n">material_der</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcmaterial</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span>
+    <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span>
+    <span class="n">mua</span><span class="o">=</span><span class="mf">0.4585e2</span><span class="p">,</span>
+    <span class="n">mus</span><span class="o">=</span><span class="mf">356.5406e2</span><span class="p">,</span>
+    <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># blood</span>
+<span class="n">material_bl</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcmaterial</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span>
+    <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span>
+    <span class="n">mua</span><span class="o">=</span><span class="mf">230.5427e2</span><span class="p">,</span>
+    <span class="n">mus</span><span class="o">=</span><span class="mf">93.9850e2</span><span class="p">,</span>
+    <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">materials</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcmaterial</span><span class="o">.</span><span class="n">Materials</span><span class="p">([</span>
+    <span class="n">material_sm</span><span class="p">,</span>
+    <span class="n">material_epi</span><span class="p">,</span>
+    <span class="n">material_der</span><span class="p">,</span>
+    <span class="n">material_bl</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>In this example we define a pencil beam source, which can be initialized using the <a class="reference internal" href="../../../apidoc/xopto.mcvox.mcsource.line.html#xopto.mcvox.mcsource.line.Line" title="xopto.mcvox.mcsource.line.Line"><code class="xref py py-class docutils literal notranslate"><span class="pre">Line</span></code></a> class. Two keyword parameters can be passed <code class="code docutils literal notranslate"><span class="pre">position</span></code> and <code class="code docutils literal notranslate"><span class="pre">direction</span></code>. In this case we keep the default values which describe the source position at the origin and perpendicular to the surface of the medium.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">Line</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="fluence-object">
+<h2>Fluence object<a class="headerlink" href="#fluence-object" title="Permalink to this headline">¶</a></h2>
+<p>To accumulate either fluence or deposited energy, we have to define an instance of <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fluence</span></code></a>. The <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fluence</span></code></a> class accepts x, y and z axes and a mode parameter, which can be assigned a string <code class="code docutils literal notranslate"><span class="pre">fluence</span></code> or <code class="code docutils literal notranslate"><span class="pre">deposition</span></code>, depending on the desired simulated quantity stored in the fluence object. In case the mode is <code class="code docutils literal notranslate"><span class="pre">fluence</span></code>, the accumulated quantity is fluence with units of 1/m:superscript:<cite>2</cite>, under the mode <code class="code docutils literal notranslate"><span class="pre">deposition</span></code>, the accumulated quantity is the energy deposition in a voxel with units 1/m:superscript:<cite>3</cite> and normalized against the initial number of launched photon packets. To obtain physically representable energy deposition units, the accumulated values should be multiplied by the power of the source in Watts.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fluence</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcfluence</span><span class="o">.</span><span class="n">Fluence</span><span class="p">(</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="n">xaxis</span><span class="p">,</span>
+    <span class="n">yaxis</span><span class="o">=</span><span class="n">yaxis</span><span class="p">,</span>
+    <span class="n">zaxis</span><span class="o">=</span><span class="n">zaxis</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;deposition&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="the-monte-carlo-simulator-object-and-material-assignment">
+<h2>The Monte Carlo simulator object and material assignment<a class="headerlink" href="#the-monte-carlo-simulator-object-and-material-assignment" title="Permalink to this headline">¶</a></h2>
+<p>In this section we define the <code class="xref py py-class docutils literal notranslate"><span class="pre">MC</span></code> simulator object, which accepts various parameters and subsequently assign materials to voxels. Mandatory parameters to the <code class="xref py py-class docutils literal notranslate"><span class="pre">MC</span></code> simulator object constructor are <code class="code docutils literal notranslate"><span class="pre">voxels</span></code>, <code class="code docutils literal notranslate"><span class="pre">materials</span></code> and <code class="code docutils literal notranslate"><span class="pre">source</span></code>, which we have already defined in the previous sections. We also pass the fluence object <code class="code docutils literal notranslate"><span class="pre">fluence</span></code> to accumulate the deposited energy and also the <code class="code docutils literal notranslate"><span class="pre">cl_device</span></code> object to specify the computational device on which the simulations are going to be run.</p>
+<p>Once the <code class="xref py py-class docutils literal notranslate"><span class="pre">MC</span></code> simulator object is defined, we can assign the materials to voxels. We use the previously defined logical matrices corresponding to the different tissue structures to access the voxels and assign indices that correspond to the order of materials packed in the <code class="code docutils literal notranslate"><span class="pre">materials</span></code> object.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mc_obj</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">voxels</span><span class="o">=</span><span class="n">voxels</span><span class="p">,</span>
+    <span class="n">materials</span><span class="o">=</span><span class="n">materials</span><span class="p">,</span>
+    <span class="n">fluence</span><span class="o">=</span><span class="n">fluence</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># assign the materials to voxels</span>
+<span class="n">mc_obj</span><span class="o">.</span><span class="n">voxels</span><span class="o">.</span><span class="n">material</span><span class="p">[</span><span class="n">logical_epi</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">mc_obj</span><span class="o">.</span><span class="n">voxels</span><span class="o">.</span><span class="n">material</span><span class="p">[</span><span class="n">logical_der</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">mc_obj</span><span class="o">.</span><span class="n">voxels</span><span class="o">.</span><span class="n">material</span><span class="p">[</span><span class="n">logical_vessel</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</section>
+<section id="running-the-monte-carlo-simulation">
+<h2>Running the Monte Carlo simulation<a class="headerlink" href="#running-the-monte-carlo-simulation" title="Permalink to this headline">¶</a></h2>
+<p>To run the Monte Carlo simulations, we set the number of photons to 10:superscript:<cite>8</cite> and call the method <code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code>, which returns three objects. The fluence is returned as the second object, which is thus achieved by <code class="code docutils literal notranslate"><span class="pre">[1]</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nphotons</span> <span class="o">=</span> <span class="mf">1e8</span>
+<span class="n">deposit</span> <span class="o">=</span> <span class="n">mc_obj</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="visualize-the-results">
+<h2>Visualize the results<a class="headerlink" href="#visualize-the-results" title="Permalink to this headline">¶</a></h2>
+<p>Finally, we visualize the obtained deposited energy, which can be accessed through the attribute <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.data" title="xopto.mcbase.mcfluence.Fluence.data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code></a> in the returned <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Fluence</span></code></a> object <code class="code docutils literal notranslate"><span class="pre">deposit</span></code>. The visualization is done in the logarithmic scale. Note that visualization can also be done in a straightforward manner by calling the method <a class="reference internal" href="../../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.plot" title="xopto.mcbase.mcfluence.Fluence.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a> and specifying the axis along which slices through the 3D medium are performed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot the deposited energy in 1/m^3.</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Deposited energy&#39;</span><span class="p">)</span>
+<span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e3</span><span class="o">*</span><span class="p">(</span><span class="n">xaxis</span><span class="o">.</span><span class="n">centers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">binsize</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="mf">1e3</span><span class="o">*</span><span class="p">(</span><span class="n">xaxis</span><span class="o">.</span><span class="n">centers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">binsize</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span>
+    <span class="mf">1e3</span><span class="o">*</span><span class="p">(</span><span class="n">zaxis</span><span class="o">.</span><span class="n">centers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">binsize</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="mf">1e3</span><span class="o">*</span><span class="p">(</span><span class="n">zaxis</span><span class="o">.</span><span class="n">centers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">binsize</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">deposit</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">100</span><span class="p">,:]</span><span class="o">/</span><span class="n">nphotons</span><span class="p">),</span>
+    <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
+    <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;upper&#39;</span>
+<span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x (mm)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;z (mm)&#39;</span><span class="p">)</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Log10(A)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># use the slicer view</span>
+<span class="n">deposit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../../_images/deposited_energy.svg"><img alt="Deposited energy" class="align-center" height="360px" src="../../../_images/deposited_energy.svg" width="480px" /></a>
+<a class="reference internal image-reference" href="../../../_images/slices_visualization.svg"><img alt="Slices through the deposited energy" class="align-center" height="360px" src="../../../_images/slices_visualization.svg" width="480px" /></a>
+</section>
+<section id="the-complete-example">
+<h2>The complete example<a class="headerlink" href="#the-complete-example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="c1"># This example shows how to simulate deposited energy using the </span>
+<span class="c1"># voxelized Monte Carlo method for a simple case of a two-layered </span>
+<span class="c1"># skin model with an embedded blood vessel.</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox.mcutil</span> <span class="kn">import</span> <span class="n">axis</span>
+<span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">clinfo</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">pp</span>
+
+<span class="c1"># DEFINE A COMPUTATIONAL DEVICE</span>
+<span class="c1"># select the first device from the provided platform</span>
+<span class="n">cl_device</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">platform</span><span class="o">=</span><span class="s1">&#39;nvidia&#39;</span><span class="p">)</span>
+
+<span class="c1"># DEFINE VOXELS AND TISSUE STRUCTURE</span>
+<span class="c1"># number of bins and size</span>
+<span class="n">nx</span> <span class="o">=</span> <span class="mi">201</span>
+<span class="n">ny</span> <span class="o">=</span> <span class="mi">201</span>
+<span class="n">nz</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">binsize</span> <span class="o">=</span> <span class="mf">5e-6</span>
+
+<span class="c1"># define each axis</span>
+<span class="n">xaxis</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span>
+    <span class="n">start</span><span class="o">=-</span><span class="n">nx</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">binsize</span><span class="p">,</span> 
+    <span class="n">stop</span><span class="o">=</span><span class="n">nx</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">binsize</span><span class="p">,</span> 
+    <span class="n">n</span><span class="o">=</span><span class="n">nx</span>
+<span class="p">)</span>
+
+<span class="n">yaxis</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span>
+    <span class="n">start</span><span class="o">=-</span><span class="n">ny</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">binsize</span><span class="p">,</span> 
+    <span class="n">stop</span><span class="o">=</span><span class="n">ny</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">binsize</span><span class="p">,</span> 
+    <span class="n">n</span><span class="o">=</span><span class="n">ny</span>
+<span class="p">)</span>
+
+<span class="n">zaxis</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span>
+    <span class="n">start</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> 
+    <span class="n">stop</span><span class="o">=</span><span class="n">nz</span> <span class="o">*</span> <span class="n">binsize</span><span class="p">,</span>
+    <span class="n">n</span><span class="o">=</span><span class="n">nz</span>
+<span class="p">)</span>
+
+<span class="c1"># define voxels</span>
+<span class="n">voxels</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcgeometry</span><span class="o">.</span><span class="n">Voxels</span><span class="p">(</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="n">xaxis</span><span class="p">,</span> 
+    <span class="n">yaxis</span><span class="o">=</span><span class="n">yaxis</span><span class="p">,</span> 
+    <span class="n">zaxis</span><span class="o">=</span><span class="n">zaxis</span>
+<span class="p">)</span>
+
+<span class="c1"># get mesh</span>
+<span class="n">z</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">voxels</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">()</span>
+
+<span class="c1"># set logical indices for material assignment</span>
+<span class="n">r_vessels</span> <span class="o">=</span> <span class="mf">100e-6</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">z0</span> <span class="o">=</span> <span class="n">nz</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">binsize</span>
+
+<span class="n">logical_epi</span> <span class="o">=</span> <span class="n">z</span> <span class="o">&lt;=</span> <span class="mf">60e-6</span>
+<span class="n">logical_der</span> <span class="o">=</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="mf">60e-6</span>
+<span class="n">logical_vessel</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">z</span><span class="o">-</span><span class="n">z0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">r_vessels</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="c1"># DEFINE MATERIALS</span>
+<span class="c1"># surrounding medium</span>
+<span class="n">material_sm</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcmaterial</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span>
+    <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span>
+    <span class="n">mua</span><span class="o">=</span><span class="mf">0.0001e2</span><span class="p">,</span>
+    <span class="n">mus</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span>
+    <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># epidermis</span>
+<span class="n">material_epi</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcmaterial</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span>
+    <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span>
+    <span class="n">mua</span><span class="o">=</span><span class="mf">16.5724e2</span><span class="p">,</span>
+    <span class="n">mus</span><span class="o">=</span><span class="mf">375.9398e2</span><span class="p">,</span>
+    <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># dermis</span>
+<span class="n">material_der</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcmaterial</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span>
+    <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span>
+    <span class="n">mua</span><span class="o">=</span><span class="mf">0.4585e2</span><span class="p">,</span>
+    <span class="n">mus</span><span class="o">=</span><span class="mf">356.5406e2</span><span class="p">,</span>
+    <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># blood</span>
+<span class="n">material_bl</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcmaterial</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span>
+    <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span>
+    <span class="n">mua</span><span class="o">=</span><span class="mf">230.5427e2</span><span class="p">,</span>
+    <span class="n">mus</span><span class="o">=</span><span class="mf">93.9850e2</span><span class="p">,</span>
+    <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">materials</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcmaterial</span><span class="o">.</span><span class="n">Materials</span><span class="p">([</span>
+    <span class="n">material_sm</span><span class="p">,</span>
+    <span class="n">material_epi</span><span class="p">,</span>
+    <span class="n">material_der</span><span class="p">,</span>
+    <span class="n">material_bl</span>
+<span class="p">])</span>
+
+<span class="c1"># DEFINE PENCIL BEAM SOURCE</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">Line</span><span class="p">()</span>
+
+<span class="c1"># DEFINE FLUENCE OBJECT</span>
+<span class="n">fluence</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcfluence</span><span class="o">.</span><span class="n">Fluence</span><span class="p">(</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="n">xaxis</span><span class="p">,</span> 
+    <span class="n">yaxis</span><span class="o">=</span><span class="n">yaxis</span><span class="p">,</span> 
+    <span class="n">zaxis</span><span class="o">=</span><span class="n">zaxis</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;deposition&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># DEFINE MC OBJECT FOR MONTE CARLO SIMULATIONS AND ASSIGN MATERIALS</span>
+<span class="n">mc_obj</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
+    <span class="n">voxels</span><span class="o">=</span><span class="n">voxels</span><span class="p">,</span>
+    <span class="n">materials</span><span class="o">=</span><span class="n">materials</span><span class="p">,</span>
+    <span class="n">fluence</span><span class="o">=</span><span class="n">fluence</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+    <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># assign the materials to voxels</span>
+<span class="n">mc_obj</span><span class="o">.</span><span class="n">voxels</span><span class="o">.</span><span class="n">material</span><span class="p">[</span><span class="n">logical_epi</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">mc_obj</span><span class="o">.</span><span class="n">voxels</span><span class="o">.</span><span class="n">material</span><span class="p">[</span><span class="n">logical_der</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">mc_obj</span><span class="o">.</span><span class="n">voxels</span><span class="o">.</span><span class="n">material</span><span class="p">[</span><span class="n">logical_vessel</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="c1"># RUN THE MONTE CARLO SIMULATIONS</span>
+<span class="n">nphotons</span> <span class="o">=</span> <span class="mf">1e8</span>
+<span class="n">deposit</span> <span class="o">=</span> <span class="n">mc_obj</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># VISUALIZE THE RESULTS</span>
+<span class="c1"># plot the deposited energy in 1/m^3.</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Deposited energy&#39;</span><span class="p">)</span>
+<span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e3</span><span class="o">*</span><span class="p">(</span><span class="n">xaxis</span><span class="o">.</span><span class="n">centers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">binsize</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="mf">1e3</span><span class="o">*</span><span class="p">(</span><span class="n">xaxis</span><span class="o">.</span><span class="n">centers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">binsize</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span>
+    <span class="mf">1e3</span><span class="o">*</span><span class="p">(</span><span class="n">zaxis</span><span class="o">.</span><span class="n">centers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">binsize</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="mf">1e3</span><span class="o">*</span><span class="p">(</span><span class="n">zaxis</span><span class="o">.</span><span class="n">centers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">binsize</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">deposit</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">100</span><span class="p">,:]</span><span class="o">/</span><span class="n">nphotons</span><span class="p">),</span> 
+    <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
+    <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;upper&#39;</span>
+<span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x (mm)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;z (mm)&#39;</span><span class="p">)</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Log10(A)&#39;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># use the slicer view</span>
+<span class="n">deposit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can run this example from the root directory of the PyXOpto package as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python examples/mcvox/voxelized_vessel.py
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Voxelized MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Voxelized Monte Carlo simulations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Voxelized MC</a><ul>
+  <li><a href="index.html">Examples</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Examples</a></li>
+      <li>Next: <a href="../../../apidoc/modules.html" title="next chapter">xopto</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,7 @@
+xopto.pf.miemixture module
+==========================
+
+.. automodule:: xopto.pf.miemixture
+   :members:
+   :undoc-members:
+   :show-inheritance:

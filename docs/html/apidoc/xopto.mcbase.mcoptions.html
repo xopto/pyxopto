@@ -1,0 +1,626 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.mcbase.mcoptions module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.mcbase.mcsrc module" href="xopto.mcbase.mcsrc.html" />
+    <link rel="prev" title="xopto.mcbase.mcobject module" href="xopto.mcbase.mcobject.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.mcbase.mcoptions">
+<span id="xopto-mcbase-mcoptions-module"></span><h1>xopto.mcbase.mcoptions module<a class="headerlink" href="#module-xopto.mcbase.mcoptions" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McBoolOption">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McBoolOption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McBoolOption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McBoolOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McOption" title="xopto.mcbase.mcoptions.McOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McOption</span></code></a></p>
+<p>Base Class of Monte Carlo kernel options that have a boolean type.</p>
+<p>Initializes a boolean kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Property name</p></li>
+<li><p><strong>value</strong> (<em>bool</em>) – Boolean value of the kernel option.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McBoolOption.get_define">
+<span class="sig-name descname"><span class="pre">get_define</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McBoolOption.get_define"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McBoolOption.get_define" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McDebugMode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McDebugMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McDebugMode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McDebugMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McBoolOption" title="xopto.mcbase.mcoptions.McBoolOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McBoolOption</span></code></a></p>
+<p>Switch the kernel debug mode on or off. Use only for kernel development.
+Default is off.</p>
+<p>Initializes the debug mode kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – Use True to enable the debug mode or False to disable the debug mode.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McDebugMode.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_ENABLE_DEBUG',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McDebugMode.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McDebugMode.off">
+<span class="sig-name descname"><span class="pre">off</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_ENABLE_DEBUG',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McDebugMode.off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McDebugMode.on">
+<span class="sig-name descname"><span class="pre">on</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_ENABLE_DEBUG',</span> <span class="pre">True)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McDebugMode.on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McFloatLutMemory">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McFloatLutMemory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'global'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McFloatLutMemory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McFloatLutMemory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McTypeOption" title="xopto.mcbase.mcoptions.McTypeOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McTypeOption</span></code></a></p>
+<p>OpenCL memory type used to hold the floating-point lookup table data.
+Use one of “constant_mem” or “global_mem”.
+Default is “global_mem”.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Selecting “global_mem” memory will likely lead to a significant performance
+degradation, in particular on older GPUs.
+The amount of available “constant_mem” memory on GPUs is typically limited
+to about 64k.</p>
+</div>
+<p>Initializes the floating-point lookup table memory type kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – Use “global_mem” to move integer lookup table data to the __global
+OpenCL memory or use “constant_mem” to move the lookup table data
+to the __constant OpenCL memory.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McFloatLutMemory.constant_mem">
+<span class="sig-name descname"><span class="pre">constant_mem</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McTypeOption('MC_FP_LUT_ARRAY_MEMORY',</span> <span class="pre">__constant)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McFloatLutMemory.constant_mem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McFloatLutMemory.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McTypeOption('MC_FP_LUT_ARRAY_MEMORY',</span> <span class="pre">__constant)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McFloatLutMemory.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McFloatLutMemory.global_mem">
+<span class="sig-name descname"><span class="pre">global_mem</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McTypeOption('MC_FP_LUT_ARRAY_MEMORY',</span> <span class="pre">__global)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McFloatLutMemory.global_mem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McFloatOption">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McFloatOption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McFloatOption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McFloatOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McOption" title="xopto.mcbase.mcoptions.McOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McOption</span></code></a></p>
+<p>Initializes a floating-point kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Property name</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – Floating-point value of the kernel option.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McIntLutMemory">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McIntLutMemory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'global'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McIntLutMemory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McIntLutMemory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McTypeOption" title="xopto.mcbase.mcoptions.McTypeOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McTypeOption</span></code></a></p>
+<p>OpenCL memory type used to hold the floating-point lookup table data.
+Use one of <code class="xref py py-attr docutils literal notranslate"><span class="pre">__constant</span></code> or <code class="xref py py-attr docutils literal notranslate"><span class="pre">__global</span></code>.
+Default is <code class="xref py py-attr docutils literal notranslate"><span class="pre">__global</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Selecting “__global” memory will likely lead to a significant performance
+degradation, in particular on older GPUs.
+The amount of available “__constant” memory on GPUs is typically limited
+to about 64k.</p>
+</div>
+<p>Initializes the integer type lookup table memory type kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – Use “global” to move integer type lookup table data to the
+__global OpenCL memory or use “constant” to move the lookup table
+data to the __constant OpenCL memory.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McIntLutMemory.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McTypeOption('MC_INT_LUT_ARRAY_MEMORY',</span> <span class="pre">constant)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McIntLutMemory.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McIntOption">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McIntOption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McIntOption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McIntOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McOption" title="xopto.mcbase.mcoptions.McOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McOption</span></code></a></p>
+<p>Base Class of Monte Carlo kernel options that have an integer type.</p>
+<p>Initializes an integer kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Property name</p></li>
+<li><p><strong>value</strong> (<em>int</em>) – Integer value of the kernel option.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McMinimumPacketWeight">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McMinimumPacketWeight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McMinimumPacketWeight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McMinimumPacketWeight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McFloatOption" title="xopto.mcbase.mcoptions.McFloatOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McFloatOption</span></code></a></p>
+<p>Minimum packet weight allowed before starting packet termination or lottery.
+Default value is 1e-4.</p>
+<p>Initializes a floating-point kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Property name</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – Floating-point value of the kernel option.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McMinimumPacketWeight.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McFloatOption('MC_PACKET_WEIGHT_MIN',</span> <span class="pre">0.0001)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McMinimumPacketWeight.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McOption">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McOption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McOption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcobject.McObject</span></code></a></p>
+<p>Base Class of Monte Carlo kernel options that are set up through defines.</p>
+<p>Initializes a kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Option name</p></li>
+<li><p><strong>value</strong> (<em>str</em><em>, </em><em>bool</em><em>, </em><em>int</em><em>, </em><em>float</em>) – Option value.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McOption.cl_value">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">cl_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McOption.cl_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McOption.cl_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenCL representation of the option value that can be set by a define.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em><em> or </em><em>bool</em><em> or </em><em>int</em><em> or </em><em>float</em>) – Python representation of the option value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>cl_value</strong> – Representation of the option value that can be used in a
+standard C/OpenCL define.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McOption.make_define">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">make_define</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McOption.make_define"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McOption.make_define" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return a standard C/OpenCL define.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>define</strong> – A standard C/OpenCL define representing the option.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McOption.name">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McOption.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Option name.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McOption.value">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McOption.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Option value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McPacketLotteryChance">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McPacketLotteryChance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McPacketLotteryChance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McPacketLotteryChance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McFloatOption" title="xopto.mcbase.mcoptions.McFloatOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McFloatOption</span></code></a></p>
+<p>Terminate photon packet by lottery if the value of a uniform random
+number from [0, 1] exceeds this value.
+Default value is 0.1.</p>
+<p>Initializes the lottery chance kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>float</em>) – Lottery survival fraction from 0.0 to 1.0.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McPacketLotteryChance.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McFloatOption('MC_PACKET_LOTTERY_CHANCE',</span> <span class="pre">0.1)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McPacketLotteryChance.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McTypeOption">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McTypeOption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McTypeOption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McTypeOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McOption" title="xopto.mcbase.mcoptions.McOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McOption</span></code></a></p>
+<p>Base Class of Monte Carlo kernel options that have a label type
+(no quotes in the define).</p>
+<p>Initializes a label (no quotes in the define) kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Property name</p></li>
+<li><p><strong>value</strong> (<em>str</em>) – String value of the kernel option.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseBallisticKernel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McUseBallisticKernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McUseBallisticKernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseBallisticKernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McBoolOption" title="xopto.mcbase.mcoptions.McBoolOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McBoolOption</span></code></a></p>
+<p>Turn on or off the use of ballistic Monte Carlo kernel. The ballistic
+kernel either scatters or fully absorbs the packet hence the photon
+packets do not undergo termination through weight threshold and / or
+lottery.
+The values of options <a class="reference internal" href="#xopto.mcbase.mcoptions.McMinimumPacketWeight" title="xopto.mcbase.mcoptions.McMinimumPacketWeight"><code class="xref py py-class docutils literal notranslate"><span class="pre">McMinimumPacketWeight</span></code></a> and
+<a class="reference internal" href="#xopto.mcbase.mcoptions.McUseLottery" title="xopto.mcbase.mcoptions.McUseLottery"><code class="xref py py-class docutils literal notranslate"><span class="pre">McUseLottery</span></code></a> are not used by the ballistic kernel.</p>
+<p>Default is off.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ballistic Monte Carlo kernel is about 2~3-fold faster but produces
+noisy results.</p>
+</div>
+<p>Initializes the ballistic kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – Use True to enable or False to disable the ballistic implementation
+of the Monte Carlo kernel.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseBallisticKernel.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_BALLISTIC_KERNEL',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseBallisticKernel.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseBallisticKernel.off">
+<span class="sig-name descname"><span class="pre">off</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_BALLISTIC_KERNEL',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseBallisticKernel.off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseBallisticKernel.on">
+<span class="sig-name descname"><span class="pre">on</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_BALLISTIC_KERNEL',</span> <span class="pre">True)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseBallisticKernel.on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseLottery">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McUseLottery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McUseLottery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseLottery" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McBoolOption" title="xopto.mcbase.mcoptions.McBoolOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McBoolOption</span></code></a></p>
+<p>Switch on or off photon packet termination by lottery.
+Default is on.</p>
+<p>Initializes the lottery kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – Use True to enable the lottery or False to disable the lottery.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseLottery.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_LOTTERY',</span> <span class="pre">True)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseLottery.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseLottery.off">
+<span class="sig-name descname"><span class="pre">off</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_LOTTERY',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseLottery.off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseLottery.on">
+<span class="sig-name descname"><span class="pre">on</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_LOTTERY',</span> <span class="pre">True)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseLottery.on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseNativeMath">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McUseNativeMath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McUseNativeMath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseNativeMath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McBoolOption" title="xopto.mcbase.mcoptions.McBoolOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McBoolOption</span></code></a></p>
+<p>Turn on or off the use of OpenCL native math.
+Default is off.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Native math usually gives some performance benefit, but might not
+be fully compliant with precisions defined by the IEEE standards.</p>
+</div>
+<p>Initializes the native math kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – Use True to enable native math or False to disable native math.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseNativeMath.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_NATIVE_MATH',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseNativeMath.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseNativeMath.off">
+<span class="sig-name descname"><span class="pre">off</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_NATIVE_MATH',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseNativeMath.off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseNativeMath.on">
+<span class="sig-name descname"><span class="pre">on</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_NATIVE_MATH',</span> <span class="pre">True)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseNativeMath.on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUsePackedStructures">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McUsePackedStructures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McUsePackedStructures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McUsePackedStructures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McBoolOption" title="xopto.mcbase.mcoptions.McBoolOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McBoolOption</span></code></a></p>
+<p>Turn on/off the use of tightly packed structures.
+Default value is off.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that packed structures can lead to significant performance
+degradation of the MonteCarlo kernel. This option is the last resort if
+the fields of the OpenCL and host structures cannot be properly aligned.
+When declaring OPenCL or host structures always start with the
+largest data type and move towards smaller data types. Use data types
+that are of size no less than 4 bytes.</p>
+</div>
+<p>Initializes the packed structures kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – Use True to enable packed structures or
+False to disable packed structures.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUsePackedStructures.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_PACKED_STRUCTURES',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUsePackedStructures.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUsePackedStructures.off">
+<span class="sig-name descname"><span class="pre">off</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_PACKED_STRUCTURES',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUsePackedStructures.off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUsePackedStructures.on">
+<span class="sig-name descname"><span class="pre">on</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_PACKED_STRUCTURES',</span> <span class="pre">True)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUsePackedStructures.on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseSoft64Atomics">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McUseSoft64Atomics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McUseSoft64Atomics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseSoft64Atomics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McBoolOption" title="xopto.mcbase.mcoptions.McBoolOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McBoolOption</span></code></a></p>
+<p>Force software implementation of 64-bit atomic operations.</p>
+<p>Initializes the software-based 64-bit integer atomics usage option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – Use True to force software-implemented 64-bit integer atomics.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseSoft64Atomics.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_SOFT_64_ATOMICS',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseSoft64Atomics.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseSoft64Atomics.off">
+<span class="sig-name descname"><span class="pre">off</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_SOFT_64_ATOMICS',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseSoft64Atomics.off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseSoft64Atomics.on">
+<span class="sig-name descname"><span class="pre">on</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_SOFT_64_ATOMICS',</span> <span class="pre">True)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseSoft64Atomics.on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.cl_value">
+<span class="sig-name descname"><span class="pre">cl_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#cl_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.cl_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenCL representation of the option value that can be set by a define.
+:param value: Python representation of the option value.
+:type value: str or bool or int or float</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>cl_value</strong> – Representation of the option value that can be used in a
+standard C/OpenCL define.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.make_defines">
+<span class="sig-name descname"><span class="pre">make_defines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#make_defines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.make_defines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create defines for the given list of options. These defines should be
+included at the beginning of the OpenCL source file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>options</strong> (<em>List</em><em>[</em><em>RawOption</em><em>]</em>) – List of options defined as [(option_name, option_value), …].</p></li>
+<li><p><strong>indent</strong> (<em>str</em>) – Indent to use when creating define directives.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>defs</strong> – Options as defines, one per line.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.resolve_cl_options">
+<span class="sig-name descname"><span class="pre">resolve_cl_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#resolve_cl_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.resolve_cl_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve collections of OpenCL options passed as input arguments.
+Check for duplicate options with different values and raise
+ValueError if the same option is defined with different values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>Tuple</em><em>[</em><em>RawOption</em><em>]</em>) – Each positional argument must be a list of options defined as
+[(name, value), …].</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>options</strong> – List of resolved options defined as [(name, value), …].</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[RawOption]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.mcbase.html">xopto.mcbase package</a><ul>
+      <li>Previous: <a href="xopto.mcbase.mcobject.html" title="previous chapter">xopto.mcbase.mcobject module</a></li>
+      <li>Next: <a href="xopto.mcbase.mcsrc.html" title="next chapter">xopto.mcbase.mcsrc module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

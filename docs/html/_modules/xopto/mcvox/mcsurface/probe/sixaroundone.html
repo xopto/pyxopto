@@ -1,0 +1,632 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcvox.mcsurface.probe.sixaroundone &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcvox.mcsurface.probe.sixaroundone</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">cltypes</span><span class="p">,</span> <span class="n">mcobject</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox.mcutil</span> <span class="kn">import</span> <span class="n">fiber</span> <span class="k">as</span> <span class="n">fiberutil</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox.mcutil</span> <span class="kn">import</span> <span class="n">boundary</span><span class="p">,</span> <span class="n">geometry</span>
+
+<span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">SurfaceLayoutAny</span><span class="p">,</span> <span class="n">TOP</span><span class="p">,</span> <span class="n">BOTTOM</span>
+
+
+<div class="viewcode-block" id="SixAroundOne"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcvox.mcsurface.probe.sixaroundone.html#xopto.mcvox.mcsurface.probe.sixaroundone.SixAroundOne">[docs]</a><span class="k">class</span> <span class="nc">SixAroundOne</span><span class="p">(</span><span class="n">SurfaceLayoutAny</span><span class="p">):</span>
+<div class="viewcode-block" id="SixAroundOne.cl_type"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcvox.mcsurface.probe.sixaroundone.html#xopto.mcvox.mcsurface.probe.sixaroundone.SixAroundOne.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Surface layout of a tilted six-around one probe with stainless steel</span>
+<span class="sd">        housing.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: McObject</span>
+<span class="sd">            A Monte Carlo simulator instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        struct: cltypes.Structure</span>
+<span class="sd">            A structure type that represents the six-around-one surface layout</span>
+<span class="sd">            in the Monte Carlo kernel.</span>
+
+<span class="sd">        Fields</span>
+<span class="sd">        ------</span>
+<span class="sd">        transformation: mc_matrix3f_t</span>
+<span class="sd">            Transformation that transforms Monte Carlo coordinates relative to</span>
+<span class="sd">            the probe center to probe coordinates</span>
+<span class="sd">        position: mc_point3f_t</span>
+<span class="sd">            Position of the probe center.</span>
+<span class="sd">        core_spacing: float</span>
+<span class="sd">            Spacing between the cores of the central and sourrounding optical</span>
+<span class="sd">            fibers.</span>
+<span class="sd">        core_r_squared: float</span>
+<span class="sd">            Squared radius of the optical fiber core.</span>
+<span class="sd">        core_n: float</span>
+<span class="sd">            Refractive index of the fiber core.</span>
+<span class="sd">        cladding_r_squared: float</span>
+<span class="sd">            Squared radius of the optical fiber cladding.</span>
+<span class="sd">        cladding_n: float</span>
+<span class="sd">            Refractive index of the fiber cladding.</span>
+<span class="sd">        cutout_r_squared: float</span>
+<span class="sd">            Squared radius of the cutout in the probe tip that accommodates</span>
+<span class="sd">            the fibers.</span>
+<span class="sd">        cutout_n: float</span>
+<span class="sd">            Refractive index of the probe cutout.</span>
+<span class="sd">        probe_r_squared: float</span>
+<span class="sd">            Squared radius of the probe.</span>
+<span class="sd">        probe_reflectivity: float</span>
+<span class="sd">            Reflectivity of the probe tip (a value from 0 to 1 is required).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClSixAroundOne</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;transformation&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_matrix3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point2f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;core_spacing&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;cladding_r_squared&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;cladding_n&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;core_r_squared&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;core_n&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;cutout_r_squared&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;cutout_n&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;probe_r_squared&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;probe_reflectivity&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">ClSixAroundOne</span></div>
+
+<div class="viewcode-block" id="SixAroundOne.cl_declaration"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcvox.mcsurface.probe.sixaroundone.html#xopto.mcvox.mcsurface.probe.sixaroundone.SixAroundOne.cl_declaration">[docs]</a>    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that defines the layout in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span>
+        <span class="n">Loc</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES Mc</span><span class="si">{}</span><span class="s1">SurfaceLayout{{&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation;&#39;</span>
+            <span class="s1">&#39;	mc_point2f_t position;&#39;</span>
+            <span class="s1">&#39;	mc_fp_t core_spacing;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t cladding_r_squared;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t cladding_n;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t core_r_squared;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t core_n;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t cutout_r_squared;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t cutout_n;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t probe_r_squared;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t probe_reflectivity;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="SixAroundOne.cl_implementation"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcvox.mcsurface.probe.sixaroundone.html#xopto.mcvox.mcsurface.probe.sixaroundone.SixAroundOne.cl_implementation">[docs]</a>    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span>
+        <span class="n">Loc</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;void dbg_print_</span><span class="si">{}</span><span class="s1">_surface_layout(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loc</span><span class="p">),</span>
+            <span class="s1">&#39;		__mc_surface_mem const Mc</span><span class="si">{}</span><span class="s1">SurfaceLayout *layout){{&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;	dbg_print(&quot;Mc</span><span class="si">{}</span><span class="s1">SurfaceLayout - SixAroundOne surface layout:&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;	dbg_print_matrix3f(INDENT &quot;transformation:&quot;, &amp;layout-&gt;transformation);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point2f(INDENT &quot;position:&quot;, &amp;layout-&gt;position);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;core_spacing (mm):&quot;, layout-&gt;core_spacing*1e3f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;core_r_squared (mm2):&quot;, layout-&gt;core_r_squared*1e6f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;core_n:&quot;, layout-&gt;core_n);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;cladding_r_squared (mm2):&quot;, layout-&gt;cladding_r_squared*1e6f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;cladding_n:&quot;, layout-&gt;cladding_n);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;cutout_r_squared (mm2):&quot;, layout-&gt;cutout_r_squared*1e6f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;cutout_n:&quot;, layout-&gt;cutout_n);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;probe_r_squared (mm2):&quot;, layout-&gt;probe_r_squared*1e6f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;probe_reflectivity&quot;, layout-&gt;probe_reflectivity);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline int mcsim_</span><span class="si">{}</span><span class="s1">_surface_layout_handler(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loc</span><span class="p">),</span>
+            <span class="s1">&#39;		McSim *mcsim, mc_fp_t *n2, mc_fp_t *cc){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	__mc_surface_mem const struct Mc</span><span class="si">{}</span><span class="s1">SurfaceLayout *layout = &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;		mcsim_</span><span class="si">{}</span><span class="s1">_surface_layout(mcsim);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loc</span><span class="p">),</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t dx, dy, r_squared;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t mc_pos, layout_pos;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(&quot;</span><span class="si">{}</span><span class="s1"> SixAroundOne layout hit: &quot;, &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;		mcsim_direction(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t rel_pos = {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_position_x(mcsim) - layout-&gt;position.x,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_position_y(mcsim) - layout-&gt;position.y,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		FP_0&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	/* The central fiber */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_pos.x = rel_pos.x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_pos.y = rel_pos.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_pos.z = FP_0;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;layout-&gt;transformation, &amp;mc_pos, &amp;layout_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dx = layout_pos.x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dy = layout_pos.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	r_squared = dx*dx + dy*dy;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if(r_squared &lt;= layout-&gt;cladding_r_squared){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		if(r_squared &lt;= layout-&gt;core_r_squared){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			/* hit the fiber core */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			*n2 = layout-&gt;core_n;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			dbg_print(&quot;</span><span class="si">{}</span><span class="s1"> SixAroundOne layout fiber core 0 hit&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;			return MC_SURFACE_LAYOUT_CONTINUE;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		*n2 = layout-&gt;cladding_n;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print(&quot;</span><span class="si">{}</span><span class="s1"> SixAroundOne layout fiber cladding 0 hit&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;		return MC_SURFACE_LAYOUT_CONTINUE;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	/* The 1st and 4th fibers of the ring. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_pos.x = mc_fabs(rel_pos.x) - layout-&gt;core_spacing;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_pos.y = rel_pos.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;layout-&gt;transformation, &amp;mc_pos, &amp;layout_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dx = layout_pos.x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dy = layout_pos.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	r_squared = dx*dx + dy*dy;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if(r_squared &lt;= layout-&gt;cladding_r_squared){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		if(r_squared &lt;= layout-&gt;core_r_squared){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			/* hit the fiber core */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			*n2 = layout-&gt;core_n;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			dbg_print(&quot;</span><span class="si">{}</span><span class="s1"> SixAroundOne layout fiber core 1 or 4 hit&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;			return MC_SURFACE_LAYOUT_CONTINUE;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		*n2 = layout-&gt;cladding_n;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print(&quot;</span><span class="si">{}</span><span class="s1"> SixAroundOne layout fiber cladding 1 or 4 hit&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;		return MC_SURFACE_LAYOUT_CONTINUE;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	/* The 2nd, 3rd, 5th and 6th fibers of the ring. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_pos.x = mc_fabs(rel_pos.x) - layout-&gt;core_spacing*FP_0p5;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_pos.y = mc_fabs(rel_pos.y) - layout-&gt;core_spacing*FP_COS_30;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;layout-&gt;transformation, &amp;mc_pos, &amp;layout_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dx = layout_pos.x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dy = layout_pos.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	r_squared = dx*dx + dy*dy;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if(r_squared &lt;= layout-&gt;cladding_r_squared){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		if(r_squared &lt;= layout-&gt;core_r_squared){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			/* hit the fiber core */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			*n2 = layout-&gt;core_n;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			dbg_print(&quot;</span><span class="si">{}</span><span class="s1"> SixAroundOne layout fiber core 2, 3, 5 or 6 hit&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;			return MC_SURFACE_LAYOUT_CONTINUE;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		*n2 = layout-&gt;cladding_n;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print(&quot;</span><span class="si">{}</span><span class="s1"> SixAroundOne layout fiber cladding 2, 3, 5 or 6 hit&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;		return MC_SURFACE_LAYOUT_CONTINUE;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	/* The cutout of the stainless steel probe. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dx = rel_pos.x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dy = rel_pos.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	r_squared = dx*dx + dy*dy;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if(r_squared &lt;= layout-&gt;cutout_r_squared){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		*n2 = layout-&gt;cutout_n;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print(&quot;</span><span class="si">{}</span><span class="s1"> SixAroundOne layout cutout hit&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;		return MC_SURFACE_LAYOUT_CONTINUE;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	/* The tip of the stainless steel probe. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if(r_squared &lt;= layout-&gt;probe_r_squared){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_reverse_direction_z(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_set_weight(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mcsim, mcsim_weight(mcsim)*layout-&gt;probe_reflectivity);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print(&quot;</span><span class="si">{}</span><span class="s1"> SixAroundOne layout stainles steel hit&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;		return MC_REFLECTED;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(&quot;</span><span class="si">{}</span><span class="s1"> SixAroundOne layout missed&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;	return MC_SURFACE_LAYOUT_CONTINUE;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fiber</span><span class="p">:</span> <span class="n">fiberutil</span><span class="o">.</span><span class="n">MultimodeFiber</span> <span class="ow">or</span> <span class="n">SixAroundOne</span><span class="p">,</span>
+                 <span class="n">spacing</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">diameter</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">reflectivity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">cutout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">cutoutn</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">position</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                 <span class="n">direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        A six-around one optical fiber probe surface layout with optional</span>
+<span class="sd">        tilted fibers (direction parameter) and a round cutout region that</span>
+<span class="sd">        accommodates the optical fibers. The optical fibers are always</span>
+<span class="sd">        polished in way that forms a tight optical contact with the surface</span>
+<span class="sd">        of the sample.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fiber: MultimodeFiber or SixAroundOne</span>
+<span class="sd">            Properties of the optical fibers or an instance of SixAroundOne.</span>
+<span class="sd">            A copy is made if an instance of SixAroundOne.</span>
+<span class="sd">        spacing: float</span>
+<span class="sd">            Spacing between the optical fibers. If spacing is None,</span>
+<span class="sd">            a tight layout is used with spacing set to the outer diameter</span>
+<span class="sd">            of the fiber cladding.</span>
+<span class="sd">        diameter: float</span>
+<span class="sd">            Outer diameter of the probe tip.</span>
+<span class="sd">        reflectivity: float</span>
+<span class="sd">            Reflectivity of the probe tip.</span>
+<span class="sd">        cutout: float</span>
+<span class="sd">            Diameter of the cutout accommodating the optical fibers. Set to 0</span>
+<span class="sd">            if not used.</span>
+<span class="sd">        cutoutn: float</span>
+<span class="sd">            Refractive index of the cutout. Only used if cutout is not 0.</span>
+<span class="sd">        position: (float, float)</span>
+<span class="sd">            Position of the center of the probe / central finer.</span>
+<span class="sd">        direction: (float, float, float)</span>
+<span class="sd">            Reference direction / orientation of the fibers. Fibers are</span>
+<span class="sd">            oriented in this direction and polished to form a tight optical</span>
+<span class="sd">            contact with the sample (the fiber cross sections are ellipsoids</span>
+<span class="sd">            if the direction is not perpendicular, i.e different</span>
+<span class="sd">            from (0, 0, 1).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fiber</span><span class="p">,</span> <span class="n">SixAroundOne</span><span class="p">):</span>
+            <span class="n">sao</span> <span class="o">=</span> <span class="n">fiber</span>
+            <span class="n">fiber</span> <span class="o">=</span> <span class="n">sao</span><span class="o">.</span><span class="n">fiber</span>
+            <span class="n">spacing</span> <span class="o">=</span> <span class="n">sao</span><span class="o">.</span><span class="n">spacing</span>
+            <span class="n">cutout</span> <span class="o">=</span> <span class="n">sao</span><span class="o">.</span><span class="n">cutout</span>
+            <span class="n">reflectivity</span> <span class="o">=</span> <span class="n">sao</span><span class="o">.</span><span class="n">reflectivity</span>
+            <span class="n">diameter</span> <span class="o">=</span> <span class="n">sao</span><span class="o">.</span><span class="n">diameter</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">sao</span><span class="o">.</span><span class="n">position</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="n">sao</span><span class="o">.</span><span class="n">direction</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">spacing</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">spacing</span> <span class="o">=</span> <span class="n">fiber</span><span class="o">.</span><span class="n">dcladding</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span> <span class="o">=</span> <span class="n">fiber</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cutout</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cutout_n</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reflectivity</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_spacing</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">spacing</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_diameter</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">diameter</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_reflectivity</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">reflectivity</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cutout</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">cutout</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cutout_n</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">cutoutn</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_position</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_direction</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> 
+
+    <span class="k">def</span> <span class="nf">_get_fiber</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">fiberutil</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span>
+    <span class="k">def</span> <span class="nf">_set_fiber</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fiber</span><span class="p">:</span> <span class="n">fiberutil</span><span class="o">.</span><span class="n">MultimodeFiber</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span> <span class="o">=</span> <span class="n">fiber</span>
+    <span class="n">fiber</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_fiber</span><span class="p">,</span> <span class="n">_set_fiber</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Multimode optical fiber.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_spacing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span>
+    <span class="k">def</span> <span class="nf">_set_spacing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spacing</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">spacing</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">spacing</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_spacing</span><span class="p">,</span> <span class="n">_set_spacing</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="s1">&#39;Spacing of the optical fibers (m).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span>
+    <span class="k">def</span> <span class="nf">_set_diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diameter</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">diameter</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">diameter</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_diameter</span><span class="p">,</span> <span class="n">_set_diameter</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="s1">&#39;Outer diameter of the optical fiber probe tip.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_reflectivity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reflectivity</span>
+    <span class="k">def</span> <span class="nf">_set_reflectivity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reflectivity</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reflectivity</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">reflectivity</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">reflectivity</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_reflectivity</span><span class="p">,</span> <span class="n">_set_reflectivity</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="s1">&#39;Reflectivity of the stainless steel optical fiber &#39;</span>
+                           <span class="s1">&#39;probe tip.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_cutout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scutout</span>
+    <span class="k">def</span> <span class="nf">_set_cutout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cutout</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cutout</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">cutout</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">cutout</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_cutout</span><span class="p">,</span> <span class="n">_set_cutout</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="s1">&#39;Cutout diameter (m) accommodating the optical fibers.&#39;</span>
+                       <span class="s1">&#39;Set to 0 if unused.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_cutout_n</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cutout_n</span>
+    <span class="k">def</span> <span class="nf">_set_cutout_n</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cutout_n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">cutoutn</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_cutout_n</span><span class="p">,</span> <span class="n">_set_cutout_n</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="s1">&#39;Refractive index of the cutout fill.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span>
+    <span class="k">def</span> <span class="nf">_set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_position</span><span class="p">,</span> <span class="n">_set_position</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="s1">&#39;Position of the layout as a tuple (x, y).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span>
+    <span class="k">def</span> <span class="nf">_set_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">direction</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">norm</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Direction vector norm/length must not be 0!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span> <span class="o">*=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">norm</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_direction</span><span class="p">,</span> <span class="n">_set_direction</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="s1">&#39;Direction of the optical fibers.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SixAroundOne.check"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcvox.mcsurface.probe.sixaroundone.html#xopto.mcvox.mcsurface.probe.sixaroundone.SixAroundOne.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Check if the properties of the optical fiber probe are correct and</span>
+<span class="sd">        raise exception if not.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">dcladding</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The optical fibers are overlapping!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">dcladding</span><span class="p">:</span>
+           <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The probe diameter is too small to accommodate &#39;</span>
+                            <span class="s1">&#39;the fibers&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cutout</span> <span class="o">!=</span> <span class="mf">0.0</span> <span class="ow">and</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cutout</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">dcladding</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;The cutout is too small to accommodate the optical fibers!&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="SixAroundOne.fiber_position"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcvox.mcsurface.probe.sixaroundone.html#xopto.mcvox.mcsurface.probe.sixaroundone.SixAroundOne.fiber_position">[docs]</a>    <span class="k">def</span> <span class="nf">fiber_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the position of the fiber center as a tuple (x, y).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        index: int</span>
+<span class="sd">            Fiber index from 0 to 6. Index zero corresponds to the central</span>
+<span class="sd">            fiber. The remaining fibers are listed in a counter clockwise</span>
+<span class="sd">            direction starting with the fiber located on the positive x axis.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        position: (float, float)</span>
+<span class="sd">            The position of the fiber center as a tuple (x, y).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="mi">7</span> <span class="ow">or</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">7</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;The fiber index is out of valid range!&#39;</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="o">*</span><span class="mf">0.5</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">6.0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">):</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">index</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">):</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">index</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">):</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">index</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">):</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">index</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">index</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SixAroundOne.update"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcvox.mcsurface.probe.sixaroundone.html#xopto.mcvox.mcsurface.probe.sixaroundone.SixAroundOne.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;SixAroundOne&#39;</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update this surface layout configuration from the other surface layout.</span>
+<span class="sd">        The other surface layout must be of the same type as this surface</span>
+<span class="sd">        layout or a dict with appropriate fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other: SixAroundOne or dict</span>
+<span class="sd">            This surface layout is updated with data from this parameter.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">SixAroundOne</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">fiber</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spacing</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">spacing</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">diameter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reflectivity</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">reflectivity</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">cutout</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cutoutn</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">cutoutn</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">position</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">direction</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiber</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spacing</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;spacing&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spacing</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;diameter&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reflectivity</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reflectivity</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cutout&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutout</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cutoutn</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cutoutn&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutoutn</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;direction&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SixAroundOne.cl_pack"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcvox.mcsurface.probe.sixaroundone.html#xopto.mcvox.mcsurface.probe.sixaroundone.SixAroundOne.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator.</span>
+<span class="sd">        See the :py:meth:`SixAroundOne.cl_type` method for a detailed list</span>
+<span class="sd">        of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Ctypes structure that is filled with the source data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Filled structure received as an input argument or a new</span>
+<span class="sd">            instance if the input argument target is None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="n">adir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">transform_base</span><span class="p">(</span><span class="n">adir</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">transformation</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">)</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">core_spacing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">core_r_squared</span> <span class="o">=</span> <span class="mf">0.25</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">dcore</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">core_n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">ncore</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">cladding_r_squared</span> <span class="o">=</span> <span class="mf">0.25</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">dcladding</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">cladding_n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">ncladding</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">cutout_r_squared</span> <span class="o">=</span> <span class="mf">0.25</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_cutout</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">cutout_n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cutout_n</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">probe_r_squared</span> <span class="o">=</span> <span class="mf">0.25</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">probe_reflectivity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reflectivity</span>
+
+        <span class="k">return</span> <span class="n">target</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;SixAroundOne(fiber=</span><span class="si">{}</span><span class="s1">, spacing=</span><span class="si">{}</span><span class="s1">, &#39;</span>\
+                <span class="s1">&#39;diameter=</span><span class="si">{}</span><span class="s1">, reflectivity=</span><span class="si">{}</span><span class="s1">, &#39;</span>\
+                <span class="s1">&#39;cutout=</span><span class="si">{}</span><span class="s1">, cutoutn=</span><span class="si">{}</span><span class="s1">, &#39;</span>\
+                <span class="s1">&#39;position=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">), direction=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">))&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reflectivity</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_cutout</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cutout_n</span><span class="p">,</span>
+                    <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> #</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../../index.html">
+    <img class="logo" src="../../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  <li><a href="../../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

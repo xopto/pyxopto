@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcbase.mcpf.lut &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcbase.mcpf.lut</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">mcoptions</span>
+<span class="kn">from</span> <span class="nn">.pfbase</span> <span class="kn">import</span> <span class="n">PfBase</span><span class="p">,</span> <span class="n">cltypes</span><span class="p">,</span> <span class="n">McObject</span>
+
+<span class="kn">from</span> <span class="nn">xopto</span> <span class="kn">import</span> <span class="n">pf</span>
+
+
+<div class="viewcode-block" id="Lut"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.Lut">[docs]</a><span class="k">class</span> <span class="nc">Lut</span><span class="p">(</span><span class="n">PfBase</span><span class="p">):</span>
+<div class="viewcode-block" id="Lut.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.Lut.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns an OpenCL structure that can be passed to the Monte carlo</span>
+<span class="sd">        simulator.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: McObject</span>
+<span class="sd">            A Monte Carlo simulator instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        struct: cltypes.Structure</span>
+<span class="sd">            A structure type that represents the scattering phase function in</span>
+<span class="sd">            the Monte Carlo kernel.</span>
+
+<span class="sd">            The returned structure type implements the following fields:</span>
+
+<span class="sd">            - a: mc_fp_t</span>
+<span class="sd">                Parameter of the nonlinear lookup table index transformation.</span>
+<span class="sd">            - b: mc_fp_t</span>
+<span class="sd">                Parameter of the nonlinear lookup table index transformation.</span>
+<span class="sd">            - c: mc_fp_t</span>
+<span class="sd">                Parameter of the nonlinear lookup table index transformation.</span>
+<span class="sd">            - offset: mc_int_t</span>
+<span class="sd">                Location of the lookuptable as an offset from the start of</span>
+<span class="sd">                the lookup table buffer.</span>
+<span class="sd">            - size: mc_int_t</span>
+<span class="sd">                Number of entries in the lookup table.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Note that this implementation of the lookup</span>
+<span class="sd">        table uses the following nonlinear transformation to compute</span>
+<span class="sd">        the lookup table index from a uniform random number</span>
+<span class="sd">        :math:`\\xi \\in [0, 1]`.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            index &amp;= \\frac{1}{2}(\\frac{a}/{\\xi - c} - b + 1)N,</span>
+
+<span class="sd">        where :math:`a, b, c` are the parameters of the nonlinear index</span>
+<span class="sd">        transformation and :math:`N` is the size of the lookup table</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClLut</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;offset&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">ClLut</span></div>
+
+<div class="viewcode-block" id="Lut.cl_options"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.Lut.cl_options">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">RawOptions</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;MC_USE_FP_LUT&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="Lut.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.Lut.cl_declaration">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL declarations of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McPf{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t b;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t c;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_size_t offset;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_size_t size;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Lut.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.Lut.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL implementation of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;void dbg_print_pf(const McPf *pf) {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(&quot;Lut scattering phase function:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;a:&quot;,  pf-&gt;a);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;b:&quot;,  pf-&gt;b);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;c:&quot;,  pf-&gt;c);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;offset:&quot;,  pf-&gt;offset);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;size:&quot;,  pf-&gt;size);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline mc_fp_t mcsim_sample_pf(McSim *mcsim, mc_fp_t *azimuth){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t fp_index, fp_index_floor, d;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;   size_t index;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a = mcsim_current_pf(mcsim)-&gt;a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t b = mcsim_current_pf(mcsim)-&gt;b;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t c = mcsim_current_pf(mcsim)-&gt;c;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	size_t offset = mcsim_current_pf(mcsim)-&gt;offset;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	size_t lut_size = mcsim_current_pf(mcsim)-&gt;size - 1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	*azimuth = FP_2PI*mcsim_random(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	/* calculate the floating point lookup table index */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	fp_index = (mc_fdiv(a, mcsim_random(mcsim) - c) - b + FP_1)*&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		lut_size*FP_0p5;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	/* calculate the weight of second point */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	fp_index_floor = mc_floor(fp_index);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	d = fp_index - fp_index_floor;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	/* calculate the integer index of the first point in the lookup table */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	index = mc_int(fp_index_floor);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	/* now do the linear interpolation - dont forget the lookup table offset */ &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t cos_theta = mcsim_pf_lut_array(mcsim)[offset + index]*(FP_1 - d) +&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_pf_lut_array(mcsim)[offset + mc_min(index + 1, lut_size)]*d;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	//dbg_print_float(&quot;cos_theta:&quot;, cos_theta);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	//dbg_print_float(&quot;lut[0]:&quot;, mcsim_pf_lut_array(mcsim)[offset]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	//dbg_print_float(&quot;lut[1]:&quot;, mcsim_pf_lut_array(mcsim)[offset + 1]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	//dbg_print_float(&quot;lut[2]:&quot;, mcsim_pf_lut_array(mcsim)[offset + 2]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	//dbg_print_float(&quot;lut[3]:&quot;, mcsim_pf_lut_array(mcsim)[offset + 3]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	//dbg_print_float(&quot;lut[-2]:&quot;, mcsim_pf_lut_array(mcsim)[offset + lut_size - 1]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	//dbg_print_float(&quot;lut[-1]:&quot;, mcsim_pf_lut_array(mcsim)[offset + lut_size]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	return cos_theta;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">lut</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Lookup table-based scattering phase function constructor.</span>
+<span class="sd">        Lookuptable is used for efficient computation of deflection</span>
+<span class="sd">        angle cosines.</span>
+<span class="sd">        A nonlinear transformation is used to compute linear lookup table</span>
+<span class="sd">        (floating point) index from a uniform random number F:</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            index = 0.5*(params[0]/(F - params[2]) - params[1] + 1.0)*data.size</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        params: list, tuple or ndarray vector of 3 float</span>
+<span class="sd">            Nonlinear index transformation function parameters provided as</span>
+<span class="sd">            an array of size 3.</span>
+<span class="sd">        lut: np.ndarray vector</span>
+<span class="sd">            Lookuptable data.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">            The offset of the first lookup table entry is stored in</span>
+<span class="sd">            the 45th user-defined scattering phase function parameter.</span>
+<span class="sd">            The lookup table size is stored in the 4th user-defined</span>
+<span class="sd">            scattering phase function parameter.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lut</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">lut</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">params</span>
+
+    <span class="k">def</span> <span class="nf">_get_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span>
+    <span class="k">def</span> <span class="nf">_set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">params</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_params</span><span class="p">,</span> <span class="n">_set_params</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="s1">&#39;Lookup table index trasnformation parameters.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_lut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lut</span>
+    <span class="k">def</span> <span class="nf">_set_lut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lut</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lut</span> <span class="o">=</span> <span class="n">lut</span>
+    <span class="n">lut</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_lut</span><span class="p">,</span> <span class="n">_set_lut</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Lookup table object or None.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lut</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_size</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Lookup table size.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span>
+    <span class="k">def</span> <span class="nf">_set_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_offset</span><span class="p">,</span> <span class="n">_set_offset</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="s1">&#39;Offset of the first element in the lookup table.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Lut.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.Lut.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the an OpenCL cltypes.Structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator. See the :py:meth:`~Lut.cl_type` method</span>
+<span class="sd">        for a detailed list of fields.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Calls the :py:meth:`Mc.pack_fp_lut` method to pack the lookup table</span>
+<span class="sd">        array data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: McObject</span>
+<span class="sd">            Simulator instance.</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Target OpenCL structure for packing.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Target structure received as an input argument or a new</span>
+<span class="sd">            instance of ClLut if the input argument target is None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetch_cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="n">lut_entry</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">append_r_lut</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lut</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">lut_entry</span><span class="o">.</span><span class="n">offset</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lut</span><span class="o">.</span><span class="n">size</span>
+
+        <span class="k">return</span> <span class="n">target</span></div>
+
+<div class="viewcode-block" id="Lut.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.Lut.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">,</span> <span class="s1">&#39;lut&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_lut</span><span class="p">,</span>
+               <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Lut(params=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">), data=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lut</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LutEx"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.LutEx">[docs]</a><span class="k">class</span> <span class="nc">LutEx</span><span class="p">(</span><span class="n">Lut</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pftype</span><span class="p">:</span> <span class="n">PfBase</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pfargs</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+                 <span class="n">lutsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Creates a Monte Carlo lookup table-based scattering phase function</span>
+<span class="sd">        instance from a standard scattering phase function instance</span>
+<span class="sd">        (:py:class:`xopto.pf.PfBase` subclass).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pftype: PfBase subclass or str</span>
+<span class="sd">            Scattering phase function type. Use one defined in the</span>
+<span class="sd">            :py:mod:`xopto.pf` module.</span>
+<span class="sd">        pfargs: list, tuple</span>
+<span class="sd">            A list of scattering phase function parameters passed to the pftype.</span>
+<span class="sd">        lutsize: int</span>
+<span class="sd">            Number of elements in the lookup table.</span>
+<span class="sd">        kwargs: dict</span>
+<span class="sd">            Additional keyword arguments passed to the lut method of the</span>
+<span class="sd">            scattering phase function as</span>
+<span class="sd">            :code:`pftype(*pfargs).lut(lutsize, **kwargs)`</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pftype</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">pftype</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pf</span><span class="p">,</span> <span class="n">pftype</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pftype</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s1">&#39;Scattering Phase function type &quot;</span><span class="si">{}</span><span class="s1">&quot; not found &#39;</span>\
+                    <span class="s1">&#39;in the xopto.pf.pf module!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pftype</span><span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pfargs</span> <span class="o">=</span> <span class="n">pfargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pf_obj</span> <span class="o">=</span> <span class="n">pftype</span><span class="p">(</span><span class="o">*</span><span class="n">pfargs</span><span class="p">)</span>
+        <span class="n">lut_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_obj</span><span class="o">.</span><span class="n">mclut</span><span class="p">(</span><span class="n">lutsize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">lut_args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_pf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PfBase</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_obj</span>
+    <span class="n">pf</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_pf</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="s1">&#39;Scattering phase function object that was used &#39;</span>\
+                  <span class="s1">&#39;to create a lookup table.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LutEx.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.LutEx.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;pftype&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> 
+                <span class="s1">&#39;pfargs&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_pfargs</span><span class="p">,</span> <span class="s1">&#39;lutsize&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">lut</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;LutEx(pftype=&quot;</span><span class="si">{:s}</span><span class="s1">&quot;, pfargs=</span><span class="si">{}</span><span class="s1">, lutsize=</span><span class="si">{:d}</span><span class="s1">, &#39;</span>\
+               <span class="s1">&#39;**kwargs=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_pf_obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pfargs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lut</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Scattering phase functions &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Fluence" href="fluence.html" />
+    <link rel="prev" title="Voxelized MC" href="index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <span class="target" id="mcvox-pf-label"></span><section id="scattering-phase-functions">
+<h1>Scattering phase functions<a class="headerlink" href="#scattering-phase-functions" title="Permalink to this headline">¶</a></h1>
+<p>All the scattering phase functions that can be used in the Monte Carlo
+simulator are implemented by subclassing
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.pfbase.html#xopto.mcbase.mcpf.pfbase.PfBase" title="xopto.mcbase.mcpf.pfbase.PfBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.pfbase.PfBase</span></code></a>. The
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.html#module-xopto.mcbase.mcpf" title="xopto.mcbase.mcpf"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf</span></code></a> module includes a number of commonly
+used scattering phase functions:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.hg.html#xopto.mcbase.mcpf.hg.Hg" title="xopto.mcbase.mcpf.hg.Hg"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.hg.Hg</span></code></a> implements the Henyey-Greenstein
+scattering phase function</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.mhg.html#xopto.mcbase.mcpf.mhg.MHg" title="xopto.mcbase.mcpf.mhg.MHg"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.mhg.MHg</span></code></a> implements the Modified
+Henyey-Greenstein scattering phase function</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.gk.html#xopto.mcbase.mcpf.gk.Gk" title="xopto.mcbase.mcpf.gk.Gk"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.gk.Gk</span></code></a> implements the Gegenbauer kernel
+scattering phase function</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.mgk.html#xopto.mcbase.mcpf.mgk.MGk" title="xopto.mcbase.mcpf.mgk.MGk"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.mgk.MGk</span></code></a> implements the modified
+Gegenbauer kernel scattering phase function</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.pc.html#xopto.mcbase.mcpf.pc.Pc" title="xopto.mcbase.mcpf.pc.Pc"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.pc.Pc</span></code></a> implements the Power of
+cosine scattering phase function</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.mpc.html#xopto.mcbase.mcpf.mpc.MPc" title="xopto.mcbase.mcpf.mpc.MPc"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.mpc.MPc</span></code></a> implements the Modified Power of
+cosine scattering phase function</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.rayleigh.html#xopto.mcbase.mcpf.rayleigh.Rayleigh" title="xopto.mcbase.mcpf.rayleigh.Rayleigh"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.rayleigh.Rayleigh</span></code></a> implements the isotropic Rayleigh
+scattering phase function</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.Lut" title="xopto.mcbase.mcpf.lut.Lut"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.lut.Lut</span></code></a> and <a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.LutEx" title="xopto.mcbase.mcpf.lut.LutEx"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.lut.LutEx</span></code></a>
+implement the lookup table-based scattering phase functions that need to
+be used when there is no analytical inverse of the cumulative probability
+density function. In this case, the scattering angle cannot be sampled
+analytically, instead an efficient numerical sampling scheme is required.
+Note that the use of <a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.Lut" title="xopto.mcbase.mcpf.lut.Lut"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lut</span></code></a>
+and <a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.LutEx" title="xopto.mcbase.mcpf.lut.LutEx"><code class="xref py py-class docutils literal notranslate"><span class="pre">LutEx</span></code></a> is tightly coupled to the
+<a class="reference internal" href="../../apidoc/xopto.pf.html#module-xopto.pf" title="xopto.pf"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.pf</span></code></a> module that implements numerous scattering phase functions
+with a number of numerical utilities for computing quantifiers such as
+<img class="math" src="../../_images/math/34d137cf01c787ecda732761c3f95b0f65a6c3e9.png" alt="\gamma"/>, <img class="math" src="../../_images/math/652b9d8b65c10aed0fdcdbde47396c879ed5bd33.png" alt="\delta"/>, <img class="math" src="../../_images/math/b52df27bfb0b1e3af0c2c68a7b9da459178c2a7d.png" alt="\sigma"/> and Legendre moments,
+computing the scattering cross sections of spherical particles, angular
+distribution of scattering probabilities, working with monodisperse,
+or various standard and custom size distributions, layered spherical particles,
+etc.</p></li>
+</ul>
+<p>The individual scattering phase functions are conveniently imported into
+the <a class="reference internal" href="../../apidoc/xopto.mcvox.mc.html#module-xopto.mcvox.mc" title="xopto.mcvox.mc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcvox.mc</span></code></a> and <a class="reference internal" href="../../apidoc/xopto.mcvox.mcpf.html#module-xopto.mcvox.mcpf" title="xopto.mcvox.mcpf"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcvox.mcpf</span></code></a> mdules.</p>
+<section id="analytical-sampling">
+<h2>Analytical sampling<a class="headerlink" href="#analytical-sampling" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows how to create a Henyey-Greenstein scattering
+phase function with the anisotropy <img class="math" src="../../_images/math/157ba5711de84b4c715a0478fd8ae440e596d96e.png" alt="g"/> set to 0.8:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">mc</span>
+
+<span class="n">pf</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The parameters of the scattering phase function can be updated at any time
+through the class properties. The following examples changes the value
+of parameter <code class="code docutils literal notranslate"><span class="pre">g</span></code> from 0.8 to 0.9.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="mf">0.9</span>
+</pre></div>
+</div>
+<p>The number and naming of parameters depends on the type of the scattering phase
+function. The Gegenbauer kernel scattering phase function
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.gk.html#xopto.mcbase.mcpf.gk.Gk" title="xopto.mcbase.mcpf.gk.Gk"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.gk.Gk</span></code></a> exposes two parameters,
+namely <code class="code docutils literal notranslate"><span class="pre">gg</span></code> and :code:’a’.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Gk</span><span class="p">(</span><span class="n">gg</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Any of the two parameters can be accessed through the class properties:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span><span class="o">.</span><span class="n">gg</span> <span class="o">=</span> <span class="mf">0.7</span>
+<span class="n">pf</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="mf">0.4</span>
+</pre></div>
+</div>
+</section>
+<section id="lookup-table-based-numerical-sampling">
+<h2>Lookup table-based numerical sampling<a class="headerlink" href="#lookup-table-based-numerical-sampling" title="Permalink to this headline">¶</a></h2>
+<p>Complex scattering phase functions, such as the scattering phase functions of
+spherical particles that can be computed with the Mie theory, can be used with
+the Monte Carlo simulator through the lookup table scattering phase functions
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.Lut" title="xopto.mcbase.mcpf.lut.Lut"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.lut.Lut</span></code></a> or
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.LutEx" title="xopto.mcbase.mcpf.lut.LutEx"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.lut.LutEx</span></code></a>. In the first step we need to create
+an instance of a scattering phase function that enables computation of various
+scattering phase function quantifiers, such as the Legendre moments,
+<img class="math" src="../../_images/math/34d137cf01c787ecda732761c3f95b0f65a6c3e9.png" alt="\gamma"/>, <img class="math" src="../../_images/math/652b9d8b65c10aed0fdcdbde47396c879ed5bd33.png" alt="\delta"/>, <img class="math" src="../../_images/math/b52df27bfb0b1e3af0c2c68a7b9da459178c2a7d.png" alt="\sigma"/>, etc. These
+can be found in the <a class="reference internal" href="../../apidoc/xopto.pf.html#module-xopto.pf" title="xopto.pf"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.pf</span></code></a> that conveniently imports all
+the implemented scattering phase functions.</p>
+<p>The following example shows how to create a Monte Carlo simulator-compatible
+scattering phase function <a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.Lut" title="xopto.mcbase.mcpf.lut.Lut"><code class="xref py py-meth docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.lut.Lut()</span></code></a> for spherical
+polystyrene particles of diameter 1.0 μm suspended in water and for
+550 nm light. Note that we utilize the <a class="reference internal" href="../../apidoc/xopto.materials.html#module-xopto.materials" title="xopto.materials"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.materials</span></code></a> package
+from which we import the refractive index module <a class="reference internal" href="../../apidoc/xopto.materials.ri.html#module-xopto.materials.ri" title="xopto.materials.ri"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.materials.ri</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto</span> <span class="kn">import</span> <span class="n">pf</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.materials</span> <span class="kn">import</span> <span class="n">ri</span>
+
+<span class="n">mie</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">Mie</span><span class="p">(</span><span class="n">ri</span><span class="o">.</span><span class="n">polystyrene</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="mf">550e-9</span><span class="p">),</span> <span class="n">ri</span><span class="o">.</span><span class="n">water</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="mf">550e-9</span><span class="p">),</span> <span class="mf">1.0e-6</span><span class="p">,</span> <span class="mf">550e-9</span><span class="p">)</span>
+
+<span class="n">mc_mie</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Lut</span><span class="p">(</span><span class="o">*</span><span class="n">mie</span><span class="o">.</span><span class="n">mclut</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The same result can be accomplished by <a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.LutEx" title="xopto.mcbase.mcpf.lut.LutEx"><code class="xref py py-meth docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.lut.LutEx()</span></code></a>
+that takes the scattering phase function type and a list of arguments for the
+corresponding constructor (parameters of the scattering phase function).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto</span> <span class="kn">import</span> <span class="n">pf</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.materials</span> <span class="kn">import</span> <span class="n">ri</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">ri</span><span class="o">.</span><span class="n">polystyrene</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="mf">550e-9</span><span class="p">),</span> <span class="n">ri</span><span class="o">.</span><span class="n">water</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="mf">550e-9</span><span class="p">),</span> <span class="mf">1.0e-6</span><span class="p">,</span> <span class="mf">550e-9</span><span class="p">]</span>
+
+<span class="n">mc_mie</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">LutEx</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Mie</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The default lookup table size is set to 2000, which should yield an accurate
+representation for the vast majority of the scattering phase functions.
+However, for scattering phase functions with an extremely high anisotropy that
+exceeds 0.95, a larger lookup table size might be required.
+The size of the lookup table can be controlled with the <code class="code docutils literal notranslate"><span class="pre">lutsize</span></code>
+parameter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto</span> <span class="kn">import</span> <span class="n">pf</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.materials</span> <span class="kn">import</span> <span class="n">ri</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">ri</span><span class="o">.</span><span class="n">polystyrene</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="mf">550e-9</span><span class="p">),</span> <span class="n">ri</span><span class="o">.</span><span class="n">water</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="mf">550e-9</span><span class="p">),</span> <span class="mf">1.0e-6</span><span class="p">,</span> <span class="mf">550e-9</span><span class="p">]</span>
+<span class="n">mc_mie</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">LutEx</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Mie</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">lutsize</span><span class="o">=</span><span class="mi">4000</span><span class="p">)</span>
+
+<span class="n">mie</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">Mie</span><span class="p">(</span><span class="n">ri</span><span class="o">.</span><span class="n">polystyrene</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="mf">550e-9</span><span class="p">),</span> <span class="n">ri</span><span class="o">.</span><span class="n">water</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="mf">550e-9</span><span class="p">),</span> <span class="mf">1.0e-6</span><span class="p">,</span> <span class="mf">550e-9</span><span class="p">)</span>
+<span class="n">mc_mie</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Lut</span><span class="p">(</span><span class="o">*</span><span class="n">mie</span><span class="o">.</span><span class="n">mclut</span><span class="p">(</span><span class="n">lutsize</span><span class="o">=</span><span class="mi">4000</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>For scattering phase functions that come in a nonparametric form, such as when
+measured with a goniometer, use the <a class="reference internal" href="../../apidoc/xopto.pf.discrete.html#xopto.pf.discrete.Discrete" title="xopto.pf.discrete.Discrete"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.pf.discrete.Discrete</span></code></a> that
+can take values defined at discrete scattering angles. Then follow the above
+examples to obtain a Monte Carlo simulator-compatible scattering phase
+function with
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.Lut" title="xopto.mcbase.mcpf.lut.Lut"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Lut()</span></code></a> or
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcpf.lut.html#xopto.mcbase.mcpf.lut.LutEx" title="xopto.mcbase.mcpf.lut.LutEx"><code class="xref py py-meth docutils literal notranslate"><span class="pre">LutEx()</span></code></a>.</p>
+<p>Note that any scattering phase function in <a class="reference internal" href="../../apidoc/xopto.pf.html#module-xopto.pf" title="xopto.pf"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.pf</span></code></a> can
+be converted into a lookup table-based Monte Carlo simulator-compatible
+scattering phase function. The following example crates a lookup table-based
+implementation of the Henyey-Greenstein (<code class="xref py py-class docutils literal notranslate"><span class="pre">Hg</span></code>)
+scattering phase function with anisotropy <img class="math" src="../../_images/math/bd75afd89b6810ed19483fa947f3552e9c248307.png" alt="g=0.8"/>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto</span> <span class="kn">import</span> <span class="n">pf</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">mc</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">]</span>
+<span class="n">hg_lut</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">LutEx</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Hg</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The use of lookup-table based scattering phase functions in the Monte Carlo
+simulations will not have a notable performance impact as long as all the
+lookup table data can be kept in the constant memory of the OpenCL device,
+the size of which is for a typical GPU around 64 kB.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Voxelized MC</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Scattering phase functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#analytical-sampling">Analytical sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lookup-table-based-numerical-sampling">Lookup table-based numerical sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/index.html">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Voxelized MC</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Voxelized MC</a></li>
+      <li>Next: <a href="fluence.html" title="next chapter">Fluence</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

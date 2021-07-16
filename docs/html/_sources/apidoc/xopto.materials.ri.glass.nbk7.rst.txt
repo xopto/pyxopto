@@ -1,0 +1,7 @@
+xopto.materials.ri.glass.nbk7 module
+====================================
+
+.. automodule:: xopto.materials.ri.glass.nbk7
+   :members:
+   :undoc-members:
+   :show-inheritance:

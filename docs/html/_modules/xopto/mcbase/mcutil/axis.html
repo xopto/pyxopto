@@ -1,0 +1,585 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcbase.mcutil.axis &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcbase.mcutil.axis</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="Axis"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis">[docs]</a><span class="k">class</span> <span class="nc">Axis</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    An accumulator/detector axis with linearly or logarithmically spaced</span>
+<span class="sd">    points/bins.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">logscale</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Creates a linearly or logarithmically spaced accumulator/detector axis.</span>
+<span class="sd">        The parameters and data points of the axis can be accessed through</span>
+<span class="sd">        several properties.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        start: float</span>
+<span class="sd">            Start coordinate (left edge) of the accumulator.</span>
+<span class="sd">        stop: float</span>
+<span class="sd">            Stop coordinate (right edge) of the accumulator.</span>
+<span class="sd">        n: int</span>
+<span class="sd">            Number of bins in the accumulator.</span>
+<span class="sd">        logscale: bool</span>
+<span class="sd">            Scale of the accumulator. Linear if False (default) or logarithmic</span>
+<span class="sd">            if True. Note that values of the start and stop parameters are</span>
+<span class="sd">            threated as unscaled even if logscale is True.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Note that only the r-axis of RT accumulators supports log-scale.</span>
+
+<span class="sd">        Detailed description of the class properties:</span>
+
+<span class="sd">        - start: float</span>
+<span class="sd">            Left edge of the first bin.</span>
+
+<span class="sd">        - scaled_start: float</span>
+<span class="sd">            Logarithm of the start point if bins are distributed</span>
+<span class="sd">            logarithmically, else equals start.</span>
+
+<span class="sd">        - stop: float</span>
+<span class="sd">            Right edge of the final bin.</span>
+
+<span class="sd">        - scaled_stop: float</span>
+<span class="sd">            Logarithm of the stop point if bins are distributed</span>
+<span class="sd">            logarithmically, else equals stop.</span>
+
+<span class="sd">        - span: tuple of two float</span>
+<span class="sd">            Full range of the accumulator axis as a tuple (start, stop).</span>
+
+<span class="sd">        - scaled_span: tuple of two float</span>
+<span class="sd">            Full scaled range of the accumulator axis as a tuple</span>
+<span class="sd">            (scaled_start, scaled_stop).</span>
+
+<span class="sd">        - n: int</span>
+<span class="sd">            Number of bins along the axis.</span>
+
+<span class="sd">        - logscale: bool</span>
+<span class="sd">            True, if bins are distributed logarithmically.</span>
+
+<span class="sd">        - edges: np.ndarray vector</span>
+<span class="sd">            Numpy vector of bin edges (number of points is n + 1).</span>
+
+<span class="sd">        - centers: np.ndarray vector</span>
+<span class="sd">            Central positions of the bins.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">Axis</span><span class="p">):</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="n">start</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">start</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">stop</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">n</span>
+            <span class="n">logscale</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">logscale</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">stop</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">logscale</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">logscale</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span> <span class="o">=</span> <span class="n">logscale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="n">n</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">start</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">stop</span><span class="p">),</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                                      <span class="n">base</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">stop</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">start</span><span class="p">))</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span> <span class="o">=</span> <span class="p">(</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_span</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scaled_span</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_span</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scaled_span</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_span</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_centers</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_edges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+<div class="viewcode-block" id="Axis.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object toa dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;start&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_span</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;stop&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_span</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span>
+                <span class="s1">&#39;logscale&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;Axis&#39;</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="Axis.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Axis&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new object from dict. The dict keys must match</span>
+<span class="sd">        the parameter names defined by the constructor.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_logscale</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span>
+    <span class="n">logscale</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_logscale</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Accumulator scale.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_step</span>
+    <span class="n">step</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_step</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Accumulator step.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_n</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_n</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Number of accumulators along the axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_span</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_span</span>
+    <span class="n">span</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_span</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Accumulator span as [min, max].&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_span</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_start</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Accumulator start coordinate.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_span</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_stop</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Accumulator stop coordinate.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_scaled_span</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scaled_span</span>
+    <span class="n">scaled_span</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_scaled_span</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="s1">&#39;Scaled accumulator span as [min, max].&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_scaled_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scaled_span</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">scaled_start</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_scaled_start</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;Scaled accumulator start coordinate.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_scaled_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scaled_span</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">scaled_stop</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_scaled_stop</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="s1">&#39;Scaled accumulator stop coordinate.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_edges</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Edges of the accumulators.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_centers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_centers</span>
+    <span class="n">centers</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_centers</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="s1">&#39;Center points of the accumulators.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Axis(start=</span><span class="si">{}</span><span class="s1">, stop=</span><span class="si">{}</span><span class="s1">, n=</span><span class="si">{}</span><span class="s1">, logscale=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_span</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_span</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span> <span class="o">+</span> \
+            <span class="s1">&#39; # object at 0x</span><span class="si">{:&gt;08X}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="RadialAxis"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.RadialAxis">[docs]</a><span class="k">class</span> <span class="nc">RadialAxis</span><span class="p">(</span><span class="n">Axis</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A radial accumulator/detector axis with linearly or logarithmically spaced</span>
+<span class="sd">    points/bins and corrected accumulator centers.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">logscale</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Radial axis with corrected bin centers.</span>
+
+<span class="sd">        The central point of each bin is computed as:</span>
+<span class="sd">            :math:`2/3(r_{i}^2 + r_{i}*r_{i + 1} + r_{i + 1}^2)/(r_{i} + r_{i + 1})`</span>
+
+<span class="sd">        For a detailed description of parameters see the Axis documentation.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Correction is based on the assumption that for linear functions of</span>
+<span class="sd">        reflectance :math:`f(r) = a + b r` the integral of</span>
+<span class="sd">        :math:`f(r) 2 \\pi r dr` from :math:`r_i` to :math:`r_{i + 1}` is equal</span>
+<span class="sd">        to the integral of :math:`f(r_center) 2 \pi r dr` from</span>
+<span class="sd">        :math:`r_i` to :math:`r_{i + 1}`, where</span>
+<span class="sd">        :math:`r_i &lt; r_center &lt; r_{i + 1}`.</span>
+<span class="sd">        Computing the two integrals and equating the terms at coefficients</span>
+<span class="sd">        :math:`a` and :math:`b` yields the &quot;equivalent&quot; center point of the bin</span>
+<span class="sd">        :math:`[r_i, r_{i + 1})`.</span>
+<span class="sd">        Note that the two integrals represent surface integral of reflectace.</span>
+
+<span class="sd">        Warning</span>
+<span class="sd">        -------</span>
+<span class="sd">        The spacing of points in the RadialAxis is uneven even if logscale is</span>
+<span class="sd">        set to False, since correction of the bin centers depends on the</span>
+<span class="sd">        absolute position of the bin.</span>
+<span class="sd">        If using data from RadialAxis with the simpson integration method make</span>
+<span class="sd">        sure to use a version that does not require a fixed step (specify x</span>
+<span class="sd">        instead of dx in a call to scipy.integrate.simps).</span>
+<span class="sd">        If using the xopto.utilities.hankel.discreteSimpson method make</span>
+<span class="sd">        sure to set the value of the uneven parameter to True.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">Axis</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">logscale</span><span class="p">)</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_true_centers</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">edges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">edges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span>
+                                        <span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">edges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+    <span class="k">def</span> <span class="nf">_get_centers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_true_centers</span>
+    <span class="n">centers</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_centers</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="s1">&#39;Corrected centers of the accumulator bins.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RadialAxis.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.RadialAxis.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">Axis</span><span class="o">.</span><span class="n">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;RadialAxis&#39;</span></div>
+
+<div class="viewcode-block" id="RadialAxis.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.RadialAxis.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span><span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;RadialAxis&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new object from dict. The dict keys must match</span>
+<span class="sd">        the parameter names defined by the constructor.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SymmetricAxis"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.SymmetricAxis">[docs]</a><span class="k">class</span> <span class="nc">SymmetricAxis</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    An accumulator/detector axis with linearly or logarithmically spaced</span>
+<span class="sd">    points/bins placed symmetrically around a center.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">range</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">n_half</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                 <span class="n">logscale</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Creates a linearly or logarithmically spaced symmetric accumulator axis.</span>
+<span class="sd">        The parameters and data points of the axis can be accessed through</span>
+<span class="sd">        several properties.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        center: float</span>
+<span class="sd">            Position of the axis/accumulator origin.</span>
+<span class="sd">        range: float</span>
+<span class="sd">            Extent of the axis as [center - range, center + range].</span>
+<span class="sd">        n_half: int</span>
+<span class="sd">            Number of bins in the interval [center, center + range]. The total</span>
+<span class="sd">            number of bins equals 2*n_half.</span>
+<span class="sd">        logscale: bool</span>
+<span class="sd">            Scale of the accumulator. Linear if False (default) or logarithmic</span>
+<span class="sd">            if True. Note that the values of the center and range parameters</span>
+<span class="sd">            are threated as unscaled even if logscale is set to True.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Note that only some RT classes support the SymmetricAxis class.</span>
+
+<span class="sd">        Detailed description of the class properties:</span>
+
+<span class="sd">        - center: float</span>
+<span class="sd">            Coordinate of the center/origin of the symmetric accumulator.</span>
+
+<span class="sd">        - range: float</span>
+<span class="sd">            Range of the symmetric accumulator such that the full span of</span>
+<span class="sd">            the symmetric accumulator is [center - range, center + range].</span>
+
+<span class="sd">        - start: float</span>
+<span class="sd">            Left edge of the first bin of the positive half interval. Note that</span>
+<span class="sd">            for logarithmically spaced accumulators the start does not equal</span>
+<span class="sd">            center but is instead slightly (eps) larger than the center.</span>
+
+<span class="sd">        - stop: float</span>
+<span class="sd">            Right edge of the final bin of the positive interval.</span>
+
+<span class="sd">        - offset: float</span>
+<span class="sd">            Offset of the left edge of the first bin along the</span>
+<span class="sd">            positive interval. This value is 0 for linearly spaced</span>
+<span class="sd">            accumulators but is a small nonzero value (eps) for</span>
+<span class="sd">            logarithmically spaced values.</span>
+
+<span class="sd">        - scaled_offset: float</span>
+<span class="sd">            Logarithm of the offset of the left edge of the first bin along the</span>
+<span class="sd">            positive interval. This value is 0 for linearly spaced</span>
+<span class="sd">            accumulators but is a logarithm of a small nonzero value (ln(eps))</span>
+<span class="sd">            for logarithmically spaced accumulators.</span>
+
+<span class="sd">        - span: tuple of two float</span>
+<span class="sd">            Full range of the accumulators (start, stop).</span>
+
+<span class="sd">        - n_half:int</span>
+<span class="sd">            Number of bins along the positive axis [center, center + range].</span>
+
+<span class="sd">        - n: int</span>
+<span class="sd">            Number of bins (2*n_half) along the full axis range</span>
+<span class="sd">            [center - range, center + range].</span>
+
+<span class="sd">        - logscale: bool</span>
+<span class="sd">            True, if bins are distributed logarithmically.</span>
+
+<span class="sd">        - edges: np.ndarray vector</span>
+<span class="sd">            Numpy vector of bin edges (number of points is n + 1) in the</span>
+<span class="sd">            full axis interval [center - range, center + range].</span>
+
+<span class="sd">        - centers: np.ndarray vector</span>
+<span class="sd">            Central positions of the bins in the</span>
+<span class="sd">            full axis interval [center - range, center + range].</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">SymmetricAxis</span><span class="p">):</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="n">center</span>
+            <span class="nb">range</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">range</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">center</span>
+            <span class="n">n_half</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">n_half</span>
+            <span class="n">logscale</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">logscale</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">range</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">range</span><span class="p">)</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">center</span><span class="p">)</span>
+            <span class="n">n_half</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_half</span><span class="p">)</span>
+            <span class="n">logscale</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">logscale</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_range</span> <span class="o">=</span> <span class="nb">range</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_center</span> <span class="o">=</span> <span class="n">center</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span> <span class="o">=</span> <span class="n">logscale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_half</span> <span class="o">=</span> <span class="n">n_half</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n_half</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span><span class="p">:</span>
+            <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">center</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">eps</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">range</span><span class="p">),</span> <span class="n">n_half</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">edges_right</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="n">edges_left</span> <span class="o">=</span> <span class="o">-</span><span class="n">edges_right</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="n">eps</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">edges_left</span><span class="p">,</span> <span class="p">[</span><span class="n">center</span><span class="p">],</span> <span class="n">edges_right</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">range</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">eps</span><span class="p">))</span><span class="o">/</span><span class="n">n_half</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+                <span class="n">center</span> <span class="o">-</span> <span class="nb">range</span><span class="p">,</span> <span class="n">center</span> <span class="o">+</span> <span class="nb">range</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">n_half</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_span</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_center</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_center</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_range</span><span class="p">),</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scaled_offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offset</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scaled_offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_centers</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_edges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+<div class="viewcode-block" id="SymmetricAxis.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.SymmetricAxis.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;range&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_range</span><span class="p">,</span> <span class="s1">&#39;center&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_center</span><span class="p">,</span>
+                <span class="s1">&#39;n_half&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_half</span><span class="p">,</span> <span class="s1">&#39;logscale&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span><span class="p">,</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;SymmetricAxis&#39;</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="SymmetricAxis.from_dict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.SymmetricAxis.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;SymmetricAxis&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new object from dict. The dict keys must match</span>
+<span class="sd">        the parameter names defined by the constructor.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_logscale</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span>
+    <span class="n">logscale</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_logscale</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;True if the accumulator is defined in log scale.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_center</span>
+    <span class="n">center</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_center</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Axis/accumulator origin.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_range</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_range</span>
+    <span class="nb">range</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_range</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Axis/accumulator range.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_step</span>
+    <span class="n">step</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_step</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Accumulator step/bin size.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_n_half</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_half</span>
+    <span class="n">n_half</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_n_half</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="s1">&#39;Total number of accumulator bins along &#39;</span>\
+                      <span class="s1">&#39;the positive half axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_n</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_n</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Total number of accumulator bins along the axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_span</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_span</span>
+    <span class="n">span</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_span</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;Accumulator positive half axis span as [min, max].&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_span</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_start</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Accumulator positive half interval start coordinate.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_span</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_stop</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;Accumulator positive half interval stop coordinate.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_scaled_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scaled_offset</span>
+    <span class="n">scaled_offset</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_scaled_offset</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                             <span class="s1">&#39;Scaled offset of the first bin &#39;</span> \
+                             <span class="s1">&#39;of the positive half interval &#39;</span>\
+                             <span class="s1">&#39;from the center of the accumulator.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_edges</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Edges of the accumulator bins.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_centers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_centers</span>
+    <span class="n">centers</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_centers</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="s1">&#39;Central points of the accumulator bins.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;SymmetricAxis(range=</span><span class="si">{}</span><span class="s1">, center=</span><span class="si">{}</span><span class="s1">, n_half=</span><span class="si">{}</span><span class="s1">, &#39;</span>\
+               <span class="s1">&#39;logscale=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_range</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_center</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_half</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span> <span class="o">+</span> \
+            <span class="s1">&#39; # object at 0x</span><span class="si">{:&gt;08X}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

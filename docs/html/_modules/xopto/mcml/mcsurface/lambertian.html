@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcml.mcsurface.lambertian &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcml.mcsurface.lambertian</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mcobject</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">cltypes</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">SurfaceLayoutAny</span>
+
+
+<div class="viewcode-block" id="LambertianReflector"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsurface.lambertian.html#xopto.mcml.mcsurface.lambertian.LambertianReflector">[docs]</a><span class="k">class</span> <span class="nc">LambertianReflector</span><span class="p">(</span><span class="n">SurfaceLayoutAny</span><span class="p">):</span>
+<div class="viewcode-block" id="LambertianReflector.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsurface.lambertian.html#xopto.mcml.mcsurface.lambertian.LambertianReflector.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClLambertianReflector</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Structure that is passed to the Monte carlo simulator kernel.</span>
+
+<span class="sd">            Fields</span>
+<span class="sd">            ------</span>
+<span class="sd">            reflectance: mc_fp_t</span>
+<span class="sd">                Total reflectance of the Lambertian reflector. Use a value between</span>
+<span class="sd">                0 and 1.</span>
+<span class="sd">            specular: mc_fp_t</span>
+<span class="sd">                Fraction of specular reflections. Use a value of 0 for a</span>
+<span class="sd">                pure lambertian reflector.</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;reflectance&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;specular&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">ClLambertianReflector</span></div>
+
+<div class="viewcode-block" id="LambertianReflector.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsurface.lambertian.html#xopto.mcml.mcsurface.lambertian.LambertianReflector.cl_declaration">[docs]</a>    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that defines the reflector in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES Mc</span><span class="si">{}</span><span class="s1">SurfaceLayout{{&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loc</span><span class="p">),</span>
+            <span class="s1">&#39;	mc_fp_t reflectance;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t specular;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="LambertianReflector.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsurface.lambertian.html#xopto.mcml.mcsurface.lambertian.LambertianReflector.cl_implementation">[docs]</a>    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the reflector in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span>
+        <span class="n">Loc</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;void dbg_print_</span><span class="si">{}</span><span class="s1">_surface_layout(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loc</span><span class="p">),</span>
+            <span class="s1">&#39;		__mc_surface_mem const Mc</span><span class="si">{}</span><span class="s1">SurfaceLayout *layout){{&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;	dbg_print(&quot;Mc</span><span class="si">{}</span><span class="s1">SurfaceLayout - Lambertian reflector:&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;reflectance:&quot;, layout-&gt;reflectance);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;specular:&quot;, layout-&gt;specular);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline int mcsim_</span><span class="si">{}</span><span class="s1">_surface_layout_handler(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loc</span><span class="p">),</span>
+            <span class="s1">&#39;		McSim *mcsim, mc_fp_t *n2, mc_fp_t *cc){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	__mc_surface_mem const struct Mc</span><span class="si">{}</span><span class="s1">SurfaceLayout *layout = &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;		mcsim_</span><span class="si">{}</span><span class="s1">_surface_layout(mcsim);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loc</span><span class="p">),</span>
+            <span class="s1">&#39;	mc_fp_t sin_fi, cos_fi, sin_theta, cos_theta;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(&quot;</span><span class="si">{}</span><span class="s1"> LambertianReflector hit: &quot;, &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;		mcsim_direction(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if (mcsim_random(mcsim) &gt; layout-&gt;specular){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print(&quot;</span><span class="si">{}</span><span class="s1"> LambertianReflector: Lambertian reflection&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;		/* Lambertian reflection */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		sin_theta = mc_sqrt(mcsim_random(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		cos_theta = mc_sqrt(FP_1 - sin_theta*sin_theta);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_sincos(mcsim_random(mcsim)*FP_2PI, &amp;sin_fi, &amp;cos_fi);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_set_direction_coordinates(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mcsim,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			cos_fi*sin_theta,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			sin_fi*sin_theta,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mc_fsign(-mcsim_direction_z(mcsim))*cos_theta&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	} else {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print(&quot;</span><span class="si">{}</span><span class="s1"> LambertianReflector: specular reflection&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;		/* Specular reflection */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_reverse_direction_z(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span>
+            <span class="s1">&#39;	dbg_print_point3f(&quot;</span><span class="si">{}</span><span class="s1"> LambertianReflector reflected dir: &quot;, &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;		mcsim_direction(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_set_weight(mcsim, mcsim_weight(mcsim)*layout-&gt;reflectance);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	return MC_REFLECTED;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reflectance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">specular</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Base class of Lambertian reflectors.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        reflectance: float</span>
+<span class="sd">            Total reflectance of the surface. Use a value between 0 and 1.</span>
+<span class="sd">        specular: float</span>
+<span class="sd">            Fraction of specular reflections at the surface. Use a value of 0</span>
+<span class="sd">            for an ideal Lambertian reflector or a value of 1.0 for an ideal</span>
+<span class="sd">            mirror (with the given reflectance). Any value between 0 and 1</span>
+<span class="sd">            will result in surface that is a combination of a Lambertian</span>
+<span class="sd">            and specular reflector.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reflectance</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_specular</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_reflectance</span><span class="p">(</span><span class="n">reflectance</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_specular</span><span class="p">(</span><span class="n">specular</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_reflectance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reflectance</span>
+    <span class="k">def</span> <span class="nf">_set_reflectance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reflectance</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reflectance</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">reflectance</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">reflectance</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_reflectance</span><span class="p">,</span> <span class="n">_set_reflectance</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="s1">&#39;Surface reflectance of the Lambertian reflector&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_specular</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specular_fraction</span>
+    <span class="k">def</span> <span class="nf">_set_specular</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fraction</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_specular_fraction</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">fraction</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">specular</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_specular</span><span class="p">,</span> <span class="n">_set_specular</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Specular fraction of surface reflectance. A value &#39;</span>
+                        <span class="s1">&#39;of 0 indicate an ideal Lambertian reflector, and &#39;</span>
+                        <span class="s1">&#39;a value of 1 a perfect mirror.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LambertianReflector.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsurface.lambertian.html#xopto.mcml.mcsurface.lambertian.LambertianReflector.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator.</span>
+<span class="sd">        See the :py:meth:`LambertianReflector.cl_type` for a detailed</span>
+<span class="sd">        list of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Structure that is filled with the source data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Filled ctypes structure received as an input argument or a new</span>
+<span class="sd">            instance if the input argument target is None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">reflectance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reflectance</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">specular</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specular</span>
+
+        <span class="k">return</span> <span class="n">target</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;LambertianReflector(reflectance=</span><span class="si">{}</span><span class="s1">, specular=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reflectance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specular</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> #</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

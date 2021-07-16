@@ -1,0 +1,10 @@
+xopto.data.mcml package
+=======================
+
+Module contents
+---------------
+
+.. automodule:: xopto.data.mcml
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+xopto.pf.mie module
+===================
+
+.. automodule:: xopto.pf.mie
+   :members:
+   :undoc-members:
+   :show-inheritance:

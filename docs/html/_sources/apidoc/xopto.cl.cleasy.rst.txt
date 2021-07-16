@@ -1,0 +1,7 @@
+xopto.cl.cleasy module
+======================
+
+.. automodule:: xopto.cl.cleasy
+   :members:
+   :undoc-members:
+   :show-inheritance:

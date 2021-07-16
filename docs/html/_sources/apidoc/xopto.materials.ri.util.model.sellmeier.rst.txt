@@ -1,0 +1,7 @@
+xopto.materials.ri.util.model.sellmeier module
+==============================================
+
+.. automodule:: xopto.materials.ri.util.model.sellmeier
+   :members:
+   :undoc-members:
+   :show-inheritance:

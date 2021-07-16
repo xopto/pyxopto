@@ -1,0 +1,7 @@
+xopto.util.sliceview module
+===========================
+
+.. automodule:: xopto.util.sliceview
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,21 @@
+xopto.mcvox.mcutil package
+==========================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcvox.mcutil.axis
+   xopto.mcvox.mcutil.buffer
+   xopto.mcvox.mcutil.fiber
+   xopto.mcvox.mcutil.lut
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcvox.mcutil
+   :members:
+   :undoc-members:
+   :show-inheritance:

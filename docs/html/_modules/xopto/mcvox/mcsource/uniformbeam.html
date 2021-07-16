@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.mcvox.mcsource.uniformbeam &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.mcvox.mcsource.uniformbeam</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcvox.mcsource.base</span> <span class="kn">import</span> <span class="n">Source</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">cltypes</span><span class="p">,</span> <span class="n">mcobject</span>
+<span class="kn">from</span> <span class="nn">xopto.mcvox.mcutil</span> <span class="kn">import</span> <span class="n">geometry</span>
+
+
+<div class="viewcode-block" id="UniformBeam"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.uniformbeam.html#xopto.mcvox.mcsource.uniformbeam.UniformBeam">[docs]</a><span class="k">class</span> <span class="nc">UniformBeam</span><span class="p">(</span><span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">):</span>
+<div class="viewcode-block" id="UniformBeam.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.uniformbeam.html#xopto.mcvox.mcsource.uniformbeam.UniformBeam.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClUniformBeam</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Structure that is passed to the Monte carlo simulator kernel.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            mc: McObject</span>
+<span class="sd">                A Monte Carlo simulator instance.</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            struct: cltypes.Structure</span>
+<span class="sd">                A structure type that represents the uniform beam in</span>
+<span class="sd">                the Monte Carlo kernel.</span>
+
+<span class="sd">            Fields</span>
+<span class="sd">            ------</span>
+<span class="sd">            transformation: mc_matrix3f_t</span>
+<span class="sd">                Transformation from the beam coordinate system to the Monte</span>
+<span class="sd">                Carlo coordinate system.</span>
+<span class="sd">            position: mc_point3f_t</span>
+<span class="sd">                Source position (beam axis).</span>
+<span class="sd">            direction: mc_point3f_t</span>
+<span class="sd">                Direction of the collimated beam as an array-like object of size 3</span>
+<span class="sd">                (px, py, pz). The vector should be normalized to unit length..</span>
+<span class="sd">            radius: mc_point2f_t</span>
+<span class="sd">                Ellipse radii along the x and y axis. Use equal values for a</span>
+<span class="sd">                circular beam.</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;transformation&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_matrix3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;direction&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;radius&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point2f_t</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">ClUniformBeam</span></div>
+
+<div class="viewcode-block" id="UniformBeam.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.uniformbeam.html#xopto.mcvox.mcsource.uniformbeam.UniformBeam.cl_declaration">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that defines the source in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McSource{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t position;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t direction;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point2f_t radius;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="UniformBeam.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.uniformbeam.html#xopto.mcvox.mcsource.uniformbeam.UniformBeam.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the source in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span>  <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;void dbg_print_source(__mc_source_mem const McSource *src){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	printf(&quot;UniformBeam source:</span><span class="se">\\</span><span class="s1">n&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	printf(INDENT &quot;position: (</span><span class="si">%.3f</span><span class="s1">, </span><span class="si">%.3f</span><span class="s1">, </span><span class="si">%.3f</span><span class="s1">) mm</span><span class="se">\\</span><span class="s1">n&quot;,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		src-&gt;position.x*1e3f, src-&gt;position.y*1e3f, src-&gt;position.z*1e3f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	printf(INDENT &quot;direction: (</span><span class="si">%.3f</span><span class="s1">, </span><span class="si">%.3f</span><span class="s1">, </span><span class="si">%.3f</span><span class="s1">)</span><span class="se">\\</span><span class="s1">n&quot;,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		src-&gt;direction.x, src-&gt;direction.y, src-&gt;direction.z);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	printf(INDENT &quot;radius: (</span><span class="si">%.3f</span><span class="s1">, </span><span class="si">%.3f</span><span class="s1">) mm</span><span class="se">\\</span><span class="s1">n&quot;, src-&gt;radius.x*1e3f, src-&gt;radius.y*1e3f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void mcsim_launch(McSim *mcsim){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;   __mc_source_mem const struct McSource *source = mcsim_source(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t rand_sqrt = mc_sqrt(mcsim_random(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t fi = FP_2PI*mcsim_random(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t specular_r = FP_0;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t pt_src, pt_mc;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	pt_src.x = rand_sqrt*mc_cos(fi)*source-&gt;radius.x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	pt_src.y = rand_sqrt*mc_sin(fi)*source-&gt;radius.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	pt_src.z = FP_0;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;source-&gt;transformation, &amp;pt_src, &amp;pt_mc);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	pt_mc.x += source-&gt;position.x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	pt_mc.y += source-&gt;position.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	pt_mc.z += source-&gt;position.z;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t direction = source-&gt;direction;&#39;</span>
+            <span class="s1">&#39;	if (mcsim_sample_box_contains(mcsim, &amp;pt_mc)) {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		reverse3f(&amp;direction, &amp;direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print(&quot;Move to the sample box surface:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_point3f(INDENT &quot;from        :&quot;, &amp;pt_mc);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_point3f(INDENT &quot;in direction:&quot;, &amp;direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t intersection, normal;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if (mcsim_sample_box_intersect(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mcsim, &amp;pt_mc, &amp;direction, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			&amp;intersection, &amp;normal)) {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_set_position(mcsim, &amp;intersection);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		reverse3f(&amp;direction, &amp;direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		reverse3f(&amp;normal, &amp;normal);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print(&quot;Surface intersection:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_point3f(INDENT &quot;position:&quot;, &amp;intersection);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_point3f(INDENT &quot;normal:  &quot;, &amp;normal);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t n_outside = mc_material_n(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mcsim_surrounding_material(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_point3_t voxel_index;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_position_to_voxel_index_safe(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mcsim, &amp;intersection, &amp;voxel_index);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_point3(&quot;Launch voxel:&quot;, &amp;voxel_index);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t material_index = mcsim_voxel_material_index(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mcsim, &amp;voxel_index);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_size_t(&quot;Launch material:&quot;, material_index);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t n_inside = mc_material_n(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mcsim_material(mcsim, material_index));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_point3f_t refracted_direction=direction;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		refract_safe(&amp;direction, &amp;normal, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			n_outside, n_inside, &amp;refracted_direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_set_direction(mcsim, &amp;refracted_direction)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		specular_r = reflectance(n_outside, n_inside,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;				dot3f(&amp;normal, &amp;direction),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;				cos_critical(n_outside, n_inside));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		#if MC_USE_SPECULAR_DETECTOR&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mcsim_specular_detector_deposit(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;				mcsim, mcsim_position(mcsim), &amp;direction, specular_r);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		#endif&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_status(mcsim, &quot;Moved to the sample surface&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	} else {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_set_position(mcsim, mcsim_top_left(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_set_direction_coordinates(mcsim, FP_0, FP_0, FP_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		specular_r = FP_1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_status(mcsim, &quot;Launch missed the sample box!&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_set_weight(mcsim, FP_1 - specular_r);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_status(mcsim, &quot;Launch UniformBeam&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diameter</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+                 <span class="n">position</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                 <span class="n">direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Uniform intensity collimated beam photon packet source.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        diameter: float or (float, float)</span>
+<span class="sd">            Collimated beam diameter. Or diameters of the ellipse</span>
+<span class="sd">            along the x and y axis</span>
+<span class="sd">        position: (float, float, float)</span>
+<span class="sd">            Center of the collimated beam as an array-like object of size 3</span>
+<span class="sd">            (x, y, z).</span>
+<span class="sd">        direction: (float, float, float)</span>
+<span class="sd">            Propagation direction of the collimated beam as an array-like</span>
+<span class="sd">            object of size 3 (px, py, pz).</span>
+<span class="sd">            The vector should be normalized to unit length and</span>
+<span class="sd">            have a positive z coordinate (hitting the top sample surface).</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The beam will be first propagated from the given position to the</span>
+<span class="sd">        entry point on the sample surface along the propagation</span>
+<span class="sd">        direction (no interactions with the medium during this step).</span>
+<span class="sd">        Note that in case the position lies within the sample, the</span>
+<span class="sd">        beam will be propagated to the entry point using reversed direction.</span>
+<span class="sd">        From there it will be refracted into the sample. The MC simulation</span>
+<span class="sd">        will start after subtracting the specular reflectance at the</span>
+<span class="sd">        sample boundary from the initial weight of the packet.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">Source</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_diameter</span><span class="p">(</span><span class="n">diameter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_position</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_direction</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span>
+    <span class="k">def</span> <span class="nf">_set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">position</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_position</span><span class="p">,</span> <span class="n">_set_position</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Source position.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span>
+    <span class="k">def</span> <span class="nf">_set_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">direction</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">norm</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The norm/length of the propagation direction &#39;</span>
+                             <span class="s1">&#39;vector must not be 0!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span> <span class="o">*=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">norm</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_direction</span><span class="p">,</span> <span class="n">_set_direction</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Source direction.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span>
+    <span class="k">def</span> <span class="nf">_set_diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diameter</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">diameter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Beam diameter must not be negative!&#39;</span><span class="p">)</span>
+    <span class="n">diameter</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_diameter</span><span class="p">,</span> <span class="n">_set_diameter</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Beam diameter along the x and y axis (m).&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="UniformBeam.update"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.uniformbeam.html#xopto.mcvox.mcsource.uniformbeam.UniformBeam.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">dict</span> <span class="ow">or</span> <span class="s1">&#39;UniformBeam&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update this source configuration from the other source. The</span>
+<span class="sd">        other source must be of the same type as this source or a dict with</span>
+<span class="sd">        appropriate fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other: UniformBeam or dict</span>
+<span class="sd">            This source is updated with the configuration of the other source.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">UniformBeam</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">diameter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">position</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">direction</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;diameter&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;direction&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UniformBeam.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.uniformbeam.html#xopto.mcvox.mcsource.uniformbeam.UniformBeam.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills a structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator kernel.</span>
+<span class="sd">        See the :py:meth:`UniformBeam.cl_type` for a detailed list of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+<span class="sd">        target: pyopyo.mcvox.mcsource.UniformBeam.cl_type</span>
+<span class="sd">            Ctypes structure that is filled with the source data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: pyopyo.mcvox.mcsource.UniformBeam.cl_type</span>
+<span class="sd">            Filled ctypes structure received as an input argument or a new</span>
+<span class="sd">            instance if the input argument target is None.</span>
+<span class="sd">        topgeometry: None</span>
+<span class="sd">            This source does not use advanced geometry at the top sample surface.</span>
+<span class="sd">        bottomgeometry: None</span>
+<span class="sd">            This source does not use advanced geometry at the bottom sample surface.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="n">T</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">transform_base</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">transformation</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">)</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">direction</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">radius</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">0.5</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">radius</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mf">0.5</span>
+
+        <span class="k">return</span> <span class="n">target</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;UniformBeam(diameter=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">), position=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">). &#39;</span> \
+               <span class="s1">&#39;direction=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">))&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

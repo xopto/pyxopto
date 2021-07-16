@@ -1,0 +1,7 @@
+xopto.materials.ri.pmma module
+==============================
+
+.. automodule:: xopto.materials.ri.pmma
+   :members:
+   :undoc-members:
+   :show-inheritance:

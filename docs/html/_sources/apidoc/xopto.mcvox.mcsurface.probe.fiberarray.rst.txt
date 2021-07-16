@@ -1,0 +1,7 @@
+xopto.mcvox.mcsurface.probe.fiberarray module
+=============================================
+
+.. automodule:: xopto.mcvox.mcsurface.probe.fiberarray
+   :members:
+   :undoc-members:
+   :show-inheritance:

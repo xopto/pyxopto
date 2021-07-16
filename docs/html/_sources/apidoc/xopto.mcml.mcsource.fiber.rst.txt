@@ -1,0 +1,7 @@
+xopto.mcml.mcsource.fiber module
+================================
+
+.. automodule:: xopto.mcml.mcsource.fiber
+   :members:
+   :undoc-members:
+   :show-inheritance:

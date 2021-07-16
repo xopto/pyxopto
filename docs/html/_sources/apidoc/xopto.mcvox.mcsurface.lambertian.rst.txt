@@ -1,0 +1,7 @@
+xopto.mcvox.mcsurface.lambertian module
+=======================================
+
+.. automodule:: xopto.mcvox.mcsurface.lambertian
+   :members:
+   :undoc-members:
+   :show-inheritance:
