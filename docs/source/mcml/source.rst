@@ -52,26 +52,27 @@ used sources:
     * :py:mod:`xopto.mcml.mcsource.fiber.UniformFiberLut` implements a fiber
        source that follows a measured or nonparametric angular emission.
     * :py:mod:`xopto.mcml.mcsource.fiber.LambertianFiber` implements a fiber
-      source that emits like a Lambertian surface within the NA.
+      source that emits like a Lambertian surface within the NA of the core.
 
 * :py:mod:`xopto.mcml.mcsource.fiberni` module implements the same sources as
-  the :py:mod:`xopto.mcml.mcsource.fiber` module but assuming a normal
+  the :py:mod:`xopto.mcml.mcsource.fiber` module but for a normal source
   incidence.
 
 * :py:mod:`xopto.mcml.mcsource.rectangular` module implements the following sources:
 
     * :py:mod:`xopto.mcml.mcsource.rectangular.UniformRectangular` implements
       a rectangular source that emits uniformly within the NA from each point
-      of the surface.
+      of the source surface.
     * :py:mod:`xopto.mcml.mcsource.rectangular.UniformRectangularLut` implements
       a rectangular source that follows a measured or nonparametric angular
-      emission.
+      emission characteristics.
     * :py:mod:`xopto.mcml.mcsource.rectangular.LambertianRectangular` implements
-      a rectangular source that emits like a Lambertian surface within the NA.
+      a rectangular source that emits like a Lambertian surface within the NA
+      of the source.
 
 All sources have a position attribute that defines the position of the
 geometrical center of the source. This position is used as a reference point
-for terminating the photon packet that leave the simulation radius that is set
+for terminating photon packets that leave the simulation radius set
 through the :py:attr:`xopto.mcml.mc.Mc.rmax` property.
 
 Note that the refractive index of the source (not all the sources implement
@@ -87,7 +88,7 @@ fiber sources
 Isotropic point
 ---------------
 
-This source can be placed inside and abov the sample. The following example
+This source can be placed inside and above the sample. The following example
 shows how to create an isotropic point source 5 |nbsp| mm bellow the top
 surface of the sample:
 
@@ -109,7 +110,7 @@ will be launched with the z coordinate set to 0. If a specular surface
 that detector. Such zero-weight packets are
 immediately terminated and have no contribution to the fluence and surface
 detectors, however will be included in the trace (have no effect on
-the sampling volume or other trace-based analysis due to zero-weight).
+the sampling volume or other trace-based analysis due to the zero-weight).
 Note that in case the position lies within the sample (z > 0),
 it will be used as the launch point and the packets will retain the
 full initial weight.
@@ -132,7 +133,7 @@ the center of the top sample surface :math:`(0, 0, 0)`:
 The packets are always launched from the top surface of the sample. The
 source position and direction are used to determine the launch point at the
 sample surface. From there, the packet is first refracted into the sample
-and the reflectance is subtracted from the initial packet weight.
+and the surface reflectance is subtracted from the initial packet weight.
 If a specular surface :ref:`detector <mcml-detector-label>` is used, the
 reflectance is deposited into that detector. 
 
@@ -141,12 +142,12 @@ Uniform beam
 A uniform beam of elliptical cross section can be created with
 :py:class:`xopto.mcml.mcsource.uniformbeam.UniformBeam` source. The beam
 diameter along the x and y axis is controlled by the :code:`diameter` parameter.
-In case the diameter is give as a single :code:`float` value, the cross
+In case the diameter is give as a scalar :code:`float` value, the cross
 section of the beam becomes circular. Note that the diameters are applied in
 the coordinate system of the beam. Optionally, the beam can be repositioned
 and tilted through the :code:`position` and :code:`direction` parameters.
 The following example creates a uniform beam with a perpendicular incidence
-and circular cross section diameter of 1 |nbsp| mm.
+and a circular cross section diameter of 1 |nbsp| mm.
 
 .. code-block:: python
 
@@ -157,7 +158,7 @@ and circular cross section diameter of 1 |nbsp| mm.
 The packets are always launched from the top surface of the sample. The
 source position and direction are used to determine the launch point at the
 sample surface. From there, the packet is first refracted into the sample
-and the reflectance is subtracted from the initial packet weight.
+and the surface reflectance is subtracted from the initial packet weight.
 If a specular surface :ref:`detector <mcml-detector-label>` is used, the
 reflectance is deposited into that detector. 
 
@@ -166,9 +167,10 @@ Gaussian beam
 
 A Gaussian beam can be created with
 :py:class:`xopto.mcml.mcsource.gaussianbeam.GaussianBeam` source. The standard
-deviation (:math:`\sigma`) of the beam can be defined along the x and y axis.
-In case :math:`\sigma` is give as a single :code:`float` value, the value is
-applied along the x and y axis. the beam is clipped at a distance of
+deviation (:math:`\sigma`) of the beam can be independently set along
+the x and y axis.
+In case :math:`\sigma` is give as a scalar :code:`float` value, the value is
+applied along the x and y axis. The beam is clipped at a distance of
 :math:`5\sigma` from the beam axis. The clip distance can be customized through
 the :code:`clip` parameter. Note that :math:`\sigma` is applied in
 the coordinate system of the beam. Optionally, the beam can be repositioned
@@ -194,12 +196,11 @@ reflectance is deposited into that detector.
 Fiber
 -----
 This example shows how to create an optical fiber source with an :math:`NA=0.22`,
-fused silica core of diameter 200 |nbsp| μm and outer diameter of the
+a fused silica core of diameter 200 |nbsp| μm and outer diameter of the
 cladding 220 |nbsp| μm. Note that in this example we also use the
-:py:mod:`xopto.materials.ri` module for calculating the refractive index of
-fused silica at 550 |nbsp| nm and :py:mod:`xopto.mcbase.mcutil.fiber` module for
-creating a multimode fiber
-:py:class:`~xopto.mcbase.mcutil.fiber.MultimodeFiber`.
+:py:mod:`xopto.materials.ri` module to calculate the refractive index of
+fused silica at 550 |nbsp| nm and the :py:mod:`xopto.mcbase.mcutil.fiber` module for
+creating a multimode fiber :py:class:`~xopto.mcbase.mcutil.fiber.MultimodeFiber`.
 
 .. code-block:: python
 
