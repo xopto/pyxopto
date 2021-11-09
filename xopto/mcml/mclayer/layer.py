@@ -21,6 +21,7 @@
 ################################# End license ##################################
 
 from typing import List
+from xopto.mcbase.mcpf.pfbase import PfBase
 
 from xopto.mcml import mcobject
 from xopto.mcml import mctypes
@@ -154,7 +155,7 @@ class Layer(mcobject.McObject):
         Export object to a dict.
         '''
         return {'d':self._d, 'n':self._n, 'mua':self._mua, 'mus':self._mus,
-                'pf':self._pf, 'type':'Layer'}
+                'pf':self._pf.todict(), 'type':'Layer'}
 
     @classmethod
     def fromdict(cls, data: dict) -> 'Layer':
@@ -165,7 +166,12 @@ class Layer(mcobject.McObject):
         t = data.pop('type')
         if t != 'Layer':
             raise ValueError('Cannot create a Layer instance from the data!')
-        return cls(**data)
+        pf_data = data.pop('pf')
+        if not hasattr(mcpf, pf_data['type']):
+            raise TypeError('Scattering phase function "{}" '
+                            'not implemented'.format(pf_data['type']))
+        pf_type = getattr(mcpf, pf_data['type'])
+        return cls(pf=pf_type.fromdict(pf_data), **data)
 
     def __str__(self):
         return 'Layer(d={}, n={}, mua={}, mus={}, pf={})'.format(
@@ -407,7 +413,8 @@ class Layers(mcobject.McObject):
         '''
         Export object to a dict.
         '''
-        return {'layers':self._layers, 'type': 'Layers'}
+        return {'layers': [layer.todict() for layer in self._layers],
+                'type': 'Layers'}
 
     def tolist(self) -> List[Layer]:
         '''
@@ -430,7 +437,8 @@ class Layers(mcobject.McObject):
         if T != 'Layers':
             raise ValueError(
             'Cannot create a Layers instance from the given data!')
-        return cls(**data)
+        layers = [Layer.fromdict(item) for item in data.pop('layers')]
+        return cls(layers=layers, **data)
 
     def __getitem__(self, what):
         return self._layers[what]
