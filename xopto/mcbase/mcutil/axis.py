@@ -134,7 +134,12 @@ class Axis:
         Create a new object from dict. The dict keys must match
         the parameter names defined by the constructor.
         '''
-        return cls(**data)
+        data_ = dict(data)
+        type_name = data_.pop('type')
+        if type_name != cls.__name__:
+            raise TypeError('Expected "{}" type bot got "{}"!'.format(
+                cls.__name__, type_name))
+        return cls(**data_)
 
     def _get_logscale(self) -> bool:
         return self._logscale
@@ -229,7 +234,7 @@ class RadialAxis(Axis):
         If using data from RadialAxis with the simpson integration method make
         sure to use a version that does not require a fixed step (specify x
         instead of dx in a call to scipy.integrate.simps).
-        If using the xopto.utilities.hankel.discreteSimpson method make
+        If using the :py:meth:`xopto.util.hankel.discrete_simpson` method make
         sure to set the value of the uneven parameter to True.
         '''
         Axis.__init__(self, start, stop, n, logscale)
