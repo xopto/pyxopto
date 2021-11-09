@@ -1,7 +1,19 @@
 # PyXOpto
 
 PyXOpto is a collection of python tools for performing Monte Carlo simulations
-of light propagation in turbid media.
+of light propagation in turbid media using massively parallel processing. The tools allow steady-state and time-resolved simulations of light propagation, deposition and fluence simulations, tracing and filtering of packet paths, computation of sampling volumes for a number of source-detector configurations, use of arbitrary scattering phase function models and are easy to customize or extend with new sources and detectors.
+
+![Deposit simulations](/docs/source/static/animation/xopto_fluence.gif)
+*Energy deposit simulations for a voxelized volume with a laterally moving Gaussian beam.*
+
+![Sampling volume trajectories](/docs/source/static/animation/paths_transmittance_128.gif)
+*Transmittance trajectories of photon packets on the way from the source to the laterally displaced detector optical fiber.*
+
+![Sampling volume in reflectance configuration](/docs/source/static/animation/sds_reflectance_10000.gif)
+*Sampling volume in reflectance configuration as a function of the distance between the source and detector optical fiber.*
+
+![Sampling volume in transmittance](/docs/source/static/animation/sds_transmittance_10000.gif)
+*Sampling volume in transmittance configuration as a function of the lateral displacement between the source and detector optical fiber.*
 
 # Documentation
 

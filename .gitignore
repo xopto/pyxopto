@@ -16,6 +16,8 @@ xopto/data/primes/__pycache__
 xopto/data/mcml/__pycache__
 xopto/data/mcvox/__pycache__
 
+xopto/diffusion/__pycache__
+
 xopto/materials/__pycache__
 xopto/materials/absorption/__pycache__
 xopto/materials/density/__pycache__
@@ -39,6 +41,7 @@ xopto/mcml/mclayer/__pycache__
 xopto/mcml/mcobject/__pycache__
 xopto/mcml/mcoptions/__pycache__
 xopto/mcml/mcpf/__pycache__
+xopto/mcml/mcrun/__pycache__
 xopto/mcml/mcsource/__pycache__
 xopto/mcml/mcsurface/__pycache__
 xopto/mcml/mcsurface/probe/__pycache__
@@ -61,6 +64,7 @@ xopto/mcvox/mcgeometry/__pycache__
 xopto/mcvox/mcobject/__pycache__
 xopto/mcvox/mcoptions/__pycache__
 xopto/mcvox/mcpf/__pycache__
+xopto/mcvox/mcrun/__pycache__
 xopto/mcvox/mcsource/__pycache__
 xopto/mcvox/mcsurface/__pycache__
 xopto/mcvox/mcsurface/probe/__pycache__
@@ -87,6 +91,9 @@ xopto/tmp
 !xopto/tmp/.gitkeep
 
 xopto/util/__pycache__
+xopto/util/animation/__pycache__
+xopto/util/animation/sv/__pycache__
+xopto/util/animation/sv/fiber/__pycache__
 
 build
 dist
