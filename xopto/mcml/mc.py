@@ -50,6 +50,13 @@ from xopto.mcml.mcutil.buffer import NumpyAllocators
 from xopto import MCBASE_PATH, MCML_PATH
 from xopto.mcbase import mcsrc
 from xopto.mcbase import mcworker
+from xopto.mcvox.mcfluence import FLUENCE_TYPE
+
+MC_RESULT_TYPE = Tuple[
+    mctrace.Trace or None,
+    mcfluence.FLUENCE_TYPE or None,
+    mcdetector.Detectors or None
+]
 
 # Instructions for fusing OpenCL source files into a single file.
 _MCML_FUSION_SPEC = {
@@ -79,7 +86,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
                  source: mcsource.Source,
                  detectors: mcdetector.Detectors = None,
                  trace: mctrace.Trace = None,
-                 fluence: mcfluence.Fluence = None,
+                 fluence: mcfluence.FLUENCE_TYPE = None,
                  surface: mcsurface.SurfaceLayouts = None,
                  types: mctypes.McDataTypesBase = mctypes.McDataTypesSingle,
                  options: List[mcoptions.McOption] = None,
@@ -136,7 +143,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             The Trace object will set the following simulator options:
                 - MC_USE_TRACE
 
-        fluence: mcfluence.Fluence
+        fluence: mcfluence.Fluence or mcfluence.FluenceCyl or mcfluence.FluenceRz
             Fluence object that collects the energy deposited by the photon
             packets on a regular 3D grid.
 
@@ -413,6 +420,13 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
 
         return lutetry
 
+    def clear_r_luts(self):
+        '''
+        Clear all the read-only lookup table managers
+        '''
+        self.clear_r_float_lut()
+        self.clear_r_int_lut()
+
     def _pack(self, nphotons: int):
         '''
         Pack the data into buffers.
@@ -426,6 +440,9 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         self.cl_rw_accumulator_allocator.clear()
         self.cl_rw_float_allocator.clear()
         self.cl_rw_int_allocator.clear()
+
+        # Clear the lookup table managers
+        self.clear_r_luts()
 
         # Finalize and pack the sample layer stack.
         self._packed['layers'] = self._layers.cl_pack(self, self._packed['layers'])
@@ -662,12 +679,10 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
                             n, siz['surface_layouts']))
 
     def run(self, nphotons: int,
-            out: Tuple[mctrace.Trace or None, mcfluence.Fluence or None,
-                       mcdetector.Detector or None] or None = None,
+            out: MC_RESULT_TYPE or None = None,
             wgsize: int = None, maxthreads: int = None,
             copyseeds: bool = False, exportsrc: bool = None,
-            verbose: bool = False) \
-                -> Tuple[mctrace.Trace, mcfluence.Fluence, mcdetector.Detector]:
+            verbose: bool = False) -> MC_RESULT_TYPE:
         '''
         Run a simulation with the specified number of photon packets.
 
@@ -676,7 +691,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         nphotons: int
             Number of photon packets to simulate. Note that the maximum number
             of photon packets is limited to :py:attr:`Mc.types.mc_cnt_max`.
-        out: Tuple[mctrace.Trace, mcfluence.Fluence, mcdetector.Detector] or None
+        out: MC_RESULT_TYPE or None
             Existing trace, fluence and/or detector objects that will be
             updated with the simulation results if not None. Pass objects
             that were returned after the previous/first call of the
@@ -704,11 +719,11 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         trace: mctrace.Trace
             Trace object instance with simulation results or None if not used
             by the simulator.
-        fluence: mcfluence.Fluence
+        fluence: mcfluence.Fluence or mcfluence.FluenceCyl or mcfluence.FluenceRz
             Fluence object instance with simulation results or None if not used
             by the simulator.
-        detector: mcdetector.Detector
-            Detector object instance with simulation results or None if not
+        detector: mcdetector.Detectors
+            Detectors object instance with simulation results or None if not
             used by the simulator.
 
         Note
@@ -717,7 +732,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         :py:class:`mcfluence.Fluence` and :py:class:`mcdetector.Detector`
         objects are not the same instances as were passed to the
         constructor :py:meth:`Mc`. A new set of instances is created
-        for each run of the simulator.
+        for the results of each run of the simulator.
 
         The maximum number of photon packets that can be simulated in a
         single run is limited by the kernel data type used as the photon
