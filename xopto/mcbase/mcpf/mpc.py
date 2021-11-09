@@ -166,7 +166,7 @@ class MPc(PfBase):
         target.n = self._n
         target.beta = self._b
 
-        return target, args
+        return target
 
     def todict(self) -> dict:
         '''
