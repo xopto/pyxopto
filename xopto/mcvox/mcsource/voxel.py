@@ -179,5 +179,12 @@ class IsotropicVoxel(Source):
 
         return target, None, None
 
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'voxel': self._voxel.tolist(),
+                'type': self.__class__.__name__}
+
     def __str__(self):
         return 'IsotropicVoxel(voxel=({}, {}, {}))'.format(*self._voxel)

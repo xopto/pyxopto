@@ -334,6 +334,16 @@ class GaussianBeam(Source):
 
         return target, None, None
 
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'sigma': self._sigma.tolist(), 
+                'clip': self._clip,
+                'position': self._position.tolist(),
+                'direction': self._direction.tolist(),
+                'type': self.__class__.__name__}
+
     def __str__(self):
         return 'GaussianBeam(sigma=({}, {}), clip={}, '\
                'position=({}, {}, {}), direction=({}, {}, {}))'.format(

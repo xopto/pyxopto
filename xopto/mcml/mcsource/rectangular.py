@@ -73,6 +73,7 @@ class UniformRectangular(Source):
             'struct MC_STRUCT_ATTRIBUTES McSource{',
             '	mc_point3f_t position;',
             '	mc_point2f_t size;',
+            '	mc_fp_t n;',
             '	mc_fp_t cos_critical;',
             '	mc_fp_t cos_min;',
             '	mc_int_t layer_index;',
@@ -297,6 +298,17 @@ class UniformRectangular(Source):
 
         return target, None, None
 
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'width': self._width, 
+                'height': self._height,
+                'n': self._n,
+                'na':  self._na,
+                'position': self._position.tolist(),
+                'type': self.__class__.__name__}
+
     def __str__(self):
         return 'UniformRectangular(width={}, height={}, n={}, na={},'\
                'position=({}, {}, {}))'.format(
@@ -330,8 +342,7 @@ class LambertianRectangular(UniformRectangular):
             '''
             _fields_ = [
                 ('position', T.mc_point3f_t),
-                ('width', T.mc_float),
-                ('height', T.mc_float),
+                ('size', T.mc_point2f_t),
                 ('n', T.mc_float),
                 ('cos_critical', T.mc_float),
                 ('na', T.mc_fp_t),
@@ -348,6 +359,7 @@ class LambertianRectangular(UniformRectangular):
             'struct MC_STRUCT_ATTRIBUTES McSource{',
             '	mc_point3f_t position;',
             '	mc_point2f_t size;',
+            '	mc_fp_t n;',
             '	mc_fp_t cos_critical;',
             '	mc_fp_t na;',
             '	mc_int_t layer_index;',
@@ -544,8 +556,7 @@ class UniformRectangularLut(Source):
             '''
             _fields_ = [
                 ('position', T.mc_point3f_t),
-                ('width', T.mc_float),
-                ('height', T.mc_float),
+                ('size', T.mc_point2f_t),
                 ('n', T.mc_float),
                 ('cos_critical', T.mc_float),
                 ('lut', CollectionLut(mc).cl_type(mc)),
@@ -562,6 +573,7 @@ class UniformRectangularLut(Source):
             'struct MC_STRUCT_ATTRIBUTES McSource{',
             '	mc_point3f_t position;',
             '	mc_point2f_t size;',
+            '	mc_fp_t n;',
             '	mc_fp_t cos_critical;',
             '	mc_fp_lut_t lut_lut;',
             '	mc_size_t layer_index;',

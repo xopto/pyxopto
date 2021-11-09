@@ -239,7 +239,8 @@ class Radial(Detector):
     logscale = property(_get_logscale, None, None, 'Axis scale.')
 
     def _get_normalized(self) -> np.ndarray:
-        return self.raw*self._inv_accumulators_area*(1.0/self.nphotons)
+        k = 1.0/max(self._nphotons, 1)
+        return self.raw*self._inv_accumulators_area*k
     normalized = property(_get_normalized, None, None, 'Normalized.')
     reflectance = property(_get_normalized, None, None, 'Reflectance.')
     transmittance = property(_get_normalized, None, None, 'Transmittance.')

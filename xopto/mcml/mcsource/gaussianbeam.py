@@ -152,7 +152,7 @@ class GaussianBeam(Source):
             '		mc_point3f_t dir;',
             '		mc_point3f_t normal = (mc_point3f_t){FP_0, FP_0, -FP_1};',
             '		refract(&dir_in, &normal, mc_layer_n(mcsim_layer(mcsim, 1)),',
-            '			source->n, &dir);',
+            '			mc_layer_n(mcsim_layer(mcsim, 0)), &dir);',
             '		mcsim_specular_detector_deposit(',
             '			mcsim, mcsim_position(mcsim), &dir, source->reflectance);',
             '	#endif',
@@ -161,6 +161,40 @@ class GaussianBeam(Source):
             '};',
         ))
 
+    @staticmethod
+    def fwhm2sigma(fwhm: float) -> float:
+        '''
+        Converts sigma to Full width at half maximum (FWHM).
+
+        Parameters
+        ----------
+        sigma: float
+            Standard deviation of the Gaussian.
+
+        Returns
+        -------
+        fwhm: float
+            FWHM parameter of the Gaussian
+        '''
+        return fwhm/(8*np.log(2))**0.5
+
+    @staticmethod
+    def sigma2fwhm(sigma: float) -> float:
+        '''
+        Converts Full width at half maximum (FWHM) to sigma (standard deviation).
+
+        Parameters
+        ----------
+        fwhm: float
+            Full width at half maximum (FWHM).
+
+        Returns
+        -------
+        sigma: float
+            Standard deviation of the Gaussian.
+        '''
+        return sigma*(8*np.log(2))**0.5
+    
     def __init__(self, sigma: float or Tuple[float, float], clip: float = 5.0,
                  position: Tuple[float, float, float] = (0.0, 0.0, 0.0),
                  direction: Tuple[float, float, float] = (0.0, 0.0, 1.0)):
@@ -322,6 +356,16 @@ class GaussianBeam(Source):
         target.reflectance = reflectance
 
         return target, None, None
+
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'sigma': self._sigma.tolist(), 
+                'clip': self._clip,
+                'position': self._position.tolist(),
+                'direction': self._direction.tolist(),
+                'type': self.__class__.__name__}
 
     def __str__(self):
         return 'GaussianBeam(sigma=({}, {}), clip={}, '\

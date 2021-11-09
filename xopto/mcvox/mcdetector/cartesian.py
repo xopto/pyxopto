@@ -294,7 +294,7 @@ class Cartesian(Detector):
         return X, Y
 
     def _get_normalized(self) -> np.ndarray:
-        return self.raw*(1.0/(self.nphotons*self._accumulators_area))
+        return self.raw*(1.0/(max(self.nphotons, 1.0)*self._accumulators_area))
     normalized = property(_get_normalized, None, None, 'Normalized.')
     reflectance = property(_get_normalized, None, None, 'Reflectance.')
     transmittance = property(_get_normalized, None, None, 'Transmittance.')

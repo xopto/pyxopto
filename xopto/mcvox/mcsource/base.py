@@ -22,6 +22,23 @@
 
 from xopto.mcvox import mcobject
 
+
 class Source(mcobject.McObject):
+    @classmethod
+    def fromdict(cls, data: dict) -> 'Source':
+        '''
+        Create a new instance of a photon packet source from a dict.
+        The dict keys must match the parameter names defined by the
+        constructor.
+        '''
+        data_ = dict(data)
+        T = data_.pop('type')
+        if T != cls.__name__:
+            raise TypeError(
+                'Cannot initialize an instance of {:s} photon packet source '
+                'from the data of "{}"!'.format(cls.__name__, T))
+
+        return cls(**data_)
+
     def __repr__(self):
         return '{} # id {}'.format(self.__str__(), id(self))

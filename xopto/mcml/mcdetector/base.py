@@ -198,6 +198,31 @@ class DetectorDefault(DetectorAny):
 
         return target
 
+    def todict(self) -> dict:
+        '''
+        Export object to dict.
+        '''
+        return {'type': self.__class__.__name__}
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'DetectorDefault':
+        '''
+        Create an instance of :py:class:`DetectorDefault` from a
+        dictionary.
+
+        Parameters
+        ----------
+        data: dict
+            Dictionary created by the :py:meth:`DetectorDefault.todict` method.
+        '''
+        layout_type = data.pop('type')
+        if layout_type != cls.__name__:
+            raise TypeError(
+                'Expected a "{}" type bot got "{}"!'.format(
+                    cls.__name__, layout_type))
+
+        return cls(**data)
+
 
 class Detector(DetectorAny):
     def __init__(self, raw_data: np.ndarray, nphotons: int):
@@ -522,6 +547,18 @@ class Detectors(mcobject.McObject):
         Returns a tuple of detector types assigned to this instance.
         '''
         return type(self._top), type(self._bottom), type(self._specular)
+
+    def todict(self) -> dict:
+        '''
+        Export object to dict.
+        '''
+
+        return {
+            'type': self.__class__.__name__,
+            'top': self._top.todict(),
+            'bottom': self._bottom.todict(),
+            'specular': self._specular.todict()
+        }
 
     def __str__(self):
         return 'Detectors(top={}, bottom={}, specular={})'.format(

@@ -403,7 +403,7 @@ class SixAroundOnePl(Detector):
         return True
 
     def _get_normalized(self) -> np.ndarray:
-        return self.raw*(1.0/self.nphotons)
+        return self.raw*(1.0/max(self.nphotons, 1.0))
     normalized = property(_get_normalized, None, None, 'Normalized.')
     reflectance = property(_get_normalized, None, None, 'Reflectance.')
     transmittance = property(_get_normalized, None, None, 'Transmittance.')
@@ -473,7 +473,7 @@ class SixAroundOnePl(Detector):
             'fiber': self._fiber.todict(),
             'spacing': self._spacing,
             'position':self._position.tolist(),
-            'direction':self.direction.todict(),
+            'direction':self.direction.tolist(),
             'pl_axis': self.plaxis.todict(),
         }
 

@@ -29,7 +29,7 @@ from xopto.mcml import cltypes, mcobject, mctypes
 from xopto.mcml.mcutil import boundary, geometry
 
 
-class UniformBeam(mcobject.McObject):
+class UniformBeam(Source):
     @staticmethod
     def cl_type(mc: mcobject.McObject) -> cltypes.Structure:
         T = mc.types
@@ -136,7 +136,7 @@ class UniformBeam(mcobject.McObject):
             '		mc_point3f_t dir;',
             '		mc_point3f_t normal = (mc_point3f_t){FP_0, FP_0, -FP_1};',
             '		refract(&dir_in, &normal, mc_layer_n(mcsim_layer(mcsim, 1)),',
-            '			source->n, &dir);',
+            '			mc_layer_n(mcsim_layer(mcsim, 0)), &dir);',
             '		mcsim_specular_detector_deposit(',
             '			mcsim, mcsim_position(mcsim), &dir, source->reflectance);',
             '	#endif',
@@ -291,6 +291,15 @@ class UniformBeam(mcobject.McObject):
         target.reflectance = reflectance
 
         return target, None, None
+
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'diameter': self._diameter.tolist(), 
+                'position': self._position.tolist(),
+                'direction': self._direction.tolist(),
+                'type': self.__class__.__name__}
 
     def __str__(self):
         return 'UniformBeam(diameter=({}, {}), position=({}, {}, {}). ' \

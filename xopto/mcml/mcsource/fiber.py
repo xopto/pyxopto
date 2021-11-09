@@ -466,6 +466,27 @@ class UniformFiber(Source):
 
         return target, None, None
 
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'fiber': self._fiber.todict(), 
+                'position': self._position.tolist(),
+                'direction': self._direction.tolist(),
+                'type': self.__class__.__name__}
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'UniformFiberLut':
+        '''
+        Create a new instance of a photon packet source from a dict that was
+        created by the :py:meth:`todict` method. 
+        '''
+        data_ = dict(data)
+        fiber_data = data_.pop('fiber')
+        data_['fiber'] = getattr(
+            fiberutil, fiber_data['type']).fromdict(fiber_data)
+        return super().fromdict(data_)
+
     def __str__(self):
         return 'UniformFiber(fiber={}, '\
                'position=({}, {}, {}), direction=({}, {}, {}))'.format(
@@ -653,6 +674,7 @@ class LambertianFiber(UniformFiber):
         target.radius = self._fiber.dcore*0.5
 
         return target, None, None
+
 
     def __str__(self):
         return 'LambertianFiber(fiber={}'\
@@ -961,6 +983,27 @@ class UniformFiberLut(Source):
         self._fiber.emission.cl_pack(mc, target.lut)
 
         return target, None, None
+
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'fiber': self._fiber.todict(), 
+                'position': self._position.tolist(),
+                'direction': self._direction.tolist(),
+                'type': self.__class__.__name__}
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'UniformFiberLut':
+        '''
+        Create a new instance of a photon packet source from a dict that was
+        created by the :py:meth:`todict` method. 
+        '''
+        data_ = dict(data)
+        fiber_data = data_.pop('fiber')
+        data_['fiber'] = getattr(
+            fiberutil, fiber_data['type']).fromdict(fiber_data)
+        return super().fromdict(data_)
 
     def __str__(self):
         return 'UniformFiberLut(fiber={}, ' \

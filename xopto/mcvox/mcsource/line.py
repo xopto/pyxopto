@@ -231,6 +231,14 @@ class Line(Source):
 
         return target, None, None
 
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'position': self._position.tolist(), 
+                'direction': self._direction.tolist(),
+                'type': self.__class__.__name__}
+
     def __str__(self):
         return 'Line (position=({}, {}, {}), direction=({}, {}, {}))'.\
             format(*self._position, *self._direction)

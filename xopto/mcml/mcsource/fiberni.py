@@ -394,6 +394,26 @@ class UniformFiberNI(Source):
 
         return target, None, None
 
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'fiber': self._fiber.todict(), 
+                'position': self._position.tolist(),
+                'type': self.__class__.__name__}
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'UniformFiberNI':
+        '''
+        Create a new instance of a photon packet source from a dict that was
+        created by the :py:meth:`todict` method. 
+        '''
+        data_ = dict(data)
+        fiber_data = data_.pop('fiber')
+        data_['fiber'] = getattr(
+            fiberutil, fiber_data['type']).fromdict(fiber_data)
+        return super().fromdict(data_)
+
     def __str__(self):
         return 'UniformFiberNI(fiber={}, position=({}, {}, {}))'.format(
             self._fiber *self._position)
@@ -786,6 +806,26 @@ class UniformFiberLutNI(Source):
         self._fiber.emission.cl_pack(mc, target.lut)
 
         return target, None, None
+
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'fiber': self._fiber.todict(), 
+                'position': self._position.tolist(),
+                'type': self.__class__.__name__}
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'UniformFiberNI':
+        '''
+        Create a new instance of a photon packet source from a dict that was
+        created by the :py:meth:`todict` method. 
+        '''
+        data_ = dict(data)
+        fiber_data = data_.pop('fiber')
+        data_['fiber'] = getattr(
+            fiberutil, fiber_data['type']).fromdict(fiber_data)
+        return super().fromdict(data_)
 
     def __str__(self):
         return 'UniformFiberLut(fiber={}, position=({}, {}, {}))'.format(

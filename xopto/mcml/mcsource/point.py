@@ -226,5 +226,12 @@ class IsotropicPoint(Source):
 
         return target, None, None
 
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'position': self._position.tolist(),
+                'type': self.__class__.__name__}
+
     def __str__(self):
         return 'IsotropicPoint(position=({}, {}, {}))'.format(*self._position)

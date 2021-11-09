@@ -156,7 +156,7 @@ class Total(Detector):
                         'Detector reference direction.')
 
     def _get_normalized(self) -> np.ndarray:
-        return self.raw*(1.0/self.nphotons)
+        return self.raw*(1.0/max(self.nphotons, 1.0))
     normalized = property(_get_normalized, None, None, 'Normalized.')
     reflectance = property(_get_normalized, None, None, 'Reflectance.')
     transmittance = property(_get_normalized, None, None, 'Transmittance.')
@@ -380,7 +380,7 @@ class TotalLut(Detector):
                         'Detector reference direction.')
 
     def _get_normalized(self) -> np.ndarray:
-        return self.raw*(1.0/self.nphotons)
+        return self.raw*(1.0/max(self.nphotons, 1.0))
     normalized = property(_get_normalized, None, None, 'Normalized.')
     reflectance = property(_get_normalized, None, None, 'Reflectance.')
     transmittance = property(_get_normalized, None, None, 'Transmittance.')

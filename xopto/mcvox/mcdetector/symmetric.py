@@ -232,7 +232,7 @@ class SymmetricX(Detector):
     logscale = property(_get_logscale, None, None, 'Axis log scale.')
 
     def _get_normalized(self) -> np.ndarray:
-        return self.raw*self._inv_dx*(1.0/self.nphotons)
+        return self.raw*self._inv_dx*(1.0/max(self.nphotons, 1.0))
     reflectance = property(_get_normalized, None, None, 'Reflectance.')
     reflectance = property(_get_normalized, None, None, 'Reflectance.')
     transmittance = property(_get_normalized, None, None, 'Transmittance.')

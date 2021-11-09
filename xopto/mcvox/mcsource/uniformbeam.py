@@ -305,6 +305,15 @@ class UniformBeam(mcobject.McObject):
 
         return target, None, None
 
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'diameter': self._diameter.tolist(), 
+                'position': self._position.tolist(),
+                'direction': self._direction.tolist(),
+                'type': self.__class__.__name__}
+
     def __str__(self):
         return 'UniformBeam(diameter=({}, {}), position=({}, {}, {}). ' \
                'direction=({}, {}, {}))'.format(
