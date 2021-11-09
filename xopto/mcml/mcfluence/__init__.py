@@ -23,5 +23,10 @@
 """
 This package only imports all the items from :py:mod:`xopto.mcbase.mcfluence`.
 """
-from xopto.mcbase.mcfluence import Fluence
+
+import typing
+
+from xopto.mcbase.mcfluence import Fluence, FluenceRz, FluenceCyl
 from xopto.mcbase.mcutil.axis import Axis
+
+FLUENCE_TYPE = typing.Union[Fluence, FluenceCyl, FluenceRz]

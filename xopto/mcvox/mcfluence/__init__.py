@@ -20,5 +20,13 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
-from xopto.mcbase.mcfluence import Fluence
+"""
+This package only imports all the items from :py:mod:`xopto.mcbase.mcfluence`.
+"""
+
+import typing
+
+from xopto.mcbase.mcfluence import Fluence, FluenceRz, FluenceCyl
 from xopto.mcbase.mcutil.axis import Axis
+
+FLUENCE_TYPE = typing.Union[Fluence, FluenceCyl, FluenceRz]
