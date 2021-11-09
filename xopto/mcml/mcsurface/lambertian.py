@@ -181,6 +181,13 @@ class LambertianReflector(SurfaceLayoutAny):
 
         return target
 
+    def todict(self) -> dict:
+        '''
+        Export object to dict
+        '''
+        return {'type': self.__class__.__name__,
+                'reflectance': self._reflectance, 'specular': self._specular}
+
     def __str__(self):
         return 'LambertianReflector(reflectance={}, specular={})'.format(
             self._reflectance, self._specular)

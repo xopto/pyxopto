@@ -308,6 +308,7 @@ class SixAroundOne(SurfaceLayoutAny):
             fiber = sao.fiber
             spacing = sao.spacing
             cutout = sao.cutout
+            cutoutn = sao.cutoutn
             reflectivity = sao.reflectivity
             diameter = sao.diameter
             position = sao.position
@@ -536,6 +537,41 @@ class SixAroundOne(SurfaceLayoutAny):
         target.probe_reflectivity = self.reflectivity
 
         return target
+
+    def todict(self) -> dict:
+        '''
+        Export object to dict
+        '''
+        return {
+            'type': self.__class__.__name__,
+            'fiber': self._fiber.todict(),
+            'cutout': self._cutout,
+            'cutoutn': self._cutout_n,
+            'reflectivity': self._reflectivity,
+            'diameter': self._diameter,
+            'position': self._position.tolist(),
+            'direction': self._direction.tolist()
+        }
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'SixAroundOne':
+        '''
+        Create an accumulator instance from a dictionary.
+
+        Parameters
+        ----------
+        data: dict
+            Dictionary created by the :py:meth:`SixAroundOne.todict` method.
+        '''
+        layout_type = data.pop('type')
+        if layout_type != cls.__name__:
+            raise TypeError(
+                'Expected a "{}" type bot got "{}"!'.format(
+                    cls.__name__, layout_type))
+        fiber = data.pop('fiber')
+        fiber = fiberutil.MultimodeFiber.fromdict(fiber)
+
+        return cls(fiber, **data)
 
     def __str__(self):
         return 'SixAroundOne(fiber={}, spacing={}, '\

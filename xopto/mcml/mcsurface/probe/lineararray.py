@@ -255,7 +255,7 @@ class LinearArray(SurfaceLayoutAny):
             are considered the same.
         n: int
             The number of optical fibers in the linear array. This option
-            is a compile-time feature and caanot be changed once the
+            is a compile-time feature and cannot be changed once the
             surface layout object is created.
         spacing: float
             Spacing between the optical fibers. If spacing is None,
@@ -281,7 +281,7 @@ class LinearArray(SurfaceLayoutAny):
             the last optical fiber!
         position: (float, float)
             Position of the center of the linear fiber array and of the
-            opticalfiber probe probe.
+            opticalfiber probe.
         direction: (float, float, float)
             Reference direction / orientation of the optical fibers. Fibers
             are oriented in this direction and polished to form a tight optical
@@ -560,7 +560,7 @@ class LinearArray(SurfaceLayoutAny):
             Accumulator configuration as a dictionary.
         '''
         return {
-            'type':'LinearArray',
+            'type': self.__class__.__name__,
             'fiber': self._fiber.todict(),
             'n': self._n,
             'spacing': self._spacing,
@@ -568,13 +568,13 @@ class LinearArray(SurfaceLayoutAny):
             'diameter': self._diameter,
             'reflectivity': self._reflectivity,
             'cutout': self._cutout.tolist(),
-            'cutoutn': self._cutoutn,
+            'cutoutn': self._cutout_n,
             'position':self._position.tolist(),
-            'direction':self.direction.todict(),
+            'direction':self.direction.tolist(),
         }
 
-    @staticmethod
-    def fromdict(data: dict) -> 'LinearArray':
+    @classmethod
+    def fromdict(cls, data: dict) -> 'LinearArray':
         '''
         Create an accumulator instance from a dictionary.
 
@@ -584,14 +584,14 @@ class LinearArray(SurfaceLayoutAny):
             Dictionary created by the :py:meth:`LinearArray.todict` method.
         '''
         layout_type = data.pop('type')
-        if layout_type != 'LinearArray':
+        if layout_type != cls.__name__:
             raise TypeError(
-                'Expected a "LinearArray" type bot got "{}"!'.format(
-                    layout_type))
+                'Expected a "{}" type bot got "{}"!'.format(
+                    cls.__name__, layout_type))
         fiber = data.pop('fiber')
         fiber = MultimodeFiber.fromdict(fiber)
 
-        return LinearArray(fiber, **data)
+        return cls(fiber, **data)
 
     def __str__(self):
         return 'LinearArray(fiber={}, n={}, spacing={}, orientation=({}, {}) '\

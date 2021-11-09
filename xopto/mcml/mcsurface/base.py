@@ -103,6 +103,21 @@ class SurfaceLayoutAny(SurfaceLayoutBase):
         '''
         super().__init__(location)
 
+    @classmethod
+    def fromdict(cls, data:dict) -> 'SurfaceLayoutAny':
+        '''
+        Create a new instance of a surface layout from a dict.
+        The dict keys must match the parameter names defined by the
+        constructor.
+        '''
+        data_ = dict(data)
+        T = data_.pop('type')
+        if T != cls.__name__:
+            raise TypeError(
+                'Cannot initialize an instance of "{:s}" from the data'
+                'of instance "{}"!'.format(cls.__name__, T))
+
+        return cls(**data_)
 
 class SurfaceLayoutDefault(SurfaceLayoutAny):
     '''
@@ -188,6 +203,32 @@ class SurfaceLayoutDefault(SurfaceLayoutAny):
         target.dummy = 0
 
         return target
+
+    def todict(self) -> dict:
+        '''
+        Export object to dict.
+        '''
+        return {'type': self.__class__.__name__}
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'SurfaceLayoutDefault':
+        '''
+        Create an instance of :py:class:`SurfaceLayoutDefault` from a
+        dictionary.
+
+        Parameters
+        ----------
+        data: dict
+            Dictionary created by the :py:meth:`SurfaceLayoutDefault.todict`
+            method.
+        '''
+        layout_type = data.pop('type')
+        if layout_type != cls.__name__:
+            raise TypeError(
+                'Expected a "{}" type bot got "{}"!'.format(
+                    cls.__name__, layout_type))
+
+        return cls(**data)
 
 class SurfaceLayouts(mcobject.McObject):
     def cl_type(self, mc: mcobject.McObject) -> cltypes.Structure:
@@ -363,3 +404,14 @@ class SurfaceLayouts(mcobject.McObject):
         Returns a tuple of surface layout types assigned to this instance.
         '''
         return type(self._top), type(self._bottom)
+
+    def todict(self) -> dict:
+        '''
+        Export object to dict.
+        '''
+
+        return {
+            'type': self.__class__.__name__,
+            'top': self._top.todict(),
+            'bottom': self._bottom.todict()
+        }

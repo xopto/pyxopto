@@ -539,7 +539,7 @@ class LinearArray(SurfaceLayoutAny):
             'cutout': self._cutout.tolist(),
             'cutoutn': self._cutoutn,
             'position':self._position.tolist(),
-            'direction':self.direction.todict(),
+            'direction':self.direction.tolist(),
         }
 
     @staticmethod

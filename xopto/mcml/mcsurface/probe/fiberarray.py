@@ -400,8 +400,8 @@ class FiberArray(SurfaceLayoutAny):
             'position':self._position.tolist(),
         }
 
-    @staticmethod
-    def fromdict(data: dict) -> 'FiberArray':
+    @classmethod
+    def fromdict(cls, data: dict) -> 'FiberArray':
         '''
         Create an accumulator instance from a dictionary.
 
@@ -411,14 +411,14 @@ class FiberArray(SurfaceLayoutAny):
             Dictionary created by the :py:meth:`FiberArray.todict` method.
         '''
         layout_type = data.pop('type')
-        if layout_type != 'FiberArray':
+        if layout_type != cls.__name__:
             raise TypeError(
-                'Expected a "FiberArray" type bot got "{}"!'.format(
-                    layout_type))
+                'Expected a "{}" type bot got "{}"!'.format(
+                    cls.__name__, layout_type))
         fibers = data.pop('fibers')
-        fibers = [FiberLayout.fromdict(fiber) for item in fibers]
+        fibers = [FiberLayout.fromdict(item) for item in fibers]
 
-        return FiberArray(fibers, **data)
+        return cls(fibers, **data)
 
     def __str__(self):
         return 'FiberArray(fibers={}, diameter={}, reflectivity={}, '\
