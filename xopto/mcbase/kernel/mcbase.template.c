@@ -575,14 +575,14 @@ __kernel void ScalarFillMcAccu(
 /*############## Start random number generator implementation ################*/
 
 /**
- * @brief Generates a single precision random number from (0.0, 1.0) and
+ * @brief Generates a single precision random number from [0.0, 1.0] and
  *        updates the generator state.
  * @note Due to precision issues
  *       the open nature of the interval is not guaranteed.
  *
  * @param[in,out]	x Mutable state of the random number generator.
  * @param[in]		a Immutable state of the random number generator.
- * @return			A random number from (0.0, 1.0).
+ * @return			A random number from [0.0, 1.0].
  * 
  @details George Marsaglia's Random Number Generator. A single precision 
  *        floating-point number has a 23-bit mantisa, hence only integers from 
@@ -592,20 +592,20 @@ inline mc_fp_t fp_random_single(unsigned long *x, unsigned a){
 	*x = (*x & (uint64_t)0xFFFFFFFFUL)*(a) + (*x >> 32);
 
 	return mc_fdiv(
-		((float)( 1 | ((unsigned int)(*x) & 0x7FFFFF) )),
-		(float)0x800000U
+		((float)( ((unsigned int)(*x) & 0x7FFFFFU) )),
+		(float)0x7FFFFFU
 	);
 };
 
 #if MC_USE_DOUBLE_PRECISION || defined(__DOXYGEN__)
 	/**
-	 * @brief Generates a double precision random number from (0.0, 1.0) and
+	 * @brief Generates a double precision random number from [0.0, 1.0] and
 	 *        update the generator state.
 	 * @note Due to precision issues
 	 *       the open nature of the interval is not guaranteed.
 	 * @param[in,out]	x Mutable state of the random number generator.
 	 * @param[in]		a Immutable state of the random number generator.
-	 * @return			A random number from (0.0, 1.0).
+	 * @return			A random number from [0.0, 1.0].
 	 *
 	 * @details George Marsaglia's Random Number Generator. A double precision 
 	 *          floating-point number has a 52-bit mantisa, hence only integers from 
@@ -616,8 +616,8 @@ inline mc_fp_t fp_random_single(unsigned long *x, unsigned a){
 
 		/* Generate a random number (0,1). */
 		return mc_fdiv(
-			((double)(1 | (*x & (uint64_t)0xFFFFFFFFFFFFFUL))),
-			(double)0x10000000000000UL
+			((double)( (*x & (uint64_t)0xFFFFFFFFFFFFFUL)) ),
+			(double)0xFFFFFFFFFFFFFUL
 		);
 	};
 

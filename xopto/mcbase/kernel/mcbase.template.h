@@ -541,6 +541,8 @@ typedef char int8_t;
 	#define mc_sincos(fi, ps, pc)		(*(ps)=sincos(fi, (pc)))
 #endif
 
+/** @brief Arcus tangens(y/x). */
+#define mc_atan2(y, x)				atan2((mc_fp_t)(y), (mc_fp_t)(x))
 /** @brief Copy the sign of a floating-point number. */
 #define mc_fcopysign(to, from)		(copysign(to, from))
 /** @brief Evaluate to integer sign of a floating-point number. */
@@ -1519,14 +1521,14 @@ inline int refract_safe(
 */
 
 /**
- * @brief Generates a single precision random number from (0.0, 1.0) and
+ * @brief Generates a single precision random number from [0.0, 1.0] and
  *        update the generator state.
  * @note Due to precision issues
  *       the open nature of the interval is not guaranteed.
  *
  * @param[in,out]	x Mutable state of the random number generator.
  * @param[in]		a Immutable state of the random number generator.
- * @return			A random number from (0.0, 1.0).
+ * @return			A random number from [0.0, 1.0].
  * 
  @details George Marsaglia's Random Number Generator. A single precision 
  *        floating-point number has a 23-bit mantisa, hence only integers from 
@@ -1536,13 +1538,13 @@ inline mc_fp_t fp_random_single(unsigned long *x, unsigned a);
 
 #if MC_USE_DOUBLE_PRECISION || defined(__DOXYGEN__)
 	/**
-	 * @brief Generates a double precision random number from (0.0, 1.0) and
+	 * @brief Generates a double precision random number from [0.0, 1.0] and
 	 *        update the generator state.
 	 * @note Due to precision issues
 	 *       the open nature of the interval is not guaranteed.
 	 * @param[in,out]	x Mutable state of the random number generator.
 	 * @param[in]		a Immutable state of the random number generator.
-	 * @return			A random number from (0.0, 1.0).
+	 * @return			A random number from [0.0, 1.0].
 	 *
 	 * @details George Marsaglia's Random Number Generator. A double precision 
 	 *          floating-point number has a 52-bit mantisa, hence only integers from 
