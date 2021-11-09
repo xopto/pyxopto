@@ -25,7 +25,7 @@ from setuptools import setup, find_packages
 setup(
     name='PyXOpto',
     version='0.1.0',
-    description='Python Mone Carlo light propagation tools',
+    description='Python Monte Carlo light propagation tools',
     url='https://github.com/xopto/pyxopto',
     author='XOpto team',
     author_email='info@xopto.eu',
