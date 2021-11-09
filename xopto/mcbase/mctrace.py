@@ -760,7 +760,12 @@ class Trace(mcobject.McObject):
 
     def _get_filter(self) -> Filter:
         return self._filter
-    filter = property(_get_filter, None, None, 'Trace filter.')
+    def _set_filter(self, filter: Filter):
+        if not isinstance(filter, Filter):
+            raise TypeError('Expected a "Filter" instance but '
+                            'got "{}"'.format(type(filter)))
+        self._filter = filter
+    filter = property(_get_filter, _set_filter, None, 'Trace filter.')
 
     def _get_plon(self) -> bool:
         return self._plon
