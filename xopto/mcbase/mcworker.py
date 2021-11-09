@@ -1079,6 +1079,18 @@ class ClWorkerStandardBufferLutMixin:
         '''
         return self.append_r_lut_data(self.types.np_float, data, force=force)
 
+    def clear_r_float_lut(self):
+        '''
+        Clear the content of the floating point read-only lookup table manager.
+        '''
+        self.float_r_lut_manager.clear()
+
+    def clear_r_int_lut(self):
+        '''
+        Clear the content of the integer read-only lookup table manager.
+        '''
+        self.int_r_lut_manager.clear()
+
     def _get_np_r_float_lut(self) -> np.ndarray:
         return self.np_buffers[self.r_lut_manager(self.types.np_float)]
     np_r_float_lut = property(
