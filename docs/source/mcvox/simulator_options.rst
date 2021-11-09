@@ -72,7 +72,7 @@ The list of available options is as follows:
 * :py:class:`~xopto.mcbase.mcoptions.McUseNativeMath`
   (default is :py:class:`~xopto.mcbase.mcoptions.McUseNativeMath.off`) -
   can be used to enable device-native math functions. Native math usually gives
-  some performance benefit, but might not be fully compliant with the precision
+  some performance benefit, but might not be fully compliant with precisions
   defined by the IEEE standards.
 
 * :py:class:`~xopto.mcbase.mcoptions.McMaterialMemory`
@@ -106,14 +106,13 @@ The list of available options is as follows:
   (default is :py:class:`~xopto.mcbase.mcoptions.McDebugMode.off`) -
   Can be used to enable kernel debug mode that will print information to
   the console output. Note that this mode requires printf functionality in
-  the  OpenCL kernel that might not be supported by all the OpenCL devices.
+  the  OpenCL kernel that might not be supported by all OpenCL devices.
   If this mode is turned on :py:class:`~xopto.mcbase.mcoptions.McDebugMode.on`,
   run the Monte Carlo simulator with one or a small number of photon packets.
 
 * :py:class:`~xopto.mcbase.mcoptions.McUseSoft64Atomics`
   (default is :py:class:`~xopto.mcbase.mcoptions.McUseSoft64Atomics.off`) -
-  Can be used to force a software-based implementation of 64-bit atomic
-  operations.
+  Can be used to force software implementation of 64-bit atomic operations.
 
 * :py:class:`~xopto.mcbase.mcoptions.McUseLottery`
   (default is :py:class:`~xopto.mcbase.mcoptions.McUseSoft64Atomics.on`) -
@@ -135,6 +134,13 @@ The list of available options is as follows:
   Note that packed structures can lead to significant performance
   degradation of the MonteCarlo kernel. This option is the last resort if
   the fields of the OpenCL and host structures cannot be properly aligned.
-  When declaring a new OPenCL or host structure, always start the declaration
-  with the largest data type and move towards smaller data types. Use data types
+  When declaring OPenCL or host structures always start with the
+  largest data type and move towards smaller data types. Use data types
   that are of size no less than 4 bytes.
+
+
+
+
+  
+
+  

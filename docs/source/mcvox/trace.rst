@@ -73,7 +73,7 @@ where :python:`num_packets` is the number of
 launched photon packets and :python:`maxlen` is the maximum length of the
 trace that is set through the constructor parameter :python:`maxlen`.
 The actual number of trace entries for each photon packet can be
-obtained from :py:attr:`~xopto.mcbase.mctrace.Trace.n` property, which is a
+obtained from the :py:attr:`~xopto.mcbase.mctrace.Trace.n` property, which is a
 numpy vector of length :python:`num_packets`.
 .
 
@@ -91,26 +91,26 @@ Trace Filter
 
 Frequently, only the traces of photon packets that end with a particular state
 are useful. A versatile filter :py:class:`~xopto.mcbase.mctrace.Filter` is
-available for filtering the traces according to the position,
-propagation direction, and optical path length of the photon packet. The trace
-filter :py:class:`~xopto.mcbase.mctrace.Filter` is also conveniently imported
-into the :py:mod:`xopto.mcvox.mctrace` and :py:mod:`xopto.mcvox.mctrace`
-modules.
+available for filtering the photon packet traces according to the terminal
+position, propagation direction, and optical path length of the photon packet.
+The trace filter :py:class:`~xopto.mcbase.mctrace.Filter` is also conveniently
+imported into the :py:mod:`xopto.mcvox.mctrace` and
+:py:mod:`xopto.mcvox.mctrace` modules.
 
 The traces can be filtered by the final state of the photon packet.
 For a detailed list of available options see
 :py:class:`~xopto.mcbase.mctrace.Filter`. If a filter object is
 passed to the :py:class:`~xopto.mcbase.mctrace.Trace` constructor (parameter
 :code:`filter`) the results of the Monte Carlo simulation will be automatically
-filtered. Alternatively, filters can be easily applied to
+filtered. Alternatively, filters can be easily applied to the existing
 :py:class:`~xopto.mcbase.mctrace.Trace` instances by the
 :py:meth:`xopto.mcbase.mctrace.Filter.__call__` method. By default, the filter
 modifies the trace (does not create a new trace object for the filtered results)
 and returns it. This behavior can be changed by passing :python:`update=False`
 to the :py:meth:`~xopto.mcbase.mctrace.Filter.__call__` method. This will create
-a new a new :py:class:`~xopto.mcbase.mctrace.Trace` instance for the filtered
-trace. Note that the filter will drop all traces that exceed the maximum trace
-length even if they satisfy the filter. The number of dropped traces is
+a new :py:class:`~xopto.mcbase.mctrace.Trace` instance for the filtered
+trace. Note that the filter will drop all the traces that exceed the maximum
+trace length, even if they satisfy the filter. The number of dropped traces is
 returned as the second output of
 :py:meth:`~xopto.mcbase.mctrace.Filter.__call__`.
 
@@ -139,8 +139,8 @@ sample through the top surface.
     filtered_trace, dropped = filt(some_trace, False)
 
 To visualize the paths of photon packets after completing a simulation,
-use :py:meth:`~xopto.mcbase.mctrace.Trace.plot`. The traces can be plot in
-several different views:
+use the :py:meth:`~xopto.mcbase.mctrace.Trace.plot` method. The traces can be\
+plot in several different views:
 
 * :python:`view='3d'` produces a 3D view of the traces (default).
 * :python:`view='xy'` produces a 2D view of the traces projected onto the x-y plane.
@@ -157,4 +157,4 @@ the traced path with a red marker.
     trace.plot(show=False) # produces a 3D view
     trace.plot(view='xy', show=False) # produces a 2D view in the x-y plane
     trace.plot(view='xz', show=False) # produces a 2D view in the x-z plane
-    trace.plot(view='yz', show=Trrue) # produces a 2D view in the y-z plane
+    trace.plot(view='yz', show=True) # produces a 2D view in the y-z plane
