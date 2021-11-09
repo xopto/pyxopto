@@ -39,12 +39,13 @@ class PfBase(McObject):
         The dict keys must match the parameter names defined by the
         constructor.
         '''
-        T = data.pop('type')
+        data_ = dict(data)
+        T = data_.pop('type')
         if T != cls.__name__:
             raise TypeError(
                 'Cannot initialize an instance of {:s} scattering phase '
-                'function from the provided data!'.format(cls.__name__))
-        return cls(**data)
+                'function from the data of "{}"!'.format(cls.__name__, T))
+        return cls(**data_)
 
     def __repr__(self):
         return self.__str__() + ' # id 0x{:>08X}.'.format(id(self))
