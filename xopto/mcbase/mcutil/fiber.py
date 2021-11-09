@@ -185,6 +185,33 @@ class MultimodeFiber:
 
         return target
 
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'dcore': self._dcore, 
+                'dcladding': self._dcladding,
+                'ncore': self._ncore,
+                'na': self._na,
+                'type': self.__class__.__name__}
+
+    @staticmethod
+    def fromdict(data: dict) -> 'MultimodeFiber':
+        '''
+        Create an accumulator instance from a dictionary.
+
+        Parameters
+        ----------
+        data: dict
+            Dictionary created by the py:meth:`MultimodeFiber.todict` method.
+        '''
+        obj_type = data.pop('type')
+        if obj_type != 'MultimodeFiber':
+            raise TypeError('Expected "MultimodeFiber" type but '
+                            'got "{}"!'.format(obj_type))
+
+        return MultimodeFiber(**data)
+
     def __repr__(self):
         return 'MultimodeFiber(dcore={:f}, dcladding={:f}, ' \
                'ncore={:f}, na={:f})'.format(
@@ -333,6 +360,17 @@ class MultimodeFiberLut:
     collection = property(_get_collection_lut, _set_collection_lut, None,
                          'Collection lookup table.')
 
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'dcore': self._dcore, 
+                'dcladding': self._dcladding,
+                'ncore': self._ncore,
+                'emission': self._emission_lut,
+                'collection': self._collection_lut,
+                'type': self.__class__.__name__}
+
     def __repr__(self):
         return 'MultimodeFiberLut(dcore={:f}, dcladding={:f}, ' \
                'ncore={:f}, emission={}, collection={})'.format(
@@ -402,6 +440,32 @@ class FiberLayout:
         self._direction *= 1.0/norm
     direction = property(_get_direction, _set_direction, None,
                          'Fiber reference direction.')
+
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'fiber': self._fiber.todict(), 
+                'position': self._position.tolist(),
+                'direction': self._direction.tolist(),
+                'type': self.__class__.__name__}
+
+    @staticmethod
+    def fromdict(data: dict) -> 'MultimodeFiber':
+        '''
+        Create an accumulator instance from a dictionary.
+
+        Parameters
+        ----------
+        data: dict
+            Dictionary created by the py:meth:`FiberLayout.todict` method.
+        '''
+        obj_type = data.pop('type')
+        if obj_type != 'FiberLayout':
+            raise TypeError('Expected "FiberLayout" type but '
+                            'got "{}"!'.format(obj_type))
+
+        return FiberLayout(fiber=MultimodeFiber(data.pop('fiber')), **data)
 
     def __str__(self):
         return 'FiberLayout(fiber={}, position=({}, {}, {}), ' \
