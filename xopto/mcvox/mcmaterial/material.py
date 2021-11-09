@@ -352,6 +352,41 @@ class Materials(mcobject.McObject):
     def __setitem__(self, what, value):
         self._materials[what] = value
 
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {
+            'type': 'Materials',
+            'materials': [material.todict() for material in self._materials] 
+        }
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'Materials':
+        '''
+        Create a new instance of :py:class:`Materials` from a dict.
+
+        Parameters
+        ----------
+        data: dict
+            A dict with instance data.
+
+        Returns
+        -------
+        instance: Materials
+            A new instance of :py:class:`Materials`.
+        '''
+        data_ = dict(data)
+        type_name = data_.pop('type')
+        if type_name != cls.__name__:
+            raise TypeError('Expected data of instance Materials '
+                            'but got "{}"!'.format(type_name))
+        materials = data_.pop('materials')
+        return Materials(
+            [Material.fromdict(material) for material in materials],
+            **data_
+        )
+
     def __len__(self):
         return len(self._materials)
 

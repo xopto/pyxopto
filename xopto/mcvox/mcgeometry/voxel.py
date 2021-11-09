@@ -640,6 +640,44 @@ class Voxels(mcobject.McObject):
         if show:
             sv.show()
 
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {
+            'type': 'Voxels',
+            'xaxis': self._x_axis.todict(),
+            'yaxis': self._y_axis.todict(),
+            'zaxis': self._z_axis.todict(),
+        }
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'Voxels':
+        '''
+        Create a new instance of :py:class:`Voxels` from a dict.
+
+        Parameters
+        ----------
+        data: dict
+            A dict with instance data.
+
+        Returns
+        -------
+        instance: Voxels
+            A new instance of :py:class:`Voxels`.
+        '''
+        data_ = dict(data)
+        type_name = data_.pop('type')
+        if type_name != cls.__name__:
+            raise TypeError('Expected data of instance Voxels '
+                            'but got "{}"!'.format(type_name))
+        return Voxels(
+            Axis.fromdict(data_.pop('xaxis')),
+            Axis.fromdict(data_.pop('yaxis')),
+            Axis.fromdict(data_.pop('zaxis')),
+            **data_
+        )
+
     def __str__(self):
         return 'Voxels(xaxis={}, yaxis={}, zaxis={}, voxel={})'.format(
             self._x_axis, self._y_axis, self._z_axis, self._voxel_type)

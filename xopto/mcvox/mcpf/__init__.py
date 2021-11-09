@@ -20,4 +20,8 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
+"""
+This package only imports all the items from :py:mod:`xopto.mcbase.mcpf`.
+"""
+
 from xopto.mcbase.mcpf import *
