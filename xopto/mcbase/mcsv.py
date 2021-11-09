@@ -146,6 +146,36 @@ class SamplingVolume(mcobject.McObject):
             'yaxis':self._y_axis.todict(),
             'zaxis':self._z_axis.todict()
         }
+    
+    @classmethod
+    def fromdict(cls, data) -> 'SamplingVolume':
+        '''
+        Create a new instance of :py:class:`SamplingVolume` from dict data
+        exported by the :py:meth:`todict` method.
+
+        Parameters
+        ----------
+        data: dict
+            Instance data exported to a dict.
+
+        Returns
+        -------
+        sv: SamplingVolume
+            A new :py:class:`SamplingVolume` instance initialized with the data.
+        '''
+        data_ = dict(data)
+
+        type_name = data_.pop('type')
+        if type_name != cls.__name__:
+            raise TypeError('Expected data for type "{}" but got "{}"!'.format(
+                cls.__name__, type_name))
+
+        return SamplingVolume(
+            Axis.fromdict(data_.pop('xaxis')),
+            Axis.fromdict(data_.pop('yaxis')),
+            Axis.fromdict(data_.pop('zaxis')),
+            **data_
+        )
 
     def _get_shape(self) -> Tuple[int, int, int]:
         return (self._z_axis.n, self._y_axis.n, self._x_axis.n,)
@@ -197,6 +227,13 @@ class SamplingVolume(mcobject.McObject):
         self._weight = w
     weight = property(_get_weight, _set_weight, None,
                     'Total weight of the accumulated photon packets.')
+
+    def clear(self):
+        '''
+        Clear the data buffer (fill with 0) if one exists.
+        '''
+        if self._data is not None:
+            self._data.fill(0)
 
     def update_data(self, mc: mcobject.McObject,
                     accumulators: List[np.ndarray], total_weight: int,
