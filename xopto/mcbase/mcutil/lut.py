@@ -529,6 +529,14 @@ class LutManager:
         else:
             return self._offsets.get(id(lut))
 
+    def clear(self):
+        '''
+        Clear the lookup table manager - remove all the managed data entries.
+        '''
+        self._data = []
+        self._offsets = {}
+        self._size = 0
+
     def __len__(self):
         return self._size
 
@@ -601,6 +609,13 @@ class LutManagers:
         if manager is None:
             self._lut_managers[dtype] = manager = LutManager(dtype)
         return manager
+
+    def clear(self):
+        '''
+        Clear the data (managed data arrays) of all the managers.
+        '''
+        for _, manager in self._lut_managers.items():
+            manager.clear()
 
     def __getitem__(self, dtype: np.dtype) -> LutManager:
         return self.manager(dtype)
