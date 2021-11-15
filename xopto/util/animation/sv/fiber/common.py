@@ -280,7 +280,7 @@ def mc_sv_fiber_cli(description: str = None,
     
         - num_packets: int
             Minimum number of packets that should reach the detector.
-        - batch_size:
+        - batch_packets:
             int Number of packets to launch in a single simulation run.
         - filename: str
             File for the simulation results.
@@ -311,7 +311,7 @@ def mc_sv_fiber_cli(description: str = None,
         help='Reduce the number of sampling volume accumulators '
              'along the y axis to 1.')
     parser.add_argument(
-        '-b', '--batch-size', dest='batch_size', default=1000000, type=int,
+        '-b', '--batch-packets', dest='batch_packets', default=1000000, type=int,
         help='Number of photon packets to launch in a single Monte Carlo '
              'simulation.')
     parser.add_argument(
@@ -381,7 +381,7 @@ def mc_sv_fiber_cli(description: str = None,
     if not filename:
         filename = None
     sv_num_packets = max(1, args.sv_num_packets)
-    batch_size = max(1, args.batch_size)
+    batch_packets = max(1, args.batch_packets)
     fps = args.fps
     if fps <= 0.0:
         fps = None
@@ -407,7 +407,7 @@ def mc_sv_fiber_cli(description: str = None,
         fiber_sds = None
 
 
-    return {'filename': filename, 'batch_size': batch_size,
+    return {'filename': filename, 'batch_packets': batch_packets,
             'sv_num_packets': sv_num_packets, 'overwrite': args.overwrite,
             'sv_projection': args.sv_projection,
             'verbose': args.verbose, 'animation': args.animation,
@@ -442,8 +442,8 @@ def main(sim_task: callable, ani_task: callable, config:dict):
         print('Arguments returned by the command line interface:')
         print(kwargs)
 
-    if kwargs['batch_size'] is not None:
-        config['batch_size'] = kwargs['batch_size']
+    if kwargs['batch_packets'] is not None:
+        config['batch_packets'] = kwargs['batch_packets']
     if kwargs['sv_num_packets'] is not None:
         config['sv_num_packets'] = kwargs['sv_num_packets']
     if kwargs['sv_projection'] and 'sv' in config:

@@ -32,7 +32,7 @@ from xopto.cl import clinfo
 
 DEFAULT_CONFIG = {
     'rmax': 15.0e-3,
-    'batch_size': 100000,
+    'batch_packets': 100000,
     'sv_num_packets': 256,
     'sample':{
         'mua': 2.0e2,
@@ -190,7 +190,7 @@ def sv_fiber_distance(filename: str, config: dict = None,
         num_packets = 0
         sv.clear()
         while num_packets < config['sv_num_packets']:
-            trace_res, _, _ = mc_obj.run(config['batch_size'])
+            trace_res, _, _ = mc_obj.run(config['batch_packets'])
             sv = mc_obj.sampling_volume(trace_res, sv)
             num_packets += len(trace_res)
             if verbose:
@@ -204,7 +204,7 @@ def sv_fiber_distance(filename: str, config: dict = None,
         'source': mc_obj.source.todict(),
         'sv': sv.todict(),
         'rmax': mc_obj.rmax,
-        'batch_size': config['batch_size'],
+        'batch_packets': config['batch_packets'],
         'num_packets': num_packets,
         'fiber_sds': config['fiber_sds'],
         'sv_data': sv_data

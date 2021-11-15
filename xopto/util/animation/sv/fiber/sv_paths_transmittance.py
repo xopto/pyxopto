@@ -33,7 +33,7 @@ from xopto.cl import clinfo
 
 DEFAULT_CONFIG = {
     'rmax': 15.0e-3,
-    'batch_size': 100000,
+    'batch_packets': 100000,
     'sv_num_packets': 256,
     'sample':{
         'mua': 10.0e2,
@@ -191,7 +191,7 @@ def sv_fiber_paths_transmittance(filename: str, config: dict = None,
     num_packets = 0
     trace_res = out = None
     while num_packets < config['sv_num_packets']:
-        out = mc_obj.run(config['batch_size'], out)
+        out = mc_obj.run(config['batch_packets'], out)
         trace_res = out[0]
         num_packets = len(trace_res)
         if verbose:
@@ -204,7 +204,7 @@ def sv_fiber_paths_transmittance(filename: str, config: dict = None,
         'source': mc_obj.source.todict(),
         'sv': sv.todict(),
         'rmax': mc_obj.rmax,
-        'batch_size': config['batch_size'],
+        'batch_packets': config['batch_packets'],
         'num_packets': num_packets,
         'fiber_sds': config['fiber_sds'],
         'trace_data': trace_res.data,
