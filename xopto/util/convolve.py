@@ -24,8 +24,10 @@ import numpy as np
 from scipy.interpolate import interp1d
 from scipy.integrate import simps
 
-def fiber_reflectance(r, reflectance, sds, dcore, nsimps=1000,
-                      loginterp=False, uneven=False, **kwargs):
+def fiber_reflectance(r: np.ndarray, reflectance: np.ndarray,
+                      sds: float or np.ndarray, dcore: float,
+                      nsimps: int = 1000, loginterp: bool = False,
+                      uneven: bool = False, **kwargs) -> np.ndarray:
     '''
     Computes reflectance detected through optical fibers with the given
     geometry. The reflectance can be computed by integrating:
