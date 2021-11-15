@@ -170,7 +170,7 @@ class Material(mcobject.McObject):
         Export object to a dict.
         '''
         return {'n':self._n, 'mua':self._mua, 'mus':self._mus,
-                'pf':self._pf, 'type':'Material'}
+                'pf':self._pf.todict(), 'type':'Material'}
 
     @classmethod
     def fromdict(cls, data: dict) -> 'Material':
@@ -178,10 +178,16 @@ class Material(mcobject.McObject):
         Create a new object from dict. The dict keys must match
         the parameter names defined by the constructor.
         '''
-        t = data.pop('type')
+        data_ = dict(data)
+        t = data_.pop('type')
         if t != 'Material':
             raise ValueError('Cannot create a Material instance from the data!')
-        return cls(**data)
+        pf_data = data_.pop('pf')
+        if not hasattr(mcpf, pf_data['type']):
+            raise TypeError('Scattering phase function "{}" '
+                            'not implemented'.format(pf_data['type']))
+        pf_type = getattr(mcpf, pf_data['type'])
+        return cls(pf=pf_type.fromdict(pf_data), **data_)
 
     def __str__(self):
         return 'Material(n={}, mua={}, mus={}, pf={})'.format(
