@@ -742,6 +742,8 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         if out is None:
             out = (None, None, None)
 
+        nphotons = int(nphotons)
+
         # finalize and pack the configuration data
         self._pack(nphotons)
 
@@ -759,7 +761,6 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         packed = self._packed
 
         # check if the maximum number of photon packets is not exceeded
-        nphotons = int(nphotons)
         if nphotons > self._types.mc_cnt_max:
             raise ValueError(
                 'Maximum number of photon packets that can be '
