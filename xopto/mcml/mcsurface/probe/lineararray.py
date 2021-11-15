@@ -599,7 +599,7 @@ class LinearArray(SurfaceLayoutAny):
                'position=({}, {}), direction=({}, {}, {}))'.format(
                    self._fiber, self._n, self._spacing, *self._orientation,
                    self._diameter, self._reflectivity,
-                   *self._cutout, self._cutoutn
+                   *self._cutout, self._cutout_n
                    *self._position, *self._direction)
 
     def __repr__(self):
