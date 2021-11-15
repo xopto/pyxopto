@@ -190,7 +190,7 @@ As a detector, we define a radial accumulator spanning from 0 to 1 mm with 250 b
 The Monte Carlo simulator objects
 ---------------------------------
 
-We define two :py:class:`~xopto.mcml.mc.MC` simulator objects, which accept the defined layer stacks, sources, detectors and OpenCL ready device context. The :code:`detector` keyword argument accepts an instance of :py:class:`~xopto.mcml.mcdetector.base.Detectors`, which in turn accepts a top, bottom and specular detectors. In this example we have set only the top detector :code:`detector_top_radial`, which we have defined above.
+We define two :py:class:`~xopto.mcml.mc.Mc` simulator objects, which accept the defined layer stacks, sources, detectors and OpenCL ready device context. The :code:`detector` keyword argument accepts an instance of :py:class:`~xopto.mcml.mcdetector.base.Detectors`, which in turn accepts a top, bottom and specular detectors. In this example we have set only the top detector :code:`detector_top_radial`, which we have defined above.
 
 In both cases we also define a maximum simulation radius :py:attr:`xopto.mcml.mc.Mc.rmax` beyond which the photon packets are not propagated since they likely do not contribute to the reflectance signal.
 
@@ -240,8 +240,8 @@ Before the simulations are run, we define two arrays that will store reflectance
         mie_pf = mc.mcpf.Lut(*mie.mclut())
         mc_obj_mie.layers[1].pf = mie_pf
 
-        detector_hg = mc_obj_hg.run(nphotons, verbose=True, wgsize=256)[-1]
-        detector_mie = mc_obj_mie.run(nphotons, verbose=True, wgsize=256)[-1]
+        detector_hg = mc_obj_hg.run(nphotons, verbose=True)[-1]
+        detector_mie = mc_obj_mie.run(nphotons, verbose=True)[-1]
 
         reflectance_hg[i] = convolve.fiber_reflectance( 
             detector_hg.top.r,

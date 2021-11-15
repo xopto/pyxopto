@@ -26,7 +26,7 @@
 Photon packet tracing
 =====================
 
-This example (available in `examples/mcml/tracing`) covers all the neccessary steps for photon packet tracing in a two-layered turbid medium utilizing multimode optical fibers as sources and detectors.
+This example (available in `examples/mcml/tracing`) covers all the necessary steps for photon packet tracing in a two-layered turbid medium utilizing multimode optical fibers as sources and detectors.
 
 Importing the required modules and submodules
 ---------------------------------------------
@@ -49,7 +49,7 @@ Firstly, we import the submodule :py:mod:`xopto.mcml.mc`, which can be convenien
 Computational device
 --------------------
 
-The function :py:func:`~xopto.clinfo.gpu` accepts a unique string representation of the desired computational device, which can be found via listing all of the available OpenCL devices (see :ref:`opencl-devices-label`).
+The function :py:func:`~xopto.cl.clinfo.gpu` accepts a unique string representation of the desired computational device, which can be found via listing all of the available OpenCL devices (see :ref:`opencl-devices-label`).
 
 .. code-block:: python
 
@@ -61,7 +61,7 @@ The function :py:func:`~xopto.clinfo.gpu` accepts a unique string representation
 
 The layer stack
 ---------------
-Next, we define the layer stack and corresponding optical properties. The layer stack of the medium is defined through the :py:class:`~xopto.mcml.mclayer.layer.Layers` constructor, which accepts a list of :py:class:`~xopto.mcml.mclayer.layer.Layer` objects representing each individual layer. The layers are stacked along the positive direction of the z coordinate axis, which points into the medium. See :ref:`mcml-basic-example-label` or :ref:`mcml-layer-stack-label` for more information regarding the layer construction. Briefly, the topmost and bottommost layers are used only to provide the optical properties of the surrounding medium, especially to properly reflect/refract the photon packets at the boundaries. Therefore, for a two-layered turbid medium four layers have to be defined. In this example, we set the thickness of the first layer corresponding to the turbid medium to 1 |nbsp| mm and of the second layer similarly to 1 |nbsp| mm. Next, we set the refractive index to 1.33 for the first and 1.4 of the second layer. The surrounding medium refractive index is set to 1.45 to mimick the refractive index of the multimode optical fiber core. This will lead to a proper reflection/refraction at the probe-medium interface (for more complex boundary conidition see example :ref:`example-reflectance-optical-probes`). The absorption and scattering coefficients are set to 1 |nbsp| 1/cm and 125 |nbsp| 1/cm for the first layer, and 2 |nbsp| 1/cm and 125 |nbsp| 1/cm for the second layer, respectively. Finally, the Henyey-Greenstein phase function is utilized in the first and second layer of the turbid medium with anistropy factors 0.8 and 0.9, respectively.
+Next, we define the layer stack and corresponding optical properties. The layer stack of the medium is defined through the :py:class:`~xopto.mcml.mclayer.layer.Layers` constructor, which accepts a list of :py:class:`~xopto.mcml.mclayer.layer.Layer` objects representing each individual layer. The layers are stacked along the positive direction of the z coordinate axis, which points into the medium. See :ref:`mcml-basic-example-label` or :ref:`mcml-layer-stack-label` for more information regarding the layer construction. Briefly, the topmost and bottommost layers are used only to provide the optical properties of the surrounding medium, especially to properly reflect/refract the photon packets at the boundaries. Therefore, for a two-layered turbid medium four layers have to be defined. In this example, we set the thickness of the first layer corresponding to the turbid medium to 1 |nbsp| mm and of the second layer similarly to 1 |nbsp| mm. Next, we set the refractive index to 1.33 for the first and 1.4 of the second layer. The surrounding medium refractive index is set to 1.45 to mimic the refractive index of the multimode optical fiber core. This will lead to a proper reflection/refraction at the probe-medium interface (for more complex boundary condition see example :ref:`example-reflectance-optical-probes`). The absorption and scattering coefficients are set to 1 |nbsp| 1/cm and 125 |nbsp| 1/cm for the first layer, and 2 |nbsp| 1/cm and 125 |nbsp| 1/cm for the second layer, respectively. Finally, the Henyey-Greenstein phase function is utilized in the first and second layer of the turbid medium with anisotropy factors 0.8 and 0.9, respectively.
 
 .. code-block:: python
 
@@ -128,9 +128,12 @@ In this example we utilize two :py:class:`~xopto.mcbase.mctrace.Trace` objects. 
         maxlen=number_of_events, options=mc.mctrace.Trace.TRACE_ALL,
     )
 
+    # using default simulator data types
+    eps = mc.mctypes.McDataTypes.eps
+
     # with filter
     filter = mc.mctrace.Filter(
-        z=(d1+d2 - 1e-9, d1+d2 + 1e-9), 
+        z=(d1 + d2 - eps, d1 + d2 + eps), 
         pz=(np.cos(np.arcsin(0.22/1.45)), 1.00),
         r=(0, 100e-6, (440e-6, 0))
     )
@@ -141,7 +144,7 @@ In this example we utilize two :py:class:`~xopto.mcbase.mctrace.Trace` objects. 
 
 The Monte Carlo simulator object
 --------------------------------
-In the following, we define two simulator objects :py:class:`~xopto.mcml.mc.MC`, which are constructed with the same parameters differing only in the input trace objects corresponding to the :code:`trace_no_filter` and :code:`trace_filter`. The :py:class:`~xopto.mcml.mc.MC` constructor accepts the defined :code:`layers`, :code:`source`, :code:`detectors` and computational device context :code:`cl_device`. Note that for each simulator object we also set the termination radius attributde :py:attr:`~xopto.mcml.mc.MC.rmax` of 1 cm. In this case, the photon packets are not propagated beyond the 1 cm radius, which usually also speeds up the simulation times.
+In the following, we define two simulator objects :py:class:`~xopto.mcml.mc.Mc`, which are constructed with the same parameters differing only in the input trace objects corresponding to the :code:`trace_no_filter` and :code:`trace_filter`. The :py:class:`~xopto.mcml.mc.Mc` constructor accepts the defined :code:`layers`, :code:`source`, :code:`detectors` and computational device context :code:`cl_device`. Note that for each simulator object we also set the termination radius attributed :py:attr:`~xopto.mcml.mc.Mc.rmax` of 1 cm. In this case, the photon packets are not propagated beyond the 1 cm radius, which usually also speeds up the simulation times.
 
 .. code-block:: python
 
@@ -169,25 +172,25 @@ Running the Monte Carlo simulations
 -----------------------------------
 
 Finally, we can run the simulator instance with a given number of photon
-packets :code:`nphotons`. The :py:meth:`~xopto.mcml.mc.MC.run` returns a :code:`list` of trace, fluence and detector objects. The traces are stored in the trace objects, thus the trace is stored as the second item :code:`trace_no_filter = output[0]`. As already decribed above, the simulation runs with filtered traces can result in a significantly reduced number of traces and the simulations have to be run multiple times to satisfy the desired number of the recorded traces :code:`recorded_traces`. This is done via a :code:`while` loop, where at each iteration the number of photon packet traces :code:`len(output[0])` is compared to the :code:`recorded_traces`. Note that the second axis :code:`output[0].data.shape[1]` corresponds to the :code:`number_of_events` set by :code:`maxlen`. Within the :code:`while` loop, we also utilize a collection option of the :py:meth:`~xopto.mcml.mc.MC.run` function, which accepts the returned list of trace, fluence and detector objects :code:`output` and subsequently appends the data to it from a new simulation run.
+packets :code:`nphotons`. The :py:meth:`~xopto.mcml.mc.Mc.run` returns a :code:`list` of trace, fluence and detector objects. The traces are stored in the trace objects, thus the trace is stored as the second item :code:`trace_no_filter = output[0]`. As already described above, the simulation runs with filtered traces can result in a significantly reduced number of traces and the simulations have to be run multiple times to satisfy the desired number of the recorded traces :code:`recorded_traces`. This is done via a :code:`while` loop, where at each iteration the number of photon packet traces :code:`len(output[0])` is compared to the :code:`recorded_traces`. Note that the second axis :code:`output[0].data.shape[1]` corresponds to the :code:`number_of_events` set by :code:`maxlen`. Within the :code:`while` loop, we also utilize a collection option of the :py:meth:`~xopto.mcml.mc.Mc.run` function, which accepts the returned list of trace, fluence and detector objects :code:`output` and subsequently appends the data to it from a new simulation run.
 
 .. code-block:: python
 
     # without filter
-    output = mc_obj_no_filter.run(nphotons, verbose=True, wgsize=256)
+    output = mc_obj_no_filter.run(nphotons, verbose=True)
     trace_no_filter = output[0]
 
     # with filter
-    output = mc_obj_filter.run(nphotons, verbose=True, wgsize=256)
-    while output[0].data.shape[0] < recorded_traces:
-        output = mc_obj_filter.run(nphotons, verbose=True, wgsize=256, out=output)
-        print('Photon packet traces deteced:', output[0].data.shape[0])
+    output = None
+    while output is None or len(output[0]) < recorded_traces:
+        output = mc_obj_filter.run(nphotons, verbose=True, out=output)
+        print('Photon packet traces collected:', len(output[0]))
     trace_filter = output[0]
 
 Trace processing and visualization
 ----------------------------------
 
-The photon packet traces can easily be visualized using :py:mod:`matplotlib.pyplot` submodule. In this example, we plot the first number of traces according to :code:`recorded_traces`, which was set to 100. Each trace is plotted using the :code:`for` loop iterating through the first 100 traces. The traces are ploted in the X-Z plane. The :math:`x` positions of the events for a single photon packet trajectory can be accessed through a keyword, e.g. :code:`trace_no_filter.data['x']`. Likewise for :math:`z` positions or any other recorded properties (see :ref:`mcml-trace-label`). The first axis/index corresponds to photon packet traces, the second axis/index corresponds to the recorded events. It should be noted that each trace can have a different number of recorded events and the trace should be plotted only to the last recorded event before termination. This number is provided for each photon packet trace by the property :py:attr:`~xopto.mcbase.mctrace.Trace.n` of the object :py:class:`~xopto.mcbase.mctrace.Trace`. Note that the positions are originally in meters and are in this example converted to millimeters by multiplying with 1000.
+The photon packet traces can easily be visualized using :py:mod:`matplotlib.pyplot` submodule. In this example, we plot the first number of traces according to :code:`recorded_traces`, which was set to 100. Each trace is plotted using the :code:`for` loop iterating through the first 100 traces. The traces are plotted in the X-Z plane. The :math:`x` positions of the events for a single photon packet trajectory can be accessed through a keyword, e.g. :code:`trace_no_filter.data['x']`. Likewise for :math:`z` positions or any other recorded properties (see :ref:`mcml-trace-label`). The first axis/index corresponds to photon packet traces, the second axis/index corresponds to the recorded events. It should be noted that each trace can have a different number of recorded events and the trace should be plotted only to the last recorded event before termination. This number is provided for each photon packet trace by the property :py:attr:`~xopto.mcbase.mctrace.Trace.n` of the object :py:class:`~xopto.mcbase.mctrace.Trace`. Note that the positions are originally in meters and are in this example converted to millimeters by multiplying with 1000.
 
 .. image:: ../../images/examples/mcml/tracing/trace_fig1.svg
    :height: 480 px

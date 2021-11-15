@@ -77,7 +77,7 @@ obtained from the :py:attr:`~xopto.mcbase.mctrace.Trace.n` property, which is a
 numpy vector of length :python:`num_packets`.
 .
 
-When tracing the entire path of the photon packets, it is importat to select
+When tracing the entire path of the photon packets, it is important to select
 an adequate maximum length of the trace. The value will depend on a number of
 factors including the optical properties of the sample and the configuration
 of the investigated source and detector. It is advised to iteratively determine

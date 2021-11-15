@@ -14,6 +14,7 @@ Welcome to PyXOpto's documentation!
    source/opencl_devices
    source/mcml/index
    source/mcvox/index
+   source/dataset/index
    apidoc/modules
 
 Indices and tables

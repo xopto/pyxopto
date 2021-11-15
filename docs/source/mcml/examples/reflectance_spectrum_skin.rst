@@ -104,9 +104,9 @@ Refer to the code below for specific values of the parameters.
     n1 = 1.4  # refractive index
     m = 0.02  # melanin volume fraction
     g1 = 0.8  # anisotropy factor constant with wavelength
-    pf1 = mc.mcpf.Hg(g1)  # Henyey-Greenstein scatterin phase function
+    pf1 = mc.mcpf.Hg(g1)  # Henyey-Greenstein scattering phase function
 
-    # epidermis absortpion coefficient
+    # epidermis absorption coefficient
     mua1 = lambda wavelength: m * 6.6*1e13*(1e9*wavelength)**-3.33 + \
         (1-m) * 1e2*0.5*(0.244 + 85.3*np.exp(-(1e9*wavelength - 154)/66.2))
 
@@ -120,7 +120,7 @@ Refer to the code below for specific values of the parameters.
     bl = 0.02  # blood volume fraction
     oxy = 0.90  # oxygenation
     g2 = 0.8  # anisotropy factor
-    pf2 = mc.mcpf.Hg(g2)  # Henyey-Greenstein scatterin phase function
+    pf2 = mc.mcpf.Hg(g2)  # Henyey-Greenstein scattering phase function
 
     # dermis absorption coefficient
     mua_oxy = oxyhem.OxyHem()
@@ -177,7 +177,7 @@ The reflectance in this example is acquired with an integrating sphere that accu
 
 The Monte Carlo simulator object and simulation runs
 ----------------------------------------------------
-We initiliaze the Monte Carlo simulator object :py:class:`~xopto.mcml.mc.Mc` with the specified layers, source and detector objects. We also provide the desired computational device via the keyword parameter :code:`cl_devices`.To conserve with the simulations time, the photon packets that travel 10 cm away from the source are terminated by setting the maximum radius attribute :code:`rmax`.
+We initialize the Monte Carlo simulator object :py:class:`~xopto.mcml.mc.Mc` with the specified layers, source and detector objects. We also provide the desired computational device via the keyword parameter :code:`cl_devices`.To conserve with the simulations time, the photon packets that travel 10 cm away from the source are terminated by setting the maximum radius attribute :code:`rmax`.
 
 .. code-block:: python
 
@@ -189,7 +189,7 @@ We initiliaze the Monte Carlo simulator object :py:class:`~xopto.mcml.mc.Mc` wit
     )
     mc_obj.rmax = 10e-2
 
-Simulation runs with the above Monte Carlo simulator object have to be done at each wavelength since the absorption and reduced scattering coefficient are wavelength dependent. To store reflectance at each wavelength point, we thus define an empty numpy array :code:`reflectacne_spectrum`. Subsequently, we iterate over all the wavelengths in the :code:`for` loop changing the absorption and scattering coefficients for the epidermis and dermis layers. Finally, the simulation is run with :code:`nphotons` and only the last output parameter of the method call :py:meth:`~xopto.mcml.mc.Mc.run` which corresponds to the detectors object :py:class:`~xopto.mcml.mcdetector.base.Detectors` with separate detectors stored at the top and bottom. The reflectance as stored by the previously defined :py:class:`~xopto.mcml.mcdetector.radial.Radial` detector object can be accessed as the top detector reflectance by using the :code:`detector.top.reflectance`. Only the first accumulator corresponds to the reflectance acquired through the integrating sphere opening. Since the :py:class:`~xopto.mcml.mcdetector.radial.Radial` accumulator stores reflectance per area, we have to multiply the reflectance also by the area of the accumulator to obtain pure reflectance relative to the amount of launched photon packets. At each step :code:`i` this is then saved to the variable :code:`reflectacne_spectrum`.
+Simulation runs with the above Monte Carlo simulator object have to be done at each wavelength since the absorption and reduced scattering coefficient are wavelength dependent. To store reflectance at each wavelength point, we thus define an empty numpy array :code:`reflectance_spectrum`. Subsequently, we iterate over all the wavelengths in the :code:`for` loop changing the absorption and scattering coefficients for the epidermis and dermis layers. Finally, the simulation is run with :code:`nphotons` and only the last output parameter of the method call :py:meth:`~xopto.mcml.mc.Mc.run` which corresponds to the detectors object :py:class:`~xopto.mcml.mcdetector.base.Detectors` with separate detectors stored at the top and bottom. The reflectance as stored by the previously defined :py:class:`~xopto.mcml.mcdetector.radial.Radial` detector object can be accessed as the top detector reflectance by using the :code:`detector.top.reflectance`. Only the first accumulator corresponds to the reflectance acquired through the integrating sphere opening. Since the :py:class:`~xopto.mcml.mcdetector.radial.Radial` accumulator stores reflectance per area, we have to multiply the reflectance also by the area of the accumulator to obtain pure reflectance relative to the amount of launched photon packets. At each step :code:`i` this is then saved to the variable :code:`reflectance_spectrum`.
 
 Reflectance spectrum visualization
 ----------------------------------
@@ -212,4 +212,3 @@ You can run this example from the root directory of the PyXOpto package as:
 .. code-block:: bash
 
     python examples/mcml/reflectance_spectrum_skin.py
-    

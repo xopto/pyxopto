@@ -70,7 +70,7 @@ used scattering phase functions:
   etc.  
 
 The individual scattering phase functions are conveniently imported into
-the :py:mod:`xopto.mcml.mc` and :py:mod:`xopto.mcml.mcpf` mdules.
+the :py:mod:`xopto.mcml.mc` and :py:mod:`xopto.mcml.mcpf` modules.
 
 Analytical sampling
 -------------------

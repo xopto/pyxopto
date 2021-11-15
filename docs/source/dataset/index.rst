@@ -19,15 +19,10 @@
 .. along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 .. ******************************* End license *********************************
 
-.. |br| raw:: html
+Datasets
+========
 
-   <br />
+.. toctree::
+   :maxdepth: 2
 
-.. |nbsp| unicode:: 0xA0 
-   :trim:
-
-.. role:: python(code)
-   :language: python
-
-.. role:: sh(code)
-   :language: sh
+   description

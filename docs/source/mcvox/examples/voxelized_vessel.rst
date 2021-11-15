@@ -112,7 +112,7 @@ Subsequently, we define logical matrices of the same shape and size as the voxel
 
 Materials
 ---------
-Each material that will be utilized within the structured tissue can be constructed using the :py:class:`~xopto.mcvox.mcmaterial.material.Material` class, which accepts refractive index :code:`n`, absorption coefficient :code:`mua` in 1/m, scattering coefficient :code:`mua` in 1/m and scattering phase function. Various scattering phase functions that are available in the package :py:mod:`xopto.mcbase.mcpf` can be chosen. In this case we select Henyey-Greenstein phase function for all materials. We define optical properties for surrounding medium :code:`material_sm`, epidermis :code:`material_epi`, dermis :code:`material_der` and blood :code:`material_bl`. These values were obtained from the Steven Jacques' example for `mcxyz <https://omlc.org/software/mc/mcxyz/index.html>`_ under the section How to use mcxyz.c. Finally, it should be noted that the defined materials have to be packed by using the :py:class`~xopto.mcvox.mcmaterial.material.Materials` constructor, which accepts a :code:`lsit` of :py:class:`~xopto.mcvox.mcmaterial.material.Material` objects and is later in this example passed to the Monte Carlo simulator constructor :py:class:`~xopto.mcvox.mc.MC`. Note that the order of the :py:class:`~xopto.mcvox.mcmaterial.material.Material` objects is important, since voxels will be assigned indices that correspond to the order of these materials in the list. Initially, all voxels are assigned an index 0, which corresponds to the first material or in our case the surrounding medium :code:`material_sm`. The proper material assignment to each voxel will be done later in this example.
+Each material that will be utilized within the structured tissue can be constructed using the :py:class:`~xopto.mcvox.mcmaterial.material.Material` class, which accepts refractive index :code:`n`, absorption coefficient :code:`mua` in 1/m, scattering coefficient :code:`mua` in 1/m and scattering phase function. Various scattering phase functions that are available in the package :py:mod:`xopto.mcbase.mcpf` can be chosen. In this case we select Henyey-Greenstein phase function for all materials. We define optical properties for surrounding medium :code:`material_sm`, epidermis :code:`material_epi`, dermis :code:`material_der` and blood :code:`material_bl`. These values were obtained from the Steven Jacques' example for `mcxyz <https://omlc.org/software/mc/mcxyz/index.html>`_ under the section How to use mcxyz.c. Finally, it should be noted that the defined materials have to be packed by using the :py:class`~xopto.mcvox.mcmaterial.material.Materials` constructor, which accepts a :code:`lsit` of :py:class:`~xopto.mcvox.mcmaterial.material.Material` objects and is later in this example passed to the Monte Carlo simulator constructor :py:class:`~xopto.mcvox.mc.Mc`. Note that the order of the :py:class:`~xopto.mcvox.mcmaterial.material.Material` objects is important, since voxels will be assigned indices that correspond to the order of these materials in the list. Initially, all voxels are assigned an index 0, which corresponds to the first material or in our case the surrounding medium :code:`material_sm`. The proper material assignment to each voxel will be done later in this example.
 
 .. code-block:: python
 
@@ -178,9 +178,9 @@ To accumulate either fluence or deposited energy, we have to define an instance 
 
 The Monte Carlo simulator object and material assignment
 --------------------------------------------------------
-In this section we define the :py:class:`~xopto.mcvox.mc.MC` simulator object, which accepts various parameters and subsequently assign materials to voxels. Mandatory parameters to the :py:class:`~xopto.mcvox.mc.MC` simulator object constructor are :code:`voxels`, :code:`materials` and :code:`source`, which we have already defined in the previous sections. We also pass the fluence object :code:`fluence` to accumulate the deposited energy and also the :code:`cl_device` object to specify the computational device on which the simulations are going to be run.
+In this section we define the :py:class:`~xopto.mcvox.mc.Mc` simulator object, which accepts various parameters and subsequently assign materials to voxels. Mandatory parameters to the :py:class:`~xopto.mcvox.mc.Mc` simulator object constructor are :code:`voxels`, :code:`materials` and :code:`source`, which we have already defined in the previous sections. We also pass the fluence object :code:`fluence` to accumulate the deposited energy and also the :code:`cl_device` object to specify the computational device on which the simulations are going to be run.
 
-Once the :py:class:`~xopto.mcvox.mc.MC` simulator object is defined, we can assign the materials to voxels. We use the previously defined logical matrices corresponding to the different tissue structures to access the voxels and assign indices that correspond to the order of materials packed in the :code:`materials` object.
+Once the :py:class:`~xopto.mcvox.mc.Mc` simulator object is defined, we can assign the materials to voxels. We use the previously defined logical matrices corresponding to the different tissue structures to access the voxels and assign indices that correspond to the order of materials packed in the :code:`materials` object.
 
 .. code-block:: python
 
@@ -199,7 +199,7 @@ Once the :py:class:`~xopto.mcvox.mc.MC` simulator object is defined, we can assi
 
 Running the Monte Carlo simulation
 ----------------------------------
-To run the Monte Carlo simulations, we set the number of photons to 10:superscript:`8` and call the method :py:meth:`~xopto.mcvox.mc.MC.run`, which returns three objects. The fluence is returned as the second object, which is thus achieved by :code:`[1]`.
+To run the Monte Carlo simulations, we set the number of photons to 10:superscript:`8` and call the method :py:meth:`~xopto.mcvox.mc.Mc.run`, which returns three objects. The fluence is returned as the second object, which is thus achieved by :code:`[1]`.
 
 .. code-block:: python
 
@@ -219,7 +219,7 @@ Finally, we visualize the obtained deposited energy, which can be accessed throu
     extent = [1e3*(xaxis.centers[0] - binsize/2), 1e3*(xaxis.centers[-1] - binsize/2),
         1e3*(zaxis.centers[-1] + binsize/2), 1e3*(zaxis.centers[0] - binsize/2)
     ]
-    pp.imshow(np.log10(deposit.data[:,100,:]/nphotons), 
+    pp.imshow(np.log10(deposit.data[:,100,:]), 
         extent=extent,
         origin='upper'
     )

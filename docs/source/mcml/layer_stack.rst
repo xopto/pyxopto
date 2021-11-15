@@ -32,7 +32,7 @@ in the stack is used to describe the medium above the top sample
 surface and the last layer in the stack is used to describe the
 medium bellow the bottom sample surfaces.
 
-The classess that allow definition of individual layers and forming of
+The classes that allow definition of individual layers and forming of
 layer stacks can be found in the :py:mod:`xopto.mcml.mclayer.layer` module. The
 module is for convenience also imported into the main simulator module
 :py:mod:`xopto.mcml.mc`.
@@ -51,7 +51,8 @@ optical properties of the layer material.
 
 The following example creates a layer with a refractive index 1.33,
 absorption coefficient 1 |nbsp| cm :superscript:`-1` , scattering coefficient
-50 |nbsp| cm :superscript:`-1`, thickness 10 |nbsp| mm and Henyey-Greenstein scattering phase function with anisotropy 0.9.
+50 |nbsp| cm :superscript:`-1`, thickness 10 |nbsp| mm and Henyey-Greenstein
+scattering phase function with anisotropy 0.9.
 
 .. code-block:: python
 
