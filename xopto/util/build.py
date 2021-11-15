@@ -32,13 +32,33 @@ MSVS =     [2010, 2012, 2013, 2015, 2015, 2017, 2019]
 MS_VS2VER = {2010:100, 2012:110, 2013:120, 2015:130, 2017:150, 2019:160}
 MS_VER2VS = {100:2010, 110:2012, 120:2013, 130:2015, 150:2017, 160:2019}
 
-def os_bits():
+def os_bits() -> int:
+    '''
+    Returns 32 for 32-bit OS, 64 for 64-bit OS.
+    '''
     if sys.maxsize > 4294967295:
         return 64
     else:
         return 32
 
-def subprocess_cmd(command, verbose=False, **kwargs):
+def subprocess_cmd(command: list, verbose: bool = False, **kwargs) -> str:
+    '''
+    Execute a command using :py:class:`subprocess.Popen`.
+
+    Parameters
+    ----------
+    command: list
+        List of str that represent the command and all the arguments.
+    verbose: bool
+        Turn on verbose reporting.
+    kwargs: dict
+        Keyword arguments passed to :py:meth:`subprocess.Popen.__init__`.
+
+    Returns
+    -------
+    err: str
+        Error from stderr if any.
+    '''
     if verbose:
         print('Executing shell command:', command)
     proc = subprocess.Popen(
@@ -52,7 +72,24 @@ def subprocess_cmd(command, verbose=False, **kwargs):
 
     return err.decode('utf8')
 
-def find_msvcver(supported=None, allver=False):
+def find_msvcver(supported: list = None, allver: bool = False) -> str:
+    '''
+    Find a version of installed MSC build tools.
+
+    Parameters
+    ----------
+    allver: bool
+        If True, all the found versions are returned, else only the highest
+        version is returned.
+    supported: list
+        Optional list of supported MSC build tool versions.
+
+    Returns
+    -------
+    ver: str
+        A list of found MSC build tools if allver is True, else only the
+        highest found version. Returns [] if no MSC build tools are found.
+    '''
     if supported is None:
         supported = MSVCVER
     found = []
@@ -75,6 +112,24 @@ def msvcver2vs(msvcver):
     return 'unknown'
 
 def find_msvsver(supported=None, allver=False):
+    '''
+    Find a version of installed Visual studio tools.
+
+    Parameters
+    ----------
+    allver: bool
+        If True, all the found versions are returned, else only the highest
+        version is returned.
+    supported: list
+        Optional list of supported MSC build tool versions.
+
+    Returns
+    -------
+    ver: str
+        A list of found Visual Studio installations if allver is True, else
+        only the highest found version.
+        Returns [] if no MSC build tools are found.
+    '''
     vers = find_msvcver(supported, allver)
     if isinstance(vers, int):
         return msvcver2vs(vers)
@@ -88,6 +143,9 @@ def msvc_build_dll(srclist, msvcver=None, target=None, ccopts='',
                    inclist=None, deflist=None, libdirlist=None, liblist=None,
                    verbose=False, envvars=None, cwd=None, moveto=None,
                    implib=False, automachine=True, keepscript=False):
+    '''
+    Builds a DLL using MSC build tools.
+    '''
 
     machineopts = ''
     if not automachine:
@@ -253,7 +311,10 @@ def _gcc_version(gcc='gcc'):
     out, err = p.communicate()
     return out.decode('ascii').lower()
 
-def find_mingw_64(gcc='gcc'):
+def find_mingw_64(gcc='gcc') -> str:
+    '''
+    Returns the version of installed 32-bit MINGW compiller or None.
+    '''
     p = subprocess.Popen([gcc, '-dumpmachine'], stdout=subprocess.PIPE)
     out, err = p.communicate()
     outstr = out.decode('ascii').lower()
@@ -262,13 +323,21 @@ def find_mingw_64(gcc='gcc'):
         return _gcc_version(), outstr
     return None
 
-def find_mingw():
+def find_mingw() -> str:
+    '''
+    Returns the version of installed MINGW compiller or None.
+    If the underlaying OS is 32-bit, only 32-bit compilers are considered,
+    else only 64-bit compilers are considered.
+    '''
     if os_bits() > 32:
         return find_mingw_64()
     else:
         return find_mingw_32()
 
-def find_mingw_32(gcc='gcc'):
+def find_mingw_32(gcc='gcc') -> str:
+    '''
+    Returns the version of installed 32-bit compiller or None.
+    '''
     p = subprocess.Popen([gcc, '-dumpmachine'], stdout=subprocess.PIPE)
     out, err = p.communicate()
     outstr = out.decode('ascii').lower()
@@ -282,7 +351,9 @@ def mingw_build_dll(srclist, inclist=None, liblist=None, libdirlist=None,
                     gcc='gcc', opt='-O2', std=None, implib=False,
                     moveto=None, cwd=None, verbose=False, envvars=None,
                     keepscript=False):
-
+    '''
+    Builds a DLL using MIGW tools.
+    '''
     if os_bits() > 32:
         cc = find_mingw_64()
         if cc is None:
@@ -390,7 +461,10 @@ def mingw_build_dll(srclist, inclist=None, liblist=None, libdirlist=None,
             raise RuntimeError('Could not delete the temporary files:\n' + err)
 
 
-def find_gcc_64(gcc='gcc'):
+def find_gcc_64(gcc='gcc') -> str:
+    '''
+    Returns version of the installed 64-bit GCC compiler or None.
+    '''
     p = subprocess.Popen([gcc, '-dumpmachine'], stdout=subprocess.PIPE)
     out, err = p.communicate()
     outstr = out.decode('ascii').lower()
@@ -400,6 +474,9 @@ def find_gcc_64(gcc='gcc'):
     return None
 
 def find_gcc_32(gcc='gcc'):
+    '''
+    Returns version of the installed 32-bit GCC compiler or None.
+    '''
     p = subprocess.Popen([gcc, '-dumpmachine'], stdout=subprocess.PIPE)
     out, err = p.communicate()
     outstr = out.decode('ascii').lower()
@@ -409,6 +486,9 @@ def find_gcc_32(gcc='gcc'):
     return None
 
 def find_gcc():
+    '''
+    Find a version of installed GCC that matches the number OS bits (32 or 64). 
+    '''
     if os_bits() > 32:
         return find_gcc_64()
     else:
@@ -419,7 +499,9 @@ def gcc_build_so_dll(srclist, inclist=None, liblist=None, libdirlist=None,
                   gcc='gcc', opt='-O2', soname=None, std=None, implib=False,
                   moveto=None, cwd=None, verbose=False, envvars=None,
                   keepscript=False, shell='bash'):
-
+    '''
+    Builds a DLL (SO) using GCC.
+    '''
     implib = False  # ... no import libraries on linux platform
     if os_bits() > 32:
         cc = find_gcc_64()
@@ -537,7 +619,22 @@ def gcc_build_so_dll(srclist, inclist=None, liblist=None, libdirlist=None,
             raise RuntimeError('Could not delete the temporary files:\n' + err)
 #%%
 
-def build_so_dll(*args, cc=None, **kwargs):
+def build_so_dll(*args, cc: str or list = None, **kwargs) -> bool:
+    '''
+    Build a dll or so library using the available native compiles.
+
+    Parameters
+    ----------
+    args: list
+        Positional parameters passed to the DLL / SO build function.
+    kwargs: dict
+        Keyword parameters passed to the DLL / SO build function.
+
+    Returns
+    -------
+    res: bool
+        True on success, else False.
+    '''
     if isinstance(cc, str):
         cc = [cc]
 
