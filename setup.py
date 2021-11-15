@@ -38,20 +38,20 @@ setup(
     },
     #include_package_data=True,
 
-    install_requires=['scipy >= 1.4.1',
-                      'numpy >= 1.18.4',
-                      'matplotlib >= 1.18.1',
-                      'pyopencl >= 2019.1.2',
-                      'Shapely >= 1.6.4',
-                      'Jinja2 >= 2.9.6',
-                      'numba'
-                      ],
+    install_requires=[
+        'scipy >= 1.4.1',
+        'numpy >= 1.18.4',
+        'matplotlib >= 1.18.1',
+        'pyopencl >= 2019.1.2',
+        'Shapely >= 1.6.4',
+        'Jinja2 >= 2.9.6',
+        'numba'
+    ],
 
     classifiers=[
         'Development Status :: 1 - Alpha',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
-        'Operating System :: POSIX :: Linux',
         'Operating System :: POSIX :: Linux',
         'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python :: 3.7',
