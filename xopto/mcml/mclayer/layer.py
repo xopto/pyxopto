@@ -163,15 +163,16 @@ class Layer(mcobject.McObject):
         Create a new object from dict. The dict keys must match
         the parameter names defined by the constructor.
         '''
-        t = data.pop('type')
+        data_ = dict(data)
+        t = data_.pop('type')
         if t != 'Layer':
             raise ValueError('Cannot create a Layer instance from the data!')
-        pf_data = data.pop('pf')
+        pf_data = data_.pop('pf')
         if not hasattr(mcpf, pf_data['type']):
             raise TypeError('Scattering phase function "{}" '
                             'not implemented'.format(pf_data['type']))
         pf_type = getattr(mcpf, pf_data['type'])
-        return cls(pf=pf_type.fromdict(pf_data), **data)
+        return cls(pf=pf_type.fromdict(pf_data), **data_)
 
     def __str__(self):
         return 'Layer(d={}, n={}, mua={}, mus={}, pf={})'.format(
@@ -433,12 +434,13 @@ class Layers(mcobject.McObject):
         Create a new Layers object from a dict. The dict keys must match
         the parameter names defined by the constructor.
         '''
-        T = data.pop('type')
+        data_ = dict(data)
+        T = data_.pop('type')
         if T != 'Layers':
             raise ValueError(
             'Cannot create a Layers instance from the given data!')
-        layers = [Layer.fromdict(item) for item in data.pop('layers')]
-        return cls(layers=layers, **data)
+        layers = [Layer.fromdict(item) for item in data_.pop('layers')]
+        return cls(layers=layers, **data_)
 
     def __getitem__(self, what):
         return self._layers[what]
