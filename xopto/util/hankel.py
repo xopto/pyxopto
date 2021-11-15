@@ -20,13 +20,12 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
-
 import numpy as np
 
-# Import the Symmetric Fourier Transform class
 from scipy.interpolate import interp1d
 from scipy.integrate import quad, simps
 from scipy.special import j0
+
 
 def _is_uneven(array: np.ndarray) -> bool:
     '''
@@ -42,25 +41,26 @@ def continuous(frequency: np.ndarray, rfun: np.ndarray, rstop: float,
 
     .. math::
 
-        g(q) &= 2 \\pi \\int_0^{inf}f(r)J_0(2 \\pi q r) r dr
+        g(q) &= 2 \\pi \\int_0^{\\infty}f(r)J_0(2 \\pi q r) r dr
 
     Parameters
     ----------
-    frequency: list, tuple, ndarray vector
+    frequency: np.ndarray
         A list of frequencies (1/m) at which to compute the Hankel transform.
     rfun: callable
         Callable with one parameter (radius) representing a radially symmetric
         function.
     rstop: float
         Range of numerical integration as [0, rstop].
-    out: ndarray
+    out: np.ndarray
         Optional output array for the computed frequencies.
     kwargs: dict
-        Optional keyword arguments passed to the scipy.integrate.quad function.
+        Optional keyword arguments passed to the
+        :py:func:`scipy.integrate.quad` function.
 
     Returns
     -------
-    F: list, tuple, ndarray vector
+    F: np.ndarray vector
         The Hankel transfor of rfun at the given frequencies.
     '''
     np_freq = np.asarray(frequency)
@@ -84,23 +84,24 @@ def discrete(frequency: np.ndarray, rpts: np.ndarray, fpts: np.ndarray,
 
     .. math::
 
-        g(q) &= 2 \\pi \\int_0^{inf}f(r)J_0(2 \\pi q r) r dr
+        g(q) &= 2 \\pi \\int_0^{\\infty}f(r)J_0(2 \\pi q r) r dr
 
     Parameters
     ----------
-    frequency: list, tuple, np.ndarray
+    frequency: np.ndarray
         A list of frequencies (1/m) at which to compute the Hankel transform.
     rpts: np.ndarray
         Points at which the discrete radially symmetric function is defined.
     fpts: np.ndarray
         Value of the radially symmetric function at points rpts.
     kwargs: dict
-        Optional keyword arguments passed to the scipy.integrate.quad function.
+        Optional keyword arguments passed to the
+        :py:func:`scipy.integrate.quad` function.
 
     Returns
     -------
-    F: ndarray vector
-        The Hankle transfor of rfun at the given frequencies.
+    F: np.ndarray
+        The Hankel transfor of rfun at the given frequencies.
     '''
     if logscale:
         fpts[fpts <= 0.0] = np.finfo(np.float).eps
@@ -124,7 +125,7 @@ def discrete_simpson(frequency: np.ndarray, rpts: np.ndarray, fpts: np.ndarray,
 
     .. math::
 
-        g(q) &= 2 \\pi \\int_0^{inf}f(r)J_0(2 \\pi q r) r dr
+        g(q) &= 2 \\pi \\int_0^{\\infty}f(r)J_0(2 \\pi q r) r dr
 
     Parameters
     ----------
@@ -144,7 +145,7 @@ def discrete_simpson(frequency: np.ndarray, rpts: np.ndarray, fpts: np.ndarray,
 
     Returns
     -------
-    F: ndarray vector
+    F: np.ndarray
         The Hankel transfor of rfun at the given frequencies. If the fpts array
         ia a vector (points of one function only) then F is a vector of size
         len(frequencies). If fpts is a 2D array of shape (N, rpts.size) then
