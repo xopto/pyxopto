@@ -29,7 +29,7 @@
 # Med. Biol. Eng. Comput., 39(1), 44-50 (2001).)
 
 from xopto.mcml import mc
-from xopto.mcml.mcutil import fiber, axis
+from xopto.mcml.mcutil import fiber
 from xopto.cl import clinfo
 
 import numpy as np
@@ -90,9 +90,9 @@ nx = 200
 ny = 200
 nz = 200
 sv = mc.mcsv.SamplingVolume(
-    xaxis=axis.Axis(-0.75e-3, 0.75e-3, nx), 
-    yaxis=axis.Axis(-0.75e-3, 0.75e-3, ny),
-    zaxis=axis.Axis(0e-3, 1e-3, nz)
+    xaxis=mc.mcsv.Axis(-0.75e-3, 0.75e-3, nx), 
+    yaxis=mc.mcsv.Axis(-0.75e-3, 0.75e-3, ny),
+    zaxis=mc.mcsv.Axis(0e-3, 1e-3, nz)
 )
 
 # DEFINE MC OBJECT FOR MONTE CARLO SIMULATIONS
@@ -104,10 +104,10 @@ mc_obj = mc.Mc(
 mc_obj.rmax = 1e-1
 
 # RUN MONTE CARLO SIMULATIONS AND COMPUTE THE SAMPLING VOLUME
-output = mc_obj.run(nphotons, verbose=True, wgsize=256)
-while output[0].data.shape[0] < recorded_traces:
-    output = mc_obj.run(nphotons, verbose=True, wgsize=256, out=output)
-    print('Photon packet traces deteced:', output[0].data.shape[0])
+output = None
+while output is None or len(output[0]) < recorded_traces:
+    output = mc_obj.run(nphotons, verbose=True, out=output)
+    print('Photon packet traces collected:', len(output[0]))
 trace = output[0]
 sv = mc_obj.sampling_volume(trace, sv)
 

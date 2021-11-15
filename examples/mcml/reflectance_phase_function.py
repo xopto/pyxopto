@@ -25,11 +25,11 @@
 # fiber position tightly next to the source fiber. The example
 # gives a comparison how the selection of the scattering phase function
 # (in this case Mie and Henyey-Greenstein) can affect the simulated 
-# reflectance even though the scattering coefficient and anistropy factor 
+# reflectance even though the scattering coefficient and anisotropy factor 
 # are the same
 
 from xopto.mcml import mc
-from xopto.mcml.mcutil import fiber, axis
+from xopto.mcml.mcutil import fiber
 from xopto.util import convolve
 from xopto.pf import miepolystyrene
 from xopto.materials.ri import polystyrene, water
@@ -119,7 +119,7 @@ source = mc.mcsource.UniformFiber(
 
 # DEFINE DETECTOR (IN THIS EXAMPLE TOP IS USED)
 detector_top_radial = mc.mcdetector.Radial(
-    raxis=axis.RadialAxis(
+    raxis=mc.mcdetector.RadialAxis(
         start=0.0, stop=1e-3, n=250
     ),
     cosmin=np.cos(np.arcsin(0.22/1.45))
@@ -165,8 +165,8 @@ for i, w in enumerate(wavelengths):
     mie_pf = mc.mcpf.Lut(*mie.mclut())
     mc_obj_mie.layers[1].pf = mie_pf
 
-    detector_hg = mc_obj_hg.run(nphotons, verbose=True, wgsize=256)[-1]
-    detector_mie = mc_obj_mie.run(nphotons, verbose=True, wgsize=256)[-1]
+    detector_hg = mc_obj_hg.run(nphotons, verbose=True)[-1]
+    detector_mie = mc_obj_mie.run(nphotons, verbose=True)[-1]
 
     reflectance_hg[i] = convolve.fiber_reflectance( 
         detector_hg.top.r,

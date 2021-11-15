@@ -25,7 +25,6 @@
 # skin model with an embedded blood vessel.
 
 from xopto.mcvox import mc
-from xopto.mcvox.mcutil import axis
 from xopto.cl import clinfo
 
 import numpy as np
@@ -43,19 +42,19 @@ nz = 200
 binsize = 5e-6
 
 # define each axis
-xaxis = axis.Axis(
+xaxis = mc.mcgeometry.Axis(
     start=-nx/2 * binsize, 
     stop=nx/2 * binsize, 
     n=nx
 )
 
-yaxis = axis.Axis(
+yaxis = mc.mcgeometry.Axis(
     start=-ny/2 * binsize, 
     stop=ny/2 * binsize, 
     n=ny
 )
 
-zaxis = axis.Axis(
+zaxis = mc.mcgeometry.Axis(
     start=0.0, 
     stop=nz * binsize,
     n=nz
@@ -156,7 +155,7 @@ pp.title('Deposited energy')
 extent = [1e3*(xaxis.centers[0] - binsize/2), 1e3*(xaxis.centers[-1] - binsize/2),
     1e3*(zaxis.centers[-1] + binsize/2), 1e3*(zaxis.centers[0] - binsize/2)
 ]
-pp.imshow(np.log10(deposit.data[:,100,:]/nphotons), 
+pp.imshow(np.log10(deposit.data[:,100,:]), 
     extent=extent,
     origin='upper'
 )

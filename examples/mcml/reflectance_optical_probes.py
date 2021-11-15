@@ -24,7 +24,7 @@
 # and optical fiber probes. 
 
 from xopto.mcml import mc
-from xopto.mcml.mcutil import fiber, axis
+from xopto.mcml.mcutil import fiber
 from xopto.util import convolve
 from xopto.cl import clinfo
 
@@ -63,7 +63,7 @@ detector_top_fiber = mc.mcdetector.FiberArray(
 )
 
 detector_top_radial = mc.mcdetector.Radial(
-    raxis=axis.RadialAxis(
+    raxis=mc.mcdetector.RadialAxis(
         start=0.0, stop=1e-3, n=250
     ),
     cosmin=np.cos(np.arcsin(0.22/1.45))
@@ -131,10 +131,11 @@ mc_obj_probe_realistic.rmax = 1e-2
 
 # RUN MONTE CARLO SIMULATIONS AND COMPUTE THE SAMPLING VOLUME
 nphotons = 1e8
-detector_fiber = mc_obj_fiber.run(nphotons, verbose=True, wgsize=256)[-1]
-detector_radial = mc_obj_radial.run(nphotons, verbose=True, wgsize=256)[-1]
-detector_probe = mc_obj_probe.run(nphotons, verbose=True, wgsize=256)[-1]
-detector_probe_realistic = mc_obj_probe_realistic.run(nphotons, verbose=True, wgsize=256)[-1]
+detector_fiber = mc_obj_fiber.run(nphotons, verbose=True)[-1]
+detector_radial = mc_obj_radial.run(nphotons, verbose=True)[-1]
+detector_probe = mc_obj_probe.run(nphotons, verbose=True)[-1]
+detector_probe_realistic = mc_obj_probe_realistic.run(
+    nphotons, verbose=True)[-1]
 
 # each returned detector object 
 reflectance_fiber = detector_fiber.top.reflectance[0]  
@@ -154,7 +155,7 @@ print('{:.4e} - Reflectance for uniform mutlimode fiber detector obtained'
     ' via annular ring integration'. format(reflectance_fiber2))
 print('{:.4e} - Reflectance for optical probe.'
     .format(reflectance_probe))
-print('{:.4e} - Reflectance for optical probe with realrealisticsitic boundary.'
+print('{:.4e} - Reflectance for optical probe with realistic boundary.'
     .format(reflectance_probe_realistic))
 
 # 2.9472e-04 - Reflectance detected with uniform multimode fiber detector.

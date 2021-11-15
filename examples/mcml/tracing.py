@@ -120,8 +120,8 @@ output = mc_obj_no_filter.run(nphotons, verbose=True)
 trace_no_filter = output[0]
 
 # with filter
-output = mc_obj_filter.run(nphotons, verbose=True)
-while len(output[0]) < recorded_traces:
+output = None
+while output is None or len(output[0]) < recorded_traces:
     output = mc_obj_filter.run(nphotons, verbose=True, out=output)
     print('Photon packet traces detected:', len(output[0]))
 trace_filter = output[0]

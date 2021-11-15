@@ -46,7 +46,7 @@ d1 = 100e-6  # layer thickness in m
 n1 = 1.4  # refractive index
 m = 0.02  # melanin volume fraction
 g1 = 0.8  # anisotropy factor constant with wavelength
-pf1 = mc.mcpf.Hg(g1)  # Henyey-Greenstein scatterin phase function
+pf1 = mc.mcpf.Hg(g1)  # Henyey-Greenstein scattering phase function
 
 # epidermis absortpion coefficient
 mua1 = lambda wavelength: m * 6.6*1e13*(1e9*wavelength)**-3.33 + \
@@ -62,7 +62,7 @@ n2 = 1.4  # refractive index
 bl = 0.02  # blood volume fraction
 oxy = 0.90  # oxygenation
 g2 = 0.8  # anisotropy factor
-pf2 = mc.mcpf.Hg(g2)  # Henyey-Greenstein scatterin phase function
+pf2 = mc.mcpf.Hg(g2)  # Henyey-Greenstein scattering phase function
 
 # dermis absorption coefficient
 mua_oxy = oxyhem.OxyHem()
@@ -121,7 +121,7 @@ for i, w in enumerate(wavelengths):
     mc_obj.layers[2].mua = mua2(w)
     mc_obj.layers[2].mus = mus2(w)
 
-    detector = mc_obj.run(nphotons, verbose=True, wgsize=256)[-1]
+    detector = mc_obj.run(nphotons, verbose=True)[-1]
     reflectance_spectrum[i] = detector.top.reflectance[0] * np.pi * sp_r**2
 
 # PLOT THE REFLECTANCE SPECTRUM
