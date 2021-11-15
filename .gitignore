@@ -16,6 +16,15 @@ xopto/data/primes/__pycache__
 xopto/data/mcml/__pycache__
 xopto/data/mcvox/__pycache__
 
+xopto/dataset/__pycache__
+xopto/dataset/run
+xopto/dataset/data
+xopto/dataset/template/__pycache__
+xopto/dataset/template/mcml/__pycache__
+xopto/dataset/template/mcvox/__pycache__
+xopto/dataset/template/sv/__pycache__
+xopto/dataset/render/__pycache__
+
 xopto/diffusion/__pycache__
 
 xopto/materials/__pycache__
@@ -98,6 +107,7 @@ xopto/util/animation/sv/fiber/__pycache__
 build
 dist
 datasets
+mcdataset
 xopto.egg-info
 pyxopto.egg-info
 PyXOpto.egg-info
