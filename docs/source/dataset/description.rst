@@ -328,7 +328,7 @@ in the following two tables.
       - 0.1, 0.3, 0.5, 0.7, 0.9
     * - :py:class:`~xopto.mcbase.mcpf.mhg.MHg` :math:`(g, \beta)`
       - :math:`g`
-      - 0.1, 0.2, 0.3, 0.5, 0.7, 0.9
+      - 0.1, 0.3, 0.5, 0.7, 0.9
     * - 
       - :math:`\beta`
       - 0.0, 0.2, 0.4, 0.6, 0.8, 1.0
@@ -724,7 +724,7 @@ in 0.01 |nbsp| mm :sup:`-1` steps:
 
 
 Note that the SFD datasets are run with 1000 million photon packets and that
-the simulation termination radius is seto 150 |nbsp| mm.
+the simulation termination radius is set to 150 |nbsp| mm.
 
 **Dataset files**
 
@@ -842,13 +842,13 @@ The values of placeholders <> are as follows:
 
 * :sh:`pf_param_2`: is the second parameter of the scattering phase function
   formatted with two decimal digits and using :sh:`_` as the decimal
-  separator. Exception to this rule is the wavelength parameter of the
+  separator. An exception to this rule is the wavelength parameter of the
   :py:class:`~xopto.pf.mie.Mie` scattering phase function that is converted to
-  nm and formatted as integer.
+  nm and formatted as an integer.
   This placeholder is not used with the :py:class:`~xopto.mcbase.mcpf.hg.Hg`
   scattering phase function.
 
-    * :sh:`b-<b>` for :py:class:`~xopto.mcbase.mcpf.mhg.MHg`, e.g. :sh:`a-0_60` for :math:`b=0.6`.
+    * :sh:`b-<b>` for :py:class:`~xopto.mcbase.mcpf.mhg.MHg`, e.g. :sh:`b-0_60` for :math:`b=0.6`.
 
     * :sh:`a-<a>` for :py:class:`~xopto.mcbase.mcpf.gk.Gk`, e.g. :sh:`a-0_50` for :math:`a=0.5`.
 
@@ -867,7 +867,7 @@ Simulator core for voxelized media
 
 Module :py:mod:`xopto.dataset.render.mcvox` => :sh:`run/mcvox/`
   
-Renders a datset scripts for computing fluence / deposition
+Renders a dataset scripts for computing fluence / deposition
 datasets with the MC kernel for voxelized media. A two-layer skin model
 with an embedded blood vessel is used. The depth/position of the blood vessel
 along the :math:`z` axis is varied from 0.2 to 0.8 |nbsp| mm in steps of
@@ -961,7 +961,7 @@ The simulations are run with 1000 million photon packets.
       - in dermis
     * -
       - :math:`position`
-      - (0, 0, 0.000250)
+      - (0, 0, 0.0002-0.0008)
       - (x, y, z)
     * -
       - :math:`direction`
@@ -983,11 +983,11 @@ into compressed numpy data files that will be organized as follows:
 
 The values of placeholders <> are as follows:
 
-* :sh:`<diameter>` is the diameter of the blood vessel in units of μm, formated
+* :sh:`<diameter>` is the diameter of the blood vessel in units of μm, formatted
   as an integer value, e.g :sh:`200` for a 200 |nbsp| μm blood vessel.
 
-* :sh:`<depth>` is the :math:`z` coordinate (depth) of the blood veesel in units
-  of μm, formated as an integer value, e.g :sh:`500` for :math:`z=500`
+* :sh:`<depth>` is the :math:`z` coordinate (depth) of the blood vessel in units
+  of μm, formatted as an integer value, e.g :sh:`500` for :math:`z=500`
   |nbsp| μm.
 
 Sampling volume simulation
@@ -1001,7 +1001,7 @@ a semi-infinite homogeneous medium for an optical fiber probe with two
 optical fibers placed at a distance of 0.5 |nbsp| mm. The refractive index
 of the surrounding medium is set to 1.0. Simulations are run in batches
 until 1,000,000 photon packet traces that reach the detector fiber are
-traced and converted to sampling volume information. The trace capacity is
+collected and converted to sampling volume information. The trace capacity is
 limited to 1000 events. The simulation termination radius is set to
 25 |nbsp| mm. 
 
@@ -1090,10 +1090,10 @@ into compressed numpy data files that will be organized as follows:
 The values of placeholders <> are as follows:
 
 * :sh:`<sds>` is the distance between the centers of the source and detector
-  fibers in units of μm, formated as an integer value, e.g :sh:`500` for a 
+  fibers in units of μm, formatted as an integer value, e.g :sh:`500` for a 
   500 |nbsp| μm distance.
 
-* :sh:`<g>` is the anisotropy formated with two decimal digits and :sh:`_`
+* :sh:`<g>` is the anisotropy formatted with two decimal digits and :sh:`_`
   as the decimal separator, e.g :sh:`0_15` for :math:`g=0.15`.
 
 * :sh:`<mua>` is the absorption coefficient in units of cm :sup:`-1` with
@@ -1102,7 +1102,7 @@ The values of placeholders <> are as follows:
 
 * :sh:`<musr>` is the reduced scattering coefficient in units of cm :sup:`-1`
   with two decimal digits and :sh:`_` as a decimal separator, e.g :sh:`20_00`
-  for :math:`\mu_a=20.0` |nbsp| cm :sup:`-1`.
+  for :math:`\mu_s'=20.0` |nbsp| cm :sup:`-1`.
 
 All available datasets
 ----------------------
