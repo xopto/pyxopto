@@ -45,7 +45,7 @@ RI_FUSED_SILICA = round(common.RI_FUSED_SILICA(DEFAULT_WAVELENGTH), RI_DIGITS)
 RI_AIR = round(common.RI_AIR(DEFAULT_WAVELENGTH), RI_DIGITS)
 
 CONFIG = {
-    'double_precision': True,
+    'double_precision': False,
     'rmax': 1000.0e-3,
     'num_packets': 100e6,
     'fluence_k': 0x7FFFFF,
