@@ -22,11 +22,11 @@
 
 import os.path
 import argparse
-
-import numpy as np
-import matplotlib.pyplot as pp
 from matplotlib.animation import FuncAnimation
 
+import numpy as np
+
+from xopto.util.animation.common import create_2d_animation
 from xopto.mcml import mc
 from xopto.cl import clinfo
 
@@ -35,7 +35,8 @@ def create_sv_animation_xz(data_source: str or dict, filename: str = None,
                            overwrite=False, logscale=False,
                            fps: float = None, duration: float = None,
                            axis_off: bool = False, title: str = None,
-                           autoscale: bool = True, verbose: bool = False):
+                           autoscale: bool = True, verbose: bool = False) \
+                            -> FuncAnimation:
     '''
     Creates a continuous animation of the sampling volume projected
     onto the x-z plane.
@@ -82,67 +83,28 @@ def create_sv_animation_xz(data_source: str or dict, filename: str = None,
             print('Animation will not be saved!')
         filename = None
 
-    if title is None:
-        title = 'Sampling volume'
-
     sv_dict = data['sv']
     if not isinstance(sv_dict, dict):
         sv_dict = sv_dict.item()
 
     sv = mc.mcsv.SamplingVolume.fromdict(sv_dict)
-    x_range = sv.xaxis.edges[0], sv.xaxis.edges[-1]
-    # y_range = sv.yaxis.edges[0], sv.yaxis.edges[-1]
-    z_range = sv.zaxis.edges[-1], sv.zaxis.edges[0] 
+    x_range = sv.xaxis.edges[0]*1e3, sv.xaxis.edges[-1]*1e3
+    z_range = sv.zaxis.edges[-1]*1e3, sv.zaxis.edges[0]*1e3 
 
-    extent = [x_range[0]*1e3, x_range[1]*1e3, z_range[0]*1e3, z_range[1]*1e3]
+    extent = [x_range[0], x_range[1], z_range[0], z_range[1]]
 
-    frames = np.array(data['sv_data'])
-    if frames.ndim > 3:
-        frames = frames.sum(2)
+    data = np.array(data['sv_data'])
+    if data.ndim > 3:
+        data = data.mean(2)
 
-    if logscale:
-        l = frames[frames > 0.0].min()
-        frames[frames <= 0.0] = l
-        frames = np.log10(frames)
+    frames = np.vstack([data, data[-2::-1]])
 
-    num_frames = frames.shape[0]
-    imshow_kwargs, vmin, vmax = {}, frames.min(), frames.max()
-    fig, ax = pp.subplots()
-    if not autoscale:
-        imshow_kwargs = {'vmin': vmin, 'vmax': vmax}
-    img = ax.imshow(frames[0], extent=extent, **imshow_kwargs)
+    return create_2d_animation(
+        frames, filename, overwrite=overwrite, logscale=logscale,
+        extent=extent, xrange=x_range, yrange=z_range, title=title,
+        xlabel='$x$ (mm)', ylabel='$y$ (mm)', axis_off=axis_off,
+        autoscale=autoscale, fps=fps, duration=duration)
 
-    if fps is None and duration is not None:
-        fps = num_frames/duration
-
-    if fps is None:
-        fps = 0.5*num_frames
-
-    def ani_init():
-        ax.set_xlim(x_range[0]*1e3, x_range[1]*1e3)
-        ax.set_ylim(z_range[0]*1e3, z_range[1]*1e3)
-        if not axis_off:
-            ax.set_xlabel('x (mm)')
-            ax.set_ylabel('z (mm)')
-            if title:
-                ax.set_title(title)
-        else:
-            ax.set_axis_off()
-        return img,
-
-    def ani_update(frame):
-        img.set_array(frame)
-        if autoscale:
-            vmin, vmax = frame.min(), frame.max()
-            img.set_clim(vmin, vmax)
-        return img,
-
-    mirrored_frames = np.vstack([frames, frames[-2::-1]])
-    ani = FuncAnimation(fig, ani_update, mirrored_frames,
-                        init_func=ani_init, blit=True)
-    if filename is not None:
-        ani.save(filename, writer='imagemagick', fps=fps)
-    pp.show()
 
 def create_path_animation_xz(data_source: str or dict, filename: str = None,
                              overwrite=False, fps: float = None,
@@ -195,15 +157,11 @@ def create_path_animation_xz(data_source: str or dict, filename: str = None,
             print('Animation will not be saved!')
         filename = None
 
-    if title is None:
-        title = 'Trajectories'
-
     sv_dict = data['sv']
     if not isinstance(sv_dict, dict):
         sv_dict = sv_dict.item()
     sv = mc.mcsv.SamplingVolume.fromdict(sv_dict)
     x_range = sv.xaxis.edges[0], sv.xaxis.edges[-1]
-    # y_range = sv.yaxis.edges[0], sv.yaxis.edges[-1]
     z_range = sv.zaxis.edges[-1], sv.zaxis.edges[0] 
 
     # extent = [x_range[0]*1e3, x_range[1]*1e3, z_range[0]*1e3, z_range[1]*1e3]
@@ -420,7 +378,7 @@ def mc_sv_fiber_cli(description: str = None,
             'sample_g': sample_g, 'sample_n': sample_n,
             'fiber_sds': fiber_sds}, args
 
-def main(sim_task: callable, ani_task: callable, config:dict):
+def main(sim_task: callable, ani_task: callable, config: dict):
     '''
     Code for the __main__ section of the sampling volume simulation modules.
 
