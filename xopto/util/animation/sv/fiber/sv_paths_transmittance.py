@@ -29,6 +29,7 @@ import numpy as np
 from xopto.mcml import mc
 from xopto.mcml.mcutil.fiber import MultimodeFiber
 from xopto.cl import clinfo
+from xopto.util.animation.common import create_path_animation
 
 
 DEFAULT_CONFIG = {

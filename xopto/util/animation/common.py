@@ -30,23 +30,22 @@ import matplotlib as mpl
 from matplotlib.animation import FuncAnimation
 
 
-def create_2d_animation(frames: np.ndarray, filename: str = None,
-                        overwrite=False, logscale=False,
-                        fps: float = None, duration: float = None,
-                        xlabel=None, ylabel=None, title: str = None,
-                        axis_off: bool = False, tight_layout: bool = False,
-                        cbar: bool = False, cbar_label : str = None,
-                        cbar_tick_format: str = None, cmap: str = None,
-                        extent: Tuple[float, float, float, float] = None,
-                        xrange: Tuple[float, float] = None,
-                        yrange: Tuple[float, float] = None,
-                        autoscale: bool = True,
-                        imshow_kwargs: dict = None,
-                        writer: str or mpl.animation.MovieWriter = None,
-                        verbose: bool = False) -> FuncAnimation:
+def create_frame_animation(frames: np.ndarray, filename: str = None,
+                           overwrite=False, logscale=False,
+                           fps: float = None, duration: float = None,
+                           xlabel=None, ylabel=None, title: str = None,
+                           axis_off: bool = False, tight_layout: bool = False,
+                           cbar: bool = False, cbar_label : str = None,
+                           cbar_tick_format: str = None, cmap: str = None,
+                           extent: Tuple[float, float, float, float] = None,
+                           xrange: Tuple[float, float] = None,
+                           yrange: Tuple[float, float] = None,
+                           autoscale: bool = True,
+                           imshow_kwargs: dict = None,
+                           writer: str or mpl.animation.MovieWriter = None,
+                           verbose: bool = False) -> FuncAnimation:
     '''
-    Creates a continuous animation of the sampling volume projected
-    onto the x-z plane.
+    Creates a continuous animation of frames.
 
     Parameters
     ----------
@@ -57,7 +56,7 @@ def create_2d_animation(frames: np.ndarray, filename: str = None,
     overwrite: bool
         If False, existing animation files will not be overwritten.
     logscale: bool
-        If True, logarithmically scale the sampling volume data.
+        If True, logarithmically scale the frame data.
     fps: float
         Frame rate of the animation (1/s). Another way to control the frame
         rate is specify the duration parameter.
@@ -201,6 +200,160 @@ def create_2d_animation(frames: np.ndarray, filename: str = None,
 
     return ani
 
+
+def create_path_animation(x: np.ndarray, y: np.ndarray, filename: str = None,
+                          overwrite=False, logscale=False,
+                          fps: float = None, duration: float = None,
+                          xlabel=None, ylabel=None, title: str = None,
+                          axis_off: bool = False, tight_layout: bool = False,
+                          xrange: Tuple[float, float] = None,
+                          yrange: Tuple[float, float] = None,
+                          plot_kwargs: dict = None,
+                          writer: str or mpl.animation.MovieWriter = None,
+                          verbose: bool = False) -> FuncAnimation:
+    '''
+    Creates a continuous animation of the paths specified in the x and y
+    arrays.
+
+    Parameters
+    ----------
+    x: np.ndarray
+        X coordinates of the path as a vector or a 2D array of shape
+        (num_paths, path_length) or (1, path_length) or (path_length,).
+    y: np.ndarray
+        Y coordinates of the path as a vector or a 2D array of shape
+        (num_paths, path_length) or (path_length,).
+    filename: str
+        Output file for the animation.
+    overwrite: bool
+        If False, existing animation files will not be overwritten.
+    logscale: bool
+        If True, logarithmically scale the data.
+    fps: float
+        Frame rate of the animation (1/s). Another way to control the frame
+        rate is specify the duration parameter.
+    duration: float
+        Duration of one full animation (s). The same effect can be achieved
+        with the fps parameter.
+    title: str
+        Plot title.
+    xlabel: str
+        Plot x axis label.
+    ylabel: str
+        Plot y axis label.
+    axis_off: bool 
+        Turns off the axis and related labels.
+    tight_layout: bool
+        Apply tight layout to the plot.
+    xrange: Tuple[float, float]
+        Range of the x axis as (xmin, xmax).
+    yrange: Tuple[float, float]
+        Range of the y axis as (ymin, ymax).
+    writer: str or mpl.animation.MovieWriter
+        Movie writer.
+    plot_kwargs: dict
+        Additional keyword arguments for pyplot.plot.
+    verbose: bool
+        Turns on verbose progress report.
+
+    Returns
+    -------
+    animation: FuncAnimation
+        Animation object.
+    '''
+
+    if filename is not None and os.path.isfile(filename) and not overwrite:
+        if verbose:
+            print('Animation file "{}" already exists!'.format(filename))
+            print('Animation will not be saved!')
+        filename = None
+
+    if plot_kwargs is None:
+        plot_kwargs = {}
+
+    x = np.asarray(x)
+    y = np.asarray(y)
+
+    if logscale:
+        l = x[x > 0.0].min()
+        x[x <= 0.0] = l
+        x = np.log10(x)
+
+        l = y[y > 0.0].min()
+        y[y <= 0.0] = l
+        y = np.log10(y)
+
+    if y.ndim == 1:
+        y.shape = (1, y.size)
+    if x.ndim == 1:
+        x.shape = (1, x.size)
+
+    if x.shape[1] != y.shape[1]:
+        raise ValueError('The number of points in the x and y '
+                         'arrays must be equal!')
+
+    if x.shape[0] > 1 and x.shape[0] != y.shape[0]:
+        raise ValueError('The number of paths in the x and y arrays '
+                         'must be equal!')
+
+    fig, ax = pp.subplots()
+    plots = []
+
+    num_paths = y.shape[0]
+    num_steps = y.shape[1]
+
+    if fps is None and duration is not None:
+        fps = num_frames/duration
+
+    if fps is None:
+        fps = 25
+
+    def ani_init():
+        if xrange:
+            ax.set_xlim(xrange[0], xrange[1])
+        if yrange:
+            ax.set_ylim(yrange[0], yrange[1])
+
+        if not axis_off:
+            if xlabel is not None:
+                ax.set_xlabel(xlabel)
+            if ylabel is not None:
+                ax.set_ylabel(ylabel)
+            if title is not None:
+                ax.set_title(title)
+        else:
+            ax.set_axis_off()
+
+        if tight_layout:
+            pp.tight_layout()
+
+        plots.clear()
+        for _ in range(num_paths):
+            plots.append(ax.plot([], [], **plot_kwargs)[0])
+
+        return plots
+
+    def ani_update(step):
+        for path_index in range(num_paths):
+            if x.shape[0] > 1:
+                x_data = x[path_index, :step + 1]
+            else:
+                x_data = x[0, :step + 1]
+            y_data = y[path_index, :step + 1]
+            
+            plots[path_index].set_data(x_data, y_data)
+
+        return plots
+
+    ani = FuncAnimation(fig, ani_update, range(num_steps - 1),
+                        init_func=ani_init, blit=False)
+    if filename is not None:
+        ani.save(filename, writer=writer, fps=fps)
+    pp.show()
+
+    return ani
+
+
 if __name__ == '__main__':
     num_frames = 25
     H = W = 100
@@ -217,8 +370,10 @@ if __name__ == '__main__':
         c_x += W/num_frames
         c_y += H/num_frames
 
-    create_2d_animation(frames, xlabel='$x$ (mm)', ylabel='$y$ (mm)',
-                        xrange=(x[0], x[-1]), yrange=(y[0], y[-1]),
-                        extent=(x[0], x[-1], y[0], y[-1]), logscale=True,
-                        cbar=True, cbar_label='Intensity (a.u.)',
-                        tight_layout=True)
+    create_frame_animation(
+        frames, xlabel='$x$ (mm)', ylabel='$y$ (mm)',
+        xrange=(x[0], x[-1]), yrange=(y[0], y[-1]),
+        extent=(x[0], x[-1], y[0], y[-1]), logscale=True,
+        cbar=True, cbar_label='Intensity (a.u.)',
+        tight_layout=True, writer='imagemagick'
+    )

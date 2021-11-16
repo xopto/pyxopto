@@ -22,21 +22,24 @@
 
 import os.path
 import argparse
+import matplotlib as mpl
 from matplotlib.animation import FuncAnimation
 
 import numpy as np
 
-from xopto.util.animation.common import create_2d_animation
+from xopto.util.animation.common import create_frame_animation, \
+                                        create_path_animation
 from xopto.mcml import mc
 from xopto.cl import clinfo
 
 
-def create_sv_animation_xz(data_source: str or dict, filename: str = None,
-                           overwrite=False, logscale=False,
-                           fps: float = None, duration: float = None,
-                           axis_off: bool = False, title: str = None,
-                           autoscale: bool = True, verbose: bool = False) \
-                            -> FuncAnimation:
+def create_sv_animation_xz(
+        data_source: str or dict, filename: str = None,
+        overwrite=False, logscale=False,
+        fps: float = None, duration: float = None,
+        axis_off: bool = False, title: str = None,
+        autoscale: bool = True, writer: str or mpl.animation.MovieWriter = None,
+        verbose: bool = False) -> FuncAnimation:
     '''
     Creates a continuous animation of the sampling volume projected
     onto the x-z plane.
@@ -64,8 +67,15 @@ def create_sv_animation_xz(data_source: str or dict, filename: str = None,
         Plot title.
     autoscale: bool
         Independently autoscale the intensity of each frame.
+    writer: str or mpl.animation.MovieWriter
+        Movie writer.
     verbose: bool
         Turns on verbose progress report.
+
+    Returns
+    -------
+    animation: FuncAnimation
+        Animation instance
     '''
     if isinstance(data_source, str):
         data = np.load(data_source, allow_pickle=True)
@@ -99,18 +109,21 @@ def create_sv_animation_xz(data_source: str or dict, filename: str = None,
 
     frames = np.vstack([data, data[-2::-1]])
 
-    return create_2d_animation(
+    return create_frame_animation(
         frames, filename, overwrite=overwrite, logscale=logscale,
         extent=extent, xrange=x_range, yrange=z_range, title=title,
         xlabel='$x$ (mm)', ylabel='$y$ (mm)', axis_off=axis_off,
-        autoscale=autoscale, fps=fps, duration=duration)
+        autoscale=autoscale, fps=fps, duration=duration,
+        writer=writer, verbose=verbose)
 
 
-def create_path_animation_xz(data_source: str or dict, filename: str = None,
-                             overwrite=False, fps: float = None,
-                             duration: float = None, logscale: bool = False,
-                             axis_off: bool = False, title: str = None,
-                             autoscale: bool = True, verbose: bool = False):
+def create_path_animation_xz(
+        data_source: str or dict, filename: str = None,
+        overwrite=False, fps: float = None,
+        duration: float = None, logscale: bool = False,
+        axis_off: bool = False, title: str = None,
+        autoscale: bool = True, writer: str or mpl.animation.MovieWriter = None,
+        verbose: bool = False) -> FuncAnimation:
     '''
     Creates a continuous animation of the packet paths that are projected
     onto the x-z plane.
@@ -138,8 +151,15 @@ def create_path_animation_xz(data_source: str or dict, filename: str = None,
         Not used by this animation.
     autoscale: bool
         Not used by this animation.
+    writer: str or mpl.animation.MovieWriter
+        Movie writer.
     verbose: bool
         Turns on verbose progress report.
+
+    Returns
+    -------
+    animation: AnimationFunc
+        Animation instance.
     '''
     if isinstance(data_source, str):
         data = np.load(data_source, allow_pickle=True)
@@ -161,17 +181,12 @@ def create_path_animation_xz(data_source: str or dict, filename: str = None,
     if not isinstance(sv_dict, dict):
         sv_dict = sv_dict.item()
     sv = mc.mcsv.SamplingVolume.fromdict(sv_dict)
-    x_range = sv.xaxis.edges[0], sv.xaxis.edges[-1]
-    z_range = sv.zaxis.edges[-1], sv.zaxis.edges[0] 
-
-    # extent = [x_range[0]*1e3, x_range[1]*1e3, z_range[0]*1e3, z_range[1]*1e3]
+    x_range = sv.xaxis.edges[0]*1e3, sv.xaxis.edges[-1]*1e3
+    z_range = sv.zaxis.edges[-1]*1e3, sv.zaxis.edges[0]*1e3 
 
     trace_data = data['trace_data']
     trace_n= data['trace_n']
     num_packets, trace_len_max = trace_data.shape
-
-    fig, ax = pp.subplots()
-    plots = []
 
     num_frames = trace_n.max()
 
@@ -181,38 +196,14 @@ def create_path_animation_xz(data_source: str or dict, filename: str = None,
         for coordinate in ('x', 'y', 'z'):
             trace_data[packet_index][coordinate][entries:] = \
                 trace_data[packet_index][coordinate][entries - 1]
-        plots.append(ax.plot([], [])[0])
 
-    if fps is None and duration is not None:
-        fps = num_frames/duration
+    return create_path_animation(
+        trace_data[:]['x']*1e3, trace_data[:]['z']*1e3, filename,
+        xrange=x_range, yrange=z_range,
+        title=title, xlabel='$x$ (mm)', ylabel='$z$ (mm)',
+        axis_off=axis_off, fps=fps, duration=duration,
+        writer=writer, verbose=verbose)
 
-    if fps is None:
-        fps = 0.125*num_frames
-
-    def ani_init():
-        ax.set_xlim(x_range[0]*1e3, x_range[1]*1e3)
-        ax.set_ylim(z_range[0]*1e3, z_range[1]*1e3)
-        if not axis_off:
-            ax.set_xlabel('x (mm)')
-            ax.set_ylabel('z (mm)')
-            if title:
-                ax.set_title(title)
-        else:
-            ax.set_axis_off()
-        return plots
-
-    def ani_update(path_segment):
-        for packet_index in range(num_packets):
-            x = trace_data[packet_index, :path_segment + 1]['x']
-            z = trace_data[packet_index, :path_segment + 1]['z']
-            plots[packet_index].set_data(x*1e3, z*1e3)
-        return plots
-
-    ani = FuncAnimation(fig, ani_update, range(num_frames - 1),
-                        init_func=ani_init, blit=False)
-    if filename is not None:
-        ani.save(filename, writer='imagemagick', fps=fps)
-    pp.show()
 
 def mc_sv_fiber_cli(description: str = None,
                     parser: argparse.ArgumentParser = None):
