@@ -77,8 +77,8 @@ instructions for rendering / generating scripts that will compute these
 datasets. At the end of each section there is a breakdown of the directory
 tree and naming conventions that are used to organize the datasets. 
 
-MCML comparison
----------------
+MCML comparison datasets
+------------------------
 
 Module :py:mod:`xopto.dataset.render.mcml_comparison` => :sh:`run/mcml_comparison/`
 
@@ -282,8 +282,8 @@ The values of placeholders <> are as follows:
   with two decimal digits and :sh:`_` as a decimal separator, e.g :sh:`20_00`
   for :math:`\mu_a=20.0` |nbsp| cm :sup:`-1` .
 
-Simulator core for layered media
---------------------------------
+Layered media datasets
+----------------------
 
 Module :py:mod:`xopto.dataset.render.mcml` => :sh:`run/mcml/`
 
@@ -862,8 +862,8 @@ The values of placeholders <> are as follows:
   with two decimal digits and :sh:`_` as a decimal separator, e.g :sh:`20_00`
   for :math:`\mu_a=20.0` |nbsp| cm :sup:`-1`.
 
-Simulator core for voxelized media
-----------------------------------
+Voxelized media datasets
+------------------------
 
 Module :py:mod:`xopto.dataset.render.mcvox` => :sh:`run/mcvox/`
   
@@ -990,8 +990,8 @@ The values of placeholders <> are as follows:
   of μm, formatted as an integer value, e.g :sh:`500` for :math:`z=500`
   |nbsp| μm.
 
-Sampling volume simulation
---------------------------
+Sampling volume datasets
+------------------------
 
 Module :py:mod:`xopto.dataset.render.sv` => :sh:`run/sv/`
   
