@@ -67,6 +67,7 @@
 <span class="kn">from</span> <span class="nn">xopto.mcvox.mcutil</span> <span class="kn">import</span> <span class="n">fiber</span> <span class="k">as</span> <span class="n">fiberutil</span>
 <span class="kn">from</span> <span class="nn">xopto.mcvox</span> <span class="kn">import</span> <span class="n">cltypes</span>
 
+
 <div class="viewcode-block" id="TopGeometryFiber"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.fiber.html#xopto.mcvox.mcsource.fiber.TopGeometryFiber">[docs]</a><span class="k">class</span> <span class="nc">TopGeometryFiber</span><span class="p">(</span><span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">):</span>
 <div class="viewcode-block" id="TopGeometryFiber.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.fiber.html#xopto.mcvox.mcsource.fiber.TopGeometryFiber.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
@@ -517,6 +518,27 @@
         <span class="n">target</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">dcore</span><span class="o">*</span><span class="mf">0.5</span>
 
         <span class="k">return</span> <span class="n">target</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="UniformFiber.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.fiber.html#xopto.mcvox.mcsource.fiber.UniformFiber.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;fiber&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span> 
+                <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="UniformFiber.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.fiber.html#xopto.mcvox.mcsource.fiber.UniformFiber.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;UniformFiber&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance of a photon packet source from a dict that was</span>
+<span class="sd">        created by the :py:meth:`todict` method. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">fiber_data</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)</span>
+        <span class="n">data_</span><span class="p">[</span><span class="s1">&#39;fiber&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+            <span class="n">fiberutil</span><span class="p">,</span> <span class="n">fiber_data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">fiber_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data_</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;UniformFiber(fiber=</span><span class="si">{}</span><span class="s1">, &#39;</span>\
@@ -1080,6 +1102,27 @@
 
         <span class="k">return</span> <span class="n">target</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
 
+<div class="viewcode-block" id="UniformFiberLut.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.fiber.html#xopto.mcvox.mcsource.fiber.UniformFiberLut.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;fiber&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span> 
+                <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="UniformFiberLut.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.fiber.html#xopto.mcvox.mcsource.fiber.UniformFiberLut.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;UniformFiber&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance of a photon packet source from a dict that was</span>
+<span class="sd">        created by the :py:meth:`todict` method. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">fiber_data</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)</span>
+        <span class="n">data_</span><span class="p">[</span><span class="s1">&#39;fiber&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+            <span class="n">fiberutil</span><span class="p">,</span> <span class="n">fiber_data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">fiber_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data_</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;UniformFiberLut(fiber=</span><span class="si">{}</span><span class="s1">, &#39;</span> \
                <span class="s1">&#39;position=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">), direction=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">))&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -1115,6 +1158,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

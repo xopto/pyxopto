@@ -84,10 +84,10 @@ where <code class="code python docutils literal notranslate"><span class="name">
 launched photon packets and <code class="code python docutils literal notranslate"><span class="name"><span class="pre">maxlen</span></span></code> is the maximum length of the
 trace that is set through the constructor parameter <code class="code python docutils literal notranslate"><span class="name"><span class="pre">maxlen</span></span></code>.
 The actual number of trace entries for each photon packet can be
-obtained from <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.n" title="xopto.mcbase.mctrace.Trace.n"><code class="xref py py-attr docutils literal notranslate"><span class="pre">n</span></code></a> property, which is a
+obtained from the <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.n" title="xopto.mcbase.mctrace.Trace.n"><code class="xref py py-attr docutils literal notranslate"><span class="pre">n</span></code></a> property, which is a
 numpy vector of length <code class="code python docutils literal notranslate"><span class="name"><span class="pre">num_packets</span></span></code>.
 .</p>
-<p>When tracing the entire path of the photon packets, it is importat to select
+<p>When tracing the entire path of the photon packets, it is important to select
 an adequate maximum length of the trace. The value will depend on a number of
 factors including the optical properties of the sample and the configuration
 of the investigated source and detector. It is advised to iteratively determine
@@ -99,25 +99,25 @@ with the final state of the photon packet.</p>
 <h2>Trace Filter<a class="headerlink" href="#trace-filter" title="Permalink to this headline">¶</a></h2>
 <p>Frequently, only the traces of photon packets that end with a particular state
 are useful. A versatile filter <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Filter" title="xopto.mcbase.mctrace.Filter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filter</span></code></a> is
-available for filtering the traces according to the position,
-propagation direction, and optical path length of the photon packet. The trace
-filter <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Filter" title="xopto.mcbase.mctrace.Filter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filter</span></code></a> is also conveniently imported
-into the <a class="reference internal" href="../../apidoc/xopto.mcvox.mctrace.html#module-xopto.mcvox.mctrace" title="xopto.mcvox.mctrace"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcvox.mctrace</span></code></a> and <a class="reference internal" href="../../apidoc/xopto.mcvox.mctrace.html#module-xopto.mcvox.mctrace" title="xopto.mcvox.mctrace"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcvox.mctrace</span></code></a>
-modules.</p>
+available for filtering the photon packet traces according to the terminal
+position, propagation direction, and optical path length of the photon packet.
+The trace filter <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Filter" title="xopto.mcbase.mctrace.Filter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filter</span></code></a> is also conveniently
+imported into the <a class="reference internal" href="../../apidoc/xopto.mcvox.mctrace.html#module-xopto.mcvox.mctrace" title="xopto.mcvox.mctrace"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcvox.mctrace</span></code></a> and
+<a class="reference internal" href="../../apidoc/xopto.mcvox.mctrace.html#module-xopto.mcvox.mctrace" title="xopto.mcvox.mctrace"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcvox.mctrace</span></code></a> modules.</p>
 <p>The traces can be filtered by the final state of the photon packet.
 For a detailed list of available options see
 <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Filter" title="xopto.mcbase.mctrace.Filter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filter</span></code></a>. If a filter object is
 passed to the <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trace</span></code></a> constructor (parameter
 <code class="code docutils literal notranslate"><span class="pre">filter</span></code>) the results of the Monte Carlo simulation will be automatically
-filtered. Alternatively, filters can be easily applied to
+filtered. Alternatively, filters can be easily applied to the existing
 <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trace</span></code></a> instances by the
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">xopto.mcbase.mctrace.Filter.__call__()</span></code> method. By default, the filter
 modifies the trace (does not create a new trace object for the filtered results)
 and returns it. This behavior can be changed by passing <code class="code python docutils literal notranslate"><span class="name"><span class="pre">update</span></span><span class="operator"><span class="pre">=</span></span><span class="keyword constant"><span class="pre">False</span></span></code>
 to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">__call__()</span></code> method. This will create
-a new a new <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trace</span></code></a> instance for the filtered
-trace. Note that the filter will drop all traces that exceed the maximum trace
-length even if they satisfy the filter. The number of dropped traces is
+a new <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trace</span></code></a> instance for the filtered
+trace. Note that the filter will drop all the traces that exceed the maximum
+trace length, even if they satisfy the filter. The number of dropped traces is
 returned as the second output of
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">__call__()</span></code>.</p>
 <p>In the following example we create a trace with a maximum number of
@@ -143,8 +143,7 @@ sample through the top surface.</p>
 </pre></div>
 </div>
 <p>To visualize the paths of photon packets after completing a simulation,
-use <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.plot" title="xopto.mcbase.mctrace.Trace.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a>. The traces can be plot in
-several different views:</p>
+use the <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.plot" title="xopto.mcbase.mctrace.Trace.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a> method. The traces can beplot in several different views:</p>
 <ul class="simple">
 <li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">view</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’3d’</span></span></code> produces a 3D view of the traces (default).</p></li>
 <li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">view</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’xy’</span></span></code> produces a 2D view of the traces projected onto the x-y plane.</p></li>
@@ -158,7 +157,7 @@ the traced path with a red marker.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">trace</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># produces a 3D view</span>
 <span class="n">trace</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">view</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># produces a 2D view in the x-y plane</span>
 <span class="n">trace</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">view</span><span class="o">=</span><span class="s1">&#39;xz&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># produces a 2D view in the x-z plane</span>
-<span class="n">trace</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">view</span><span class="o">=</span><span class="s1">&#39;yz&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">Trrue</span><span class="p">)</span> <span class="c1"># produces a 2D view in the y-z plane</span>
+<span class="n">trace</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">view</span><span class="o">=</span><span class="s1">&#39;yz&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># produces a 2D view in the y-z plane</span>
 </pre></div>
 </div>
 </section>
@@ -206,6 +205,7 @@ the traced path with a red marker.</p>
 <li class="toctree-l2"><a class="reference internal" href="examples/index.html">Examples</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../apidoc/modules.html">xopto</a></li>
 </ul>
 

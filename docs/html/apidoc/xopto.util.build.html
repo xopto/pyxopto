@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="xopto.util.convolve module" href="xopto.util.convolve.html" />
-    <link rel="prev" title="xopto.util package" href="xopto.util.html" />
+    <link rel="prev" title="xopto.util.animation.common module" href="xopto.util.animation.common.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -37,8 +37,23 @@
 <span id="xopto-util-build-module"></span><h1>xopto.util.build module<a class="headerlink" href="#module-xopto.util.build" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.build_so_dll">
-<span class="sig-name descname"><span class="pre">build_so_dll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#build_so_dll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.build_so_dll" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">build_so_dll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/xopto/util/build.html#build_so_dll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.build_so_dll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a dll or so library using the available native compiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<em>list</em>) – Positional parameters passed to the DLL / SO build function.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Keyword parameters passed to the DLL / SO build function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>res</strong> – True on success, else False.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.find_compilers">
@@ -48,57 +63,103 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.find_gcc">
 <span class="sig-name descname"><span class="pre">find_gcc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#find_gcc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.find_gcc" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Find a version of installed GCC that matches the number OS bits (32 or 64).</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.find_gcc_32">
 <span class="sig-name descname"><span class="pre">find_gcc_32</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gcc'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#find_gcc_32"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.find_gcc_32" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns version of the installed 32-bit GCC compiler or None.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.find_gcc_64">
-<span class="sig-name descname"><span class="pre">find_gcc_64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gcc'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#find_gcc_64"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.find_gcc_64" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">find_gcc_64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gcc'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/util/build.html#find_gcc_64"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.find_gcc_64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns version of the installed 64-bit GCC compiler or None.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.find_mingw">
-<span class="sig-name descname"><span class="pre">find_mingw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#find_mingw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.find_mingw" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">find_mingw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/util/build.html#find_mingw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.find_mingw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the version of installed MINGW compiller or None.
+If the underlaying OS is 32-bit, only 32-bit compilers are considered,
+else only 64-bit compilers are considered.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.find_mingw_32">
-<span class="sig-name descname"><span class="pre">find_mingw_32</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gcc'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#find_mingw_32"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.find_mingw_32" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">find_mingw_32</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gcc'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/util/build.html#find_mingw_32"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.find_mingw_32" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the version of installed 32-bit compiller or None.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.find_mingw_64">
-<span class="sig-name descname"><span class="pre">find_mingw_64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gcc'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#find_mingw_64"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.find_mingw_64" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">find_mingw_64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gcc'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/util/build.html#find_mingw_64"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.find_mingw_64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the version of installed 32-bit MINGW compiller or None.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.find_msvcver">
-<span class="sig-name descname"><span class="pre">find_msvcver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">supported</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#find_msvcver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.find_msvcver" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">find_msvcver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">supported</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allver</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/util/build.html#find_msvcver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.find_msvcver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find a version of installed MSC build tools.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>allver</strong> (<em>bool</em>) – If True, all the found versions are returned, else only the highest
+version is returned.</p></li>
+<li><p><strong>supported</strong> (<em>list</em>) – Optional list of supported MSC build tool versions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ver</strong> – A list of found MSC build tools if allver is True, else only the
+highest found version. Returns [] if no MSC build tools are found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.find_msvsver">
 <span class="sig-name descname"><span class="pre">find_msvsver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">supported</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#find_msvsver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.find_msvsver" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Find a version of installed Visual studio tools.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>allver</strong> (<em>bool</em>) – If True, all the found versions are returned, else only the highest
+version is returned.</p></li>
+<li><p><strong>supported</strong> (<em>list</em>) – Optional list of supported MSC build tool versions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ver</strong> – A list of found Visual Studio installations if allver is True, else
+only the highest found version.
+Returns [] if no MSC build tools are found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.gcc_build_so_dll">
 <span class="sig-name descname"><span class="pre">gcc_build_so_dll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srclist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liblist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">libdirlist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deflist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gcc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gcc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-O2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moveto</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cwd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envvars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepscript</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bash'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#gcc_build_so_dll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.gcc_build_so_dll" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Builds a DLL (SO) using GCC.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.mingw_build_dll">
 <span class="sig-name descname"><span class="pre">mingw_build_dll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srclist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liblist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">libdirlist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deflist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccopts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gcc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gcc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-O2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moveto</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cwd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envvars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepscript</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#mingw_build_dll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.mingw_build_dll" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Builds a DLL using MIGW tools.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.msvc_build_dll">
 <span class="sig-name descname"><span class="pre">msvc_build_dll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srclist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msvcver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccopts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deflist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">libdirlist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liblist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envvars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cwd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moveto</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automachine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepscript</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#msvc_build_dll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.msvc_build_dll" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Builds a DLL using MSC build tools.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.msvcver2vs">
@@ -107,13 +168,30 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.os_bits">
-<span class="sig-name descname"><span class="pre">os_bits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#os_bits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.os_bits" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">os_bits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="../_modules/xopto/util/build.html#os_bits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.os_bits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 32 for 32-bit OS, 64 for 64-bit OS.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.util.build.subprocess_cmd">
-<span class="sig-name descname"><span class="pre">subprocess_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/build.html#subprocess_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.subprocess_cmd" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">subprocess_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/util/build.html#subprocess_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.build.subprocess_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a command using <code class="xref py py-class docutils literal notranslate"><span class="pre">subprocess.Popen</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>command</strong> (<em>list</em>) – List of str that represent the command and all the arguments.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Turn on verbose reporting.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Keyword arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">subprocess.Popen.__init__()</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>err</strong> – Error from stderr if any.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 
@@ -147,6 +225,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
@@ -164,7 +243,7 @@
   <li><a href="modules.html">xopto</a><ul>
   <li><a href="xopto.html">xopto package</a><ul>
   <li><a href="xopto.util.html">xopto.util package</a><ul>
-      <li>Previous: <a href="xopto.util.html" title="previous chapter">xopto.util package</a></li>
+      <li>Previous: <a href="xopto.util.animation.common.html" title="previous chapter">xopto.util.animation.common module</a></li>
       <li>Next: <a href="xopto.util.convolve.html" title="next chapter">xopto.util.convolve module</a></li>
   </ul></li>
   </ul></li>

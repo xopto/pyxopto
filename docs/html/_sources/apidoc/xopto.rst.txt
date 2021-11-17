@@ -9,6 +9,7 @@ Subpackages
 
    xopto.cl
    xopto.data
+   xopto.dataset
    xopto.materials
    xopto.mcbase
    xopto.mcml

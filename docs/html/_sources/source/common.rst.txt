@@ -28,3 +28,6 @@
 
 .. role:: python(code)
    :language: python
+
+.. role:: sh(code)
+   :language: sh

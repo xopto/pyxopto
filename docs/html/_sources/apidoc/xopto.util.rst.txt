@@ -1,6 +1,14 @@
 xopto.util package
 ==================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.util.animation
+
 Submodules
 ----------
 
@@ -9,6 +17,8 @@ Submodules
 
    xopto.util.build
    xopto.util.convolve
+   xopto.util.fourier
+   xopto.util.hankel
    xopto.util.sliceview
 
 Module contents

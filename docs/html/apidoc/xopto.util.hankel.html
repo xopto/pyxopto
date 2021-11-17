@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.util.hankel module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.util.sliceview module" href="xopto.util.sliceview.html" />
+    <link rel="prev" title="xopto.util.fourier module" href="xopto.util.fourier.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.util.hankel">
+<span id="xopto-util-hankel-module"></span><h1>xopto.util.hankel module<a class="headerlink" href="#module-xopto.util.hankel" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.util.hankel.continuous">
+<span class="sig-name descname"><span class="pre">continuous</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rfun</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rstop</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/util/hankel.html#continuous"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.hankel.continuous" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes Hankel transform of a continuous radially symmetric function:</p>
+<div class="math">
+<p><img src="../_images/math/e26a66de1de46cb3309517879a95b99d16b0dfeb.png" alt="g(q) &amp;= 2 \pi \int_0^{\infty}f(r)J_0(2 \pi q r) r dr"/></p>
+</div><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frequency</strong> (<em>np.ndarray</em>) – A list of frequencies (1/m) at which to compute the Hankel transform.</p></li>
+<li><p><strong>rfun</strong> (<em>callable</em>) – Callable with one parameter (radius) representing a radially symmetric
+function.</p></li>
+<li><p><strong>rstop</strong> (<em>float</em>) – Range of numerical integration as [0, rstop].</p></li>
+<li><p><strong>out</strong> (<em>np.ndarray</em>) – Optional output array for the computed frequencies.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Optional keyword arguments passed to the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.integrate.quad()</span></code> function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>F</strong> – The Hankel transfor of rfun at the given frequencies.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray vector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.util.hankel.discrete">
+<span class="sig-name descname"><span class="pre">discrete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fpts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logscale</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/util/hankel.html#discrete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.hankel.discrete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes Hankel transform of a discrete function. The discrete function is
+first made continuous by means of interpolation in linear or log scale.
+Finally, the transform is computed by the <a class="reference internal" href="#xopto.util.hankel.continuous" title="xopto.util.hankel.continuous"><code class="xref py py-func docutils literal notranslate"><span class="pre">continuous()</span></code></a> function
+using quad.</p>
+<div class="math">
+<p><img src="../_images/math/e26a66de1de46cb3309517879a95b99d16b0dfeb.png" alt="g(q) &amp;= 2 \pi \int_0^{\infty}f(r)J_0(2 \pi q r) r dr"/></p>
+</div><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frequency</strong> (<em>np.ndarray</em>) – A list of frequencies (1/m) at which to compute the Hankel transform.</p></li>
+<li><p><strong>rpts</strong> (<em>np.ndarray</em>) – Points at which the discrete radially symmetric function is defined.</p></li>
+<li><p><strong>fpts</strong> (<em>np.ndarray</em>) – Value of the radially symmetric function at points rpts.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Optional keyword arguments passed to the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.integrate.quad()</span></code> function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>F</strong> – The Hankel transfor of rfun at the given frequencies.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.util.hankel.discrete_simpson">
+<span class="sig-name descname"><span class="pre">discrete_simpson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fpts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uneven</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/util/hankel.html#discrete_simpson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.hankel.discrete_simpson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes Hankel transform of a radially symmetric function defined
+on a grid of evenly or unevenly spaced points. To compute transforms of
+multiple sets (functions), the fpts array shape must be
+(num_sets, rpts.size).</p>
+<div class="math">
+<p><img src="../_images/math/e26a66de1de46cb3309517879a95b99d16b0dfeb.png" alt="g(q) &amp;= 2 \pi \int_0^{\infty}f(r)J_0(2 \pi q r) r dr"/></p>
+</div><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frequency</strong> (<em>np.ndarray</em>) – A list of frequencies (1/m) at which to compute the Hankel transform.</p></li>
+<li><p><strong>rpts</strong> (<em>np.ndarray</em>) – A vector of evenly or unevenly spaced points at which the function
+values in fpts are defined.</p></li>
+<li><p><strong>fpts</strong> (<em>np.ndarray</em>) – A vector or array of function values defined at points rpts. To compute
+transforms of multiple sets (functions), the fpts array shape must be
+(num_sets, rpts.size).</p></li>
+<li><p><strong>uneven</strong> (<em>bool</em>) – If True, the method assumes unevenly spaced values in rpts. Default is
+False. If set to None, the value of uneven flag is derived from
+the values in the rpts array.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>F</strong> – The Hankel transfor of rfun at the given frequencies. If the fpts array
+ia a vector (points of one function only) then F is a vector of size
+len(frequencies). If fpts is a 2D array of shape (N, rpts.size) then
+F is a 2D array of shape (N, len(frequencies)).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.util.html">xopto.util package</a><ul>
+      <li>Previous: <a href="xopto.util.fourier.html" title="previous chapter">xopto.util.fourier module</a></li>
+      <li>Next: <a href="xopto.util.sliceview.html" title="next chapter">xopto.util.sliceview module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

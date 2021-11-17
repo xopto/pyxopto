@@ -43,7 +43,7 @@ The required modules and submodules used in this example are listed below. The s
 .. code-block:: python
 
     from xopto.mcml import mc
-    from xopto.mcml.mcutil import fiber, axis
+    from xopto.mcml.mcutil import fiber
     from xopto.util import convolve
     from xopto.cl import clinfo
 
@@ -65,7 +65,7 @@ Select the desired OpenCL computational device (see also :ref:`opencl-devices-la
 The layer stack
 ---------------
 
-In this example we use a single-layered turbid medium of 1 |nbsp| cm thickness. The refractive index of the single layer was set to 1.33, while the surrounding medium refractive index is set to 1.45, which corresponds to a uniform boundary with an optical fiber core. The absorption is set to zero, while the scattering coefficient of the single layer is set to 100 |nbsp| 1/cm. Finally, the Henyey-Greenstein phase function is utilized with anistropy factor of 0.8 in the single layer turbid medium. Note that each layer is defined using an instance of :py:class:`~xopto.mcml.mclayer.layer.Layer`, which are then packet into a list and passed to the :py:class:`~xopto.mcml.mclayer.layer.Layers` constructor. The order of the layers is ascending along the positive z axis, which points into the medium. In all cases the top and bottom layers must be provided and correspond to the medium surrounding the single-layer specified in the middle.
+In this example we use a single-layered turbid medium of 1 |nbsp| cm thickness. The refractive index of the single layer was set to 1.33, while the surrounding medium refractive index is set to 1.45, which corresponds to a uniform boundary with an optical fiber core. The absorption is set to zero, while the scattering coefficient of the single layer is set to 100 |nbsp| 1/cm. Finally, the Henyey-Greenstein phase function is utilized with anisotropy factor of 0.8 in the single layer turbid medium. Note that each layer is defined using an instance of :py:class:`~xopto.mcml.mclayer.layer.Layer`, which are then packet into a list and passed to the :py:class:`~xopto.mcml.mclayer.layer.Layers` constructor. The order of the layers is ascending along the positive z axis, which points into the medium. In all cases the top and bottom layers must be provided and correspond to the medium surrounding the single-layer specified in the middle.
 
 .. code-block:: python
 
@@ -98,7 +98,7 @@ The  multimode optical fiber source is defined using the class :py:class:`~xopto
 Detector
 --------
 
-In this example, we define three detectors or accumulators assigned to variables :code:`detector_top_fiber`, :code:`detector_top_radial` and :code:`detector_top_probe`. The :code:`detector_top_fiber` corresponds to a multimode optical fiber detector situated 220 |nbsp| μm from a source fiber representing a single detector fiber in a common six-around-one optical probe. Note that multiple multimode detector fibers could be defined and passed using a list to the :py:class:`~xopto.mcml.mcdetector.probe.fiberarray.FiberArray` constructor. The :code:`detector_top_radial` corresponds to a radial accumulator annular rings defined by class :py:class:`~xopto.mcml.mcdetector.radial.Radial`, which accepts a radial axis constructor :py:class:`xopto.mcbase.mcutil.axis.RadialAxis` (constructed by specifying start, stop and number of intervals) and :code:`cosmin` keyword argument, which is cosine of the maximum acceptance angle and can be calculated from the numerical aperture. Note that the refractive index of the outer medium (1.45) is used since the photon packet is propagated over the medium-probe interface prior to detection. Finally, the :code:`detector_top_probe` utilizes :py:class:`~xopto.mcml.mcdetector.probe.sixaorundone.SixAroundOne` object which accumulates photon packet weights into six multimode optical fiber detectors specified via the :code:`fiber` keyword argument. Additionally, the position of the center of the probe and direction of the probe tip can be specified. In this case we have used default values, i.e., the six-around-one probe centered at origin and perpendicular to the turbid medium interface. 
+In this example, we define three detectors or accumulators assigned to variables :code:`detector_top_fiber`, :code:`detector_top_radial` and :code:`detector_top_probe`. The :code:`detector_top_fiber` corresponds to a multimode optical fiber detector situated 220 |nbsp| μm from a source fiber representing a single detector fiber in a common six-around-one optical probe. Note that multiple multimode detector fibers could be defined and passed using a list to the :py:class:`~xopto.mcml.mcdetector.probe.fiberarray.FiberArray` constructor. The :code:`detector_top_radial` corresponds to a radial accumulator annular rings defined by class :py:class:`~xopto.mcml.mcdetector.radial.Radial`, which accepts a radial axis constructor :py:class:`xopto.mcbase.mcutil.axis.RadialAxis` (constructed by specifying start, stop and number of intervals) and :code:`cosmin` keyword argument, which is cosine of the maximum acceptance angle and can be calculated from the numerical aperture. Note that the refractive index of the outer medium (1.45) is used since the photon packet is propagated over the medium-probe interface prior to detection. Finally, the :code:`detector_top_probe` utilizes :py:class:`~xopto.mcml.mcdetector.probe.sixaroundone.SixAroundOne` object which accumulates photon packet weights into six multimode optical fiber detectors specified via the :code:`fiber` keyword argument. Additionally, the position of the center of the probe and direction of the probe tip can be specified. In this case we have used default values, i.e., the six-around-one probe centered at origin and perpendicular to the turbid medium interface. 
 
 .. code-block:: python
 
@@ -113,7 +113,7 @@ In this example, we define three detectors or accumulators assigned to variables
     )
 
     detector_top_radial = mc.mcdetector.Radial(
-        raxis=axis.RadialAxis(
+        raxis=mc.mcdetector.RadialAxis(
             start=0.0, stop=1e-3, n=250
         ),
         cosmin=np.cos(np.arcsin(0.22/1.45))
@@ -154,7 +154,7 @@ Finally, the optical fiber probe surface layout is passed to the surfaces constr
 The Monte Carlo simulator objects
 ---------------------------------
 
-Four Monte Carlo simulator objects :py:class:`~xopto.mcml.mc.MC` are constructed corresponding to different detectors defined above with the same layers and sources. The fourth simulator is also passed a surface layout constructor, which describes the realistic top probe-medium interface. Finally, termination radius is set for each simulator object to 1 cm.
+Four Monte Carlo simulator objects :py:class:`~xopto.mcml.mc.Mc` are constructed corresponding to different detectors defined above with the same layers and sources. The fourth simulator is also passed a surface layout constructor, which describes the realistic top probe-medium interface. Finally, termination radius is set for each simulator object to 1 cm.
 
 .. code-block:: python
 
@@ -201,10 +201,11 @@ Each simulator is run by launching :code:`nphotons=1e8` photon packets. Only the
 .. code-block:: python
 
     nphotons = 1e8
-    detector_fiber = mc_obj_fiber.run(nphotons, verbose=True, wgsize=256)[-1]
-    detector_radial = mc_obj_radial.run(nphotons, verbose=True, wgsize=256)[-1]
-    detector_probe = mc_obj_probe.run(nphotons, verbose=True, wgsize=256)[-1]
-    detector_probe_realistic = mc_obj_probe_realistic.run(nphotons, verbose=True, wgsize=256)[-1]
+    detector_fiber = mc_obj_fiber.run(nphotons, verbose=True)[-1]
+    detector_radial = mc_obj_radial.run(nphotons, verbose=True)[-1]
+    detector_probe = mc_obj_probe.run(nphotons, verbose=True)[-1]
+    detector_probe_realistic = mc_obj_probe_realistic.run(
+        nphotons, verbose=True)[-1]
 
     reflectance_fiber = detector_fiber.top.reflectance[0]  
     reflectance_fiber2 = convolve.fiber_reflectance( 

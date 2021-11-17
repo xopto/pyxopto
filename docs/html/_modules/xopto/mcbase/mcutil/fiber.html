@@ -218,6 +218,33 @@
 
         <span class="k">return</span> <span class="n">target</span></div>
 
+<div class="viewcode-block" id="MultimodeFiber.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;dcore&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcore</span><span class="p">,</span> 
+                <span class="s1">&#39;dcladding&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcladding</span><span class="p">,</span>
+                <span class="s1">&#39;ncore&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ncore</span><span class="p">,</span>
+                <span class="s1">&#39;na&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_na</span><span class="p">,</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="MultimodeFiber.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber.fromdict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;MultimodeFiber&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create an accumulator instance from a dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Dictionary created by the py:meth:`MultimodeFiber.todict` method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">obj_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">obj_type</span> <span class="o">!=</span> <span class="s1">&#39;MultimodeFiber&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected &quot;MultimodeFiber&quot; type but &#39;</span>
+                            <span class="s1">&#39;got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj_type</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">MultimodeFiber</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;MultimodeFiber(dcore=</span><span class="si">{:f}</span><span class="s1">, dcladding=</span><span class="si">{:f}</span><span class="s1">, &#39;</span> \
                <span class="s1">&#39;ncore=</span><span class="si">{:f}</span><span class="s1">, na=</span><span class="si">{:f}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -366,6 +393,17 @@
     <span class="n">collection</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_collection_lut</span><span class="p">,</span> <span class="n">_set_collection_lut</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
                          <span class="s1">&#39;Collection lookup table.&#39;</span><span class="p">)</span>
 
+<div class="viewcode-block" id="MultimodeFiberLut.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiberLut.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;dcore&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcore</span><span class="p">,</span> 
+                <span class="s1">&#39;dcladding&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dcladding</span><span class="p">,</span>
+                <span class="s1">&#39;ncore&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ncore</span><span class="p">,</span>
+                <span class="s1">&#39;emission&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_emission_lut</span><span class="p">,</span>
+                <span class="s1">&#39;collection&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collection_lut</span><span class="p">,</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;MultimodeFiberLut(dcore=</span><span class="si">{:f}</span><span class="s1">, dcladding=</span><span class="si">{:f}</span><span class="s1">, &#39;</span> \
                <span class="s1">&#39;ncore=</span><span class="si">{:f}</span><span class="s1">, emission=</span><span class="si">{}</span><span class="s1">, collection=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -436,6 +474,32 @@
     <span class="n">direction</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_direction</span><span class="p">,</span> <span class="n">_set_direction</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
                          <span class="s1">&#39;Fiber reference direction.&#39;</span><span class="p">)</span>
 
+<div class="viewcode-block" id="FiberLayout.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.FiberLayout.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;fiber&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span> 
+                <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="FiberLayout.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.FiberLayout.fromdict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;MultimodeFiber&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create an accumulator instance from a dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Dictionary created by the py:meth:`FiberLayout.todict` method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">obj_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">obj_type</span> <span class="o">!=</span> <span class="s1">&#39;FiberLayout&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected &quot;FiberLayout&quot; type but &#39;</span>
+                            <span class="s1">&#39;got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj_type</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">FiberLayout</span><span class="p">(</span><span class="n">fiber</span><span class="o">=</span><span class="n">MultimodeFiber</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)),</span> <span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;FiberLayout(fiber=</span><span class="si">{}</span><span class="s1">, position=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">), &#39;</span> \
                <span class="s1">&#39;direction=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">))&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -474,6 +538,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

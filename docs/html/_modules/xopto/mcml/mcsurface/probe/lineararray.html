@@ -288,7 +288,7 @@
 <span class="sd">            are considered the same.</span>
 <span class="sd">        n: int</span>
 <span class="sd">            The number of optical fibers in the linear array. This option</span>
-<span class="sd">            is a compile-time feature and caanot be changed once the</span>
+<span class="sd">            is a compile-time feature and cannot be changed once the</span>
 <span class="sd">            surface layout object is created.</span>
 <span class="sd">        spacing: float</span>
 <span class="sd">            Spacing between the optical fibers. If spacing is None,</span>
@@ -314,7 +314,7 @@
 <span class="sd">            the last optical fiber!</span>
 <span class="sd">        position: (float, float)</span>
 <span class="sd">            Position of the center of the linear fiber array and of the</span>
-<span class="sd">            opticalfiber probe probe.</span>
+<span class="sd">            opticalfiber probe.</span>
 <span class="sd">        direction: (float, float, float)</span>
 <span class="sd">            Reference direction / orientation of the optical fibers. Fibers</span>
 <span class="sd">            are oriented in this direction and polished to form a tight optical</span>
@@ -593,7 +593,7 @@
 <span class="sd">            Accumulator configuration as a dictionary.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;LinearArray&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
             <span class="s1">&#39;fiber&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
             <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span>
             <span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="p">,</span>
@@ -601,13 +601,13 @@
             <span class="s1">&#39;diameter&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span><span class="p">,</span>
             <span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reflectivity</span><span class="p">,</span>
             <span class="s1">&#39;cutout&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cutout</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-            <span class="s1">&#39;cutoutn&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cutoutn</span><span class="p">,</span>
+            <span class="s1">&#39;cutoutn&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cutout_n</span><span class="p">,</span>
             <span class="s1">&#39;position&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-            <span class="s1">&#39;direction&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;direction&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
         <span class="p">}</span></div>
 
-<div class="viewcode-block" id="LinearArray.fromdict"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcsurface.probe.lineararray.html#xopto.mcml.mcsurface.probe.lineararray.LinearArray.fromdict">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;LinearArray&#39;</span><span class="p">:</span>
+<div class="viewcode-block" id="LinearArray.fromdict"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcsurface.probe.lineararray.html#xopto.mcml.mcsurface.probe.lineararray.LinearArray.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;LinearArray&#39;</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Create an accumulator instance from a dictionary.</span>
 
@@ -617,14 +617,14 @@
 <span class="sd">            Dictionary created by the :py:meth:`LinearArray.todict` method.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">layout_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">layout_type</span> <span class="o">!=</span> <span class="s1">&#39;LinearArray&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">layout_type</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="s1">&#39;Expected a &quot;LinearArray&quot; type bot got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">layout_type</span><span class="p">))</span>
+                <span class="s1">&#39;Expected a &quot;</span><span class="si">{}</span><span class="s1">&quot; type bot got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">layout_type</span><span class="p">))</span>
         <span class="n">fiber</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fiber&#39;</span><span class="p">)</span>
         <span class="n">fiber</span> <span class="o">=</span> <span class="n">MultimodeFiber</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">fiber</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">LinearArray</span><span class="p">(</span><span class="n">fiber</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">fiber</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;LinearArray(fiber=</span><span class="si">{}</span><span class="s1">, n=</span><span class="si">{}</span><span class="s1">, spacing=</span><span class="si">{}</span><span class="s1">, orientation=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">) &#39;</span>\
@@ -632,7 +632,7 @@
                <span class="s1">&#39;position=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">), direction=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">))&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                    <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span><span class="p">,</span>
                    <span class="bp">self</span><span class="o">.</span><span class="n">_diameter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reflectivity</span><span class="p">,</span>
-                   <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_cutout</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cutoutn</span>
+                   <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_cutout</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cutout_n</span>
                    <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -668,6 +668,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

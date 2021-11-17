@@ -63,10 +63,27 @@ If a fiber layout instance, a new copy is created.</p></li>
 <dd><p>Properties of the optical fiber.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.fiber.FiberLayout.fromdict">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcbase.mcutil.fiber.MultimodeFiber" title="xopto.mcbase.mcutil.fiber.MultimodeFiber"><span class="pre">xopto.mcbase.mcutil.fiber.MultimodeFiber</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/fiber.html#FiberLayout.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.fiber.FiberLayout.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an accumulator instance from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Dictionary created by the py:meth:<cite>FiberLayout.todict</cite> method.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="xopto.mcbase.mcutil.fiber.FiberLayout.position">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[float,</span> <span class="pre">float,</span> <span class="pre">float]</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.fiber.FiberLayout.position" title="Permalink to this definition">¶</a></dt>
 <dd><p>Position of the fiber as a tuple (x, y, z).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.fiber.FiberLayout.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/fiber.html#FiberLayout.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.fiber.FiberLayout.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
 </dd></dl>
 
 </dd></dl>
@@ -171,6 +188,17 @@ refractive index and numerical aperture of the fiber core.</p>
 <dd><p>Diameter (m) of the fiber core.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.fiber.MultimodeFiber.fromdict">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcbase.mcutil.fiber.MultimodeFiber" title="xopto.mcbase.mcutil.fiber.MultimodeFiber"><span class="pre">xopto.mcbase.mcutil.fiber.MultimodeFiber</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/fiber.html#MultimodeFiber.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.fiber.MultimodeFiber.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an accumulator instance from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Dictionary created by the py:meth:<cite>MultimodeFiber.todict</cite> method.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="xopto.mcbase.mcutil.fiber.MultimodeFiber.na">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">na</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.fiber.MultimodeFiber.na" title="Permalink to this definition">¶</a></dt>
@@ -187,6 +215,12 @@ refractive index and numerical aperture of the fiber core.</p>
 <dt class="sig sig-object py" id="xopto.mcbase.mcutil.fiber.MultimodeFiber.ncore">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">ncore</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.mcbase.mcutil.fiber.MultimodeFiber.ncore" title="Permalink to this definition">¶</a></dt>
 <dd><p>Refractive index of the fiber core.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.fiber.MultimodeFiber.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/fiber.html#MultimodeFiber.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.fiber.MultimodeFiber.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -300,6 +334,12 @@ refractive index and numerical aperture of the fiber core.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcutil.fiber.MultimodeFiberLut.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/fiber.html#MultimodeFiberLut.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.fiber.MultimodeFiberLut.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="xopto.mcbase.mcutil.fiber.MultimodeFiberLut.validate">
 <span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/fiber.html#MultimodeFiberLut.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.fiber.MultimodeFiberLut.validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check the integrity of parameters. Raises a ValueError.</p>
@@ -339,6 +379,7 @@ refractive index and numerical aperture of the fiber core.</p>
 <li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>

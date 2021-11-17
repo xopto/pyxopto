@@ -793,7 +793,12 @@
 
     <span class="k">def</span> <span class="nf">_get_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Filter</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span>
-    <span class="nb">filter</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_filter</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Trace filter.&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_set_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">filter</span><span class="p">:</span> <span class="n">Filter</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">filter</span><span class="p">,</span> <span class="n">Filter</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected a &quot;Filter&quot; instance but &#39;</span>
+                            <span class="s1">&#39;got &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="nb">filter</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span> <span class="o">=</span> <span class="nb">filter</span>
+    <span class="nb">filter</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_filter</span><span class="p">,</span> <span class="n">_set_filter</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Trace filter.&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_plon</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plon</span>
@@ -1187,6 +1192,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

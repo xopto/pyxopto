@@ -185,7 +185,7 @@
             <span class="s1">&#39;		mc_point3f_t dir;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		mc_point3f_t normal = (mc_point3f_t){FP_0, FP_0, -FP_1};&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		refract(&amp;dir_in, &amp;normal, mc_layer_n(mcsim_layer(mcsim, 1)),&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;			source-&gt;n, &amp;dir);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mc_layer_n(mcsim_layer(mcsim, 0)), &amp;dir);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		mcsim_specular_detector_deposit(&#39;</span><span class="p">,</span>
             <span class="s1">&#39;			mcsim, mcsim_position(mcsim), &amp;dir, source-&gt;reflectance);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	#endif&#39;</span><span class="p">,</span>
@@ -194,6 +194,40 @@
             <span class="s1">&#39;};&#39;</span><span class="p">,</span>
         <span class="p">))</span></div>
 
+<div class="viewcode-block" id="GaussianBeam.fwhm2sigma"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.gaussianbeam.html#xopto.mcml.mcsource.gaussianbeam.GaussianBeam.fwhm2sigma">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fwhm2sigma</span><span class="p">(</span><span class="n">fwhm</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Converts sigma to Full width at half maximum (FWHM).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sigma: float</span>
+<span class="sd">            Standard deviation of the Gaussian.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fwhm: float</span>
+<span class="sd">            FWHM parameter of the Gaussian</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">fwhm</span><span class="o">/</span><span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span></div>
+
+<div class="viewcode-block" id="GaussianBeam.sigma2fwhm"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.gaussianbeam.html#xopto.mcml.mcsource.gaussianbeam.GaussianBeam.sigma2fwhm">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">sigma2fwhm</span><span class="p">(</span><span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Converts Full width at half maximum (FWHM) to sigma (standard deviation).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fwhm: float</span>
+<span class="sd">            Full width at half maximum (FWHM).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sigma: float</span>
+<span class="sd">            Standard deviation of the Gaussian.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">sigma</span><span class="o">*</span><span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span></div>
+    
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">clip</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
                  <span class="n">position</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
                  <span class="n">direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)):</span>
@@ -356,6 +390,16 @@
 
         <span class="k">return</span> <span class="n">target</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
 
+<div class="viewcode-block" id="GaussianBeam.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.gaussianbeam.html#xopto.mcml.mcsource.gaussianbeam.GaussianBeam.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> 
+                <span class="s1">&#39;clip&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span><span class="p">,</span>
+                <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;GaussianBeam(sigma=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">), clip=</span><span class="si">{}</span><span class="s1">, &#39;</span>\
                <span class="s1">&#39;position=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">), direction=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">))&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -391,6 +435,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

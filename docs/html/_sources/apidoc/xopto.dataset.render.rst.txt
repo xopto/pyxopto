@@ -1,0 +1,23 @@
+xopto.dataset.render package
+============================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.dataset.render.all
+   xopto.dataset.render.common
+   xopto.dataset.render.mcml
+   xopto.dataset.render.mcml_comparison
+   xopto.dataset.render.mcvox
+   xopto.dataset.render.sv
+
+Module contents
+---------------
+
+.. automodule:: xopto.dataset.render
+   :members:
+   :undoc-members:
+   :show-inheritance:

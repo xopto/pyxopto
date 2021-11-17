@@ -170,7 +170,7 @@
 </section>
 <section id="the-monte-carlo-simulator-objects">
 <h2>The Monte Carlo simulator objects<a class="headerlink" href="#the-monte-carlo-simulator-objects" title="Permalink to this headline">¶</a></h2>
-<p>We define two <code class="xref py py-class docutils literal notranslate"><span class="pre">MC</span></code> simulator objects, which accept the defined layer stacks, sources, detectors and OpenCL ready device context. The <code class="code docutils literal notranslate"><span class="pre">detector</span></code> keyword argument accepts an instance of <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.Detectors" title="xopto.mcml.mcdetector.base.Detectors"><code class="xref py py-class docutils literal notranslate"><span class="pre">Detectors</span></code></a>, which in turn accepts a top, bottom and specular detectors. In this example we have set only the top detector <code class="code docutils literal notranslate"><span class="pre">detector_top_radial</span></code>, which we have defined above.</p>
+<p>We define two <a class="reference internal" href="../../../apidoc/xopto.mcml.mc.html#xopto.mcml.mc.Mc" title="xopto.mcml.mc.Mc"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mc</span></code></a> simulator objects, which accept the defined layer stacks, sources, detectors and OpenCL ready device context. The <code class="code docutils literal notranslate"><span class="pre">detector</span></code> keyword argument accepts an instance of <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.Detectors" title="xopto.mcml.mcdetector.base.Detectors"><code class="xref py py-class docutils literal notranslate"><span class="pre">Detectors</span></code></a>, which in turn accepts a top, bottom and specular detectors. In this example we have set only the top detector <code class="code docutils literal notranslate"><span class="pre">detector_top_radial</span></code>, which we have defined above.</p>
 <p>In both cases we also define a maximum simulation radius <a class="reference internal" href="../../../apidoc/xopto.mcml.mc.html#xopto.mcml.mc.Mc.rmax" title="xopto.mcml.mc.Mc.rmax"><code class="xref py py-attr docutils literal notranslate"><span class="pre">xopto.mcml.mc.Mc.rmax</span></code></a> beyond which the photon packets are not propagated since they likely do not contribute to the reflectance signal.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mc_obj_hg</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span>
     <span class="n">layers</span><span class="o">=</span><span class="n">layers_hg</span><span class="p">,</span>
@@ -214,8 +214,8 @@
     <span class="n">mie_pf</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Lut</span><span class="p">(</span><span class="o">*</span><span class="n">mie</span><span class="o">.</span><span class="n">mclut</span><span class="p">())</span>
     <span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span> <span class="o">=</span> <span class="n">mie_pf</span>
 
-    <span class="n">detector_hg</span> <span class="o">=</span> <span class="n">mc_obj_hg</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">detector_mie</span> <span class="o">=</span> <span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">detector_hg</span> <span class="o">=</span> <span class="n">mc_obj_hg</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">detector_mie</span> <span class="o">=</span> <span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="n">reflectance_hg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">convolve</span><span class="o">.</span><span class="n">fiber_reflectance</span><span class="p">(</span>
         <span class="n">detector_hg</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">r</span><span class="p">,</span>
@@ -276,11 +276,11 @@
 <span class="c1"># fiber position tightly next to the source fiber. The example</span>
 <span class="c1"># gives a comparison how the selection of the scattering phase function</span>
 <span class="c1"># (in this case Mie and Henyey-Greenstein) can affect the simulated </span>
-<span class="c1"># reflectance even though the scattering coefficient and anistropy factor </span>
+<span class="c1"># reflectance even though the scattering coefficient and anisotropy factor </span>
 <span class="c1"># are the same</span>
 
 <span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
-<span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">fiber</span><span class="p">,</span> <span class="n">axis</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">fiber</span>
 <span class="kn">from</span> <span class="nn">xopto.util</span> <span class="kn">import</span> <span class="n">convolve</span>
 <span class="kn">from</span> <span class="nn">xopto.pf</span> <span class="kn">import</span> <span class="n">miepolystyrene</span>
 <span class="kn">from</span> <span class="nn">xopto.materials.ri</span> <span class="kn">import</span> <span class="n">polystyrene</span><span class="p">,</span> <span class="n">water</span>
@@ -370,7 +370,7 @@
 
 <span class="c1"># DEFINE DETECTOR (IN THIS EXAMPLE TOP IS USED)</span>
 <span class="n">detector_top_radial</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Radial</span><span class="p">(</span>
-    <span class="n">raxis</span><span class="o">=</span><span class="n">axis</span><span class="o">.</span><span class="n">RadialAxis</span><span class="p">(</span>
+    <span class="n">raxis</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">RadialAxis</span><span class="p">(</span>
         <span class="n">start</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">250</span>
     <span class="p">),</span>
     <span class="n">cosmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mf">0.22</span><span class="o">/</span><span class="mf">1.45</span><span class="p">))</span>
@@ -416,8 +416,8 @@
     <span class="n">mie_pf</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Lut</span><span class="p">(</span><span class="o">*</span><span class="n">mie</span><span class="o">.</span><span class="n">mclut</span><span class="p">())</span>
     <span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span> <span class="o">=</span> <span class="n">mie_pf</span>
 
-    <span class="n">detector_hg</span> <span class="o">=</span> <span class="n">mc_obj_hg</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">detector_mie</span> <span class="o">=</span> <span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wgsize</span><span class="o">=</span><span class="mi">256</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">detector_hg</span> <span class="o">=</span> <span class="n">mc_obj_hg</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">detector_mie</span> <span class="o">=</span> <span class="n">mc_obj_mie</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">nphotons</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="n">reflectance_hg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">convolve</span><span class="o">.</span><span class="n">fiber_reflectance</span><span class="p">(</span> 
         <span class="n">detector_hg</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">r</span><span class="p">,</span>
@@ -501,6 +501,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.dataset.render.common &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.dataset.render.common</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">xopto.materials</span> <span class="kn">import</span> <span class="n">ri</span>
+
+
+<span class="n">DEFAULT_WAVELENGTH</span> <span class="o">=</span> <span class="mf">500e-9</span>
+
+<span class="n">RI_DIGITS</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">RI_FUSED_SILICA</span> <span class="o">=</span> <span class="n">ri</span><span class="o">.</span><span class="n">glass</span><span class="o">.</span><span class="n">fusedsilica</span><span class="o">.</span><span class="n">malitson</span>
+<span class="n">RI_WATER</span> <span class="o">=</span> <span class="n">ri</span><span class="o">.</span><span class="n">water</span><span class="o">.</span><span class="n">daimon</span>
+<span class="n">RI_POLYSTYRENE</span> <span class="o">=</span> <span class="n">ri</span><span class="o">.</span><span class="n">polystyrene</span><span class="o">.</span><span class="n">nikolov</span>
+<span class="n">RI_AIR</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">wavelength</span><span class="p">:</span> <span class="mf">1.0</span>
+
+<span class="n">PROBE_REFLECTIVITY</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">wavelength</span><span class="p">:</span> <span class="mf">0.6</span>
+<span class="n">PROBE_DIAMETER</span> <span class="o">=</span> <span class="mf">6.0e-3</span>
+
+<div class="viewcode-block" id="prepare_cli"><a class="viewcode-back" href="../../../../apidoc/xopto.dataset.render.common.html#xopto.dataset.render.common.prepare_cli">[docs]</a><span class="k">def</span> <span class="nf">prepare_cli</span><span class="p">(</span><span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Prepare argument parser for the rendering calls.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    description: str</span>
+<span class="sd">        Description for the command line interface.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    parser: argparse.ArgumentParser</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Command line argument parser instance implements the following arguments:</span>
+
+<span class="sd">        verbose: bool</span>
+<span class="sd">        Turns on verbose mode.</span>
+
+<span class="sd">        test: bool</span>
+<span class="sd">            Run in test mode.</span>
+
+<span class="sd">        output_dir: str</span>
+<span class="sd">            Root directory of the dataset.</span>
+
+<span class="sd">        cl_device: str</span>
+<span class="sd">            OpenCL device name to use.</span>
+
+<span class="sd">        cl_index: int</span>
+<span class="sd">            OpenCL device index (zero-based).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="s1">&#39;--target-dir&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;target_dir&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">cwd</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Root directory of the dataset. The run scripts will be rendered &#39;</span>
+             <span class="s1">&#39;into the &quot;run/mcml/&quot; subdirectory.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-v&#39;</span><span class="p">,</span> <span class="s1">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Enables verbose report mode.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="s1">&#39;--test&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Do a test run with verbose output. No directories will &#39;</span>
+             <span class="s1">&#39;be created and no files will be saved.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-d&#39;</span><span class="p">,</span> <span class="s1">&#39;--cl-device&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;cl_device&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;OpenCL device to use for the simulations.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="s1">&#39;--cl-index&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;cl_index&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;OpenCL device index to use for the simulations.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">parser</span></div>
+
+<div class="viewcode-block" id="process_cli"><a class="viewcode-back" href="../../../../apidoc/xopto.dataset.render.common.html#xopto.dataset.render.common.process_cli">[docs]</a><span class="k">def</span> <span class="nf">process_cli</span><span class="p">(</span><span class="n">parser</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Process the ArgumentParser instance created with :py:func:`prepare_cli`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parser: argparse.ArgumentParser</span>
+<span class="sd">        Argument parser as returned by the :py:func:`prepare_ci` function.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        Keyword arguments from the command line interface as a dict.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The command line implements the following keyword arguments:</span>
+
+<span class="sd">        verbose: bool</span>
+<span class="sd">            Turns on verbose mode.</span>
+
+<span class="sd">        test: bool</span>
+<span class="sd">            Run in test mode.</span>
+
+<span class="sd">        output_dir: str</span>
+<span class="sd">            Root directory of the dataset.</span>
+
+<span class="sd">        cl_device: str</span>
+<span class="sd">            OpenCL device name to use.</span>
+
+<span class="sd">        cl_index: int</span>
+<span class="sd">            OpenCL device index (zero-based).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;verbose&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">test</span><span class="p">,</span>
+            <span class="s1">&#39;target_dir&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">target_dir</span><span class="p">,</span>
+            <span class="s1">&#39;cl_device&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">cl_device</span><span class="p">,</span>
+            <span class="s1">&#39;cl_index&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">cl_index</span><span class="p">}</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

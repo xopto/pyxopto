@@ -1,0 +1,7 @@
+xopto.util.animation.sv.fiber.sds\_transmittance module
+=======================================================
+
+.. automodule:: xopto.util.animation.sv.fiber.sds_transmittance
+   :members:
+   :undoc-members:
+   :show-inheritance:

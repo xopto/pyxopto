@@ -250,7 +250,7 @@ and jinja2).
 
 .. note::
 
-    When using Windows OS and Anaconda Pytohon distribution, PyXOpto should be installed by running the Anaconda Prompt and activating the custom environment created in the Python installation section. When using the WinPython distribution, the WinPython Command Prompt found in the extracted WinPython folder should be run instead.
+    When using Windows OS and Anaconda Python distribution, PyXOpto should be installed by running the Anaconda Prompt and activating the custom environment created in the Python installation section. When using the WinPython distribution, the WinPython Command Prompt found in the extracted WinPython folder should be run instead.
 
 The PyXOpto installation can be verified by running an example found in *examples* folder, e.g., examples/mcml/basic.py:
 

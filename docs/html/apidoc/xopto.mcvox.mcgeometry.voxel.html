@@ -244,6 +244,23 @@ structured array that represents the voxels.</p>
 <dd><p>The size of voxels along the z axis.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mcgeometry.voxel.Voxels.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcvox.mcgeometry.voxel.Voxels" title="xopto.mcvox.mcgeometry.voxel.Voxels"><span class="pre">xopto.mcvox.mcgeometry.voxel.Voxels</span></a><a class="reference internal" href="../_modules/xopto/mcvox/mcgeometry/voxel.html#Voxels.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mcgeometry.voxel.Voxels.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance of <a class="reference internal" href="#xopto.mcvox.mcgeometry.voxel.Voxels" title="xopto.mcvox.mcgeometry.voxel.Voxels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Voxels</span></code></a> from a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – A dict with instance data.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>instance</strong> – A new instance of <a class="reference internal" href="#xopto.mcvox.mcgeometry.voxel.Voxels" title="xopto.mcvox.mcgeometry.voxel.Voxels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Voxels</span></code></a>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#xopto.mcvox.mcgeometry.voxel.Voxels" title="xopto.mcvox.mcgeometry.voxel.Voxels">Voxels</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="xopto.mcvox.mcgeometry.voxel.Voxels.grid">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">grid</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[numpy.ndarray,</span> <span class="pre">numpy.ndarray,</span> <span class="pre">numpy.ndarray]</span></em><a class="headerlink" href="#xopto.mcvox.mcgeometry.voxel.Voxels.grid" title="Permalink to this definition">¶</a></dt>
@@ -363,6 +380,12 @@ to slice.</p></li>
 <dt class="sig sig-object py" id="xopto.mcvox.mcgeometry.voxel.Voxels.size">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcvox.mcgeometry.voxel.Voxels.size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Total number of voxels.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mcgeometry.voxel.Voxels.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcvox/mcgeometry/voxel.html#Voxels.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mcgeometry.voxel.Voxels.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -490,6 +513,7 @@ tho OpenCL device before running a new simulation.</p>
 <li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>

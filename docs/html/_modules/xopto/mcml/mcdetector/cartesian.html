@@ -313,7 +313,7 @@
         <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span></div>
 
     <span class="k">def</span> <span class="nf">_get_normalized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nphotons</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_accumulators_area</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nphotons</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_accumulators_area</span><span class="p">))</span>
     <span class="n">normalized</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_normalized</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Normalized.&#39;</span><span class="p">)</span>
     <span class="n">reflectance</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_normalized</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Reflectance.&#39;</span><span class="p">)</span>
     <span class="n">transmittance</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_normalized</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Transmittance.&#39;</span><span class="p">)</span>
@@ -435,7 +435,7 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">detector_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">detector_type</span> <span class="o">!=</span> <span class="s1">&#39;Cartesian&#39;</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected &quot;Cartesian&quot; type bot got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected &quot;Cartesian&quot; type but got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">detector_type</span><span class="p">))</span>
         <span class="n">xaxis_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;x_axis&#39;</span><span class="p">)</span>
         <span class="n">xaxis_type</span> <span class="o">=</span> <span class="n">xaxis_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
@@ -527,6 +527,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

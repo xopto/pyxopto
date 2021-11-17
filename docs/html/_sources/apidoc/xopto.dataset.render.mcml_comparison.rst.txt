@@ -1,0 +1,7 @@
+xopto.dataset.render.mcml\_comparison module
+============================================
+
+.. automodule:: xopto.dataset.render.mcml_comparison
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1112,6 +1112,18 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">append_r_lut_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_float</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="ClWorkerStandardBufferLutMixin.clear_r_float_lut"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcworker.html#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.clear_r_float_lut">[docs]</a>    <span class="k">def</span> <span class="nf">clear_r_float_lut</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Clear the content of the floating point read-only lookup table manager.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">float_r_lut_manager</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ClWorkerStandardBufferLutMixin.clear_r_int_lut"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcworker.html#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin.clear_r_int_lut">[docs]</a>    <span class="k">def</span> <span class="nf">clear_r_int_lut</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Clear the content of the integer read-only lookup table manager.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">int_r_lut_manager</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
     <span class="k">def</span> <span class="nf">_get_np_r_float_lut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">np_buffers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">r_lut_manager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_float</span><span class="p">)]</span>
     <span class="n">np_r_float_lut</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
@@ -1232,6 +1244,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

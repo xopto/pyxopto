@@ -1,0 +1,18 @@
+xopto.util.animation.sv package
+===============================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.util.animation.sv.fiber
+
+Module contents
+---------------
+
+.. automodule:: xopto.util.animation.sv
+   :members:
+   :undoc-members:
+   :show-inheritance:

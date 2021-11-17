@@ -365,7 +365,7 @@
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span><span class="o">*</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">))</span></div>
 
     <span class="k">def</span> <span class="nf">_get_normalized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">nphotons</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nphotons</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
     <span class="n">normalized</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_normalized</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Normalized.&#39;</span><span class="p">)</span>
     <span class="n">reflectance</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_normalized</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Reflectance.&#39;</span><span class="p">)</span>
     <span class="n">transmittance</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_normalized</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Transmittance.&#39;</span><span class="p">)</span>
@@ -429,7 +429,7 @@
             <span class="s1">&#39;orientation&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span><span class="p">,</span>
             <span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="p">,</span>
             <span class="s1">&#39;position&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-            <span class="s1">&#39;direction&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;direction&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="LinearArray.fromdict"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcvox.mcdetector.probe.lineararray.html#xopto.mcvox.mcdetector.probe.lineararray.LinearArray.fromdict">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -491,6 +491,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

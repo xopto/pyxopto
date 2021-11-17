@@ -1,0 +1,7 @@
+xopto.util.animation.sv.fiber.common module
+===========================================
+
+.. automodule:: xopto.util.animation.sv.fiber.common
+   :members:
+   :undoc-members:
+   :show-inheritance:

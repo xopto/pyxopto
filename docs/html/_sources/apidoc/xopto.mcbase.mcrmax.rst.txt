@@ -1,0 +1,7 @@
+xopto.mcbase.mcrmax module
+==========================
+
+.. automodule:: xopto.mcbase.mcrmax
+   :members:
+   :undoc-members:
+   :show-inheritance:

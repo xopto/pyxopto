@@ -106,6 +106,7 @@
             <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McSource{&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t position;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point2f_t size;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t n;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t cos_critical;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t cos_min;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_int_t layer_index;&#39;</span><span class="p">,</span>
@@ -330,6 +331,17 @@
 
         <span class="k">return</span> <span class="n">target</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
 
+<div class="viewcode-block" id="UniformRectangular.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.rectangular.html#xopto.mcml.mcsource.rectangular.UniformRectangular.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">,</span> 
+                <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height</span><span class="p">,</span>
+                <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span>
+                <span class="s1">&#39;na&#39;</span><span class="p">:</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_na</span><span class="p">,</span>
+                <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;UniformRectangular(width=</span><span class="si">{}</span><span class="s1">, height=</span><span class="si">{}</span><span class="s1">, n=</span><span class="si">{}</span><span class="s1">, na=</span><span class="si">{}</span><span class="s1">,&#39;</span>\
                <span class="s1">&#39;position=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">))&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -363,8 +375,7 @@
 <span class="sd">            &#39;&#39;&#39;</span>
             <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point2f_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;cos_critical&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;na&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
@@ -381,6 +392,7 @@
             <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McSource{&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t position;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point2f_t size;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t n;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t cos_critical;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t na;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_int_t layer_index;&#39;</span><span class="p">,</span>
@@ -577,8 +589,7 @@
 <span class="sd">            &#39;&#39;&#39;</span>
             <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point2f_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;cos_critical&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;lut&#39;</span><span class="p">,</span> <span class="n">CollectionLut</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)),</span>
@@ -595,6 +606,7 @@
             <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McSource{&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t position;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point2f_t size;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t n;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t cos_critical;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_lut_t lut_lut;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_size_t layer_index;&#39;</span><span class="p">,</span>
@@ -906,6 +918,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

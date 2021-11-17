@@ -40,7 +40,7 @@ The layers are stacked along the positive z-axis. The first layer
 in the stack is used to describe the medium above the top sample
 surface and the last layer in the stack is used to describe the
 medium bellow the bottom sample surfaces.</p>
-<p>The classess that allow definition of individual layers and forming of
+<p>The classes that allow definition of individual layers and forming of
 layer stacks can be found in the <a class="reference internal" href="../../apidoc/xopto.mcml.mclayer.layer.html#module-xopto.mcml.mclayer.layer" title="xopto.mcml.mclayer.layer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mclayer.layer</span></code></a> module. The
 module is for convenience also imported into the main simulator module
 <a class="reference internal" href="../../apidoc/xopto.mcml.mc.html#module-xopto.mcml.mc" title="xopto.mcml.mc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mc</span></code></a>.</p>
@@ -58,7 +58,8 @@ be any instance of <a class="reference internal" href="../../apidoc/xopto.mcbase
 </ol>
 <p>The following example creates a layer with a refractive index 1.33,
 absorption coefficient 1 cm <sup>-1</sup> , scattering coefficient
-50 cm <sup>-1</sup>, thickness 10 mm and Henyey-Greenstein scattering phase function with anisotropy 0.9.</p>
+50 cm <sup>-1</sup>, thickness 10 mm and Henyey-Greenstein
+scattering phase function with anisotropy 0.9.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
 
 <span class="n">layer</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.33</span><span class="p">,</span> <span class="n">mua</span><span class="o">=</span><span class="mf">1.0e2</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">50.0e2</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">(</span><span class="mf">0.9</span><span class="p">))</span>
@@ -181,6 +182,7 @@ human-readable output when used with the <code class="xref py py-func docutils l
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../apidoc/modules.html">xopto</a></li>
 </ul>
 

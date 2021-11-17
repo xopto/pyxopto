@@ -61,31 +61,32 @@ core surface.</p></li>
 </dl>
 </li>
 <li><p><a class="reference internal" href="../../apidoc/xopto.mcml.mcsource.fiber.html#xopto.mcml.mcsource.fiber.LambertianFiber" title="xopto.mcml.mcsource.fiber.LambertianFiber"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcsource.fiber.LambertianFiber</span></code></a> implements a fiber
-source that emits like a Lambertian surface within the NA.</p></li>
+source that emits like a Lambertian surface within the NA of the core.</p></li>
 </ul>
 </div></blockquote>
 </li>
 <li><p><a class="reference internal" href="../../apidoc/xopto.mcml.mcsource.fiberni.html#module-xopto.mcml.mcsource.fiberni" title="xopto.mcml.mcsource.fiberni"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcsource.fiberni</span></code></a> module implements the same sources as
-the <a class="reference internal" href="../../apidoc/xopto.mcml.mcsource.fiber.html#module-xopto.mcml.mcsource.fiber" title="xopto.mcml.mcsource.fiber"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcsource.fiber</span></code></a> module but assuming a normal
+the <a class="reference internal" href="../../apidoc/xopto.mcml.mcsource.fiber.html#module-xopto.mcml.mcsource.fiber" title="xopto.mcml.mcsource.fiber"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcsource.fiber</span></code></a> module but for a normal source
 incidence.</p></li>
 <li><p><a class="reference internal" href="../../apidoc/xopto.mcml.mcsource.rectangular.html#module-xopto.mcml.mcsource.rectangular" title="xopto.mcml.mcsource.rectangular"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcsource.rectangular</span></code></a> module implements the following sources:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><a class="reference internal" href="../../apidoc/xopto.mcml.mcsource.rectangular.html#xopto.mcml.mcsource.rectangular.UniformRectangular" title="xopto.mcml.mcsource.rectangular.UniformRectangular"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcsource.rectangular.UniformRectangular</span></code></a> implements
 a rectangular source that emits uniformly within the NA from each point
-of the surface.</p></li>
+of the source surface.</p></li>
 <li><p><a class="reference internal" href="../../apidoc/xopto.mcml.mcsource.rectangular.html#xopto.mcml.mcsource.rectangular.UniformRectangularLut" title="xopto.mcml.mcsource.rectangular.UniformRectangularLut"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcsource.rectangular.UniformRectangularLut</span></code></a> implements
 a rectangular source that follows a measured or nonparametric angular
-emission.</p></li>
+emission characteristics.</p></li>
 <li><p><a class="reference internal" href="../../apidoc/xopto.mcml.mcsource.rectangular.html#xopto.mcml.mcsource.rectangular.LambertianRectangular" title="xopto.mcml.mcsource.rectangular.LambertianRectangular"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcsource.rectangular.LambertianRectangular</span></code></a> implements
-a rectangular source that emits like a Lambertian surface within the NA.</p></li>
+a rectangular source that emits like a Lambertian surface within the NA
+of the source.</p></li>
 </ul>
 </div></blockquote>
 </li>
 </ul>
 <p>All sources have a position attribute that defines the position of the
 geometrical center of the source. This position is used as a reference point
-for terminating the photon packet that leave the simulation radius that is set
+for terminating photon packets that leave the simulation radius set
 through the <a class="reference internal" href="../../apidoc/xopto.mcml.mc.html#xopto.mcml.mc.Mc.rmax" title="xopto.mcml.mc.Mc.rmax"><code class="xref py py-attr docutils literal notranslate"><span class="pre">xopto.mcml.mc.Mc.rmax</span></code></a> property.</p>
 <p>Note that the refractive index of the source (not all the sources implement
 this property) is used to compute the initial photon packet weight (the
@@ -97,7 +98,7 @@ the surrounding medium.</p>
 fiber sources</p>
 <section id="isotropic-point">
 <h2>Isotropic point<a class="headerlink" href="#isotropic-point" title="Permalink to this headline">¶</a></h2>
-<p>This source can be placed inside and abov the sample. The following example
+<p>This source can be placed inside and above the sample. The following example
 shows how to create an isotropic point source 5 mm bellow the top
 surface of the sample:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
@@ -117,7 +118,7 @@ will be launched with the z coordinate set to 0. If a specular surface
 that detector. Such zero-weight packets are
 immediately terminated and have no contribution to the fluence and surface
 detectors, however will be included in the trace (have no effect on
-the sampling volume or other trace-based analysis due to zero-weight).
+the sampling volume or other trace-based analysis due to the zero-weight).
 Note that in case the position lies within the sample (z &gt; 0),
 it will be used as the launch point and the packets will retain the
 full initial weight.</p>
@@ -137,7 +138,7 @@ the center of the top sample surface <img class="math" src="../../_images/math/c
 <p>The packets are always launched from the top surface of the sample. The
 source position and direction are used to determine the launch point at the
 sample surface. From there, the packet is first refracted into the sample
-and the reflectance is subtracted from the initial packet weight.
+and the surface reflectance is subtracted from the initial packet weight.
 If a specular surface <a class="reference internal" href="detector.html#mcml-detector-label"><span class="std std-ref">detector</span></a> is used, the
 reflectance is deposited into that detector.</p>
 </section>
@@ -146,12 +147,12 @@ reflectance is deposited into that detector.</p>
 <p>A uniform beam of elliptical cross section can be created with
 <a class="reference internal" href="../../apidoc/xopto.mcml.mcsource.uniformbeam.html#xopto.mcml.mcsource.uniformbeam.UniformBeam" title="xopto.mcml.mcsource.uniformbeam.UniformBeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcml.mcsource.uniformbeam.UniformBeam</span></code></a> source. The beam
 diameter along the x and y axis is controlled by the <code class="code docutils literal notranslate"><span class="pre">diameter</span></code> parameter.
-In case the diameter is give as a single <code class="code docutils literal notranslate"><span class="pre">float</span></code> value, the cross
+In case the diameter is give as a scalar <code class="code docutils literal notranslate"><span class="pre">float</span></code> value, the cross
 section of the beam becomes circular. Note that the diameters are applied in
 the coordinate system of the beam. Optionally, the beam can be repositioned
 and tilted through the <code class="code docutils literal notranslate"><span class="pre">position</span></code> and <code class="code docutils literal notranslate"><span class="pre">direction</span></code> parameters.
 The following example creates a uniform beam with a perpendicular incidence
-and circular cross section diameter of 1 mm.</p>
+and a circular cross section diameter of 1 mm.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
 
 <span class="n">src</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">UniformBeam</span><span class="p">(</span><span class="mf">1.0e-3</span><span class="p">)</span>
@@ -160,7 +161,7 @@ and circular cross section diameter of 1 mm.</p>
 <p>The packets are always launched from the top surface of the sample. The
 source position and direction are used to determine the launch point at the
 sample surface. From there, the packet is first refracted into the sample
-and the reflectance is subtracted from the initial packet weight.
+and the surface reflectance is subtracted from the initial packet weight.
 If a specular surface <a class="reference internal" href="detector.html#mcml-detector-label"><span class="std std-ref">detector</span></a> is used, the
 reflectance is deposited into that detector.</p>
 </section>
@@ -168,9 +169,10 @@ reflectance is deposited into that detector.</p>
 <h2>Gaussian beam<a class="headerlink" href="#gaussian-beam" title="Permalink to this headline">¶</a></h2>
 <p>A Gaussian beam can be created with
 <a class="reference internal" href="../../apidoc/xopto.mcml.mcsource.gaussianbeam.html#xopto.mcml.mcsource.gaussianbeam.GaussianBeam" title="xopto.mcml.mcsource.gaussianbeam.GaussianBeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcml.mcsource.gaussianbeam.GaussianBeam</span></code></a> source. The standard
-deviation (<img class="math" src="../../_images/math/b52df27bfb0b1e3af0c2c68a7b9da459178c2a7d.png" alt="\sigma"/>) of the beam can be defined along the x and y axis.
-In case <img class="math" src="../../_images/math/b52df27bfb0b1e3af0c2c68a7b9da459178c2a7d.png" alt="\sigma"/> is give as a single <code class="code docutils literal notranslate"><span class="pre">float</span></code> value, the value is
-applied along the x and y axis. the beam is clipped at a distance of
+deviation (<img class="math" src="../../_images/math/b52df27bfb0b1e3af0c2c68a7b9da459178c2a7d.png" alt="\sigma"/>) of the beam can be independently set along
+the x and y axis.
+In case <img class="math" src="../../_images/math/b52df27bfb0b1e3af0c2c68a7b9da459178c2a7d.png" alt="\sigma"/> is give as a scalar <code class="code docutils literal notranslate"><span class="pre">float</span></code> value, the value is
+applied along the x and y axis. The beam is clipped at a distance of
 <img class="math" src="../../_images/math/30371a77d1672b4d8e851aa1dce1982043638e97.png" alt="5\sigma"/> from the beam axis. The clip distance can be customized through
 the <code class="code docutils literal notranslate"><span class="pre">clip</span></code> parameter. Note that <img class="math" src="../../_images/math/b52df27bfb0b1e3af0c2c68a7b9da459178c2a7d.png" alt="\sigma"/> is applied in
 the coordinate system of the beam. Optionally, the beam can be repositioned
@@ -194,12 +196,11 @@ reflectance is deposited into that detector.</p>
 <section id="fiber">
 <h2>Fiber<a class="headerlink" href="#fiber" title="Permalink to this headline">¶</a></h2>
 <p>This example shows how to create an optical fiber source with an <img class="math" src="../../_images/math/b56b1cca4b2190af755362e6bd0f33946bc4a068.png" alt="NA=0.22"/>,
-fused silica core of diameter 200 μm and outer diameter of the
+a fused silica core of diameter 200 μm and outer diameter of the
 cladding 220 μm. Note that in this example we also use the
-<a class="reference internal" href="../../apidoc/xopto.materials.ri.html#module-xopto.materials.ri" title="xopto.materials.ri"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.materials.ri</span></code></a> module for calculating the refractive index of
-fused silica at 550 nm and <a class="reference internal" href="../../apidoc/xopto.mcbase.mcutil.fiber.html#module-xopto.mcbase.mcutil.fiber" title="xopto.mcbase.mcutil.fiber"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcbase.mcutil.fiber</span></code></a> module for
-creating a multimode fiber
-<a class="reference internal" href="../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber" title="xopto.mcbase.mcutil.fiber.MultimodeFiber"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultimodeFiber</span></code></a>.</p>
+<a class="reference internal" href="../../apidoc/xopto.materials.ri.html#module-xopto.materials.ri" title="xopto.materials.ri"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.materials.ri</span></code></a> module to calculate the refractive index of
+fused silica at 550 nm and the <a class="reference internal" href="../../apidoc/xopto.mcbase.mcutil.fiber.html#module-xopto.mcbase.mcutil.fiber" title="xopto.mcbase.mcutil.fiber"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcbase.mcutil.fiber</span></code></a> module for
+creating a multimode fiber <a class="reference internal" href="../../apidoc/xopto.mcbase.mcutil.fiber.html#xopto.mcbase.mcutil.fiber.MultimodeFiber" title="xopto.mcbase.mcutil.fiber.MultimodeFiber"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultimodeFiber</span></code></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.materials.ri</span>
 <span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
 <span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">fiber</span>
@@ -306,6 +307,7 @@ size <img class="math" src="../../_images/math/e0af985addbfbfdb1fab9c81e127cdee5
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../apidoc/modules.html">xopto</a></li>
 </ul>
 

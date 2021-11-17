@@ -21,6 +21,8 @@ Submodules
    xopto.mcbase.mcfluence
    xopto.mcbase.mcobject
    xopto.mcbase.mcoptions
+   xopto.mcbase.mcrmax
+   xopto.mcbase.mcrun
    xopto.mcbase.mcsrc
    xopto.mcbase.mcsv
    xopto.mcbase.mctest

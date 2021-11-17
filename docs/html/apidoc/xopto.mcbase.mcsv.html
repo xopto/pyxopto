@@ -87,10 +87,34 @@ instance if the input argument target is None.</p>
 <em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">cl_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcsv.html#SamplingVolume.cl_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcsv.SamplingVolume.cl_type" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcsv.SamplingVolume.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcsv.html#SamplingVolume.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcsv.SamplingVolume.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the data buffer (fill with 0) if one exists.</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="xopto.mcbase.mcsv.SamplingVolume.data">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcsv.SamplingVolume.data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Raw sampling volume accumulator data if any.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcsv.SamplingVolume.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcbase.mcsv.SamplingVolume" title="xopto.mcbase.mcsv.SamplingVolume"><span class="pre">xopto.mcbase.mcsv.SamplingVolume</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcsv.html#SamplingVolume.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcsv.SamplingVolume.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance of <a class="reference internal" href="#xopto.mcbase.mcsv.SamplingVolume" title="xopto.mcbase.mcsv.SamplingVolume"><code class="xref py py-class docutils literal notranslate"><span class="pre">SamplingVolume</span></code></a> from dict data
+exported by the <a class="reference internal" href="#xopto.mcbase.mcsv.SamplingVolume.todict" title="xopto.mcbase.mcsv.SamplingVolume.todict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">todict()</span></code></a> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Instance data exported to a dict.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sv</strong> – A new <a class="reference internal" href="#xopto.mcbase.mcsv.SamplingVolume" title="xopto.mcbase.mcsv.SamplingVolume"><code class="xref py py-class docutils literal notranslate"><span class="pre">SamplingVolume</span></code></a> instance initialized with the data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#xopto.mcbase.mcsv.SamplingVolume" title="xopto.mcbase.mcsv.SamplingVolume">SamplingVolume</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -234,6 +258,7 @@ units.</p></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>

@@ -1,0 +1,7 @@
+xopto.util.animation.sv.fiber.sv\_paths\_transmittance module
+=============================================================
+
+.. automodule:: xopto.util.animation.sv.fiber.sv_paths_transmittance
+   :members:
+   :undoc-members:
+   :show-inheritance:

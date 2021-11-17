@@ -1,0 +1,7 @@
+xopto.dataset.render.mcvox module
+=================================
+
+.. automodule:: xopto.dataset.render.mcvox
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -231,6 +231,23 @@ represent one instance of a material stack.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mcmaterial.material.Materials.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcvox.mcmaterial.material.Materials" title="xopto.mcvox.mcmaterial.material.Materials"><span class="pre">xopto.mcvox.mcmaterial.material.Materials</span></a><a class="reference internal" href="../_modules/xopto/mcvox/mcmaterial/material.html#Materials.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mcmaterial.material.Materials.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance of <a class="reference internal" href="#xopto.mcvox.mcmaterial.material.Materials" title="xopto.mcvox.mcmaterial.material.Materials"><code class="xref py py-class docutils literal notranslate"><span class="pre">Materials</span></code></a> from a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – A dict with instance data.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>instance</strong> – A new instance of <a class="reference internal" href="#xopto.mcvox.mcmaterial.material.Materials" title="xopto.mcvox.mcmaterial.material.Materials"><code class="xref py py-class docutils literal notranslate"><span class="pre">Materials</span></code></a>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#xopto.mcvox.mcmaterial.material.Materials" title="xopto.mcvox.mcmaterial.material.Materials">Materials</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="xopto.mcvox.mcmaterial.material.Materials.material">
 <span class="sig-name descname"><span class="pre">material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcvox.mcmaterial.material.Material" title="xopto.mcvox.mcmaterial.material.Material"><span class="pre">xopto.mcvox.mcmaterial.material.Material</span></a><a class="reference internal" href="../_modules/xopto/mcvox/mcmaterial/material.html#Materials.material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mcmaterial.material.Materials.material" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the material at the specified index. Note that the first
@@ -241,6 +258,12 @@ material (index 0) represents the medium that sourounds the sample.</p>
 <dt class="sig sig-object py" id="xopto.mcvox.mcmaterial.material.Materials.material_type">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">material_type</span></span><a class="headerlink" href="#xopto.mcvox.mcmaterial.material.Materials.material_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Data type that represents a material.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mcmaterial.material.Materials.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcvox/mcmaterial/material.html#Materials.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mcmaterial.material.Materials.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -291,6 +314,7 @@ material (index 0) represents the medium that sourounds the sample.</p>
 <li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>

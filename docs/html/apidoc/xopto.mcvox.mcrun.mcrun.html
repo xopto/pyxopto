@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.mcvox.mcrun.mcrun module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.mcvox.mcsource package" href="xopto.mcvox.mcsource.html" />
+    <link rel="prev" title="xopto.mcvox.mcrun package" href="xopto.mcvox.mcrun.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.mcvox.mcrun.mcrun">
+<span id="xopto-mcvox-mcrun-mcrun-module"></span><h1>xopto.mcvox.mcrun.mcrun module<a class="headerlink" href="#module-xopto.mcvox.mcrun.mcrun" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcvox.mcrun.mcrun.RunMinPacketsTrace">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">RunMinPacketsTrace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_packets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcvox/mcrun/mcrun.html#RunMinPacketsTrace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mcrun.mcrun.RunMinPacketsTrace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcrun.html#xopto.mcbase.mcrun.RunMinPacketsBase" title="xopto.mcbase.mcrun.RunMinPacketsBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcrun.RunMinPacketsBase</span></code></a></p>
+<p>Object for running MC simulations until the desired number of packets
+is collected in the (filtered) trace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min_packets</strong> (<em>float</em>) – Minimum number of packet traces that needs to be collected.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – Number of packets to launch in a single simulation.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mcrun.mcrun.RunMinPacketsTrace.process_batch">
+<span class="sig-name descname"><span class="pre">process_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><span class="pre">xopto.mcbase.mctrace.Trace</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><span class="pre">xopto.mcbase.mcfluence.Fluence</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceCyl" title="xopto.mcbase.mcfluence.FluenceCyl"><span class="pre">xopto.mcbase.mcfluence.FluenceCyl</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceRz" title="xopto.mcbase.mcfluence.FluenceRz"><span class="pre">xopto.mcbase.mcfluence.FluenceRz</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcvox.mcdetector.base.html#xopto.mcvox.mcdetector.base.Detectors" title="xopto.mcvox.mcdetector.base.Detectors"><span class="pre">xopto.mcvox.mcdetector.base.Detectors</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><span class="pre">xopto.mcbase.mctrace.Trace</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><span class="pre">xopto.mcbase.mcfluence.Fluence</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceCyl" title="xopto.mcbase.mcfluence.FluenceCyl"><span class="pre">xopto.mcbase.mcfluence.FluenceCyl</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceRz" title="xopto.mcbase.mcfluence.FluenceRz"><span class="pre">xopto.mcbase.mcfluence.FluenceRz</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcvox.mcdetector.base.html#xopto.mcvox.mcdetector.base.Detectors" title="xopto.mcvox.mcdetector.base.Detectors"><span class="pre">xopto.mcvox.mcdetector.base.Detectors</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/mcvox/mcrun/mcrun.html#RunMinPacketsTrace.process_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mcrun.mcrun.RunMinPacketsTrace.process_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process one MC simulation.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Do not call this method directly. The method is called by
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>result</strong> (<em>mc.MC_RESULT_TYPE</em>) – A tuple as returned by the <code class="xref py py-meth docutils literal notranslate"><span class="pre">mcvox.mc.Mc.run()</span></code> method.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>total_weight</strong> (<em>float</em>) – Total weight collected by the selected detector.</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – The number of packets collected by the detector or None.</p></li>
+<li><p><strong>result</strong> (<em>mc.MC_RESULT_TYPE</em>) – Input simulation result ready for the next Monte Carlo simulation.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcvox.mcrun.mcrun.RunMinWeightBottom">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">RunMinWeightBottom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">slice</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcvox/mcrun/mcrun.html#RunMinWeightBottom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mcrun.mcrun.RunMinWeightBottom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcvox.mcrun.mcrun._RunMinWeightDetector</span></code></p>
+<p>Object for running MC simulations until the desired weight is collected
+by the bottom detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min_weight</strong> (<em>float</em>) – Minimum weight that needs to be collected by the detector.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – Number of packets to launch in a single simulation.</p></li>
+<li><p><strong>selection</strong> (<em>slice</em><em> or </em><em>int</em>) – A slice / region or index of the detector that is used to compute
+the collected weight. If None (default), the entire detector
+contributes to the total weight.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcvox.mcrun.mcrun.RunMinWeightSpecular">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">RunMinWeightSpecular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">slice</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcvox/mcrun/mcrun.html#RunMinWeightSpecular"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mcrun.mcrun.RunMinWeightSpecular" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcvox.mcrun.mcrun._RunMinWeightDetector</span></code></p>
+<p>Object for running MC simulations until the desired weight is collected
+by the specular detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min_weight</strong> (<em>float</em>) – Minimum weight that needs to be collected by the detector.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – Number of packets to launch in a single simulation.</p></li>
+<li><p><strong>selection</strong> (<em>slice</em><em> or </em><em>int</em>) – A slice / region or index of the detector that is used to compute
+the collected weight. If None (default), the entire detector
+contributes to the total weight.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcvox.mcrun.mcrun.RunMinWeightTop">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">RunMinWeightTop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">slice</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcvox/mcrun/mcrun.html#RunMinWeightTop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mcrun.mcrun.RunMinWeightTop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcvox.mcrun.mcrun._RunMinWeightDetector</span></code></p>
+<p>Object for running MC simulations until the desired weight is collected
+by the top detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min_weight</strong> (<em>float</em>) – Minimum weight that needs to be collected by the detector.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – Number of packets to launch in a single simulation.</p></li>
+<li><p><strong>selection</strong> (<em>slice</em><em> or </em><em>int</em>) – A slice / region or index of the detector that is used to compute
+the collected weight. If None (default), the entire detector
+contributes to the total weight.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcvox.mcrun.mcrun.RunMinWeightTrace">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">RunMinWeightTrace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcvox/mcrun/mcrun.html#RunMinWeightTrace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mcrun.mcrun.RunMinWeightTrace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcrun.html#xopto.mcbase.mcrun.RunMinWeightBase" title="xopto.mcbase.mcrun.RunMinWeightBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcrun.RunMinWeightBase</span></code></a></p>
+<p>Object for running MC simulations until the desired weight is collected
+by the trace, i.e. the sum of terminal weights of the traced packets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min_weight</strong> (<em>float</em>) – Minimum total terminal weight of the packets that needs to be
+collected by the trace.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – Number of packets to launch in a single simulation.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcvox.mcrun.mcrun.RunMinWeightTrace.process_batch">
+<span class="sig-name descname"><span class="pre">process_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><span class="pre">xopto.mcbase.mctrace.Trace</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><span class="pre">xopto.mcbase.mcfluence.Fluence</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceCyl" title="xopto.mcbase.mcfluence.FluenceCyl"><span class="pre">xopto.mcbase.mcfluence.FluenceCyl</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceRz" title="xopto.mcbase.mcfluence.FluenceRz"><span class="pre">xopto.mcbase.mcfluence.FluenceRz</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcvox.mcdetector.base.html#xopto.mcvox.mcdetector.base.Detectors" title="xopto.mcvox.mcdetector.base.Detectors"><span class="pre">xopto.mcvox.mcdetector.base.Detectors</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><span class="pre">xopto.mcbase.mctrace.Trace</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><span class="pre">xopto.mcbase.mcfluence.Fluence</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceCyl" title="xopto.mcbase.mcfluence.FluenceCyl"><span class="pre">xopto.mcbase.mcfluence.FluenceCyl</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceRz" title="xopto.mcbase.mcfluence.FluenceRz"><span class="pre">xopto.mcbase.mcfluence.FluenceRz</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="xopto.mcvox.mcdetector.base.html#xopto.mcvox.mcdetector.base.Detectors" title="xopto.mcvox.mcdetector.base.Detectors"><span class="pre">xopto.mcvox.mcdetector.base.Detectors</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/mcvox/mcrun/mcrun.html#RunMinWeightTrace.process_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcvox.mcrun.mcrun.RunMinWeightTrace.process_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process one MC simulation.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Do not call this method directly. The method is called by
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>result</strong> (<em>mc.MC_RESULT_TYPE</em>) – A tuple as returned by the <code class="xref py py-meth docutils literal notranslate"><span class="pre">mcvox.mc.Mc.run()</span></code> method.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>total_weight</strong> (<em>float</em>) – Total weight collected by the selected detector.</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – The number of packets collected by the detector or None.</p></li>
+<li><p><strong>result</strong> (<em>mc.MC_RESULT_TYPE</em>) – Input simulation result ready for the next Monte Carlo simulation.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.mcvox.html">xopto.mcvox package</a><ul>
+  <li><a href="xopto.mcvox.mcrun.html">xopto.mcvox.mcrun package</a><ul>
+      <li>Previous: <a href="xopto.mcvox.mcrun.html" title="previous chapter">xopto.mcvox.mcrun package</a></li>
+      <li>Next: <a href="xopto.mcvox.mcsource.html" title="next chapter">xopto.mcvox.mcsource package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

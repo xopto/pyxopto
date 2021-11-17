@@ -214,6 +214,13 @@
 
         <span class="k">return</span> <span class="n">target</span></div>
 
+<div class="viewcode-block" id="LambertianReflector.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsurface.lambertian.html#xopto.mcml.mcsurface.lambertian.LambertianReflector.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to dict</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                <span class="s1">&#39;reflectance&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reflectance</span><span class="p">,</span> <span class="s1">&#39;specular&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specular</span><span class="p">}</span></div>
+
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;LambertianReflector(reflectance=</span><span class="si">{}</span><span class="s1">, specular=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_reflectance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specular</span><span class="p">)</span>
@@ -251,6 +258,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

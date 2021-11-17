@@ -1,0 +1,26 @@
+xopto.util.animation package
+============================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.util.animation.sv
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.util.animation.common
+
+Module contents
+---------------
+
+.. automodule:: xopto.util.animation
+   :members:
+   :undoc-members:
+   :show-inheritance:

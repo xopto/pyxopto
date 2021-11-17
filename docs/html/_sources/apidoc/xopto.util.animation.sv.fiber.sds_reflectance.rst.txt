@@ -1,0 +1,7 @@
+xopto.util.animation.sv.fiber.sds\_reflectance module
+=====================================================
+
+.. automodule:: xopto.util.animation.sv.fiber.sds_reflectance
+   :members:
+   :undoc-members:
+   :show-inheritance:

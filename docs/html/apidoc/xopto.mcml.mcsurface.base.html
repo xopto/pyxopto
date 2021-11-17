@@ -55,6 +55,14 @@
 top or bottom sample surface.</p>
 <p>Create a layout for the top or bottom sample surface. By default
 the location is not initialized.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutAny.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutAny" title="xopto.mcml.mcsurface.base.SurfaceLayoutAny"><span class="pre">xopto.mcml.mcsurface.base.SurfaceLayoutAny</span></a><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayoutAny.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutAny.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance of a surface layout from a dict.
+The dict keys must match the parameter names defined by the
+constructor.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -158,6 +166,25 @@ the Monte Carlo kernel.</p>
 <dd class="field-odd"><p><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure">cltypes.Structure</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutDefault.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutDefault" title="xopto.mcml.mcsurface.base.SurfaceLayoutDefault"><span class="pre">xopto.mcml.mcsurface.base.SurfaceLayoutDefault</span></a><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayoutDefault.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutDefault.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of <a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutDefault" title="xopto.mcml.mcsurface.base.SurfaceLayoutDefault"><code class="xref py py-class docutils literal notranslate"><span class="pre">SurfaceLayoutDefault</span></code></a> from a
+dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Dictionary created by the <a class="reference internal" href="#xopto.mcml.mcsurface.base.SurfaceLayoutDefault.todict" title="xopto.mcml.mcsurface.base.SurfaceLayoutDefault.todict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SurfaceLayoutDefault.todict()</span></code></a>
+method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayoutDefault.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayoutDefault.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayoutDefault.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to dict.</p>
 </dd></dl>
 
 </dd></dl>
@@ -268,6 +295,12 @@ Monte Carlo kernel.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayouts.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcml/mcsurface/base.html#SurfaceLayouts.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayouts.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to dict.</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="xopto.mcml.mcsurface.base.SurfaceLayouts.top">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">top</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcobject.McObject</span></em><a class="headerlink" href="#xopto.mcml.mcsurface.base.SurfaceLayouts.top" title="Permalink to this definition">¶</a></dt>
@@ -320,6 +353,7 @@ Monte Carlo kernel.</p>
 <li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>

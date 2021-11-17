@@ -179,6 +179,23 @@ photon packets.</p>
 <dd><p>Source direction.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsource.gaussianbeam.GaussianBeam.fwhm2sigma">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">fwhm2sigma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fwhm</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/mcml/mcsource/gaussianbeam.html#GaussianBeam.fwhm2sigma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsource.gaussianbeam.GaussianBeam.fwhm2sigma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts sigma to Full width at half maximum (FWHM).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sigma</strong> (<em>float</em>) – Standard deviation of the Gaussian.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fwhm</strong> – FWHM parameter of the Gaussian</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="xopto.mcml.mcsource.gaussianbeam.GaussianBeam.position">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[float,</span> <span class="pre">float,</span> <span class="pre">float]</span></em><a class="headerlink" href="#xopto.mcml.mcsource.gaussianbeam.GaussianBeam.position" title="Permalink to this definition">¶</a></dt>
@@ -189,6 +206,29 @@ photon packets.</p>
 <dt class="sig sig-object py" id="xopto.mcml.mcsource.gaussianbeam.GaussianBeam.sigma">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">sigma</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[float,</span> <span class="pre">float]</span></em><a class="headerlink" href="#xopto.mcml.mcsource.gaussianbeam.GaussianBeam.sigma" title="Permalink to this definition">¶</a></dt>
 <dd><p>Beam standard deviation (m).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsource.gaussianbeam.GaussianBeam.sigma2fwhm">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">sigma2fwhm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/mcml/mcsource/gaussianbeam.html#GaussianBeam.sigma2fwhm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsource.gaussianbeam.GaussianBeam.sigma2fwhm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts Full width at half maximum (FWHM) to sigma (standard deviation).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fwhm</strong> (<em>float</em>) – Full width at half maximum (FWHM).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sigma</strong> – Standard deviation of the Gaussian.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsource.gaussianbeam.GaussianBeam.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcml/mcsource/gaussianbeam.html#GaussianBeam.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsource.gaussianbeam.GaussianBeam.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -238,6 +278,7 @@ appropriate fields.</p>
 <li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>

@@ -85,6 +85,13 @@
 <span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">mcsrc</span>
 <span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">mcworker</span>
 
+<span class="n">MC_RESULT_TYPE</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span>
+    <span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mcfluence</span><span class="o">.</span><span class="n">FLUENCE_TYPE</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span> <span class="ow">or</span> <span class="kc">None</span>
+<span class="p">]</span>
+
+
 <span class="c1"># Instructions for fusing OpenCL source files into a single file.</span>
 <span class="n">_MCVOX_FUSION_SPEC</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;inputs&#39;</span><span class="p">:</span> <span class="p">[</span>
@@ -114,7 +121,7 @@
                  <span class="n">source</span><span class="p">:</span> <span class="n">mcsource</span><span class="o">.</span><span class="n">Source</span><span class="p">,</span>
                  <span class="n">detectors</span><span class="p">:</span> <span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">trace</span><span class="p">:</span> <span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                 <span class="n">fluence</span><span class="p">:</span> <span class="n">mcfluence</span><span class="o">.</span><span class="n">Fluence</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">fluence</span><span class="p">:</span> <span class="n">mcfluence</span><span class="o">.</span><span class="n">FLUENCE_TYPE</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">surface</span><span class="p">:</span> <span class="n">mcsurface</span><span class="o">.</span><span class="n">SurfaceLayouts</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">types</span><span class="p">:</span> <span class="n">mctypes</span><span class="o">.</span><span class="n">McDataTypesBase</span> <span class="o">=</span> <span class="n">mctypes</span><span class="o">.</span><span class="n">McDataTypesSingle</span><span class="p">,</span>
                  <span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">mcoptions</span><span class="o">.</span><span class="n">McOption</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -171,7 +178,7 @@
 
 <span class="sd">            - MC_USE_TRACE</span>
 
-<span class="sd">        fluence: mcfluence.Fluence</span>
+<span class="sd">        fluence: mcfluence.Fluence or mcfluence.FluenceCyl or mcfluence.FluenceRz</span>
 <span class="sd">            Fluence object that collects the energy deposited by the photon</span>
 <span class="sd">            packets on a regular 3D grid.</span>
 
@@ -470,6 +477,13 @@
 
         <span class="k">return</span> <span class="n">lutetry</span></div>
 
+<div class="viewcode-block" id="Mc.clear_r_luts"><a class="viewcode-back" href="../../../apidoc/xopto.mcvox.mc.html#xopto.mcvox.mc.Mc.clear_r_luts">[docs]</a>    <span class="k">def</span> <span class="nf">clear_r_luts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Clear all the read-only lookup table managers</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_r_float_lut</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_r_int_lut</span><span class="p">()</span></div>
+
     <span class="k">def</span> <span class="nf">_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nphotons</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Pack the data into buffers.</span>
@@ -483,6 +497,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cl_rw_accumulator_allocator</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cl_rw_float_allocator</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cl_rw_int_allocator</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="c1"># Clear the lookup table managers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_r_luts</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mc_obj_types</span><span class="p">[</span><span class="s1">&#39;voxel&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voxels</span><span class="o">.</span><span class="n">voxel_type</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The voxel kind/type must not&#39;</span> \
@@ -747,12 +764,10 @@
                             <span class="n">n</span><span class="p">,</span> <span class="n">siz</span><span class="p">[</span><span class="s1">&#39;surface_layouts&#39;</span><span class="p">]))</span>
 
 <div class="viewcode-block" id="Mc.run"><a class="viewcode-back" href="../../../apidoc/xopto.mcvox.mc.html#xopto.mcvox.mc.Mc.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nphotons</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-            <span class="n">out</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> <span class="n">mcfluence</span><span class="o">.</span><span class="n">Fluence</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-                       <span class="n">mcdetector</span><span class="o">.</span><span class="n">Detector</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">]</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">out</span><span class="p">:</span> <span class="n">MC_RESULT_TYPE</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">wgsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">maxthreads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">copyseeds</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">exportsrc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> \
-                <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span><span class="p">,</span> <span class="n">mcfluence</span><span class="o">.</span><span class="n">Fluence</span><span class="p">,</span> <span class="n">mcdetector</span><span class="o">.</span><span class="n">Detector</span><span class="p">]:</span>
+            <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MC_RESULT_TYPE</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Run a simulation with the specified number of photon packets.</span>
 
@@ -764,7 +779,7 @@
 <span class="sd">        wgsize: int</span>
 <span class="sd">            Local work group size. If None (default), the optimal work group</span>
 <span class="sd">            size is determined automatically.</span>
-<span class="sd">        out: Tuple[mctrace.Trace, mcfluence.Fluence, mcdetector.Detector] or None</span>
+<span class="sd">        out: MC_RESULT_TYPE or None</span>
 <span class="sd">            Existing trace, fluence and/or detector objects that will be</span>
 <span class="sd">            updated with the simulation results if not None. Pass objects</span>
 <span class="sd">            that were returned after the previous/first call of the</span>
@@ -786,10 +801,10 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        trace: mctrace.Trace</span>
+<span class="sd">        trace: mcfluence.Fluence or mcfluence.FluenceCyl or mcfluence.FluenceRz</span>
 <span class="sd">            Trace object instance with simulation results or None if not used</span>
 <span class="sd">            by the simulator.</span>
-<span class="sd">        fluence: mcfluence.Fluence</span>
+<span class="sd">        fluence: mcfluence.FLUENCE_TYPE</span>
 <span class="sd">            Fluence object instance with simulation results or None if not used</span>
 <span class="sd">            by the simulator.</span>
 <span class="sd">        detector: mcdetector.Detector</span>
@@ -802,7 +817,7 @@
 <span class="sd">        :py:class:`mcfluence.Fluence` and :py:class:`mcdetector.Detector`</span>
 <span class="sd">        objects are not the same instances as were passed to the</span>
 <span class="sd">        constructor :py:meth:`Mc`. A new set of instances is created</span>
-<span class="sd">        for each run of the simulator.</span>
+<span class="sd">        for the results of each run of the simulator.</span>
 
 <span class="sd">        The maximum number of photon packets that can be simulated in a</span>
 <span class="sd">        single run is limited by the kernel data type used as the photon</span>
@@ -1619,6 +1634,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

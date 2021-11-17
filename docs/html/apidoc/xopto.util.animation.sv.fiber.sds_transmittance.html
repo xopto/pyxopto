@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>xopto.util.animation.sv.fiber.sds_transmittance module &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.util.animation.sv.fiber.sv_paths_transmittance module" href="xopto.util.animation.sv.fiber.sv_paths_transmittance.html" />
+    <link rel="prev" title="xopto.util.animation.sv.fiber.sds_reflectance module" href="xopto.util.animation.sv.fiber.sds_reflectance.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-xopto.util.animation.sv.fiber.sds_transmittance">
+<span id="xopto-util-animation-sv-fiber-sds-transmittance-module"></span><h1>xopto.util.animation.sv.fiber.sds_transmittance module<a class="headerlink" href="#module-xopto.util.animation.sv.fiber.sds_transmittance" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.util.animation.sv.fiber.sds_transmittance.default_configuration">
+<span class="sig-name descname"><span class="pre">default_configuration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/animation/sv/fiber/sds_transmittance.html#default_configuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.animation.sv.fiber.sds_transmittance.default_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of the default simulation configuration that can be
+optionally customized.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.util.animation.sv.fiber.sds_transmittance.process_config">
+<span class="sig-name descname"><span class="pre">process_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/animation/sv/fiber/sds_transmittance.html#process_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.animation.sv.fiber.sds_transmittance.process_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the simulation configuration. This will create objects for
+the Monte Carlo simulator and return the amendded configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>dict</em>) – Customized default configuration.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>config</strong> – Configuration with the created Monte Carlo simulator objects.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.util.animation.sv.fiber.sds_transmittance.sv_fiber_transmittance">
+<span class="sig-name descname"><span class="pre">sv_fiber_transmittance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pyopencl._cl.Device</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/animation/sv/fiber/sds_transmittance.html#sv_fiber_transmittance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.animation.sv.fiber.sds_transmittance.sv_fiber_transmittance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates data for visualization of the sampling volume in transmittance
+configuration as a function of the lateral distance between the source
+and detector fiber.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – Output file for the simulation results or None.</p></li>
+<li><p><strong>config</strong> (<em>dict</em>) – Monte Carlo configuration as returned by
+<a class="reference internal" href="#xopto.util.animation.sv.fiber.sds_transmittance.default_configuration" title="xopto.util.animation.sv.fiber.sds_transmittance.default_configuration"><code class="xref py py-func docutils literal notranslate"><span class="pre">default_configuration()</span></code></a> and optionally customized.</p></li>
+<li><p><strong>cl_device</strong> – Opencl device on which to run the simulations or None.</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – If False, existing output files will not be overwritten.</p></li>
+<li><p><strong>verbose</strong> – If nonzero, progress reports are periodically printed to the console.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>results</strong> – Simulation results with and simulation configuration data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">xopto</a><ul>
+  <li><a href="xopto.html">xopto package</a><ul>
+  <li><a href="xopto.util.html">xopto.util package</a><ul>
+  <li><a href="xopto.util.animation.html">xopto.util.animation package</a><ul>
+  <li><a href="xopto.util.animation.sv.html">xopto.util.animation.sv package</a><ul>
+  <li><a href="xopto.util.animation.sv.fiber.html">xopto.util.animation.sv.fiber package</a><ul>
+      <li>Previous: <a href="xopto.util.animation.sv.fiber.sds_reflectance.html" title="previous chapter">xopto.util.animation.sv.fiber.sds_reflectance module</a></li>
+      <li>Next: <a href="xopto.util.animation.sv.fiber.sv_paths_transmittance.html" title="next chapter">xopto.util.animation.sv.fiber.sv_paths_transmittance module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

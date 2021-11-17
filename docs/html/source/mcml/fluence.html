@@ -37,13 +37,30 @@
 <h1>Fluence<a class="headerlink" href="#fluence" title="Permalink to this headline">¶</a></h1>
 <p>Fluence detector is used to obtain the spatial distribution of the
 energy (packet weights) deposited into the sample through the process of
-absorption. The fluence detector is implemented in the
-<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcfluence.Fluence</span></code></a> class. The observed volume
-voxelization is axis-aligned and allows independent adjustment of the voxel
-size along the x, y and z axis.</p>
-<p>The <a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fluence</span></code></a> is also conveniently
+absorption or optionally the fluence rate.
+Three different implementations of the fluence detector are
+available in the <a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#module-xopto.mcbase.mcfluence" title="xopto.mcbase.mcfluence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcbase.mcfluence</span></code></a> module:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceRz" title="xopto.mcbase.mcfluence.FluenceRz"><code class="xref py py-class docutils literal notranslate"><span class="pre">FluenceRz</span></code></a> - Radially symmetric implementation <img class="math" src="../../_images/math/00e682e1db246b4240b7b57317b64a32d45c10f5.png" alt="(r, z)"/>.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceCyl" title="xopto.mcbase.mcfluence.FluenceCyl"><code class="xref py py-class docutils literal notranslate"><span class="pre">FluenceCyl</span></code></a> - Implementation in cylindrical coordinates <img class="math" src="../../_images/math/94e5fc91e35ffcd1fdee0378dde584ab90440206.png" alt="(r, \varphi, z)"/>.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fluence</span></code></a> - Implementation in Cartesian coordinates <img class="math" src="../../_images/math/7bc9b1d09f06174302e9375ccd7d6bf2f26b5fc4.png" alt="(x, y, z)"/>.</p></li>
+</ul>
+<p>The observed volume voxelization is axis-aligned and allows independent
+adjustment of the voxel size along the x, y and z axis for
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fluence</span></code></a>, along r, φ and z axis for .
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceCyl" title="xopto.mcbase.mcfluence.FluenceCyl"><code class="xref py py-class docutils literal notranslate"><span class="pre">FluenceCyl</span></code></a> and along the r and z axis for
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceRz" title="xopto.mcbase.mcfluence.FluenceRz"><code class="xref py py-class docutils literal notranslate"><span class="pre">FluenceRz</span></code></a>.</p>
+<p>The <a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceRz" title="xopto.mcbase.mcfluence.FluenceRz"><code class="xref py py-class docutils literal notranslate"><span class="pre">FluenceRz</span></code></a>,
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceCyl" title="xopto.mcbase.mcfluence.FluenceCyl"><code class="xref py py-class docutils literal notranslate"><span class="pre">FluenceCyl</span></code></a> and
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceRz" title="xopto.mcbase.mcfluence.FluenceRz"><code class="xref py py-class docutils literal notranslate"><span class="pre">FluenceRz</span></code></a> classes are also conveniently
 imported into the <a class="reference internal" href="../../apidoc/xopto.mcml.mcfluence.html#module-xopto.mcml.mcfluence" title="xopto.mcml.mcfluence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcfluence</span></code></a> and
 <a class="reference internal" href="../../apidoc/xopto.mcvox.mcfluence.html#module-xopto.mcvox.mcfluence" title="xopto.mcvox.mcfluence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcvox.mcfluence</span></code></a> modules.</p>
+<p>The fluence detector allows collection of unscaled deposited / absorbed
+packet weights or of the fluence rate where the deposited packet weights are
+scaled by the inverse of the absorption coefficient. The collection method can
+be selected through the <code class="code python docutils literal notranslate"><span class="name"><span class="pre">mode</span></span></code> argument that should be set
+to <code class="code python docutils literal notranslate"><span class="literal string single"><span class="pre">‘deposition’</span></span></code> (default) for the raw weights and <code class="code python docutils literal notranslate"><span class="literal string single"><span class="pre">‘fluence’</span></span></code>
+for the fluence rate.</p>
 <p>In the following example we voxelize a volume that extends along the
 x axis from -5 to 5 mm, along the y axis from -5 to 5 mm and along
 the z axis from 0 to 10 mm. The voxel size along all the three axis is
@@ -76,10 +93,18 @@ centers of the voxels along the x, y and z axis can be accessed through the
 </pre></div>
 </div>
 <p>The fluence data are stored in a 3D numpy array that can be accessed through the
-<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.data" title="xopto.mcbase.mcfluence.Fluence.data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code></a> property. The individual voxels
-are addressed / sliced as <code class="code python docutils literal notranslate"><span class="name"><span class="pre">data</span></span><span class="punctuation"><span class="pre">[</span></span><span class="name"><span class="pre">z_slice</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="name"><span class="pre">y_slice</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="name"><span class="pre">x_slice</span></span><span class="punctuation"><span class="pre">]</span></span></code>. Note that
-the values in the fluence data array are the unscaled sums of
-deposited / absorbed photon packet weights.</p>
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.raw" title="xopto.mcbase.mcfluence.Fluence.raw"><code class="xref py py-attr docutils literal notranslate"><span class="pre">raw</span></code></a> or
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.data" title="xopto.mcbase.mcfluence.Fluence.data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code></a> properties. The individual
+voxels are addressed / sliced as <code class="code python docutils literal notranslate"><span class="name"><span class="pre">data</span></span><span class="punctuation"><span class="pre">[</span></span><span class="name"><span class="pre">z_slice</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="name"><span class="pre">y_slice</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="name"><span class="pre">x_slice</span></span><span class="punctuation"><span class="pre">]</span></span></code>.
+Note that the values returned by the
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.raw" title="xopto.mcbase.mcfluence.Fluence.raw"><code class="xref py py-attr docutils literal notranslate"><span class="pre">raw</span></code></a> property are the unscaled
+sums of deposited / absorbed photon packet weights while the values returned by
+the <a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.data" title="xopto.mcbase.mcfluence.Fluence.data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code></a> property are scaled by the
+inverse of the product between the voxel volume and the number of launched
+packets. Also note that the voxel size is constant for the
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence" title="xopto.mcbase.mcfluence.Fluence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fluence</span></code></a> but changes with location for the
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceRz" title="xopto.mcbase.mcfluence.FluenceRz"><code class="xref py py-class docutils literal notranslate"><span class="pre">FluenceRz</span></code></a> and
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.FluenceCyl" title="xopto.mcbase.mcfluence.FluenceCyl"><code class="xref py py-class docutils literal notranslate"><span class="pre">FluenceCyl</span></code></a>.</p>
 <p>After completing the Monte Carlo simulation, the fluence accumulator can be
 viewed using the <a class="reference internal" href="../../apidoc/xopto.mcbase.mcfluence.html#xopto.mcbase.mcfluence.Fluence.plot" title="xopto.mcbase.mcfluence.Fluence.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a> method. The
 method allows slicing across the voxelized volume along one of the main
@@ -87,7 +112,7 @@ coordinate axis. Use the <code class="code docutils literal notranslate"><span c
 axis:</p>
 <ul class="simple">
 <li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">axis</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’x’</span></span></code> slice along the x axis,</p></li>
-<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">axis</span></span><span class="operator"><span class="pre">=</span></span><span class="name"><span class="pre">y</span></span></code> slice along the y axis,</p></li>
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">axis</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’y’</span></span></code> slice along the y axis,</p></li>
 <li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">axis</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’z’</span></span></code> slice along the z axis.</p></li>
 </ul>
 <p>To show integral projections along one of the main coordinate axis call with:</p>
@@ -154,6 +179,7 @@ of weights (<code class="code python docutils literal notranslate"><span class="
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../apidoc/modules.html">xopto</a></li>
 </ul>
 

@@ -433,8 +433,8 @@
             <span class="s1">&#39;position&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
         <span class="p">}</span></div>
 
-<div class="viewcode-block" id="FiberArray.fromdict"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcsurface.probe.fiberarray.html#xopto.mcml.mcsurface.probe.fiberarray.FiberArray.fromdict">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;FiberArray&#39;</span><span class="p">:</span>
+<div class="viewcode-block" id="FiberArray.fromdict"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcsurface.probe.fiberarray.html#xopto.mcml.mcsurface.probe.fiberarray.FiberArray.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;FiberArray&#39;</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Create an accumulator instance from a dictionary.</span>
 
@@ -444,14 +444,14 @@
 <span class="sd">            Dictionary created by the :py:meth:`FiberArray.todict` method.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">layout_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">layout_type</span> <span class="o">!=</span> <span class="s1">&#39;FiberArray&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">layout_type</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="s1">&#39;Expected a &quot;FiberArray&quot; type bot got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">layout_type</span><span class="p">))</span>
+                <span class="s1">&#39;Expected a &quot;</span><span class="si">{}</span><span class="s1">&quot; type bot got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">layout_type</span><span class="p">))</span>
         <span class="n">fibers</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fibers&#39;</span><span class="p">)</span>
-        <span class="n">fibers</span> <span class="o">=</span> <span class="p">[</span><span class="n">FiberLayout</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">fiber</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">fibers</span><span class="p">]</span>
+        <span class="n">fibers</span> <span class="o">=</span> <span class="p">[</span><span class="n">FiberLayout</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">fibers</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">FiberArray</span><span class="p">(</span><span class="n">fibers</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">fibers</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;FiberArray(fibers=</span><span class="si">{}</span><span class="s1">, diameter=</span><span class="si">{}</span><span class="s1">, reflectivity=</span><span class="si">{}</span><span class="s1">, &#39;</span>\
@@ -492,6 +492,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

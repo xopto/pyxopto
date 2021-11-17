@@ -179,6 +179,36 @@
             <span class="s1">&#39;yaxis&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
             <span class="s1">&#39;zaxis&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span>
         <span class="p">}</span></div>
+    
+<div class="viewcode-block" id="SamplingVolume.fromdict"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcsv.html#xopto.mcbase.mcsv.SamplingVolume.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;SamplingVolume&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance of :py:class:`SamplingVolume` from dict data</span>
+<span class="sd">        exported by the :py:meth:`todict` method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Instance data exported to a dict.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sv: SamplingVolume</span>
+<span class="sd">            A new :py:class:`SamplingVolume` instance initialized with the data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">type_name</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">type_name</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected data for type &quot;</span><span class="si">{}</span><span class="s1">&quot; but got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">type_name</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">SamplingVolume</span><span class="p">(</span>
+            <span class="n">Axis</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xaxis&#39;</span><span class="p">)),</span>
+            <span class="n">Axis</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;yaxis&#39;</span><span class="p">)),</span>
+            <span class="n">Axis</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;zaxis&#39;</span><span class="p">)),</span>
+            <span class="o">**</span><span class="n">data_</span>
+        <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_get_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">n</span><span class="p">,)</span>
@@ -230,6 +260,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_weight</span> <span class="o">=</span> <span class="n">w</span>
     <span class="n">weight</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_weight</span><span class="p">,</span> <span class="n">_set_weight</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;Total weight of the accumulated photon packets.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SamplingVolume.clear"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcsv.html#xopto.mcbase.mcsv.SamplingVolume.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Clear the data buffer (fill with 0) if one exists.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SamplingVolume.update_data"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcsv.html#xopto.mcbase.mcsv.SamplingVolume.update_data">[docs]</a>    <span class="k">def</span> <span class="nf">update_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span>
                     <span class="n">accumulators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">total_weight</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -434,6 +471,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

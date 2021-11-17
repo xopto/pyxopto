@@ -1,0 +1,18 @@
+xopto.dataset package
+=====================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.dataset.render
+
+Module contents
+---------------
+
+.. automodule:: xopto.dataset
+   :members:
+   :undoc-members:
+   :show-inheritance:

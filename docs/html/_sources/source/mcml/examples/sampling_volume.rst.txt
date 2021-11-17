@@ -26,12 +26,12 @@
 Sampling volume simulations
 ===========================
 
-This example (available in `examples/mcml/sampling_volume`) covers all the neccessary steps for simulating sampling volume utilizing multimode optical fibers as sources and detectors. Sampling volume gives us an understanding of which part of the turbid medium under investigation is primarily responsible for the given detected signal (Meglinsky, I. V., and S. J. Matcher, Med. Biol. Eng. Comput., 39(1), 44-50 (2001).). This example uses a similar approach as in :ref:`example-photon-packet-tracing`, which should be read first before proceeding with this example.
+This example (available in `examples/mcml/sampling_volume`) covers all the necessary steps for simulating sampling volume utilizing multimode optical fibers as sources and detectors. Sampling volume gives us an understanding of which part of the turbid medium under investigation is primarily responsible for the given detected signal (Meglinsky, I. V., and S. J. Matcher, Med. Biol. Eng. Comput., 39(1), 44-50 (2001).). This example uses a similar approach as in :ref:`example-photon-packet-tracing`, which should be read first before proceeding with this example.
 
 Importing the required modules and submodules
 ---------------------------------------------
 
-Like in the example :ref:`example-photon-packet-tracing`, we import the neccessary modules. In addition, we import the submodule :py:mod:`xopto.mcml.mcutil.axis`, which comprises helper classes for accumulator axis definitions.
+Like in the example :ref:`example-photon-packet-tracing`, we import the necessary modules. In addition, we import the submodule :py:mod:`xopto.mcml.mcutil.axis`, which comprises helper classes for accumulator axis definitions.
 
 .. code-block:: python
 
@@ -62,7 +62,7 @@ Select the desired OpenCL computational device (see :ref:`opencl-devices-label`)
 The layer stack
 ---------------
 
-In this example we use a single-layered turbid medium of 1 |nbsp| cm thickness. The refractive index of the single layer was set to 1.33, while the surrounding medium refractive index is set to 1.45. The absorption and scattering coefficients of the single layer are set to 2 |nbsp| 1/cm and 250 |nbsp| 1/cm. Finally, the Henyey-Greenstein phase function is utilized with anistropy factor of 0.9 in the single layer turbid medium.
+In this example we use a single-layered turbid medium of 1 |nbsp| cm thickness. The refractive index of the single layer was set to 1.33, while the surrounding medium refractive index is set to 1.45. The absorption and scattering coefficients of the single layer are set to 2 |nbsp| 1/cm and 250 |nbsp| 1/cm. Finally, the Henyey-Greenstein phase function is utilized with anisotropy factor of 0.9 in the single layer turbid medium.
 
 .. code-block:: python
 
@@ -116,7 +116,7 @@ Unlike in the example :ref:`example-photon-packet-tracing`, we define the multim
 Trace
 -----
 
-For sampling volume simulations, the photon packet traces are required. The trace object is defined similarly to the example :ref:`example-photon-packet-tracing`. The only difference is in the geometrical properties, where the photon packet traces are selected only if the photon packet is detected in the multimode optical fiber detector. As such, the final :math:`z` coordinate should be within a small interval from the upper boundary :math:`z=0`. The final direction of the detected photon packet should be within the acceptance cone corresponding to the numerical apperture 0.22. Note that the detected photon packets are already propagated over the boundary and the surrounding medium is therefore fused silica or medium with refractive index approx. 1.45. Finally, the photon packets are detected only within a circle of radius 100 |nbsp| μm, which is displaced by the same amount as the multimode optical fiber detector.
+For sampling volume simulations, the photon packet traces are required. The trace object is defined similarly to the example :ref:`example-photon-packet-tracing`. The only difference is in the geometrical properties, where the photon packet traces are selected only if the photon packet is detected in the multimode optical fiber detector. As such, the final :math:`z` coordinate should be within a small interval from the upper boundary :math:`z=0`. The final direction of the detected photon packet should be within the acceptance cone corresponding to the numerical aperture 0.22. Note that the detected photon packets are already propagated over the boundary and the surrounding medium is therefore fused silica or medium with refractive index approx. 1.45. Finally, the photon packets are detected only within a circle of radius 100 |nbsp| μm, which is displaced by the same amount as the multimode optical fiber detector.
 
 .. code-block:: python
 
@@ -144,15 +144,15 @@ Here we construct the sampling volume object :py:class:`~xopto.mcbase.mcsv.Sampl
     ny = 200
     nz = 200
     sv = mc.mcsv.SamplingVolume(
-        xaxis=axis.Axis(-0.75e-3, 0.75e-3, nx), 
-        yaxis=axis.Axis(-0.75e-3, 0.75e-3, ny),
-        zaxis=axis.Axis(0e-3, 1e-3, nz)
+        xaxis=mc.mcsv..Axis(-0.75e-3, 0.75e-3, nx), 
+        yaxis=mc.mcsv.Axis(-0.75e-3, 0.75e-3, ny),
+        zaxis=mc.mcsv.Axis(0e-3, 1e-3, nz)
     )
 
 The Monte Carlo simulator object
 --------------------------------
 
-The Monte Carlo simulator object :py:class:`~xopto.mcml.mc.MC` is defined similarly to the example :ref:`example-photon-packet-tracing`. In this case the termination radius is set to a bigger value to allow the photon packets to propagate longer distances.
+The Monte Carlo simulator object :py:class:`~xopto.mcml.mc.Mc` is defined similarly to the example :ref:`example-photon-packet-tracing`. In this case the termination radius is set to a bigger value to allow the photon packets to propagate longer distances.
 
 .. code-block:: python
 
@@ -172,17 +172,17 @@ Similarly as provided in the example :ref:`example-photon-packet-tracing`, the s
 
 .. code-block:: python
 
-    output = mc_obj.run(nphotons, verbose=True, wgsize=256)
-    while output[0].data.shape[0] < recorded_traces:
-        output = mc_obj.run(nphotons, verbose=True, wgsize=256, out=output)
-        print('Photon packet traces deteced:', output[0].data.shape[0])
+    output = mc_obj.run(nphotons, verbose=True)
+    while output is None or len(output[0]) < recorded_traces:
+        output = mc_obj.run(nphotons, verbose=True, out=output)
+        print('Photon packet traces collected:', len(output[0]))
     trace = output[0]
     sv = mc_obj.sampling_volume(trace, sv)
 
 Sampling volume visualization
 -----------------------------
 
-The data within the sampling volume object :code:`sv` can be accessed via the :py:attr:`~xopto.mcml.mc.mcsv.data` attribute corresponding to a 3D numpy array with the 0 axis/indices corresponding to :math:`z` axis, 1 axis/indices corresponding to :math:`y` axis and 2 axis/indices correspodning to :math:`x` axis. In this example we visualize the sampling volume summed along the :math:`y` axis.
+The data within the sampling volume object :code:`sv` can be accessed via the :py:attr:`~xopto.mcml.mc.mcsv.data` attribute corresponding to a 3D numpy array with the 0 axis/indices corresponding to :math:`z` axis, 1 axis/indices corresponding to :math:`y` axis and 2 axis/indices corresponding to :math:`x` axis. In this example we visualize the sampling volume summed along the :math:`y` axis.
 
 .. code-block:: python
 

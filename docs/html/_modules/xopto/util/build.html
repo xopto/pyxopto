@@ -65,13 +65,33 @@
 <span class="n">MS_VS2VER</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2010</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2012</span><span class="p">:</span><span class="mi">110</span><span class="p">,</span> <span class="mi">2013</span><span class="p">:</span><span class="mi">120</span><span class="p">,</span> <span class="mi">2015</span><span class="p">:</span><span class="mi">130</span><span class="p">,</span> <span class="mi">2017</span><span class="p">:</span><span class="mi">150</span><span class="p">,</span> <span class="mi">2019</span><span class="p">:</span><span class="mi">160</span><span class="p">}</span>
 <span class="n">MS_VER2VS</span> <span class="o">=</span> <span class="p">{</span><span class="mi">100</span><span class="p">:</span><span class="mi">2010</span><span class="p">,</span> <span class="mi">110</span><span class="p">:</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">120</span><span class="p">:</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">130</span><span class="p">:</span><span class="mi">2015</span><span class="p">,</span> <span class="mi">150</span><span class="p">:</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">160</span><span class="p">:</span><span class="mi">2019</span><span class="p">}</span>
 
-<div class="viewcode-block" id="os_bits"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.os_bits">[docs]</a><span class="k">def</span> <span class="nf">os_bits</span><span class="p">():</span>
+<div class="viewcode-block" id="os_bits"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.os_bits">[docs]</a><span class="k">def</span> <span class="nf">os_bits</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns 32 for 32-bit OS, 64 for 64-bit OS.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span> <span class="o">&gt;</span> <span class="mi">4294967295</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">64</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">32</span></div>
 
-<div class="viewcode-block" id="subprocess_cmd"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.subprocess_cmd">[docs]</a><span class="k">def</span> <span class="nf">subprocess_cmd</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="subprocess_cmd"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.subprocess_cmd">[docs]</a><span class="k">def</span> <span class="nf">subprocess_cmd</span><span class="p">(</span><span class="n">command</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Execute a command using :py:class:`subprocess.Popen`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    command: list</span>
+<span class="sd">        List of str that represent the command and all the arguments.</span>
+<span class="sd">    verbose: bool</span>
+<span class="sd">        Turn on verbose reporting.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        Keyword arguments passed to :py:meth:`subprocess.Popen.__init__`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    err: str</span>
+<span class="sd">        Error from stderr if any.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Executing shell command:&#39;</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span>
     <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
@@ -85,7 +105,24 @@
 
     <span class="k">return</span> <span class="n">err</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="find_msvcver"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.find_msvcver">[docs]</a><span class="k">def</span> <span class="nf">find_msvcver</span><span class="p">(</span><span class="n">supported</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allver</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="find_msvcver"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.find_msvcver">[docs]</a><span class="k">def</span> <span class="nf">find_msvcver</span><span class="p">(</span><span class="n">supported</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">allver</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Find a version of installed MSC build tools.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    allver: bool</span>
+<span class="sd">        If True, all the found versions are returned, else only the highest</span>
+<span class="sd">        version is returned.</span>
+<span class="sd">    supported: list</span>
+<span class="sd">        Optional list of supported MSC build tool versions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ver: str</span>
+<span class="sd">        A list of found MSC build tools if allver is True, else only the</span>
+<span class="sd">        highest found version. Returns [] if no MSC build tools are found.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">supported</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">supported</span> <span class="o">=</span> <span class="n">MSVCVER</span>
     <span class="n">found</span> <span class="o">=</span> <span class="p">[]</span>
@@ -108,6 +145,24 @@
     <span class="k">return</span> <span class="s1">&#39;unknown&#39;</span></div>
 
 <div class="viewcode-block" id="find_msvsver"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.find_msvsver">[docs]</a><span class="k">def</span> <span class="nf">find_msvsver</span><span class="p">(</span><span class="n">supported</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allver</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Find a version of installed Visual studio tools.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    allver: bool</span>
+<span class="sd">        If True, all the found versions are returned, else only the highest</span>
+<span class="sd">        version is returned.</span>
+<span class="sd">    supported: list</span>
+<span class="sd">        Optional list of supported MSC build tool versions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ver: str</span>
+<span class="sd">        A list of found Visual Studio installations if allver is True, else</span>
+<span class="sd">        only the highest found version.</span>
+<span class="sd">        Returns [] if no MSC build tools are found.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">vers</span> <span class="o">=</span> <span class="n">find_msvcver</span><span class="p">(</span><span class="n">supported</span><span class="p">,</span> <span class="n">allver</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vers</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">msvcver2vs</span><span class="p">(</span><span class="n">vers</span><span class="p">)</span>
@@ -121,6 +176,9 @@
                    <span class="n">inclist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deflist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">libdirlist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">liblist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">envvars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">moveto</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">implib</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">automachine</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keepscript</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Builds a DLL using MSC build tools.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="n">machineopts</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">automachine</span><span class="p">:</span>
@@ -286,7 +344,10 @@
     <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
-<div class="viewcode-block" id="find_mingw_64"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.find_mingw_64">[docs]</a><span class="k">def</span> <span class="nf">find_mingw_64</span><span class="p">(</span><span class="n">gcc</span><span class="o">=</span><span class="s1">&#39;gcc&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="find_mingw_64"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.find_mingw_64">[docs]</a><span class="k">def</span> <span class="nf">find_mingw_64</span><span class="p">(</span><span class="n">gcc</span><span class="o">=</span><span class="s1">&#39;gcc&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns the version of installed 32-bit MINGW compiller or None.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">gcc</span><span class="p">,</span> <span class="s1">&#39;-dumpmachine&#39;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
     <span class="n">outstr</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -295,13 +356,21 @@
         <span class="k">return</span> <span class="n">_gcc_version</span><span class="p">(),</span> <span class="n">outstr</span>
     <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="find_mingw"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.find_mingw">[docs]</a><span class="k">def</span> <span class="nf">find_mingw</span><span class="p">():</span>
+<div class="viewcode-block" id="find_mingw"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.find_mingw">[docs]</a><span class="k">def</span> <span class="nf">find_mingw</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns the version of installed MINGW compiller or None.</span>
+<span class="sd">    If the underlaying OS is 32-bit, only 32-bit compilers are considered,</span>
+<span class="sd">    else only 64-bit compilers are considered.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">os_bits</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">32</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">find_mingw_64</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">find_mingw_32</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="find_mingw_32"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.find_mingw_32">[docs]</a><span class="k">def</span> <span class="nf">find_mingw_32</span><span class="p">(</span><span class="n">gcc</span><span class="o">=</span><span class="s1">&#39;gcc&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="find_mingw_32"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.find_mingw_32">[docs]</a><span class="k">def</span> <span class="nf">find_mingw_32</span><span class="p">(</span><span class="n">gcc</span><span class="o">=</span><span class="s1">&#39;gcc&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns the version of installed 32-bit compiller or None.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">gcc</span><span class="p">,</span> <span class="s1">&#39;-dumpmachine&#39;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
     <span class="n">outstr</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -315,7 +384,9 @@
                     <span class="n">gcc</span><span class="o">=</span><span class="s1">&#39;gcc&#39;</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="s1">&#39;-O2&#39;</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">implib</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                     <span class="n">moveto</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">envvars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">keepscript</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Builds a DLL using MIGW tools.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">os_bits</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">32</span><span class="p">:</span>
         <span class="n">cc</span> <span class="o">=</span> <span class="n">find_mingw_64</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">cc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -423,7 +494,10 @@
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Could not delete the temporary files:</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">err</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="find_gcc_64"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.find_gcc_64">[docs]</a><span class="k">def</span> <span class="nf">find_gcc_64</span><span class="p">(</span><span class="n">gcc</span><span class="o">=</span><span class="s1">&#39;gcc&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="find_gcc_64"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.find_gcc_64">[docs]</a><span class="k">def</span> <span class="nf">find_gcc_64</span><span class="p">(</span><span class="n">gcc</span><span class="o">=</span><span class="s1">&#39;gcc&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns version of the installed 64-bit GCC compiler or None.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">gcc</span><span class="p">,</span> <span class="s1">&#39;-dumpmachine&#39;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
     <span class="n">outstr</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -433,6 +507,9 @@
     <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="find_gcc_32"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.find_gcc_32">[docs]</a><span class="k">def</span> <span class="nf">find_gcc_32</span><span class="p">(</span><span class="n">gcc</span><span class="o">=</span><span class="s1">&#39;gcc&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns version of the installed 32-bit GCC compiler or None.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">gcc</span><span class="p">,</span> <span class="s1">&#39;-dumpmachine&#39;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
     <span class="n">outstr</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -442,6 +519,9 @@
     <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="find_gcc"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.find_gcc">[docs]</a><span class="k">def</span> <span class="nf">find_gcc</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Find a version of installed GCC that matches the number OS bits (32 or 64). </span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">os_bits</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">32</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">find_gcc_64</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
@@ -452,7 +532,9 @@
                   <span class="n">gcc</span><span class="o">=</span><span class="s1">&#39;gcc&#39;</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="s1">&#39;-O2&#39;</span><span class="p">,</span> <span class="n">soname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">implib</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                   <span class="n">moveto</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">envvars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">keepscript</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="s1">&#39;bash&#39;</span><span class="p">):</span>
-
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Builds a DLL (SO) using GCC.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">implib</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># ... no import libraries on linux platform</span>
     <span class="k">if</span> <span class="n">os_bits</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">32</span><span class="p">:</span>
         <span class="n">cc</span> <span class="o">=</span> <span class="n">find_gcc_64</span><span class="p">()</span>
@@ -570,7 +652,22 @@
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Could not delete the temporary files:</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">err</span><span class="p">)</span></div>
 <span class="c1">#%%</span>
 
-<div class="viewcode-block" id="build_so_dll"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.build_so_dll">[docs]</a><span class="k">def</span> <span class="nf">build_so_dll</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">cc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="build_so_dll"><a class="viewcode-back" href="../../../apidoc/xopto.util.build.html#xopto.util.build.build_so_dll">[docs]</a><span class="k">def</span> <span class="nf">build_so_dll</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">cc</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Build a dll or so library using the available native compiles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    args: list</span>
+<span class="sd">        Positional parameters passed to the DLL / SO build function.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        Keyword parameters passed to the DLL / SO build function.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    res: bool</span>
+<span class="sd">        True on success, else False.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">cc</span> <span class="o">=</span> <span class="p">[</span><span class="n">cc</span><span class="p">]</span>
 
@@ -722,6 +819,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

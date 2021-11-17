@@ -203,7 +203,7 @@
 <span class="sd">        Export object to a dict.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span> <span class="s1">&#39;mua&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_mua</span><span class="p">,</span> <span class="s1">&#39;mus&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_mus</span><span class="p">,</span>
-                <span class="s1">&#39;pf&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;Material&#39;</span><span class="p">}</span></div>
+                <span class="s1">&#39;pf&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;Material&#39;</span><span class="p">}</span></div>
 
 <div class="viewcode-block" id="Material.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Material.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Material&#39;</span><span class="p">:</span>
@@ -211,10 +211,16 @@
 <span class="sd">        Create a new object from dict. The dict keys must match</span>
 <span class="sd">        the parameter names defined by the constructor.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="n">data_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">t</span> <span class="o">!=</span> <span class="s1">&#39;Material&#39;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot create a Material instance from the data!&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+        <span class="n">pf_data</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;pf&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">mcpf</span><span class="p">,</span> <span class="n">pf_data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Scattering phase function &quot;</span><span class="si">{}</span><span class="s1">&quot; &#39;</span>
+                            <span class="s1">&#39;not implemented&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pf_data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]))</span>
+        <span class="n">pf_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mcpf</span><span class="p">,</span> <span class="n">pf_data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">pf</span><span class="o">=</span><span class="n">pf_type</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">pf_data</span><span class="p">),</span> <span class="o">**</span><span class="n">data_</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;Material(n=</span><span class="si">{}</span><span class="s1">, mua=</span><span class="si">{}</span><span class="s1">, mus=</span><span class="si">{}</span><span class="s1">, pf=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -385,6 +391,41 @@
     <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_materials</span><span class="p">[</span><span class="n">what</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
+<div class="viewcode-block" id="Materials.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Materials.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;Materials&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;materials&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">material</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span> <span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_materials</span><span class="p">]</span> 
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="Materials.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Materials.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Materials&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance of :py:class:`Materials` from a dict.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            A dict with instance data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        instance: Materials</span>
+<span class="sd">            A new instance of :py:class:`Materials`.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">type_name</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">type_name</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected data of instance Materials &#39;</span>
+                            <span class="s1">&#39;but got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_name</span><span class="p">))</span>
+        <span class="n">materials</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;materials&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Materials</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">Material</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">material</span><span class="p">)</span> <span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="n">materials</span><span class="p">],</span>
+            <span class="o">**</span><span class="n">data_</span>
+        <span class="p">)</span></div>
+
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_materials</span><span class="p">)</span>
 
@@ -443,6 +484,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

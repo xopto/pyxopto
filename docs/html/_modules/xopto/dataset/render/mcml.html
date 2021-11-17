@@ -1,0 +1,590 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xopto.dataset.render.mcml &#8212; PyXOpto 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for xopto.dataset.render.mcml</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+
+<span class="kn">import</span> <span class="nn">jinja2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">from</span> <span class="nn">xopto.dataset</span> <span class="kn">import</span> <span class="n">DATASET_PATH</span><span class="p">,</span> <span class="n">MCML_TEMPLATE_PATH</span>
+<span class="kn">from</span> <span class="nn">xopto.dataset.render</span> <span class="kn">import</span> <span class="n">common</span>
+
+<span class="c1"># Helper function that converts FWHM to sigma.</span>
+<span class="n">fwhm2sigma</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">GaussianBeam</span><span class="o">.</span><span class="n">fwhm2sigma</span>
+
+<span class="c1"># Number of samples along the absorption and reduced scattering coefficient axes.</span>
+<span class="n">N_MUA</span> <span class="o">=</span> <span class="mi">21</span>
+<span class="n">N_MUSR</span> <span class="o">=</span> <span class="mi">21</span>
+
+<span class="c1"># Spatial frequency domain - frequencies (1/m)</span>
+<span class="n">SFDI_FREQUENCY_RANGE</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.00e3</span><span class="p">,</span> <span class="mf">0.80e3</span><span class="p">]</span>
+<span class="n">SFDI_FREQUENCY_STEP</span> <span class="o">=</span> <span class="mf">0.01e3</span>
+
+<span class="c1"># Data common to all datasets.</span>
+<span class="n">RI_DIGITS</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">RI_DIGITS</span>
+<span class="n">DEFAULT_WAVELENGTH</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">DEFAULT_WAVELENGTH</span>
+
+<span class="c1"># General data for all datasets.</span>
+<span class="n">RI_AIR</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">common</span><span class="o">.</span><span class="n">RI_AIR</span><span class="p">(</span><span class="n">DEFAULT_WAVELENGTH</span><span class="p">),</span> <span class="n">RI_DIGITS</span><span class="p">)</span>
+<span class="n">RI_WATER</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">common</span><span class="o">.</span><span class="n">RI_WATER</span><span class="p">(</span><span class="n">DEFAULT_WAVELENGTH</span><span class="p">),</span> <span class="n">RI_DIGITS</span><span class="p">)</span>
+<span class="n">RI_FUSEDSILICA</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">common</span><span class="o">.</span><span class="n">RI_FUSED_SILICA</span><span class="p">(</span><span class="n">DEFAULT_WAVELENGTH</span><span class="p">),</span> <span class="n">RI_DIGITS</span><span class="p">)</span>
+<span class="n">PROBE_REFLECTIVITY</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">PROBE_REFLECTIVITY</span><span class="p">(</span><span class="n">DEFAULT_WAVELENGTH</span><span class="p">)</span>
+<span class="n">PROBE_DIAMETER</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">PROBE_DIAMETER</span>
+
+<span class="c1"># Data for the MIE datasets.</span>
+<span class="n">MIE_RI_DIGITS</span>          <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">RI_DIGITS</span>
+<span class="n">MIE_WAVELENGTHS</span>        <span class="o">=</span> <span class="p">[</span><span class="n">DEFAULT_WAVELENGTH</span><span class="p">]</span>
+<span class="n">MIE_RI_POLYSTYRENE</span>     <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">common</span><span class="o">.</span><span class="n">RI_POLYSTYRENE</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="n">MIE_RI_DIGITS</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">MIE_WAVELENGTHS</span><span class="p">]</span>
+<span class="n">MIE_RI_WATER</span>           <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">common</span><span class="o">.</span><span class="n">RI_WATER</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="n">MIE_RI_DIGITS</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">MIE_WAVELENGTHS</span><span class="p">]</span>
+<span class="n">MIE_RI_FUSED_SILICA</span>    <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">common</span><span class="o">.</span><span class="n">RI_FUSED_SILICA</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="n">MIE_RI_DIGITS</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">MIE_WAVELENGTHS</span><span class="p">]</span>
+<span class="n">MIE_RI_FIBER_CORE</span>      <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">common</span><span class="o">.</span><span class="n">RI_FUSED_SILICA</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="n">MIE_RI_DIGITS</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">MIE_WAVELENGTHS</span><span class="p">]</span>
+<span class="n">MIE_DIAMETERS</span>          <span class="o">=</span> <span class="p">[</span><span class="mf">0.25e-6</span><span class="p">,</span> <span class="mf">0.5e-6</span><span class="p">,</span> <span class="mf">1.0e-6</span><span class="p">,</span> <span class="mf">2.0e-6</span><span class="p">,</span> <span class="mf">4.0e-6</span><span class="p">]</span>
+<span class="n">MIE_PROBE_REFLECTIVITY</span> <span class="o">=</span> <span class="p">[</span><span class="n">PROBE_REFLECTIVITY</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">MIE_WAVELENGTHS</span><span class="p">)</span>
+
+<span class="c1"># Data for the SFDI dataset.</span>
+<span class="n">SFDI_ACCEPTANCE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">10.0</span><span class="p">)</span>
+<span class="n">SFDI_INCIDENCE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">20.0</span><span class="p">)</span>
+
+<span class="c1"># Default dataset configuration.</span>
+<span class="n">CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;rmax&#39;</span><span class="p">:</span> <span class="mf">25e-3</span><span class="p">,</span>
+    <span class="s1">&#39;num_packets&#39;</span><span class="p">:</span> <span class="mf">100e6</span><span class="p">,</span>
+    <span class="s1">&#39;root_storage_dir&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATASET_PATH</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">),</span>
+
+    <span class="s1">&#39;spatial_frequencies&#39;</span><span class="p">:</span> <span class="s1">&#39;np.arange(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">SFDI_FREQUENCY_RANGE</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">SFDI_FREQUENCY_RANGE</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">SFDI_FREQUENCY_STEP</span><span class="p">,</span>
+        <span class="n">SFDI_FREQUENCY_STEP</span><span class="p">),</span>
+
+    <span class="s1">&#39;sample&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;semiinfinite&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="c1"># &#39;rmax&#39;: 25e-3, # use to overload the top level rmax attribute</span>
+            <span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="s1">&#39;np.inf&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span>   <span class="s1">&#39;mua&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;mus&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+                <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="s1">&#39;np.inf&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">RI_WATER</span><span class="p">,</span> <span class="s1">&#39;mua&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;mus&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+                <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="s1">&#39;np.inf&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span>   <span class="s1">&#39;mua&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;mus&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}</span>
+            <span class="p">],</span>
+            <span class="s1">&#39;n_mua&#39;</span><span class="p">:</span> <span class="n">N_MUA</span><span class="p">,</span> <span class="s1">&#39;n_musr&#39;</span><span class="p">:</span> <span class="n">N_MUSR</span><span class="p">,</span>   <span class="c1"># number of samples along the mua and musr axis</span>
+            <span class="s1">&#39;mua&#39;</span><span class="p">:</span> <span class="s1">&#39;np.linspace(0.0, 5.0e2, </span><span class="si">{:d}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">N_MUA</span><span class="p">),</span>       <span class="c1"># for 1st layer only</span>
+            <span class="s1">&#39;musr&#39;</span><span class="p">:</span> <span class="s1">&#39;np.linspace(5.0e2, 35.0e2, </span><span class="si">{:d}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">N_MUSR</span><span class="p">),</span>  <span class="c1"># for 1st layer only</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;1-layer-semiinfinite&#39;</span>   <span class="c1"># storage directory name</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+
+    <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;line&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># radial detectors on top and bottom, NA=1</span>
+            <span class="c1"># &#39;num_packets&#39;: 100e6, # use to overload the top level num_packets attribute</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;Line&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="c1"># storage directory name</span>
+            <span class="s1">&#39;n_above&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;n_bellow&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span> <span class="c1"># refractive index for the two outer layers</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;collimated-200um&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># radial detectors on top and bottom, NA=1</span>
+            <span class="c1"># &#39;num_packets&#39;: 100e6, # use to overload the top level num_packets attribute</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;UniformBeam&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;diameter&#39;</span><span class="p">:</span> <span class="mf">200.0e-6</span><span class="p">},</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;collimated-200um&#39;</span><span class="p">,</span> <span class="c1"># storage directory name</span>
+            <span class="s1">&#39;n_above&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;n_bellow&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span> <span class="c1"># refractive index for the two outer layers</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;gaussian-100um&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># radial detectors on top and bottom, NA=1</span>
+            <span class="c1"># &#39;num_packets&#39;: 100e6, # use to overload the top level num_packets attribute</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;GaussianBeam&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="n">fwhm2sigma</span><span class="p">(</span><span class="mf">100e-6</span><span class="p">)},</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;gaussian-fwhm-100um&#39;</span><span class="p">,</span> <span class="c1"># storage directory name</span>
+            <span class="s1">&#39;n_above&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;n_bellow&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span> <span class="c1"># refractive index for the two outer layers</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;fiber-200um&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># radial detector on top with with fiber NA, bottom with NA=1</span>
+            <span class="c1"># &#39;num_packets&#39;: 100e6, # use to overload the top level num_packets attribute</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;UniformFiber&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;fiber&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dcore&#39;</span><span class="p">:</span> <span class="mf">200e-6</span><span class="p">,</span> <span class="s1">&#39;dcladding&#39;</span><span class="p">:</span> <span class="mf">220e-6</span><span class="p">,</span> <span class="s1">&#39;na&#39;</span><span class="p">:</span> <span class="mf">0.22</span><span class="p">,</span>
+                           <span class="s1">&#39;ncore&#39;</span><span class="p">:</span> <span class="n">RI_FUSEDSILICA</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;n_above&#39;</span><span class="p">:</span> <span class="n">RI_FUSEDSILICA</span><span class="p">,</span> <span class="s1">&#39;n_bellow&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="c1"># refractive index for the two outer layers</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;fiber-200um-0.22na&#39;</span> <span class="c1"># storage directory name</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;six-around-one-200um&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># surface layout + SixAroundOne detector on top, radial on bottom with NA=1</span>
+            <span class="c1"># &#39;num_packets&#39;: 100e6, # use to overload the top level num_packets attribute</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;SixAroundOne&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;fiber&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dcore&#39;</span><span class="p">:</span> <span class="mf">200e-6</span><span class="p">,</span> <span class="s1">&#39;dcladding&#39;</span><span class="p">:</span> <span class="mf">220e-6</span><span class="p">,</span> <span class="s1">&#39;na&#39;</span><span class="p">:</span> <span class="mf">0.22</span><span class="p">,</span>
+                           <span class="s1">&#39;ncore&#39;</span><span class="p">:</span> <span class="n">RI_FUSEDSILICA</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;diameter&#39;</span><span class="p">:</span> <span class="n">PROBE_DIAMETER</span><span class="p">,</span> <span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="mf">220e-6</span><span class="p">,</span>
+                       <span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span> <span class="n">PROBE_REFLECTIVITY</span><span class="p">},</span>
+            <span class="s1">&#39;n_above&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;n_bellow&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="c1"># refractive index for the two outer layers</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;six-around-one-200um-0_22na&#39;</span> <span class="c1"># storage directory name</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;six-around-one-400um&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># surface layout + SixAroundOne detector on top, radial on bottom with NA=1</span>
+            <span class="c1"># &#39;num_packets&#39;: 100e6, # use to overload the top level num_packets attribute</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;SixAroundOne&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;fiber&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dcore&#39;</span><span class="p">:</span> <span class="mf">400e-6</span><span class="p">,</span> <span class="s1">&#39;dcladding&#39;</span><span class="p">:</span> <span class="mf">420e-6</span><span class="p">,</span> <span class="s1">&#39;na&#39;</span><span class="p">:</span> <span class="mf">0.22</span><span class="p">,</span>
+                           <span class="s1">&#39;ncore&#39;</span><span class="p">:</span> <span class="n">RI_FUSEDSILICA</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;diameter&#39;</span><span class="p">:</span> <span class="n">PROBE_DIAMETER</span><span class="p">,</span> <span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="mf">420e-6</span><span class="p">,</span>
+                       <span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span> <span class="n">PROBE_REFLECTIVITY</span><span class="p">},</span>
+            <span class="s1">&#39;n_above&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;n_bellow&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="c1"># refractive index for the two outer layers</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;six-around-one-400um-0_22na&#39;</span> <span class="c1"># storage directory name</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;six-linear-array-200um&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># surface layout + LinearArray detector on top, radial on bottom with NA=1</span>
+            <span class="c1"># &#39;num_packets&#39;: 100e6, # use to overload the top level num_packets attribute</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;LinearArray&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;fiber&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dcore&#39;</span><span class="p">:</span> <span class="mf">200e-6</span><span class="p">,</span> <span class="s1">&#39;dcladding&#39;</span><span class="p">:</span> <span class="mf">220e-6</span><span class="p">,</span> <span class="s1">&#39;na&#39;</span><span class="p">:</span> <span class="mf">0.22</span><span class="p">,</span>
+                           <span class="s1">&#39;ncore&#39;</span><span class="p">:</span> <span class="n">RI_FUSEDSILICA</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;diameter&#39;</span><span class="p">:</span> <span class="n">PROBE_DIAMETER</span><span class="p">,</span> <span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="mf">220e-6</span><span class="p">,</span>
+                       <span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span> <span class="n">PROBE_REFLECTIVITY</span><span class="p">},</span>
+            <span class="s1">&#39;n_above&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;n_bellow&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="c1"># refractive index for the two outer layers</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;six-linear-200um-0_22na&#39;</span> <span class="c1"># storage directory name</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;single-fiber-100um&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># surface layout + LinearArray detector (1 fiber) on top, radial on bottom with NA=1</span>
+            <span class="c1"># &#39;num_packets&#39;: 100e6, # use to overload the top level num_packets attribute</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;LinearArray&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;fiber&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dcore&#39;</span><span class="p">:</span> <span class="mf">100e-6</span><span class="p">,</span> <span class="s1">&#39;dcladding&#39;</span><span class="p">:</span> <span class="mf">120e-6</span><span class="p">,</span> <span class="s1">&#39;na&#39;</span><span class="p">:</span> <span class="mf">0.22</span><span class="p">,</span>
+                           <span class="s1">&#39;ncore&#39;</span><span class="p">:</span> <span class="n">RI_FUSEDSILICA</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;diameter&#39;</span><span class="p">:</span> <span class="n">PROBE_DIAMETER</span><span class="p">,</span> <span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="mf">120e-6</span><span class="p">,</span>
+                       <span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span> <span class="n">PROBE_REFLECTIVITY</span><span class="p">},</span>
+            <span class="s1">&#39;n_above&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;n_bellow&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="c1"># refractive index for the two outer layers</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;single-fiber-100um-0_22na&#39;</span> <span class="c1"># storage directory name</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;single-fiber-200um&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># surface layout + LinearArray detector (1 fiber) on top, radial on bottom with NA=1</span>
+            <span class="c1"># &#39;num_packets&#39;: 100e6, # use to overload the top level num_packets attribute</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;LinearArray&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;fiber&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dcore&#39;</span><span class="p">:</span> <span class="mf">200e-6</span><span class="p">,</span> <span class="s1">&#39;dcladding&#39;</span><span class="p">:</span> <span class="mf">220e-6</span><span class="p">,</span> <span class="s1">&#39;na&#39;</span><span class="p">:</span> <span class="mf">0.22</span><span class="p">,</span>
+                           <span class="s1">&#39;ncore&#39;</span><span class="p">:</span> <span class="n">RI_FUSEDSILICA</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;diameter&#39;</span><span class="p">:</span> <span class="n">PROBE_DIAMETER</span><span class="p">,</span> <span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="mf">220e-6</span><span class="p">,</span>
+                       <span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span> <span class="n">PROBE_REFLECTIVITY</span><span class="p">},</span>
+            <span class="s1">&#39;n_above&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;n_bellow&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="c1"># refractive index for the two outer layers</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;single-fiber-200um-0_22na&#39;</span> <span class="c1"># storage directory name</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;single-fiber-400um&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># surface layout + LinearArray detector (1 fiber) on top, radial on bottom with NA=1</span>
+            <span class="c1"># &#39;num_packets&#39;: 100e6, # use to overload the top level num_packets attribute</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;LinearArray&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;fiber&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dcore&#39;</span><span class="p">:</span> <span class="mf">400e-6</span><span class="p">,</span> <span class="s1">&#39;dcladding&#39;</span><span class="p">:</span> <span class="mf">420e-6</span><span class="p">,</span> <span class="s1">&#39;na&#39;</span><span class="p">:</span> <span class="mf">0.22</span><span class="p">,</span>
+                           <span class="s1">&#39;ncore&#39;</span><span class="p">:</span> <span class="n">RI_FUSEDSILICA</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;diameter&#39;</span><span class="p">:</span> <span class="n">PROBE_DIAMETER</span><span class="p">,</span> <span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="mf">420e-6</span><span class="p">,</span>
+                       <span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span> <span class="n">PROBE_REFLECTIVITY</span><span class="p">},</span>
+            <span class="s1">&#39;n_above&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;n_bellow&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="c1"># refractive index for the two outer layers</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;single-fiber-400um-0_22na&#39;</span> <span class="c1"># storage directory name</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;single-fiber-800um&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># surface layout + LinearArray detector (1 fiber) on top, radial on bottom with NA=1</span>
+            <span class="c1"># &#39;num_packets&#39;: 100e6, # use to overload the top level num_packets attribute</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;LinearArray&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;fiber&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dcore&#39;</span><span class="p">:</span> <span class="mf">800e-6</span><span class="p">,</span> <span class="s1">&#39;dcladding&#39;</span><span class="p">:</span> <span class="mf">820e-6</span><span class="p">,</span> <span class="s1">&#39;na&#39;</span><span class="p">:</span> <span class="mf">0.22</span><span class="p">,</span>
+                           <span class="s1">&#39;ncore&#39;</span><span class="p">:</span> <span class="n">RI_FUSEDSILICA</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;diameter&#39;</span><span class="p">:</span> <span class="n">PROBE_DIAMETER</span><span class="p">,</span> <span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="mf">820e-6</span><span class="p">,</span>
+                       <span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span> <span class="n">PROBE_REFLECTIVITY</span><span class="p">},</span>
+            <span class="s1">&#39;n_above&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;n_bellow&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="c1"># refractive index for the two outer layers</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;single-fiber-800um-0_22na&#39;</span> <span class="c1"># storage directory name</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;sfdi-normal&#39;</span><span class="p">:{</span> <span class="c1"># normal projection, normal detector</span>
+            <span class="s1">&#39;num_packets&#39;</span><span class="p">:</span> <span class="mf">1000e6</span><span class="p">,</span> <span class="c1"># use to overload the top level num_packets attribute</span>
+            <span class="s1">&#39;rmax&#39;</span><span class="p">:</span> <span class="mf">150e-3</span><span class="p">,</span>     <span class="c1"># overloads the top level and sample rmax attribute</span>
+            <span class="s1">&#39;is_sfdi&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>    <span class="c1"># indicate that this is a SFDI source/detector configuration</span>
+            <span class="s1">&#39;detector&#39;</span><span class="p">:</span> <span class="s1">&#39;radial_sfdi&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;Line&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]},</span>
+            <span class="s1">&#39;n_above&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;n_bellow&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="c1"># refractive index for the two outer layers</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;sfdi-0deg-incidence&#39;</span> <span class="c1"># storage directory name</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;sfdi-normal-tilted&#39;</span><span class="p">:{</span> <span class="c1"># normal projection, tilted detector</span>
+            <span class="s1">&#39;num_packets&#39;</span><span class="p">:</span> <span class="mf">1000e6</span><span class="p">,</span> <span class="c1"># use to overload the top level num_packets attribute</span>
+            <span class="s1">&#39;rmax&#39;</span><span class="p">:</span> <span class="mf">150e-3</span><span class="p">,</span>     <span class="c1"># overloads the top level and sample rmax attribute</span>
+            <span class="s1">&#39;is_sfdi&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>    <span class="c1"># indicate that this is a SFDI source/detector configuration</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;Line&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;detector&#39;</span><span class="p">:</span> <span class="s1">&#39;symmetricx_sfdi&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]},</span>
+            <span class="s1">&#39;n_above&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;n_bellow&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="c1"># refractive index for the two outer layers</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;sfdi-0deg-incidence&#39;</span> <span class="c1"># storage directory name</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;pf&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;hg&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;Hg&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span> <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">],</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;hg&#39;</span><span class="p">,</span> <span class="c1"># pf dir</span>
+            <span class="s1">&#39;param_dir&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;g-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1"># templates for parameter dirs</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;gk&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;Gk&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="p">[</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>
+            <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span> <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;gk&#39;</span><span class="p">,</span> <span class="c1"># pf dir</span>
+            <span class="s1">&#39;param_dir&#39;</span><span class="p">:[</span><span class="s1">&#39;g-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;a-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1"># templates for parameter dirs</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;mhg&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;MHg&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>
+            <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;mhg&#39;</span><span class="p">,</span> <span class="c1"># pf dir</span>
+            <span class="s1">&#39;param_dir&#39;</span><span class="p">:[</span> <span class="s1">&#39;g-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;b-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1"># templates for parameter dirs</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;mpc&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;MPc&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">],</span>
+            <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;mpc&#39;</span><span class="p">,</span>   <span class="c1"># pf dir</span>
+            <span class="s1">&#39;param_dir&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;n-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;b-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1"># templates for parameter dirs</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;mie-sphere-polystyrene&#39;</span><span class="p">:{</span>
+            <span class="s1">&#39;lutsize&#39;</span><span class="p">:</span> <span class="mi">4000</span><span class="p">,</span>    <span class="c1"># 2000 is the default value</span>
+            <span class="s1">&#39;diameters&#39;</span><span class="p">:</span> <span class="n">MIE_DIAMETERS</span><span class="p">,</span>
+            <span class="s1">&#39;wavelengths&#39;</span><span class="p">:</span> <span class="n">MIE_WAVELENGTHS</span><span class="p">,</span>
+            <span class="s1">&#39;nmedium&#39;</span><span class="p">:</span> <span class="n">MIE_RI_WATER</span><span class="p">,</span>
+            <span class="s1">&#39;nparticle&#39;</span><span class="p">:</span> <span class="n">MIE_RI_POLYSTYRENE</span><span class="p">,</span>
+            <span class="s1">&#39;nfibercore&#39;</span><span class="p">:</span> <span class="n">MIE_RI_FIBER_CORE</span><span class="p">,</span>
+            <span class="s1">&#39;probe_reflectivity&#39;</span><span class="p">:</span> <span class="n">MIE_PROBE_REFLECTIVITY</span><span class="p">,</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;mie-polystyrene&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;param_dir&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;diameter-</span><span class="si">{:.2f}</span><span class="s1">um&#39;</span><span class="p">,</span> <span class="s1">&#39;wavelength-</span><span class="si">{:.0f}</span><span class="s1">nm&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="mf">500e-9</span><span class="p">]</span> <span class="c1"># default parameter for initialization</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;mie-sphere-fusedsilica&#39;</span><span class="p">:{</span>
+            <span class="s1">&#39;lutsize&#39;</span><span class="p">:</span> <span class="mi">4000</span><span class="p">,</span>    <span class="c1"># 2000 is the default value</span>
+            <span class="s1">&#39;diameters&#39;</span><span class="p">:</span> <span class="n">MIE_DIAMETERS</span><span class="p">,</span>
+            <span class="s1">&#39;wavelengths&#39;</span><span class="p">:</span> <span class="n">MIE_WAVELENGTHS</span><span class="p">,</span>
+            <span class="s1">&#39;nmedium&#39;</span><span class="p">:</span> <span class="n">MIE_RI_WATER</span><span class="p">,</span>
+            <span class="s1">&#39;nparticle&#39;</span><span class="p">:</span> <span class="n">MIE_RI_FUSED_SILICA</span><span class="p">,</span>
+            <span class="s1">&#39;nfibercore&#39;</span><span class="p">:</span> <span class="n">MIE_RI_FIBER_CORE</span><span class="p">,</span>
+            <span class="s1">&#39;probe_reflectivity&#39;</span><span class="p">:</span> <span class="n">MIE_PROBE_REFLECTIVITY</span><span class="p">,</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;mie-fusedsilica&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;param_dir&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;diameter-</span><span class="si">{:.2f}</span><span class="s1">um&#39;</span><span class="p">,</span> <span class="s1">&#39;wavelength-</span><span class="si">{:.0f}</span><span class="s1">nm&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="mf">500e-9</span><span class="p">]</span> <span class="c1"># default parameter for initialization</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;detector&#39;</span><span class="p">:{</span>
+        <span class="s1">&#39;radial&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;raxis&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;stop&#39;</span><span class="p">:</span> <span class="mf">5.0e-3</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">500</span><span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;bottom&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;raxis&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;stop&#39;</span><span class="p">:</span> <span class="mf">5.0e-3</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">500</span><span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;radial&#39;</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;radial_sfdi&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;raxis&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;stop&#39;</span><span class="p">:</span> <span class="mf">150.0e-3</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">4000</span><span class="p">,</span>
+                               <span class="s1">&#39;logscale&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;cosmin&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">SFDI_ACCEPTANCE</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;bottom&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;raxis&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;stop&#39;</span><span class="p">:</span> <span class="mf">150.0e-3</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">4000</span><span class="p">,</span>
+                               <span class="s1">&#39;logscale&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;cosmin&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">SFDI_ACCEPTANCE</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;radial&#39;</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;symmetricx_sfdi&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;xaxis&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># SymmetricAxis</span>
+                    <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;center&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="mf">150.0e-3</span><span class="p">,</span> <span class="s1">&#39;n_half&#39;</span><span class="p">:</span> <span class="mi">4000</span><span class="p">,</span>
+                               <span class="s1">&#39;logscale&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;cosmin&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">SFDI_ACCEPTANCE</span><span class="p">),</span>
+                    <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">SFDI_INCIDENCE</span><span class="p">),</span>
+                        <span class="mf">0.0</span><span class="p">,</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">SFDI_INCIDENCE</span><span class="p">)</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;bottom&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># SymmetricAxis</span>
+                <span class="s1">&#39;raxis&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;center&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="mf">150.0e-3</span><span class="p">,</span>
+                               <span class="s1">&#39;n_half&#39;</span><span class="p">:</span> <span class="mi">4000</span><span class="p">,</span> <span class="s1">&#39;logscale&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;cosmin&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">SFDI_ACCEPTANCE</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;symmetricx-</span><span class="si">{:.0f}</span><span class="s1">deg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">SFDI_INCIDENCE</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<div class="viewcode-block" id="render_mcml"><a class="viewcode-back" href="../../../../apidoc/xopto.dataset.render.mcml.html#xopto.dataset.render.mcml.render_mcml">[docs]</a><span class="k">def</span> <span class="nf">render_mcml</span><span class="p">(</span><span class="n">target_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">cl_device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cl_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="n">test</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Render templates with the given configuration.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    target_dir: str</span>
+<span class="sd">        Root directory for the dataset. The scripts will be rendered into</span>
+<span class="sd">        &quot;run&quot; subdirectory and the dataset data will be saved into the data</span>
+<span class="sd">        subdirectory. If None, the parent directory of this file will serve</span>
+<span class="sd">        as the root directory. </span>
+<span class="sd">    config: dict</span>
+<span class="sd">        Configuration / context to use when rendering the run scripts. If None,</span>
+<span class="sd">        the default configuration will be used.</span>
+<span class="sd">    cl_device: str</span>
+<span class="sd">        Default OpenCL device name or None. The value can be also set through</span>
+<span class="sd">        the CL_DEVICE environment variable.</span>
+<span class="sd">    cl_index: int</span>
+<span class="sd">        OpenCL device index (if multiple OpenCL devices of the same kind</span>
+<span class="sd">        are installed). The value can be also set through the CL_INDEX</span>
+<span class="sd">        environment variable.</span>
+<span class="sd">    test: bool</span>
+<span class="sd">        Do a test run. The run scripts will be rendered but not saved. This</span>
+<span class="sd">        option will automatically enable the verbose mode.</span>
+<span class="sd">    verbose: bool</span>
+<span class="sd">        Enables verbose reporting.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rendering run scripts for MCML.&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">CONFIG</span>
+
+    <span class="k">if</span> <span class="n">target_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">target_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">test</span><span class="p">:</span>
+        <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">root_dataset_dir</span> <span class="o">=</span>  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+    <span class="n">run_script_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="s1">&#39;mcml&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Root dataset directory set to &quot;</span><span class="si">{}</span><span class="s1">&quot;.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target_dir</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rendering run scripts into &quot;</span><span class="si">{}</span><span class="s1">&quot;.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">run_script_dir</span><span class="p">))</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">MCML_TEMPLATE_PATH</span><span class="p">,</span>
+                           <span class="s1">&#39;analytical_pf.template.py&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
+        <span class="n">analytical_pf_template</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">MCML_TEMPLATE_PATH</span><span class="p">,</span>
+                           <span class="s1">&#39;mie_pf.template.py&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
+        <span class="n">mie_pf_template</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">T_analytical_pf</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">analytical_pf_template</span><span class="p">)</span>
+    <span class="n">T_mie_pf</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">mie_pf_template</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">sample_name</span><span class="p">,</span> <span class="n">sample_data</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">src_name</span><span class="p">,</span> <span class="n">src_data</span> <span class="ow">in</span> <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">spf_name</span><span class="p">,</span> <span class="n">spf_data</span> <span class="ow">in</span> <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;pf&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rendering:&#39;</span><span class="p">,</span> <span class="n">sample_name</span><span class="p">,</span> <span class="n">src_name</span><span class="p">,</span> <span class="n">spf_name</span><span class="p">)</span>
+                <span class="n">T</span> <span class="o">=</span> <span class="n">T_mie_pf</span> <span class="k">if</span> <span class="n">spf_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;mie-&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">T_analytical_pf</span>
+                <span class="n">rendered_template</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="p">{</span>
+                    <span class="s1">&#39;sample&#39;</span><span class="p">:</span> <span class="n">sample_data</span><span class="p">,</span>
+                    <span class="s1">&#39;cl_device&#39;</span><span class="p">:</span> <span class="n">cl_device</span><span class="p">,</span> <span class="s1">&#39;cl_index&#39;</span><span class="p">:</span> <span class="n">cl_index</span><span class="p">,</span>
+                    <span class="s1">&#39;rmax&#39;</span><span class="p">:</span> <span class="n">src_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rmax&#39;</span><span class="p">,</span> <span class="n">sample_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rmax&#39;</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;rmax&#39;</span><span class="p">])),</span>
+                    <span class="s1">&#39;num_packets&#39;</span><span class="p">:</span> <span class="n">src_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;num_packets&#39;</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;num_packets&#39;</span><span class="p">]),</span>
+                    <span class="s1">&#39;sample&#39;</span><span class="p">:</span> <span class="n">sample_data</span><span class="p">,</span>
+                    <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="n">src_data</span><span class="p">,</span>
+                    <span class="s1">&#39;detector&#39;</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;detector&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;pf&#39;</span><span class="p">:</span> <span class="n">spf_data</span><span class="p">,</span>
+                    <span class="s1">&#39;root_dataset_dir&#39;</span><span class="p">:</span> <span class="n">root_dataset_dir</span><span class="p">,</span>
+                    <span class="s1">&#39;spatial_frequencies&#39;</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;spatial_frequencies&#39;</span><span class="p">]</span>
+                <span class="p">})</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">run_script_dir</span><span class="p">,</span>
+                    <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">-</span><span class="si">{}</span><span class="s1">-</span><span class="si">{}</span><span class="s1">.py&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sample_name</span><span class="p">,</span> <span class="n">src_name</span><span class="p">,</span> <span class="n">spf_name</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Creating output directory &quot;</span><span class="si">{}</span><span class="s1">&quot;.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">run_script_dir</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving run script to &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">test</span><span class="p">:</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">run_script_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
+                        <span class="n">fid</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">rendered_template</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The run scripts will save data into &quot;</span><span class="si">{}</span><span class="s1">&quot;.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">root_dataset_dir</span><span class="p">))</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">prepare_cli</span><span class="p">(</span><span class="s1">&#39;Render run scripts for the MCML datasets&#39;</span><span class="p">)</span>
+    <span class="c1"># no additional command line arguments are required</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">process_cli</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+    <span class="n">render_mcml</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">PyXOpto</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../../xopto.html">xopto</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, XOpto team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

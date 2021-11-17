@@ -229,7 +229,32 @@
 
         <span class="n">target</span><span class="o">.</span><span class="n">dummy</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">return</span> <span class="n">target</span></div></div>
+        <span class="k">return</span> <span class="n">target</span></div>
+
+<div class="viewcode-block" id="DetectorDefault.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.DetectorDefault.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="DetectorDefault.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.DetectorDefault.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;DetectorDefault&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create an instance of :py:class:`DetectorDefault` from a</span>
+<span class="sd">        dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Dictionary created by the :py:meth:`DetectorDefault.todict` method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">layout_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">layout_type</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s1">&#39;Expected a &quot;</span><span class="si">{}</span><span class="s1">&quot; type bot got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">layout_type</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="Detector"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.Detector">[docs]</a><span class="k">class</span> <span class="nc">Detector</span><span class="p">(</span><span class="n">DetectorAny</span><span class="p">):</span>
@@ -556,6 +581,18 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_top</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bottom</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_specular</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="Detectors.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcdetector.base.html#xopto.mcml.mcdetector.base.Detectors.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_top</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;bottom&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bottom</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;specular&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specular</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span>
+        <span class="p">}</span></div>
+
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;Detectors(top=</span><span class="si">{}</span><span class="s1">, bottom=</span><span class="si">{}</span><span class="s1">, specular=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_top</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bottom</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specular</span><span class="p">)</span>
@@ -593,6 +630,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
 </ul>
 

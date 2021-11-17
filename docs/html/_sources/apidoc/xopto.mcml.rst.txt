@@ -15,6 +15,7 @@ Subpackages
    xopto.mcml.mcobject
    xopto.mcml.mcoptions
    xopto.mcml.mcpf
+   xopto.mcml.mcrun
    xopto.mcml.mcsource
    xopto.mcml.mcsurface
    xopto.mcml.mcsv

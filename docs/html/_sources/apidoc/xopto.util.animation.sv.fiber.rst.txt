@@ -1,0 +1,22 @@
+xopto.util.animation.sv.fiber package
+=====================================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.util.animation.sv.fiber.common
+   xopto.util.animation.sv.fiber.incidence_angle
+   xopto.util.animation.sv.fiber.sds_reflectance
+   xopto.util.animation.sv.fiber.sds_transmittance
+   xopto.util.animation.sv.fiber.sv_paths_transmittance
+
+Module contents
+---------------
+
+.. automodule:: xopto.util.animation.sv.fiber
+   :members:
+   :undoc-members:
+   :show-inheritance:

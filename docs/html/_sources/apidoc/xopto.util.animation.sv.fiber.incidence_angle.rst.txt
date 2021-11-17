@@ -1,0 +1,7 @@
+xopto.util.animation.sv.fiber.incidence\_angle module
+=====================================================
+
+.. automodule:: xopto.util.animation.sv.fiber.incidence_angle
+   :members:
+   :undoc-members:
+   :show-inheritance:

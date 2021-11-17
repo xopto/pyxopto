@@ -38,7 +38,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="xopto.mcml.mcsource.uniformbeam.UniformBeam">
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">UniformBeam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diameter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0,</span> <span class="pre">1.0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcml/mcsource/uniformbeam.html#UniformBeam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsource.uniformbeam.UniformBeam" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcobject.McObject</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="xopto.mcml.mcsource.base.html#xopto.mcml.mcsource.base.Source" title="xopto.mcml.mcsource.base.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcml.mcsource.base.Source</span></code></a></p>
 <p>Uniform intensity collimated beam photon packet source.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -126,6 +126,12 @@ instance if the input argument target is None.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mcsource.uniformbeam.UniformBeam.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcml/mcsource/uniformbeam.html#UniformBeam.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsource.uniformbeam.UniformBeam.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="xopto.mcml.mcsource.uniformbeam.UniformBeam.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcml/mcsource/uniformbeam.html#UniformBeam.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mcsource.uniformbeam.UniformBeam.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update this source configuration from the other source. The
@@ -172,6 +178,7 @@ appropriate fields.</p>
 <li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>

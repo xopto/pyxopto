@@ -1,0 +1,7 @@
+xopto.util.hankel module
+========================
+
+.. automodule:: xopto.util.hankel
+   :members:
+   :undoc-members:
+   :show-inheritance:
