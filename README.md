@@ -196,7 +196,13 @@ You can run this example from the root directory of the PyXopto package as:
 python examples/mcml/basic.py
 ```
 
-### Citing PyXOpto
+# MC Datasets
+
+Precomputed datasets of reflectance, transmittance, energy deposition and sampling volume for a number of different source, detector and sample
+configurations are available through a separate repository
+[MCDatasets](https://github.com/xopto/mcdataset).
+
+# Citing PyXOpto
 
 We, the authors of PyXOpto, expect that the package is used in accordance with
 the [GPL3+](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
