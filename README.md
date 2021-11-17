@@ -19,7 +19,8 @@ of light propagation in turbid media using massively parallel processing on a wi
 <br>*Sampling volume in reflectance configuration as a function of the incidence angle of the source optical fiber.*
 
 ![Deposition](https://github.com/xopto/mcdataset/blob/master/docs/source/static/deposition-projection.gif)<br>
-*Energy deposition mean along the y axis for a 2-layer skin with an embedded blood vessel.*
+*A sequence of voxelized simulations of energy deposition in a 2-layer skin
+model with an embedded blood vessel.*
 
 # Documentation
 
