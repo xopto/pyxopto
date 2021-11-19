@@ -60,6 +60,88 @@ set PTYTHONPATH=path\to\pyxopto;%PYTHONPATH%
 After installing the dependencies and setting the environment variable
 `PYTHONPATH`, you should be able to import PyXOpto.
 
+## Docker image
+
+Docker images for NVIDIA CUDA 11 and Intel OpenCL with preinstalled PyXOpto and [Jupyter](https://jupyter.org) Notebook
+environment are available from public repositories on the
+[Docker Hub](https://hub.docker.com):
+
+* [xopto/pyxopto-intel-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-intel-jupyter)
+
+    These images include all the required Python dependencies and Intel OpenCL.
+
+* [xopto/pyxopto-nvidia-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter)
+
+   These images include all the required Python dependencies and NVIDIA CUDA 11 and related OpenCL.
+
+* [xopto/pyxopto-nvidia-jupyter-dl](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter-dl)
+
+   In addition to to the previous `xopto/pyxopto-nvidia-jupyter` image, this image also includes the [Tensorflow](https://www.tensorflow.org) and [PyTorch](https://pytorch.org/) deep learning libraries.
+
+All the images includes many of the popular Python libraries for scientific
+computing, data management and visualization ([scipy](https://scipy.org),
+[numpy](https://numpy.org), [matplotlib](https://matplotlib.org),
+[pandas](https://pandas.pydata.org), etc.).
+
+*Summary of the PyXOpto Docker images.*
+| Image                           | Tag    | PyXOpto | OS           | CUDA  | CUDNN |
+|---------------------------------|--------|---------|--------------|-------|-------|
+| xopto/pyxopto-intel-jupyter     | v0.1.0 | 0.1.0   | Ubuntu 20.04 | -     | -     | 
+| xopto/pyxopto-nvidia-jupyter    | v0.1.0 | 0.1.0   | Ubuntu 20.04 | 11.03 | 8     |
+| xopto/pyxopto-nvidia-jupyter-dl | v0.1.0 | 0.1.0   | Ubuntu 20.04 | 11.03 | 8     |
+
+
+The [xopto/pyxopto-nvidia-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter), and [xopto/pyxopto-nvidia-jupyter-dl](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter) Docker images can be run by executing the following command:
+```bash
+sudo docker run --rm --runtime nvidia -p 8888:8888 -it xopto/pyxopto-nvidia-jupyter:v0.1.0
+```
+or
+```bash
+sudo docker run --rm --runtime nvidia -p 8888:8888 -it xopto/pyxopto-nvidia-jupyter-dl:v0.1.0
+```
+The Intel OpenCL images [xopto/pyxopto-intel-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-intel-jupyter) can be run as:
+```bash
+sudo docker run --rm --device /dev/dri:/dev/dri -u 0 -p 8888:8888 -it xopto/pyxopto-intel-jupyter:v0.1.0
+```
+This will produce output in the terminal that should be similar to:
+```bash
+[I 2021-11-18 22:53:55.782 LabApp] JupyterLab extension loaded from /usr/local/lib/python3.8/dist-packages/jupyterlab
+[I 2021-11-18 22:53:55.782 LabApp] JupyterLab application directory is /usr/local/share/jupyter/lab
+[I 22:53:55.788 NotebookApp] Serving notebooks from local directory: /home/jovyan
+[I 22:53:55.788 NotebookApp] Jupyter Notebook 6.4.6 is running at:
+[I 22:53:55.788 NotebookApp] http://5a29ef955782:8888/?token=7e1168ae3711761bad536257a28745a02020c1fc9db6fe7a
+[I 22:53:55.788 NotebookApp] or http://127.0.0.1:8888/?token=7e1168ae3711761bad536257a28745a02020c1fc9db6fe7a
+[I 22:53:55.788 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+```
+The [Jupyter](https://jupyter.org) Notebook can be accessed in the host browser
+through the displayed link, which is in this example
+`http://127.0.0.1:8888/?token=7e1168ae3711761bad536257a28745a02020c1fc9db6fe7a`.
+
+### Persisting data
+
+PyXopto and user data can be persisted by mounting a Docker Volume or a local
+directory to `/home/jovyan/work`. In the following example the
+`/home/someuser/data` directory of the host machine will be used to persist
+the container data.
+All the Python scripts, Jupyter Notebooks and other user files inside
+the container should be placed into the `/home/jovyan/work` directory.
+```bash
+sudo docker run --rm --runtime nvidia -p 8888:8888  -v /home/someuser/data:/home/jovyan/work -it xopto/pyxopto-nvidia-jupyter:v0.1.0
+```
+
+### Building the Docker images from source
+
+The PyXOpto Docker images can be build from source by running the 
+[docker/build_intel_jupyter.sh](/blob/master/docker/build_intel_jupyter.sh), [docker/build_nvidia_jupyter.sh](/blob/master/docker/build_nvidia_jupyter.sh) or [docker/build_nvidia_jupyter-dl.sh](/blob/master/docker/build_nvidia_jupyter-dl.sh) scripts. This step might require super user rights.
+```bash
+sudo bash ./build_intel_jupyter.sh
+sudo bash ./build_nvidia_jupyter.sh
+sudo bash ./build_nvidia_jupyter-dl.sh
+```
+Note that the build scripts must be run from the `docker` directory of the
+PyXOpto source tree. The built images will be tagged with the version of the
+PyXOpto source distribution.
+
 ## Basic Monte Carlo simulations of a layered medium
 This basic example is available in the `examples/mcml/basic_example.py` file.
 

@@ -1,0 +1,11 @@
+build
+datasets
+dist
+maintenance
+mcdataset
+PyXOpto.egg-info
+tmp
+xopto.egg-info
+
+**/__pycache__
+*.pyc

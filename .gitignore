@@ -120,6 +120,4 @@ docs/_build
 docs/apidoc
 docs/__pycache__
 
-docker
-
 .vscode
