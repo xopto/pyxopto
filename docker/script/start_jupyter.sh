@@ -20,21 +20,29 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
-set -e
+if [ $EUID -eq 0 ]; then
+	if [ -e "/dev/dri/renderD128" ]; then
+		egrep -i "^render" /etc/group;
+		if [ $? -eq 0 ]; then
+			echo "Render group exists"
+		else
+			echo "Render group does not exist ... creating"
+			if [ "$(stat -c "%-G" /dev/dri/renderD128)" == "UNKNOWN" ]
+			then
+				gid=$(stat -c "%-g" /dev/dri/renderD128)
 
-export PYTHONPATH=$PWD/..
+				echo "Creating group \"render\" with id=$gid"
+				groupadd -g $gid render
 
-if [ -z "$VERSION" ]; then
-    VERSION=v$(python3 -c "import xopto; print(xopto.__version__)")
+				echo "Adding render group to user \"$NB_USER\""
+				usermod -a -G render $NB_USER
+				echo "Groups of user \"$NB_USER\":"
+				groups $NB_USER
+			fi
+		fi
+	fi
+	su $NB_USER -c "jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser"
+
+else
+	jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser
 fi
-
-docker build \
-    --build-arg BASE_CONTAINER=intelopencl/intel-opencl:ubuntu-20.04-ppa \
-    -t xopto/pyxopto-intel-jupyter:$VERSION \
-    --file pyxopto_jupyter.DOCKERFILE \
-    ..
-
-# Tensorflow CUDA compatibility matrix: https://www.tensorflow.org/install/source#gpu
-#
-# Run as:
-#   "docker run --rm -p 8888:8888 -it pyxopto/intel-jupyter"

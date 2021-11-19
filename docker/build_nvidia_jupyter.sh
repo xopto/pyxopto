@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 ################################ Begin license #################################
 # Copyright (C) Laboratory of Imaging technologies,
 #               Faculty of Electrical Engineering,
@@ -19,8 +19,6 @@
 # You should have received a copy of the GNU General Public License
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
-
-#!/bin/bash
 
 set -e
 
