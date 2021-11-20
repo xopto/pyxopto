@@ -457,6 +457,8 @@ typedef char int8_t;
 #define FP_2			FP_LITERAL(2.0)
 /** @brief A floating-point constant: two point five. */
 #define FP_2p5			FP_LITERAL(2.5)
+/** @brief A floating-point constant: two point zero. */
+#define FP_4			FP_LITERAL(4.0)
 /** @brief A floating-point constant: half pi. */
 #define FP_HALF_PI		FP_LITERAL(1.5707963267948966)
 /** @brief A floating-point constant: pi. */
