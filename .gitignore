@@ -120,4 +120,6 @@ docs/_build
 docs/apidoc
 docs/__pycache__
 
+xopto/mccyl
+
 .vscode
