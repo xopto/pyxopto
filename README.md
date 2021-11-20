@@ -89,11 +89,11 @@ computing, data management and visualization ([SciPy](https://scipy.org),
 [Pandas](https://pandas.pydata.org), etc.).
 
 *Summary of the PyXOpto Docker images.*
-| Image                           | Tag    | PyXOpto | OS           | CUDA  | CUDNN |
-|---------------------------------|--------|---------|--------------|-------|-------|
-| xopto/pyxopto-intel-jupyter     | v0.1.0 | 0.1.0   | Ubuntu 20.04 | -     | -     | 
-| xopto/pyxopto-nvidia-jupyter    | v0.1.0 | 0.1.0   | Ubuntu 20.04 | 11.03 | 8     |
-| xopto/pyxopto-nvidia-jupyter-dl | v0.1.0 | 0.1.0   | Ubuntu 20.04 | 11.03 | 8     |
+| Image                                                                                                      | Tag    | PyXOpto | OS           | CUDA  | CUDNN |
+|------------------------------------------------------------------------------------------------------------|--------|---------|--------------|-------|-------|
+| [xopto/pyxopto-intel-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-intel-jupyter)        | v0.1.0 | 0.1.0   | Ubuntu 20.04 | -     | -     | 
+| [xopto/pyxopto-nvidia-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter)      | v0.1.0 | 0.1.0   | Ubuntu 20.04 | 11.03 | 8     |
+| [xopto/pyxopto-intel-jupyter-dl](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter-dl) | v0.1.0 | 0.1.0   | Ubuntu 20.04 | 11.03 | 8     |
 
 
 The [xopto/pyxopto-nvidia-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter), and [xopto/pyxopto-nvidia-jupyter-dl](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter) Docker images can be run by executing the following command:
