@@ -278,7 +278,7 @@ class Layers(mcobject.McObject):
         Returns
         -------
         layer_index: int
-            Index of the layer that contains the give poit z.
+            Index of the layer that contains the give point z.
         '''
         index = len(self._layers) - 1
         bottom = 0.0
