@@ -34,7 +34,7 @@ Detailed instructions are available [here](https://xopto.github.io/pyxopto/docs/
 PyXOpto requires a Python 3 installation. Most of the Linux OS distributions will come with a preinstalled Python 3. On Windows OS, the easiest way to install the Python 3 programming language is to use the [WinPython](https://github.com/winpython) or [Anaconda](https://docs.anaconda.com/anaconda/install/windows/) distributions. There are numerous integrated development environments that work with Python, among these [Visual Studio Code](https://code.visualstudio.com) and [PyCharm](https://www.jetbrains.com/pycharm/) are two popular cross-platform options. The [WinPython](https://sourceforge.net/projects/winpython/files/WinPython_3.9/3.9.4.0/) distributions can be downloaded with an embedded and preconfigured Visual Studio Code (e.g. [Winpython64-3.9.4.0cod.exe](https://sourceforge.net/projects/winpython/files/WinPython_3.9/3.9.4.0/Winpython64-3.9.4.0cod.exe/download)).
 
 ### PyXOpto
-First, download or clone the PyXOpto source repository to a local directory. The source code can be installed as python package or used independently from the dowloaded source.
+First, download or clone the PyXOpto source repository to a local directory. The source code can be installed as a python package or used independently from the downloaded source.
 
 #### As a python package
 PyXOpto can be installed as a package using the setup.py file. Run the
@@ -42,11 +42,16 @@ following command from the root directory of PyXOpto (the one with the setup.py 
 ```bash
 python setup.py install
 ```
-This will also install the dependencies that include several popular Python packages (scipy, matplotlib, numpy, pyopencl, shapely, numba,
-and jinja2) dependencies.
+This will also install the dependencies that include several popular Python packages ([SciPy](https://scipy.org), [Matplotlib](https://matplotlib.org),
+[NumPy](https://numpy.org), [PyOpenCL](https://github.com/inducer/pyopencl), [Shapely](https://github.com/Toblerity/Shapely),
+[Numba](https://numba.pydata.org), and
+[Jinja2](https://palletsprojects.com/p/jinja/)).
 
 ### Using from source
-To use the PyXOpto package from source, you will have to manually install all the python dependencies listed in the setup.py file (scipy, matplotlib, numpy, pyopencl, shapely, numba, jinja2, ...). The easiest way to install the dependencies is to use the Python package installer [pip](https://pypi.org/project/pip/). Note that the WinPython distribution will likely come with many if not all the dependencies already installed. Also note that on some Linux distributions, the Python 3 executable is named `python3` and `python` is used for the deprecated Python 2.
+To use the PyXOpto package from source, you will have to manually install all the python dependencies listed in the setup.py file ([SciPy](https://scipy.org), [Matplotlib](https://matplotlib.org),
+[NumPy](https://numpy.org), [PyOpenCL](https://github.com/inducer/pyopencl), [Shapely](https://github.com/Toblerity/Shapely),
+[Numba](https://numba.pydata.org), and
+[Jinja2](https://palletsprojects.com/p/jinja/), ...). The easiest way to install the dependencies is to use the Python package installer [pip](https://pypi.org/project/pip/). Note that the WinPython distribution will likely come with many if not all the dependencies already installed. Also note that on some Linux distributions, the Python 3 executable is named `python3` and `python` is used for the deprecated Python 2.
 You will also have to manually include the root directory of the PyXOpto package into the Python search path. This can be conveniently 
 accomplished through setting the `PYTHONPATH` environment variable.
 On Linux operating system use:
@@ -78,10 +83,10 @@ environment are available from public repositories on the
 
    In addition to to the previous `xopto/pyxopto-nvidia-jupyter` image, this image also includes the [Tensorflow](https://www.tensorflow.org) and [PyTorch](https://pytorch.org/) deep learning libraries.
 
-All the images includes many of the popular Python libraries for scientific
-computing, data management and visualization ([scipy](https://scipy.org),
-[numpy](https://numpy.org), [matplotlib](https://matplotlib.org),
-[pandas](https://pandas.pydata.org), etc.).
+All the images include many of the popular Python libraries for scientific
+computing, data management and visualization ([SciPy](https://scipy.org),
+[NumPy](https://numpy.org), [Matplotlib](https://matplotlib.org),
+[Pandas](https://pandas.pydata.org), etc.).
 
 *Summary of the PyXOpto Docker images.*
 | Image                           | Tag    | PyXOpto | OS           | CUDA  | CUDNN |
