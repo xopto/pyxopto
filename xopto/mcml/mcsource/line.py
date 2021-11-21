@@ -119,14 +119,14 @@ class Line(Source):
 
         Note
         ----
-        If the source position lies outside of the sample, the entry point
-        into the sample is determined by propagating the packet from the source
-        position along the source direction. The MC simulation will start after
-        subtracting the specular reflectance at the sample boundary from the
-        initial weight of the packet.
-        Note that in case the position lies within the sample,
-        it will be used as the launch point and the packets will retain the
-        full initial weight.
+        The line will be first propagated from the given position to the
+        entry point on the sample surface along the propagation
+        direction (no interactions with the medium during this step).
+        Note that in case the position lies within the sample, the
+        line will be propagated to the entry point using reversed direction.
+        From there it will be refracted into the sample. The MC simulation
+        will start after subtracting the specular reflectance at the
+        sample boundary from the initial weight of the packet.
         '''
         Source.__init__(self)
 
