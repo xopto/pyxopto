@@ -80,7 +80,7 @@ def reflectance(
 def refract(direction: np.ndarray, normal: np.ndarray, n1: float, n2: float) \
         -> np.ndarray:
     '''
-    Refract the beam acros the given boundary with refractive indices
+    Refract the beam across the given boundary with refractive indices
     n1 and n2.
 
     Parameters
@@ -115,3 +115,33 @@ def refract(direction: np.ndarray, normal: np.ndarray, n1: float, n2: float) \
     k = n1_d_n2*abs(cos1) - np.sqrt(1.0 - sin2_squared)
 
     return n1_d_n2*direction/direction_len - np.sign(cos1)*k*normal/normal_len
+
+def reflect(direction: np.ndarray, normal: np.ndarray) -> np.ndarray:
+    '''
+    Reflect the beam direction from a boundary with the given normal.
+
+    Parameters
+    ----------
+    direction: np.ndarray
+        Propagation direction of the incident beam.
+    normal: np.ndarray
+        Boundary surface normal (pointing inwards or outwards).
+
+    Returns
+    -------
+    reflected_dir: np.ndarray
+        Propagation direction of the reflected beam.
+    '''
+    direction = np.asarray(direction, dtype=np.float)
+    direction_len = np.linalg.norm(direction)
+    if direction_len > 0.0:
+        direction = direction/direction_len
+
+    normal = np.asarray(normal, dtype=np.float)
+    normal_len = np.linalg.norm(normal)
+    if normal_len > 0.0:
+        normal = normal/normal_len
+
+    k = 2.0*np.dot(direction, normal)
+
+    return direction - k*normal
