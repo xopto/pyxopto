@@ -62,7 +62,7 @@
 
 /**
  * @brief Returns the r squared (polar radius) coordinate of the
- *        photon packet position with respecto to the given origin.
+ *        photon packet position with respect to the given origin.
  * @param[in] psim Pointer to a simulator instance.  
  * @param[in]  Coordinate x of the origin.
  * @param[in] y Coordinate y of the origin.
