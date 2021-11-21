@@ -204,6 +204,31 @@ inline mc_int_t mcsim_boundary(McSim *psim, mc_int_t nextLayerIndex){
 /*############### End layer boundary handler implementation ##################*/
 
 
+/*############### Start photon packet fluence implementation #################*/
+
+#if MC_USE_FLUENCE || defined(__DOXYGEN__)
+/**
+ * @brief Deposit the given weight to the fluence accumulator. Takes care
+ *        of the different function signatures in case of the weight deposition
+ *        and fluence rate mode.
+ * 
+ * @param sim      Simulator instance.
+ * @param deposit  Weight to deposit.
+ */
+inline void mcsim_fluence_deposit_weight(McSim *psim, mc_fp_t deposit){
+	#if MC_FLUENCE_MODE_RATE
+		mcsim_fluence_deposit(psim, deposit,
+			mc_layer_mua(mcsim_current_layer(psim))
+		);
+	#else
+		mcsim_fluence_deposit(&psim, deposit);
+	#endif
+};
+#endif /* MC_USE_FLUENCE */
+
+/*################ End photon packet fluence implementation ##################*/
+
+
 /*################ Start photon packet trace implementation ##################*/
 #if MC_USE_TRACE || defined(__DOXYGEN__)
 /**
@@ -611,13 +636,7 @@ __kernel void McKernel(
 						done = true;
 						mcsim_adjust_weight(&sim, deposit);
 						#if MC_USE_FLUENCE
-							#if MC_FLUENCE_MODE_RATE
-								mcsim_fluence_deposit(&sim, deposit,
-									mc_layer_mua(mcsim_current_layer(&sim))
-								);
-							#else
-								mcsim_fluence_deposit(&sim, deposit);
-							#endif
+							mcsim_fluence_deposit_weight(&sim, deposit);
 						#endif
 					} else {
 						/* Scatter the photon packet. */
@@ -629,13 +648,7 @@ __kernel void McKernel(
 						mc_layer_mua_inv_mut(mcsim_current_layer(&sim));
 					mcsim_adjust_weight(&sim, deposit);
 					#if MC_USE_FLUENCE
-						#if MC_FLUENCE_MODE_RATE
-							mcsim_fluence_deposit(&sim, deposit,
-								mc_layer_mua(mcsim_current_layer(&sim))
-							);
-						#else
-							mcsim_fluence_deposit(&sim, deposit);
-						#endif
+						mcsim_fluence_deposit_weight(&sim, deposit);
 					#endif
 
 					/* Scatter the photon packet. */
