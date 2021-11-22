@@ -364,3 +364,10 @@ class SurfaceLayouts(mcobject.McObject):
         Returns a tuple of surface layout types assigned to this instance.
         '''
         return type(self._top), type(self._bottom)
+
+    def __str__(self):
+        return 'SurfaceLayouts(top={}, bottom={})'.format(
+            self._top, self._bottom)
+
+    def __repr__(self):
+        return '{} #{}'.format(self.__str__(), id(self))

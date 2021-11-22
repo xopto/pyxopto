@@ -415,3 +415,10 @@ class SurfaceLayouts(mcobject.McObject):
             'top': self._top.todict(),
             'bottom': self._bottom.todict()
         }
+
+    def __str__(self):
+        return 'SurfaceLayouts(top={}, bottom={})'.format(
+            self._top, self._bottom)
+
+    def __repr__(self):
+        return '{} #{}'.format(self.__str__(), id(self))
