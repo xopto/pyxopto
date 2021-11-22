@@ -222,7 +222,7 @@ class IsotropicPoint(Source):
         if self._position[2] <= 0.0:
             target.layer_index = 1
         else:
-            target.layer_index = layer_index = mc.layer_index(self._position[2])
+            target.layer_index = mc.layer_index(self._position[2])
 
         return target, None, None
 
