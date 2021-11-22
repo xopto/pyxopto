@@ -29,7 +29,7 @@ def cos_critical(n1: float, n2: float) -> float:
 
     Parameters
     ----------
-    n1: fload
+    n1: float
         Refractive index of the material on the incident side of the 
         boundary.
     n2: float
