@@ -46,6 +46,9 @@ class Line(Source):
             direction_sample: mc_point3f_t
                 Source direction in the sample after refraction from the
                 surrounding medium.
+            direction_reflected: mc_point3f_t
+                Source direction in the surrounding medium after reflected
+                from the sample surface.
             reflectance: mc_fp_t
                 Precalculated specular reflectance at the medium -> sample layer
                 transition.
@@ -54,6 +57,7 @@ class Line(Source):
                 ('position', T.mc_point3f_t),
                 ('direction_medium', T.mc_point3f_t),
                 ('direction_sample', T.mc_point3f_t),
+                ('direction_reflected', T.mc_point3f_t),
                 ('reflectance', T.mc_fp_t),
             ]
         return ClLine
@@ -68,6 +72,7 @@ class Line(Source):
             '	mc_point3f_t position;',
             '	mc_point3f_t direction_medium;',
             '	mc_point3f_t direction_sample;',
+            '	mc_point3f_t direction_reflected;',
             '	mc_fp_t reflectance;'
             '};'
         ))
@@ -83,6 +88,7 @@ class Line(Source):
             '	dbg_print_point3f(INDENT "position        :", &src->position);',
             '	dbg_print_point3f(INDENT "direction_medium:", &src->direction_medium);',
             '	dbg_print_point3f(INDENT "direction_sample:", &src->direction_sample);',
+            '	dbg_print_point3f(INDENT "direction_reflected:", &src->direction_reflected);',
             '	dbg_print_float(INDENT   "reflectance     :", src->reflectance);',
             '};',
             '',
@@ -94,7 +100,7 @@ class Line(Source):
             '	mcsim_set_direction(mcsim, &source->direction_sample);',
             '',
             '	#if MC_USE_SPECULAR_DETECTOR',
-            '		mc_point3f_t direction = source->direction_medium;',
+            '		mc_point3f_t direction = source->direction_reflected;',
             '		mcsim_specular_detector_deposit(',
             '			mcsim, mcsim_position(mcsim), &direction, source->reflectance);',
             '	#endif',
@@ -223,6 +229,9 @@ class Line(Source):
         target.position.fromarray(position)
         target.direction_medium.fromarray(self._direction)
         target.direction_sample.fromarray(dir)
+        target.direction_reflected.x = self._direction[0]
+        target.direction_reflected.y = self._direction[1]
+        target.direction_reflected.z = -self._direction[2]
         target.reflectance = reflectance
 
         return target, None, None
