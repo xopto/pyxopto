@@ -363,7 +363,7 @@ class TotalLut(Detector):
     def _set_lut(self, lut: CollectionLut):
         if not isinstance(lut, CollectionLut):
             raise TypeError(
-                'Expecteda a CollectionLut but got {}!'.format(type(lut)))
+                'Expected a CollectionLut but got {}!'.format(type(lut)))
         self._lut = lut
     lut = property(_get_lut, _set_lut, None,
                    'Lookup table of the detector angular sensitivity.')
