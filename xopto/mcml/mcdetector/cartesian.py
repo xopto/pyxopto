@@ -400,20 +400,21 @@ class Cartesian(Detector):
         data: dict
             Dictionary created by the py:meth:`Cartesian.todict` method.
         '''
-        detector_type = data.pop('type')
+        data_ = dict(data)
+        detector_type = data_.pop('type')
         if detector_type != 'Cartesian':
             raise TypeError('Expected "Cartesian" type but got "{}"!'.format(
                 detector_type))
-        xaxis_data = data.pop('x_axis')
+        xaxis_data = data_.pop('x_axis')
         xaxis_type = xaxis_data.pop('type')
 
-        yaxis_data = data.pop('y_axis')
+        yaxis_data = data_.pop('y_axis')
         yaxis_type = yaxis_data.pop('type')
 
         return Cartesian(
             getattr(axis, xaxis_type)(**xaxis_data),
             getattr(axis, yaxis_type)(**yaxis_data),
-            **data
+            **data_
         )
 
     def plot(self, scale: str = 'log', raw: bool = False, show: bool = True):
