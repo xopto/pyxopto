@@ -265,7 +265,7 @@ class SurfaceLayouts(mcobject.McObject):
         Returns the OpenCL options of the surface layout.
 
         If the top and / or bottom sample surface layouts are specified
-        (not the dummy default layout:py:class:`SurfaceLayoutDefault`),
+        (not the dummy default :py:class:`SurfaceLayoutDefault`),
         the corresponding OpenCL options that activate the use of surface
         layouts are set, i.e. MC_USE_TOP_SURFACE_LAYOUT for the top surface
         and MC_USE_BOTTOM_SURFACE_LAYOUT for the bottom surface.
