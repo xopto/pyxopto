@@ -291,16 +291,17 @@ class TotalPl(Detector):
         data: dict
             Dictionary created by the :py:meth:`TotalPl.todict` method.
         '''
-        detector_type = data.pop('type')
+        data_ = dict(data)
+        detector_type = data_.pop('type')
         if detector_type != 'TotalPl':
             raise TypeError(
                 'Expected "TotalPl" type bot got "{}"!'.format(detector_type))
 
-        pl_axis_data = data.pop('pl_axis')
+        pl_axis_data = data_.pop('pl_axis')
         pl_axis_type = pl_axis_data.pop('type')
         plaxis = getattr(axis, pl_axis_type)(**pl_axis_data)
 
-        return TotalPl(plaxis=plaxis, **data)
+        return TotalPl(plaxis=plaxis, **data_)
 
     def __str__(self):
         return 'TotalPl(plaxis={}, cosmin={}, direction=({}, {}, {}))'.format(
@@ -586,18 +587,19 @@ class TotalLutPl(Detector):
         data: dict
             Dictionary created by the :py:meth:`TotalLutPl.todict` method.
         '''
-        detector_type = data.pop('type')
+        data_ = dict(data)
+        detector_type = data_.pop('type')
         if detector_type != 'TotalLutPl':
             raise TypeError(
                 'Expected "TotalLutPl" type bot got "{}"!'.format(detector_type))
 
-        lut = CollectionLut(data.pop('lut'))
+        lut = CollectionLut(data_.pop('lut'))
 
-        pl_axis_data = data.pop('pl_axis')
+        pl_axis_data = data_.pop('pl_axis')
         pl_axis_type = pl_axis_data.pop('type')
         plaxis = getattr(axis, pl_axis_type)(**pl_axis_data)
 
-        return TotalLutPl(lut, plaxis=plaxis, **data)
+        return TotalLutPl(lut, plaxis=plaxis, **data_)
 
     def __str__(self):
         return 'TotalLutPl(lut={}, plaxis={}, direction=({}, {}, {}))'.format(

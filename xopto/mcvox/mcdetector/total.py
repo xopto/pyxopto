@@ -221,12 +221,13 @@ class Total(Detector):
         data: dict
             Dictionary created by the :py:meth:`Total.todict` method.
         '''
-        detector_type = data.pop('type')
+        data_ = dict(data)
+        detector_type = data_.pop('type')
         if detector_type != 'Total':
             raise TypeError(
                 'Expected "Total" type bot got "{}"!'.format(detector_type))
 
-        return Total(**data)
+        return Total(**data_)
 
     def __str__(self):
         return 'Total(cosmin={}, direction=({}, {}, {}))'.format(
@@ -445,12 +446,13 @@ class TotalLut(Detector):
         data: dict
             Dictionary created by the :py:meth:`Total.todict` method.
         '''
-        detector_type = data.pop('type')
+        data_ = dict(data)
+        detector_type = data_.pop('type')
         if detector_type != 'TotalLut':
             raise TypeError(
                 'Expected "TotalLut" type bot got "{}"!'.format(detector_type))
-        lut = CollectionLut(data.pop('lut'))
-        return TotalLut(lut, **data)
+        lut = CollectionLut(data_.pop('lut'))
+        return TotalLut(lut, **data_)
 
     def __str__(self):
         return 'TotalLut(lut={}, direction=({}, {}, {}))'.format(
