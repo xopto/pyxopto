@@ -62,7 +62,7 @@ class DetectorBase(mcobject.McObject):
     def _set_location(self, location: TOP or BOTTOM or SPECULAR):
         if location not in (TOP, BOTTOM, SPECULAR):
             raise ValueError(
-                'Surface layout location must be "{}", "{}", "{}"!'.format(
+                'Detector location must be "{}", "{}", "{}"!'.format(
                     TOP, BOTTOM, SPECULAR)
             )
         if location != self._location and self._location != NONE:
@@ -215,11 +215,11 @@ class DetectorDefault(DetectorAny):
         data: dict
             Dictionary created by the :py:meth:`DetectorDefault.todict` method.
         '''
-        layout_type = data.pop('type')
-        if layout_type != cls.__name__:
+        detector_type = data.pop('type')
+        if detector_type != cls.__name__:
             raise TypeError(
                 'Expected a "{}" type bot got "{}"!'.format(
-                    cls.__name__, layout_type))
+                    cls.__name__, detector_type))
 
         return cls(**data)
 
@@ -331,7 +331,6 @@ class Detectors(mcobject.McObject):
 
         If the detectors for the top or bottom sample surface or the detector
         of specular reflection are specified, this function activates
-        (not the dummy default layout:py:class:`SurfaceLayoutDefault`),
         the corresponding OpenCL options that enable the corresponding surface
         detector, i.e. MC_USE_TOP_DETECTOR for the detector at the top sample
         surface, MC_USE_BOTTOM_DETECTOR for the detector at the bottom sample
