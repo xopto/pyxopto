@@ -56,24 +56,27 @@ SRC_PATH = os.path.join(ROOT_PATH, 'src')
 ''' Location of compilable source code. '''
 
 USER_TMP_PATH = os.path.join(ROOT_PATH, 'tmp')
-''' Temporary data path '''
+''' Temporary data path. '''
 
 MCBASE_PATH = os.path.join(ROOT_PATH, 'mcbase')
-''' Root directory of MC base '''
+''' Root directory of MC base. '''
+
+MCCYL_PATH = os.path.join(ROOT_PATH, 'mccyl')
+''' Root directory of MC Cyl. '''
 
 MCML_PATH = os.path.join(ROOT_PATH, 'mcml')
-''' Root directory of MC ML '''
+''' Root directory of MC ML. '''
 
 MCVOX_PATH = os.path.join(ROOT_PATH, 'mcvox')
-''' Root directory of MC VOX '''
+''' Root directory of MC VOX. '''
 
 USER_PATH = os.path.join(os.path.expanduser('~'), '.xopto', 'pyxopto')
-''' Root path of user data storage '''
+''' Root path of user data storage. '''
 if 'PYXOPTO_USER_PATH' in os.environ and os.environ['PYXOPTO_USER_PATH']:
     USER_PATH = str(os.environ['PYXOPTO_USER_PATH'])
 
 USER_DATA_PATH = os.path.join(USER_PATH, 'data')
-''' User directory for precalculated data '''
+''' User directory for precalculated data. '''
 
 USER_BIN_PATH = os.path.join(USER_PATH, 'bin')
 ''' User directory for built libraries or executables. '''
@@ -89,7 +92,7 @@ USER_PRIMES_PATH = os.path.join(USER_DATA_PATH, 'primes')
 
 def make_user_dirs():
     '''
-    Create all the user directories for data, binary and temporary files. 
+    Create all the user directories for data, binary and temporary files.
     '''
     for dir in (USER_DATA_PATH, USER_BIN_PATH, USER_TMP_PATH,
                 USER_BUILD_PATH, USER_PRIMES_PATH):
