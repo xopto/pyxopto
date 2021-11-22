@@ -117,7 +117,7 @@ class GaussianBeam(Source):
             '	r = mc_sqrt(-FP_2*mc_log(FP_1 - mcsim_random(mcsim)));',
             '	r = mc_fmin(r, source->clip);',
             '',
-            '	mc_sincos(FP_2PI*mcsim_random(mcsim), &cos_fi, &sin_fi);',
+            '	mc_sincos(FP_2PI*mcsim_random(mcsim), &sin_fi, &cos_fi);',
             '	pt_src.x = r*cos_fi*source->sigma.x;',
             '	pt_src.y = r*sin_fi*source->sigma.y;',
             '	pt_src.z = FP_0;',
