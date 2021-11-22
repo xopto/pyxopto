@@ -473,6 +473,10 @@ typedef char int8_t;
 #define FP_COS_0		(FP_1 - FP_COS_90)
 /** @brief floating-point infinity constant. */
 #define FP_INF			INFINITY
+/** @brief Conversion from radians to degrees. */
+#define FP_RAD2DEG		FP_LITERAL(57.2957795130823229)
+/** @brief Conversion from degrees to radians. */
+#define FP_DEG2RAD		FP_LITERAL(0.017453292519943295)
 
 #if MC_USE_NATIVE_MATH || defined(__DOXYGEN__)
 	/** @brief Native sine function. */
