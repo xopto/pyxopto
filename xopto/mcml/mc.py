@@ -118,11 +118,13 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         source: mcsource.Source
             One of the available photon packet source object:
 
-            - LineSource - infinity thin beam
-            - BeamSource - finite diameter uniform beam
-            - FiberSource - uniform intensity fiber with given numercial aperture
-            - SingleFiberSourceEx - single fiber optical probe with advanced boundary
-            - SixLinearFiberSourceEx - linear arrangement of 6 optical fibers
+            - Line - Infinity thin beam.
+            - UniformBeam - Collimated uniform beam.
+            - GaussianBeam - Collimated beam with a Gaussian crosssection.
+            - IsotropicPoint - Isotropic point source.
+            - UniformFiber - Uniform intensity fiber source with a given numerical aperture.
+
+            See the :py:mod:`xopto.mcml.mcsource` module for further sources.
 
         detectors: mcdetector.Detectors
             A set of detectors for the top and bottom sample surfaces and
@@ -152,11 +154,11 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             - MC_USE_FLUENCE
 
         surface: mcsurface.SurfaceLayouts
-            Spetial geometry that is applied to the top and / or bottom
+            Surface geometry that is applied to the top and / or bottom
             surfaces of the sample.
 
-            The Fluence object will set the following simulator options as
-            required:
+            The SurfaceLayouts object will set the following simulator
+            options as required:
 
             - MC_USE_TOP_SURFACE_LAYOUT
             - MC_USE_BOTTOM_SURFACE_LAYOUT

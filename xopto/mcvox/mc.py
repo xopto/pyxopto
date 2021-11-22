@@ -111,19 +111,23 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         ----------
         voxels: mcgeometry.Voxels
             Object representing the voxelized ample volume.
+
         materials: mcmaterial.Materials or list[mcmaterial.Material]
             Object representing sample Materials or a python list of materials.
             The list must contain at least one material. The first material
-            in the list represents the medium taht surrounds the voxelized
+            in the list represents the medium that surrounds the voxelized
             sample.
+
         source: mcsource.Source
             One of the available photon packet source object:
 
-            - LineSource - infinity thin beam
-            - BeamSource - finite diameter uniform beam
-            - FiberSource - uniform intensity fiber with given numercial aperture
-            - SingleFiberSourceEx - single fiber optical probe with advanced boundary
-            - SixLinearFiberSourceEx - linear arrangement of 6 optical fibers
+            - Line - Infinity thin beam.
+            - UniformBeam - Collimated uniform beam.
+            - GaussianBeam - Collimated beam with a Gaussian crosssection.
+            - IsotropicPoint - Isotropic point source.
+            - UniformFiber - Uniform intensity fiber source with a given numerical aperture.
+
+            See the :py:mod:`xopto.mcvox.mcsource` module for further sources.
 
         detectors: mcdetector.Detectors
             A set of detectors for the top and bottom sample surfaces and
@@ -154,7 +158,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             - MC_USE_FLUENCE
 
         surface: mcsurface.SurfaceLayouts
-            Spetial geometry that is applied to the top and / or bottom
+            Surface geometry that is applied to the top and / or bottom
             surfaces of the sample.
 
             The Fluence object will set the following simulator options as
@@ -269,6 +273,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             integer.
             Use this initializer if there is a need to put the random, number
             generator into a known state. 
+
         cl_devices: list/tuple
             A python list of OpenCL devices that are used for
             conducting the simulation.See the clGpuDevices and clCpuDevices
@@ -280,6 +285,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             clinfo.device(['amd', 'nvidia', 'hd', 'cpu'], that will search
             for an AMD GPU, Nvidia GPU, Intel Hd GPU, any CPU and return
             the first device found.
+
         cl_build_options: List[str]
             A list of OpenCL build option as specified by the OpenCl manuals at
             https://www.khronos.org/.
