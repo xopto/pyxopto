@@ -330,7 +330,7 @@ class Detectors(mcobject.McObject):
 
         If the detectors for the top or bottom sample surface or the detector
         of specular reflection are specified, this function activates
-        (not the dummy default layout:py:class:`SurfaceLayoutDefault`),
+        (not the dummy default :py:class:`SurfaceLayoutDefault`),
         the corresponding OpenCL options that enable the corresponding surface
         detector, i.e. MC_USE_TOP_DETECTOR for the detector at the top sample
         surface, MC_USE_BOTTOM_DETECTOR for the detector at the bottom sample
