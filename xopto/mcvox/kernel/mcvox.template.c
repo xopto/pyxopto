@@ -438,7 +438,7 @@ static inline void mcsim_trace_finalize(McSim *psim){
 /**
 * @brief Called when the photon packet needs to be scattered.
 * @param[in, out] psim Simulator satate.
-* @details Function computes and updates the packet propagatio direction
+* @details Function computes and updates the packet propagation direction
 *          and associated states photon packet states.
 */
 inline void mcsim_scatter(McSim *psim){
