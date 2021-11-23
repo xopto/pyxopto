@@ -1522,6 +1522,19 @@ inline int refract_safe(
 
 
 
+/*################# Start general scattering implementation ##################*/
+/**
+* @brief Called when the photon packet needs to be scattered.
+* @param[in] cos_theta Scattering angle cosine.
+* @param[in] fi        Azimuth angle.
+* @param[in, out] dir  Current propagation direction updated on return.
+* @details Function computes and updates the packet propagation direction
+*          and associated states photon packet states.
+*/
+inline void scatter_direction(mc_point3f_t *dir, mc_fp_t cos_theta, mc_fp_t fi);
+/*################## End general scattering implementation ###################*/
+
+
 /*############### Start random number generator declarations #################*/
 /**
 * @addtogroup mc_random Random number generator

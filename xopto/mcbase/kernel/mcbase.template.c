@@ -572,6 +572,52 @@ __kernel void ScalarFillMcAccu(
 /*##################### End buffer initialization kernels ####################*/
 
 
+/*################# Start general scattering implementation ##################*/
+/**
+* @brief Called when the photon packet needs to be scattered.
+* @param[in, out] dir  Current propagation direction updated on return.
+* @param[in] cos_theta Scattering angle cosine.
+* @param[in] fi        Azimuth angle.
+* @details Function computes and updates the packet propagation direction
+*          and associated states photon packet states.
+*/
+inline void scatter_direction(mc_point3f_t *dir, mc_fp_t cos_theta, mc_fp_t fi){
+	mc_fp_t sin_fi, cos_fi;
+	mc_fp_t sin_theta;
+	mc_fp_t px, k;
+	mc_fp_t sin_theta_cos_fi, sin_theta_sin_fi;
+
+	sin_theta = mc_sqrt(FP_1 - cos_theta*cos_theta);
+
+	mc_sincos(fi, &sin_fi, &cos_fi);
+
+	sin_theta_cos_fi = sin_theta*cos_fi;
+	sin_theta_sin_fi = sin_theta*sin_fi;
+
+	px = dir->x;
+
+	if(mc_fabs(dir->z) >= FP_COS_0){
+		dir->x = sin_theta_cos_fi;
+		dir->y = sin_theta_sin_fi;
+		dir->z = mc_fcopysign(cos_theta, dir->z*cos_theta); 
+	}else{
+		k = mc_sqrt(FP_1 - dir->z*dir->z);
+
+		dir->x = mc_fdiv(sin_theta_cos_fi*px*dir->z - sin_theta_sin_fi*dir->y, k) +
+			px*cos_theta;
+		dir->y = mc_fdiv(sin_theta_cos_fi*dir->y*dir->z + sin_theta_sin_fi*px, k) +
+			dir->y*cos_theta;
+		dir->z = (-sin_theta_cos_fi)*k + dir->z*cos_theta;
+	};
+
+	/* Single precision can lose unity vector length. */
+	#if !defined(MC_DOUBLE_PRECISION)
+		point3f_normalize(dir);
+	#endif
+};
+/*################## End general scattering implementation ###################*/
+
+
 /*############## Start random number generator implementation ################*/
 
 /**
@@ -632,6 +678,5 @@ __kernel void RngKernel(
 };
 
 /*############### End random number generator implementation #################*/
-
 
 #endif /* #define __MCBASE_H */
