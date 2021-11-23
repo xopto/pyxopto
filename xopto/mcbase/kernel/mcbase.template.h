@@ -569,6 +569,8 @@ typedef char int8_t;
 #define mc_clip(x, low, high)		clamp((mc_int_t)x, (mc_int_t)low, (mc_int_t)high)
 /** @brief Clip floating-point value to the specified range. */
 #define mc_fclip(x, low, high)		clamp((mc_fp_t)x, (mc_fp_t)low, (mc_fp_t)high)
+/** @brief Compute the square of x */
+#define mc_fsquare(x)				((mc_fp_t)(x)*(mc_fp_t)(x))
 /** @brief Compute the cube root of x */
 #define mc_cbrt(x)					cbrt((mc_fp_t)(x))
 /** @brief Type cast a floating-point value to integer value. */
