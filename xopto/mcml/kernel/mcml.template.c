@@ -259,44 +259,12 @@ static inline void mcsim_trace_finalize(McSim *psim){
 *          and associated states photon packet states.
 */
 inline void mcsim_scatter(McSim *psim){
-	mc_fp_t fi, sinFi, cosFi;
-	mc_fp_t cosTheta, sinTheta;
-	mc_fp_t px, k;
-	mc_fp_t sinTheta_cosFi, sinTheta_sinFi;
-
-	/* get the photon packet propagation direction - manipulate directly */
-	mc_point3f_t *dir = mcsim_direction(psim);
+	mc_fp_t fi, cos_theta;
 
 	/* sample the scattering phase functions */
-	cosTheta = mcsim_sample_pf(psim, &fi);
+	cos_theta = mcsim_sample_pf(psim, &fi);
 
-	sinTheta = mc_sqrt(FP_1 - cosTheta*cosTheta);
-
-	mc_sincos(fi, &sinFi, &cosFi);
-
-	sinTheta_cosFi = sinTheta*cosFi;
-	sinTheta_sinFi = sinTheta*sinFi;
-
-	px = dir->x;
-
-	if(mc_fabs(dir->z) >= FP_COS_0){
-		dir->x = sinTheta_cosFi;
-		dir->y = sinTheta_sinFi;
-		dir->z = mc_fcopysign(cosTheta, dir->z*cosTheta); 
-	}else{
-		k = mc_sqrt(FP_1 - dir->z*dir->z);
-
-		dir->x = mc_fdiv(sinTheta_cosFi*px*dir->z - sinTheta_sinFi*dir->y, k) +
-			px*cosTheta;
-		dir->y = mc_fdiv(sinTheta_cosFi*dir->y*dir->z + sinTheta_sinFi*px, k) +
-			dir->y*cosTheta;
-		dir->z = (-sinTheta_cosFi)*k + dir->z*cosTheta;
-	};
-
-	/* Single precision can lose unity vector length. */
-	#if !defined(MC_DOUBLE_PRECISION)
-		point3f_normalize(dir);
-	#endif
+	scatter_direction(mcsim_direction(psim), cos_theta, fi);
 };
 /*################# End scattering handling implementation ###################*/
 
