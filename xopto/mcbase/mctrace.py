@@ -926,6 +926,7 @@ class Trace(mcobject.McObject):
     def apply_filter(self):
         if self._filter is not None:
             self._n_dropped = self._filter(self, update=True)[1]
+            self._terminal = None
 
     def _get_dropped(self) -> int:
         return self._n_dropped
