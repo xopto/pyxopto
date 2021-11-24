@@ -934,7 +934,8 @@ class Trace(mcobject.McObject):
         'The number of photon packets that matched the filter, but were '\
         'dropped due to exceeding the maximum trace length.')
 
-    def plot(self, inds: np.ndarray = None, view='3d', show: bool = True):
+    def plot(self, inds: np.ndarray = None, view='3d', show: bool = True,
+             ax: 'matplotlib.axes.Axes' = None):
         '''
         Plots the paths of photon packets.
 
@@ -953,6 +954,9 @@ class Trace(mcobject.McObject):
             * '3d' - 3D plot (default).
         show: bool
             If True, show the plot.
+        ax: matplotlib.axes.Axes
+            A 3D matplotlib axis that will be used to plot the traces or
+            None to create a new figure.
         '''
         from matplotlib import pyplot as pp
         from mpl_toolkits.mplot3d import Axes3D
@@ -966,9 +970,16 @@ class Trace(mcobject.McObject):
 
         fig = None
 
+        if ax is not None:
+            if ax.name == '3d':
+                view = '3d'
+            elif view == '3d':
+                view = 'xy'
+
         if view == '3d':
-            fig = pp.figure()
-            ax = Axes3D(fig)
+            if ax is None:
+                fig = pp.figure()
+                ax = fig.add_subplot(1, 1, 1, projection='3d')
 
             for photon in inds:
                 n = min(self._n[photon], self.maxlen)
@@ -989,7 +1000,8 @@ class Trace(mcobject.McObject):
             ax.set_zlabel('z')
 
         elif view in('xy', 'xz', 'yz'):
-            fig, ax = pp.subplots()
+            if ax is None:
+                fig, ax = pp.subplots()
             for photon in inds:
                 n = min(self._n[photon], self.maxlen)
                 ax.plot(self._data[photon][view[0]][:n],
