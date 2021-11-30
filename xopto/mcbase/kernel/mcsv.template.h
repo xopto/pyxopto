@@ -41,7 +41,7 @@ struct McSamplingVolume {
 	mc_fp_t multiplier;
 	/** @brief Offset of the top-left (first) voxel in the accumulator buffer. */
 	mc_size_t offset;
-	/** @brief Photon packet weight conversion from floating-poiny to integer accumulator type **/
+	/** @brief Photon packet weight conversion from floating-point to integer accumulator type **/
 	mc_int_t k;
 };
 /**
@@ -127,7 +127,7 @@ inline int sva_is_valid_voxel(McSamplingVolumeAnalyzer const *sva,
  * @param[in] sva Pointer to a sampling volume analyzer instance.
  * @param[in] ev Event at the current position.
  * @param[in] voxel Voxel at the current poosition.
- * @param[out] distances Distances to intersections with the voxel in x, y and z direcyion.
+ * @param[out] distances Distances to intersections with the voxel in x, y and z direction.
  * @returns Distance from ev1 to the voxel intersection.
  */ 
 inline mc_fp_t sva_intersect(

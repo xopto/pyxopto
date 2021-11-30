@@ -64,7 +64,7 @@
 
 #if !defined(MC_USE_DOUBLE_PRECISION) || defined(__DOXYGEN__)
 	/** @brief Enable double floating-point precision arithmetics. 
-	 *  @note Double precision arithmetic is significatly slower than
+	 *  @note Double precision arithmetic is significantly slower than
 	 *        the default single precision arithmetics */
 	#define MC_USE_DOUBLE_PRECISION				FALSE
 #endif
@@ -170,7 +170,7 @@
 #endif
 
 #if !defined(MC_USE_PACKED_STRUCTS) || defined(__DOXYGEN__)
-	/** @brief Define to TRUE to force packed structurMC_USE_64_BIT_INTsctaes. */
+	/** @brief Define to TRUE to force packed structures. */
 	#define MC_USE_PACKED_STRUCTS				FALSE
 #endif
 
