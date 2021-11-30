@@ -85,7 +85,7 @@ inline int sva_is_valid_voxel(McSamplingVolumeAnalyzer const *sva,
  * @param[in] sva Pointer to a sampling volume analyzer instance.
  * @param[in] ev Event at the current position.
  * @param[in] voxel Voxel at the current poosition.
- * @param[out] distances Distances to intersections with the voxel in x, y and z direcyion.
+ * @param[out] distances Distances to intersections with the voxel in x, y and z direction.
  * @returns Distance from ev1 to the voxel intersection.
  */ 
 inline mc_fp_t sva_intersect(
