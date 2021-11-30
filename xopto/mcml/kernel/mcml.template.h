@@ -576,7 +576,7 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 
 /**
- * @brief Sets the z coordiante of the photon packet position to the specified value.
+ * @brief Sets the z coordinate of the photon packet position to the specified value.
  * @param[in] psim Pointer to a simulator instance.
  * @param[in] zpos New packet position z coordinate.
  */
