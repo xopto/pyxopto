@@ -45,8 +45,7 @@ optical properties of the layer material.
 2. The refractive index is defined by parameter :code:`n`.
 3. The scattering coefficient is defined by parameter :code:`mus` (m :superscript:`-1`).
 4. The absorption coefficient is defined by parameter :code:`mua` (m :superscript:`-1`).
-5. The scattering coefficient is defined by parameter :code:`mua`.
-6. The scattering phase function is defined by parameter :code:`pf` that can
+5. The scattering phase function is defined by parameter :code:`pf` that can
    be any instance of :py:class:`xopto.mcbase.mcpf.pfbase.PfBase`.
 
 The following example creates a layer with a refractive index 1.33,
