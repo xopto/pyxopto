@@ -115,6 +115,7 @@ maintenance
 tmp
 
 doc
+docs/source/mccyl
 docs/build
 docs/_build
 docs/apidoc

@@ -46,7 +46,7 @@ adjustment of the voxel size along the x, y and z axis for
 The :py:class:`~xopto.mcbase.mcfluence.FluenceRz`,
 :py:class:`~xopto.mcbase.mcfluence.FluenceCyl` and
 :py:class:`~xopto.mcbase.mcfluence.FluenceRz` classes are also conveniently
-imported into the :py:mod:`xopto.mcml.mcfluence` and
+imported into the :py:mod:`xopto.mcml.mcfluence`, :py:mod:`xopto.mccyl.mcfluence`
 :py:mod:`xopto.mcvox.mcfluence` modules.
 
 The fluence detector allows collection of unscaled deposited / absorbed

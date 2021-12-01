@@ -357,7 +357,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
     def layer(self, index:int) -> mclayer.Layer:
         '''
         Returns the layer at the specified index.
-        Layers can be also accessed by the :py:attr:`Mc.layers`
+        Layers can be also accessed by the :py:attr:`~xopto.mcml.mc.Mc.layers`
         property and [] operator.
 
         Parameters
@@ -367,7 +367,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
 
         Returns
         -------
-        layer: Layer
+        layer: xopto.mcml.mclayer.layer.Layer
             Layer at the specified index.
         '''
         return self._layers.layer(index)

@@ -78,6 +78,20 @@ MCVOX_TEMPLATES = [
 ]
 ''' Mcvox documentation templates and corresponding output files '''
 
+MCCYL_CONTEXT = {'MC':'mccyl'}
+''' Context used to render the mccyl documentation tempates '''
+MCCYL_TEMPLATES = [
+    ('source/mcbase/trace.template.rst', 'source/mccyl/trace.rst'),
+    ('source/mcbase/fluence.template.rst', 'source/mccyl/fluence.rst'),
+    ('source/mcbase/phase_function.template.rst', 'source/mccyl/phase_function.rst'),
+    ('source/mcbase/sampling_volume.template.rst', 'source/mccyl/sampling_volume.rst'),
+    ('source/mcbase/simulator_data_types.template.rst', 'source/mccyl/simulator_data_types.rst'),
+    ('source/mcbase/simulator_options.template.rst', 'source/mccyl/simulator_options.rst'),
+
+]
+''' Mccyl documentation templates and corresponding output files '''
+
 if __name__ == '__main__':
     render(MCML_TEMPLATES, MCML_CONTEXT, verbose=True)
+    render(MCCYL_TEMPLATES, MCCYL_CONTEXT, verbose=True)
     render(MCVOX_TEMPLATES, MCVOX_CONTEXT, verbose=True)

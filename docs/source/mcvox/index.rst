@@ -25,6 +25,7 @@ Voxelized MC
 .. toctree::
    :maxdepth: 2
 
+   material
    phase_function
    fluence
    trace

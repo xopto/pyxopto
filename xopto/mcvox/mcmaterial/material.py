@@ -397,15 +397,22 @@ class Materials(mcobject.McObject):
         return len(self._materials)
 
     def __str__(self):
+        items = []
         if len(self) > 10:
-            return 'Materials(\n  [{}\n   ...\n   ...\n   {}]\n)'.format(
-                ',\n   '.join([str(material) for material in self._materials[:7]]),
-                str(self._materials[-1])
-            )
+            for index, material in enumerate(self._materials[:7]):
+                item = str(material)
+                if index == 0:
+                    item += ", # surrounding medium"
+                items.append(item)
+            return 'Materials([\n   {}\n   ...\n   ...\n   {}\n])'.format(
+                ',\n   '.join(items), str(self._materials[-1]))
         else:
-            return 'Materials(\n  [{}]\n)'.format(
-                ',\n   '.join([str(material) for material in self._materials])
-            )
+            for index, material in enumerate(self._materials):
+                item = str(material)
+                if index == 0:
+                    item += ", # surrounding medium"
+                items.append(item)
+            return 'Materials([\n   {}\n])'.format(',\n   '.join(items))
 
     def tolist(self) -> List[Material]:
         '''

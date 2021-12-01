@@ -247,8 +247,9 @@ After completing the Monte Carlo simulations, the returned instance of
 :py:class:`~xopto.mcml.mcdetector.base.Detectors` can be used to access the
 collected reflectance (also used for transmittance) or the accumulated raw
 weight of the photon packets. Note that the reflectance / transmittance is
-computed as the raw weight in the accumulator divided by the surface area of
-the accumulator (weight/m :superscript:`2`) .
+computed as the raw weight in the accumulator divided by the number of
+launched photon packets and if applicable also divided by the surface area of
+the accumulator (weight/m :superscript:`2`).
 
 .. code-block:: python
 
