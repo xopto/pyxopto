@@ -70,8 +70,8 @@ add_module_names = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
-#html_theme = 'sphinx_rtd_theme'
+#html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -84,10 +84,18 @@ html_theme = 'alabaster'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['source/static']
 
-html_theme_options = {
-    'logo': 'xopto_logo_bright.png',
-    'logo_name': True,
-}
+if html_theme == 'sphinx_rtd_theme':
+    html_logo = 'source/static/xopto_logo_dark.png'
+    html_theme_options = {
+        #'logo': 'xopto_logo_bright.png',
+        #'logo_name': True,
+    }
+else:
+    html_logo = 'source/static/xopto_logo_bright.png'
+    html_theme_options = {
+        'logo': 'xopto_logo_bright.png',
+        'logo_name': True,
+    }
 
 autodata_content = 'both'
 
