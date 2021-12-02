@@ -1,5 +1,6 @@
 examples/__pycache__
 examples/mcml/__pycache__
+examples/mccyl
 examples/mcvox/__pycache__
 examples/pf/__pycache__
 
@@ -116,6 +117,7 @@ tmp
 
 doc
 docs/source/mccyl
+docs/source/images/examples/mccyl
 docs/build
 docs/_build
 docs/apidoc
