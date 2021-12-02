@@ -957,7 +957,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         exectime = t2 - t1
         downloadtime = time.perf_counter() - t2
         if verbose:
-            print('McKernel processed {:d} packets in {:d} threads:\n'
+            print('McKernel processed {:,d} packets in {:,d} threads:\n'
                   '    uploaded/built in: {:7.3f} ms\n'
                   '    executed in:       {:7.3f} ms\n'
                   '    downloaded in:     {:7.3f} ms'.format(
