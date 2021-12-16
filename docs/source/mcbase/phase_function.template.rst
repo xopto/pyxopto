@@ -59,15 +59,18 @@ used scattering phase functions:
   be used when there is no analytical inverse of the cumulative probability
   density function. In this case, the scattering angle cannot be sampled
   analytically, instead an efficient numerical sampling scheme is required.
-  Note that the use of :py:class:`~xopto.mcbase.mcpf.lut.Lut`
-  and :py:class:`~xopto.mcbase.mcpf.lut.LutEx` is tightly coupled to the
-  :py:mod:`xopto.pf` module that implements numerous scattering phase functions
-  with a number of numerical utilities for computing quantifiers such as
-  :math:`\gamma`, :math:`\delta`, :math:`\sigma` and Legendre moments,
-  computing the scattering cross sections of spherical particles, angular
-  distribution of scattering probabilities, working with monodisperse,
-  or various standard and custom size distributions, layered spherical particles,
-  etc.  
+
+  .. note::
+
+    The use of :py:class:`~xopto.mcbase.mcpf.lut.Lut`
+    and :py:class:`~xopto.mcbase.mcpf.lut.LutEx` is tightly coupled to the
+    :py:mod:`xopto.pf` module that implements numerous scattering phase functions
+    with a number of numerical utilities for computing quantifiers such as
+    :math:`\gamma`, :math:`\delta`, :math:`\sigma` and Legendre moments,
+    computing the scattering cross sections of spherical particles, angular
+    distribution of scattering probabilities, working with monodisperse,
+    or various standard and custom size distributions, layered spherical
+    particles, etc.  
 
 The individual scattering phase functions are conveniently imported into
 the :py:mod:`xopto.{{ MC }}.mc` and :py:mod:`xopto.{{ MC }}.mcpf` modules.
@@ -179,9 +182,12 @@ function with
 :py:meth:`~xopto.mcbase.mcpf.lut.Lut` or
 :py:meth:`~xopto.mcbase.mcpf.lut.LutEx`.
 
-Note that any scattering phase function in :py:mod:`xopto.pf` can
-be converted into a lookup table-based Monte Carlo simulator-compatible
-scattering phase function. The following example crates a lookup table-based
+.. note::
+  Any scattering phase function in :py:mod:`xopto.pf` can
+  be converted into a lookup table-based Monte Carlo simulator-compatible
+  scattering phase function.
+
+The following example crates a lookup table-based
 implementation of the Henyey-Greenstein (:py:class:`~xopto.mcbase.mcpf.mhg.Hg`)
 scattering phase function with anisotropy :math:`g=0.8`:
 

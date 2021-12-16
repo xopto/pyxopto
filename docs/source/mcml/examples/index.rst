@@ -24,7 +24,6 @@ Examples
 
 .. toctree::
    :maxdepth: 3
-   :caption: Examples
 
    basic_example
    reflectance_spectrum_skin

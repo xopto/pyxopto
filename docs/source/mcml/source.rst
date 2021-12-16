@@ -75,11 +75,13 @@ geometrical center of the source. This position is used as a reference point
 for terminating photon packets that leave the simulation radius set
 through the :py:attr:`xopto.mcml.mc.Mc.rmax` property.
 
-Note that the refractive index of the source (not all the sources implement
-this property) is used to compute the initial photon packet weight (the
-specular reflectance at the source-sample boundary is subtracted from 1.0).
-The sources that do not implement a refractive index, inherit the value from
-the surrounding medium.
+.. note::
+
+    The refractive index of the source (not all the sources implement
+    this property) is used to compute the initial photon packet weight (the
+    specular reflectance at the source-sample boundary is subtracted from 1.0).
+    The sources that do not implement a refractive index, inherit the value
+    from the surrounding medium.
 
 The :py:class:`~xopto.mcml.mcsource.uniformbeam.UniformBeam`,
 :py:class:`xopto.mcml.mcsource.gaussianbeam.GaussianBeam` and all the

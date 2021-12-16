@@ -90,6 +90,7 @@ if html_theme == 'sphinx_rtd_theme':
         #'logo': 'xopto_logo_bright.png',
         #'logo_name': True,
     }
+    extensions.append('sphinx_rtd_theme')
 else:
     html_logo = 'source/static/xopto_logo_bright.png'
     html_theme_options = {

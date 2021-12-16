@@ -65,7 +65,7 @@ function from this example exposes only the anisotropy
     material.n = 1.452
     material.pf.g = 0.9
 
-The individual materials are then combined into a list through the
+The individual materials are then combined into a list through
 :py:meth:`~xopto.mcvox.mcmaterial.material.Materials`. The constructor takes
 a list of :py:class:`~xopto.mcvox.mcmaterial.material.Material`. The created
 instance manages the transfer of data between the host and the OpenCL device.
@@ -80,10 +80,6 @@ instance manages the transfer of data between the host and the OpenCL device.
         ]
     )
 
-Voxels of the samples can be labeled by a particular material through the
-corresponding index of the material in the list. A label 0 will set the
-voxel material to the the same material as is used for the surrounding medium.
-
 Note that the first material in the list represent the surrounding
 medium. The absorption coefficient :code:`mua`, scattering coefficient
 :code:`mus` and the scattering phase function :code:`pf` of the
@@ -92,6 +88,10 @@ photon packets are not propagated through the surrounding medium.
 However, the refractive index :code:`n` of the surrounding medium
 is used to properly refract/reflect the photon packet at the sample surface
 when launched by the source or when escaping the sample.
+
+Voxels of the samples can be labeled by a particular material through the
+corresponding index of the material in the list. A label 0 will set the
+voxel material to the the same material as is used for the surrounding medium.
 
 The properties of materials in the list can be modified at any time
 through accessing the individual materials and from there the material
@@ -111,7 +111,7 @@ The :py:class:`~xopto.mcvox.mcmaterial.material.Material` and
 :py:class:`~xopto.mcvox.mcmaterial.material.Materials` produce an informative
 human-readable output when used with the :py:func:`print` builtin.
 
-Applying :py:func:`print` to an individual material (instances of
+Applying :py:func:`print` to a material (instance of
 :py:class:`~xopto.mcvox.mcmaterial.material.Material`) will produce the
 following output:
 

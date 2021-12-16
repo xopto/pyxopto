@@ -92,14 +92,15 @@ manages the transfer of data between the host and the OpenCL device.
         ]
     )
 
-Note that the first and last layer in the stack represent the surrounding
-medium. The absorption coefficient :code:`mua`, scattering coefficient
-:code:`mus` and the scattering phase function :code:`pf` of the
-topmost and bottommost layers are not used in the MC simulations, since the
-photon packets are not propagated through the surrounding medium.
-However, the refractive index :code:`n` of the two outermost
-layers is used to properly refract/reflect the photon packet at the layer
-boundaries when launched by the source or when escaping the sample.
+.. note::
+    The first and last layer in the stack represent the surrounding
+    medium. The absorption coefficient :code:`mua`, scattering coefficient
+    :code:`mus` and the scattering phase function :code:`pf` of the
+    topmost and bottommost layers are not used in the MC simulations, since the
+    photon packets are not propagated through the surrounding medium.
+    However, the refractive index :code:`n` of the two outermost
+    layers is used to properly refract/reflect the photon packet at the layer
+    boundaries when launched by the source or when escaping the sample.
 
 The properties of layers in the layer stack can be modified at any time
 through accessing the individual layers and from there the layer

@@ -88,9 +88,11 @@ applications:
     * :py:class:`~xopto.mcbase.mctypes.McAccu64` - 64-bit unsigned weight accumulators
     * :py:class:`~xopto.mcbase.mctypes.McDouble` - double precision floating-point arithmetics
 
-Note that 32-bit photon packet weight accumulators
-:py:class:`~xopto.mcbase.mctypes.McAccu32` should be avoided, since they can
-overflow even for simulations with a small number of photon packets.
+.. note::
+
+    The 32-bit photon packet weight accumulators
+    :py:class:`~xopto.mcbase.mctypes.McAccu32` should be avoided, since they can
+    overflow even for simulations with a small number of photon packets.
 
 Single precision floating-point arithmetics 
 :py:class:`~xopto.mcbase.mctypes.McFloat` should be sufficient for most

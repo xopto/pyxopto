@@ -95,15 +95,17 @@ The fluence data are stored in a 3D numpy array that can be accessed through the
 :py:attr:`~xopto.mcbase.mcfluence.Fluence.raw` or
 :py:attr:`~xopto.mcbase.mcfluence.Fluence.data` properties. The individual
 voxels are addressed / sliced as :python:`data[z_slice, y_slice, x_slice]`.
-Note that the values returned by the
-:py:attr:`~xopto.mcbase.mcfluence.Fluence.raw` property are the unscaled
-sums of deposited / absorbed photon packet weights while the values returned by
-the :py:attr:`~xopto.mcbase.mcfluence.Fluence.data` property are scaled by the
-inverse of the product between the voxel volume and the number of launched
-packets. Also note that the voxel size is constant for the
-:py:class:`~xopto.mcbase.mcfluence.Fluence` but changes with location for the
-:py:class:`~xopto.mcbase.mcfluence.FluenceRz` and
-:py:class:`~xopto.mcbase.mcfluence.FluenceCyl`.
+
+.. note::
+
+    The values returned by the :py:attr:`~xopto.mcbase.mcfluence.Fluence.raw`
+    property are the unscaled sums of deposited / absorbed photon packet weights
+    while the values returned by the :py:attr:`~xopto.mcbase.mcfluence.Fluence.data`
+    property are scaled by the inverse of the product between the voxel volume and
+    the number of launched packets. Also note that the voxel size is constant
+    for the :py:class:`~xopto.mcbase.mcfluence.Fluence` but changes with location
+    for the :py:class:`~xopto.mcbase.mcfluence.FluenceRz` and
+    :py:class:`~xopto.mcbase.mcfluence.FluenceCyl`.
 
 
 After completing the Monte Carlo simulation, the fluence accumulator can be
