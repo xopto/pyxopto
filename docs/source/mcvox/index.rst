@@ -32,5 +32,6 @@ Voxelized MC
    sampling_volume
    simulator_data_types
    simulator_options
+   opencl_build_options
 
    examples/index

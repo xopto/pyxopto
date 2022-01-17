@@ -62,6 +62,7 @@ MCML_TEMPLATES = [
     ('source/mcbase/sampling_volume.template.rst', 'source/mcml/sampling_volume.rst'),
     ('source/mcbase/simulator_data_types.template.rst', 'source/mcml/simulator_data_types.rst'),
     ('source/mcbase/simulator_options.template.rst', 'source/mcml/simulator_options.rst'),
+    ('source/mcbase/opencl_build_options.template.rst', 'source/mcml/opencl_build_options.rst'),
 ]
 ''' Mcml documentation templates and corresponding output files '''
 
@@ -74,6 +75,7 @@ MCVOX_TEMPLATES = [
     ('source/mcbase/sampling_volume.template.rst', 'source/mcvox/sampling_volume.rst'),
     ('source/mcbase/simulator_data_types.template.rst', 'source/mcvox/simulator_data_types.rst'),
     ('source/mcbase/simulator_options.template.rst', 'source/mcvox/simulator_options.rst'),
+    ('source/mcbase/opencl_build_options.template.rst', 'source/mcvox/opencl_build_options.rst'),
 
 ]
 ''' Mcvox documentation templates and corresponding output files '''
@@ -87,6 +89,7 @@ MCCYL_TEMPLATES = [
     ('source/mcbase/sampling_volume.template.rst', 'source/mccyl/sampling_volume.rst'),
     ('source/mcbase/simulator_data_types.template.rst', 'source/mccyl/simulator_data_types.rst'),
     ('source/mcbase/simulator_options.template.rst', 'source/mccyl/simulator_options.rst'),
+    ('source/mcbase/opencl_build_options.template.rst', 'source/mccyl/opencl_build_options.rst'),
 
 ]
 ''' Mccyl documentation templates and corresponding output files '''

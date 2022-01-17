@@ -155,7 +155,7 @@ class ClWorker(mcobject.McObject):
         # OpenCL build options
         if cl_build_options is None:
             cl_build_options = []
-        self._cl_build_options = cl_build_options
+        self._cl_build_options = [str(item) for item in cl_build_options]
 
         # The opencl context used by the worker.
         self._cl_context = cl.Context(self._cl_devices)

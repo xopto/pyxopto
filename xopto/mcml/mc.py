@@ -92,7 +92,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
                  options: List[mcoptions.McOption] = None,
                  rnginit: np.uint64 = None,
                  cl_devices: List[cl.Device] = None,
-                 cl_build_options: List[str] = None):
+                 cl_build_options: List[str or cloptions.ClBuildOption] = None):
         '''
         Multilayer Monte Carlo light propagation simulator object constructor.
         The object uses existing OpenCL kernel code in the mcml.h and mcml.c
@@ -273,7 +273,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             for an AMD GPU, Nvidia GPU, Intel Hd GPU, any CPU and return
             the first device found.
 
-        cl_build_options: List[str]
+        cl_build_options: List[str or cloptions.ClBuildOption]
             A list of OpenCL build option as specified by the OpenCl manuals at
             https://www.khronos.org/.
             An example of commonly used build options:
