@@ -31,7 +31,7 @@ import pyopencl as cl
 import jinja2
 
 from xopto import ROOT_PATH, DATA_PATH
-from xopto.cl import clrng, clinfo
+from xopto.cl import clrng, clinfo, cloptions
 
 from xopto.mcml.mcobject import McObject
 from xopto.mcml import cltypes
