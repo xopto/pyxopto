@@ -278,7 +278,9 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             https://www.khronos.org/.
             An example of commonly used build options:
             cloptions=['-cl-opt-disable', '-Werror', '-cl-fast-relaxed-math', '-cl-mad-enable'].
-            Note that "-cl-fast-relaxed-math" canlead to broken results on some platforms.
+            Note that the "-cl-fast-relaxed-math" build option will likely
+            lead to a significant performance improvement but may on some
+            platforms lead to errors in the simulated quantities.
 
         Examples
         --------

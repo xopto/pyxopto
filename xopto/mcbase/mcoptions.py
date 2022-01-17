@@ -303,6 +303,7 @@ class McUseBallisticKernel(McBoolOption):
     def __repr__(self):
         return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
 
+
 class McUseNativeMath(McBoolOption):
     '''
     Turn on or off the use of OpenCL native math.
