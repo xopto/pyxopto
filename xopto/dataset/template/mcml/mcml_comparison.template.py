@@ -36,6 +36,8 @@ cl_device = clinfo.device(
     index=cl_index
 )
 
+cl_build_options = {{ cl_build_options or None }}
+
 overwrite = os.environ.get('MC_OVERWRITE', False) 
 
 num_packets = int(os.environ.get('MC_NUM_PACKETS', {{ num_packets }}))
@@ -75,6 +77,7 @@ fluence = mc.mcfluence.FluenceRz(
 {% if fluence_k -%}fluence.k = {{ fluence_k }}{%- endif %}
 
 mc_obj = mc.Mc(layers, source, detectors, fluence=fluence,
+               cl_build_options=cl_build_options,
                cl_devices=cl_device{% if double_precision %}, types=mc.mctypes.McDataTypesDouble{% endif %})
 mc_obj.rmax = 1000e-3
 pos = 0

@@ -22,6 +22,8 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
+from typing import List
+
 from .mcml_comparison import render_mcml_comparison
 from .mcml import render_mcml
 from .mcvox import render_mcvox_fluence
@@ -31,6 +33,7 @@ from .common import prepare_cli, process_cli
 
 def render_all(target_dir: str = None,
                cl_device: str = None, cl_index: int = 0,
+               cl_build_options: List[str] = None,
                test: bool = False, verbose: bool = False):
     '''
     Render all templates using default configuration.
@@ -49,6 +52,9 @@ def render_all(target_dir: str = None,
         OpenCL device index (if multiple OpenCL devices of the same kind
         are installed). The value can be also set through the CL_INDEX
         environment variable.
+    cl_build_options: List[str]
+        A list of  OpenCL build options.
+        See :py:class:`~xopto.cl.cloptions.ClBuildOption` for more details.
     test: bool
         Do a test run. The run scripts will be rendered but not saved. This
         option will automatically enable the verbose mode.
@@ -56,7 +62,8 @@ def render_all(target_dir: str = None,
         Enables verbose reporting.
     '''
     kwargs = {'target_dir': target_dir, 'test': test, 'verbose': verbose,
-              'cl_device': cl_device, 'cl_index': cl_index}
+              'cl_device': cl_device, 'cl_index': cl_index,
+              'cl_build_options': cl_build_options}
     render_mcml_comparison(**kwargs)
     render_mcml(**kwargs)
     render_sv_reflectance(**kwargs)

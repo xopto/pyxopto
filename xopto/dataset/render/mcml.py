@@ -22,6 +22,7 @@
 
 import os
 import os.path
+from typing import List
 
 import jinja2
 import numpy as np
@@ -377,6 +378,7 @@ CONFIG = {
 
 def render_mcml(target_dir: str = None, config: dict = None,
                 cl_device: str = None, cl_index: int = 0,
+                cl_build_options: List[str] = None,
                 test: bool = False, verbose: bool = False):
     '''
     Render templates with the given configuration.
@@ -398,6 +400,9 @@ def render_mcml(target_dir: str = None, config: dict = None,
         OpenCL device index (if multiple OpenCL devices of the same kind
         are installed). The value can be also set through the CL_INDEX
         environment variable.
+    cl_build_options: List[str]
+        A list of  OpenCL build options.
+        See :py:class:`~xopto.cl.cloptions.ClBuildOption` for more details.
     test: bool
         Do a test run. The run scripts will be rendered but not saved. This
         option will automatically enable the verbose mode.
@@ -415,6 +420,11 @@ def render_mcml(target_dir: str = None, config: dict = None,
 
     if test:
         verbose = True
+
+    if cl_build_options is None:
+        cl_build_options = []
+    else:
+        cl_build_options = [str(item) for item in cl_build_options]
 
     root_dataset_dir =  os.path.join(target_dir, 'data')
     run_script_dir = os.path.join(target_dir, 'run', 'mcml')
@@ -442,6 +452,7 @@ def render_mcml(target_dir: str = None, config: dict = None,
                 rendered_template = T.render(**{
                     'sample': sample_data,
                     'cl_device': cl_device, 'cl_index': cl_index,
+                    'cl_build_options': cl_build_options,
                     'rmax': src_data.get('rmax', sample_data.get('rmax', config['rmax'])),
                     'num_packets': src_data.get('num_packets', config['num_packets']),
                     'sample': sample_data,

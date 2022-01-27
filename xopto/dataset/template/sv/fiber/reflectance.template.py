@@ -36,10 +36,13 @@ from xopto.mcml.mcutil.fiber import MultimodeFiber
 
 root_dataset_dir = '{{ root_dataset_dir }}'
 
+cl_index = int(os.environ.get('CL_INDEX', {{ cl_index }}))
 cl_device = clinfo.device(
     os.environ.get('CL_DEVICE', {{ cl_device }}),
-    index=int(os.environ.get('CL_INDEX', {{ cl_index }}))
+    index=cl_index
 )
+
+cl_build_options = {{ cl_build_options or None }}
 
 overwrite = int(os.environ.get('MC_OVERWRITE', False))
 
@@ -81,7 +84,7 @@ surface = mc.mcsurface.SurfaceLayouts(
 )
 
 mc_obj = mc.Mc(layers, source, surface=surface, trace=trace,
-               cl_devices=cl_device)
+               cl_devices=cl_device, cl_build_options=cl_build_options)
 mc_obj.rmax = {{ rmax }}
 
 sv = mc.mcsv.SamplingVolume(

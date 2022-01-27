@@ -91,6 +91,27 @@ def prepare_cli(description: str) -> argparse.ArgumentParser:
         '-i', '--cl-index', dest='cl_index', default=0, type=int,
         help='OpenCL device index to use for the simulations.')
 
+    parser.add_argument(
+        '--cl-fast-relaxed-math', dest='cl_fast_relaxed_math',
+        action='store_true',
+        help='Adds OpenCL build option -cl-fast-relaxed-math.')
+    parser.add_argument(
+        '--cl-mad-enable', dest='cl_mad_enable',
+        action='store_true',
+        help='Adds OpenCL build option -cl-mad-enable.')
+    parser.add_argument(
+        '--cl-unsafe-math-optimizations', dest='cl_unsafe_math_optimizations',
+        action='store_true',
+        help='Adds OpenCL build option -cl-unsafe-math-optimizations.')
+    parser.add_argument(
+        '--cl-finite-math-only', dest='cl_finite_math_only',
+        action='store_true',
+        help='Adds OpenCL build option -cl-finite-math-only.')
+    parser.add_argument(
+        '--cl-no-signed-zeros', dest='cl_no_signed_zeros',
+        action='store_true',
+        help='Adds OpenCL build option -cl-no-signed-zeros.')
+
     return parser
 
 def process_cli(parser: argparse.ArgumentParser) -> dict:
@@ -125,10 +146,28 @@ def process_cli(parser: argparse.ArgumentParser) -> dict:
 
         cl_index: int
             OpenCL device index (zero-based).
+
+        cl_build_options: List[str]
+            A list of  OpenCL build options.
+            See :py:class:`~xopto.cl.cloptions.ClBuildOption` for more
+            details.
     '''
     args = parser.parse_args()
+
+    cl_build_options = []
+    if args.cl_fast_relaxed_math:
+        cl_build_options.append('-cl-fast-relaxed-math')
+    if args.cl_mad_enable:
+        cl_build_options.append('-cl-mad-enable')
+    if args.cl_unsafe_math_optimizations:
+        cl_build_options.append('-cl-unsafe-math-optimizations')
+    if args.cl_finite_math_only:
+        cl_build_options.append('-cl-finite-math-ony')
+    if args.cl_no_signed_zeros:
+        cl_build_options.append('-cl-no-signed-zeros')
 
     return {'verbose': args.verbose, 'test': args.test,
             'target_dir': args.target_dir,
             'cl_device': args.cl_device,
-            'cl_index': args.cl_index}
+            'cl_index': args.cl_index,
+            'cl_build_options': cl_build_options}

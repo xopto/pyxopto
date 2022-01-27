@@ -40,6 +40,8 @@ cl_device = clinfo.device(
     index=cl_index
 )
 
+cl_build_options = {{ cl_build_options or None }}
+
 overwrite = int(os.environ.get('MC_OVERWRITE', False))
 
 num_packets = int(os.environ.get('MC_NUM_PACKETS', {{ num_packets }}))
@@ -142,6 +144,7 @@ mc_obj = mc.Mc(
     fluence=fluence,
     source=source,
     cl_devices=cl_device,
+    cl_build_options=cl_build_options
 )
 mc_obj.rmax = {{ rmax }}
 

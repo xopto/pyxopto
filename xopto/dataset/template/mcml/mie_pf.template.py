@@ -66,10 +66,13 @@ storage_dir_common = os.path.join(
     'mcml', '{{ sample.dir }}', '{{ source.dir }}'
 )
 
+cl_index = int(os.environ.get('CL_INDEX', {{ cl_index }}))
 cl_device = clinfo.device(
     os.environ.get('CL_DEVICE', {{ cl_device }}),
-    index=int(os.environ.get('CL_INDEX', {{ cl_index }}))
+    index=cl_index
 )
+
+cl_build_options = {{ cl_build_options or None }}
 
 overwrite = int(os.environ.get('MC_OVERWRITE', False))
 
@@ -184,7 +187,7 @@ if top_layout is not None:
     surface = mc.mcsurface.SurfaceLayouts(top = top_layout)
 
 mc_obj = mc.Mc(layers, source, detectors, surface=surface,
-               cl_devices=cl_device,
+               cl_devices=cl_device, cl_build_options=cl_build_options,
                options=[mc.mcoptions.McFloatLutMemory.constant_mem])
 mc_obj.rmax = {{ rmax }}
 
