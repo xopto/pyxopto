@@ -46,7 +46,9 @@ import pyopencl as cl
 class ClWorker(mcobject.McObject):
     def __init__(self,
                  types: mctypes.McDataTypesBase = mctypes.McDataTypesSingle,
-                 cl_devices=None, cl_build_options=None, **kwargs):
+                 cl_devices=None, cl_build_options=None,
+                 cl_profiling: bool = False,
+                 **kwargs):
         '''
         OpenCL worker with support for allocation of read-write data buffers
         of arbitrary types and management of read-only lookup tables.
@@ -110,6 +112,8 @@ class ClWorker(mcobject.McObject):
             https://www.khronos.org/.
             An example of commonly used build options:
             cloptions=['-cl-opt-disable', '-Werror', '-cl-fast-relaxed-math', '-cl-mad-enable'].
+        cl_profiling: bool
+            Enables OpenCL command queue profiling.
         kwargs: dict
             Keyword arguments passed to the Mixin classes.
 
@@ -152,6 +156,11 @@ class ClWorker(mcobject.McObject):
             cl_devices = [clinfo.device(cl_devices)]
         self._cl_devices = cl_devices
 
+        self._cl_profiling = bool(cl_profiling)
+        cl_cq_properties = None
+        if self._cl_profiling:
+            cl_cq_properties = cl.command_queue_properties.PROFILING_ENABLE
+
         # OpenCL build options
         if cl_build_options is None:
             cl_build_options = []
@@ -160,7 +169,8 @@ class ClWorker(mcobject.McObject):
         # The opencl context used by the worker.
         self._cl_context = cl.Context(self._cl_devices)
         # The opencl queue used by the worker.
-        self._cl_queue = cl.CommandQueue(self._cl_context)
+        self._cl_queue = cl.CommandQueue(
+            self._cl_context, properties=cl_cq_properties)
         # The latest executable build with this the worker.
         self._cl_exec = None
 
@@ -173,7 +183,38 @@ class ClWorker(mcobject.McObject):
             np.dtype('float32'): 'float', np.dtype('float64'): 'double'
         }
 
-    def cl_build(self, cl_src: str, verbose=False) -> cl.Program:
+    def event_timing(self, event: cl.Event) -> float:
+        '''
+        If OpenCL profiling is enabled, the timing related to an OpenCL event
+        can be retrieved through the profile property of the event:
+
+        - ev.profile.queued   - nanosecond counter captured on event queued
+        - ev.profile.submit   - nanosecond counter captured on event submitted
+        - ev.profile.start    - nanosecond counter captured on start of execution
+        - ev.profile.complete - nanosecond counter captured on end of execution
+
+        This method returns the time (s) that was required to start executing
+        of the command and the time (s) required to execute the command.
+
+        Parameters
+        ----------
+        event: cl.Event
+            OpenCL event instance.
+
+        Returns
+        -------
+        dt_delay: float
+            Time (s) that was required to start the execution of the command
+            (profile.start - profile.submit).
+        dt_exec: float
+            Time (s) that was required to execute the command
+            (profile.complete - profile.start).
+        '''
+        if self.cl_profiling:
+            return (event.profile.complete - event.profile.start)*1e-9, \
+                   (event.profile.start - event.profile.submit)*1e-9
+
+    def cl_build(self, cl_src: str, verbose: bool = False) -> cl.Program:
         '''
         Build OpenCL source code. A context and command queue are created on
         the first run.
@@ -196,7 +237,11 @@ class ClWorker(mcobject.McObject):
         if self._cl_context is None:
             self._cl_context = cl.Context(self._cl_devices)
         if self._cl_queue is None:
-            self._cl_queue = cl.CommandQueue(self._cl_context)
+            properties = None
+            if self._cl_profiling:
+                properties = cl.command_queue_properties.PROFILING_ENABLE
+            self._cl_queue = cl.CommandQueue(
+                self._cl_context, properties=properties)
 
         if verbose:
             print('Executing OpenCL code on: {}'.format(
@@ -223,6 +268,12 @@ class ClWorker(mcobject.McObject):
     def _get_cl_context(self) -> cl.Context:
         return self._cl_context
     cl_context = property(_get_cl_context, None, None, 'OpenCL context.')
+
+    def _get_cl_profiling(self) -> bool:
+        return self._cl_profiling
+    cl_profiling = property(_get_cl_profiling, None, None,
+                            'Returns True if OpenCL command queue '
+                            'allows profiling.')
 
     def _get_cl_queue(self) -> cl.CommandQueue:
         return self._cl_queue

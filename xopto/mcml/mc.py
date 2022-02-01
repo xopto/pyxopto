@@ -92,7 +92,8 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
                  options: List[mcoptions.McOption] = None,
                  rnginit: np.uint64 = None,
                  cl_devices: List[cl.Device] = None,
-                 cl_build_options: List[str or cloptions.ClBuildOption] = None):
+                 cl_build_options: List[str or cloptions.ClBuildOption] = None,
+                 cl_profiling : bool = False):
         '''
         Multilayer Monte Carlo light propagation simulator object constructor.
         The object uses existing OpenCL kernel code in the mcml.h and mcml.c
@@ -282,6 +283,9 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             lead to a significant performance improvement but may on some
             platforms lead to errors in the simulated quantities.
 
+        cl_profiling: bool
+            Enables OpenCL command queue profiling if set to True.
+
         Examples
         --------
         See the test/example.py for additional examples.
@@ -297,7 +301,8 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         >>> trace_data, _, _ = mc.run(100)
         '''
         super().__init__(types=types, options=options, cl_devices=cl_devices,
-                         cl_build_options=cl_build_options, rnginit=rnginit)
+                         cl_build_options=cl_build_options, rnginit=rnginit,
+                         cl_profiling=cl_profiling)
         # Initialization of members for later use.
         self._cl_exec = self._cl_src = self._cl_src_options = None
 
@@ -874,7 +879,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         t1 = time.perf_counter()
 
         # call the kernel
-        self._cl_exec.McKernel(
+        ev = self._cl_exec.McKernel(
             cl_queue, globalWG, localWG,
 
             np.dtype(self._types.np_cnt).type(nphotons),
@@ -905,7 +910,10 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             self.cl_rw_int_buffer(),
             self.cl_rw_float_buffer(),
             self.cl_rw_accumulator_buffer(),
-        ).wait()
+        )
+
+        if self.cl_profiling and verbose:
+            print((ev.profile.end - ev.profile.start)*1e-9)
 
         t2 = time.perf_counter()
 
@@ -1488,7 +1496,7 @@ if __name__ == '__main__':
     surface = None
     mc = Mc(layers, source, detectors, trace=trace, fluence=fluence,
             surface=surface,
-            cl_devices=cl_device,
+            cl_devices=cl_device, cl_profiling=True,
             options=[mcoptions.McDebugMode.off, mcoptions.McUseSoft64Atomics.off,
                      mcoptions.McMinimumPacketWeight.default],
             types=mctypes.McDataTypes)

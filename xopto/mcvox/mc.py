@@ -94,7 +94,8 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
                  options: List[mcoptions.McOption] = None,
                  rnginit: np.uint64 = None,
                  cl_devices: List[cl.Device] = None,
-                 cl_build_options: List[str or cloptions.ClBuildOption] = None):
+                 cl_build_options: List[str or cloptions.ClBuildOption] = None,
+                 cl_profiling : bool = False):
         '''
         Voxelized Monte Carlo light propagation simulator object constructor.
         The object uses existing OpenCL kernel code in the mcvox.template.h and
@@ -295,6 +296,9 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             lead to a significant performance improvement but may on some
             platforms lead to errors in the simulated quantities.
 
+        cl_profiling: bool
+            Enables OpenCL command queue profiling if set to True.
+
         Examples
         --------
         See the test/example.py for additional examples.
@@ -323,7 +327,8 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         >>>
         '''
         super().__init__(types=types, options=options, cl_devices=cl_devices,
-                         cl_build_options=cl_build_options, rnginit=rnginit)
+                         cl_build_options=cl_build_options,
+                         cl_profiling=cl_profiling, rnginit=rnginit)
         # Initialization of members for later use.
         self._cl_exec = self._cl_src = self._cl_src_options = None
 
