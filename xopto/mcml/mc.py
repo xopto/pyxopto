@@ -879,7 +879,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         t1 = time.perf_counter()
 
         # call the kernel
-        ev = self._cl_exec.McKernel(
+        self._cl_exec.McKernel(
             cl_queue, globalWG, localWG,
 
             np.dtype(self._types.np_cnt).type(nphotons),
@@ -910,10 +910,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             self.cl_rw_int_buffer(),
             self.cl_rw_float_buffer(),
             self.cl_rw_accumulator_buffer(),
-        )
-
-        if self.cl_profiling and verbose:
-            print((ev.profile.end - ev.profile.start)*1e-9)
+        ).wait()
 
         t2 = time.perf_counter()
 

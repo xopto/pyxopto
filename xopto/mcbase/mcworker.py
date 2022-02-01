@@ -183,7 +183,7 @@ class ClWorker(mcobject.McObject):
             np.dtype('float32'): 'float', np.dtype('float64'): 'double'
         }
 
-    def event_timing(self, event: cl.Event) -> float:
+    def event_timing(self, event: cl.Event) -> Tuple[float, float]:
         '''
         If OpenCL profiling is enabled, the timing related to an OpenCL event
         can be retrieved through the profile property of the event:
@@ -530,8 +530,8 @@ class ClWorker(mcobject.McObject):
         '''
         lut_manager = self._r_lut_managers[dtype]
         cl_buffer = self._cl_buffers.get(lut_manager)
-        np_buffer = self._np_buffers.get(lut_manager)
         if cl_buffer is None or update:
+            np_buffer = self._np_buffers.get(lut_manager)
             np_buffer = lut_manager.pack_into(np_buffer)
             self._np_buffers[lut_manager] = np_buffer 
 
