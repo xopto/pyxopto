@@ -46,7 +46,9 @@ import pyopencl as cl
 class ClWorker(mcobject.McObject):
     def __init__(self,
                  types: mctypes.McDataTypesBase = mctypes.McDataTypesSingle,
-                 cl_devices=None, cl_build_options=None,
+                 cl_devices: str or cl.Device or List[cl.Device] 
+                             or cl.Context or cl.CommandQueue = None,
+                 cl_build_options: List[str] = None,
                  cl_profiling: bool = False,
                  **kwargs):
         '''
@@ -96,9 +98,9 @@ class ClWorker(mcobject.McObject):
                 - 32-bit photon packet counter (maximum number of photon
                     packets per OpenCL kernel call virtually unlimited)
 
-        cl_devices: List[cl.Device] or cl.Device or str
+        cl_devices: List[cl.Device] or cl.Device or str or cl.CommnadQueue or cl.Context
             A python list of OpenCL devices that are used for
-            conducting the simulation.See the clGpuDevices and clCpuDevices
+            conducting the simulation. See the clGpuDevices and clCpuDevices
             functions of the :py:mod:`xopto.clinfo` module for details on
             obtaining a list of OpenCl capable devices. If None is provided,
             the first available device is used (GPU devices have priority over
@@ -107,13 +109,25 @@ class ClWorker(mcobject.McObject):
             clinfo.device(['amd', 'nvidia', 'hd', 'cpu'], that will search
             for an AMD GPU, Nvidia GPU, Intel Hd GPU, any CPU and return
             the first device found.
+            The value of this input argument can also be an
+            instance of OpenCL Context or an instance of OpenCL CommandQueue.
+            Note that in case an instance of CommandQueue is passed, the value
+            of parameter cl_profiling is ignored since it is not possible to
+            enable or disable profiling on an existing OpenCL CommandQueue.
+
         cl_build_options: List[str]
             A list of OpenCL build option as specified by the OpenCl manuals at
             https://www.khronos.org/.
             An example of commonly used build options:
             cloptions=['-cl-opt-disable', '-Werror', '-cl-fast-relaxed-math', '-cl-mad-enable'].
+
         cl_profiling: bool
             Enables OpenCL command queue profiling.
+            Note that in case an instance of CommandQueue is passed as the
+            cl_devices parameter, the value of parameter cl_profiling is
+            ignored since it is not possible to enable or disable profiling
+            on an existing OpenCL CommandQueue.
+
         kwargs: dict
             Keyword arguments passed to the Mixin classes.
 
@@ -149,12 +163,22 @@ class ClWorker(mcobject.McObject):
         # OpenCL data buffers.
         self._cl_buffers = {}
 
-        # Save the list of opencl devices
+        self._cl_devices = self._cl_queue = self._cl_context = None
+        # Save the list of OpenCL devices
         if isinstance(cl_devices, cl.Device):
-            cl_devices = [cl_devices]
+            self._cl_devices = [cl_devices]
         elif isinstance(cl_devices, str):
-            cl_devices = [clinfo.device(cl_devices)]
-        self._cl_devices = cl_devices
+            self._cl_devices = [clinfo.device(cl_devices)]
+        elif isinstance(cl_devices, cl.Context):
+            self._cl_context = cl_devices
+            self._cl_devices = self._cl_context.devices
+        elif isinstance(cl_devices, cl.CommandQueue):
+            self._cl_queue = cl_devices
+            self._cl_context = self._cl_queue.context
+            self._cl_devices = self._cl_context.devices
+            cl_profiling = bool(
+                self._cl_queue.properties & 
+                cl.command_queue_properties.PROFILING_ENABLE)
 
         self._cl_profiling = bool(cl_profiling)
         cl_cq_properties = None
@@ -166,11 +190,13 @@ class ClWorker(mcobject.McObject):
             cl_build_options = []
         self._cl_build_options = [str(item) for item in cl_build_options]
 
-        # The opencl context used by the worker.
-        self._cl_context = cl.Context(self._cl_devices)
-        # The opencl queue used by the worker.
-        self._cl_queue = cl.CommandQueue(
-            self._cl_context, properties=cl_cq_properties)
+        # The OpenCL context used by the worker.
+        if self._cl_context is None:
+            self._cl_context = cl.Context(self._cl_devices)
+        # The OpenCL queue used by the worker.
+        if self._cl_queue is None:
+            self._cl_queue = cl.CommandQueue(
+                self._cl_context, properties=cl_cq_properties)
         # The latest executable build with this the worker.
         self._cl_exec = None
 
