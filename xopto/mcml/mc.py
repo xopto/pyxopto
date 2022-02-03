@@ -91,7 +91,8 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
                  types: mctypes.McDataTypesBase = mctypes.McDataTypesSingle,
                  options: List[mcoptions.McOption] = None,
                  rnginit: np.uint64 = None,
-                 cl_devices: List[cl.Device] = None,
+                 cl_devices: str or cl.Device or List[cl.Device] or 
+                             cl.Context or cl.CommandQueue = None,
                  cl_build_options: List[str or cloptions.ClBuildOption] = None,
                  cl_profiling : bool = False):
         '''
@@ -262,7 +263,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             Use this initializer if there is a need to put the random, number
             generator into a known state. 
 
-        cl_devices: list/tuple
+        cl_devices: str or cl.Device or List[cl.Device] or cl.Context cl.CommnadQueue
             A python list of OpenCL devices that are used for
             conducting the simulation.See the clGpuDevices and clCpuDevices
             functions of the clinfo module for details on obtaining a
@@ -273,6 +274,11 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             clinfo.device(['amd', 'nvidia', 'hd', 'cpu'], that will search
             for an AMD GPU, Nvidia GPU, Intel Hd GPU, any CPU and return
             the first device found.
+            The value of this input argument can also be an
+            instance of OpenCL Context or an instance of OpenCL CommandQueue.
+            Note that in case an instance of CommandQueue is passed, the value
+            of parameter cl_profiling is ignored since it is not possible to
+            enable or disable profiling on an existing OpenCL CommandQueue.
 
         cl_build_options: List[str or cloptions.ClBuildOption]
             A list of OpenCL build option as specified by the OpenCl manuals at
@@ -285,6 +291,10 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
 
         cl_profiling: bool
             Enables OpenCL command queue profiling if set to True.
+            Note that in case an instance of CommandQueue is passed as the
+            cl_devices parameter, the value of parameter cl_profiling is
+            ignored since it is not possible to enable or disable profiling
+            on an existing OpenCL CommandQueue.
 
         Examples
         --------
