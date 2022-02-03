@@ -25,7 +25,8 @@ _ALLOWED_BUILD_OPTIONS = (
     '-cl-no-signed-zeros',
     '-cl-unsafe-math-optimizations',
     '-cl-finite-math-only',
-    '-cl-fast-relaxed-math'
+    '-cl-fast-relaxed-math',
+    '-cl-fast-relaxed-math -cl-mad-enable'
 )
 
 class ClBuildOption:
@@ -146,4 +147,10 @@ OpenCL program.
 
 Source of the above information:
 https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html 
+'''
+
+FastMath = ClBuildOption('-cl-fast-relaxed-math -cl-mad-enable')
+'''
+Sets two optimization options, namely -cl-fast-relaxed-mat and -cl-mad-enable.
+See :py:data:`FastRelaxedMath` :py:data:`MadEnable`.
 '''
