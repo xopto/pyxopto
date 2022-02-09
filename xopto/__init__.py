@@ -104,7 +104,7 @@ def make_user_dirs():
 
 make_user_dirs()
 
-def rebuild(envvars: dict = None):
+def rebuild(envvars: dict = None, verbose: bool = False):
     '''
     Rebuilds all the external dependencies of xopto (rng).
 
@@ -112,6 +112,9 @@ def rebuild(envvars: dict = None):
     ----------
     envvars: dict
         Additional environmental variables for the build process.
+
+    verbose: bool
+        Enables verbose output.
 
     Examples
     --------
@@ -160,7 +163,7 @@ def rebuild(envvars: dict = None):
             inclist=inclist,
             target=build_target, moveto=moveto,
             envvars=envvars, cwd=USER_BUILD_PATH,
-            verbose=1
+            verbose=verbose
         )
 
     elif platform.system() == 'Windows':
@@ -171,7 +174,7 @@ def rebuild(envvars: dict = None):
             inclist=inclist,
             target=build_target, moveto=moveto,
             envvars=envvars, cwd=USER_BUILD_PATH,
-            verbose=1
+            verbose=verbose
         )
     else:
         raise RuntimeError('Rebuild supported only on Linux and Windows OS!')
