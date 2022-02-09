@@ -30,11 +30,17 @@ fi
 
 docker build \
     --build-arg BASE_CONTAINER=intelopencl/intel-opencl:ubuntu-20.04-ppa \
-    -t xopto/pyxopto-intel-jupyter:$VERSION \
+    -t xopto/pyxopto-intel-jupyter-base \
     --file pyxopto_jupyter.DOCKERFILE \
+    ..
+
+docker build \
+    --build-arg BASE_CONTAINER=xopto/pyxopto-intel-jupyter-base \
+    -t xopto/pyxopto-intel-jupyter:$VERSION \
+    --file pyxopto_jupyter_finalize.DOCKERFILE \
     ..
 
 # Tensorflow CUDA compatibility matrix: https://www.tensorflow.org/install/source#gpu
 #
 # Run as:
-#   "docker run --rm -p 8888:8888 -it pyxopto/intel-jupyter"
+#   "docker run --rm -p 8888:8888 -it xopto/pyxopto-intel-jupyter:$VERSION"

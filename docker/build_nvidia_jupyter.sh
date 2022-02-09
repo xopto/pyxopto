@@ -38,14 +38,20 @@ docker build \
 
 docker build \
     --build-arg BASE_CONTAINER=xopto/pyxopto-opencl-cuda-11.0.3 \
-	-t xopto/pyxopto-nvidia-jupyter:$VERSION \
+	-t xopto/pyxopto-nvidia-jupyter-base \
     --file pyxopto_jupyter.DOCKERFILE \
+    ..
+
+docker build \
+    --build-arg BASE_CONTAINER=xopto/pyxopto-nvidia-jupyter-base \
+    -t xopto/pyxopto-nvidia-jupyter:$VERSION \
+    --file pyxopto_jupyter_finalize.DOCKERFILE \
     ..
 
 # Tensorflow CUDA compatibility matrix: https://www.tensorflow.org/install/source#gpu
 #
-# Run as 
-#    "docker run --runtime=nvidia --rm -p 8888:8888 -it pyxopto/nvidia-jupyter"
+# Run as
+#    "docker run --runtime=nvidia --rm -p 8888:8888 -it xopto/pyxopto-nvidia-jupyter:$VERSION"
 #
 # Test tensorflow version < 1.12 in shell as:
 #	python3 -c "import tensorflow as tf; tf.enable_eager_execution(); print(tf.reduce_sum(tf.random_normal([1000, 1000])))"

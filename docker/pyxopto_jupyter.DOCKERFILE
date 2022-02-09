@@ -51,7 +51,21 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     nodejs \
     libboost-all-dev \
     python3 \
-    python3-pip
+    python3-pip \
+    python3-setuptools \
+    python3-wheel \
+    python3-numpy \
+    python3-scipy \
+    python3-matplotlib \
+    python3-jinja2 \
+    python3-shapely \
+    python3-numba \
+    python3-pybind11 \
+    python3-pandas \
+    python3-keras \
+    python3-pyopencl
+
+RUN locale-gen en_US.UTF-8
 
 # Configure environment
 ENV SHELL=/bin/bash \
@@ -67,25 +81,25 @@ ENV SHELL=/bin/bash \
 
 # install python packages
 RUN python3 -m pip install --no-cache-dir --upgrade pip
-RUN python3 -m pip install --no-cache-dir setuptools
-RUN python3 -m pip install --no-cache-dir wheel
-RUN python3 -m pip install --no-cache-dir numpy
-RUN python3 -m pip install --no-cache-dir scipy
-RUN python3 -m pip install --no-cache-dir matplotlib
-RUN python3 -m pip install --no-cache-dir jinja2
-RUN python3 -m pip install --no-cache-dir shapely
-RUN python3 -m pip install --no-cache-dir numba
-RUN python3 -m pip install --no-cache-dir pybind11
 RUN python3 -m pip install --no-cache-dir python-scattnlay
-RUN python3 -m pip install --no-cache-dir pandas
-RUN python3 -m pip install --no-cache-dir keras
+#RUN python3 -m pip install --no-cache-dir setuptools
+#RUN python3 -m pip install --no-cache-dir wheel
+#RUN python3 -m pip install --no-cache-dir numpy
+#RUN python3 -m pip install --no-cache-dir scipy
+#RUN python3 -m pip install --no-cache-dir matplotlib
+#RUN python3 -m pip install --no-cache-dir jinja2
+#RUN python3 -m pip install --no-cache-dir shapely
+#RUN python3 -m pip install --no-cache-dir numba
+#RUN python3 -m pip install --no-cache-dir pybind11
+#RUN python3 -m pip install --no-cache-dir pandas
+#RUN python3 -m pip install --no-cache-dir keras
 
 # install gpu support
-RUN python3 -m pip install --no-cache-dir pyopencl
+# RUN python3 -m pip install --no-cache-dir pyopencl
 
 # install jupyter
-RUN python3 -m pip install --no-cache-dir jupyter
 RUN python3 -m pip install --no-cache-dir jupyterlab
+RUN python3 -m pip install --no-cache-dir notebook
 
 COPY docker/script/start_jupyter.sh /start_jupyter.sh
 
@@ -112,15 +126,3 @@ WORKDIR $HOME
 
 # create the user work directory
 RUN mkdir -p ~/work
-
-# create the user pyxopto directory
-RUN mkdir -p ~/pyxopto/xopto
-RUN mkdir -p ~/pyxopto/examples
-RUN mkdir -p ~/pyxopto/test
-RUN mkdir -p ~/pyxopto/documentation
-
-# copy pyxopto into the container
-COPY xopto                   $HOME/pyxopto/xopto/
-COPY examples                $HOME/pyxopto/examples/
-COPY test                    $HOME/pyxopto/test/
-COPY docs/build/docs/html    $HOME/pyxopto/documentation/

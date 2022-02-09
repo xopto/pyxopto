@@ -19,26 +19,26 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
-ARG BASE_CONTAINER=pyxopto/jupyter
+ARG BASE_CONTAINER
 
 FROM ${BASE_CONTAINER}
 
 LABEL maintainer="info@xopto.eu"
 
-ARG TENSORFLOW_VERSION="tensorflow-gpu==2.3.*"
-ARG PYTORCH_VERSION="torch==1.7.* torchvision torchaudio"
-
-USER root
-
-RUN apt-get update && apt-get -yq dist-upgrade \
-    python3-pycuda
-
-# install gpu support
-# RUN python3 -m pip install --no-cache-dir pycuda
-
-# install deep-learning
-RUN python3 -m pip install --no-cache-dir $TENSORFLOW_VERSION
-RUN python3 -m pip install --no-cache-dir $PYTORCH_VERSION
-
 # switch to user
 USER $NB_USER
+
+# create the user work directory
+RUN mkdir -p ~/work
+
+# create the user pyxopto directory
+RUN mkdir -p ~/pyxopto/xopto
+RUN mkdir -p ~/pyxopto/examples
+RUN mkdir -p ~/pyxopto/test
+RUN mkdir -p ~/pyxopto/documentation
+
+# copy pyxopto into the container
+COPY xopto                   $HOME/pyxopto/xopto/
+COPY examples                $HOME/pyxopto/examples/
+COPY test                    $HOME/pyxopto/test/
+COPY docs/build/docs/html    $HOME/pyxopto/documentation/

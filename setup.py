@@ -31,7 +31,8 @@ setup(
     author_email='info@xopto.eu',
     license='GPLv3+',
     packages=find_packages(
-        exclude=['PyXOpto.egg-info*', 'build*', 'dist*', 'maintenance*', 'docs*']),
+        exclude=['PyXOpto.egg-info*', 'build*', 'dist*', 'maintenance*',
+                 'docs*', 'datasets*', 'mcdataset*', 'tmp*']),
 
     package_data={
         '': ['*.c', '*.cpp', '*.h', '*.npz', '*.pkl'],

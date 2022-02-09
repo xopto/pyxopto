@@ -31,18 +31,23 @@ fi
 . ./build_nvidia_jupyter.sh
 
 docker build \
-    --build-arg BASE_CONTAINER=xopto/pyxopto-nvidia-jupyter:$VERSION \
+    --build-arg BASE_CONTAINER=xopto/pyxopto-nvidia-jupyter-base \
     --build-arg TENSORFLOW_VERSION='tensorflow-gpu==2.4.*' \
     --build-arg PYTORCH_VERSION='torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html' \
-    -t xopto/pyxopto-nvidia-jupyter-dl:$VERSION \
+    -t xopto/pyxopto-nvidia-jupyter-dl-base \
     --file pyxopto_jupyter_dl.DOCKERFILE \
     ..
 
+docker build \
+    --build-arg BASE_CONTAINER=xopto/pyxopto-nvidia-jupyter-dl-base \
+    -t xopto/pyxopto-nvidia-jupyter-dl:$VERSION \
+    --file pyxopto_jupyter_finalize.DOCKERFILE \
+    ..
 
 # Tensorflow CUDA compatibility matrix: https://www.tensorflow.org/install/source#gpu
 #
 # Run as 
-#    "docker run --runtime=nvidia --rm -p 8888:8888 -it pyxopto/nvidia-jupyter-dl"
+#    "docker run --runtime=nvidia --rm -p 8888:8888 -it xopto/pyxopto-nvidia-jupyter-dl:$VERSION"
 #
 # Test tensorflow version < 1.12 in shell as:
 #	python3 -c "import tensorflow as tf; tf.enable_eager_execution(); print(tf.reduce_sum(tf.random_normal([1000, 1000])))"
