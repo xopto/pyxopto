@@ -22,16 +22,21 @@
 
 from setuptools import setup, find_packages
 
+with open("README.md", "r", encoding="utf-8") as fid:
+    long_description = fid.read()
+
 setup(
-    name='PyXOpto',
+    name='pyxopto',
     version='0.1.0',
     description='Python Monte Carlo light propagation tools',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url='https://github.com/xopto/pyxopto',
     author='XOpto team',
     author_email='info@xopto.eu',
     license='GPLv3+',
     packages=find_packages(
-        exclude=['PyXOpto.egg-info*', 'build*', 'dist*', 'maintenance*',
+        exclude=['pyxopto.egg-info*', 'build*', 'dist*', 'maintenance*',
                  'docs*', 'datasets*', 'mcdataset*', 'tmp*']),
 
     package_data={
@@ -50,7 +55,7 @@ setup(
     ],
 
     classifiers=[
-        'Development Status :: 1 - Alpha',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
         'Operating System :: POSIX :: Linux',

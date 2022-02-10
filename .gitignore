@@ -126,3 +126,4 @@ docs/__pycache__
 xopto/mccyl
 
 .vscode
+.pypirc
