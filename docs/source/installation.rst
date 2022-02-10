@@ -264,7 +264,7 @@ Using from source
 
 To use the PyXOpto package from source, you will have to manually install all
 the Python packages listed in the setup.py file. Follow the
-the installation instructions for :ref:`Python<installation-python-label>`.
+installation instructions for :ref:`Python<installation-python-label>`.
 
 You will also have to manually include the root directory of the PyXOpto
 package into the Python search path. This can be conveniently 

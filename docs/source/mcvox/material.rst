@@ -91,7 +91,7 @@ when launched by the source or when escaping the sample.
 
 Voxels of the samples can be labeled by a particular material through the
 corresponding index of the material in the list. A label 0 will set the
-voxel material to the the same material as is used for the surrounding medium.
+voxel material to the same material as is used for the surrounding medium.
 
 The properties of materials in the list can be modified at any time
 through accessing the individual materials and from there the material

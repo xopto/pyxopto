@@ -936,7 +936,7 @@ inline mc_fp_t mcsim_position_r2_ex(
 #define mcsim_voxel_index_z(psim) ((psim)->state.voxel_index.z)
 
 /** 
-* @brief Evaluates to a pointer to the the current voxel index. 
+* @brief Evaluates to a pointer to the current voxel index. 
 * @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_voxel_index(psim) (&((psim)->state.voxel_index))
