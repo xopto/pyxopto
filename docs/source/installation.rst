@@ -270,7 +270,7 @@ You will also have to manually include the root directory of the PyXOpto
 package into the Python search path. This can be conveniently 
 accomplished through setting the :code:`PYTHONPATH` environment variable.
 
-On Linux operating system use:
+On Linux operating systems use:
 
 .. code-block:: bash
 
