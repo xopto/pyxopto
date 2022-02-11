@@ -990,11 +990,14 @@ class Trace(mcobject.McObject):
                 ax.plot([self._data[photon]['x'][0]],
                         [self._data[photon]['y'][0]],
                         [self._data[photon]['z'][0]],
-                        marker='.', color=(0, 1, 0))
+                        marker='.', color=(0, 1, 0), label='launch')
                 ax.plot([self._data[photon]['x'][n - 1]],
                         [self._data[photon]['y'][n - 1]],
                         [self._data[photon]['z'][n - 1]],
                         marker='.', color=(1, 0, 0))
+
+            ax.plot([], [], '.', color=(0, 1, 0), label='launch')
+            ax.plot([], [], '.', color=(1, 0, 0), label='termination')
 
             ax.set_xlabel('x')
             ax.set_ylabel('y')
@@ -1013,6 +1016,8 @@ class Trace(mcobject.McObject):
                 ax.plot([self._data[photon][view[0]][n - 1]],
                         [self._data[photon][view[1]][n - 1]],
                         marker='.', color=(1, 0, 0))
+            ax.plot([], [], '.', color=(0, 1, 0), label='launch')
+            ax.plot([], [], '.', color=(1, 0, 0), label='termination')
 
             ax.set_xlabel(view[0])
             ax.set_ylabel(view[1])

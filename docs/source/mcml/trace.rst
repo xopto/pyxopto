@@ -24,7 +24,7 @@
 .. _mcml-trace-label:
 
 Trace
-=======
+=====
 
 Trace allows collection of detailed data along the photon packet path. The
 trace functionality is implemented in :py:class:`xopto.mcbase.mctrace.Trace`
