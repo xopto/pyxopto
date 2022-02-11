@@ -21,15 +21,35 @@
 ################################# End license ##################################
 
 from setuptools import setup, find_packages
+import os
+import xopto
 
-with open("README.md", "r", encoding="utf-8") as fid:
-    long_description = fid.read()
+def long_description():
+    with open('README.md', 'r', encoding='utf-8') as fid:
+        readme = fid.read()
+    pos1 = readme.find('## Installation')
+    pos2 = readme.find('## Basic Monte Carlo')
+    readme_pypi = readme[:pos1] + readme[pos2:]
+    readme_pypi = readme_pypi.replace(
+        '(/docs/source/',
+        '(https://raw.githubusercontent.com/xopto/pyxopto/master/docs/source/'
+    )
+    readme_pypi = readme_pypi.replace(
+        'https://github.com/xopto/mcdataset/blob/master/docs/source/static/deposition-projection.gif',
+        'https://raw.githubusercontent.com/xopto/mcdataset/master/docs/source/static/deposition-projection.gif'
+    )
+    readme_pypi = readme_pypi.replace(
+        '(/examples/mcml/basic.py)',
+        '(https://github.com/xopto/pyxopto/blob/master/examples/mcml/basic.py)'
+    )
+
+    return readme_pypi
 
 setup(
     name='pyxopto',
     version='0.1.0',
     description='Python Monte Carlo light propagation tools',
-    long_description=long_description,
+    long_description=long_description(),
     long_description_content_type="text/markdown",
     url='https://github.com/xopto/pyxopto',
     author='XOpto team',
@@ -40,7 +60,7 @@ setup(
                  'docs*', 'datasets*', 'mcdataset*', 'tmp*']),
 
     package_data={
-        '': ['*.c', '*.cpp', '*.h', '*.npz', '*.pkl'],
+        '': ['*.c', '*.cpp', '*.h', '*.npz', '*.pkl', '*.md'],
     },
     #include_package_data=True,
 
