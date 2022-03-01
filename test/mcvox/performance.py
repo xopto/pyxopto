@@ -139,24 +139,24 @@ if __name__ == '__main__':
           '               (Windows 8.1) GPU @ 1900 MHz')
     print('      38.6 s - NVIDIA Corporation GeForce, ASUS GF GTX 1070 OC\n'
           '               (Ubuntu 20.04, 460.84) GPU @ 1900 MHz')
-    print('     ?48.0 s - Advanced Micro Devices, Inc. Grenada R9 390 \n'
+    print('      48.0 s - Advanced Micro Devices, Inc. Grenada R9 390 \n'
           '               (Ubuntu 16.04 amdgpu-pro-17.50-511655 driver)')
-    print('     ?52.3 s - Advanced Micro Devices, Inc. Polaris20 RX 580\n'
+    print('      52.3 s - Advanced Micro Devices, Inc. Polaris20 RX 580\n'
           '               (Win 8.1, 18.3.4 AMD driver) GPU @ 1420 MHZ, MEM @ 1750 MHZ')
-    print('     ?54.0 s - Advanced Micro Devices, Inc. Tahiti R9 280\n'
+    print('      54.0 s - Advanced Micro Devices, Inc. Tahiti R9 280\n'
           '               (Win 8.1, 17.7.1 driver) GPU OC @ 1200 MHz, MEM @ 1500 MHZ')
-    print('     ?58.0 s - Advanced Micro Devices, Inc. Grenada R9 390\n'
+    print('      58.0 s - Advanced Micro Devices, Inc. Grenada R9 390\n'
           '               (Win 8.1 16.7.2 driver)')
-    print('     ?60.0 s - Advanced Micro Devices, Inc. Polaris20 RX 570\n'
+    print('      60.0 s - Advanced Micro Devices, Inc. Polaris20 RX 570\n'
           '               (Ubuntu 16.04, amdgpu-pro-17.50 driver)')
-    print('     ?63.4 s - Advanced Micro Devices, Inc. Tahiti R9 280\n'
+    print('      63.4 s - Advanced Micro Devices, Inc. Tahiti R9 280\n'
           '               (Win 8.1, 17.7.1 driver) GPU @ 1020 MHz, MEM @ 1500 MHZ')
-    print('     ?82.7 s - GTX 770 (Ubuntu 16.04, NVIDIA 390.25 driver)')
-    print('    ?114.0 s - Tesla K40c Linux (Linux - cluster)')
-    print('    ?178.0 s - Advanced Micro Devices, Inc. Grenada R9 390\n'
+    print('      82.7 s - GTX 770 (Ubuntu 16.04, NVIDIA 390.25 driver)')
+    print('     114.0 s - Tesla K40c Linux (Linux - cluster)')
+    print('     178.0 s - Advanced Micro Devices, Inc. Grenada R9 390\n'
           '               (Win 8.1, 17.2.1 driver)')
-    print('    ?269.3 s - NVIDIA Corporation GeForce, GT 750M\n'
+    print('     269.3 s - NVIDIA Corporation GeForce, GT 750M\n'
           '               (Windows 8.1) GPU @ 1162 MHz')
-    print('    ?528.4 s - Intel(R) Corporation Intel(R) HD Graphics 4600')
-    print('    ?496.7 s - Intel(R) Corporation Intel(R) Gen9 HD Graphics NEO')
-    print('   ?4679.6 s - Intel(R) Corporation Intel(R) Core(TM) i7-4700HQ CPU @ 2.40GHz')
+    print('     528.4 s - Intel(R) Corporation Intel(R) HD Graphics 4600')
+    print('     496.7 s - Intel(R) Corporation Intel(R) Gen9 HD Graphics NEO')
+    print('    4679.6 s - Intel(R) Corporation Intel(R) Core(TM) i7-4700HQ CPU @ 2.40GHz')
