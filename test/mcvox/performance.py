@@ -61,10 +61,12 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
                         required=False,
                         help='Enable verbose mode.')
-    parser.add_argument('-b', '--ballistic', action='store_true',
-                        default=False, required=False,
-                        help='Enable ballistic implementation of the '
-                        'Monte Carlo kernel.')
+    parser.add_argument('--method', metavar='MC_METHOD', type=str,
+                        choices = ('albedo_weight', 'aw',
+                                   'albedo_rejection', 'ar',
+                                   'microscopic_beer_lambert', 'mbl'),
+                        default='albedo_weight', required=False,
+                        help='Select the Monte Carlo simulation method.')
 
     mc_options = [
         mcoptions.McFloatLutMemory.constant_mem,
@@ -80,8 +82,14 @@ if __name__ == '__main__':
     nphotons = max(int(args.nphotons), 100000)
     if args.math == 'native':
         mc_options.append(mcoptions.McUseNativeMath.on)
-    if args.ballistic:
-        mc_options.append(mcoptions.McUseBallisticKernel.on)
+    if args.method:
+        kernel_method = str(args.method)
+        kernel_method = {'ar': 'albedo_rejection',
+                         'aw': 'albedo_weight',
+                         'mbl': 'microscopic_beer_lambert'}.get(
+                               kernel_method, kernel_method)
+        mc_options.append(getattr(mcoptions.McMethod, kernel_method))
+
     usepflut = bool(args.lut)
 
     verbose = bool(args.verbose)
@@ -98,11 +106,10 @@ if __name__ == '__main__':
         'exportsrc': os.path.join(USER_TMP_PATH, 'mcvox_performancetest.h')
     }
     spf_mode = 'LOOKUP TABLE-BASED' if usepflut else 'ANALYTICAL'
-    kernel_mode = 'BALLISTIC' if args.ballistic else 'REGULAR'
     print('--------------------------------------------------------------------------')
     print('Staring performance test with:\n'
           '   {:s} sampling of the scattering phase function (SPF)\n'
-          '   {} MC kernel'.format(spf_mode, kernel_mode)
+          '   {} MC kernel method'.format(spf_mode, kernel_method)
     )
     print('...')
     t1 = time.perf_counter()
@@ -118,7 +125,7 @@ if __name__ == '__main__':
     dev = test_obj.mc.cl_device[0]
 
     print('--------------------------------------------------------------------------')
-    print('Test completed using {} SPF and {} MC kernel:'.format(spf_mode, kernel_mode))
+    print('Test completed using {} SPF and {} MC kernel method:'.format(spf_mode, kernel_method))
     print('    {:>6.1f} s - {} {}'.format(k*(t2 - t1), dev.vendor, dev.name))
     print('               ({:.1f} s for the Monte Carlo kernel)'.format(k*t_mc))
     print('--------------------------------------------------------------------------')

@@ -548,6 +548,9 @@ __kernel void McKernel(
 	mc_fp_t d, d_ok, step, deposit;
 	mc_point3f_t distances;
 	bool done = false;
+	#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
+		mc_fp_t deposit_cumulative = FP_0;
+	#endif
 
 	mc_point3f_t src_pos = source->position;
 
@@ -732,8 +735,13 @@ __kernel void McKernel(
 		while (!done) {
 
 			/* generate a new step */
-			step = -mc_log(mcsim_random(&sim))*
-				mc_material_inv_mut(mcsim_current_voxel_material(&sim));
+			#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
+				step = mc_fdiv(-mc_log(mcsim_random(&sim)),
+					mc_material_mus(mcsim_current_voxel_material(&sim)));
+			#else
+				step = -mc_log(mcsim_random(&sim))*
+					mc_material_inv_mut(mcsim_current_voxel_material(&sim));
+			#endif
 			step = mc_fmin(step, FP_INV_EPS);
 
 			/* compute distance to the voxel boundaries */ 
@@ -764,93 +772,174 @@ __kernel void McKernel(
 				);
 			#endif
 
-			/* process boundary hit or handle absorption */
-			if (d < step){
-				/* deal with the boundary hit ... returns MC_REFRACTED or MC_REFLECTED */
-				mcsim_boundary(&sim, &distances);
-				/* check if photon escaped the sample */
+			#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
+				deposit = mcsim_weight(&sim)*(
+					FP_1 - mc_exp(-mc_material_mua(mcsim_current_voxel_material(&sim))*step));
+				mcsim_adjust_weight(&sim, deposit);
+				deposit_cumulative += deposit;
 
-				#if MC_ENABLE_DEBUG
-					dbg_print_status(&sim, "Boundary hit:");
-				#endif
+				/* process boundary hit or handle absorption */
+				if (d < step){
+					/* deal with the boundary hit ... returns MC_REFRACTED or MC_REFLECTED */
+					int boundary_res = mcsim_boundary(&sim, &distances);
+					/* check if photon escaped the sample */
 
-				if (mcsim_packet_escaped_sample(&sim)) {
-					#if MC_USE_TOP_DETECTOR || MC_USE_BOTTOM_DETECTOR
-						if ( (mcsim_voxel_index_z(&sim) < 0) ){
-							#if MC_USE_TOP_DETECTOR
-								mcsim_top_detector_deposit(
-									&sim,
-									mcsim_position(&sim),
-									mcsim_direction(&sim),
-									mcsim_weight(&sim)
-								);
-							#endif
-						} else if (mcsim_voxel_index_z(&sim) >=
-								mcsim_shape_z(&sim)){
-							#if MC_USE_BOTTOM_DETECTOR
-								mcsim_bottom_detector_deposit(
-									&sim,
-									mcsim_position(&sim),
-									mcsim_direction(&sim),
-									mcsim_weight(&sim)
-								);
-							#endif
+					#if MC_ENABLE_DEBUG
+						dbg_print_status(&sim, "Boundary hit:");
+					#endif
+
+					if (mcsim_packet_escaped_sample(&sim)) {
+						#if MC_USE_TOP_DETECTOR || MC_USE_BOTTOM_DETECTOR
+							if ( (mcsim_voxel_index_z(&sim) < 0) ){
+								#if MC_USE_TOP_DETECTOR
+									mcsim_top_detector_deposit(
+										&sim,
+										mcsim_position(&sim),
+										mcsim_direction(&sim),
+										mcsim_weight(&sim)
+									);
+								#endif
+							} else if (mcsim_voxel_index_z(&sim) >=
+									mcsim_shape_z(&sim)){
+								#if MC_USE_BOTTOM_DETECTOR
+									mcsim_bottom_detector_deposit(
+										&sim,
+										mcsim_position(&sim),
+										mcsim_direction(&sim),
+										mcsim_weight(&sim)
+									);
+								#endif
+							}
+						#endif
+
+						done = true; /* photon packet escaped the sample volume */
+					}
+
+					#if MC_USE_FLUENCE
+						if (boundary_res == MC_REFRACTED){
+							mcsim_fluence_deposit_weight(&sim, deposit_cumulative);
+							deposit_cumulative = FP_0;
 						}
 					#endif
 
-					done = true; /* photon packet escaped the sample volume */
+				} else {
+					/* Scatter the photon packet, */
+					mcsim_scatter(&sim);
 				}
 
-			} else {
-				#if MC_USE_BALLISTIC_KERNEL
-					/* Do absorption or scattering only when no layer boundary has been hit.*/
-					if (mcsim_random(&sim) <= mc_material_mua_inv_mut(mcsim_current_voxel_material(&sim))) {
-						/* Deposit the entire weight of the packet. */
-						deposit = mcsim_weight(&sim);
-						mcsim_adjust_weight(&sim, deposit);
+				/* Perform survival lottery if required (packet not done).*/
+				if(mcsim_weight(&sim) < MC_PACKET_WEIGHT_MIN){
+					#if MC_USE_LOTTERY
+						/* perform lottery */
+						if(mcsim_random(&sim) > MC_PACKET_LOTTERY_CHANCE){
+							/* should leave the weight as is */
+							/* mcsim_set_weight(&sim, FP_0); */
+							done = true;
+						}else{
+							mcsim_set_weight(&sim, 
+								mc_fdiv(mcsim_weight(&sim), MC_PACKET_LOTTERY_CHANCE));
+						};
+					#else
+						/* no lottery - terminate on weight threshold */
 						done = true;
+					#endif
+
+					#if MC_USE_FLUENCE
+						if (done){
+							mcsim_fluence_deposit_weight(&sim, deposit_cumulative);
+						}
+					#endif
+				};
+
+			#else
+				/* process boundary hit or handle absorption */
+				if (d < step){
+					/* deal with the boundary hit ... returns MC_REFRACTED or MC_REFLECTED */
+					mcsim_boundary(&sim, &distances);
+					/* check if photon escaped the sample */
+
+					#if MC_ENABLE_DEBUG
+						dbg_print_status(&sim, "Boundary hit:");
+					#endif
+
+					if (mcsim_packet_escaped_sample(&sim)) {
+						#if MC_USE_TOP_DETECTOR || MC_USE_BOTTOM_DETECTOR
+							if ( (mcsim_voxel_index_z(&sim) < 0) ){
+								#if MC_USE_TOP_DETECTOR
+									mcsim_top_detector_deposit(
+										&sim,
+										mcsim_position(&sim),
+										mcsim_direction(&sim),
+										mcsim_weight(&sim)
+									);
+								#endif
+							} else if (mcsim_voxel_index_z(&sim) >=
+									mcsim_shape_z(&sim)){
+								#if MC_USE_BOTTOM_DETECTOR
+									mcsim_bottom_detector_deposit(
+										&sim,
+										mcsim_position(&sim),
+										mcsim_direction(&sim),
+										mcsim_weight(&sim)
+									);
+								#endif
+							}
+						#endif
+
+						done = true; /* photon packet escaped the sample volume */
+					}
+
+				} else {
+					#if MC_METHOD == ALBEDO_REJECTION
+						/* Do absorption or scattering only when no layer boundary has been hit.*/
+						if (mcsim_random(&sim) <= mc_material_mua_inv_mut(mcsim_current_voxel_material(&sim))) {
+							/* Deposit the entire weight of the packet. */
+							deposit = mcsim_weight(&sim);
+							mcsim_adjust_weight(&sim, deposit);
+							done = true;
+							#if MC_USE_FLUENCE
+								/* update the fluence data in fluence mode */
+								mcsim_fluence_deposit_weight(&sim, deposit);
+							#endif
+						} else {
+							/* Scatter the photon packet, */
+							mcsim_scatter(&sim);
+						}
+
+					#else	// ALBEDO_WEIGHT
+						/* Do absorption only when no voxel boundary has been hit.*/
+						deposit = mcsim_weight(&sim)*
+							mc_material_mua_inv_mut(mcsim_current_voxel_material(&sim));
+						mcsim_adjust_weight(&sim, deposit);
 						#if MC_USE_FLUENCE
 							/* update the fluence data in fluence mode */
 							mcsim_fluence_deposit_weight(&sim, deposit);
 						#endif
-					} else {
+
 						/* Scatter the photon packet, */
 						mcsim_scatter(&sim);
-					}
 
-				#else
-					/* Do absorption only when no voxel boundary has been hit.*/
-					deposit = mcsim_weight(&sim)*
-						mc_material_mua_inv_mut(mcsim_current_voxel_material(&sim));
-					mcsim_adjust_weight(&sim, deposit);
-					#if MC_USE_FLUENCE
-						/* update the fluence data in fluence mode */
-						mcsim_fluence_deposit_weight(&sim, deposit);
-					#endif
-
-					/* Scatter the photon packet, */
-					mcsim_scatter(&sim);
-
-					/* Perform survival lottery if required (packet not done).*/
-					if(mcsim_weight(&sim) < MC_PACKET_WEIGHT_MIN){
-						#if MC_USE_LOTTERY
-							/* perform lottery */
-							if(mcsim_random(&sim) > MC_PACKET_LOTTERY_CHANCE){
-								/* should leave the weight as is */
-								/* mcsim_set_weight(&sim, FP_0); */
+						/* Perform survival lottery if required (packet not done).*/
+						if(mcsim_weight(&sim) < MC_PACKET_WEIGHT_MIN){
+							#if MC_USE_LOTTERY
+								/* perform lottery */
+								if(mcsim_random(&sim) > MC_PACKET_LOTTERY_CHANCE){
+									/* should leave the weight as is */
+									/* mcsim_set_weight(&sim, FP_0); */
+									done = true;
+								}else{
+									mcsim_set_weight(&sim, 
+										mc_fdiv(mcsim_weight(&sim), MC_PACKET_LOTTERY_CHANCE));
+								};
+							#else
+								/* no lottery - terminate on weight threshold */
 								done = true;
-							}else{
-								mcsim_set_weight(&sim, 
-									mc_fdiv(mcsim_weight(&sim), MC_PACKET_LOTTERY_CHANCE));
-							};
-						#else
-							/* no lottery - terminate on weight threshold */
-							done = true;
-						#endif
-					};
-				#endif
-			}
-			
+							#endif
+						};
+					#endif
+				}
+			#endif
+
 			/* check if photon escaped the predefined simulation domain */
 			if (point3f_distance_squared(mcsim_position(&sim), &src_pos) >
 					mc_rmax*mc_rmax || mcsim_weight(&sim) <= FP_0){
@@ -898,6 +987,10 @@ __kernel void McKernel(
 						mcsim_trace_this_event(&sim);
 					#endif
 					done = false; /* have a new packet ... not done yet */
+
+					#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
+						deposit_cumulative = FP_0;
+					#endif
 				}
 			}
 		};

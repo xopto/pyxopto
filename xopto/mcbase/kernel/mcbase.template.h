@@ -62,6 +62,14 @@
 	#define MC_USE_BALLISTIC_KERNEL				FALSE
 #endif
 
+#if !defined(MC_METHOD) || defined(__DOXYGEN__)
+	/** @brief Set the Stepping method. Allowed values are
+	 *         0 (albedo weight - default),
+	 *         1 (albedo rejection) or
+	 *         2 (microscopic beer-lambert). */
+	#define MC_METHOD							0
+#endif
+
 #if !defined(MC_USE_DOUBLE_PRECISION) || defined(__DOXYGEN__)
 	/** @brief Enable double floating-point precision arithmetics. 
 	 *  @note Double precision arithmetic is significantly slower than
@@ -225,6 +233,13 @@
 	/** @brief Use unpacked struct definitions if MC_USE_PACKED_STRUCTS is set to FALSE. */
 	#define MC_STRUCT_ATTRIBUTES
 #endif
+
+/** @brief Albedo Weight Monte Carlo simulation method. */
+#define ALBEDO_WEIGHT				0
+/** @brief Albedo Rejection Monte Carlo simulation method. */
+#define ALBEDO_REJECTION			1
+/** @brief Microscopic Ber-Lambert Monte Carlo simulation method. */
+#define MICROSCOPIC_BEER_LAMBERT	2
 
 /**
  * @} // end @addtogroup mc_simulator_options

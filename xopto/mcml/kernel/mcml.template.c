@@ -354,6 +354,9 @@ __kernel void McKernel(
 	mc_fp_t step, deposit;
 	mc_int_t nexLayerIndex;
 	bool done = false;
+	#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
+		mc_fp_t deposit_cumulative = FP_0;
+	#endif
 
 	mc_point3f_t src_pos = source->position;
 
@@ -507,10 +510,14 @@ __kernel void McKernel(
 
 			/* generate a new step */
 			//step = -mc_log(mc_fclip(mcsim_random(&sim), FP_EPS, FP_1 - FP_EPS))*
-			step = -mc_log(mcsim_random(&sim))*
-				mc_layer_inv_mut(mcsim_current_layer(&sim));
+			#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
+				step = mc_fdiv(-mc_log(mcsim_random(&sim)),
+					mc_layer_mus(mcsim_current_layer(&sim)));
+			#else
+				step = -mc_log(mcsim_random(&sim))*
+					mc_layer_inv_mut(mcsim_current_layer(&sim));
+			#endif
 			step = mc_fmin(step, FP_INV_EPS);
-			
 			//step = -mc_log(mcsim_random(&sim));
 			//step = mc_fclip(step, FP_EPS, FP_1 - FP_EPS)*mc_layer_inv_mut(mcsim_current_layer(&sim));
 			
@@ -561,86 +568,162 @@ __kernel void McKernel(
 				mcsim_set_position_z(&sim, 
 					mc_layer_top(mcsim_current_layer(&sim)));
 
-			/* process boundary hit or handle absorption */
-			if (nexLayerIndex != mcsim_current_layer_index(&sim)) {
-				/* deal with the boundary hit ... returns MC_REFRACTED or MC_REFLECTED */
-				mcsim_boundary(&sim, nexLayerIndex);
+			#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
+				deposit = mcsim_weight(&sim)*(
+					FP_1 - mc_exp(-mc_layer_mua(mcsim_current_layer(&sim))*step));
+				mcsim_adjust_weight(&sim, deposit);
+				deposit_cumulative += deposit;
 
-				/* handle the sample surface detector */
-				if (mcsim_packet_escaped_sample(&sim)) {
-					#if MC_USE_TOP_DETECTOR || MC_USE_BOTTOM_DETECTOR
-						if ( (mcsim_current_layer_index(&sim) <= 0) ){
-							#if MC_USE_TOP_DETECTOR
-								mcsim_top_detector_deposit(
-									&sim,
-									mcsim_position(&sim),
-									mcsim_direction(&sim),
-									mcsim_weight(&sim)
-								);
-							#endif
-						} else if (mcsim_current_layer_index(&sim) >=
-								mcsim_layer_count(&sim) - 1){
-							#if MC_USE_BOTTOM_DETECTOR
-								mcsim_bottom_detector_deposit(
-									&sim,
-									mcsim_position(&sim),
-									mcsim_direction(&sim),
-									mcsim_weight(&sim)
-								);
-							#endif
+				/* process boundary hit or handle absorption */
+				if (nexLayerIndex != mcsim_current_layer_index(&sim)) {
+					/* deal with the boundary hit ... returns MC_REFRACTED or MC_REFLECTED */
+					int boundary_res = mcsim_boundary(&sim, nexLayerIndex);
+
+					/* handle the sample surface detector */
+					if (mcsim_packet_escaped_sample(&sim)) {
+						#if MC_USE_TOP_DETECTOR || MC_USE_BOTTOM_DETECTOR
+							if ( (mcsim_current_layer_index(&sim) <= 0) ){
+								#if MC_USE_TOP_DETECTOR
+									mcsim_top_detector_deposit(
+										&sim,
+										mcsim_position(&sim),
+										mcsim_direction(&sim),
+										mcsim_weight(&sim)
+									);
+								#endif
+							} else if (mcsim_current_layer_index(&sim) >=
+									mcsim_layer_count(&sim) - 1){
+								#if MC_USE_BOTTOM_DETECTOR
+									mcsim_bottom_detector_deposit(
+										&sim,
+										mcsim_position(&sim),
+										mcsim_direction(&sim),
+										mcsim_weight(&sim)
+									);
+								#endif
+							}
+						#endif
+
+						/* check if the packet escaped the sample */
+						done = true;
+					}
+					#if MC_USE_FLUENCE
+						if (boundary_res == MC_REFRACTED){
+							mcsim_fluence_deposit_weight(&sim, deposit_cumulative);
+							deposit_cumulative = FP_0;
 						}
 					#endif
 
-					/* check if the packet escaped the sample */
-					done = true;
+				} else {
+					/* Scatter the photon packet. */
+						mcsim_scatter(&sim);
 				}
 
-			} else {
-				#if MC_USE_BALLISTIC_KERNEL
-					/* Do absorption or scattering only when no layer boundary has been hit.*/
-					if (mcsim_random(&sim) <= mc_layer_mua_inv_mut(mcsim_current_layer(&sim))){
-						/* Deposit the entire weight of the packet. */
-						deposit = mcsim_weight(&sim);
+				/* Perform survival lottery if required (packet not done). */
+				if(mcsim_weight(&sim) < MC_PACKET_WEIGHT_MIN){
+					#if MC_USE_LOTTERY
+						/* perform lottery */
+						if(mcsim_random(&sim) > MC_PACKET_LOTTERY_CHANCE){
+							/* should leave the weight as is */
+							/* mcsim_set_weight(&sim, FP_0); */
+							done = true;
+						}else{
+							mcsim_set_weight(&sim, 
+								mc_fdiv(mcsim_weight(&sim), MC_PACKET_LOTTERY_CHANCE));
+						};
+					#else
+						/* no lottery - terminate on weight threshold */
 						done = true;
+					#endif
+
+					#if MC_USE_FLUENCE
+						if (done){
+							mcsim_fluence_deposit_weight(&sim, deposit_cumulative);
+						}
+					#endif
+				}
+			#else
+				/* process boundary hit or handle absorption */
+				if (nexLayerIndex != mcsim_current_layer_index(&sim)) {
+					/* deal with the boundary hit ... returns MC_REFRACTED or MC_REFLECTED */
+					mcsim_boundary(&sim, nexLayerIndex);
+
+					/* handle the sample surface detector */
+					if (mcsim_packet_escaped_sample(&sim)) {
+						#if MC_USE_TOP_DETECTOR || MC_USE_BOTTOM_DETECTOR
+							if ( (mcsim_current_layer_index(&sim) <= 0) ){
+								#if MC_USE_TOP_DETECTOR
+									mcsim_top_detector_deposit(
+										&sim,
+										mcsim_position(&sim),
+										mcsim_direction(&sim),
+										mcsim_weight(&sim)
+									);
+								#endif
+							} else if (mcsim_current_layer_index(&sim) >=
+									mcsim_layer_count(&sim) - 1){
+								#if MC_USE_BOTTOM_DETECTOR
+									mcsim_bottom_detector_deposit(
+										&sim,
+										mcsim_position(&sim),
+										mcsim_direction(&sim),
+										mcsim_weight(&sim)
+									);
+								#endif
+							}
+						#endif
+
+						/* check if the packet escaped the sample */
+						done = true;
+					}
+
+				} else {
+					#if MC_METHOD == ALBEDO_REJECTION
+						/* Do absorption or scattering only when no layer boundary has been hit.*/
+						if (mcsim_random(&sim) <= mc_layer_mua_inv_mut(mcsim_current_layer(&sim))){
+							/* Deposit the entire weight of the packet. */
+							deposit = mcsim_weight(&sim);
+							done = true;
+							mcsim_adjust_weight(&sim, deposit);
+							#if MC_USE_FLUENCE
+								mcsim_fluence_deposit_weight(&sim, deposit);
+							#endif
+						} else {
+							/* Scatter the photon packet. */
+							mcsim_scatter(&sim);
+						}
+					#else	// ALBEDO_WEIGHT
+						/* Do absorption only when no layer boundary has been hit.*/
+						deposit = mcsim_weight(&sim)*
+							mc_layer_mua_inv_mut(mcsim_current_layer(&sim));
 						mcsim_adjust_weight(&sim, deposit);
 						#if MC_USE_FLUENCE
 							mcsim_fluence_deposit_weight(&sim, deposit);
 						#endif
-					} else {
+
 						/* Scatter the photon packet. */
 						mcsim_scatter(&sim);
-					}
-				#else
-					/* Do absorption only when no layer boundary has been hit.*/
-					deposit = mcsim_weight(&sim)*
-						mc_layer_mua_inv_mut(mcsim_current_layer(&sim));
-					mcsim_adjust_weight(&sim, deposit);
-					#if MC_USE_FLUENCE
-						mcsim_fluence_deposit_weight(&sim, deposit);
-					#endif
 
-					/* Scatter the photon packet. */
-					mcsim_scatter(&sim);
-
-					/* Perform survival lottery if required (packet not done). */
-					if(mcsim_weight(&sim) < MC_PACKET_WEIGHT_MIN){
-						#if MC_USE_LOTTERY
-							/* perform lottery */
-							if(mcsim_random(&sim) > MC_PACKET_LOTTERY_CHANCE){
-								/* should leave the weight as is */
-								/* mcsim_set_weight(&sim, FP_0); */
+						/* Perform survival lottery if required (packet not done). */
+						if(mcsim_weight(&sim) < MC_PACKET_WEIGHT_MIN){
+							#if MC_USE_LOTTERY
+								/* perform lottery */
+								if(mcsim_random(&sim) > MC_PACKET_LOTTERY_CHANCE){
+									/* should leave the weight as is */
+									/* mcsim_set_weight(&sim, FP_0); */
+									done = true;
+								}else{
+									mcsim_set_weight(&sim, 
+										mc_fdiv(mcsim_weight(&sim), MC_PACKET_LOTTERY_CHANCE));
+								};
+							#else
+								/* no lottery - terminate on weight threshold */
 								done = true;
-							}else{
-								mcsim_set_weight(&sim, 
-									mc_fdiv(mcsim_weight(&sim), MC_PACKET_LOTTERY_CHANCE));
-							};
-						#else
-							/* no lottery - terminate on weight threshold */
-							done = true;
-						#endif
-					};
-				#endif
-			}
+							#endif
+						};
+					#endif
+				}
+			#endif
 
 			/* check if photon escaped the predefined simulation domain */
 			if (point3f_distance_squared(mcsim_position(&sim), &src_pos) >
@@ -689,6 +772,10 @@ __kernel void McKernel(
 						mcsim_trace_this_event(&sim);
 					#endif
 					done = false; /* have a new packet ... not done yet */
+
+					#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
+						deposit_cumulative = FP_0;
+					#endif
 				}
 			}
 		};

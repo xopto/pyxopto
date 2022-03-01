@@ -1952,15 +1952,19 @@ if __name__ == '__main__':
         help='String that selects single or double floating-point precision.')
 
     parser.add_argument(
-        '-b', '--ballistic', action='store_true', default=False, required=False,
-        help='Enable ballistic implementation of the Monte Carlo kernel.')
+        '--method', metavar='MC_METHOD', type=str,
+        choices = ('albedo_weight', 'aw',
+                   'albedo_rejection', 'ar',
+                   'microscopic_beer_lambert', 'mbl'),
+        default='albedo_weight', required=False,
+        help='Select the Monte Carlo simulation method.')
 
 
     args = parser.parse_args()
     nphotons = max(0, int(args.nphotons))
     usepflut = bool(args.lut)
     custom_types = []
-    ballistic = bool(args.ballistic)
+    kernel_method = str(args.method)
     if args.device:
         cldevices = [args.device]
     if args.precision in ('double', 'd'):
@@ -1988,7 +1992,7 @@ if __name__ == '__main__':
             mc.mcoptions.McFloatLutMemory('constant'),
             mc.mcoptions.McMaterialMemory.constant_mem,
             mc.mcoptions.McDebugMode.off,
-            mc.mcoptions.McUseBallisticKernel(ballistic)
+            getattr(mc.mcoptions.McMethod, kernel_method)
         ],
         'specular': True, 
         'exportsrc': os.path.join(USER_TMP_PATH, 'mcvox_validate.h')

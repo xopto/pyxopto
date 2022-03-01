@@ -266,6 +266,58 @@ class McTypeOption(McOption):
         super().__init__(name, str(value))
 
 
+class McMethod(McIntOption):
+    '''
+    Selects the Monte Carlo simulation method:
+      - Albedo Weight (0)
+      - Albedo Rejection (1)
+      - Microscopic Beer Lambert (2)
+
+    A detailed description of the available methods can be found in:
+
+    A. Sassaroli and F. Martelli
+    Equivalence of four Monte Carlo methods for photon migration in turbid media
+    J. Opt. Soc. Am. A / Vol. 29, No. 10 / October 2012
+
+    Note
+    ----
+    Default method is Albedo Weight. The Albedo Rejection is fast but
+    produces noisy results. The Microscopic Beer-Lambert is useful for
+    fluence simulations with voxel size that is smaller than the mean
+    free path. 
+    '''
+
+    albedo_weight = McIntOption('MC_METHOD', 0)
+    aw = albedo_weight
+
+    albedo_rejection = McIntOption('MC_METHOD', 1)
+    ar = albedo_rejection
+
+    microscopic_beer_lambert = McIntOption('MC_METHOD', 2)
+    mbl = microscopic_beer_lambert
+
+    default = albedo_weight
+
+    def __init__(self, value: int=0):
+        '''
+        Initializes the Monte Carlo simulation method option.
+
+        Parameters
+        ----------
+        value: int
+            Allowed values are:
+              - 0 for Albedo Weight
+              - 1 for Albedo Rejection or,
+              - 2 for Microscopic Beer-Lambert.
+        '''
+        if value not in (0, 1, 2):
+            raise ValueError('Allowed values are 0, 1 or 2!')
+        super().__init__('MC_METHOD', value)
+
+    def __repr__(self):
+        return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
+
+
 class McUseBallisticKernel(McBoolOption):
     '''
     Turn on or off the use of ballistic Monte Carlo kernel. The ballistic
