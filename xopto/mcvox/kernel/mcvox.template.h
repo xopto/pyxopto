@@ -959,6 +959,40 @@ inline mc_fp_t mcsim_position_r2_ex(
 */
 #define mcsim_voxel_size_z(psim) ((psim)->voxel_cfg->size.z)
 
+/** 
+* @brief Evaluates to the x coordinate of the voxel center. 
+* @param[in] psim Pointer to a simulator instance.
+*/
+#define mcsim_voxel_center_x(psim) \
+	(mcsim_top_left_x(psim) + \
+	(mcsim_voxel_index_x(psim) + FP_0p5)*mcsim_voxel_size_x(psim))
+
+/** 
+* @brief Evaluates to the y coordinate of the voxel center. 
+* @param[in] psim Pointer to a simulator instance.
+*/
+#define mcsim_voxel_center_y(psim) \
+	(mcsim_top_left_y(psim) + \
+	(mcsim_voxel_index_y(psim) + FP_0p5)*mcsim_voxel_size_y(psim))
+
+/** 
+* @brief Evaluates to the z coordinate of the voxel center. 
+* @param[in] psim Pointer to a simulator instance.
+*/
+#define mcsim_voxel_center_z(psim) \
+	(mcsim_top_left_z(psim) + \
+	(mcsim_voxel_index_z(psim) + FP_0p5)*mcsim_voxel_size_z(psim))
+
+/** 
+* @brief Evaluates to the coordinate of the voxel center. 
+* @param[in] psim Pointer to a simulator instance.
+* @param[out] point3 Pointer to a mc_point3_t instance that will be filled with coordinates.
+*/
+#define mcsim_voxel_center(psim, pcenter) \
+	(pcenter->x = mcsim_voxel_center_x(psim) \
+		pcenter->y = mcsim_voxel_center_y(psim) \
+		pcenter->z = mcsim_voxel_center_z(psim))
+
 /**
 * @brief Evaluates to the total number of voxels.
 * @param[in] psim Pointer to a simulator instance.
@@ -1020,7 +1054,7 @@ inline mc_fp_t mcsim_position_r2_ex(
  * @param[in] psim Pointer to a simulator instance.
  * @param[in] opl  Optical pathlength to add to the total pathlength.
  */
-#define mcim_optical_pathlength_add(psim, opl) \
+#define mcsim_optical_pathlength_add(psim, opl) \
 	((psim)->state.optical_pathlength += (opl))
 
 /**

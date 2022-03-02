@@ -867,7 +867,7 @@ inline mc_fp_t mcsim_position_r2_ex(
  * @param[in] psim Pointer to a simulator instance.
  * @param[in] opl  Optical pathlength to add to the total pathlength.
  */
-#define mcim_optical_pathlength_add(psim, opl) \
+#define mcsim_optical_pathlength_add(psim, opl) \
 	((psim)->state.optical_pathlength += (opl))
 
 /**
@@ -981,10 +981,12 @@ inline void mcsim_detector_deposit(McSim *mcsim);
  *        of the different function signatures in case of the weight deposition
  *        and fluence rate mode.
  * 
- * @param psim     Simulator instance.
- * @param deposit  Weight to deposit.
+ * @param[in] psim     Simulator instance.
+ * @param[in] pos      Position at which to deposit the weight.
+ * @param[in] deposit  Weight to deposit.
  */
-inline void mcsim_fluence_deposit_weight(McSim *psim, mc_fp_t deposit);
+inline void mcsim_fluence_deposit_weight(
+	McSim *psim, mc_point3f_t const *pos, mc_fp_t deposit);
 
 #if MC_FLUENCE_MODE_RATE
 /**

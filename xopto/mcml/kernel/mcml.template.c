@@ -215,13 +215,14 @@ inline mc_int_t mcsim_boundary(McSim *psim, mc_int_t nextLayerIndex){
  * @param sim      Simulator instance.
  * @param deposit  Weight to deposit.
  */
-inline void mcsim_fluence_deposit_weight(McSim *psim, mc_fp_t deposit){
+inline void mcsim_fluence_deposit_weight(
+		McSim *psim, mc_point3f_t const *pos, mc_fp_t deposit){
 	#if MC_FLUENCE_MODE_RATE
-		mcsim_fluence_deposit(psim, deposit,
+		mcsim_fluence_deposit(psim, deposit, pos,
 			mc_layer_mua(mcsim_current_layer(psim))
 		);
 	#else
-		mcsim_fluence_deposit(&psim, deposit);
+		mcsim_fluence_deposit(&psim, pos, deposit);
 	#endif
 };
 #endif /* MC_USE_FLUENCE */
@@ -354,10 +355,6 @@ __kernel void McKernel(
 	mc_fp_t step, deposit;
 	mc_int_t nexLayerIndex;
 	bool done = false;
-	#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
-		mc_fp_t deposit_cumulative = FP_0;
-	#endif
-
 	mc_point3f_t src_pos = source->position;
 
 	/* prepare a simulation structure - the part that does not change between simulations */
@@ -556,7 +553,7 @@ __kernel void McKernel(
 
 			/* update total optical pathlength of the photon packet*/
 			#if MC_TRACK_OPTICAL_PATHLENGTH
-				mcim_optical_pathlength_add(
+				mcsim_optical_pathlength_add(
 					&sim, mc_layer_n(mcsim_current_layer(&sim))*step);
 			#endif
 
@@ -569,15 +566,30 @@ __kernel void McKernel(
 					mc_layer_top(mcsim_current_layer(&sim)));
 
 			#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
-				deposit = mcsim_weight(&sim)*(
-					FP_1 - mc_exp(-mc_layer_mua(mcsim_current_layer(&sim))*step));
+				mc_fp_t mua = mc_layer_mua(mcsim_current_layer(&sim));
+				mc_fp_t deposit_fraction = FP_1 - mc_exp(-mua*step);
+				deposit = deposit_fraction*mcsim_weight(&sim);
 				mcsim_adjust_weight(&sim, deposit);
-				deposit_cumulative += deposit;
+
+				#if MC_USE_FLUENCE
+					mc_fp_t step_back = (mua != FP_0) ?
+						step - mc_fdiv(-mc_log(FP_1 - mcsim_random(&sim)*deposit_fraction), mua) :
+						FP_0;
+					//mc_fp_t w_c = FP_0p5*step;
+					mc_point3f_t deposit_pos = {
+						mcsim_position_x(&sim) - step_back*mcsim_direction_x(&sim),
+						mcsim_position_y(&sim) - step_back*mcsim_direction_y(&sim),
+						mcsim_position_z(&sim) - step_back*mcsim_direction_z(&sim)
+					};
+
+					/* update the fluence data in fluence mode */
+					mcsim_fluence_deposit_weight(&sim, &deposit_pos, deposit),
+				#endif
 
 				/* process boundary hit or handle absorption */
 				if (nexLayerIndex != mcsim_current_layer_index(&sim)) {
 					/* deal with the boundary hit ... returns MC_REFRACTED or MC_REFLECTED */
-					int boundary_res = mcsim_boundary(&sim, nexLayerIndex);
+					mcsim_boundary(&sim, nexLayerIndex);
 
 					/* handle the sample surface detector */
 					if (mcsim_packet_escaped_sample(&sim)) {
@@ -607,12 +619,6 @@ __kernel void McKernel(
 						/* check if the packet escaped the sample */
 						done = true;
 					}
-					#if MC_USE_FLUENCE
-						if (boundary_res == MC_REFRACTED){
-							mcsim_fluence_deposit_weight(&sim, deposit_cumulative);
-							deposit_cumulative = FP_0;
-						}
-					#endif
 
 				} else {
 					/* Scatter the photon packet. */
@@ -636,13 +642,8 @@ __kernel void McKernel(
 						done = true;
 					#endif
 
-					#if MC_USE_FLUENCE
-						if (done){
-							mcsim_fluence_deposit_weight(&sim, deposit_cumulative);
-						}
-					#endif
 				}
-			#else
+			#else /* Albedo Weight or Albedo Rejection */
 				/* process boundary hit or handle absorption */
 				if (nexLayerIndex != mcsim_current_layer_index(&sim)) {
 					/* deal with the boundary hit ... returns MC_REFRACTED or MC_REFLECTED */
@@ -686,19 +687,21 @@ __kernel void McKernel(
 							done = true;
 							mcsim_adjust_weight(&sim, deposit);
 							#if MC_USE_FLUENCE
-								mcsim_fluence_deposit_weight(&sim, deposit);
+								mcsim_fluence_deposit_weight(
+									&sim, mcsim_position(&sim), deposit);
 							#endif
 						} else {
 							/* Scatter the photon packet. */
 							mcsim_scatter(&sim);
 						}
-					#else	// ALBEDO_WEIGHT
+					#else	/* Albedo Weight */.
 						/* Do absorption only when no layer boundary has been hit.*/
 						deposit = mcsim_weight(&sim)*
 							mc_layer_mua_inv_mut(mcsim_current_layer(&sim));
 						mcsim_adjust_weight(&sim, deposit);
 						#if MC_USE_FLUENCE
-							mcsim_fluence_deposit_weight(&sim, deposit);
+							mcsim_fluence_deposit_weight(
+								&sim, mcsim_position(&sim), deposit);
 						#endif
 
 						/* Scatter the photon packet. */
@@ -772,10 +775,6 @@ __kernel void McKernel(
 						mcsim_trace_this_event(&sim);
 					#endif
 					done = false; /* have a new packet ... not done yet */
-
-					#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
-						deposit_cumulative = FP_0;
-					#endif
 				}
 			}
 		};

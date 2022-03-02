@@ -1692,7 +1692,7 @@ struct McSim{
  * @param[in] psim Pointer to a simulator instance.
  * @param[in] opl  Optical pathlength to add to the total pathlength.
  */
-#define mcim_optical_pathlength_add(psim, opl) \
+#define mcsim_optical_pathlength_add(psim, opl) \
 	((psim)->state.optical_pathlength += (opl))
 
 /**
@@ -3150,7 +3150,7 @@ __kernel void McKernel(
 
 			/* update total optical pathlength of the photon packet*/
 			#if MC_TRACK_OPTICAL_PATHLENGTH
-				mcim_optical_pathlength_add(
+				mcsim_optical_pathlength_add(
 					&sim, mc_layer_n(mcsim_current_layer(&sim))*step);
 			#endif
 
