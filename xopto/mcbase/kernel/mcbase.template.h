@@ -55,12 +55,6 @@
  * @addtogroup mc_option Simulation options
  * @{
  */
-#if !defined(MC_USE_BALLISTIC_KERNEL) || defined(__DOXYGEN__)
-	/** @brief Switches to a ballistic implementation of the Monte Carlo.
-	 *  #note Ballistic stepping is about 2-3 fold faster but produces 
-	 *	noisy results and should be used only as a reference */
-	#define MC_USE_BALLISTIC_KERNEL				FALSE
-#endif
 
 #if !defined(MC_METHOD) || defined(__DOXYGEN__)
 	/** @brief Set the Stepping method. Allowed values are

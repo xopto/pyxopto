@@ -318,44 +318,6 @@ class McMethod(McIntOption):
         return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
 
 
-class McUseBallisticKernel(McBoolOption):
-    '''
-    Turn on or off the use of ballistic Monte Carlo kernel. The ballistic
-    kernel either scatters or fully absorbs the packet hence the photon
-    packets do not undergo termination through weight threshold and / or
-    lottery.
-    The values of options :py:class:`McMinimumPacketWeight` and
-    :py:class:`McUseLottery` are not used by the ballistic kernel.
-
-    Default is off.
-
-    Note
-    ----
-    The ballistic Monte Carlo kernel is about 2~3-fold faster but produces
-    noisy results.
-    '''
-    on = McBoolOption('MC_USE_BALLISTIC_KERNEL', True)
-
-    off = McBoolOption('MC_USE_BALLISTIC_KERNEL', False)
-
-    default = off
-
-    def __init__(self, value: bool=False):
-        '''
-        Initializes the ballistic kernel option.
-
-        Parameters
-        ----------
-        value: bool
-            Use True to enable or False to disable the ballistic implementation
-            of the Monte Carlo kernel.
-        '''
-        super().__init__('MC_USE_BALLISTIC_KERNEL', value)
-
-    def __repr__(self):
-        return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
-
-
 class McUseNativeMath(McBoolOption):
     '''
     Turn on or off the use of OpenCL native math.
