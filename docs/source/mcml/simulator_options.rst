@@ -46,15 +46,18 @@ The list of available options is as follows:
   (default is :py:class:`~xopto.mcbase.mcoptions.McMethod.albedo_weight`) -
   can be used to set the Monte Carlo method. A detailed description of the
   methods can be found in:
-  
+
   #. A. Sassaroli and F. Martelli, *Equivalence of four Monte Carlo*
-   *methods for photon migration in turbid media*,
-   J Opt Soc Am A Opt Image Sci Vis, **29** (10), 2110-2117 (2012),
-   https://doi.org/10.1364/JOSAA.29.002110.
+     *methods for photon migration in turbid media*,
+     J Opt Soc Am A Opt Image Sci Vis, **29** (10), 2110-2117 (2012),
+     https://doi.org/10.1364/JOSAA.29.002110.
 
   Three different photon packet stepping methods are available:
 
     - Albedo Rejection
+      (:py:class:`~xopto.mcbase.mcoptions.McMethod.albedo_rejection`
+      or :py:class:`~xopto.mcbase.mcoptions.McMethod.ar`)
+
       Propagation step :math:`s=-\frac{\ln(\xi_1)}{\mu_t}` is derived
       from a uniform random number :math:`\xi_1` from interval
       :math:`[0, 1]` and the total attenuation coefficient
@@ -65,10 +68,13 @@ The list of available options is as follows:
       :math:`\xi_2` from :math:`[0, 1]` fulfils
       :math:`\xi_2 \leq \frac{\mu_a}{\mu_t}`.  If the
       packet hits geometry boundaries, it is propagated to the boundary,
-      where the boundary interractions are processed and a new step is
+      where the boundary interactions are processed and a new step is
       started afterwards.
 
     - Albedo weight
+      (:py:class:`~xopto.mcbase.mcoptions.McMethod.albedo_weight`
+      or :py:class:`~xopto.mcbase.mcoptions.McMethod.aw`)
+
       Propagation step :math:`s=-\frac{\ln(\xi_1)}{\mu_t}` is derived
       from a uniform random number :math:`\xi_1` from interval
       :math:`[0, 1]` and the total attenuation coefficient
@@ -78,24 +84,26 @@ The list of available options is as follows:
       hit along the step :math:`s`. The fraction of the absorbed
       weight is computed as :math:`\frac{\mu_a}{\mu_t}`. If the
       packet hits geometry boundaries, it is propagated to the boundary,
-      where the boundary interractions are processed and a new step is
+      where the boundary interactions are processed and a new step is
       started afterwards.
 
     - Microscopic Beer-Lambert
+      (:py:class:`~xopto.mcbase.mcoptions.McMethod.microscopic_beer_lambert`
+      or :py:class:`~xopto.mcbase.mcoptions.McMethod.mbl`)
+
       Propagation step :math:`s=-\frac{\ln(\xi_1)}{\mu_s}` is derived
       from a uniform random number :math:`\xi_1` from interval
       :math:`[0, 1]` and the scattering coefficient :math:`\mu_s`.
       The packet is absorbed regardless if the boundaries are
-      hit along the step.  If the packet hits geometry boundaries,
+      hit along the step.  If the packet hits a geometry boundary,
       it is propagated to the boundary, where the boundary
-      interractions are processed and a new step is
-      started afterwards.
-       :math:`s`. The fraction of the absorbed
-      weight is computed as :math:`1 - \exp{-\mu_a s_b}`, where
+      interactions are processed and a new step is
+      started afterwards. The fraction of the absorbed
+      weight is computed as :math:`1 - \exp^{-\mu_a s_b}`, where
       :math:`s_b` is the distance to the geometry boundary or the
       full step if the boundary is not hit.
 
-  The Albedo Rejection implementation of the Monte Carlo metod is the fastes
+  The Albedo Rejection implementation of the Monte Carlo method is the fastest
   but produces noisy results. The Microscopic Beer-Lambert method produces
   higher quality Fluence or Energy Deposition simulations if the size of
   the voxels in the deposition / fluence grid is smaller than the
