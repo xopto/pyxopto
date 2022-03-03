@@ -42,32 +42,69 @@ The :py:mod:`xopto.mcbase.mcoptions` is also conveniently imported into the
 
 The list of available options is as follows:
 
-* :py:class:`~xopto.mcbase.mcoptions.McUseBallisticKernel`
-  (default is :py:class:`~xopto.mcbase.mcoptions.McUseBallisticKernel.off`) -
-  can be used to switch to ballistic implementation of the Monte Carlo kernel.
-  The ballistic Monte Carlo kernel either scatters or fully absorbs the packet
-  in each simulation step that does not intersect the boundaries of the current
-  material (e.g. voxel or layer). The probability of the outcome depends on
-  the values of the absorption coefficient :math:`\mu_a`, scattering
-  coefficient :math:`\mu_s` and a random number :math:`\xi` sampled from a
-  uniform distribution :math:`[0, 1]`:
+* :py:class:`~xopto.mcbase.mcoptions.McMethod`
+  (default is :py:class:`~xopto.mcbase.mcoptions.McMethod.albedo_weight`) -
+  can be used to set the Monte Carlo method. A detailed description of the
+  methods can be found in:
+  
+  #. A. Sassaroli and F. Martelli, *Equivalence of four Monte Carlo*
+   *methods for photon migration in turbid media*,
+   J Opt Soc Am A Opt Image Sci Vis, **29** (10), 2110-2117 (2012),
+   https://doi.org/10.1364/JOSAA.29.002110.
 
-    - if :math:`\frac{\mu_a}{\mu_a + \mu_s} \geq \xi` - fully absorb else scatter
-      the packet according to the scattering phase function
+  Three different photon packet stepping methods are available:
 
-  Note that in the ballistic Monte Carlo kernel the photon packets do not
-  undergo termination through weight threshold and / or lottery and hence the
-  values of options :py:class:`~xopto.mcbase.mcoptions.McMinimumPacketWeight`
-  and :py:class:`~xopto.mcbase.mcoptions.McUseLottery` are not used by the
-  ballistic kernel.
-  In contrast, the regular Monte Carlo kernel terminates the photon packets
-  through the mechanisms of weight threshold and lottery. In each simulation
-  step that does not intersect with the boundaries of the current material, the
-  weight :math:`w` of the photon packet is reduced by
-  :math:`w\frac{\mu_a}{\mu_a + \mu_s}`.
-  The ballistic and regular Monte Carlo kernel converge towards the same
-  solution. While the ballistic kernel is faster it produces significantly
-  more noisy results than the regular kernel. 
+    - Albedo Rejection
+      Propagation step :math:`s=-\frac{\ln(\xi_1)}{\mu_t}` is derived
+      from a uniform random number :math:`\xi_1` from interval
+      :math:`[0, 1]` and the total attenuation coefficient
+      :math:`\mu_t=\mu_a + \mu_s`, which is the sum of the absorption
+      :math:`\mu_a` and scattering coefficients :math:`\mu_s`.
+      The packet is fully absorbed if no boundaries are
+      hit along the step :math:`s` and a uniform random number
+      :math:`\xi_2` from :math:`[0, 1]` fulfils
+      :math:`\xi_2 \leq \frac{\mu_a}{\mu_t}`.  If the
+      packet hits geometry boundaries, it is propagated to the boundary,
+      where the boundary interractions are processed and a new step is
+      started afterwards.
+
+    - Albedo weight
+      Propagation step :math:`s=-\frac{\ln(\xi_1)}{\mu_t}` is derived
+      from a uniform random number :math:`\xi_1` from interval
+      :math:`[0, 1]` and the total attenuation coefficient
+      :math:`\mu_t=\mu_a + \mu_s`, which is the sum of the absorption
+      :math:`\mu_a` and scattering coefficients :math:`\mu_s`.
+      The packet is scattered and partially absorbed if no boundaries are
+      hit along the step :math:`s`. The fraction of the absorbed
+      weight is computed as :math:`\frac{\mu_a}{\mu_t}`. If the
+      packet hits geometry boundaries, it is propagated to the boundary,
+      where the boundary interractions are processed and a new step is
+      started afterwards.
+
+    - Microscopic Beer-Lambert
+      Propagation step :math:`s=-\frac{\ln(\xi_1)}{\mu_s}` is derived
+      from a uniform random number :math:`\xi_1` from interval
+      :math:`[0, 1]` and the scattering coefficient :math:`\mu_s`.
+      The packet is absorbed regardless if the boundaries are
+      hit along the step.  If the packet hits geometry boundaries,
+      it is propagated to the boundary, where the boundary
+      interractions are processed and a new step is
+      started afterwards.
+       :math:`s`. The fraction of the absorbed
+      weight is computed as :math:`1 - \exp{-\mu_a s_b}`, where
+      :math:`s_b` is the distance to the geometry boundary or the
+      full step if the boundary is not hit.
+
+  The Albedo Rejection implementation of the Monte Carlo metod is the fastes
+  but produces noisy results. The Microscopic Beer-Lambert method produces
+  higher quality Fluence or Energy Deposition simulations if the size of
+  the voxels in the deposition / fluence grid is smaller than the
+  mean free path of the packets, i.e. there is on average less than one
+  absorption event per deposition/fluence voxel. The default Albedo Weight
+  method is recommended for reflectance simulations and matches the
+  performance of the Microscopic Beer-Lambert method if the mean free path
+  of the packets is equal or smaller than the voxel size of the
+  deposition / fluence grid.
 
 * :py:class:`~xopto.mcbase.mcoptions.McUseNativeMath`
   (default is :py:class:`~xopto.mcbase.mcoptions.McUseNativeMath.off`) -
