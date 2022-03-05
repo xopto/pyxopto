@@ -78,7 +78,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         ROOT_PATH, 'mcml', 'kernel', 'mc.template.h')
 
     # Directory that will be used to save the rendered OpenCL source code.
-    AUTOGEN_PATH = os.path.join(DATA_PATH, 'mcml', 'auto')
+    AUTOGEN_PATH = os.path.join(USER_DATA_PATH, 'mcml', 'auto')
     if not os.path.exists(AUTOGEN_PATH):
         os.makedirs(AUTOGEN_PATH)
 

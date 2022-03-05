@@ -30,7 +30,7 @@ import numpy as np
 import pyopencl as cl
 import jinja2
 
-from xopto import ROOT_PATH, DATA_PATH
+from xopto import ROOT_PATH, USER_DATA_PATH
 from xopto.cl import clrng, clinfo, cloptions
 
 from xopto.mcvox.mcobject import McObject
@@ -79,7 +79,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         ROOT_PATH, 'mcvox', 'kernel', 'mc.template.h')
 
     # Directory that will be used to save the rendered OpenCL source code.
-    AUTOGEN_PATH = os.path.join(DATA_PATH, 'mcvox', 'auto')
+    AUTOGEN_PATH = os.path.join(USER_DATA_PATH, 'mcvox', 'auto')
     if not os.path.exists(AUTOGEN_PATH):
         os.makedirs(AUTOGEN_PATH)
 
