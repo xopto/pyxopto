@@ -67,9 +67,9 @@ The list of available options is as follows:
       hit along the step :math:`s` and a uniform random number
       :math:`\xi_2` from :math:`[0, 1]` fulfils
       :math:`\xi_2 \leq \frac{\mu_a}{\mu_t}`.  If the
-      packet hits geometry boundaries, it is propagated to the boundary,
-      where the boundary interactions are processed and a new step is
-      started afterwards.
+      packet hits a geometry boundary, it is propagated up to the boundary,
+      where the boundary interactions are processed and a new propagation
+      step is started afterwards.
 
     - Albedo weight
       (:py:class:`~xopto.mcbase.mcoptions.McMethod.albedo_weight`
@@ -83,9 +83,9 @@ The list of available options is as follows:
       The packet is scattered and partially absorbed if no boundaries are
       hit along the step :math:`s`. The fraction of the absorbed
       weight is computed as :math:`\frac{\mu_a}{\mu_t}`. If the
-      packet hits geometry boundaries, it is propagated to the boundary,
-      where the boundary interactions are processed and a new step is
-      started afterwards.
+      packet hits a geometry boundary, it is propagated up to the boundary,
+      where the boundary interactions are processed and a new propagation
+      step is started afterwards.
 
     - Microscopic Beer-Lambert
       (:py:class:`~xopto.mcbase.mcoptions.McMethod.microscopic_beer_lambert`
@@ -94,25 +94,30 @@ The list of available options is as follows:
       Propagation step :math:`s=-\frac{\ln(\xi_1)}{\mu_s}` is derived
       from a uniform random number :math:`\xi_1` from interval
       :math:`[0, 1]` and the scattering coefficient :math:`\mu_s`.
-      The packet is absorbed regardless if the boundaries are
-      hit along the step.  If the packet hits a geometry boundary,
-      it is propagated to the boundary, where the boundary
-      interactions are processed and a new step is
+      The packet is absorbed according to the traveled path regardless
+      if a boundary is hit along the step.  If the packet hits a geometry
+      boundary, it is propagated up to the boundary, where the boundary
+      interactions are processed and a new propagation step is
       started afterwards. The fraction of the absorbed
       weight is computed as :math:`1 - \exp^{-\mu_a s_b}`, where
-      :math:`s_b` is the distance to the geometry boundary or the
-      full step if the boundary is not hit.
+      :math:`s_b` is the distance along the current propagation direction
+      to the nearest boundary or the full step if no boundaries are hit.
 
   The Albedo Rejection implementation of the Monte Carlo method is the fastest
-  but produces noisy results. The Microscopic Beer-Lambert method produces
-  higher quality Fluence or Energy Deposition simulations if the size of
-  the voxels in the deposition / fluence grid is smaller than the
+  but produces the noisiest results, since only the full energy of the photon
+  packet is deposited or collected by the detectors.
+
+  The Microscopic Beer-Lambert method produces the best quality fluence or
+  Energy Deposition simulations if the size of the voxels in
+  the deposition / fluence grid is smaller than the
   mean free path of the packets, i.e. there is on average less than one
-  absorption event per deposition/fluence voxel. The default Albedo Weight
-  method is recommended for reflectance simulations and matches the
-  performance of the Microscopic Beer-Lambert method if the mean free path
-  of the packets is equal or smaller than the voxel size of the
-  deposition / fluence grid.
+  absorption event per traversal of a fluence voxel.
+
+  The default Albedo Weight method is recommended for reflectance simulations.
+  It also matches the energy deposition performance of the Microscopic
+  Beer-Lambert method if the mean free path is equal or smaller
+  than the voxel size of the deposition / fluence grid, i.e. there is on
+  average at least one deposition event per voxel traversal.
 
 * :py:class:`~xopto.mcbase.mcoptions.McUseNativeMath`
   (default is :py:class:`~xopto.mcbase.mcoptions.McUseNativeMath.off`) -
