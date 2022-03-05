@@ -20,9 +20,6 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
-# (re)build the RNG support functions to slightly reduce the MC overhead
-python3 -c "import xopto; xopto.rebuild(verbose=False)"
-
 if [ $EUID -eq 0 ]; then
 	if [ -e "/dev/dri/renderD128" ]; then
 		egrep -i "^render" /etc/group;
@@ -44,8 +41,15 @@ if [ $EUID -eq 0 ]; then
 			fi
 		fi
 	fi
+	# (re)build the RNG support functions to slightly reduce the MC overhead
+	su $NB_USER -c 'python3 -c "import xopto; xopto.rebuild(verbose=False)"'
+
 	su $NB_USER -c "jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser"
 
 else
+	# (re)build the RNG support functions to slightly reduce the MC overhead
+	python3 -c "import xopto; xopto.rebuild(verbose=False)"
+
+
 	jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser
 fi
