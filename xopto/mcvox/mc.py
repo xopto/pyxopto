@@ -687,7 +687,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         buildtime = time.perf_counter() - tb
 
         if verbose:
-            print('Kernels built in {:.3f} ms.'.format(buildtime*1000.0))
+            print('OpenCL engine created in {:.3f} ms.'.format(buildtime*1e3))
 
         return buildtime
 

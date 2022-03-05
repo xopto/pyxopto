@@ -84,10 +84,11 @@ if __name__ == '__main__':
         mc_options.append(mcoptions.McUseNativeMath.on)
     if args.method:
         kernel_method = str(args.method)
-        kernel_method = {'ar': 'albedo_rejection',
-                         'aw': 'albedo_weight',
-                         'mbl': 'microscopic_beer_lambert'}.get(
-                               kernel_method, kernel_method)
+        kernel_method, kernel_method_name = {
+            'ar': ('albedo_rejection', 'Albedo Rejection'),
+            'aw': ('albedo_weight', 'Albedo Weight'),
+            'mbl': ('microscopic_beer_lambert', 'Microscopic Beer-Lambert')
+        }.get(kernel_method, kernel_method)
         mc_options.append(getattr(mcoptions.McMethod, kernel_method))
 
     usepflut = bool(args.lut)
@@ -109,7 +110,7 @@ if __name__ == '__main__':
     print('--------------------------------------------------------------------------')
     print('Staring performance test with:\n'
           '   {:s} sampling of the scattering phase function (SPF)\n'
-          '   {} MC kernel method'.format(spf_mode, kernel_method)
+          '   {} MC kernel method'.format(spf_mode, kernel_method_name)
     )
     print('...')
     t1 = time.perf_counter()

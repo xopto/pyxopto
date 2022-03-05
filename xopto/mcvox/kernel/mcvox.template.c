@@ -400,7 +400,8 @@ inline mc_int_t mcsim_boundary(McSim *psim, const mc_point3f_t *distances){
  * @param[in] pos      Position at which to deposit the weight.
  * @param[in] deposit  Weight to deposit.
  */
-inline void mcsim_fluence_deposit_weight(McSim *psim, mc_point3_t const *pos, mc_fp_t deposit){
+inline void mcsim_fluence_deposit_weight(
+		McSim *psim, mc_point3f_t const *pos, mc_fp_t deposit){
 	#if MC_FLUENCE_MODE_RATE
 		mcsim_fluence_deposit_at(psim, pos, deposit,
 			mc_material_mua(mcsim_current_voxel_material(psim))
@@ -897,7 +898,8 @@ __kernel void McKernel(
 							done = true;
 							#if MC_USE_FLUENCE
 								/* update the fluence data in fluence mode */
-								mcsim_fluence_deposit_weight(&sim, mcsim_pos(&sim), deposit);
+								mcsim_fluence_deposit_weight(
+									&sim, mcsim_position(&sim), deposit);
 							#endif
 						} else {
 							/* Scatter the photon packet, */
@@ -911,7 +913,8 @@ __kernel void McKernel(
 						mcsim_adjust_weight(&sim, deposit);
 						#if MC_USE_FLUENCE
 							/* update the fluence data in fluence mode */
-							mcsim_fluence_deposit_weight(&sim, mcsim_pos(&sim), deposit);
+							mcsim_fluence_deposit_weight(
+								&sim, mcsim_position(&sim), deposit);
 						#endif
 
 						/* Scatter the photon packet, */

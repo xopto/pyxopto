@@ -1168,35 +1168,41 @@ inline void mcsim_detector_deposit(McSim *mcsim);
  *        of the different function signatures in case of the weight deposition
  *        and fluence rate mode.
  * 
- * @param psim     Simulator instance.
- * @param deposit  Weight to deposit.
+ * @param[in] psim     Simulator instance.
+ * @param[in] pos      Deposit the weight at this position.
+ * @param[in] deposit  Weight to deposit.
  */
-inline void mcsim_fluence_deposit_weight(McSim *psim, mc_fp_t deposit);
+inline void mcsim_fluence_deposit_weight(
+	McSim *psim, mc_point3f_t const *pos, mc_fp_t deposit);
 
 #if MC_FLUENCE_MODE_RATE
 /**
  * @brief Deposit the given weight to the fluence accumulator that operates
  *        in fluence rate mode.
  * 
- * @param mcsim   Simulator instance.
- * @param weight  Weight to deposit.
- * @param mua     Absorption coefficient of the medium that is required to
- *                to compute the fluence rate.
+ * @param[in] mcsim   Simulator instance.
+ * @param[in] pos     Deposit the weight at this position.
+ * @param[in] weight  Weight to deposit.
+ * @param[in] mua     Absorption coefficient of the medium that is required to
+ *                    to compute the fluence rate.
  * 
  * @note The source code of this function is implemented in related python modules.
  */
-inline void mcsim_fluence_deposit(McSim *mcsim, mc_fp_t weight, mc_fp_t mua);
+inline void mcsim_fluence_deposit_at(
+	McSim *mcsim, mc_point3f_t const *pos, mc_fp_t weight, mc_fp_t mua);
 #else
 /**
  * @brief Deposit the given weight to the fluence accumulator that operates
  *        in energy deposition mode.
  * 
- * @param mcsim   Simulator instance.
- * @param weight  Weight to deposit.
+ * @param[in] mcsim   Simulator instance.
+ * @param[in] pos     Deposit the weight at this position.
+ * @param[in] weight  Weight to deposit.
  * 
  * @note The source code of this function is implemented in related python modules.
  */
-inline void mcsim_fluence_deposit(McSim *mcsim, mc_fp_t weight);
+inline void mcsim_fluence_deposit_at(
+	McSim *mcsim, mc_point3f_t const *pos, mc_fp_t weight);
 #endif
 
 #endif /* MC_USE_FLUENCE */

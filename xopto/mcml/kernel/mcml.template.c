@@ -218,11 +218,11 @@ inline mc_int_t mcsim_boundary(McSim *psim, mc_int_t nextLayerIndex){
 inline void mcsim_fluence_deposit_weight(
 		McSim *psim, mc_point3f_t const *pos, mc_fp_t deposit){
 	#if MC_FLUENCE_MODE_RATE
-		mcsim_fluence_deposit(psim, deposit, pos,
+		mcsim_fluence_deposit_at(psim, deposit, pos,
 			mc_layer_mua(mcsim_current_layer(psim))
 		);
 	#else
-		mcsim_fluence_deposit(&psim, pos, deposit);
+		mcsim_fluence_deposit_at(psim, pos, deposit);
 	#endif
 };
 #endif /* MC_USE_FLUENCE */
@@ -583,7 +583,7 @@ __kernel void McKernel(
 					};
 
 					/* update the fluence data in fluence mode */
-					mcsim_fluence_deposit_weight(&sim, &deposit_pos, deposit),
+					mcsim_fluence_deposit_weight(&sim, &deposit_pos, deposit);
 				#endif
 
 				/* process boundary hit or handle absorption */
@@ -694,7 +694,7 @@ __kernel void McKernel(
 							/* Scatter the photon packet. */
 							mcsim_scatter(&sim);
 						}
-					#else	/* Albedo Weight */.
+					#else	/* Albedo Weight */
 						/* Do absorption only when no layer boundary has been hit.*/
 						deposit = mcsim_weight(&sim)*
 							mc_layer_mua_inv_mut(mcsim_current_layer(&sim));

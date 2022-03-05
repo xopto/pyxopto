@@ -993,25 +993,29 @@ inline void mcsim_fluence_deposit_weight(
  * @brief Deposit the given weight to the fluence accumulator that operates
  *        in fluence rate mode.
  * 
- * @param mcsim   Simulator instance.
- * @param weight  Weight to deposit.
- * @param mua     Absorption coefficient of the medium that is required to
+ * @param[in] mcsim   Simulator instance.
+ * @param[in] pos     Deposit the weight at this position.
+ * @param[in] weight  Weight to deposit.
+ * @param[in] mua     Absorption coefficient of the medium that is required to
  *                to compute the fluence rate.
  * 
  * @note The source code of this function is implemented in related python modules.
  */
-inline void mcsim_fluence_deposit(McSim *mcsim, mc_fp_t weight, mc_fp_t mua);
+inline void mcsim_fluence_deposit_at(
+	McSim *mcsim, mc_point3f_t const *pos, mc_fp_t weight, mc_fp_t mua);
 #else
 /**
  * @brief Deposit the given weight to the fluence accumulator that operates
  *        in energy deposition mode.
  * 
- * @param mcsim   Simulator instance.
- * @param weight  Weight to deposit.
+ * @param[in] mcsim   Simulator instance.
+ * @param[in] pos     Deposit the weight at this position.
+ * @param[in] weight  Weight to deposit.
  * 
  * @note The source code of this function is implemented in related python modules.
  */
-inline void mcsim_fluence_deposit(McSim *mcsim, mc_fp_t weight);
+inline void mcsim_fluence_deposit_at(
+	McSim *mcsim, mc_point3f_t const *pos, mc_fp_t weight);
 #endif
 
 #endif /* MC_USE_FLUENCE */
