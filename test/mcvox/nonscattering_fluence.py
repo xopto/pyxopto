@@ -24,13 +24,10 @@ import os.path
 
 import matplotlib.pyplot as pp
 import numpy as np
-from xopto.mcbase import mcoptions
 
 from xopto.mcvox import mc
 from xopto import make_user_dirs, USER_TMP_PATH
 
-
-debug = False
 
 exportsrc = os.path.join(USER_TMP_PATH, 'mcvox_nonscattering_fluence.h')
 make_user_dirs()
@@ -59,13 +56,17 @@ voxels = mc.mcgeometry.Voxels(
     zaxis=mc.mcgeometry.Axis( 0.0e-3, 1.0,    1),
 )
 
-nphotons = 100e6
+nphotons = 500e6
 
 thickness = voxels.zaxis.span[-1] - voxels.zaxis.span[0]
 
+fig, ax = pp.subplots(2, 3)
+pp.suptitle('Energy deposition in nonscattering medium')
+
 meth = mc.mcoptions.McMethod
-for method, name in ((meth.ar, 'Albedo Rejection'), (meth.aw, 'Albedo Weight'),
-                     (meth.mbl, 'Microscopic Beer-Lambert')):
+for index, (method, name) in enumerate(((meth.ar, 'Albedo Rejection'),
+                                        (meth.aw, 'Albedo Weight'),
+                                        (meth.mbl, 'Microscopic Beer-Lambert'))):
     print('\nProcessing with MC method:', name)
     print('-'*40)
     mc_obj = mc.Mc(voxels, materials, source, detectors, fluence=fluence,
@@ -87,9 +88,8 @@ for method, name in ((meth.ar, 'Albedo Rejection'), (meth.aw, 'Albedo Weight'),
         np.exp(-materials[1].mua*fluence_res.zaxis.edges))
     mc_deposition = (fluence_res.raw/nphotons).flat
 
-    fig, (ax1, ax2) = pp.subplots(2, 1)
-    pp.suptitle(name)
-    ax1.set_title('Energy deposition in nonscattering medium')
+    ax1, ax2 = ax[:, index]
+    ax1.set_title(name)
     ax1.plot(fluence_res.z, mc_deposition, 'r-', label="MC")
     ax1.plot(fluence_res.z, analytical_deposition, 'g--', label='Analytical')
     ax1.legend()
