@@ -40,6 +40,7 @@ xopto/mcbase/__pycache__
 xopto/mcbase/kernel/__pycache__
 xopto/mcbase/mcpf/__pycache__
 xopto/mcbase/mcutil/__pycache__
+xopto/mcbase/mcfluence/__pycache__
 
 xopto/mcml/__pycache__
 xopto/mcml/cltypes/__pycache__
