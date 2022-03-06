@@ -32,20 +32,27 @@ absorption or optionally the fluence rate.
 Three different implementations of the fluence detector are
 available in the :py:mod:`xopto.mcbase.mcfluence` module:
 
-* :py:class:`~xopto.mcbase.mcfluence.FluenceRz` - Radially symmetric implementation :math:`(r, z)`.
-* :py:class:`~xopto.mcbase.mcfluence.FluenceCyl` - Implementation in cylindrical coordinates :math:`(r, \varphi, z)`. 
-* :py:class:`~xopto.mcbase.mcfluence.Fluence` - Implementation in Cartesian coordinates :math:`(x, y, z)`.
+* :py:class:`~xopto.mcbase.mcfluence.fluencerz.FluenceRz` - Radially symmetric implementation :math:`(r, z)`.
+* :py:class:`~xopto.mcbase.mcfluence.fluencecyl.FluenceCyl` - Implementation in cylindrical coordinates :math:`(r, \varphi, z)`. 
+* :py:class:`~xopto.mcbase.mcfluence.fluence.Fluence` - Implementation in Cartesian coordinates :math:`(x, y, z)`.
+
+The following are time-resolved variants of the above fluence detectors:
+
+* :py:class:`~xopto.mcbase.mcfluence.fluencet.Fluencet` - Implementation in Cartesian coordinates wit additional temporal axis :math:`(x, y, z, t)`.
 
 
 The observed volume voxelization is axis-aligned and allows independent
 adjustment of the voxel size along the x, y and z axis for
-:py:class:`~xopto.mcbase.mcfluence.Fluence`, along r, φ and z axis for .
-:py:class:`~xopto.mcbase.mcfluence.FluenceCyl` and along the r and z axis for
-:py:class:`~xopto.mcbase.mcfluence.FluenceRz`.
+:py:class:`~xopto.mcbase.mcfluence.fluence.Fluence`, along r, φ and z axis for .
+:py:class:`~xopto.mcbase.mcfluence.fluencecyl.FluenceCyl` and along the r and z axis for
+:py:class:`~xopto.mcbase.mcfluence.fluencerz.FluenceRz`.
+The time-resolved variants of the fluence detectors have an additional
+temporal (t) axis. The time along the temporal axis is measured in seconds.
 
-The :py:class:`~xopto.mcbase.mcfluence.FluenceRz`,
-:py:class:`~xopto.mcbase.mcfluence.FluenceCyl` and
-:py:class:`~xopto.mcbase.mcfluence.FluenceRz` classes are also conveniently
+The :py:class:`~xopto.mcbase.mcfluence.fluence.Fluence`,
+:py:class:`~xopto.mcbase.mcfluence.fluencet.Fluencet`,
+:py:class:`~xopto.mcbase.mcfluence.fluencecyl.FluenceCyl` and
+:py:class:`~xopto.mcbase.mcfluence<.fluencerz.FluenceRz` classes are also conveniently
 imported into the :py:mod:`xopto.mcml.mcfluence`, :py:mod:`xopto.mccyl.mcfluence`
 :py:mod:`xopto.mcvox.mcfluence` modules.
 
@@ -73,13 +80,13 @@ set to 0.1 |nbsp| mm.
 
 The :py:class:`~xopto.mcbase.mcutil.axis.Axis` instances along the x, y and z
 axis can be accessed through the 
-:py:class:`~xopto.mcbase.mcfluence.Fluence.xaxis`,
-:py:class:`~xopto.mcbase.mcfluence.Fluence.yaxis` and
-:py:class:`~xopto.mcbase.mcfluence.Fluence.zaxis` properties. Likewise, the
+:py:class:`~xopto.mcbase.mcfluence.fluence.Fluence.xaxis`,
+:py:class:`~xopto.mcbase.mcfluence.fluence.Fluence.yaxis` and
+:py:class:`~xopto.mcbase.mcfluence.fluence.Fluence.zaxis` properties. Likewise, the
 centers of the voxels along the x, y and z axis can be accessed through the
-:py:class:`~xopto.mcbase.mcfluence.Fluence.x`,
-:py:class:`~xopto.mcbase.mcfluence.Fluence.y` and
-:py:class:`~xopto.mcbase.mcfluence.Fluence.z` properties.
+:py:class:`~xopto.mcbase.mcfluence.fluence.Fluence.x`,
+:py:class:`~xopto.mcbase.mcfluence.fluence.Fluence.y` and
+:py:class:`~xopto.mcbase.mcfluence.fluence.Fluence.z` properties.
 
 .. code-block:: python
 
@@ -92,24 +99,29 @@ centers of the voxels along the x, y and z axis can be accessed through the
     z_centers = fluence.z    # or as zaxis.centers
 
 The fluence data are stored in a 3D numpy array that can be accessed through the
-:py:attr:`~xopto.mcbase.mcfluence.Fluence.raw` or
-:py:attr:`~xopto.mcbase.mcfluence.Fluence.data` properties. The individual
+:py:attr:`~xopto.mcbase.mcfluence.fluence.Fluence.raw` or
+:py:attr:`~xopto.mcbase.mcfluence.fluence.Fluence.data` properties. The individual
 voxels are addressed / sliced as :python:`data[z_slice, y_slice, x_slice]`.
 
 .. note::
 
-    The values returned by the :py:attr:`~xopto.mcbase.mcfluence.Fluence.raw`
+    The values returned by the :py:attr:`~xopto.mcbase.mcfluence.fluence.Fluence.raw`
     property are the unscaled sums of deposited / absorbed photon packet weights
-    while the values returned by the :py:attr:`~xopto.mcbase.mcfluence.Fluence.data`
+    while the values returned by the :py:attr:`~xopto.mcbase.mcfluence.fluence.Fluence.data`
     property are scaled by the inverse of the product between the voxel volume and
-    the number of launched packets. Also note that the voxel size is constant
-    for the :py:class:`~xopto.mcbase.mcfluence.Fluence` but changes with location
-    for the :py:class:`~xopto.mcbase.mcfluence.FluenceRz` and
-    :py:class:`~xopto.mcbase.mcfluence.FluenceCyl`.
+    the number of launched packets. The time-resolved variants of fluence
+    detectors scale the values returned by
+    :py:attr:`~xopto.mcbase.mcfluence.fluencet.Fluencet.data`
+    with the inverse of the product between the voxel volume, the number of
+    launched packets and the corresponding time interval. 
+    Also note that the voxel size is constant
+    for the :py:class:`~xopto.mcbase.mcfluence.fluence.Fluence` but changes with location
+    for the :py:class:`~xopto.mcbase.mcfluence.fluencerz.FluenceRz` and
+    :py:class:`~xopto.mcbase.mcfluence.fluencecyl.FluenceCyl`.
 
 
 After completing the Monte Carlo simulation, the fluence accumulator can be
-viewed using the :py:meth:`~xopto.mcbase.mcfluence.Fluence.plot` method. The
+viewed using the :py:meth:`~xopto.mcbase.mcfluence.fluence.Fluence.plot` method. The
 method allows slicing across the voxelized volume along one of the main
 coordinate axis. Use the :code:`axis` parameter to set the coordinate
 axis:
