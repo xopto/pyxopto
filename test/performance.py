@@ -62,11 +62,12 @@ if __name__ == '__main__':
                         required=False,
                         help='Enable verbose mode.')
     parser.add_argument('--method', metavar='MC_METHOD', type=str,
-                        choices = ('albedo_weight', 'aw',
-                                   'albedo_rejection', 'ar',
-                                   'microscopic_beer_lambert', 'mbl'),
-                        default='albedo_weight', required=False,
-                        help='Select the Monte Carlo simulation method.')
+                        choices = ('aw', 'ar', 'mbl'),
+                        default='aw', required=False,
+                        help='Select a Monte Carlo simulation method. Use '
+                             '"ar" for Albedo Rejection, '
+                             '"aw" for Albedo Weight (default) or '
+                             '"mbl" for Microscopic Beer-Lambert.')
 
     mc_options = [
         mcoptions.McFloatLutMemory.constant_mem
@@ -82,16 +83,11 @@ if __name__ == '__main__':
     if args.math == 'native':
         mc_options.append(mcoptions.McUseNativeMath.on)
     if args.method:
-        method = str(args.method)
-        kernel_method = {
-            'albedo_rejection':'ar', 'albedo_weight':'aw',
-            'microscopic_beer_lambert': 'mbl'}.get(method, method)
-
         kernel_method, kernel_method_name = {
             'ar': ('albedo_rejection', 'Albedo Rejection'),
             'aw': ('albedo_weight', 'Albedo Weight'),
             'mbl': ('microscopic_beer_lambert', 'Microscopic Beer-Lambert'),
-        }.get(kernel_method, kernel_method)
+        }.get(str(args.method))
         mc_options.append(getattr(mcoptions.McMethod, kernel_method))
     usepflut = bool(args.lut)
 
@@ -112,7 +108,7 @@ if __name__ == '__main__':
     print('--------------------------------------------------------------------------')
     print('Staring performance test with:\n'
           '   {:s} sampling of the scattering phase function (SPF)\n'
-          '   {} MC kernel method'.format(spf_mode, kernel_method_name)
+          '   {} MC method'.format(spf_mode, kernel_method_name)
     )
     print('...')
     t1 = time.perf_counter()

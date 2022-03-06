@@ -486,6 +486,10 @@ typedef char int8_t;
 #define FP_RAD2DEG		FP_LITERAL(57.2957795130823229)
 /** @brief Conversion from degrees to radians. */
 #define FP_DEG2RAD		FP_LITERAL(0.017453292519943295)
+/** @brief Speed of light in vacuum (m/s). */
+#define FP_C			FP_LITERAL(299792458.0)
+/** @brief Inverse of the speed of light in vacuum (m/s). */
+#define FP_INV_C		FP_LITERAL(3.3356409519815204e-09)
 
 #if MC_USE_NATIVE_MATH || defined(__DOXYGEN__)
 	/** @brief Native sine function. */
@@ -844,11 +848,29 @@ struct MC_STRUCT_ATTRIBUTES mc_point3f_t{
 	mc_fp_t y;	/**< @brief y coordinate. */
 	mc_fp_t z;	/**< @brief z coordinate. */
 };
+
 /**
  * @}
  */
 /** @brief 3D data point/vector coordinates data type. */
 typedef struct mc_point3f_t mc_point3f_t;
+
+/**
+*@brief Data type used to describe a 4D point/vector coordinates in floating-point precision.
+*@{
+*/
+struct MC_STRUCT_ATTRIBUTES mc_point4f_t{
+	mc_fp_t x;	/**< @brief x coordinate. */
+	mc_fp_t y;	/**< @brief y coordinate. */
+	mc_fp_t z;	/**< @brief z coordinate. */
+	mc_fp_t w;	/**< @brief w coordinate. */
+};
+
+/**
+ * @}
+ */
+/** @brief 4D data point/vector coordinates data type. */
+typedef struct mc_point4f_t mc_point4f_t;
 
 /**
 *@brief Data type used to describe a 3D point/vector of integer type.
@@ -859,11 +881,30 @@ struct MC_STRUCT_ATTRIBUTES mc_point3_t{
 	mc_int_t y;	/**< @brief y coordinate. */
 	mc_int_t z;	/**< @brief z coordinate. */
 };
+
 /**
  * @}
  */
 /** @brief 3D integer data point/vector coordinates data type. */
 typedef struct mc_point3_t mc_point3_t;
+
+
+/**
+*@brief Data type used to describe a 4D point/vector of integer type.
+*@{
+*/
+struct MC_STRUCT_ATTRIBUTES mc_point4_t{
+	mc_int_t x;	/**< @brief x coordinate. */
+	mc_int_t y;	/**< @brief y coordinate. */
+	mc_int_t z;	/**< @brief z coordinate. */
+	mc_int_t w;	/**< @brief w coordinate. */
+};
+
+/**
+ * @}
+ */
+/** @brief 4D integer data point/vector coordinates data type. */
+typedef struct mc_point4_t mc_point4_t;
 
 /**
 *@brief Data type used to describe a 3D point/vector of size type.
