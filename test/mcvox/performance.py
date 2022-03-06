@@ -83,11 +83,15 @@ if __name__ == '__main__':
     if args.math == 'native':
         mc_options.append(mcoptions.McUseNativeMath.on)
     if args.method:
-        kernel_method = str(args.method)
+        method = str(args.method)
+        kernel_method = {
+            'albedo_rejection':'ar', 'albedo_weight':'aw',
+            'microscopic_beer_lambert': 'mbl'}.get(method, method)
+
         kernel_method, kernel_method_name = {
             'ar': ('albedo_rejection', 'Albedo Rejection'),
             'aw': ('albedo_weight', 'Albedo Weight'),
-            'mbl': ('microscopic_beer_lambert', 'Microscopic Beer-Lambert')
+            'mbl': ('microscopic_beer_lambert', 'Microscopic Beer-Lambert'),
         }.get(kernel_method, kernel_method)
         mc_options.append(getattr(mcoptions.McMethod, kernel_method))
 
