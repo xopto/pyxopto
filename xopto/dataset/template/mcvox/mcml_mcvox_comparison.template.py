@@ -152,7 +152,7 @@ for g in g_values:
                 'voxel_data': mc_obj.voxels.material,
                 'materials': mc_obj.materials.todict(),
                 'source': mc_obj.source.todict(),
-                'detectors': mc_obj.source.todict(),
+                'detectors': mc_obj.detectors.todict(),
                 'fluence': res_fluence.todict(),
                 'fluence_data': res_fluence.data,
                 'reflectance': res_detectors.top.reflectance,
