@@ -38,6 +38,8 @@ available in the :py:mod:`xopto.mcbase.mcfluence` module:
 
 The following are time-resolved variants of the above fluence detectors:
 
+* :py:class:`~xopto.mcbase.mcfluence.fluencerz.FluenceRzt` - Implementation in Cartesian coordinates wit additional temporal axis :math:`(x, y, z, t)`.
+* :py:class:`~xopto.mcbase.mcfluence.fluencecyl.FluenceCylt` - Implementation in Cartesian coordinates wit additional temporal axis :math:`(x, y, z, t)`.
 * :py:class:`~xopto.mcbase.mcfluence.fluencet.Fluencet` - Implementation in Cartesian coordinates wit additional temporal axis :math:`(x, y, z, t)`.
 
 
@@ -49,10 +51,24 @@ adjustment of the voxel size along the x, y and z axis for
 The time-resolved variants of the fluence detectors have an additional
 temporal (t) axis. The time along the temporal axis is measured in seconds.
 
+The fluence accumulators utilize NumPy arrays and follow C-indexing order,
+where the last index represents the most rapidly changing memory location:
+
+* :py:class:`~xopto.mcbase.mcfluence.fluencerz.FluenceRz` - :code:`[z, r]`
+* :py:class:`~xopto.mcbase.mcfluence.fluencecyl.FluenceCyl` - :code:`[z, φ, r]`
+* :py:class:`~xopto.mcbase.mcfluence.fluence.Fluence` - :code:`[z, y, x]`
+* :py:class:`~xopto.mcbase.mcfluence.fluencerz.FluenceRzt` - :code:`[z, r, t]`
+* :py:class:`~xopto.mcbase.mcfluence.fluencecyl.FluenceCylt` - :code:`[z, φ, r, t]`
+* :py:class:`~xopto.mcbase.mcfluence.fluencet.Fluencet` - :code:`[z, y, x, t]`
+
+
 The :py:class:`~xopto.mcbase.mcfluence.fluence.Fluence`,
 :py:class:`~xopto.mcbase.mcfluence.fluencet.Fluencet`,
-:py:class:`~xopto.mcbase.mcfluence.fluencecyl.FluenceCyl` and
-:py:class:`~xopto.mcbase.mcfluence<.fluencerz.FluenceRz` classes are also conveniently
+:py:class:`~xopto.mcbase.mcfluence.fluencecyl.FluenceCyl`,
+:py:class:`~xopto.mcbase.mcfluence.fluencecyl.FluenceCylt`,
+:py:class:`~xopto.mcbase.mcfluence<.fluencerz.FluenceRz` and
+:py:class:`~xopto.mcbase.mcfluence<.fluencerz.FluenceRzt`
+classes are also conveniently
 imported into the :py:mod:`xopto.mcml.mcfluence`, :py:mod:`xopto.mccyl.mcfluence`
 :py:mod:`xopto.mcvox.mcfluence` modules.
 
