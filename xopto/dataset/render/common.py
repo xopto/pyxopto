@@ -67,6 +67,26 @@ def prepare_cli(description: str) -> argparse.ArgumentParser:
 
         cl_index: int
             OpenCL device index (zero-based).
+
+        fast_math:
+            Adds common performace-related OpenCL build options
+            -cl-fast-relaxed-math and --cl-mad-enable.
+
+        cl-fast-relaxed-math: None
+            Adds OpenCL build option -cl-fast-relaxed-math.
+
+        cl-mad-enable: None
+            Adds OpenCL build option -cl-mad-enable.
+
+        cl-unsafe-math-optimizations: None
+            Adds OpenCL build option -cl-unsafe-math-optimizations.
+
+        cl-finite-math-only: None
+            Adds OpenCL build option -cl-finite-math-only.
+
+        cl-no-signed-zeros: None
+            Adds OpenCL build option -cl-no-signed-zeros.
+
     '''
 
     cwd = os.getcwd()
@@ -92,6 +112,11 @@ def prepare_cli(description: str) -> argparse.ArgumentParser:
         help='OpenCL device index to use for the simulations.')
 
     parser.add_argument(
+        '--fast-math', dest='fast_math',
+        action='store_true',
+        help='Adds common performace-related OpenCL build options '
+             '-cl-fast-relaxed-math and --cl-mad-enable.')
+    parser.add_argument(
         '--cl-fast-relaxed-math', dest='cl_fast_relaxed_math',
         action='store_true',
         help='Adds OpenCL build option -cl-fast-relaxed-math.')
@@ -102,7 +127,7 @@ def prepare_cli(description: str) -> argparse.ArgumentParser:
     parser.add_argument(
         '--cl-unsafe-math-optimizations', dest='cl_unsafe_math_optimizations',
         action='store_true',
-        help='Adds OpenCL build option -cl-unsafe-math-optimizations.')
+        help='Adds OpenCL build option -cl-unsafe-math.')
     parser.add_argument(
         '--cl-finite-math-only', dest='cl_finite_math_only',
         action='store_true',
@@ -155,10 +180,14 @@ def process_cli(parser: argparse.ArgumentParser) -> dict:
     args = parser.parse_args()
 
     cl_build_options = []
-    if args.cl_fast_relaxed_math:
+    if args.fast_math:
         cl_build_options.append('-cl-fast-relaxed-math')
-    if args.cl_mad_enable:
         cl_build_options.append('-cl-mad-enable')
+    else:
+        if args.cl_fast_relaxed_math:
+            cl_build_options.append('-cl-fast-relaxed-math')
+        if args.cl_mad_enable:
+            cl_build_options.append('-cl-mad-enable')
     if args.cl_unsafe_math_optimizations:
         cl_build_options.append('-cl-unsafe-math-optimizations')
     if args.cl_finite_math_only:

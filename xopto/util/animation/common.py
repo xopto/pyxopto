@@ -76,7 +76,7 @@ def create_frame_animation(frames: np.ndarray, filename: str = None,
     cbar: bool
         Show a colorbar.
     cbar_label: str
-        Label of the colorbar label.
+        Text displayed by the colorbar label.
     cbar_tick_format: str
         Colorbar tick format string.
     cmap: str
