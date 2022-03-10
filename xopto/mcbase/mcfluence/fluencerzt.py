@@ -28,26 +28,39 @@ from xopto.mcbase import mctypes
 from xopto.mcbase import mcoptions
 from xopto.mcbase import mcobject
 from xopto.mcbase.mcutil.axis import Axis
+from xopto.util import sliceview
 
-
-class Fluencet(mcobject.McObject):
+class FluenceRzt(mcobject.McObject):
     @staticmethod
     def cl_type(mc: mcobject.McObject) -> cltypes.Structure:
         T = mc.types
-        class ClFluencet(cltypes.Structure):
+        class ClFluenceRzt(cltypes.Structure):
             '''
             OpenCL structure that used by the Monte carlo simulator.
 
             Fields
             ------
-            inv_step: McTypes.cl_point4f
-                Inverse spacings of the fluence accumulators.
-            top_left: McTypes.cl_point4f
-                Coordinates of the top-left corner of the fluence accumulators.
-            shape: McTypes.cl_point4
-                Shape/size of the accumulator along the x, y, z and
-                temporal axis.
-            offset: McTypes.mc_int_t
+            center: McTypes.cl_point3f
+                Center of the polar coordinate system with the minimum value
+                of the z coordinate.
+            t_min: mc_fp_t
+                Left edge of the first bin along the t axis.
+            inv_dr: McTypes.cl_float
+                Inverse spacings of the fluence accumulators in the radial
+                axis.
+            inv_dz: McTypes.cl_float
+                Inverse spacings of the fluence accumulators in the z
+                axis.
+            inv_dt: McTypes.cl_float
+                Inverse spacings of the fluence accumulators in the t
+                axis.
+            n_r: McTypes.cl_int
+                Number of accumulators along the r axis.
+            n_z: McTypes.cl_int
+                Number of accumulators along the z axis.
+            n_t: McTypes.cl_int
+                Number of accumulators along the t axis.
+            offset: McTypes.mc_size_t
                 Offset of the first element of the fluence accumulator buffer.
             k: McTypes.cl_float
                 Integer factor that converts floating point photon packet
@@ -55,22 +68,32 @@ class Fluencet(mcobject.McObject):
                 accumulators.
             '''
             _fields_ = [
-                ('inv_step', T.mc_point4f_t),
-                ('top_left', T.mc_point4f_t),
-                ('shape', T.mc_point4_t),
+                ('center', T.mc_point3f_t),
+                ('t_min', T.mc_fp_t),
+                ('inv_dr', T.mc_fp_t),
+                ('inv_dz', T.mc_fp_t),
+                ('inv_dt', T.mc_fp_t),
+                ('n_r', T.mc_int_t),
+                ('n_z', T.mc_int_t),
+                ('n_t', T.mc_int_t),
                 ('offset', T.mc_size_t),
                 ('k', T.mc_int_t),
             ]
 
-        return ClFluencet
+        return ClFluenceRzt
 
     @staticmethod
     def cl_declaration(mc: mcobject.McObject) -> str:
         return '\n'.join((
             'struct MC_STRUCT_ATTRIBUTES McFluence{',
-            '	mc_point4f_t inv_step;',
-            '	mc_point4f_t top_left;',
-            '	mc_point4_t shape;',
+            '	mc_point3f_t center;',
+            '	mc_fp_t t_min;',
+            '	mc_fp_t inv_dr;',
+            '	mc_fp_t inv_dz;',
+            '	mc_fp_t inv_dt;',
+            '	mc_int_t n_r;',
+            '	mc_int_t n_z;',
+            '	mc_int_t n_t;',
             '	mc_size_t offset;',
             '	mc_int_t k;',
             '};',
@@ -80,19 +103,17 @@ class Fluencet(mcobject.McObject):
     def cl_implementation(mc: mcobject.McObject):
         return '\n'.join((
             'void dbg_print_fluence(__mc_fluence_mem const McFluence *fluence){',
-            '	dbg_print("Chartesian time-resolved McFluence fluence:");',
-            '	dbg_print_float(INDENT "top_left.x (mm):", fluence->top_left.x*1e3f);',
-            '	dbg_print_float(INDENT "top_left.y (mm):", fluence->top_left.y*1e3f);',
-            '	dbg_print_float(INDENT "top_left.z (mm):", fluence->top_left.z*1e3f);',
-            '	dbg_print_float(INDENT "top_left.w (ns):",  fluence->top_left.w*1e9f);',
-            '	dbg_print_float(INDENT "inv_step.x (1/mm):", fluence->inv_step.x*1e-3f);',
-            '	dbg_print_float(INDENT "inv_step.y (1/mm):", fluence->inv_step.y*1e-3f);',
-            '	dbg_print_float(INDENT "inv_step.z (1/mm):", fluence->inv_step.z*1e-3f);',
-            '	dbg_print_float(INDENT "inv_step.w (1/ns):", fluence->inv_step.w*1e-9f);',
-            '	dbg_print_int(INDENT "shape.x:", fluence->shape.x);',
-            '	dbg_print_int(INDENT "shape.y:", fluence->shape.y);',
-            '	dbg_print_int(INDENT "shape.z:", fluence->shape.z);',
-            '	dbg_print_int(INDENT "shape.w:", fluence->shape.w);',
+            '	dbg_print("Rz time-resolved McFluence fluence:");',
+            '	dbg_print_float(INDENT "center.x (mm):", fluence->center.x*1e3f);',
+            '	dbg_print_float(INDENT "center.y (mm):", fluence->center.y*1e3f);',
+            '	dbg_print_float(INDENT "center.z (mm):", fluence->center.z*1e3f);',
+            '	dbg_print_float(INDENT "t_min (ns)   :", fluence->t_min*1e9f);',
+            '	dbg_print_float(INDENT "inv_dr (1/mm):", fluence->inv_dr*1e-3f);',
+            '	dbg_print_float(INDENT "inv_dz (1/mm):", fluence->inv_dz*1e-3f);',
+            '	dbg_print_float(INDENT "inv_dt (1/ns):", fluence->inv_dt*1e-9f);',
+            '	dbg_print_int(INDENT "n_r:", fluence->n_r);',
+            '	dbg_print_int(INDENT "n_z:", fluence->n_z);',
+            '	dbg_print_int(INDENT "n_t:", fluence->n_t);',
             '	dbg_print_size_t(INDENT "offset:", fluence->offset);',
             '	dbg_print_int(INDENT "k:", fluence->k);',
             '',
@@ -105,44 +126,43 @@ class Fluencet(mcobject.McObject):
             '',
             '#if MC_FLUENCE_MODE_RATE',
             'inline void mcsim_fluence_deposit_at(',
-            '	McSim *mcsim, mc_point3f_t const *position, ',
+            '	McSim *mcsim, mc_point3f_t const *position,',
             '	mc_fp_t weight, mc_fp_t mua){',
             '#else',
             'inline void mcsim_fluence_deposit_at(',
             '	McSim *mcsim, mc_point3f_t const *position, mc_fp_t weight){',
             '#endif',
-            '	mc_fp_t indexf_x, indexf_y, indexf_z, indexf_t;',
+            '	mc_fp_t indexf_r, indexf_z, indexf_t;',
             '	__mc_fluence_mem McFluence const *fluence = mcsim_fluence(mcsim);',
             '',
-            '	indexf_x = (position->x - fluence->top_left.x)*',
-            '		fluence->inv_step.x;',
-            '	indexf_y = (position->y - fluence->top_left.y)*',
-            '		fluence->inv_step.y;',
-            '	indexf_z = (position->z - fluence->top_left.z)*',
-            '		fluence->inv_step.z;',
-            '	indexf_t = (mcsim_optical_pathlength(mcsim)*FP_INV_C - ',
-            '		fluence->top_left.w)*fluence->inv_step.w;',
+            '	mc_fp_t dx = position->x - fluence->center.x;',
+            '	mc_fp_t dy = position->y - fluence->center.y;',
+            '	mc_fp_t r = mc_sqrt(dx*dx + dy*dy);',
             '',
-            '	if (indexf_t >= FP_0 && indexf_x >= FP_0 && ',
-            '			indexf_y >= FP_0 && indexf_z >= FP_0 &&',
-            '			indexf_x < fluence->shape.x && ',
-            '			indexf_y < fluence->shape.y && '
-            '			indexf_z < fluence->shape.z && ',
-            '			indexf_t < fluence->shape.w) {',
-            '		mc_size_t index, index_x, index_y, index_z, index_t;',
+            '	mc_fp_t dz = position->z - fluence->center.z;',
+            '	mc_fp_t dt = mcsim_optical_pathlength(mcsim)*FP_INV_C - fluence->t_min;',
             '',
-            '		index_x = mc_uint(indexf_x);',
-            '		index_y = mc_uint(indexf_y);',
+            '	indexf_r = r*fluence->inv_dr;',
+            '	indexf_z = dz*fluence->inv_dz;',
+            '	indexf_t = dt*fluence->inv_dt;',
+            '',
+            '	if (indexf_r >= 0 && indexf_z >= 0 && indexf_t >= 0 &&',
+            '			indexf_r < fluence->n_r && ',
+            '			indexf_z < fluence->n_z &&',
+            '			indexf_t < fluence->n_t){',
+            '		mc_size_t index, index_r, index_z, index_t;',
+            '		index_r = mc_uint(indexf_r);',
             '		index_z = mc_uint(indexf_z);',
             '		index_t = mc_uint(indexf_t);',
-            '		index = ((index_z*fluence->shape.y + index_y)*fluence->shape.x + index_x)*fluence->shape.w + index_t;',
+            '',
+            '		index = (index_z*fluence->n_r + index_r)*fluence->n_t + index_t;',
             '		#if MC_ENABLE_DEBUG',
-            '		mc_point4_t index_xyz = {index_x, index_y, index_z, index_t};',
+            '		mc_point3_t index_rzt = {index_r, index_z, index_t};',
             '		dbg_print("Fluence depositing:");',
-            '		dbg_print_float(INDENT     "weight                    :", weight);',
-            '		dbg_print_point4(INDENT    "voxel address (x, y, z, t):", &index_xyzt);',
-            '		dbg_print_int(INDENT       "flat index                :", index);',
-            '		dbg_print_size_t(INDENT    "offset                    :", fluence->offset);',
+            '		dbg_print_float(INDENT     "weight                 :", weight);',
+            '		dbg_print_point3(INDENT    "voxel address (r, z, t):", &index_rzt);',
+            '		dbg_print_int(INDENT       "flat index             :", index);',
+            '		dbg_print_size_t(INDENT    "offset                 :", fluence->offset);',
             '		#endif',
             '',
             '		#if MC_FLUENCE_MODE_RATE',
@@ -169,8 +189,9 @@ class Fluencet(mcobject.McObject):
                 ('MC_FLUENCE_MODE_RATE', self.mode == 'fluence'),
                 ('MC_TRACK_OPTICAL_PATHLENGTH', True)]
 
-    def __init__(self, xaxis: Axis or 'Fluencet', yaxis: Axis = None,
-                 zaxis: Axis = None, taxis: Axis = None,
+    def __init__(self, raxis: Axis or 'Fluence', zaxis: Axis = None,
+                 taxis: Axis = None,
+                 center: Tuple[float, float] = (0.0, 0.0),
                  mode: str = 'deposition'):
         '''
         Fluence object constructor. Default constructor disables the
@@ -178,15 +199,15 @@ class Fluencet(mcobject.McObject):
 
         Parameters
         ----------
-        xaxis: Axis or Fluencet
-            Axis that defines accumulators along the x axis.
-            If Fluencet instance, a new copy is created.
-        yaxis: Axis
-            Axis that defines accumulators along the y axis.
+        raxis: Axis or FluenceRzt
+            Axis that defines accumulators along the radial axis.
+            If Fluence instance, a new copy is created.
         zaxis: Axis
             Axis that defines accumulators along the z axis.
         taxis: Axis
             Axis that defines accumulators along the temporal axis.
+        center: Tuple[float, float]
+            Center of the polar accumulator in the x-y plane.
         mode: str from ('deposition', 'fluence')
             Mode that is used to accumulate the photon packet weight:
 
@@ -203,12 +224,12 @@ class Fluencet(mcobject.McObject):
         nphotons = 0
         k = mctypes.McFloat32.mc_fp_maxint
 
-        if isinstance(xaxis, Fluencet):
-            fluence = xaxis
-            xaxis = Axis(fluence.xaxis)
-            yaxis = Axis(fluence.yaxis)
+        if isinstance(raxis, FluenceRzt):
+            fluence = raxis
+            raxis = Axis(fluence.raxis)
             zaxis = Axis(fluence.zaxis)
             taxis = Axis(fluence.taxis)
+            center = fluence.center
             nphotons = fluence.nphotons
             mode = fluence.mode
             k = fluence.k
@@ -221,28 +242,25 @@ class Fluencet(mcobject.McObject):
                 'The value of mode parameter must be '
                 '"fluence" or "deposition" but got {}!'.format(mode))
 
-        if xaxis is None:
-            xaxis = Axis(-0.5, 0.5, 1)
-        if yaxis is None:
-            yaxis = Axis(-0.5, 0.5, 1)
+        if raxis is None:
+            raxis = Axis(0.0, 1.0, 1)
         if zaxis is None:
             zaxis = Axis(0.0, 1.0, 1)
         if taxis is None:
             taxis = Axis(0.0, 1.0, 1)
 
-        if xaxis.logscale:
-            raise ValueError('Fluence does not support logarithmic x axis!')
-        if yaxis.logscale:
-            raise ValueError('Fluence does not support logarithmic y axis!')
+        if raxis.logscale:
+            raise ValueError('FluenceRzt does not support logarithmic radial axis!')
         if zaxis.logscale:
-            raise ValueError('Fluence does not support logarithmic z axis!')
+            raise ValueError('FluenceRzt does not support logarithmic z axis!')
         if taxis.logscale:
-            raise ValueError('Fluence does not support logarithmic time axis!')
+            raise ValueError('FluenceRzt does not support logarithmic t axis!')
 
-        self._x_axis = xaxis
-        self._y_axis = yaxis
+        self._r_axis = raxis
         self._z_axis = zaxis
         self._t_axis = taxis
+        self._center = np.zeros((2,))
+        self._set_center(center)
 
         self._mode = mode
 
@@ -251,14 +269,14 @@ class Fluencet(mcobject.McObject):
 
         self._k = k
 
-        if self._x_axis.n*self._y_axis.n*self._z_axis.n*self._t_axis.n <= 0:
-            raise ValueError('Fluence accumulator array has one or more array '\
+        if self._r_axis.n*self._z_axis.n*self._t_axis.n <= 0:
+            raise ValueError('Fluence accumulator array has one or more array '
                              'dimensions equal to zero!')
 
     def _get_nphotons(self) -> int:
         return self._nphotons
     nphotons = property(_get_nphotons, None, None,
-                        'The number of photon packets that produced '\
+                        'The number of photon packets that produced '
                         'the raw data accumulator content.')
 
     def _get_mode(self) -> int:
@@ -276,55 +294,53 @@ class Fluencet(mcobject.McObject):
             Fluence configuration as a dictionary.
         '''
         return {
-            'type':'Fluencet',
-            'mode':self._mode,
-            'xaxis':self._x_axis.todict(),
-            'yaxis':self._y_axis.todict(),
-            'zaxis':self._z_axis.todict(),
-            'taxis':self._t_axis.todict()
+            'type': 'FluenceRzt',
+            'mode': self._mode,
+            'raxis': self._r_axis.todict(),
+            'zaxis': self._z_axis.todict(),
+            'taxis': self._t_axis.todict(),
+            'center': self._center.tolist()
         }
 
     @classmethod
-    def fromdict(cls, data: dict) -> 'Fluencet':
+    def fromdict(cls, data: dict) -> 'FluenceRzt':
         '''
         Create a Fluence instance from a dictionary.
 
         Parameters
         ----------
         data: dict
-            Dictionary created by the :py:meth:`Fluencet.todict` method.
+            Dictionary created by the :py:meth:`Fluence.todict` method.
         '''
         data_ = dict(data)
         fluence_type = data_.pop('type')
         if fluence_type != cls.__name__:
             raise TypeError('Expected "{}" type bot got "{}"!'.format(
                 cls.__name__, fluence_type))
-        x_axis = Axis.fromdict(data_.pop('xaxis'))
-        y_axis = Axis.fromdict(data_.pop('yaxis'))
+        r_axis = Axis.fromdict(data_.pop('raxis'))
         z_axis = Axis.fromdict(data_.pop('zaxis'))
         t_axis = Axis.fromdict(data_.pop('taxis'))
 
-        return cls(x_axis, y_axis, z_axis, t_axis, **data_)
+        return cls(r_axis, z_axis, t_axis, **data_)
 
-    def _get_shape(self) -> Tuple[int, int, int, int]:
-        return (self._z_axis.n, self._y_axis.n, self._x_axis.n, self._t_axis.n)
+    def _get_shape(self) -> Tuple[int, int, int]:
+        return (self._r_axis.n, self._z_axis.n, self._t_axis.n)
     shape = property(_get_shape, None, None, 'Fluence array shape.')
 
-    def _get_x(self) -> np.ndarray:
-        return self._x_axis.centers
-    x = property(_get_x, None, None, 'Accumulator centers along the x axis.')
+    def _get_center(self) -> np.ndarray:
+        return self._center
+    def _set_center(self, center: np.ndarray or Tuple[float, float]):
+        self._center[:] = center
+    center = property(_get_center, _set_center, None,
+                      'Center of the polar coordinate system in the x-y plane.')
 
-    def _get_dx(self) -> np.ndarray:
-        return abs(self._x_axis.step)
-    dx = property(_get_dx, None, None, 'The size of voxels along the x axis.')
+    def _get_r(self) -> np.ndarray:
+        return self._r_axis.centers
+    r = property(_get_r, None, None, 'Accumulator centers along the r axis.')
 
-    def _get_y(self) -> np.ndarray:
-        return self._y_axis.centers
-    y = property(_get_y, None, None, 'Accumulator centers along the y axis.')
-
-    def _get_dy(self) -> np.ndarray:
-        return abs(self._y_axis.step)
-    dy = property(_get_dy, None, None, 'The size of voxels along the y axis.')
+    def _get_dr(self) -> np.ndarray:
+        return abs(self._r_axis.step)
+    dr = property(_get_dr, None, None, 'The size of voxels along the r axis.')
 
     def _get_z(self) -> np.ndarray:
         return self._z_axis.centers
@@ -334,6 +350,7 @@ class Fluencet(mcobject.McObject):
         return abs(self._z_axis.step)
     dz = property(_get_dz, None, None, 'The size of voxels along the z axis.')
 
+
     def _get_t(self) -> np.ndarray:
         return self._t_axis.centers
     t = property(_get_t, None, None, 'Accumulator centers along the t axis.')
@@ -342,15 +359,10 @@ class Fluencet(mcobject.McObject):
         return abs(self._t_axis.step)
     dt = property(_get_dt, None, None, 'The size of voxels along the t axis.')
 
-    def _get_x_axis(self) -> Axis:
-        return self._x_axis
-    xaxis = property(_get_x_axis, None, None,
-                     'Accumulator axis object along the x axis.')
-
-    def _get_y_axis(self) -> Axis:
-        return self._y_axis
-    yaxis = property(_get_y_axis, None, None,
-                     'Accumulator axis object along the y axis.')
+    def _get_r_axis(self) -> Axis:
+        return self._r_axis
+    raxis = property(_get_r_axis, None, None,
+                     'Accumulator axis object along the r axis.')
 
     def _get_z_axis(self) -> Axis:
         return self._z_axis
@@ -377,10 +389,12 @@ class Fluencet(mcobject.McObject):
                    'Raw fluence accumulator data if any.')
 
     def _get_data(self):
-        k = 1.0/(max(self.nphotons, 1)*self.dx*self.dy*self.dz*self.dt)
+        A = np.pi*(self._r_axis.edges[1:]**2 - self._r_axis.edges[:-1]**2)
+        k = 1.0/(self.nphotons*A*self.dz*self.dt)
+        k.shape = (1, k.size, 1)
         return self._data*k
     data = property(_get_data, None, None,
-                    'Fluence accumulator - deposition or fluence rate.')
+                    'FluenceRzt accumulator - deposition or fluence rate.')
 
     def update_data(self, mc: mcobject.McObject,
                     data: Dict[np.dtype, List[np.ndarray]],
@@ -411,13 +425,13 @@ class Fluencet(mcobject.McObject):
             self._data.shape = self.shape
             self._nphotons = nphotons
 
-    def update(self, obj : 'Fluencet'):
+    def update(self, obj : 'FluenceRzt'):
         '''
         Update the fluence accumulator with data from the given fluence object.
 
         Parameters
         ----------
-        obj: Fluencet
+        obj: FluenceRzt
             Update the fluence accumulator of this instance with the data
             from fluence instance obj.
         '''
@@ -436,14 +450,14 @@ class Fluencet(mcobject.McObject):
             -> cltypes.Structure:
         '''
         Fills the structure (target) with the data required by the
-        Monte Carlo simulator. See the :py:meth:`Fluencet.cl_type` for a detailed
-        list of fields.
+        Monte Carlo simulator. See the :py:meth:`FluenceRzt.cl_type`
+        for a detailed list of fields.
 
         Parameters
         ----------
         mc: mcobject.McObject
             Monte Carlo simulator instance.
-        target: ClFluencet
+        target: ClFluenceRzt
             CStructure that is filled with the source data.
         buffer: np.ndarray
             Accumulator buffer or None. Should be checked for proper size. Use
@@ -452,7 +466,7 @@ class Fluencet(mcobject.McObject):
 
         Returns
         -------
-        target:  ClFluencet
+        target:  ClFluenceRzt
             Filled structure received as an input argument or a new
             instance if the input argument target is None.
         '''
@@ -463,26 +477,31 @@ class Fluencet(mcobject.McObject):
         allocation = mc.cl_allocate_rw_accumulator_buffer(self, self.shape)
         target.offset = allocation.offset
 
-        target.top_left.x = self._x_axis.start
-        target.top_left.y = self._y_axis.start
-        target.top_left.z = self._z_axis.start
-        target.top_left.w = self._t_axis.start
+        target.center.x = self._center[0]
+        target.center.y = self._center[1]
+        target.center.z = self._z_axis.start
 
-        target.inv_step.x = 1.0/self._x_axis.step
-        target.inv_step.y = 1.0/self._y_axis.step
-        target.inv_step.z = 1.0/self._z_axis.step
-        target.inv_step.w = 1.0/self._t_axis.step
+        target.t_min = self._t_axis.start
 
-        target.shape.x = self._x_axis.n
-        target.shape.y = self._y_axis.n
-        target.shape.z = self._z_axis.n
-        target.shape.w = self._t_axis.n
+        inv_dr = 0.0
+        if self._r_axis.step != 0.0:
+            inv_dr = 1.0/self._r_axis.step
+            
+        #target.r_log_scale = self._r_axis.logscale
+
+        target.inv_dr = inv_dr
+        target.inv_dz = 1.0/self._z_axis.step
+        target.inv_dt = 1.0/self._t_axis.step
+
+        target.n_r = self._r_axis.n
+        target.n_z = self._z_axis.n
+        target.n_t = self._t_axis.n
 
         target.k = self._k
 
         return target
 
-    def plot(self, scale: str = 'log', axis: str ='z', autoscale: bool = True,
+    def plot(self, scale: str = 'log', autoscale: bool = True,
              show: bool = True):
         '''
         Show fluence slices or integral projections.
@@ -491,87 +510,40 @@ class Fluencet(mcobject.McObject):
         ----------
         scale: str
             Data scaling can be "log" for logarithmic or "lin" for linear.
-        axis: str
-            The axis of slicing ("x", "y" or "z") or a projection along the
-            selected coordinate axis ("xproj", "yproj", "zproj").
-            Alternatively, specify the projection plane as one of
-            ("xy", "xz", or "yz").
         autoscale: bool
             Scale the color coding of individual slices to the corresponding
             range of weights. If True, the color coding changes from slice
             to slice.
         show: bool 
         '''
-        from xopto.util import sliceview
+        import matplotlib.pyplot as pp
 
         data = self.data
 
-        if axis == 'xy': axis = 'zproj'
-        if axis == 'xz': axis = 'yproj'
-        if axis == 'yz': axis = 'xproj'
-
-        ax = {'z':0, 'y':1, 'x':2}.get(axis[0], 0)
         logscale = scale == 'log'
 
-        fig = None
+        title = 'Slice {{slice}}/{} @ {} = {{pos:.1f}} ps'.format(
+            data.shape[2], 't')
 
-        if ax == 0:
-            extent = [self._x_axis.start, self._x_axis.stop,
-                      self._y_axis.start, self._y_axis.stop]
-            slices = self._z_axis.centers
-            xlabel, ylabel = 'x', 'y'
-        elif ax == 1:
-            extent = [self._x_axis.start, self._x_axis.stop,
-                      self._z_axis.start, self._z_axis.stop]
-            slices = self._y_axis.centers
-            xlabel, ylabel = 'x', 'z'
-        elif ax == 2:
-            extent = [self._y_axis.start, self._y_axis.stop,
-                      self._z_axis.start, self._z_axis.stop]
-            slices = self._x_axis.centers
-            xlabel, ylabel = 'y', 'z'
+        extent = [self._r_axis.start, self._r_axis.stop,
+                  self._z_axis.start, self._z_axis.stop]
 
-        window_title = 'Fluence SliceView - {} mode'.format(self.mode)
+        sv = sliceview.SliceView(
+            data, axis=2, slices=self.t*1e12,
+            slice_label='Time', slice_valfmt='%.1f ps',
+            title=title, logscale=logscale,
+            extent=extent, xlabel='r', ylabel='z', origin='lower',
+            autoscale=autoscale, aspect='auto')
 
-        if axis in ('xproj', 'yproj', 'zproj'):
-            import matplotlib.pyplot as pp
-
-            title = 'Slice {{slice}}/{} @ {} = {{pos:.1f}} ps'.format(
-                data.shape[-1], axis)
-
-            data_slice = data.sum(axis=ax)
-            low = data_slice.min()
-
-            sv = sliceview.SliceView(
-                data_slice, axis=2, slices=self.t*1e12,
-                slice_label='Time', slice_valfmt='%.1f ps',
-                title=title, logscale=logscale,
-                extent=extent, xlabel=xlabel, ylabel=ylabel, origin='lower',
-                autoscale=autoscale, aspect='auto')
-
-            sv.fig.canvas.manager.set_window_title(window_title)
-            if show:
-                pp.show()
-
-        else:
-            title = 'Slice {{slice1}}/{} @ {} = {{pos1:.6f}}'.format(
-                data.shape[ax], axis)
-
-            sv = sliceview.DualSliceView(
-                data,
-                axis1=3, slices1=self.t*1e12, slice1_label='Time',
-                slice1_valfmt='%.1f ps',
-                axis2=ax, slices2=slices, slice2_label='Slice {}'.format(axis),
-                title=title, logscale=logscale,
-                extent=extent, xlabel=xlabel, ylabel=ylabel, origin='lower',
-                autoscale=autoscale, aspect='auto')
-            sv.fig.canvas.manager.set_window_title(window_title)
-            if show:
-                sv.show()
+        sv.fig.canvas.manager.set_window_title('FluenceRzt View')
+        if show:
+            pp.show()
 
     def __str__(self):
-        return "Fluencet(xaxis={}, yaxis={}, zaxis={}, taxis={})".format(
-            self._x_axis, self._y_axis, self._z_axis, self._t_axis)
+        return "FluenceRzt(raxis={}, zaxis={}, taxis={}, "\
+               "center=({}, {}))".format(
+                   self._r_axis, self._z_axis, self._t_axis,
+                   self._center[0], self._center[1])
 
     def __repr__(self):
         return self.__str__() + \

@@ -570,7 +570,7 @@ class FluenceCyl(mcobject.McObject):
                 else:
                     data_slice = np.log(data_slice + 1.0)
 
-            pp.imshow(data_slice, extent=extent, origin='lower')
+            pp.imshow(data_slice, extent=extent, origin='lower', aspect='auto')
             pp.xlabel(xlabel)
             pp.ylabel(ylabel)
             pp.title('Integral projection along the {:s} axis'.format(axis[0]))
@@ -582,10 +582,17 @@ class FluenceCyl(mcobject.McObject):
         else:
             r, fi = self.r, self.fi
             R, Fi = np.meshgrid(r, fi, indexing='ij')
+            polar = ax == 0
+            if polar:
+                # axis order must be (r, fi, z) but is currently (fi, r, z)
+                data = np.transpose(data, (1, 0, 2))
+
             sv = sliceview.SliceViewCyl(
-                data, axis=ax, slices=slices, title=title, logscale=logscale,
+                data, axis=ax, slices=slices,
+                polar=polar,
+                title=title, logscale=logscale,
                 extent=extent, xlabel=xlabel, ylabel=ylabel, origin='lower',
-                autoscale=autoscale, R=R, Fi=Fi)
+                autoscale=autoscale, R=R, Fi=Fi, aspect='auto')
             sv.fig.canvas.manager.set_window_title(window_title)
             if show:
                 sv.show()

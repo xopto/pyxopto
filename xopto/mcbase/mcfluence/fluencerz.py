@@ -50,9 +50,9 @@ class FluenceRz(mcobject.McObject):
                 Inverse spacings of the fluence accumulators in the z
                 axis.
             n_r: McTypes.cl_int
-                Size of the accumulator along the r axis.
+                Number of accumulators along the r axis.
             n_z: McTypes.cl_int
-                Size of the accumulator along the z axis.
+                Number of the accumulators along the z axis.
             offset: McTypes.mc_int_t
                 Offset of the first element of the fluence accumulator buffer.
             k: McTypes.cl_float
@@ -451,8 +451,7 @@ class FluenceRz(mcobject.McObject):
 
         return target
 
-    def plot(self, scale: str = 'log', axis: str ='z', autoscale: bool = True,
-             show: bool = True):
+    def plot(self, scale: str = 'log', show: bool = True):
         '''
         Show fluence slices or integral projections.
 
@@ -460,15 +459,6 @@ class FluenceRz(mcobject.McObject):
         ----------
         scale: str
             Data scaling can be "log" for logarithmic or "lin" for linear.
-        axis: str
-            The axis of slicing ("x", "y" or "z") or a projection along the
-            selected coordinate axis ("xproj", "yproj", "zproj").
-            Alternatively, specify the projection plane as one of
-            ("xy", "xz", or "yz").
-        autoscale: bool
-            Scale the color coding of individual slices to the corresponding
-            range of weights. If True, the color coding changes from slice
-            to slice.
         show: bool 
         '''
         import matplotlib.pyplot as pp
@@ -484,9 +474,9 @@ class FluenceRz(mcobject.McObject):
         fig = pp.figure()
 
         extent = [self._r_axis.start, self._r_axis.stop,
-                    self._z_axis.start, self._z_axis.stop]
+                  self._z_axis.start, self._z_axis.stop]
 
-        pp.imshow(data, extent=extent, origin='lower')
+        pp.imshow(data, extent=extent, origin='lower', aspect='auto')
         pp.xlabel('r')
         pp.ylabel('z')
         fig.canvas.manager.set_window_title('FluenceRz View')

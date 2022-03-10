@@ -25,8 +25,11 @@ import typing
 from .fluence import Fluence
 from .fluencet import Fluencet
 from .fluencerz import FluenceRz
+from .fluencerzt import FluenceRzt
 from .fluencecyl import FluenceCyl
+from .fluencecylt import FluenceCylt
 
 from xopto.mcbase.mcutil.axis import Axis
 
-FLUENCE_TYPE = typing.Union[Fluence, FluenceCyl, FluenceRz, Fluencet]
+FLUENCE_TYPE = typing.Union[Fluence, FluenceCyl, FluenceRz,
+                            Fluencet, FluenceRzt, FluenceCylt]

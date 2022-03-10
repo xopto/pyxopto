@@ -510,7 +510,7 @@ class Fluence(mcobject.McObject):
                 else:
                     data_slice = np.log(data_slice + 1.0)
 
-            pp.imshow(data_slice, extent=extent, origin='lower')
+            pp.imshow(data_slice, extent=extent, origin='lower', aspect='auto')
             pp.xlabel(xlabel)
             pp.ylabel(ylabel)
             pp.title('Integral projection along the {:s} axis'.format(axis[0]))
@@ -523,7 +523,7 @@ class Fluence(mcobject.McObject):
             sv = sliceview.SliceView(
                 data, axis=ax, slices=slices, title=title, logscale=logscale,
                 extent=extent, xlabel=xlabel, ylabel=ylabel, origin='lower',
-                autoscale=autoscale)
+                autoscale=autoscale, aspect='auto')
             sv.fig.canvas.manager.set_window_title(window_title)
             if show:
                 sv.show()
