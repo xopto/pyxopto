@@ -53,7 +53,7 @@ CONFIG = {
 
     'sample':{
         '1-layer-100mm': {
-            'name': '1-layer-100mm',
+            'dir': '1-layer-100mm',
             'layers': [
                 {'d': 'np.inf', 'n': RI_AIR, 'mua': 0.0, 'mus': 0.0, 'g': 0.0},
                 {'d': 100.0e-3, 'n': RI_WATER, 'mua': 0.0, 'mus': 0.0, 'g': 0.0},
@@ -64,7 +64,7 @@ CONFIG = {
             'g': (0.1, 0.5, 0.9),
         },
         '1-layer-1mm': {
-            'name': '1-layer-1mm',
+            'dir': '1-layer-1mm',
             'layers': [
                 {'d': 'np.inf', 'n': RI_AIR, 'mua': 0.0, 'mus': 0.0, 'g': 0.0},
                 {'d': 1.0e-3, 'n': RI_WATER, 'mua': 0.0, 'mus': 0.0, 'g': 0.0},
@@ -191,6 +191,50 @@ def render_mcml_comparison(target_dir: str = None, config: dict = None,
                 with open(rendered_filename, 'w') as fid:
                     fid.write(out)
 
+def path(sample: str, g: float, mua: float, musr: float,
+         mcvox: bool = False) -> str:
+    '''
+    Returns path to a dataset file relative to the root directory of the
+    dataset.
+
+    Parameters
+    ----------
+    sample: str
+        One of the sample configurations defined in CONFIG.
+    g: float
+        Scattering phase function anisotropy.
+    mua: float
+        Absorption coefficient (1/m).
+    musr: float
+        Reduced scattering coefficient (1/m).
+    mcvox: bool
+        Indicates if the dataset produced by the voxelized MC should be loaded.
+
+    Returns
+    -------
+    pats: str
+        Path to the dataset file relative to the toot directory of the dataset.
+    '''
+    if sample not in CONFIG['sample']:
+        raise ValueError(
+            'The sample argument must be one of {} but got "{}"!'.format(
+                CONFIG['sample'].keys(), sample
+            )
+        )
+    if g not in CONFIG['sample'][sample]['g']:
+        raise ValueError(
+            'The g parameter must be one of {} but got "{}"!'.format(
+                CONFIG['sample'][sample]['g'], g
+            )
+    )
+    dir = 'mcml_comparison' if not mcvox else 'mcml_mcvox_comparison'
+    data_dir = os.path.join('data', dir, CONFIG['sample'][sample]['name'],
+                            'line', 'radial', 'hg', PF_DIR_FORMAT(g))
+
+    filename = FILENAME_FORMAT(mua, musr)
+
+    return os.path.join(data_dir, filename)
+
 def load(sample: str, g: float, mua: float, musr: float,
          mcvox: bool = False, dataset_dir: str = None)-> dict:
     '''
@@ -218,29 +262,11 @@ def load(sample: str, g: float, mua: float, musr: float,
     data: dict
         Sample data.
     '''
-    if dataset_dir is None or not dataset_dir:
-        dataset_dir = os.getcwd()
+    rel_filename = path(sample, g, mua, musr, mcvox)
 
-    if sample not in CONFIG['sample']:
-        raise ValueError(
-            'The sample argument must be one of {} but got "{}"!'.format(
-                CONFIG['sample'].keys(), sample
-            )
-        )
-    if g not in CONFIG['sample'][sample]['g']:
-        raise ValueError(
-            'The g parameter must be one of {} but got "{}"!'.format(
-                CONFIG['sample'][sample]['g'], g
-            )
-    )
-    dir = 'mcml_comparison' if not mcvox else 'mcml_mcvox_comparison'
-    data_dir = os.path.join(
-        dataset_dir, 'data', dir, CONFIG['sample'][sample]['name'],
-        'line', 'radial', 'hg', PF_DIR_FORMAT(g))
+    full_filename = os.path.join(dataset_dir, rel_filename)
 
-    filename = FILENAME_FORMAT(mua, musr)
-
-    return dict(np.load(os.path.join(data_dir, filename), allow_pickle=True))
+    return dict(np.load(full_filename, allow_pickle=True))
 
 def visualize(sample: str, g: float, mua: float, musr: float,
               mcvox: bool = False, dataset_dir: str = None) -> dict:

@@ -114,7 +114,7 @@ for g in g_values:
     mc_obj.materials[1].pf.g = g
     pf_param_dir = PF_DIR_FORMAT(g)
     save_dir = os.path.join(STORAGE_ROOT,
-                            'mcml_mcvox_comparison', '{{ sample.name }}',
+                            'mcml_mcvox_comparison', '{{ sample.dir }}',
                             'line', 'radial', 'hg', pf_param_dir)
     os.makedirs(save_dir, exist_ok=True)
 
