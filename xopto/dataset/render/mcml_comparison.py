@@ -92,6 +92,9 @@ CONFIG = {
         },
     }
 }
+'''
+MCML comparison dataset configuration.
+'''
 
 def render_mcml_comparison(target_dir: str = None, config: dict = None,
                            cl_device: str = None, cl_index: int = 0,
