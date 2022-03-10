@@ -25,6 +25,7 @@ xopto/dataset/template/mcml/__pycache__
 xopto/dataset/template/mcvox/__pycache__
 xopto/dataset/template/sv/__pycache__
 xopto/dataset/render/__pycache__
+xopto/dataset/validation/__pycache__
 
 xopto/diffusion/__pycache__
 
@@ -105,6 +106,9 @@ xopto/util/__pycache__
 xopto/util/animation/__pycache__
 xopto/util/animation/sv/__pycache__
 xopto/util/animation/sv/fiber/__pycache__
+
+xopto/util/widgets
+xopto/util/widgets/__pycache__
 
 build
 dist
