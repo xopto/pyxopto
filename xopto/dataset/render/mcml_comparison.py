@@ -75,7 +75,7 @@ CONFIG = {
             'g': (0.1, 0.5, 0.9),
         },
         '2-layer-100um-1mm': {
-            'name': '2-layer-100um-1mm',
+            'dir': '2-layer-100um-1mm',
             'layers': [
                 {'d': 'np.inf', 'n': RI_AIR,
                  'mua': 0.0, 'mus': 0.0, 'g': 0.0},
@@ -228,7 +228,7 @@ def path(sample: str, g: float, mua: float, musr: float,
             )
     )
     dir = 'mcml_comparison' if not mcvox else 'mcml_mcvox_comparison'
-    data_dir = os.path.join('data', dir, CONFIG['sample'][sample]['name'],
+    data_dir = os.path.join('data', dir, CONFIG['sample'][sample]['dir'],
                             'line', 'radial', 'hg', PF_DIR_FORMAT(g))
 
     filename = FILENAME_FORMAT(mua, musr)
