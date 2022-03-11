@@ -42,7 +42,6 @@ The following are time-resolved variants of the above fluence detectors:
 * :py:class:`~xopto.mcbase.mcfluence.fluencecyl.FluenceCylt` - Implementation in Cartesian coordinates wit additional temporal axis :math:`(x, y, z, t)`.
 * :py:class:`~xopto.mcbase.mcfluence.fluencet.Fluencet` - Implementation in Cartesian coordinates wit additional temporal axis :math:`(x, y, z, t)`.
 
-
 The observed volume voxelization is axis-aligned and allows independent
 adjustment of the voxel size along the x, y and z axis for
 :py:class:`~xopto.mcbase.mcfluence.fluence.Fluence`, along r, φ and z axis for .

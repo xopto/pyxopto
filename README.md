@@ -23,7 +23,7 @@ of light propagation in turbid media using massively parallel processing on a wi
 model with an embedded blood vessel.*
 
 ![Time-resolved deposition](/docs/source/static/animation/deposition_tr.gif)
-<br>*Time-resolved energy deposition simulation for a medium with an absorbing cylindrical inclusion that has a lower refractive index then the surrounding medium.*
+<br>*Time-resolved energy deposition simulation for a voxelized medium with an absorbing cylindrical inclusion that has a lower refractive index then the surrounding medium.*
 
 # Documentation
 
