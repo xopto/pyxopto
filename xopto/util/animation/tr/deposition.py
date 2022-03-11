@@ -175,11 +175,11 @@ def tr_deposition(filename: str, config: dict = None,
     batch_packets = config['batch_packets']
     while packets_launched < num_packets:
         n_launch = min(batch_packets, num_packets - packets_launched)
-        results = mc_obj.run(n_launch, out=results)
-        packets_launched += n_launch
         if verbose:
             print('    Launched {:,d}/{:,d} packets'.format(
                 packets_launched, num_packets), end='\r')
+        results = mc_obj.run(n_launch, out=results)
+        packets_launched += n_launch
     
     _, fluence_res, _ = results
     result = {

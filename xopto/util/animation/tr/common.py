@@ -39,7 +39,7 @@ def create_deposition_animation_xz(
         fps: float = None, duration: float = None,
         axis_off: bool = False, title: str = None,
         autoscale: bool = True, writer: str or mpl.animation.MovieWriter = None,
-        verbose: bool = False) -> FuncAnimation:
+        dpi: int = None, verbose: bool = False) -> FuncAnimation:
     '''
     Creates a continuous animation of the sampling volume projected
     onto the x-z plane.
@@ -69,6 +69,8 @@ def create_deposition_animation_xz(
         Independently autoscale the intensity of each frame.
     writer: str or mpl.animation.MovieWriter
         Movie writer.
+    dpi: int
+        Resolution of the exported images.
     verbose: bool
         Turns on verbose progress report.
 
@@ -122,8 +124,9 @@ def create_deposition_animation_xz(
         xlabel='$x$ (mm)', ylabel='$z$ (mm)', axis_off=axis_off,
         autoscale=autoscale, fps=fps, duration=duration,
         writer=writer, verbose=verbose,
-        cbar=True, cbar_tick_format='{:.1f}',
-        cbar_label='($\\mathrm{{m}}^{{3}}\\mathrm{{s}})^{-1}$')
+        cbar=True, cbar_tick_format='{:.0f}',
+        cbar_label='($\\mathrm{{m}}^{{3}}\\mathrm{{s}})^{-1}$',
+        dpi=dpi)
 
 
 def mc_tr_deposition_cli(description: str = None,
@@ -170,6 +173,8 @@ def mc_tr_deposition_cli(description: str = None,
             Apply logarithmic scale to the deposition data.
         - axis_off: bool
             Turns off the plot axis in animation.
+        - dpi: int
+            Resolution of the exported images.
         - opencl_device: str
             OpenCL device to use for the simulations.
         - opencl_index: int
@@ -226,6 +231,9 @@ def mc_tr_deposition_cli(description: str = None,
         help='Disable independent automatic intensity scaling of the '
              'individual frames in the animation.')
     parser.add_argument(
+        '--dpi', dest='dpi', type=int, default=0,
+        help='Resolution of the exported images. Set to 0 for default.')
+    parser.add_argument(
         '-d', '--device', dest='opencl_device', default='', type=str,
         help='OpenCL device to use for the simulations.')
     parser.add_argument(
@@ -253,6 +261,9 @@ def mc_tr_deposition_cli(description: str = None,
     inclusion_n = args.inclusion_n
     if inclusion_n < 1.0:
         inclusion_n = None
+    dpi = args.dpi
+    if dpi <= 0:
+        dpi = None
 
     return {'filename': filename,
             'num_packets': num_packets,
@@ -268,6 +279,7 @@ def mc_tr_deposition_cli(description: str = None,
             'opencl_device': args.opencl_device,
             'opencl_index': args.opencl_index,
             'logscale': args.logscale,
+            'dpi': dpi,
             'inclusion_n': inclusion_n,}, args
 
 def main(sim_task: callable, ani_task: callable, config: dict):

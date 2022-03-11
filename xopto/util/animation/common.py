@@ -43,6 +43,7 @@ def create_frame_animation(frames: np.ndarray, filename: str = None,
                            autoscale: bool = True,
                            imshow_kwargs: dict = None,
                            writer: str or mpl.animation.MovieWriter = None,
+                           dpi: int = None,
                            verbose: bool = False) -> FuncAnimation:
     '''
     Creates a continuous animation of frames.
@@ -93,6 +94,8 @@ def create_frame_animation(frames: np.ndarray, filename: str = None,
         Movie writer.
     imshow_kwargs: dict
         Additional keyword arguments for pyplot.imshow.
+    dpi: int
+        Resolution of the exported images.
     verbose: bool
         Turns on verbose progress report.
 
@@ -128,7 +131,7 @@ def create_frame_animation(frames: np.ndarray, filename: str = None,
     if not autoscale:
         imshow_kwargs.update({'vmin': vmin, 'vmax': vmax})
 
-    fig, ax = pp.subplots()
+    fig, ax = pp.subplots(dpi=dpi)
     img = ax.imshow(frames[0], **imshow_kwargs)
     if cbar:
         colorbar = pp.colorbar(img)

@@ -89,6 +89,27 @@ xopto/mcvox/test/reference/__pycache__
 xopto/mcvox/test/reference/old_format
 xopto/mcvox/types/__pycache__
 
+
+xopto/mccyl/__pycache__
+xopto/mccyl/cltypes/__pycache__
+xopto/mccyl/kernel/__pycache__
+xopto/mccyl/mcdetector/__pycache__
+xopto/mccyl/mcdetector/probe/__pycache__
+xopto/mccyl/mcfluence/__pycache__
+xopto/mccyl/mclayer/__pycache__
+xopto/mccyl/mcobject/__pycache__
+xopto/mccyl/mcoptions/__pycache__
+xopto/mccyl/mcpf/__pycache__
+xopto/mccyl/mcrun/__pycache__
+xopto/mccyl/mcsource/__pycache__
+xopto/mccyl/mcsurface/__pycache__
+xopto/mccyl/mcsurface/probe/__pycache__
+xopto/mccyl/mcsv/__pycache__
+xopto/mccyl/mctrace/__pycache__
+xopto/mccyl/mctypes/__pycache__
+xopto/mccyl/mcutil/__pycache__
+xopto/mccyl/test/__pycache__
+
 xopto/pf/__pycache__
 xopto/pf/util/__pycache__
 
@@ -98,6 +119,7 @@ xopto/src/rng/__pycache__
 xopto/test/__pycache__
 xopto/test/mcml/__pycache__
 xopto/test/mcvox/__pycache__
+xopto/test/mccyl/__pycache__
 
 xopto/tmp
 !xopto/tmp/.gitkeep
@@ -122,14 +144,11 @@ maintenance
 tmp
 
 doc
-docs/source/mccyl
-docs/source/images/examples/mccyl
+
 docs/build
 docs/_build
 docs/apidoc
 docs/__pycache__
-
-xopto/mccyl
 
 .vscode
 .pypirc

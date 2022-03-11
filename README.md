@@ -22,6 +22,9 @@ of light propagation in turbid media using massively parallel processing on a wi
 *A sequence of voxelized simulations of energy deposition in a 2-layer skin
 model with an embedded blood vessel.*
 
+![Time-resolved deposition](/docs/source/static/animation/deposition_tr.gif)
+<br>*Time-resolved energy deposition simulation for a medium with an absorbing cylindrical inclusion that has a lower refractive index then the surrounding medium.*
+
 # Documentation
 
 Full documentation of PyXOpto is available [here](https://xopto.github.io/pyxopto/).
@@ -88,12 +91,12 @@ computing, data management and visualization ([SciPy](https://scipy.org),
 [NumPy](https://numpy.org), [Matplotlib](https://matplotlib.org),
 [Pandas](https://pandas.pydata.org), etc.).
 
-*Summary of the PyXOpto Docker images.*
+*Summary of the latest PyXOpto Docker images.*
 | Image                                                                                                      | Tag    | PyXOpto | OS           | CUDA  | CUDNN |
 |------------------------------------------------------------------------------------------------------------|--------|---------|--------------|-------|-------|
-| [xopto/pyxopto-intel-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-intel-jupyter)        | v0.1.0 | 0.1.0   | Ubuntu 20.04 | -     | -     | 
-| [xopto/pyxopto-nvidia-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter)      | v0.1.0 | 0.1.0   | Ubuntu 20.04 | 11.03 | 8     |
-| [xopto/pyxopto-intel-jupyter-dl](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter-dl) | v0.1.0 | 0.1.0   | Ubuntu 20.04 | 11.03 | 8     |
+| [xopto/pyxopto-intel-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-intel-jupyter)        | v0.2.0 | 0.2.0   | Ubuntu 20.04 | -     | -     | 
+| [xopto/pyxopto-nvidia-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter)      | v0.2.0 | 0.2.0   | Ubuntu 20.04 | 11.03 | 8     |
+| [xopto/pyxopto-intel-jupyter-dl](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter-dl) | v0.2.0 | 0.2.0   | Ubuntu 20.04 | 11.03 | 8     |
 
 
 The [xopto/pyxopto-nvidia-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter), and [xopto/pyxopto-nvidia-jupyter-dl](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter) Docker images can be run by executing the following command:

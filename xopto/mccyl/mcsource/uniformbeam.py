@@ -1,0 +1,320 @@
+# -*- coding: utf-8 -*-
+################################ Begin license #################################
+# Copyright (C) Laboratory of Imaging technologies,
+#               Faculty of Electrical Engineering,
+#               University of Ljubljana.
+#
+# This file is part of PyXOpto.
+#
+# PyXOpto is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# PyXOpto is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
+################################# End license ##################################
+
+from typing import Tuple
+
+import numpy as np
+
+from xopto.mccyl.mcsource.base import Source
+from xopto.mccyl import cltypes, mcobject, mctypes
+from xopto.mccyl.mcutil import boundary, geometry
+
+
+class UniformBeam(Source):
+    @staticmethod
+    def cl_type(mc: mcobject.McObject) -> cltypes.Structure:
+        T = mc.types
+        class ClUniformBeam(cltypes.Structure):
+            '''
+            Structure that is passed to the Monte carlo simulator kernel.
+            
+            Parameters
+            ----------
+            mc: McObject
+                A Monte Carlo simulator instance.
+
+            Returns
+            -------
+            struct: cltypes.Structure
+                A structure type that represents the uniform beam in
+                the Monte Carlo kernel.
+
+            Fields
+            ------
+            transformation: mc_matrix3f_t
+                Transformation from the beam coordinate system to the Monte
+                Carlo coordinate system.
+            position: mc_point3f_t
+                Source position (beam axis).
+            direction: mc_point3f_t
+                Source direction (beam axis) in the sample medium (after
+                refraction).
+            radius: mc_point2f_t
+                Ellipse radii along the x and y axis. Use equal values for a
+                circular beam.
+            '''
+            _fields_ = [
+                ('transformation', T.mc_matrix3f_t),
+                ('position', T.mc_point3f_t),
+                ('direction', T.mc_point3f_t),
+                ('radius', T.mc_point2f_t),
+            ]
+        return ClUniformBeam
+
+    @staticmethod
+    def cl_declaration(mc: mcobject.McObject) -> str:
+        '''
+        Structure that defines the source in the Monte Carlo simulator.
+        '''
+        return '\n'.join((
+            'struct MC_STRUCT_ATTRIBUTES McSource{',
+            '	mc_matrix3f_t transformation;',
+            '	mc_point3f_t position;',
+            '	mc_point3f_t direction;',
+            '	mc_point2f_t radius;',
+            '};'
+        ))
+
+    @staticmethod
+    def cl_implementation(mc: mcobject.McObject) -> str:
+        '''
+        Implementation of the source in the Monte Carlo simulator.
+        '''
+        return  '\n'.join((
+            'void dbg_print_source(__mc_source_mem const McSource *src){',
+            '	printf("UniformBeam source:\\n");',
+            '	printf(INDENT "position: (%.3f, %.3f, %.3f) mm\\n",',
+            '		src->position.x*1e3f, src->position.y*1e3f, src->position.z*1e3f);',
+            '	printf(INDENT "direction: (%.3f, %.3f, %.3f)\\n",',
+            '		src->direction.x, src->direction.y, src->direction.z);',
+            '	printf(INDENT "radius: (%.3f, %.3f) mm\\n", src->radius.x*1e3f, src->radius.y*1e3f);',
+            '};',
+            '',
+            'inline void mcsim_launch(McSim *mcsim){',
+            '   __mc_source_mem const struct McSource *source = mcsim_source(mcsim);',
+            '	mc_point3f_t pt_src, initial_pos;',
+            '	mc_fp_t initial_weight = FP_1;',
+            '	mc_size_t layer_index = 1;',
+            '	mc_point3f_t source_dir = source->direction;',
+            '	mc_point3f_t initial_dir = source->direction;',
+            '',
+            '	mc_fp_t sin_fi, cos_fi;',
+            '	mc_fp_t rand_sqrt = mc_sqrt(mcsim_random(mcsim));',
+            '	mc_sincos(FP_2PI*mcsim_random(mcsim), &sin_fi, &cos_fi);',
+            '',
+            '	pt_src.x = rand_sqrt*cos_fi*source->radius.x;',
+            '	pt_src.y = rand_sqrt*sin_fi*source->radius.y;',
+            '	pt_src.z = FP_0;',
+            '',
+            '	transform_point3f(',
+            '		&source->transformation, &pt_src, &initial_pos);',
+            '	initial_pos.x += source->position.x;',
+            '	initial_pos.y += source->position.y;',
+            '	initial_pos.z += source->position.z;',
+            '',
+            '	mc_fp_t d1, d2;',
+            '	int has_intersection = ray_cylinder_intersections(',
+            '		mc_layer_r_inner(mcsim_layer(mcsim, 0)),',
+            '		&initial_pos, &source_dir,',
+            '		&d1, &d2);',
+            '',
+            '	if (has_intersection){',
+            '		mc_fp_t k = mc_fmin(d1, d2);',
+            '		initial_pos.x += k*source_dir.x;',
+            '		initial_pos.y += k*source_dir.y;',
+            '		initial_pos.z += k*source_dir.z;',
+            '',
+            '		mc_point3f_t normal;',
+            '		radial_normal_inv(&initial_pos, &normal);',
+            '		mc_fp_t cos1 = normal.x*source_dir.x + ',
+            '			normal.y*source_dir.y;',
+            '		mc_fp_t specular_r = reflectance(',
+            '			mc_layer_n(mcsim_layer(mcsim, 0)),',
+            '			mc_layer_n(mcsim_layer(mcsim, 1)), cos1,',
+            '			mc_layer_cc_inner(mcsim_layer(mcsim, 0))',
+            '		);'
+            '		if (cos1 > mc_layer_cc_inner(mcsim_layer(mcsim, 0))) {',
+            '			refract(',
+            '				&source_dir, &normal,',
+            '				mc_layer_n(mcsim_layer(mcsim, 0)),',
+            '				mc_layer_n(mcsim_layer(mcsim, 1)), &initial_dir',
+            '			);',
+            '		}',
+            '		layer_index = 1;',
+            '		initial_weight = FP_1 - specular_r;',
+            '',
+            '		#if MC_USE_SPECULAR_DETECTOR',
+            '		if(specular_r > FP_0){',
+            '			mc_point3f_t reflected_dir;',
+            '			reflect(&source_dir, &normal, &reflected_dir);',
+            '			mcsim_specular_detector_deposit(',
+            '				mcsim, &initial_pos, &reflected_dir, specular_r);',
+            '		}',
+            '		#endif',
+            '	} else {',
+            '		initial_pos = (mc_point3f_t){.x=FP_0, .y=FP_0, .z=FP_0};',
+            '		layer_index = mcsim_layer_count(mcsim) - 1;',
+            '		initial_weight = FP_0;',
+            '	}',
+            '',
+            '	mcsim_set_current_layer_index(mcsim, layer_index);',
+            '	mcsim_set_weight(mcsim, initial_weight);',
+            '	mcsim_set_position(mcsim, &initial_pos);',
+            '	mcsim_set_direction(mcsim, &initial_dir);',
+            '',
+            '	dbg_print_status(mcsim, "Launch UniformBeam");',
+            '};',
+        ))
+
+    def __init__(self, diameter: float or Tuple[float, float],
+                 position: Tuple[float, float, float] = (0.0, 0.0, 0.0),
+                 direction: Tuple[float, float, float] = (1.0, 0.0, 0.0)):
+        '''
+        Uniform intensity collimated beam photon packet source.
+
+        Parameters
+        ----------
+        diameter: float or (float, float)
+            Collimated beam diameter. Or diameters of the ellipse
+            along the x and y axis
+        position: (float, float, float)
+            Center of the collimated beam as an array-like object of size 3
+            (x, y, z). The beam will be always propagated to the top
+            sample surface.
+        direction: (float, float, float)
+            Direction of the collimated beam as an array-like object of size 3
+            (px, py, pz). The vector should be normalized to unit length and
+            have a positive z coordinate (hitting the top sample surface).
+
+        Note
+        ----
+        The beam will be first propagated from the given position to the
+        entry point on the sample surface along the propagation
+        direction (no interactions with the medium during this step).
+        Note that in case the position lies within the sample, the
+        beam will be propagated to the entry point using reversed direction.
+        From there it will be refracted into the sample. The MC simulation
+        will start after subtracting the specular reflectance at the
+        sample boundary from the initial weight of the packet.
+        '''
+        Source.__init__(self)
+
+        self._position = np.zeros((3,))
+        self._direction = np.zeros((3,))
+        self._diameter = np.zeros((2,))
+
+        self._set_diameter(diameter)
+        self._set_position(position)
+        self._set_direction(direction)
+
+    def _get_position(self) -> Tuple[float, float, float]:
+        return self._position
+    def _set_position(self, position: Tuple[float, float, float]):
+        self._position[:] = position
+    position = property(_get_position, _set_position, None,
+                        'Source position.')
+
+    def _get_direction(self) -> Tuple[float, float, float]:
+        return self._direction
+    def _set_direction(self, direction: Tuple[float, float, float]):
+        self._direction[:] = direction
+        norm = np.linalg.norm(self._direction)
+        if norm == 0.0:
+            raise ValueError('The norm/length of the propagation direction '
+                             'vector must not be 0!')
+        self._direction *= 1.0/norm
+    direction = property(_get_direction, _set_direction, None,
+                        'Source direction.')
+
+    def _get_diameter(self) -> float:
+        return self._diameter
+    def _set_diameter(self, diameter: float or Tuple[float, float]):
+        self._diameter[:] = diameter
+        self._diameter = np.maximum(0.0, self._diameter)
+        if np.any(self._diameter < 0.0):
+            raise ValueError('Beam diameter must not be negative!')
+    diameter = property(_get_diameter, _set_diameter, None,
+                        'Beam diameter along the x and y axis (m).')
+
+    def update(self, other: dict or 'UniformBeam'):
+        '''
+        Update this source configuration from the other source. The
+        other source must be of the same type as this source or a dict with
+        appropriate fields.
+
+        Parameters
+        ----------
+        other: UniformBeam or dict
+            This source is updated with the configuration of the other source.
+        '''
+        if isinstance(other, UniformBeam):
+            self.diameter = other.diameter
+            self.position = other.position
+            self.direction = other.direction
+        elif isinstance(other, dict):
+            self.diameter = other.get('diameter', self.diameter)
+            self.position = other.get('position', self.position)
+            self.direction = other.get('direction', self.direction)
+
+    def cl_pack(self, mc: mcobject.McObject, target: cltypes.Structure = None) \
+            -> Tuple[cltypes.Structure, None, None]:
+        '''
+        Fills a structure (target) with the data required by the
+        Monte Carlo simulator kernel.
+        See the :py:meth:`UniformBeam.cl_type` for a detailed list of fields.
+
+        Parameters
+        ----------
+        mc: mcobject.McObject
+            Monte Carlo simulator instance.
+        target: pyopyo.mccyl.mcsource.UniformBeam.cl_type
+            Ctypes structure that is filled with the source data.
+
+        Returns
+        -------
+        target: pyopyo.mccyl.mcsource.UniformBeam.cl_type
+            Filled ctypes structure received as an input argument or a new
+            instance if the input argument target is None.
+        topgeometry: None
+            This source does not use advanced geometry at the top sample surface.
+        bottomgeometry: None
+            This source does not use advanced geometry at the bottom sample surface.
+        '''
+        if target is None:
+            target_type = self.cl_type(mc)
+            target = target_type()
+
+        T = geometry.transform_base((0.0, 0.0, 1.0), self._direction)
+
+        target.transformation.fromarray(T)
+
+        target.position.fromarray(self._position)
+        target.direction.fromarray(self._direction)
+
+        target.radius.x = self._diameter[0]*0.5
+        target.radius.y = self._diameter[1]*0.5
+
+        return target, None, None
+
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'diameter': self._diameter.tolist(), 
+                'position': self._position.tolist(),
+                'direction': self._direction.tolist(),
+                'type': self.__class__.__name__}
+
+    def __str__(self):
+        return 'UniformBeam(diameter=({}, {}), position=({}, {}, {}). ' \
+               'direction=({}, {}, {}))'.format(
+            *self._diameter, *self._position, *self._direction)
