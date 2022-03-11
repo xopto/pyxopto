@@ -168,7 +168,10 @@ def create_frame_animation(frames: np.ndarray, filename: str = None,
             if ylabel is not None:
                 ax.set_ylabel(ylabel)
             if title is not None:
-                ax.set_title(title)
+                if isinstance(title, str):
+                    ax.set_title(title)
+                else:
+                    ax.set_title(title[0])
         else:
             ax.set_axis_off()
 
@@ -188,10 +191,12 @@ def create_frame_animation(frames: np.ndarray, filename: str = None,
         if autoscale:
             vmin, vmax = frame.min(), frame.max()
             img.set_clim(vmin, vmax)
+        if isinstance(title, (tuple, list)):
+            ax.set_title(title[fargs[0]['frame_index'] % len(title)])
         return img,
 
     ani = FuncAnimation(fig, ani_update, frames, fargs=fargs,
-                        init_func=ani_init, blit=True)
+                        init_func=ani_init, blit=False)
 
     if filename is not None:
         ani.save(filename, writer=writer, fps=fps)
@@ -320,7 +325,10 @@ def create_path_animation(x: np.ndarray, y: np.ndarray, filename: str = None,
             if ylabel is not None:
                 ax.set_ylabel(ylabel)
             if title is not None:
-                ax.set_title(title)
+                if isinstance(title, str):
+                    ax.set_title(title)
+                else:
+                    ax.set_title(title[0])
         else:
             ax.set_axis_off()
 
@@ -343,6 +351,8 @@ def create_path_animation(x: np.ndarray, y: np.ndarray, filename: str = None,
             
             plots[path_index].set_data(x_data, y_data)
 
+            if isinstance(title, (tuple, list)):
+                ax.set_title(title[step % len(title)])
         return plots
 
     ani = FuncAnimation(fig, ani_update, range(num_steps - 1),
