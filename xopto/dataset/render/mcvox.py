@@ -54,6 +54,7 @@ CONFIG = {
 }
 
 def render_mcvox_fluence(target_dir: str = None, config: dict = None,
+                         method: str = None,
                          cl_device: str = None, cl_index: int = 0,
                          cl_build_options: List[str] = None,
                          test: bool = False, verbose: bool = False):
@@ -70,6 +71,8 @@ def render_mcvox_fluence(target_dir: str = None, config: dict = None,
     config: dict
         Configuration / context to use when rendering the run scripts. If None,
         the default configuration will be used.
+    method: str
+        Monte Carlo stepping method. One of "ar" "aw" or "mbl".
     cl_device: str
         Default OpenCL device name or None. The value can be also set through
         the CL_DEVICE environment variable.
@@ -121,6 +124,7 @@ def render_mcvox_fluence(target_dir: str = None, config: dict = None,
     config = dict(config)
     config['cl_device'] = cl_device
     config['cl_index'] = cl_index
+    config['method'] = method
     config['root_dataset_dir'] =  root_dataset_dir
     rendered_template = T_sv.render(**config)
     filename = os.path.join(run_script_dir, 'fluence-skin-vessel.py')

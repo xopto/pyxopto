@@ -92,8 +92,10 @@ fluence = mc.mcfluence.FluenceRz(
 )
 {% if fluence_k -%}fluence.k = {{ fluence_k }}{%- endif %}
 
+mcoptions = [getattr(mc.mcoptions.McMethod, {{ method }})]
+
 mc_obj = mc.Mc(voxels, materials, source, detectors, fluence=fluence,
-               cl_build_options=cl_build_options,
+               cl_build_options=cl_build_options, options=mcoptions,
                cl_devices=cl_device{% if double_precision %}, types=mc.mctypes.McDataTypesDouble{% endif %})
 mc_obj.rmax = 1000e-3
 
@@ -164,7 +166,8 @@ for g in g_values:
                     res_detectors.bottom.raw.sum()/res_detectors.bottom.nphotons,
                 'run_time': run_time,
                 'cl_device': mc_obj.cl_device[0].name,
-                'cl_index': {{ cl_index }}
+                'cl_index': {{ cl_index }},
+                'method': {{ method }}
             }
             np.savez_compressed(full_filename, **data)
 

@@ -98,6 +98,7 @@ CONFIG = {
 }
 
 def render_sv_reflectance(target_dir: str = None, config: dict = None,
+                          method: str = None,
                           cl_device: str = None, cl_index: int = 0,
                           cl_build_options: List[str] = None,
                           test: bool = False, verbose: bool = False):
@@ -114,6 +115,8 @@ def render_sv_reflectance(target_dir: str = None, config: dict = None,
     config: dict
         Configuration / context to use when rendering the run scripts. If None,
         the default configuration will be used.
+    method: str
+        Monte Carlo stepping method. One of "ar" "aw" or "mbl".
     cl_device: str
         Default OpenCL device name or None. The value can be also set through
         the CL_DEVICE environment variable.
@@ -135,6 +138,9 @@ def render_sv_reflectance(target_dir: str = None, config: dict = None,
 
     if config is None:
         config = CONFIG
+
+    if method is None:
+        method = 'aw'
 
     if target_dir is None:
         target_dir = os.getcwd()
@@ -166,6 +172,7 @@ def render_sv_reflectance(target_dir: str = None, config: dict = None,
                 print('Rendering:', sample_name, src_name)
             rendered_template = T_sv.render(**{
                 'sample': sample_data,
+                'method': method,
                 'cl_device': cl_device, 'cl_index': cl_index,
                 'cl_build_options': cl_build_options,
                 'rmax': src_data.get('rmax', sample_data.get('rmax', config['rmax'])),

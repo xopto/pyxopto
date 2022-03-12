@@ -112,6 +112,15 @@ def prepare_cli(description: str) -> argparse.ArgumentParser:
         help='OpenCL device index to use for the simulations.')
 
     parser.add_argument(
+        '--method', metavar='MC_METHOD', type=str,
+        choices = ('aw', 'ar', 'mbl'),
+        default='aw', required=False,
+        help='Select a Monte Carlo simulation method. Use '
+             '"ar" for Albedo Rejection, '
+             '"aw" for Albedo Weight (default) or '
+             '"mbl" for Microscopic Beer-Lambert.')
+
+    parser.add_argument(
         '--fast-math', dest='fast_math',
         action='store_true',
         help='Adds common performace-related OpenCL build options '
@@ -166,6 +175,9 @@ def process_cli(parser: argparse.ArgumentParser) -> dict:
         output_dir: str
             Root directory of the dataset.
 
+        method: str
+            Monte Carlo stepping method.
+
         cl_device: str
             OpenCL device name to use.
 
@@ -197,6 +209,7 @@ def process_cli(parser: argparse.ArgumentParser) -> dict:
 
     return {'verbose': args.verbose, 'test': args.test,
             'target_dir': args.target_dir,
+            'method': args.method,
             'cl_device': args.cl_device,
             'cl_index': args.cl_index,
             'cl_build_options': cl_build_options}

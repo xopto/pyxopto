@@ -83,8 +83,11 @@ surface = mc.mcsurface.SurfaceLayouts(
     top=top_layout
 )
 
+mcoptions = [getattr(mc.mcoptions.McMethod, {{ method }})]
+
 mc_obj = mc.Mc(layers, source, surface=surface, trace=trace,
-               cl_devices=cl_device, cl_build_options=cl_build_options)
+               cl_devices=cl_device, cl_build_options=cl_build_options,
+               options=mcoptions)
 mc_obj.rmax = {{ rmax }}
 
 sv = mc.mcsv.SamplingVolume(
@@ -136,7 +139,8 @@ else:
         'layers': layers.todict(),
         'source': source.todict(),
         'sv': sv_res.todict(),
-        'sv_data': sv_res.data
+        'sv_data': sv_res.data,
+        'method': {{ method }}
     }
 
     os.makedirs(output_dir, exist_ok=True)
