@@ -83,7 +83,7 @@ surface = mc.mcsurface.SurfaceLayouts(
     top=top_layout
 )
 
-mcoptions = [getattr(mc.mcoptions.McMethod, {{ method }})]
+mcoptions = [getattr(mc.mcoptions.McMethod, '{{ method }}')]
 
 mc_obj = mc.Mc(layers, source, surface=surface, trace=trace,
                cl_devices=cl_device, cl_build_options=cl_build_options,
@@ -140,7 +140,7 @@ else:
         'source': source.todict(),
         'sv': sv_res.todict(),
         'sv_data': sv_res.data,
-        'method': {{ method }}
+        'method': '{{ method }}'
     }
 
     os.makedirs(output_dir, exist_ok=True)

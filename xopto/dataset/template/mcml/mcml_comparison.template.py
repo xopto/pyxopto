@@ -76,7 +76,7 @@ fluence = mc.mcfluence.FluenceRz(
 )
 {% if fluence_k -%}fluence.k = {{ fluence_k }}{%- endif %}
 
-mcoptions = [getattr(mc.mcoptions.McMethod, {{ method }})]
+mcoptions = [getattr(mc.mcoptions.McMethod, '{{ method }}')]
 
 mc_obj = mc.Mc(layers, source, detectors, fluence=fluence,
                cl_build_options=cl_build_options, options=mcoptions,
@@ -140,7 +140,7 @@ for g in g_values:
                 'run_time': run_time,
                 'cl_device': mc_obj.cl_device[0].name,
                 'cl_index': {{ cl_index }},
-                'method': {{ method }}
+                'method': '{{ method }}'
             }
             np.savez_compressed(full_filename, **data)
 

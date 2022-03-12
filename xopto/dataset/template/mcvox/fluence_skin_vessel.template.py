@@ -136,7 +136,7 @@ detectors = mc.mcdetector.Detectors(
     bottom=mc.mcdetector.Cartesian(xaxis, yaxis)
 )
 
-mcoptions = [getattr(mc.mcoptions.McMethod, {{ method }})]
+mcoptions = [getattr(mc.mcoptions.McMethod, '{{ method }}')]
 
 # DEFINE MC OBJECT FOR MONTE CARLO SIMULATIONS AND ASSIGN MATERIALS
 mc_obj = mc.Mc(
@@ -212,7 +212,7 @@ for index, depth in enumerate(vessel_depth):
         'fluence_data': fluence_res.data,
         'reflectance': detectors_res.top.reflectance,
         'transmittance': detectors_res.bottom.transmittance,
-        'method': {{ method }}
+        'method': '{{ method }}'
     }
 
     os.makedirs(output_dir, exist_ok=True)

@@ -186,7 +186,7 @@ detectors = mc.mcdetector.Detectors(
 if top_layout is not None:
     surface = mc.mcsurface.SurfaceLayouts(top = top_layout)
 
-mcoptions = [getattr(mc.mcoptions.McMethod, {{ method }})]
+mcoptions = [getattr(mc.mcoptions.McMethod, '{{ method }}')]
 
 mc_obj = mc.Mc(layers, source, detectors, surface=surface,
                cl_devices=cl_device, cl_build_options=cl_build_options,
@@ -241,7 +241,7 @@ def process_mua_musr(storage_dir: str, g: float, pf_info: str,
                     max(detectors_res.top.nphotons, 1),
                 'total_transmittance': detectors_res.bottom.raw.sum()/ \
                     max(detectors_res.top.nphotons, 1),
-                'method': {{ method }}
+                'method': '{{ method }}'
             }
             {%- if source.is_sfdi %}
             data['sfd_reflectance'] = sfd_transform(
