@@ -200,8 +200,8 @@ class FluenceCylt(mcobject.McObject):
             '		__global uint32_t *address = ',
             '			(__global void *)(mcsim_accumulator_buffer_ex(mcsim, fluence->offset + index));',
             '		uint32_t ui32w = (uint32_t)(weight*fluence->k + FP_0p5);',
-            '		if (atomic_add(address, ui32w) + ui32w < ui32w)',
-            '			atomic_add(address + 1, 1);',
+            '',
+            '		accumulator_deposit(address, ui32w);',
             '	};',
             '};',
         ))
