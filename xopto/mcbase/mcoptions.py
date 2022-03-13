@@ -350,6 +350,46 @@ class McUseFluenceCache(McBoolOption):
         return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
 
 
+class McUseHalfMath(McBoolOption):
+    '''
+    Turn on or off the use of OpenCL half-precision math.
+    Default is off.
+
+    Note
+    ----
+    Half-precision math gives performance benefit at a
+    significantly reduced precision. Use this option with care.
+    '''
+    on = McBoolOption('MC_USE_HALF_MATH', True)
+
+    off = McBoolOption('MC_USE_HALF_MATH', False)
+
+    default = off
+
+    def __init__(self, value: bool=False):
+        '''
+        Initializes the half-precision math kernel option.
+
+        Parameters
+        ----------
+        value: bool
+            Use True to enable the half-precision math or False to disable
+            half-precision math.
+            
+        Note
+        ----
+        The half-precision math and native math
+        :py:class:`~xopto.mcbase.mcoptions.McUseNativeMath` options are
+        mutually excluding. Ony one of the two options can be enabled at any
+        given time. If both options are enabled, the native math option takes
+        precedence.
+        '''
+        super().__init__('MC_USE_HALF_MATH', value)
+
+    def __repr__(self):
+        return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
+
+
 class McUseNativeMath(McBoolOption):
     '''
     Turn on or off the use of OpenCL native math.

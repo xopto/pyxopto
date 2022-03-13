@@ -519,7 +519,7 @@ typedef char int8_t;
 	#define mc_sincos(fi, ps, pc)		(*(ps)=sincos(fi, (pc)))
 	/* Native sin and cos functions seem to be highly inacurate on many platforms. */
 	/*#define mc_sincos(fi, ps, pc)		{*(ps) = native_sin(fi); *(pc) = native_cos(fi);} */
-#elif USE_HALF_MATH
+#elif MC_USE_HALF_MATH
 	/** @brief Native half precision sine function. */
 	#define mc_sin(x)					half_sin(x)
 	/** @brief Native half precision cosine function. */
