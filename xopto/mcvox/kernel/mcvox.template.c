@@ -410,6 +410,22 @@ inline void mcsim_fluence_deposit_weight(
 		mcsim_fluence_deposit_at(psim, pos, deposit);
 	#endif
 };
+
+inline void mcsim_fluence_weight_deposit_ll(
+		McSim *psim, size_t offset, uint32_t weight){
+	#if MC_USE_FLUENCE_CACHE
+		mc_accucache_weight_add(
+			mcsim_fluence_cache(psim), offset, weight,
+			mcsim_accumulator_buffer(psim)
+		);
+	#else
+		accumulator_deposit(
+			(__global void *)mcsim_accumulator_buffer_ex(psim, offset),
+			weight
+		);
+	#endif
+};
+
 #endif /* MC_USE_FLUENCE */
 /*################ End photon packet fluence implementation ##################*/
 
@@ -991,6 +1007,11 @@ __kernel void McKernel(
 				}
 			}
 		};
+
+		#if MC_USE_FLUENCE && MC_USE_FLUENCE_CACHE
+			mc_accucache_flush(
+				mcsim_fluence_cache(&sim), mcsim_accumulator_buffer(&sim))
+		#endif
 
 		/* save/update the random number generator state to the global memory */
 		rng_state_x[get_global_id(0)] = sim.state.rngStateX;

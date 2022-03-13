@@ -199,6 +199,11 @@
 	#define MC_USE_FLUENCE						FALSE
 #endif
 
+#if !defined(MC_USE_FLUENCE_CACHE) || defined(__DOXYGEN__)
+	/** @brief Enables fluence accumulator cache. */
+	#define MC_USE_FLUENCE_CACHE				FALSE
+#endif
+
 #if !defined(MC_USE_USER_DATA) || defined(__DOXYGEN__)
 	/** @brief Define this macro if user-defined parameters and buffer are passed and used by
 		the kernel hooks. */
@@ -1583,6 +1588,96 @@ inline int refract_safe(
 */
 inline void scatter_direction(mc_point3f_t *dir, mc_fp_t cos_theta, mc_fp_t fi);
 /*################## End general scattering implementation ###################*/
+
+
+/*########################## Start accumulator cache #########################*/
+/**
+* @addtogroup mc_accumulator_cache Accumulator cache
+* @{
+*/
+
+/**
+ * @brief Accumulator cache type.
+ * 
+ */
+MC_STRUCT_ATTRIBUTES struct mc_accucache_t{
+	uint32_t weight;	/**< @brief Weight of the cached accumulator. */
+	size_t offset;		/**< @brief Offset/address of the cached accumulator. */
+};
+
+/**
+ * @brief Accumulator cache initializer.
+ * 
+ */
+#define mc_accucache_initializer {0, 0}
+
+/**
+ * @}
+ */
+/** @brief Memory cache type. */
+typedef struct mc_accucache_t mc_accucache_t;
+
+/**
+ * @brief Evaluates to nonzero if the accumulator cache contains entry.
+ * 
+ * @param[in] pcache  Pointer to a cache instance.
+ * @param[in] offset  Offset/address of the target accumulator address.
+ * 
+ * @returns Nonzero if the accumulator cache contains entry at the given offset.
+ */
+#define mc_accucache_contains(pcache, offset) \
+	(((pcache)->offset) != offset)
+
+/**
+ * @brief Evaluates to the weight stored in the accumulator cache.
+ * 
+ * @param[in] pcache  Pointer to a cache instance.
+ * @param[in] offset  Offset/address of the target accumulator.
+ *
+ * @returns Weight stored at the offset/address.
+ */
+#define mc_accucache_weight(pcache, offset) \
+	(pcache)->weight
+
+/**
+ * @brief Add weight to the accumulator cache entry.
+ *
+ * @param[in] pcache   Pointer to a cache instance.
+ * @param[in] offset   Offset of the target accumulator address.
+ * @param[in] weight   New inital weight stored in the cache.
+ * @param[in] target   The cached global buffer.
+ */
+#define mc_accucache_weight_add(pcache, offset, weight, target) \
+	if ((pcache)->offset != offset){ \
+		accumulator_deposit( \
+			(__global void *)(((__global mc_accu_t *)(target)) + (pcache)->offset), \
+			(pcache)->weight \
+		); \
+		(pcache)->offset = (offset); \
+		(pcache)->weight = (weight); \
+	} else { \
+		(pcache)->weight += (weight); \
+	}
+
+/**
+ * @brief Flushes the accumulator cache to the accumulator memory buffer.
+ * 
+ * @param[in] pcache   Pointer to a cache instance.
+ * @param[in] target   The cached global buffer.
+ */
+#define mc_accucache_flush(pcache, target) \
+	if((pcache)->weight > 0){ \
+		accumulator_deposit( \
+			(__global void *)(((__global mc_accu_t *)(target)) + (pcache)->offset), \
+			(pcache)->weight \
+		); \
+		(pcache)->weight = 0; \
+	};
+/**
+ * @} // end @addtogroup mc_accumulator_cache
+ */
+
+/*########################### End accumulator cache ##########################*/
 
 
 /*############### Start random number generator declarations #################*/

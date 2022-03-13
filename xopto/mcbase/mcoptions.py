@@ -318,6 +318,38 @@ class McMethod(McIntOption):
         return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
 
 
+class McUseFluenceCache(McBoolOption):
+    '''
+    Turn on or off the use of OpenCL fluence cache.
+    Default is off.
+
+    Note
+    ----
+    Fluence cache will improve performance for large deposition voxels, where
+    there is a high likelihood that consecutive weight depositions will go
+    into the same accumulator. 
+    '''
+    on = McBoolOption('MC_USE_FLUENCE_CACHE', True)
+
+    off = McBoolOption('MC_USE_FLUENCE_CACHE', False)
+
+    default = off
+
+    def __init__(self, value: bool=False):
+        '''
+        Initializes the fluence cache option.
+
+        Parameters
+        ----------
+        value: bool
+            Use True to enable fluence cache.
+        '''
+        super().__init__('MC_USE_FLUENCE_CACHE', value)
+
+    def __repr__(self):
+        return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
+
+
 class McUseNativeMath(McBoolOption):
     '''
     Turn on or off the use of OpenCL native math.
