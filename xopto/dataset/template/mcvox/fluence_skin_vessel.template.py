@@ -136,7 +136,8 @@ detectors = mc.mcdetector.Detectors(
     bottom=mc.mcdetector.Cartesian(xaxis, yaxis)
 )
 
-mcoptions = [getattr(mc.mcoptions.McMethod, '{{ method }}')]
+mcoptions = [getattr(mc.mcoptions.McMethod, '{{ method }}'),
+             mc.mcoptions.McUseFluenceCache({{ cache }})]
 
 # DEFINE MC OBJECT FOR MONTE CARLO SIMULATIONS AND ASSIGN MATERIALS
 mc_obj = mc.Mc(

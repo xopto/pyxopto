@@ -586,6 +586,9 @@ __kernel void McKernel(
 			#if MC_USE_TRACE || defined(__DOXYGEN__)
 			,0						/* mc_uint_t trace_count: Number of traced events. */
 			#endif
+			#if MC_USE_FLUENCE && MC_USE_FLUENCE_CACHE
+			,mc_accucache_initializer	/* mc_accucache_t fluence_cache: Fluence cache object. */
+			#endif
 		},
 
 		voxel_cfg,		/* __mc_voxelcfg_mem McVoxelConfig const *voxel_cfg: Voxel array configuration. */

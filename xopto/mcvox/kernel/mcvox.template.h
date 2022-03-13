@@ -1208,6 +1208,26 @@ inline void mcsim_fluence_deposit_at(
 	McSim *mcsim, mc_point3f_t const *pos, mc_fp_t weight);
 #endif
 
+#if MC_USE_FLUENCE_CACHE
+	/**
+	 * @brief Evaluates to a pointer to the fluence cache.
+	 * 
+	 * @return   Pointer to a fluence cache instance.
+	 */
+	#define mcsim_fluence_cache(psim) (&((psim)->state.fluence_cache))
+#endif
+
+/**
+ * @brief Low-level deposition function that can use an intermediate cache if
+ *        configured so through the ::MC_USE_FLUENCE_CACHE option.
+ * 
+ * @param psim     Simulator instance.
+ * @param offset   Deposition address/offset.
+ * @param weight   Weight to deposit.
+ */
+inline void mcsim_fluence_weight_deposit_ll(
+	McSim *psim, size_t offset, uint32_t weight);
+
 #endif /* MC_USE_FLUENCE */
 
 /**
@@ -1243,26 +1263,6 @@ inline int mcsim_trace_event(McSim *psim, mc_uint_t event_count);
  * @note The source code of this function is implemented in related python modules.
  */
 inline void mcsim_trace_complete(McSim *psim, mc_uint_t event_count);
-
-#if MC_USE_FLUENCE_CACHE
-	/**
-	 * @brief Evaluates to a pointer to the fluence cache.
-	 * 
-	 * @return   Pointer to a fluence cache instance.
-	 */
-	#define mcsim_fluence_cache(psim) (&((psim)->state.fluence_cache))
-#endif
-
-/**
- * @brief Low-level deposition function that can use an intermediate cache if
- *        configured so through the ::MC_USE_FLUENCE_CACHE option.
- * 
- * @param psim     Simulator instance.
- * @param offset   Deposition address/offset.
- * @param weight   Weight to deposit.
- */
-inline void mcsim_fluence_weight_deposit_ll(
-	McSim *psim, size_t offset, uint32_t weight);
 
 /**
  * @} // end @addtogroup mcvox_simulator_core

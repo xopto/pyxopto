@@ -59,6 +59,12 @@ def prepare_cli(description: str) -> argparse.ArgumentParser:
         test: bool
             Run in test mode.
 
+        method: str
+            Monte Carlo stepping method.
+
+        cache: bool
+            Enables fluence accumulator cache.
+
         output_dir: str
             Root directory of the dataset.
 
@@ -119,6 +125,9 @@ def prepare_cli(description: str) -> argparse.ArgumentParser:
              '"ar" for Albedo Rejection, '
              '"aw" for Albedo Weight (default) or '
              '"mbl" for Microscopic Beer-Lambert.')
+    parser.add_argument(
+        '-c' '--cache', dest='cache', action='store_true',
+        help='Enables fluence accumulator cache.')
 
     parser.add_argument(
         '--fast-math', dest='fast_math',
@@ -178,6 +187,9 @@ def process_cli(parser: argparse.ArgumentParser) -> dict:
         method: str
             Monte Carlo stepping method.
 
+        cache: bool
+            Enables fluence accumulator cache.
+
         cl_device: str
             OpenCL device name to use.
 
@@ -210,6 +222,7 @@ def process_cli(parser: argparse.ArgumentParser) -> dict:
     return {'verbose': args.verbose, 'test': args.test,
             'target_dir': args.target_dir,
             'method': args.method,
+            'cache': args.cache,
             'cl_device': args.cl_device,
             'cl_index': args.cl_index,
             'cl_build_options': cl_build_options}

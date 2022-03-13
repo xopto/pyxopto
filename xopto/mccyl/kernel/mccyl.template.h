@@ -468,6 +468,9 @@ struct McSimState{
 	#if MC_USE_TRACE || defined(__DOXYGEN__)
 	mc_uint_t trace_count;		/**< @brief Number of logged trace events since the packet launch. */
 	#endif
+	#if MC_USE_FLUENCE && MC_USE_FLUENCE_CACHE
+	mc_accucache_t fluence_cache;	/**< @brief Fluence cache object. */
+	#endif
 };
  /** @} */
  /** @brief Data type representing the Monte Carlo simulator core state. */
@@ -1015,6 +1018,26 @@ inline void mcsim_fluence_deposit(McSim *mcsim, mc_fp_t weight, mc_fp_t mua);
  * @note The source code of this function is implemented in related python modules.
  */
 inline void mcsim_fluence_deposit(McSim *mcsim, mc_fp_t weight);
+#endif
+
+/**
+ * @brief Low-level deposition function that can use an intermediate cache if
+ *        configured so through the ::MC_USE_FLUENCE_CACHE option.
+ * 
+ * @param psim     Simulator instance.
+ * @param offset   Deposition address/offset.
+ * @param weight   Weight to deposit.
+ */
+inline void mcsim_fluence_weight_deposit_ll(
+	McSim *psim, size_t offset, uint32_t weight);
+
+#if MC_USE_FLUENCE_CACHE
+	/**
+	 * @brief Evaluates to a pointer to the fluence cache.
+	 * 
+	 * @return   Pointer to a fluence cache instance.
+	 */
+	#define mcsim_fluence_cache(psim) (&((psim)->state.fluence_cache))
 #endif
 
 #endif /* MC_USE_FLUENCE */

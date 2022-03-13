@@ -187,7 +187,8 @@ if top_layout is not None:
     surface = mc.mcsurface.SurfaceLayouts(top = top_layout)
 
 mcoptions = [mc.mcoptions.McFloatLutMemory.constant_mem,
-             getattr(mc.mcoptions.McMethod, '{{ method }}')]
+             getattr(mc.mcoptions.McMethod, '{{ method }}'),
+             mc.mcoptions.McUseFluenceCache({{ cache }})]
 
 mc_obj = mc.Mc(layers, source, detectors, surface=surface,
                cl_devices=cl_device, cl_build_options=cl_build_options,

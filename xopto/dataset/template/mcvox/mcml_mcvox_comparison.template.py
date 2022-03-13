@@ -92,7 +92,8 @@ fluence = mc.mcfluence.FluenceRz(
 )
 {% if fluence_k -%}fluence.k = {{ fluence_k }}{%- endif %}
 
-mcoptions = [getattr(mc.mcoptions.McMethod, '{{ method }}')]
+mcoptions = [getattr(mc.mcoptions.McMethod, '{{ method }}'),
+             mc.mcoptions.McUseFluenceCache({{ cache }})]
 
 mc_obj = mc.Mc(voxels, materials, source, detectors, fluence=fluence,
                cl_build_options=cl_build_options, options=mcoptions,

@@ -377,7 +377,7 @@ CONFIG = {
 }
 
 def render_mcml(target_dir: str = None, config: dict = None,
-                method: str = None,
+                method: str = None, cache: bool = False,
                 cl_device: str = None, cl_index: int = 0,
                 cl_build_options: List[str] = None,
                 test: bool = False, verbose: bool = False):
@@ -396,6 +396,8 @@ def render_mcml(target_dir: str = None, config: dict = None,
         the default configuration will be used.
     method: str
         Monte Carlo stepping method. One of "ar" "aw" or "mbl".
+    cache: bool
+        Enables fluence accumulator cache.
     cl_device: str
         Default OpenCL device name or None. The value can be also set through
         the CL_DEVICE environment variable.
@@ -458,6 +460,7 @@ def render_mcml(target_dir: str = None, config: dict = None,
                 rendered_template = T.render(**{
                     'sample': sample_data,
                     'method': method,
+                    'cache': cache,
                     'cl_device': cl_device, 'cl_index': cl_index,
                     'cl_build_options': cl_build_options,
                     'rmax': src_data.get('rmax', sample_data.get('rmax', config['rmax'])),
