@@ -62,13 +62,13 @@ if __name__ == '__main__':
                         required=False,
                         help='Enable verbose mode.')
     parser.add_argument('--method', metavar='MC_METHOD', type=str,
-                        choices = ('albedo_weight', 'aw',
-                                   'albedo_rejection', 'ar',
-                                   'microscopic_beer_lambert', 'mbl'),
-                        default='albedo_weight', required=False,
+                        choices = ('aw', 'ar', 'mbl'),
+                        default='aw', required=False,
                         help='Select a Monte Carlo simulation method. Use '
-                             '"ar" for Albedo Rejection, "aw" for Albedo Weight'
-                             ' or "mbl" Microscopic Beer-Lambert.')
+                             '"ar" for Albedo Rejection, '
+                             '"aw" for Albedo Weight (default) or '
+                             '"mbl" for Microscopic Beer-Lambert.')
+
 
     mc_options = [
         mcoptions.McFloatLutMemory.constant_mem,
@@ -84,13 +84,13 @@ if __name__ == '__main__':
     nphotons = max(int(args.nphotons), 100000)
     if args.math == 'native':
         mc_options.append(mcoptions.McUseNativeMath.on)
-    if args.method:
-        kernel_method, kernel_method_name = {
-            'ar': ('albedo_rejection', 'Albedo Rejection'),
-            'aw': ('albedo_weight', 'Albedo Weight'),
-            'mbl': ('microscopic_beer_lambert', 'Microscopic Beer-Lambert'),
-        }.get(str(args.method))
-        mc_options.append(getattr(mcoptions.McMethod, kernel_method))
+    kernel_method = str(args.method)
+    kernel_method_name = {
+        'ar': 'Albedo Rejection',
+        'aw': 'Albedo Weight',
+        'mbl': 'Microscopic Beer-Lambert',
+    }.get(kernel_method)
+    mc_options.append(getattr(mcoptions.McMethod, kernel_method))
 
     usepflut = bool(args.lut)
 
