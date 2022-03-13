@@ -126,7 +126,7 @@ def prepare_cli(description: str) -> argparse.ArgumentParser:
              '"aw" for Albedo Weight (default) or '
              '"mbl" for Microscopic Beer-Lambert.')
     parser.add_argument(
-        '-c' '--cache', dest='cache', action='store_true',
+        '-c', '--cache', dest='cache', action='store_true',
         help='Enables fluence accumulator cache.')
 
     parser.add_argument(
