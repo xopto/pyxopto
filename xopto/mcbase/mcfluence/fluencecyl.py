@@ -175,11 +175,9 @@ class FluenceCyl(mcobject.McObject):
             '		weight *= (mua != FP_0) ? mc_fdiv(FP_1, mua) : FP_0;',
             '		#endif'
             '',
-            '		__global uint32_t *address = ',
-            '			(__global void *)(mcsim_accumulator_buffer_ex(mcsim, fluence->offset + index));',
             '		uint32_t ui32w = (uint32_t)(weight*fluence->k + FP_0p5);',
             '',
-            '		accumulator_deposit(address, ui32w);',
+            '		mcsim_fluence_weight_deposit_ll(mcsim, fluence->offset + index, ui32w);',
             '	};',
             '};',
         ))
