@@ -119,11 +119,31 @@ The list of available options is as follows:
   than the voxel size of the deposition / fluence grid, i.e. there is on
   average at least one deposition event per voxel traversal.
 
+* :py:class:`~xopto.mcbase.mcoptions.McUseFluenceCache`
+  (default is :py:class:`~xopto.mcbase.mcoptions.McUseFluenceCache.off`) - 
+  can be used to enable software cache for the fluence accumulator.
+  Fluence cache will improve performance for configuration of deposition
+  voxels, where there is a high likelihood that consecutive weight depositions
+  will go into the same fluence accumulator or where the global memory
+  bandwidth presents the main performance limiting factor.
 * :py:class:`~xopto.mcbase.mcoptions.McUseNativeMath`
   (default is :py:class:`~xopto.mcbase.mcoptions.McUseNativeMath.off`) -
+  can be used to enable half-precision math functions. Half-precision
+  usually gives some performance benefit, but at a significantly reduced
+  precision. Use this option with care! The half-precision math and native math
+  :py:class:`~xopto.mcbase.mcoptions.McUseNativeMath` options are
+  mutually excluding. Ony one of the two options can be enabled at any
+  given time. If both options are enabled, the native math option takes
+  precedence.
+* :py:class:`~xopto.mcbase.mcoptions.McUseHalfMath`
+  (default is :py:class:`~xopto.mcbase.mcoptions.McUseHalfMath.off`) -
   can be used to enable device-native math functions. Native math usually gives
   some performance benefit, but might not be fully compliant with precisions
   defined by the IEEE standards.
+  The half-precision math :py:class:`~xopto.mcbase.mcoptions.McUseHalfMath`
+  and native math options are mutually excluding. Ony one of the two options
+  can be enabled at any given time. If both options are enabled, the native
+  math option takes precedence.
 
 * :py:class:`~xopto.mcbase.mcoptions.McIntLutMemory`
   (default is :py:attr:`~xopto.mcbase.mcoptions.McIntLutMemory.constant_mem`) -
@@ -171,7 +191,7 @@ The list of available options is as follows:
   (default is :py:class:`~xopto.mcbase.mcoptions.McUsePackedStructures.off`) -
   Can be used to force tightly packed structures in the OpenCL code.
   Note that packed structures can lead to significant performance
-  degradation of the MonteCarlo kernel. This option is the last resort if
+  degradation of the Monte Carlo kernel. This option is the last resort if
   the fields of the OpenCL and host structures cannot be properly aligned.
   When declaring OPenCL or host structures always start with the
   largest data type and move towards smaller data types. Use data types

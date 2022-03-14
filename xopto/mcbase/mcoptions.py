@@ -643,7 +643,7 @@ class McUsePackedStructures(McBoolOption):
     Note
     ----
     Note that packed structures can lead to significant performance
-    degradation of the MonteCarlo kernel. This option is the last resort if
+    degradation of the Monte Carlo kernel. This option is the last resort if
     the fields of the OpenCL and host structures cannot be properly aligned.
     When declaring OPenCL or host structures always start with the
     largest data type and move towards smaller data types. Use data types
