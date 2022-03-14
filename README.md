@@ -1,6 +1,6 @@
 # PyXOpto
 
-PyXOpto is a collection of python tools for performing Monte Carlo simulations
+PyXOpto is a collection of Python tools for performing Monte Carlo simulations
 of light propagation in turbid media using massively parallel processing on a wide range of OpenCL-enabled devices. The tools allow steady-state and time-resolved simulations of light propagation, deposition and fluence simulations, tracing and filtering of photon packet paths, computation of sampling volumes for a number of source-detector configurations, support arbitrary scattering phase functions and are easy to customize or extend.
 
 ![Deposit simulations](/docs/source/static/animation/xopto_fluence.gif)
@@ -37,9 +37,9 @@ Detailed instructions are available [here](https://xopto.github.io/pyxopto/docs/
 PyXOpto requires a Python 3 installation. Most of the Linux OS distributions will come with a preinstalled Python 3. On Windows OS, the easiest way to install the Python 3 programming language is to use the [WinPython](https://github.com/winpython) or [Anaconda](https://docs.anaconda.com/anaconda/install/windows/) distributions. There are numerous integrated development environments that work with Python, among these [Visual Studio Code](https://code.visualstudio.com) and [PyCharm](https://www.jetbrains.com/pycharm/) are two popular cross-platform options. The [WinPython](https://sourceforge.net/projects/winpython/files/WinPython_3.9/3.9.4.0/) distributions can be downloaded with an embedded and preconfigured Visual Studio Code (e.g. [Winpython64-3.9.4.0cod.exe](https://sourceforge.net/projects/winpython/files/WinPython_3.9/3.9.4.0/Winpython64-3.9.4.0cod.exe/download)).
 
 ### PyXOpto
-First, download or clone the PyXOpto source repository to a local directory. The source code can be installed as a python package or used independently from the downloaded source.
+First, download or clone the PyXOpto source repository to a local directory. The source code can be installed as a Python package or used independently from the downloaded source.
 
-#### As a python package
+#### As a Python package
 PyXOpto can be installed as a package using the setup.py file. Run the
 following command from the root directory of PyXOpto (the one with the setup.py file).
 ```bash
@@ -51,7 +51,7 @@ This will also install the dependencies that include several popular Python pack
 [Jinja2](https://palletsprojects.com/p/jinja/)).
 
 ### Using from source
-To use the PyXOpto package from source, you will have to manually install all the python dependencies listed in the setup.py file ([SciPy](https://scipy.org), [Matplotlib](https://matplotlib.org),
+To use the PyXOpto package from source, you will have to manually install all the Python dependencies listed in the setup.py file ([SciPy](https://scipy.org), [Matplotlib](https://matplotlib.org),
 [NumPy](https://numpy.org), [PyOpenCL](https://github.com/inducer/pyopencl), [Shapely](https://github.com/Toblerity/Shapely),
 [Numba](https://numba.pydata.org), and
 [Jinja2](https://palletsprojects.com/p/jinja/), ...). The easiest way to install the dependencies is to use the Python package installer [pip](https://pypi.org/project/pip/). Note that the WinPython distribution will likely come with many if not all the dependencies already installed. Also note that on some Linux distributions, the Python 3 executable is named `python3` and `python` is used for the deprecated Python 2.
