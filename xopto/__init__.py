@@ -90,6 +90,38 @@ USER_BUILD_PATH = os.path.join(USER_PATH, 'build')
 USER_PRIMES_PATH = os.path.join(USER_DATA_PATH, 'primes')
 ''' User directory for RNG primes. '''
 
+def fulfills_min(requirement: str) -> bool:
+    '''
+    Checks if this version of PyXOpto fulfills the minimum requiremed version.
+
+    Parameters
+    ----------
+    required: str
+        Required version as a string, e.g. "0.2.1".
+
+    Returns
+    -------
+    fulfills: bool
+        Returns True if PyXOpto fullfills the requirement, else False.
+
+    Note
+    ----
+    PyXOpto version is composed of three numbers (major, minor, patch), e.g.
+    "0.2.0".
+    '''
+    this_version = [int(item) for item in __version__.split('.')]
+    for index, item in enumerate(requirement.split('.')):
+        item = item.strip()
+        if index >= len(this_version):
+            break
+        if item == '*':
+            continue
+        if this_version[index] < int(item):
+            return False
+
+    return True
+
+
 def make_user_dirs():
     '''
     Create all the user directories for data, binary and temporary files.
