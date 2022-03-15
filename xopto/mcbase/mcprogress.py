@@ -26,7 +26,7 @@ import threading
 import numpy as np
 
 from xopto.mcbase import mcobject
-
+from xopto import cl
 
 class ProgressMonitor:
     def __init__(self, mcsim: mcobject.McObject, interval: float = 0.5):
@@ -191,7 +191,7 @@ class ProgressMonitor:
     def _proc(self, mcsim: mcobject.McObject):
         num_processed = np.zeros([1], dtype=mcsim.types.np_cnt)
         num_threads = np.zeros([1], dtype=np.uint32)
-        queue = mcsim.cl.CommandQueue(mcsim.cl_context)
+        queue = cl.CommandQueue(mcsim.cl_context)
 
         while not self._stop:
             #print('\nloop 1\n')
@@ -201,8 +201,8 @@ class ProgressMonitor:
                 cl_num_packets = mcsim.cl_buffers.get('num_processed_packets')
                 cl_num_kernels = mcsim.cl_buffers.get('num_kernels')
                 if cl_num_packets is not None and cl_num_kernels is not None:
-                    mcsim.cl.enqueue_copy(queue, num_processed, cl_num_packets)
-                    mcsim.cl.enqueue_copy(queue, num_threads, cl_num_kernels)
+                    cl.enqueue_copy(queue, num_processed, cl_num_packets)
+                    cl.enqueue_copy(queue, num_threads, cl_num_kernels)
                     self._threads = num_threads[0]
                     if self._processed != num_processed[0]:
                         self._processed = num_processed[0]
