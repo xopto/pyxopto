@@ -44,6 +44,7 @@ from xopto.mccyl import mcsv
 from xopto.mccyl import mcfluence
 from xopto.mccyl import mcsource
 from xopto.mccyl import mcpf
+from xopto.mccyl import mcprogress
 from xopto.mccyl import mcoptions
 from xopto.mccyl.mcutil.buffer import NumpyAllocators
 

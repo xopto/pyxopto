@@ -53,6 +53,7 @@ xopto/mcml/mclayer/__pycache__
 xopto/mcml/mcobject/__pycache__
 xopto/mcml/mcoptions/__pycache__
 xopto/mcml/mcpf/__pycache__
+xopto/mcml/mcprogress/__pycache__
 xopto/mcml/mcrun/__pycache__
 xopto/mcml/mcsource/__pycache__
 xopto/mcml/mcsurface/__pycache__
@@ -76,6 +77,7 @@ xopto/mcvox/mcgeometry/__pycache__
 xopto/mcvox/mcobject/__pycache__
 xopto/mcvox/mcoptions/__pycache__
 xopto/mcvox/mcpf/__pycache__
+xopto/mcvox/mcprogress/__pycache__
 xopto/mcvox/mcrun/__pycache__
 xopto/mcvox/mcsource/__pycache__
 xopto/mcvox/mcsurface/__pycache__
@@ -100,6 +102,7 @@ xopto/mccyl/mclayer/__pycache__
 xopto/mccyl/mcobject/__pycache__
 xopto/mccyl/mcoptions/__pycache__
 xopto/mccyl/mcpf/__pycache__
+xopto/mccyl/mcprogress/__pycache__
 xopto/mccyl/mcrun/__pycache__
 xopto/mccyl/mcsource/__pycache__
 xopto/mccyl/mcsurface/__pycache__
