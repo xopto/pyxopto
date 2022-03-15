@@ -22,14 +22,18 @@
 
 import time
 import threading
-
+from typing import Callable, Tuple, List, Dict
 import numpy as np
+import os
 
 from xopto.mcbase import mcobject
 import pyopencl as cl
 
 class ProgressMonitor:
-    def __init__(self, mcsim: mcobject.McObject, interval: float = 0.5):
+    def __init__(self, mcsim: mcobject.McObject, interval: float = 0.5,
+                cb: Callable[['ProgressMonitor'], None] = None,
+                cbargs: Tuple or List = None,
+                cbkwargs: Dict = None):
         '''
         Initialize Monte Carlo progress monitor.
 
@@ -42,7 +46,28 @@ class ProgressMonitor:
             number of launched packets.
         interval: float
             Polling interval in seconds.
+        cb: Callable[[ProgressMonitor], None]
+            A callable that is executed when the progress state changes. The
+            first argument of the callback is the ProgressMonitor instance
+            followed by the optional positional arguments (cbargs) and keyword
+            arguments (cbkwargs).
+        cbargs: list or tuple
+            Optional positional arguments for the callback.
+        cbkwargs: dict
+            Optional keyword arguments for the callback.
+
+        Note
+        ----
+        The callback functionality is provided for basic usage. The preferred
+        way of implementing custom progress monitors is to subclass the
+        :py:class:`~xopto.mcbase.mcprogress.ProgressMonitor` and overload the
+        :py:meth:`~xopto.mcbase.mcprogress.ProgressMonitor.update` method.
         '''
+        if cbargs is None:
+            cbargs = ()
+        if cbkwargs is None:
+            cbkwargs = {}
+
         self._mcsim = mcsim
         self._cl_queue = cl.CommandQueue(self._mcsim.cl_context)
         self._interval = max(0.1, float(interval))
@@ -50,6 +75,10 @@ class ProgressMonitor:
         self._threads = 0
         self._target = 0
         self._terminate_on_stop = False
+
+        self._cb = cb
+        self._cbargs = cbargs
+        self._cbkwargs = cbkwargs
 
         self._track = False
         self._stop = False
@@ -81,8 +110,8 @@ class ProgressMonitor:
         self: ProgressMonitor
             Returns self.
 
-        Notes
-        -----
+        Note
+        ----
         Note that a terminated monitor cannot be restarted. A RuntimeError
         will be raised if an attept is made to start a terminated monitor.
         '''
@@ -181,6 +210,7 @@ class ProgressMonitor:
         self._stop = True
         self._track = False
         self._condition.release()
+        self._clear_line()
 
     def __enter__(self):
         return self
@@ -188,6 +218,10 @@ class ProgressMonitor:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self._terminate_on_stop:
             self.terminate()
+
+    def _clear_line(self):
+        ts = os.get_terminal_size()
+        print(' '*ts.columns, end='\r')
 
     def _proc(self, mcsim: mcobject.McObject):
         num_processed = np.zeros([1], dtype=mcsim.types.np_cnt)
@@ -208,22 +242,29 @@ class ProgressMonitor:
                     self._threads = num_threads[0]
                     if self._processed != num_processed[0]:
                         self._processed = num_processed[0]
-                        self.report()
-                    if self._target <= self._processed:
-                        print()
-                        
+                        if self._cb is None:
+                            self.update()
+                        else:
+                            self._cb(self, *self._cbargs, **self._cbkwargs)
+
                 time.sleep(self._interval)
 
-    def report(self):
+    def update(self):
         '''
-        Overload this method for custom handling of the progress report.
-        This function is called each time the value of the progress
+        Overload this method for custom handling of the progress.
+        This function is called each time the state of the progress
         changes. Note that the polling interval is set with the
         constructor  
-        :py:class:`~xopto.mcbase.mcprogress.ProgressMonitor` parameter
-        :code:`interval`.
+        :py:meth:`~xopto.mcbase.mcprogress.ProgressMonitor.__init__`
+        parameter :code:`interval`.
+
+        Note
+        ----
+        Note that this method is called in the context of the background
+        thread that periodically communicates/polls the OpenCL device.
         '''
         N = 42
         n = int(self.progress()*N)
         print('|{}>{}| {:d}%'.format(
-            '-'*n, ' '*(N - n), int(100.0*self.progress())), end='\r')
+            '-'*n, ' '*(N - n), int(100.0*self.progress())),
+            end='\r', flush=True)

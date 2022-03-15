@@ -49,8 +49,8 @@ def prepare_cli(description: str) -> argparse.ArgumentParser:
     -------
     parser: argparse.ArgumentParser
 
-    Notes
-    -----
+    Note
+    ----
     Command line argument parser instance implements the following arguments:
 
         verbose: bool
@@ -171,8 +171,8 @@ def process_cli(parser: argparse.ArgumentParser) -> dict:
     kwargs: dict
         Keyword arguments from the command line interface as a dict.
 
-    Notes
-    -----
+    Note
+    ----
     The command line implements the following keyword arguments:
 
         verbose: bool
