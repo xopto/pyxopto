@@ -263,7 +263,8 @@ class ProgressMonitor:
         Note that this method is called in the context of the background
         thread that periodically communicates/polls the OpenCL device.
         '''
-        N = 42
+        ts = os.get_terminal_size()
+        N = min(50, ts.columns) - 8
         n = int(self.progress()*N)
         print('|{}>{}| {:d}%'.format(
             '-'*n, ' '*(N - n), int(100.0*self.progress())),
