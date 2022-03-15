@@ -318,6 +318,10 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         # Initialization of members for later use.
         self._cl_exec = self._cl_src = self._cl_src_options = None
 
+        # the latest kernel timing report and the number of used threads
+        self._run_report = {'upload': None, 'download': None,
+                            'execution': None, 'threads': None}
+
         # Size of structures on the target OpenCL device
         self._sizeof_types = {}
 
@@ -975,6 +979,9 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         uploadtime = t1 - t0
         exectime = t2 - t1
         downloadtime = time.perf_counter() - t2
+        self._run_report.update(upload=uploadtime, download=downloadtime,
+                                execution=exectime,
+                                threads=int(np_buffers['num_kernels'][0]))
         if verbose:
             print('McKernel processed {:,d} packets in {:,d} threads:\n'
                   '    uploaded/built in: {:10.3f} ms\n'
@@ -1227,6 +1234,17 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
     def _get_surface(self) -> mcsurface.SurfaceLayouts:
         return self._surface_layouts
     surface = property(_get_surface, None, None, 'Sample surface layout.')
+
+    def _get_run_report(self) -> dict:
+        return self._run_report
+    run_report = property(_get_run_report, None, None,
+                          'Timing and performance data of the lates kernel '
+                          'run as a dict with keys "upload", "download", '
+                          '"execution" and "threads". The timing values '
+                          'with keys "upload", "download" and "execution" '
+                          'are given in seconds. The number of OpenCL threads '
+                          'with key "threads" is an integer value. '
+                          'All values are initialized to None.')
 
     ############################# Testing code ###########################
     def dbg(self):
