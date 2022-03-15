@@ -26,7 +26,7 @@ import threading
 import numpy as np
 
 from xopto.mcbase import mcobject
-from xopto import cl
+import pyopencl as cl
 
 class ProgressMonitor:
     def __init__(self, mcsim: mcobject.McObject, interval: float = 0.5):
