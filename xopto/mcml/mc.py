@@ -976,9 +976,9 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         downloadtime = time.perf_counter() - t2
         if verbose:
             print('McKernel processed {:,d} packets in {:,d} threads:\n'
-                  '    uploaded/built in: {:7.3f} ms\n'
-                  '    executed in:       {:7.3f} ms\n'
-                  '    downloaded in:     {:7.3f} ms'.format(
+                  '    uploaded/built in: {:10.3f} ms\n'
+                  '    executed in      : {:10.3f} ms\n'
+                  '    downloaded in    : {:10.3f} ms'.format(
                        nphotons, int(np_buffers['num_kernels'][0]),
                        uploadtime*1e3, exectime*1e3, downloadtime*1e3)
             )
