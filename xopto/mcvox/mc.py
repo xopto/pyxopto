@@ -345,7 +345,8 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
 
         # the latest kernel timing report and the number of used threads
         self._run_report = {'upload': None, 'download': None,
-                            'execution': None, 'threads': None}
+                            'execution': None, 'threads': None,
+                            'items': None}
 
         # Size of structures on the target OpenCL device
         self._sizeof_types = {}
@@ -1042,7 +1043,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         exectime = t2 - t1
         downloadtime = time.perf_counter() - t2
         self._run_report.update(upload=uploadtime, download=downloadtime,
-                                execution=exectime,
+                                execution=exectime, items=nphotons,
                                 threads=int(np_buffers['num_kernels'][0]))
         if verbose:
             print('McKernel processed {:,d} packets in {:,d} threads:\n'
@@ -1306,10 +1307,12 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
     run_report = property(_get_run_report, None, None,
                           'Timing and performance data of the lates kernel '
                           'run as a dict with keys "upload", "download", '
-                          '"execution" and "threads". The timing values '
-                          'with keys "upload", "download" and "execution" '
-                          'are given in seconds. The number of OpenCL threads '
-                          'with key "threads" is an integer value. '
+                          '"execution", "threads" and "items". '
+                          'The timing values with keys "upload", "download" '
+                          'and "execution" are given in seconds. '
+                          'The number of OpenCL threads with key "threads" '
+                          'and the number of processed items with key "items" '
+                          'are integer values. '
                           'All values are initialized to None.')
 
     ############################# Testing code ###########################
