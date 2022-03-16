@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.cl.cloptions module &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.cl.clrng module" href="xopto.cl.clrng.html" />
+    <link rel="prev" title="xopto.cl.clinfo module" href="xopto.cl.clinfo.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="xopto.cl.html">xopto.cl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.data.html">xopto.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.dataset.html">xopto.dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.html">xopto.materials package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcbase.html">xopto.mcbase package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mccyl.html">xopto.mccyl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.html">xopto.mcml package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.html">xopto.mcvox package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.pf.html">xopto.pf package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.src.html">xopto.src package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.util.html">xopto.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">xopto</a> &raquo;</li>
+        
+          <li><a href="xopto.html">xopto package</a> &raquo;</li>
+        
+          <li><a href="xopto.cl.html">xopto.cl package</a> &raquo;</li>
+        
+      <li>xopto.cl.cloptions module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-xopto.cl.cloptions">
+<span id="xopto-cl-cloptions-module"></span><h1>xopto.cl.cloptions module<a class="headerlink" href="#module-xopto.cl.cloptions" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.cl.cloptions.ClBuildOption">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ClBuildOption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/cl/cloptions.html#ClBuildOption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.cl.cloptions.ClBuildOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Creates an instance of one OpenCL build option. The value of the
+options is check against the allowed list of option given by the
+OpenCL standard:</p>
+<p><a class="reference external" href="https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html">https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – <p>Value of the build option. Must be one of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>”-cl-mad-enable”,</p></li>
+<li><p>”-cl-no-signed-zeros”,</p></li>
+<li><p>”-cl-unsafe-math-optimizations”,</p></li>
+<li><p>”-cl-finite-math-only”,</p></li>
+<li><p>”-cl-fast-relaxed-math”</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Use one of the predefined OpenCL build option instances instead of
+using this class directly:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#xopto.cl.cloptions.MadEnable" title="xopto.cl.cloptions.MadEnable"><code class="xref py py-data docutils literal notranslate"><span class="pre">MadEnable</span></code></a></p></li>
+<li><p><a class="reference internal" href="#xopto.cl.cloptions.NoSignedZeros" title="xopto.cl.cloptions.NoSignedZeros"><code class="xref py py-data docutils literal notranslate"><span class="pre">NoSignedZeros</span></code></a></p></li>
+<li><p><a class="reference internal" href="#xopto.cl.cloptions.UnsafeMathOptimizations" title="xopto.cl.cloptions.UnsafeMathOptimizations"><code class="xref py py-data docutils literal notranslate"><span class="pre">UnsafeMathOptimizations</span></code></a></p></li>
+<li><p><a class="reference internal" href="#xopto.cl.cloptions.FiniteMathOnly" title="xopto.cl.cloptions.FiniteMathOnly"><code class="xref py py-data docutils literal notranslate"><span class="pre">FiniteMathOnly</span></code></a></p></li>
+<li><p><a class="reference internal" href="#xopto.cl.cloptions.FastRelaxedMath" title="xopto.cl.cloptions.FastRelaxedMath"><code class="xref py py-data docutils literal notranslate"><span class="pre">FastRelaxedMath</span></code></a></p></li>
+</ul>
+</div></blockquote>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.cl.cloptions.ClBuildOption.value">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#xopto.cl.cloptions.ClBuildOption.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value of this OpenCL build option.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.cl.cloptions.FastMath">
+<span class="sig-name descname"><span class="pre">FastMath</span></span><em class="property"> <span class="pre">=</span> <span class="pre">ClBuildOption(&quot;-cl-fast-relaxed-math</span> <span class="pre">-cl-mad-enable&quot;)</span></em><a class="headerlink" href="#xopto.cl.cloptions.FastMath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets two optimization options, namely -cl-fast-relaxed-mat and -cl-mad-enable.
+See <a class="reference internal" href="#xopto.cl.cloptions.FastRelaxedMath" title="xopto.cl.cloptions.FastRelaxedMath"><code class="xref py py-data docutils literal notranslate"><span class="pre">FastRelaxedMath</span></code></a> <a class="reference internal" href="#xopto.cl.cloptions.MadEnable" title="xopto.cl.cloptions.MadEnable"><code class="xref py py-data docutils literal notranslate"><span class="pre">MadEnable</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.cl.cloptions.FastRelaxedMath">
+<span class="sig-name descname"><span class="pre">FastRelaxedMath</span></span><em class="property"> <span class="pre">=</span> <span class="pre">ClBuildOption(&quot;-cl-fast-relaxed-math&quot;)</span></em><a class="headerlink" href="#xopto.cl.cloptions.FastRelaxedMath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the optimization options “-cl-finite-math-only” and
+“-cl-unsafe-math-optimizations”. This allows optimizations for floating-point
+arithmetic that may violate the IEEE 754 standard and the OpenCL numerical
+compliance requirements defined in the specification in section 7.4
+for single-precision floating-point, section 9.3.9 for double-precision
+floating-point, and edge case behavior in section 7.5. This option causes
+the preprocessor macro __FAST_RELAXED_MATH__ to be defined in the
+OpenCL program.</p>
+<p>Source of the above information:
+<a class="reference external" href="https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html">https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html</a></p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.cl.cloptions.FiniteMathOnly">
+<span class="sig-name descname"><span class="pre">FiniteMathOnly</span></span><em class="property"> <span class="pre">=</span> <span class="pre">ClBuildOption(&quot;-cl-finite-math-only&quot;)</span></em><a class="headerlink" href="#xopto.cl.cloptions.FiniteMathOnly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow optimizations for floating-point arithmetic that assume that arguments
+and results are not NaNs or ±∞. This option may violate the OpenCL numerical
+compliance requirements defined in in section 7.4 for single-precision
+floating-point, section 9.3.9 for double-precision floating-point, and edge
+case behavior in section 7.5.</p>
+<p>Source of the above information:
+<a class="reference external" href="https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html">https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html</a></p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.cl.cloptions.MadEnable">
+<span class="sig-name descname"><span class="pre">MadEnable</span></span><em class="property"> <span class="pre">=</span> <span class="pre">ClBuildOption(&quot;-cl-mad-enable&quot;)</span></em><a class="headerlink" href="#xopto.cl.cloptions.MadEnable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow a * b + c to be replaced by a mad. The mad computes a * b + c with
+reduced accuracy. For example, some OpenCL devices implement mad as truncate
+the result of a * b before adding it to c.</p>
+<p>Source of the above  information:
+<a class="reference external" href="https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html">https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html</a></p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.cl.cloptions.NoSignedZeros">
+<span class="sig-name descname"><span class="pre">NoSignedZeros</span></span><em class="property"> <span class="pre">=</span> <span class="pre">ClBuildOption(&quot;-cl-no-signed-zeros&quot;)</span></em><a class="headerlink" href="#xopto.cl.cloptions.NoSignedZeros" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow optimizations for floating-point arithmetic that ignore the signedness
+of zero. IEEE 754 arithmetic specifies the behavior of distinct
++0.0 and -0.0 values, which then prohibits simplification of expressions
+such as x+0.0 or 0.0*x (even with “-clfinite-math” only). This option implies
+that the sign of a zero result isn’t significant.</p>
+<p>Source of the above information:
+<a class="reference external" href="https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html">https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html</a></p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.cl.cloptions.UnsafeMathOptimizations">
+<span class="sig-name descname"><span class="pre">UnsafeMathOptimizations</span></span><em class="property"> <span class="pre">=</span> <span class="pre">ClBuildOption(&quot;-cl-unsafe-math-optimizations&quot;)</span></em><a class="headerlink" href="#xopto.cl.cloptions.UnsafeMathOptimizations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow optimizations for floating-point arithmetic that (a) assume that
+arguments and results are valid, (b) may violate IEEE 754 standard and
+(c) may violate the OpenCL numerical compliance requirements as defined
+in section 7.4 for single-precision floating-point, section 9.3.9
+for double-precision floating-point, and edge case behavior in section 7.5.
+This option includes the “-cl-no-signed-zeros” and “-cl-mad-enable options”.</p>
+<p>Source of the above information:
+<a class="reference external" href="https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html">https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html</a></p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="xopto.cl.clrng.html" class="btn btn-neutral float-right" title="xopto.cl.clrng module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="xopto.cl.clinfo.html" class="btn btn-neutral float-left" title="xopto.cl.clinfo module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

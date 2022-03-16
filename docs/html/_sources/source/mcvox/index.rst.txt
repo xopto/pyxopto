@@ -25,11 +25,13 @@ Voxelized MC
 .. toctree::
    :maxdepth: 2
 
+   material
    phase_function
    fluence
    trace
    sampling_volume
    simulator_data_types
    simulator_options
+   opencl_build_options
 
    examples/index

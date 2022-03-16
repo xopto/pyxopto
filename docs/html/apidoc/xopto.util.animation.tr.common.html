@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.util.animation.tr.common module &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.util.animation.tr.deposition module" href="xopto.util.animation.tr.deposition.html" />
+    <link rel="prev" title="xopto.util.animation.tr package" href="xopto.util.animation.tr.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="xopto.cl.html">xopto.cl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.data.html">xopto.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.dataset.html">xopto.dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.html">xopto.materials package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcbase.html">xopto.mcbase package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mccyl.html">xopto.mccyl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.html">xopto.mcml package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.html">xopto.mcvox package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.pf.html">xopto.pf package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.src.html">xopto.src package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="xopto.util.html">xopto.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">xopto</a> &raquo;</li>
+        
+          <li><a href="xopto.html">xopto package</a> &raquo;</li>
+        
+          <li><a href="xopto.util.html">xopto.util package</a> &raquo;</li>
+        
+          <li><a href="xopto.util.animation.html">xopto.util.animation package</a> &raquo;</li>
+        
+          <li><a href="xopto.util.animation.tr.html">xopto.util.animation.tr package</a> &raquo;</li>
+        
+      <li>xopto.util.animation.tr.common module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-xopto.util.animation.tr.common">
+<span id="xopto-util-animation-tr-common-module"></span><h1>xopto.util.animation.tr.common module<a class="headerlink" href="#module-xopto.util.animation.tr.common" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.util.animation.tr.common.create_deposition_animation_xz">
+<span class="sig-name descname"><span class="pre">create_deposition_animation_xz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_source</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logscale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_off</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoscale</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">matplotlib.animation.FuncAnimation</span><a class="reference internal" href="../_modules/xopto/util/animation/tr/common.html#create_deposition_animation_xz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.animation.tr.common.create_deposition_animation_xz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a continuous animation of the sampling volume projected
+onto the x-z plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_source</strong> (<em>str</em><em> or </em><em>dict</em>) – File with the simulation results or simulation results as returned by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">sv_fiber_incidence()</span></code>.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Output file for the animation.</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – If False, existing animation files will not be overwritten.</p></li>
+<li><p><strong>logscale</strong> (<em>bool</em>) – If True, logarithmically scale the sampling volume data.</p></li>
+<li><p><strong>fps</strong> (<em>float</em>) – Frame rate of the animation (1/s). Another way to control the frame
+rate is specify the duration parameter.</p></li>
+<li><p><strong>duration</strong> (<em>float</em>) – Duration of one full animation (s). The same effect can be achieved
+with the fps parameter.</p></li>
+<li><p><strong>axis_off</strong> (<em>bool</em>) – Turns off the axis and related labels.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Plot title.</p></li>
+<li><p><strong>autoscale</strong> (<em>bool</em>) – Independently autoscale the intensity of each frame.</p></li>
+<li><p><strong>writer</strong> (<em>str</em><em> or </em><em>mpl.animation.MovieWriter</em>) – Movie writer.</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – Resolution of the exported images.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Turns on verbose progress report.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>animation</strong> – Animation instance</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>FuncAnimation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.util.animation.tr.common.main">
+<span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim_task</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ani_task</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/animation/tr/common.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.animation.tr.common.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Code for the __main__ section of the sampling volume simulation modules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sim_task</strong> (<em>callable</em>) – A function that runs the sampling volume simulations.</p></li>
+<li><p><strong>ani_task</strong> (<em>callable</em>) – A function that runs/prepares the animations from the simulation
+results.</p></li>
+<li><p><strong>config</strong> (<em>dict</em>) – Sampling volume simulation configuration as a dict. Note that the
+entries of this configuration dict can change during the call.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.util.animation.tr.common.mc_tr_deposition_cli">
+<span class="sig-name descname"><span class="pre">mc_tr_deposition_cli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parser</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">argparse.ArgumentParser</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/animation/tr/common.html#mc_tr_deposition_cli"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.animation.tr.common.mc_tr_deposition_cli" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collects command line arguments and returns a dict of values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>description</strong> (<em>str</em>) – Command line description.</p></li>
+<li><p><strong>parser</strong> (<em>argparse.ArgumentParser</em>) – Externally created argument parser can be used to add custom command
+line arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>args</strong> (<em>argparse.Namespace</em>) – Parsed command line arguments. If the parser was passed
+as an input argument, use the returned namespace to extract
+any custom parameters.</p></li>
+<li><p><strong>arguments</strong> (<em>dict</em>) – Returns the collected arguments as a dict with the following keys:</p>
+<ul>
+<li><dl class="simple">
+<dt>num_packets: int</dt><dd><p>Minimum number of packets that should reach the detector.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>batch_packets:</dt><dd><p>int Number of packets to launch in a single simulation run.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>filename: str</dt><dd><p>File for the simulation results.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>overwrite: bool</dt><dd><p>Overwrite existing file.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>verbose: bool</dt><dd><p>Enables verbose reports.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>animation: bool</dt><dd><p>Creates animation after completing the sampling volume simulations.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>fps: float</dt><dd><p>Frame rate (1/s) to use in the sampling volume animation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>duration: float</dt><dd><p>Animation duration (s).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>autoscale: bool</dt><dd><p>Independently autoscale the intensity of each frame.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>logscale: bool</dt><dd><p>Apply logarithmic scale to the deposition data.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>axis_off: bool</dt><dd><p>Turns off the plot axis in animation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>dpi: int</dt><dd><p>Resolution of the exported images.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>opencl_device: str</dt><dd><p>OpenCL device to use for the simulations.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>opencl_index: int</dt><dd><p>Index (zero-based) of the OpenCL device to use for the simulations.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="xopto.util.animation.tr.deposition.html" class="btn btn-neutral float-right" title="xopto.util.animation.tr.deposition module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="xopto.util.animation.tr.html" class="btn btn-neutral float-left" title="xopto.util.animation.tr package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

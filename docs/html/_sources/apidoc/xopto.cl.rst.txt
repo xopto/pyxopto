@@ -17,6 +17,7 @@ Submodules
 
    xopto.cl.cleasy
    xopto.cl.clinfo
+   xopto.cl.cloptions
    xopto.cl.clrng
    xopto.cl.cltest
    xopto.cl.cltypes

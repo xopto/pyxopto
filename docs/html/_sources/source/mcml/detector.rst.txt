@@ -63,6 +63,12 @@ The :py:mod:`xopto.mcml.mcdetector` module includes a number different detectors
 The individual detectors are conveniently imported into the
 :py:mod:`xopto.mcml.mc` and :py:mod:`xopto.mcml.mcdetector` modules.
 
+.. note::
+
+    The first and last accumulator of the detectors along each axis will also
+    collect/accumulate the weights of photon packets that exceed the lower
+    and upper limit of the corresponding axis.
+
 Radial
 ------
 
@@ -92,9 +98,12 @@ The acceptance cone of the detector can be limited by specifying the minimum
 acceptance angle cosine. The angle is by default computed relative to the
 top or bottom sample surface normal. This behavior can be customized by
 setting the reference direction through the :code:`direction` input argument
-to a custom unit-length vector. Note that the acceptance cone is applied after
-the photon packet leaves the sample and is refracted into the surrounding
-medium.
+to a custom unit-length vector.
+
+.. note::
+
+  The acceptance cone is applied after the photon packet leaves the sample and
+  is refracted into the surrounding medium.
 
 The following example creates a radial detector that collects photon packets
 within ±10 |nbsp| :superscript:`o` of sample surface normal.
@@ -247,8 +256,9 @@ After completing the Monte Carlo simulations, the returned instance of
 :py:class:`~xopto.mcml.mcdetector.base.Detectors` can be used to access the
 collected reflectance (also used for transmittance) or the accumulated raw
 weight of the photon packets. Note that the reflectance / transmittance is
-computed as the raw weight in the accumulator divided by the surface area of
-the accumulator (weight/m :superscript:`2`) .
+computed as the raw weight in the accumulator divided by the number of
+launched photon packets and if applicable also divided by the surface area of
+the accumulator (weight/m :superscript:`2`).
 
 .. code-block:: python
 

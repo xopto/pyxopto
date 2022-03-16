@@ -1,0 +1,7 @@
+xopto.mccyl.mcsource.uniformbeam module
+=======================================
+
+.. automodule:: xopto.mccyl.mcsource.uniformbeam
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Detectors &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Surface layouts" href="surface_layout.html" />
+    <link rel="prev" title="Sources" href="source.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cylindrical MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="layer_stack.html">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source.html">Sources</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Detectors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fiz">FiZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#total">Total</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use-in-monte-carlo-simulator">Use in Monte Carlo simulator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="surface_layout.html">Surface layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opencl_build_options.html">OpenCL build options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/index.html">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Cylindrical MC</a> &raquo;</li>
+        
+      <li>Detectors</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="detectors">
+<span id="mccyl-detector-label"></span><h1>Detectors<a class="headerlink" href="#detectors" title="Permalink to this headline">¶</a></h1>
+<p>Detectors are used to collect the weights of photon packets that escape the
+sample or to collect the weight of photon packets that are specularly
+reflected when launching with the selected source.
+The the two detector locations can be populated and passed to the Monte Carlo
+simulator through the <a class="reference internal" href="../../apidoc/xopto.mccyl.mcdetector.base.html#xopto.mccyl.mcdetector.base.Detectors" title="xopto.mccyl.mcdetector.base.Detectors"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcdetector.base.Detectors</span></code></a>.
+All the detector types that can be used in the Monte Carlo simulator
+are implemented by subclassing <a class="reference internal" href="../../apidoc/xopto.mccyl.mcdetector.base.html#xopto.mccyl.mcdetector.base.Detector" title="xopto.mccyl.mcdetector.base.Detector"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcdetector.base.Detector</span></code></a>.
+The <a class="reference internal" href="../../apidoc/xopto.mccyl.mcdetector.html#module-xopto.mccyl.mcdetector" title="xopto.mccyl.mcdetector"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mccyl.mcdetector</span></code></a> module includes two different detectors:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../apidoc/xopto.mccyl.mcdetector.total.html#xopto.mccyl.mcdetector.total.Total" title="xopto.mccyl.mcdetector.total.Total"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcdetector.total.Total</span></code></a> implements a
+detector that collects the weight of photon packets into a single accumulator.</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcsdetector.fiz.FiZ</span></code> implements a 2D detector
+that collects the photon packets according to their polar angle
+<img class="math" src="../../_images/math/ed710ddac707fcbc540bfe7b354ca2d900f0faa0.png" alt="\varphi"/> and <img class="math" src="../../_images/math/8d051150f8669295ecdbe92367941012175a824d.png" alt="z"/> location when leaving the sample and entering
+the surrounding medium`.</p></li>
+</ul>
+<p>The individual detectors are conveniently imported into the
+<a class="reference internal" href="../../apidoc/xopto.mccyl.mc.html#module-xopto.mccyl.mc" title="xopto.mccyl.mc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mccyl.mc</span></code></a> and <a class="reference internal" href="../../apidoc/xopto.mccyl.mcdetector.html#module-xopto.mccyl.mcdetector" title="xopto.mccyl.mcdetector"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mccyl.mcdetector</span></code></a> modules.</p>
+<div class="section" id="fiz">
+<h2>FiZ<a class="headerlink" href="#fiz" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows how to create a
+<a class="reference internal" href="../../apidoc/xopto.mccyl.mcdetector.fiz.html#xopto.mccyl.mcdetector.fiz.FiZ" title="xopto.mccyl.mcdetector.fiz.FiZ"><code class="xref py py-class docutils literal notranslate"><span class="pre">FiZ</span></code></a> detector
+that collects photon packets with polar angle <img class="math" src="../../_images/math/ed710ddac707fcbc540bfe7b354ca2d900f0faa0.png" alt="\varphi"/> from -180° to
+180° (1° step) and <img class="math" src="../../_images/math/8d051150f8669295ecdbe92367941012175a824d.png" alt="z"/> coordinate from -1 to 1 mm
+(10 μm step). Distribution of accumulators along the two axis
+is defined by <a class="reference internal" href="../../apidoc/xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><code class="xref py py-class docutils literal notranslate"><span class="pre">Axis</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">det</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">FiZ</span><span class="p">(</span>
+  <span class="n">fi</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">360</span><span class="p">),</span>
+  <span class="n">z</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0e-3</span><span class="p">,</span> <span class="mf">1.0e-3</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The valid range of polar angle <img class="math" src="../../_images/math/ed710ddac707fcbc540bfe7b354ca2d900f0faa0.png" alt="\varphi"/> is from <img class="math" src="../../_images/math/1cdf32194709603ce30a209d0b8a6d52bf9f1a02.png" alt="-\pi"/>
+(-180°) to <img class="math" src="../../_images/math/9cc8517129c87252edd7fe2e4532af9dcf7a54d9.png" alt="\pi"/> (180°). The first and last accumulator along the
+polar <img class="math" src="../../_images/math/ed710ddac707fcbc540bfe7b354ca2d900f0faa0.png" alt="\varphi"/> and <img class="math" src="../../_images/math/8d051150f8669295ecdbe92367941012175a824d.png" alt="z"/> axis also collect the weight of all the
+photon packets that exceed the lower and upper bounds of the range.</p>
+</div>
+</div>
+<div class="section" id="total">
+<h2>Total<a class="headerlink" href="#total" title="Permalink to this headline">¶</a></h2>
+<p>To collect the weights of photon packets that leave the sample into a single
+accumulator, use the <a class="reference internal" href="../../apidoc/xopto.mccyl.mcdetector.total.html#xopto.mccyl.mcdetector.total.Total" title="xopto.mccyl.mcdetector.total.Total"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcdetector.total.Total</span></code></a> detector.
+Note that parameters <code class="code docutils literal notranslate"><span class="pre">cosmin</span></code> and <code class="code docutils literal notranslate"><span class="pre">direction</span></code> can be optionally
+used to limit the acceptance cone of the detector.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">mc</span>
+
+<span class="n">det</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Total</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-in-monte-carlo-simulator">
+<h2>Use in Monte Carlo simulator<a class="headerlink" href="#use-in-monte-carlo-simulator" title="Permalink to this headline">¶</a></h2>
+<p>To use the detectors in Monte Carlo simulations, we need to populate an instance
+of <a class="reference internal" href="../../apidoc/xopto.mccyl.mcdetector.base.html#xopto.mccyl.mcdetector.base.Detectors" title="xopto.mccyl.mcdetector.base.Detectors"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcdetector.base.Detectors</span></code></a>, that can independently set
+the detectors at the outer sample surface and the detector for
+photon packets that are specularly reflected at the medium-sample boundary
+when launched. Note that it is not required to populate the two detectors
+(outer and specular) as illustrated in this example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">mc</span>
+
+<span class="n">outer</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">FiZ</span><span class="p">(</span>
+  <span class="n">fi</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">360</span><span class="p">),</span>
+  <span class="n">z</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0e-3</span><span class="p">,</span> <span class="mf">1.0e-3</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">specular</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Total</span><span class="p">()</span>
+
+<span class="n">detectors</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">outer</span><span class="o">=</span><span class="n">outer</span><span class="p">,</span> <span class="n">specular</span><span class="o">=</span><span class="n">specular</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After completing the Monte Carlo simulations, the returned instance of
+<a class="reference internal" href="../../apidoc/xopto.mccyl.mcdetector.base.html#xopto.mccyl.mcdetector.base.Detectors" title="xopto.mccyl.mcdetector.base.Detectors"><code class="xref py py-class docutils literal notranslate"><span class="pre">Detectors</span></code></a> can be used to access the
+collected reflectance (also used for transmittance) or the accumulated raw
+weight of the photon packets.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The reflectance / transmittance is computed as the raw weight in the
+accumulator divided by the number of launched photon packets and if
+applicable also divided by the surface area of the accumulator
+(weight/m <sup>2</sup>).</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">outer_reflectance</span> <span class="o">=</span> <span class="n">detectors</span><span class="o">.</span><span class="n">outer</span><span class="o">.</span><span class="n">reflectance</span>
+<span class="n">outer</span> <span class="n">weight</span> <span class="o">=</span> <span class="n">detectors</span><span class="o">.</span><span class="n">outer</span><span class="o">.</span><span class="n">raw</span>
+
+<span class="n">specular_reflectance</span> <span class="o">=</span> <span class="n">detectors</span><span class="o">.</span><span class="n">specular</span><span class="o">.</span><span class="n">reflectance</span>
+<span class="n">specular_raw</span> <span class="n">weight</span> <span class="o">=</span> <span class="n">detectors</span><span class="o">.</span><span class="n">specular</span><span class="o">.</span><span class="n">raw</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="surface_layout.html" class="btn btn-neutral float-right" title="Surface layouts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="source.html" class="btn btn-neutral float-left" title="Sources" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

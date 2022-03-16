@@ -1,0 +1,18 @@
+xopto.mccyl.mclayer package
+===========================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mccyl.mclayer.layer
+
+Module contents
+---------------
+
+.. automodule:: xopto.mccyl.mclayer
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Simulator data types &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Simulator options" href="simulator_options.html" />
+    <link rel="prev" title="Sampling volume" href="sampling_volume.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cylindrical MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="layer_stack.html">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source.html">Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="detector.html">Detectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surface_layout.html">Surface layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opencl_build_options.html">OpenCL build options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/index.html">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Cylindrical MC</a> &raquo;</li>
+        
+      <li>Simulator data types</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="mccyl-simulator-data-types-label"></span><div class="section" id="simulator-data-types">
+<h1>Simulator data types<a class="headerlink" href="#simulator-data-types" title="Permalink to this headline">¶</a></h1>
+<p>Data types can be used to customize the OpenCL kernel of the Monte Carlo
+simulator. The following 4 data types of the kernel can be customized:</p>
+<ol class="arabic">
+<li><p>Default integer types</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McInt32" title="xopto.mcbase.mctypes.McInt32"><code class="xref py py-class docutils literal notranslate"><span class="pre">McInt32</span></code></a> - 32-bit integer</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McInt64" title="xopto.mcbase.mctypes.McInt64"><code class="xref py py-class docutils literal notranslate"><span class="pre">McInt64</span></code></a> - 64-bit integer</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Photon packet accumulator types</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McAccu32" title="xopto.mcbase.mctypes.McAccu32"><code class="xref py py-class docutils literal notranslate"><span class="pre">McAccu32</span></code></a> - 32-bit unsigned integer</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McAccu64" title="xopto.mcbase.mctypes.McAccu64"><code class="xref py py-class docutils literal notranslate"><span class="pre">McAccu64</span></code></a> - 64-bit unsigned integer</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Floating point types and computational precision</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McFloat" title="xopto.mcbase.mctypes.McFloat"><code class="xref py py-class docutils literal notranslate"><span class="pre">McFloat</span></code></a> - single precision floating-point</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDouble" title="xopto.mcbase.mctypes.McDouble"><code class="xref py py-class docutils literal notranslate"><span class="pre">McDouble</span></code></a> - double precision floating-point</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Photon packet counter types</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McCnt32" title="xopto.mcbase.mctypes.McCnt32"><code class="xref py py-class docutils literal notranslate"><span class="pre">McCnt32</span></code></a> - 32-bit unsigned integer counter</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">McCnt64</span></code> - 64-bit unsigned integer counter</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+<p>The 4 data types are passed to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">xopto:mccyl.mc.Mc()</span></code>
+constructor as an instance of <a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDataTypes" title="xopto.mcbase.mctypes.McDataTypes"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mctypes.McDataTypes</span></code></a>.
+Even though any combination of the 4 data types can be used, the preconfigured
+sets of data types will be likely sufficient for the vast majority of
+applications:</p>
+<ul>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDataTypesSingle" title="xopto.mcbase.mctypes.McDataTypesSingle"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mctypes.McDataTypesSingle</span></code></a> - default set of types
+(single precision floating-point arithmetics, 32-bit photon packet counter)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McInt32" title="xopto.mcbase.mctypes.McInt32"><code class="xref py py-class docutils literal notranslate"><span class="pre">McInt32</span></code></a> - 32-bit integer</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McCnt32" title="xopto.mcbase.mctypes.McCnt32"><code class="xref py py-class docutils literal notranslate"><span class="pre">McCnt32</span></code></a> - 32-bit unsigned photon packet counter</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McAccu64" title="xopto.mcbase.mctypes.McAccu64"><code class="xref py py-class docutils literal notranslate"><span class="pre">McAccu64</span></code></a> - 64-bit unsigned weight accumulators</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McFloat" title="xopto.mcbase.mctypes.McFloat"><code class="xref py py-class docutils literal notranslate"><span class="pre">McFloat</span></code></a> - single precision floating-point arithmetics</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDataTypesSingleCnt64" title="xopto.mcbase.mctypes.McDataTypesSingleCnt64"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mctypes.McDataTypesSingleCnt64</span></code></a>
+(single precision floating-point arithmetics, 64-bit photon packet counter)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McInt32" title="xopto.mcbase.mctypes.McInt32"><code class="xref py py-class docutils literal notranslate"><span class="pre">McInt32</span></code></a> - 32-bit integer</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McCnt64" title="xopto.mcbase.mctypes.McCnt64"><code class="xref py py-class docutils literal notranslate"><span class="pre">McCnt64</span></code></a> - 64-bit unsigned photon packet counter</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McAccu64" title="xopto.mcbase.mctypes.McAccu64"><code class="xref py py-class docutils literal notranslate"><span class="pre">McAccu64</span></code></a> - 64-bit unsigned weight accumulators</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McFloat" title="xopto.mcbase.mctypes.McFloat"><code class="xref py py-class docutils literal notranslate"><span class="pre">McFloat</span></code></a> - single precision floating-point arithmetics</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDataTypesDouble" title="xopto.mcbase.mctypes.McDataTypesDouble"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mctypes.McDataTypesDouble</span></code></a>
+(double precision floating-point arithmetics, 32-bit photon packet counter)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McInt32" title="xopto.mcbase.mctypes.McInt32"><code class="xref py py-class docutils literal notranslate"><span class="pre">McInt32</span></code></a> - 32-bit integer</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McCnt32" title="xopto.mcbase.mctypes.McCnt32"><code class="xref py py-class docutils literal notranslate"><span class="pre">McCnt32</span></code></a> - 32-bit unsigned photon packet counter</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McAccu64" title="xopto.mcbase.mctypes.McAccu64"><code class="xref py py-class docutils literal notranslate"><span class="pre">McAccu64</span></code></a> - 64-bit unsigned weight accumulators</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDouble" title="xopto.mcbase.mctypes.McDouble"><code class="xref py py-class docutils literal notranslate"><span class="pre">McDouble</span></code></a> - double precision floating-point arithmetics</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDataTypesDoubleCnt64" title="xopto.mcbase.mctypes.McDataTypesDoubleCnt64"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mctypes.McDataTypesDoubleCnt64</span></code></a>
+(double precision floating-point arithmetics, 64-bit photon packet counter)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McInt32" title="xopto.mcbase.mctypes.McInt32"><code class="xref py py-class docutils literal notranslate"><span class="pre">McInt32</span></code></a> - 32-bit integer</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McCnt64" title="xopto.mcbase.mctypes.McCnt64"><code class="xref py py-class docutils literal notranslate"><span class="pre">McCnt64</span></code></a> - 32-bit unsigned photon packet counter</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McAccu64" title="xopto.mcbase.mctypes.McAccu64"><code class="xref py py-class docutils literal notranslate"><span class="pre">McAccu64</span></code></a> - 64-bit unsigned weight accumulators</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDouble" title="xopto.mcbase.mctypes.McDouble"><code class="xref py py-class docutils literal notranslate"><span class="pre">McDouble</span></code></a> - double precision floating-point arithmetics</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The 32-bit photon packet weight accumulators
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McAccu32" title="xopto.mcbase.mctypes.McAccu32"><code class="xref py py-class docutils literal notranslate"><span class="pre">McAccu32</span></code></a> should be avoided, since they can
+overflow even for simulations with a small number of photon packets.</p>
+</div>
+<p>Single precision floating-point arithmetics
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McFloat" title="xopto.mcbase.mctypes.McFloat"><code class="xref py py-class docutils literal notranslate"><span class="pre">McFloat</span></code></a> should be sufficient for most
+application. Note that double precision floating-point arithmetics
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDouble" title="xopto.mcbase.mctypes.McDouble"><code class="xref py py-class docutils literal notranslate"><span class="pre">McDouble</span></code></a> is significantly slower
+on GPU devices.</p>
+<p>If more that 4,294,967,295 photon packets need to be simulated in a single run
+of the Monte Carlo simulator, use a 64-bit photon packet counter
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McCnt64" title="xopto.mcbase.mctypes.McCnt64"><code class="xref py py-class docutils literal notranslate"><span class="pre">McCnt64</span></code></a>. The performance penalty will depend
+on the OpenCL device support for 64-bit atomic operations
+(cl_khr_int64_base_atomics
+OpenCL <a class="reference external" href="https://www.khronos.org/registry/OpenCL/sdk/1.2/docs/man/xhtml/EXTENSION.html">extension</a>)</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="simulator_options.html" class="btn btn-neutral float-right" title="Simulator options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="sampling_volume.html" class="btn btn-neutral float-left" title="Sampling volume" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

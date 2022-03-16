@@ -1,0 +1,640 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.mccyl.mcsurface.base &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.mccyl.mcsurface.base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xopto.mccyl.mcsurface.base</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">mcoptions</span>
+<span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">mcobject</span>
+<span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">cltypes</span>
+
+<span class="n">OUTER</span> <span class="o">=</span> <span class="s1">&#39;outer&#39;</span>
+<span class="sd">&#39;&#39;&#39; Identifier of the outer sample surface. &#39;&#39;&#39;</span>
+
+<span class="n">INTERNAL</span> <span class="o">=</span> <span class="s1">&#39;internal&#39;</span>
+<span class="sd">&#39;&#39;&#39; Identifier of the internal sample surface. &#39;&#39;&#39;</span>
+
+<span class="n">NONE</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+<span class="sd">&#39;&#39;&#39; Identifier used for a surface that is not yet assigned. &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="SurfaceLayoutBase"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayoutBase">[docs]</a><span class="k">class</span> <span class="nc">SurfaceLayoutBase</span><span class="p">(</span><span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Base class of all the sample surface layouts.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">OUTER</span> <span class="ow">or</span> <span class="n">INTERNAL</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Complex surface layout at the specified sample surface.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        location: OUTER or INTERNAL</span>
+<span class="sd">            Location of the sample surface to which the layout applies.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">location</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">OUTER</span><span class="p">,</span> <span class="n">INTERNAL</span><span class="p">,</span> <span class="n">NONE</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Surface layout location must be &quot;</span><span class="si">{}</span><span class="s1">&quot;, &quot;</span><span class="si">{}</span><span class="s1">&quot; or &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">NONE</span><span class="p">,</span> <span class="n">OUTER</span><span class="p">,</span> <span class="n">INTERNAL</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_location</span> <span class="o">=</span> <span class="n">location</span>
+
+    <span class="k">def</span> <span class="nf">_get_location</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_location</span>
+    <span class="k">def</span> <span class="nf">_set_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="n">OUTER</span> <span class="ow">or</span> <span class="n">INTERNAL</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">location</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">NONE</span><span class="p">,</span> <span class="n">OUTER</span><span class="p">,</span> <span class="n">INTERNAL</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Surface layout location must be &quot;</span><span class="si">{}</span><span class="s1">&quot;, &quot;</span><span class="si">{}</span><span class="s1">&quot; or &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">NONE</span><span class="p">,</span> <span class="n">OUTER</span><span class="p">,</span> <span class="n">INTERNAL</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">location</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_location</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_location</span> <span class="o">!=</span> <span class="n">NONE</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Surface layout cannot be changed!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_location</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_location</span><span class="p">,</span> <span class="n">_set_location</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Location of the surface layout.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SurfaceLayoutOuter"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayoutOuter">[docs]</a><span class="k">class</span> <span class="nc">SurfaceLayoutOuter</span><span class="p">(</span><span class="n">SurfaceLayoutBase</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Base class of the outer sample surface layout.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a layout for the  outer sample surface.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">OUTER</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SurfaceLayoutInternal"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayoutInternal">[docs]</a><span class="k">class</span> <span class="nc">SurfaceLayoutInternal</span><span class="p">(</span><span class="n">SurfaceLayoutBase</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Base class of the internal sample surfaces layout.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a layout for the internal sample surfaces.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">INTERNAL</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SurfaceLayoutAny"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayoutAny">[docs]</a><span class="k">class</span> <span class="nc">SurfaceLayoutAny</span><span class="p">(</span><span class="n">SurfaceLayoutBase</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Base class of surface layouts that can be used for both the</span>
+<span class="sd">    outer or internal sample surfaces.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">NONE</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a layout for the outer or internal sample surfaces. By default</span>
+<span class="sd">        the location is not initialized.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SurfaceLayoutAny.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayoutAny.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span><span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;SurfaceLayoutAny&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance of a surface layout from a dict.</span>
+<span class="sd">        The dict keys must match the parameter names defined by the</span>
+<span class="sd">        constructor.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">T</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s1">&#39;Cannot initialize an instance of &quot;</span><span class="si">{:s}</span><span class="s1">&quot; from the data&#39;</span>
+                <span class="s1">&#39;of instance &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">T</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">data_</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="SurfaceLayoutDefault"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayoutDefault">[docs]</a><span class="k">class</span> <span class="nc">SurfaceLayoutDefault</span><span class="p">(</span><span class="n">SurfaceLayoutAny</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Default / dummy layout for the outer or internal sample surface.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="SurfaceLayoutDefault.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayoutDefault.cl_type">[docs]</a>    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that is passed to the Monte carlo simulator kernel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: McObject</span>
+<span class="sd">            A Monte Carlo simulator instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        struct: cltypes.Structure</span>
+<span class="sd">            A structure type that represents the surface layout in</span>
+<span class="sd">            the Monte Carlo kernel.</span>
+
+<span class="sd">            The returned structure type implements the following fields:</span>
+
+<span class="sd">            - dummy: mc_int_t</span>
+<span class="sd">                Dummy field of the dummy detector.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClSurfaceLayoutDefault</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;dummy&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">ClSurfaceLayoutDefault</span></div>
+
+<div class="viewcode-block" id="SurfaceLayoutDefault.cl_options"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayoutDefault.cl_options">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Raw OpenCL options of the default detector.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span></div>
+
+<div class="viewcode-block" id="SurfaceLayoutDefault.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayoutDefault.cl_declaration">[docs]</a>    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that defines the dummy reflector in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">Loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s1">&#39;struct Mc</span><span class="si">{}</span><span class="s1">SurfaceLayout{{mc_int_t dummy;}};&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SurfaceLayoutDefault.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayoutDefault.cl_implementation">[docs]</a>    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL implementation of the default surface layout</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span>
+        <span class="n">Loc</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;void dbg_print_</span><span class="si">{}</span><span class="s1">_surface_layout(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loc</span><span class="p">),</span>
+            <span class="s1">&#39;		__mc_surface_mem const Mc</span><span class="si">{}</span><span class="s1">SurfaceLayout *layout){{&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;	dbg_print(&quot;Mc</span><span class="si">{}</span><span class="s1">SurfaceLayout - default layout:&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="SurfaceLayoutDefault.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayoutDefault.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator.</span>
+<span class="sd">        See the :py:meth:`SurfaceLayoutDefault.cl_type` for a detailed</span>
+<span class="sd">        list of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Structure that is filled with the source data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Filled ctypes structure received as an input argument or a new</span>
+<span class="sd">            instance if the input argument target is None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">dummy</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">target</span></div>
+
+<div class="viewcode-block" id="SurfaceLayoutDefault.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayoutDefault.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="SurfaceLayoutDefault.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayoutDefault.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;SurfaceLayoutDefault&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create an instance of :py:class:`SurfaceLayoutDefault` from a</span>
+<span class="sd">        dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Dictionary created by the :py:meth:`SurfaceLayoutDefault.todict`</span>
+<span class="sd">            method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">layout_type</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">layout_type</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s1">&#39;Expected a &quot;</span><span class="si">{}</span><span class="s1">&quot; type bot got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">layout_type</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">data_</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SurfaceLayouts"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayouts">[docs]</a><span class="k">class</span> <span class="nc">SurfaceLayouts</span><span class="p">(</span><span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">):</span>
+<div class="viewcode-block" id="SurfaceLayouts.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayouts.cl_type">[docs]</a>    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that is passed to the OpenCL simulator.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: McObject</span>
+<span class="sd">            A Monte Carlo simulator instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        struct: cltypes.Structure</span>
+<span class="sd">            A structure type that represents surface layouts in the</span>
+<span class="sd">            Monte Carlo kernel.</span>
+
+<span class="sd">            The returned structure type implements the following fields:</span>
+
+<span class="sd">            - outer: SurfaceLayoutOuter</span>
+<span class="sd">                Layout of the outer sample surface (z = 0).</span>
+<span class="sd">            - internal: SurfaceLayoutInternal</span>
+<span class="sd">                Layout of the internal sample surfaces (z = 0).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">class</span> <span class="nc">ClSurfaceLayouts</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;outer&#39;</span><span class="p">,</span>    <span class="bp">self</span><span class="o">.</span><span class="n">outer</span><span class="o">.</span><span class="n">fetch_cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;internal&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="o">.</span><span class="n">fetch_cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">))</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">ClSurfaceLayouts</span></div>
+
+<div class="viewcode-block" id="SurfaceLayouts.cl_options"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayouts.cl_options">[docs]</a>    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">RawOptions</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the OpenCL options of the surface layout.</span>
+
+<span class="sd">        If the outer and / or internal sample surface layouts are specified</span>
+<span class="sd">        (not the dummy default :py:class:`SurfaceLayoutDefault`),</span>
+<span class="sd">        the corresponding OpenCL options that activate the use of surface</span>
+<span class="sd">        layouts are set, i.e. MC_USE_OUTER_SURFACE_LAYOUT for the outer surface</span>
+<span class="sd">        and MC_USE_INTERNAL_SURFACE_LAYOUT for the internal surface.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">use_layouts</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outer</span><span class="p">)</span> <span class="o">!=</span> <span class="n">SurfaceLayoutDefault</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;MC_USE_OUTER_SURFACE_LAYOUT&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_outer</span><span class="o">.</span><span class="n">fetch_cl_options</span><span class="p">(</span><span class="n">mc</span><span class="p">))</span>
+            <span class="n">use_layouts</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="p">)</span> <span class="o">!=</span> <span class="n">SurfaceLayoutDefault</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;MC_USE_INTERNAL_SURFACE_LAYOUT&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_internal</span><span class="o">.</span><span class="n">fetch_cl_options</span><span class="p">(</span><span class="n">mc</span><span class="p">))</span>
+            <span class="n">use_layouts</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">use_layouts</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;MC_USE_SURFACE_LAYOUTS&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="SurfaceLayouts.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayouts.cl_declaration">[docs]</a>    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Declarations of surface layouts in OpenCL.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_outer</span><span class="o">.</span><span class="n">fetch_cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">),</span>
+            <span class="s1">&#39;typedef struct McOuterSurfaceLayout McOuterSurfaceLayout;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_internal</span><span class="o">.</span><span class="n">fetch_cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">),</span>
+            <span class="s1">&#39;typedef struct McInternalSurfaceLayout McInternalSurfaceLayout;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McSurfaceLayouts{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	McOuterSurfaceLayout outer;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	McInternalSurfaceLayout internal;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;typedef struct McSurfaceLayouts McSurfaceLayouts;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mcsim_outer_surface_layout(psim) (&amp;mcsim_surface_layouts(psim)-&gt;outer)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mcsim_internal_surface_layout(psim) (&amp;mcsim_surface_layouts(psim)-&gt;internal)&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="SurfaceLayouts.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayouts.cl_implementation">[docs]</a>    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of surface layouts.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_outer</span><span class="o">.</span><span class="n">fetch_cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">),</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_internal</span><span class="o">.</span><span class="n">fetch_cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">),</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;void dbg_print_surface_layouts(__mc_surface_mem const McSurfaceLayouts *layouts){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(&quot;McSurfaceLayouts&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_outer_surface_layout(&amp;layouts-&gt;outer);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_internal_surface_layout(&amp;layouts-&gt;internal);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outer</span><span class="p">:</span> <span class="n">SurfaceLayoutOuter</span> <span class="ow">or</span> <span class="n">SurfaceLayoutAny</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">internal</span><span class="p">:</span> <span class="n">SurfaceLayoutInternal</span> <span class="ow">or</span> <span class="n">SurfaceLayoutAny</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Container of the outer and internal sample surface layouts.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        outer: SurfaceLayoutOuter or SurfaceLayoutAny</span>
+<span class="sd">            Layout of the outer sample surface.</span>
+<span class="sd">        internal: SurfaceLayoutInternal or SurfaceLayoutAny</span>
+<span class="sd">            Layout at the internal sample surfaces.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outer</span><span class="p">,</span> <span class="n">SurfaceLayouts</span><span class="p">):</span>
+            <span class="n">sg</span> <span class="o">=</span> <span class="n">outer</span>
+            <span class="n">outer</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">outer</span>
+            <span class="n">internal</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">internal</span>
+
+        <span class="k">if</span> <span class="n">outer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">outer</span> <span class="o">=</span> <span class="n">SurfaceLayoutDefault</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outer</span><span class="p">,</span> <span class="p">(</span><span class="n">SurfaceLayoutOuter</span><span class="p">,</span>
+                                  <span class="n">SurfaceLayoutAny</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Layout of the outer sample surface must be an &#39;</span>
+                            <span class="s1">&#39;instance of SurfaceLayoutOuter or &#39;</span>
+                            <span class="s1">&#39;SurfaceLayoutAny!&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">internal</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">internal</span> <span class="o">=</span> <span class="n">SurfaceLayoutDefault</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">internal</span><span class="p">,</span> <span class="p">(</span><span class="n">SurfaceLayoutInternal</span><span class="p">,</span>
+                                     <span class="n">SurfaceLayoutAny</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Layout of the internal sample surfaces must be an &#39;</span>
+                            <span class="s1">&#39;instance of SurfaceLayoutInternal or &#39;</span>
+                            <span class="s1">&#39;SurfaceLayoutAny!&#39;</span><span class="p">)</span>
+
+        <span class="n">outer</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">OUTER</span>
+        <span class="n">internal</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">INTERNAL</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_outer</span> <span class="o">=</span> <span class="n">outer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_internal</span> <span class="o">=</span> <span class="n">internal</span>
+
+    <span class="k">def</span> <span class="nf">_get_outer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outer</span>
+    <span class="n">outer</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_outer</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Outer sample surface layout.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_internal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_internal</span>
+    <span class="n">internal</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_internal</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Layouts of the internal sample surfaces.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SurfaceLayouts.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayouts.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator.</span>
+<span class="sd">        See the :py:meth:`SurfaceLayouts.cl_type` method for a detailed</span>
+<span class="sd">        list of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Ctypes structure that is filled with the source data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Filled structure received as an input argument or a new</span>
+<span class="sd">            instance if the input argument target is None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">outer</span><span class="o">.</span><span class="n">cl_pack</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">outer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="o">.</span><span class="n">cl_pack</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">internal</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">target</span></div>
+
+<div class="viewcode-block" id="SurfaceLayouts.types"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayouts.types">[docs]</a>    <span class="k">def</span> <span class="nf">types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns a tuple of surface layout types assigned to this instance.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_outer</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_internal</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SurfaceLayouts.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsurface.base.html#xopto.mccyl.mcsurface.base.SurfaceLayouts.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;outer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outer</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;internal&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_internal</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span>
+        <span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;SurfaceLayouts(outer=</span><span class="si">{}</span><span class="s1">, internal=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_outer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_internal</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> #</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

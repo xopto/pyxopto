@@ -24,6 +24,5 @@ Examples
 
 .. toctree::
    :maxdepth: 3
-   :caption: Examples
 
    voxelized_vessel

@@ -16,6 +16,7 @@ Subpackages
    xopto.mcvox.mcobject
    xopto.mcvox.mcoptions
    xopto.mcvox.mcpf
+   xopto.mcvox.mcprogress
    xopto.mcvox.mcrun
    xopto.mcvox.mcsource
    xopto.mcvox.mcsurface

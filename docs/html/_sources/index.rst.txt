@@ -13,6 +13,7 @@ Welcome to PyXOpto's documentation!
    source/installation
    source/opencl_devices
    source/mcml/index
+   source/mccyl/index
    source/mcvox/index
    source/dataset/index
    apidoc/modules

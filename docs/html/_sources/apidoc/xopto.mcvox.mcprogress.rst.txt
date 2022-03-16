@@ -1,0 +1,10 @@
+xopto.mcvox.mcprogress package
+==============================
+
+Module contents
+---------------
+
+.. automodule:: xopto.mcvox.mcprogress
+   :members:
+   :undoc-members:
+   :show-inheritance:

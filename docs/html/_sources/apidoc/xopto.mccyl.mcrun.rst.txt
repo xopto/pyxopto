@@ -1,0 +1,18 @@
+xopto.mccyl.mcrun package
+=========================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mccyl.mcrun.mcrun
+
+Module contents
+---------------
+
+.. automodule:: xopto.mccyl.mcrun
+   :members:
+   :undoc-members:
+   :show-inheritance:

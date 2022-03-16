@@ -1,34 +1,168 @@
 
+
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.dataset.render.common &mdash; PyXOpto 0.1.0 documentation</title>
+  
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>xopto.dataset.render.common &#8212; PyXOpto 0.1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
    
-  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
-  </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
           
 
-          <div class="body" role="main">
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.dataset.render.common</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for xopto.dataset.render.common</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
@@ -82,8 +216,8 @@
 <span class="sd">    -------</span>
 <span class="sd">    parser: argparse.ArgumentParser</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
 <span class="sd">    Command line argument parser instance implements the following arguments:</span>
 
 <span class="sd">        verbose: bool</span>
@@ -91,6 +225,12 @@
 
 <span class="sd">        test: bool</span>
 <span class="sd">            Run in test mode.</span>
+
+<span class="sd">        method: str</span>
+<span class="sd">            Monte Carlo stepping method.</span>
+
+<span class="sd">        cache: bool</span>
+<span class="sd">            Enables fluence accumulator cache.</span>
 
 <span class="sd">        output_dir: str</span>
 <span class="sd">            Root directory of the dataset.</span>
@@ -100,6 +240,26 @@
 
 <span class="sd">        cl_index: int</span>
 <span class="sd">            OpenCL device index (zero-based).</span>
+
+<span class="sd">        fast_math:</span>
+<span class="sd">            Adds common performace-related OpenCL build options</span>
+<span class="sd">            -cl-fast-relaxed-math and --cl-mad-enable.</span>
+
+<span class="sd">        cl-fast-relaxed-math: None</span>
+<span class="sd">            Adds OpenCL build option -cl-fast-relaxed-math.</span>
+
+<span class="sd">        cl-mad-enable: None</span>
+<span class="sd">            Adds OpenCL build option -cl-mad-enable.</span>
+
+<span class="sd">        cl-unsafe-math-optimizations: None</span>
+<span class="sd">            Adds OpenCL build option -cl-unsafe-math-optimizations.</span>
+
+<span class="sd">        cl-finite-math-only: None</span>
+<span class="sd">            Adds OpenCL build option -cl-finite-math-only.</span>
+
+<span class="sd">        cl-no-signed-zeros: None</span>
+<span class="sd">            Adds OpenCL build option -cl-no-signed-zeros.</span>
+
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
@@ -124,6 +284,44 @@
         <span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="s1">&#39;--cl-index&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;cl_index&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;OpenCL device index to use for the simulations.&#39;</span><span class="p">)</span>
 
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--method&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;MC_METHOD&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">choices</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;aw&#39;</span><span class="p">,</span> <span class="s1">&#39;ar&#39;</span><span class="p">,</span> <span class="s1">&#39;mbl&#39;</span><span class="p">),</span>
+        <span class="n">default</span><span class="o">=</span><span class="s1">&#39;aw&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Select a Monte Carlo simulation method. Use &#39;</span>
+             <span class="s1">&#39;&quot;ar&quot; for Albedo Rejection, &#39;</span>
+             <span class="s1">&#39;&quot;aw&quot; for Albedo Weight (default) or &#39;</span>
+             <span class="s1">&#39;&quot;mbl&quot; for Microscopic Beer-Lambert.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;--cache&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;cache&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Enables fluence accumulator cache.&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--fast-math&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;fast_math&#39;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Adds common performace-related OpenCL build options &#39;</span>
+             <span class="s1">&#39;-cl-fast-relaxed-math and --cl-mad-enable.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--cl-fast-relaxed-math&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;cl_fast_relaxed_math&#39;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Adds OpenCL build option -cl-fast-relaxed-math.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--cl-mad-enable&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;cl_mad_enable&#39;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Adds OpenCL build option -cl-mad-enable.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--cl-unsafe-math-optimizations&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;cl_unsafe_math_optimizations&#39;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Adds OpenCL build option -cl-unsafe-math.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--cl-finite-math-only&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;cl_finite_math_only&#39;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Adds OpenCL build option -cl-finite-math-only.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--cl-no-signed-zeros&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;cl_no_signed_zeros&#39;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Adds OpenCL build option -cl-no-signed-zeros.&#39;</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">parser</span></div>
 
 <div class="viewcode-block" id="process_cli"><a class="viewcode-back" href="../../../../apidoc/xopto.dataset.render.common.html#xopto.dataset.render.common.process_cli">[docs]</a><span class="k">def</span> <span class="nf">process_cli</span><span class="p">(</span><span class="n">parser</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -140,8 +338,8 @@
 <span class="sd">    kwargs: dict</span>
 <span class="sd">        Keyword arguments from the command line interface as a dict.</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
 <span class="sd">    The command line implements the following keyword arguments:</span>
 
 <span class="sd">        verbose: bool</span>
@@ -153,97 +351,91 @@
 <span class="sd">        output_dir: str</span>
 <span class="sd">            Root directory of the dataset.</span>
 
+<span class="sd">        method: str</span>
+<span class="sd">            Monte Carlo stepping method.</span>
+
+<span class="sd">        cache: bool</span>
+<span class="sd">            Enables fluence accumulator cache.</span>
+
 <span class="sd">        cl_device: str</span>
 <span class="sd">            OpenCL device name to use.</span>
 
 <span class="sd">        cl_index: int</span>
 <span class="sd">            OpenCL device index (zero-based).</span>
+
+<span class="sd">        cl_build_options: List[str]</span>
+<span class="sd">            A list of  OpenCL build options.</span>
+<span class="sd">            See :py:class:`~xopto.cl.cloptions.ClBuildOption` for more</span>
+<span class="sd">            details.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
+    <span class="n">cl_build_options</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">fast_math</span><span class="p">:</span>
+        <span class="n">cl_build_options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;-cl-fast-relaxed-math&#39;</span><span class="p">)</span>
+        <span class="n">cl_build_options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;-cl-mad-enable&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">cl_fast_relaxed_math</span><span class="p">:</span>
+            <span class="n">cl_build_options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;-cl-fast-relaxed-math&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">cl_mad_enable</span><span class="p">:</span>
+            <span class="n">cl_build_options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;-cl-mad-enable&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">cl_unsafe_math_optimizations</span><span class="p">:</span>
+        <span class="n">cl_build_options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;-cl-unsafe-math-optimizations&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">cl_finite_math_only</span><span class="p">:</span>
+        <span class="n">cl_build_options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;-cl-finite-math-ony&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">cl_no_signed_zeros</span><span class="p">:</span>
+        <span class="n">cl_build_options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;-cl-no-signed-zeros&#39;</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;verbose&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">test</span><span class="p">,</span>
             <span class="s1">&#39;target_dir&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">target_dir</span><span class="p">,</span>
+            <span class="s1">&#39;method&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+            <span class="s1">&#39;cache&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span>
             <span class="s1">&#39;cl_device&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">cl_device</span><span class="p">,</span>
-            <span class="s1">&#39;cl_index&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">cl_index</span><span class="p">}</span></div>
+            <span class="s1">&#39;cl_index&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">cl_index</span><span class="p">,</span>
+            <span class="s1">&#39;cl_build_options&#39;</span><span class="p">:</span> <span class="n">cl_build_options</span><span class="p">}</span></div>
 </pre></div>
 
+           </div>
+           
           </div>
-          
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<p class="logo">
-  <a href="../../../../index.html">
-    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
     
-    <h1 class="logo logo-name">PyXOpto</h1>
-    
-  </a>
-</p>
+   
 
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../../../index.html">Documentation overview</a><ul>
-  <li><a href="../../../index.html">Module code</a><ul>
-  <li><a href="../../../xopto.html">xopto</a><ul>
-  </ul></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2021, XOpto team.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>

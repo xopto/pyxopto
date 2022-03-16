@@ -1,0 +1,450 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.mccyl.mcrun.mcrun &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.mccyl.mcrun.mcrun</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xopto.mccyl.mcrun.mcrun</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcbase.mcrun</span> <span class="kn">import</span> <span class="n">RunMinWeightBase</span><span class="p">,</span> <span class="n">RunMinPacketsBase</span>
+<span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">mc</span>
+
+
+<span class="k">class</span> <span class="nc">_RunMinWeightDetector</span><span class="p">(</span><span class="n">RunMinWeightBase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">min_weight</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">selection</span><span class="p">:</span> <span class="nb">slice</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Base class for running MC simulations until the desired weight</span>
+<span class="sd">        is collected by the selected detector.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        location: str</span>
+<span class="sd">            Detector location (&quot;outer&quot; or &quot;specular&quot;)</span>
+<span class="sd">        min_weight: float</span>
+<span class="sd">            Minimum weight that needs to be collected by the detector.</span>
+<span class="sd">        batch_size: int</span>
+<span class="sd">            Number of packets to launch in a single simulation.</span>
+<span class="sd">        selection: slice or int</span>
+<span class="sd">            A slice / region or index of the detector that is used to compute</span>
+<span class="sd">            the collected weight. If None (default), the entire detector</span>
+<span class="sd">            contributes to the total weight.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_location</span> <span class="o">=</span> <span class="n">location</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">min_weight</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">selection</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">process_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">mc</span><span class="o">.</span><span class="n">MC_RESULT_TYPE</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">MC_RESULT_TYPE</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Process one MC simulation.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Do not call this method directly. The method is called by</span>
+<span class="sd">        :py:meth:`run`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        result: mc.MC_RESULT_TYPE</span>
+<span class="sd">            A tuple as returned by the :py:meth:`mcml.mc.Mc.run` method.</span>
+<span class="sd">    </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        total_weight: float</span>
+<span class="sd">            Total weight collected by the selected detector.</span>
+<span class="sd">        n: int</span>
+<span class="sd">            The number of packets collected by the detector or None.</span>
+<span class="sd">        result: mc.MC_RESULT_TYPE</span>
+<span class="sd">            Input simulation result ready for the next Monte Carlo simulation.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">detectors</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">detectors</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">detectors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_location</span><span class="p">))</span> <span class="o">==</span> \
+                <span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">DetectorDefault</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s1">&#39;This MC simulator instance does not use the configured&#39;</span>
+                <span class="s1">&#39; (&quot;</span><span class="si">{}</span><span class="s1">&quot;) detector!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_location</span><span class="p">))</span>
+
+        <span class="n">detector</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">detectors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_location</span><span class="p">)</span>
+
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">raw</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">selection</span><span class="p">]</span>
+        <span class="n">total_weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">total_weight</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">_get_location</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_location</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_location</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Detector location.&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="RunMinWeightOuter"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcrun.mcrun.html#xopto.mccyl.mcrun.mcrun.RunMinWeightOuter">[docs]</a><span class="k">class</span> <span class="nc">RunMinWeightOuter</span><span class="p">(</span><span class="n">_RunMinWeightDetector</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_weight</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">selection</span><span class="p">:</span> <span class="nb">slice</span> <span class="ow">or</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Object for running MC simulations until the desired weight is collected</span>
+<span class="sd">        by the outer detector.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        min_weight: float</span>
+<span class="sd">            Minimum weight that needs to be collected by the detector.</span>
+<span class="sd">        batch_size: int</span>
+<span class="sd">            Number of packets to launch in a single simulation.</span>
+<span class="sd">        selection: slice or int</span>
+<span class="sd">            A slice / region or index of the detector that is used to compute</span>
+<span class="sd">            the collected weight. If None (default), the entire detector</span>
+<span class="sd">            contributes to the total weight.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;outer&#39;</span><span class="p">,</span> <span class="n">min_weight</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">selection</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RunMinWeightSpecular"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcrun.mcrun.html#xopto.mccyl.mcrun.mcrun.RunMinWeightSpecular">[docs]</a><span class="k">class</span> <span class="nc">RunMinWeightSpecular</span><span class="p">(</span><span class="n">_RunMinWeightDetector</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_weight</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">selection</span><span class="p">:</span> <span class="nb">slice</span> <span class="ow">or</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Object for running MC simulations until the desired weight is collected</span>
+<span class="sd">        by the specular detector.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        min_weight: float</span>
+<span class="sd">            Minimum weight that needs to be collected by the detector.</span>
+<span class="sd">        batch_size: int</span>
+<span class="sd">            Number of packets to launch in a single simulation.</span>
+<span class="sd">        selection: slice or int</span>
+<span class="sd">            A slice / region or index of the detector that is used to compute</span>
+<span class="sd">            the collected weight. If None (default), the entire detector</span>
+<span class="sd">            contributes to the total weight.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;specular&#39;</span><span class="p">,</span> <span class="n">min_weight</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">selection</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RunMinWeightTrace"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcrun.mcrun.html#xopto.mccyl.mcrun.mcrun.RunMinWeightTrace">[docs]</a><span class="k">class</span> <span class="nc">RunMinWeightTrace</span><span class="p">(</span><span class="n">RunMinWeightBase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_weight</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Object for running MC simulations until the desired weight is collected</span>
+<span class="sd">        by the trace, i.e. the sum of terminal weights of the traced packets.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        min_weight: float</span>
+<span class="sd">            Minimum total terminal weight of the packets that needs to be</span>
+<span class="sd">            collected by the trace.</span>
+<span class="sd">        batch_size: int</span>
+<span class="sd">            Number of packets to launch in a single simulation.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">min_weight</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RunMinWeightTrace.process_batch"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcrun.mcrun.html#xopto.mccyl.mcrun.mcrun.RunMinWeightTrace.process_batch">[docs]</a>    <span class="k">def</span> <span class="nf">process_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">mc</span><span class="o">.</span><span class="n">MC_RESULT_TYPE</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">MC_RESULT_TYPE</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Process one MC simulation.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Do not call this method directly. The method is called by</span>
+<span class="sd">        :py:meth:`run`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        result: mc.MC_RESULT_TYPE</span>
+<span class="sd">            A tuple as returned by the :py:meth:`mcml.mc.Mc.run` method.</span>
+<span class="sd">    </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        total_weight: float</span>
+<span class="sd">            Total weight collected by the selected detector.</span>
+<span class="sd">        n: int</span>
+<span class="sd">            The number of packets collected by the detector or None.</span>
+<span class="sd">        result: mc.MC_RESULT_TYPE</span>
+<span class="sd">            Input simulation result ready for the next Monte Carlo simulation.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">trace</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;This MC simulator instance does not use trace!&#39;</span><span class="p">)</span>
+
+        <span class="n">total_weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">trace</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">])</span>
+        <span class="n">num_packets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">total_weight</span><span class="p">,</span> <span class="n">num_packets</span><span class="p">,</span> <span class="n">result</span></div></div>
+
+
+<div class="viewcode-block" id="RunMinPacketsTrace"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcrun.mcrun.html#xopto.mccyl.mcrun.mcrun.RunMinPacketsTrace">[docs]</a><span class="k">class</span> <span class="nc">RunMinPacketsTrace</span><span class="p">(</span><span class="n">RunMinPacketsBase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_packets</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Object for running MC simulations until the desired number of packets</span>
+<span class="sd">        is collected in the (filtered) trace.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        min_packets: float</span>
+<span class="sd">            Minimum number of packet traces that needs to be collected.</span>
+<span class="sd">        batch_size: int</span>
+<span class="sd">            Number of packets to launch in a single simulation.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">min_packets</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RunMinPacketsTrace.process_batch"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcrun.mcrun.html#xopto.mccyl.mcrun.mcrun.RunMinPacketsTrace.process_batch">[docs]</a>    <span class="k">def</span> <span class="nf">process_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">mc</span><span class="o">.</span><span class="n">MC_RESULT_TYPE</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">MC_RESULT_TYPE</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Process one MC simulation.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Do not call this method directly. The method is called by</span>
+<span class="sd">        :py:meth:`run`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        result: mc.MC_RESULT_TYPE</span>
+<span class="sd">            A tuple as returned by the :py:meth:`mcml.mc.Mc.run` method.</span>
+<span class="sd">    </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        total_weight: float</span>
+<span class="sd">            Total weight collected by the selected detector.</span>
+<span class="sd">        n: int</span>
+<span class="sd">            The number of packets collected by the detector or None.</span>
+<span class="sd">        result: mc.MC_RESULT_TYPE</span>
+<span class="sd">            Input simulation result ready for the next Monte Carlo simulation.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">trace</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;This MC simulator instance does not use trace!&#39;</span><span class="p">)</span>
+
+        <span class="n">total_weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">trace</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">])</span>
+        <span class="n">num_packets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">total_weight</span><span class="p">,</span> <span class="n">num_packets</span><span class="p">,</span> <span class="n">result</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

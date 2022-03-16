@@ -1,0 +1,18 @@
+xopto.mccyl.mcsurface package
+=============================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mccyl.mcsurface.base
+
+Module contents
+---------------
+
+.. automodule:: xopto.mccyl.mcsurface
+   :members:
+   :undoc-members:
+   :show-inheritance:

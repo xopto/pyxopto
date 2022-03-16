@@ -1,0 +1,748 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.mcbase.mcfluence.fluence &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.mcbase.mcfluence.fluence</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xopto.mcbase.mcfluence.fluence</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">cltypes</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">mctypes</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">mcoptions</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">mcobject</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase.mcutil.axis</span> <span class="kn">import</span> <span class="n">Axis</span>
+
+
+<div class="viewcode-block" id="Fluence"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcfluence.fluence.html#xopto.mcbase.mcfluence.fluence.Fluence">[docs]</a><span class="k">class</span> <span class="nc">Fluence</span><span class="p">(</span><span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">):</span>
+<div class="viewcode-block" id="Fluence.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcfluence.fluence.html#xopto.mcbase.mcfluence.fluence.Fluence.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClFluence</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            OpenCL structure that used by the Monte carlo simulator.</span>
+
+<span class="sd">            Fields</span>
+<span class="sd">            ------</span>
+<span class="sd">            inv_step: McTypes.mc_point3f_t</span>
+<span class="sd">                Inverse spacings of the fluence accumulators.</span>
+<span class="sd">            top_left: McTypes.mc_point3f_t</span>
+<span class="sd">                Coordinates of the top-left corner of the fluence accumulators.</span>
+<span class="sd">            shape: McTypes.mc_point3_t</span>
+<span class="sd">                Shape/size of the accumulator along the x, y and z axis.</span>
+<span class="sd">            offset: McTypes.mc_size_t</span>
+<span class="sd">                Offset of the first element of the fluence accumulator buffer.</span>
+<span class="sd">            k: McTypes.mc_int_t</span>
+<span class="sd">                Integer factor that converts floating point photon packet</span>
+<span class="sd">                weight to integer value compatible with the fluence</span>
+<span class="sd">                accumulators.</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;inv_step&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;top_left&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;offset&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">),</span>
+            <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">ClFluence</span></div>
+
+<div class="viewcode-block" id="Fluence.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcfluence.fluence.html#xopto.mcbase.mcfluence.fluence.Fluence.cl_declaration">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McFluence{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t inv_step;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t top_left;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3_t shape;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_size_t offset;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_int_t k;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Fluence.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcfluence.fluence.html#xopto.mcbase.mcfluence.fluence.Fluence.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;void dbg_print_fluence(__mc_fluence_mem const McFluence *fluence){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(&quot;McFluence fluence:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;top_left.x (mm):&quot;, fluence-&gt;top_left.x*1e3f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;top_left.y (mm):&quot;, fluence-&gt;top_left.y*1e3f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;top_left.z (mm):&quot;, fluence-&gt;top_left.z*1e3f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;inv_step.x (1/mm):&quot;, fluence-&gt;inv_step.x*1e-3f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;inv_step.y (1/mm):&quot;, fluence-&gt;inv_step.y*1e-3f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;inv_step.z (1/mm):&quot;, fluence-&gt;inv_step.z*1e-3f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_int(INDENT &quot;shape.x:&quot;, fluence-&gt;shape.x);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_int(INDENT &quot;shape.y:&quot;, fluence-&gt;shape.y);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_int(INDENT &quot;shape.z:&quot;, fluence-&gt;shape.z);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;offset:&quot;, fluence-&gt;offset);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_int(INDENT &quot;k:&quot;, fluence-&gt;k);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	#if MC_FLUENCE_MODE_RATE&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print(INDENT &quot;Mode: fluence&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	#else&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print(INDENT &quot;Mode: deposition&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	#endif&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#if MC_FLUENCE_MODE_RATE&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void mcsim_fluence_deposit_at(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	McSim *mcsim, mc_point3f_t const *position, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t weight, mc_fp_t mua){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#else&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void mcsim_fluence_deposit_at(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	McSim *mcsim, mc_point3f_t const *position, mc_fp_t weight){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#endif&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t indexf_x, indexf_y, indexf_z;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	__mc_fluence_mem McFluence const *fluence = mcsim_fluence(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	indexf_x = (position-&gt;x - fluence-&gt;top_left.x)*&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		fluence-&gt;inv_step.x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	indexf_y = (position-&gt;y - fluence-&gt;top_left.y)*&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		fluence-&gt;inv_step.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	indexf_z = (position-&gt;z - fluence-&gt;top_left.z)*&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		fluence-&gt;inv_step.z;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if (indexf_x &gt;= 0 &amp;&amp; indexf_y &gt;= 0 &amp;&amp; indexf_z &gt;= 0 &amp;&amp;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			indexf_x &lt; fluence-&gt;shape.x &amp;&amp; &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			indexf_y &lt; fluence-&gt;shape.y &amp;&amp; &#39;</span>
+            <span class="s1">&#39;			indexf_z &lt; fluence-&gt;shape.z){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t index, index_x, index_y, index_z;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		index_x = mc_uint(indexf_x);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		index_y = mc_uint(indexf_y);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		index_z = mc_uint(indexf_z);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		index = (index_z*fluence-&gt;shape.y + index_y)*fluence-&gt;shape.x + index_x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		#if MC_ENABLE_DEBUG&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_point3_t index_xyz = {index_x, index_y, index_z};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print(&quot;Fluence depositing:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_float(INDENT     &quot;weight                 :&quot;, weight);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_point3(INDENT    &quot;voxel address (x, y, z):&quot;, &amp;index_xyz);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_int(INDENT       &quot;flat index             :&quot;, index);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_size_t(INDENT    &quot;offset                 :&quot;, fluence-&gt;offset);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		#endif&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		#if MC_FLUENCE_MODE_RATE&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		weight *= (mua != FP_0) ? mc_fdiv(FP_1, mua) : FP_0;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		#endif&#39;</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		uint32_t ui32w = (uint32_t)(weight*fluence-&gt;k + FP_0p5);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim_fluence_weight_deposit_ll(mcsim, fluence-&gt;offset + index, ui32w);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Maximum integer &#39;0x7FFFFF&#39; (8388607) that can be represented by a floating</span>
+<span class="sd">    point number is used by default to convert photon packet weight</span>
+<span class="sd">    (floating point) to accumulator data type (unsigned integer).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="Fluence.cl_options"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcfluence.fluence.html#xopto.mcbase.mcfluence.fluence.Fluence.cl_options">[docs]</a>    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">RawOptions</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;MC_USE_FLUENCE&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;MC_FLUENCE_MODE_RATE&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;fluence&#39;</span><span class="p">)]</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xaxis</span><span class="p">:</span> <span class="n">Axis</span> <span class="ow">or</span> <span class="s1">&#39;Fluence&#39;</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">:</span> <span class="n">Axis</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">zaxis</span><span class="p">:</span> <span class="n">Axis</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;deposition&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fluence object constructor. Default constructor disables the</span>
+<span class="sd">        fluence functionality by creating a zero-size fluence accumulator array.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xaxis: Axis or Fluence</span>
+<span class="sd">            Axis that defines accumulators along the x axis.</span>
+<span class="sd">            If Fluence instance, a new copy is created.</span>
+<span class="sd">        yaxis: Axis</span>
+<span class="sd">            Axis that defines accumulators along the y axis.</span>
+<span class="sd">        zaxis: Axis</span>
+<span class="sd">            Axis that defines accumulators along the z axis.</span>
+<span class="sd">        mode: str from (&#39;deposition&#39;, &#39;fluence&#39;)</span>
+<span class="sd">            Mode that is used to accumulate the photon packet weight:</span>
+
+<span class="sd">            - fluence - fluence rate ( 1/m :superscript:`2`)</span>
+<span class="sd">            - deposition - absorbed energy (sum of photon packet weights</span>
+<span class="sd">              absorbed in the voxel 1/m :superscript:`3`).</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">            The fluence accumulator buffer data type is inherited from the</span>
+<span class="sd">            Monte Carlo simulator mc_accu_t type.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">nphotons</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">mctypes</span><span class="o">.</span><span class="n">McFloat32</span><span class="o">.</span><span class="n">mc_fp_maxint</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">Fluence</span><span class="p">):</span>
+            <span class="n">fluence</span> <span class="o">=</span> <span class="n">xaxis</span>
+            <span class="n">xaxis</span> <span class="o">=</span> <span class="n">Axis</span><span class="p">(</span><span class="n">fluence</span><span class="o">.</span><span class="n">xaxis</span><span class="p">)</span>
+            <span class="n">yaxis</span> <span class="o">=</span> <span class="n">Axis</span><span class="p">(</span><span class="n">fluence</span><span class="o">.</span><span class="n">yaxis</span><span class="p">)</span>
+            <span class="n">zaxis</span> <span class="o">=</span> <span class="n">Axis</span><span class="p">(</span><span class="n">fluence</span><span class="o">.</span><span class="n">zaxis</span><span class="p">)</span>
+            <span class="n">nphotons</span> <span class="o">=</span> <span class="n">fluence</span><span class="o">.</span><span class="n">nphotons</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="n">fluence</span><span class="o">.</span><span class="n">mode</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">fluence</span><span class="o">.</span><span class="n">k</span>
+
+            <span class="k">if</span> <span class="n">fluence</span><span class="o">.</span><span class="n">raw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">fluence</span><span class="o">.</span><span class="n">raw</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;fluence&#39;</span><span class="p">,</span> <span class="s1">&#39;deposition&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;The value of mode parameter must be &#39;</span>
+                <span class="s1">&#39;&quot;fluence&quot; or &quot;deposition&quot; but got </span><span class="si">{}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">xaxis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">xaxis</span> <span class="o">=</span> <span class="n">Axis</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">yaxis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">yaxis</span> <span class="o">=</span> <span class="n">Axis</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">zaxis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">zaxis</span> <span class="o">=</span> <span class="n">Axis</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">xaxis</span><span class="o">.</span><span class="n">logscale</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Fluence does not support logarithmic x axis!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">yaxis</span><span class="o">.</span><span class="n">logscale</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Fluence does not support logarithmic y axis!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">zaxis</span><span class="o">.</span><span class="n">logscale</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Fluence does not support logarithmic z axis!&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span> <span class="o">=</span> <span class="n">xaxis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span> <span class="o">=</span> <span class="n">yaxis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span> <span class="o">=</span> <span class="n">zaxis</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">mode</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nphotons</span> <span class="o">=</span> <span class="n">nphotons</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_k</span> <span class="o">=</span> <span class="n">k</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">n</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">n</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Fluence accumulator array has one or more array &#39;</span>\
+                             <span class="s1">&#39;dimensions equal to zero!&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_nphotons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nphotons</span>
+    <span class="n">nphotons</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_nphotons</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;The number of photon packets that produced &#39;</span>\
+                        <span class="s1">&#39;the raw data accumulator content.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span>
+    <span class="n">mode</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_mode</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;The accumulator mode.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Fluence.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcfluence.fluence.html#xopto.mcbase.mcfluence.fluence.Fluence.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Save the fluence configuration without the accumulator data to</span>
+<span class="sd">        a dictionary.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Fluence configuration as a dictionary.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;Fluence&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;mode&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode</span><span class="p">,</span>
+            <span class="s1">&#39;xaxis&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;yaxis&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;zaxis&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="Fluence.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcfluence.fluence.html#xopto.mcbase.mcfluence.fluence.Fluence.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Fluence&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a Fluence instance from a dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Dictionary created by the :py:meth:`Fluence.todict` method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">fluence_type</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fluence_type</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected &quot;</span><span class="si">{}</span><span class="s1">&quot; type bot got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">fluence_type</span><span class="p">))</span>
+        <span class="n">x_axis</span> <span class="o">=</span> <span class="n">Axis</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;xaxis&#39;</span><span class="p">))</span>
+        <span class="n">y_axis</span> <span class="o">=</span> <span class="n">Axis</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;yaxis&#39;</span><span class="p">))</span>
+        <span class="n">z_axis</span> <span class="o">=</span> <span class="n">Axis</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;zaxis&#39;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="p">,</span> <span class="n">z_axis</span><span class="p">,</span> <span class="o">**</span><span class="n">data_</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">n</span><span class="p">,)</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_shape</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Fluence array shape.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">centers</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_x</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Accumulator centers along the x axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_dx</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_dx</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;The size of voxels along the x axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_y</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">centers</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_y</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Accumulator centers along the y axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_dy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_dy</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;The size of voxels along the y axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_z</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">centers</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_z</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Accumulator centers along the z axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_dz</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+    <span class="n">dz</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_dz</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;The size of voxels along the z axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_x_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axis</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span>
+    <span class="n">xaxis</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_x_axis</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Accumulator axis object along the x axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_y_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axis</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span>
+    <span class="n">yaxis</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_y_axis</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Accumulator axis object along the y axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_z_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axis</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span>
+    <span class="n">zaxis</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_z_axis</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Accumulator axis object along the z axis.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_k</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k</span>
+    <span class="k">def</span> <span class="nf">_set_k</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_k</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">31</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_k</span><span class="p">,</span> <span class="n">_set_k</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Fluence floating point to accumulator&#39;</span>
+                                       <span class="s1">&#39;integer conversion coefficient.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+    <span class="k">def</span> <span class="nf">_set_raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_raw_data</span><span class="p">,</span> <span class="n">_set_raw_data</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="s1">&#39;Raw fluence accumulator data if any.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nphotons</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dz</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">*</span><span class="n">k</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_data</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;Fluence accumulator - deposition or fluence rate.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Fluence.update_data"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcfluence.fluence.html#xopto.mcbase.mcfluence.fluence.Fluence.update_data">[docs]</a>    <span class="k">def</span> <span class="nf">update_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span>
+                    <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
+                    <span class="n">nphotons</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update fluence accumulator data with simulation results.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Simulator instance that produced the data.</span>
+<span class="sd">        data: Dict[np.dtype, List[np.ndarray]]</span>
+<span class="sd">            List of allocated accumulators (this implementation uses only</span>
+<span class="sd">            one accumulator buffer).</span>
+<span class="sd">        nphotons: int</span>
+<span class="sd">            The number of photon packets that produced the raw data</span>
+<span class="sd">            accumulator content.</span>
+<span class="sd">        kwargs: dict</span>
+<span class="sd">            Additional keyword arguments not used by this implementation.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">accumulators</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_accu</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">flat</span> <span class="o">+=</span> <span class="n">accumulators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nphotons</span> <span class="o">+=</span> <span class="n">nphotons</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">accumulators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nphotons</span> <span class="o">=</span> <span class="n">nphotons</span></div>
+
+<div class="viewcode-block" id="Fluence.update"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcfluence.fluence.html#xopto.mcbase.mcfluence.fluence.Fluence.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span> <span class="p">:</span> <span class="s1">&#39;Fluence&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update the fluence accumulator with data from the given fluence object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        obj: Fluence</span>
+<span class="sd">            Update the fluence accumulator of this instance with the data</span>
+<span class="sd">            from fluence instance obj.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">obj</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s1">&#39;Cannot update with fluence data of incompatible shape!&#39;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">+=</span> <span class="n">obj</span><span class="o">.</span><span class="n">raw</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nphotons</span> <span class="o">+=</span> <span class="n">obj</span><span class="o">.</span><span class="n">nphotons</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">raw</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nphotons</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">nphotons</span></div>
+
+<div class="viewcode-block" id="Fluence.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcfluence.fluence.html#xopto.mcbase.mcfluence.fluence.Fluence.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator. See the :py:meth:`Fluence.cl_type` for a detailed</span>
+<span class="sd">        list of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+<span class="sd">        target: ClFluence</span>
+<span class="sd">            CStructure that is filled with the source data.</span>
+<span class="sd">        buffer: np.ndarray</span>
+<span class="sd">            Accumulator buffer or None. Should be checked for proper size. Use</span>
+<span class="sd">            py:attr:`mc.types.np_accu` attribute to determine the</span>
+<span class="sd">            numpy type of the accumulator used in the Monte Carlo simulator.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target:  ClFluence</span>
+<span class="sd">            Filled structure received as an input argument or a new</span>
+<span class="sd">            instance if the input argument target is None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="n">allocation</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">cl_allocate_rw_accumulator_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">allocation</span><span class="o">.</span><span class="n">offset</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">start</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">start</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">start</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">inv_step</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">step</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">inv_step</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">step</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">inv_step</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">step</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">n</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">n</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">n</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k</span>
+
+        <span class="k">return</span> <span class="n">target</span></div>
+
+<div class="viewcode-block" id="Fluence.plot"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcfluence.fluence.html#xopto.mcbase.mcfluence.fluence.Fluence.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">autoscale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+             <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Show fluence slices or integral projections.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        scale: str</span>
+<span class="sd">            Data scaling can be &quot;log&quot; for logarithmic or &quot;lin&quot; for linear.</span>
+<span class="sd">        axis: str</span>
+<span class="sd">            The axis of slicing (&quot;x&quot;, &quot;y&quot; or &quot;z&quot;) or a projection along the</span>
+<span class="sd">            selected coordinate axis (&quot;xproj&quot;, &quot;yproj&quot;, &quot;zproj&quot;).</span>
+<span class="sd">            Alternatively, specify the projection plane as one of</span>
+<span class="sd">            (&quot;xy&quot;, &quot;xz&quot;, or &quot;yz&quot;).</span>
+<span class="sd">        autoscale: bool</span>
+<span class="sd">            Scale the color coding of individual slices to the corresponding</span>
+<span class="sd">            range of weights. If True, the color coding changes from slice</span>
+<span class="sd">            to slice.</span>
+<span class="sd">        show: bool </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">xopto.util</span> <span class="kn">import</span> <span class="n">sliceview</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s1">&#39;xy&#39;</span><span class="p">:</span> <span class="n">axis</span> <span class="o">=</span> <span class="s1">&#39;zproj&#39;</span>
+        <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s1">&#39;xz&#39;</span><span class="p">:</span> <span class="n">axis</span> <span class="o">=</span> <span class="s1">&#39;yproj&#39;</span>
+        <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s1">&#39;yz&#39;</span><span class="p">:</span> <span class="n">axis</span> <span class="o">=</span> <span class="s1">&#39;xproj&#39;</span>
+
+        <span class="n">ax</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;z&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Slice {{slice}}/</span><span class="si">{}</span><span class="s1"> @ </span><span class="si">{}</span><span class="s1"> = {{pos:.6f}}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">ax</span><span class="p">],</span> <span class="n">axis</span><span class="p">)</span>
+        <span class="n">logscale</span> <span class="o">=</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span>
+            <span class="n">slices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">centers</span>
+            <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span>
+        <span class="k">elif</span> <span class="n">ax</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span>
+            <span class="n">slices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">centers</span>
+            <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span>
+        <span class="k">elif</span> <span class="n">ax</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span>
+            <span class="n">slices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="o">.</span><span class="n">centers</span>
+            <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span>
+
+        <span class="n">window_title</span> <span class="o">=</span> <span class="s1">&#39;Fluence SliceView - </span><span class="si">{}</span><span class="s1"> mode&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;xproj&#39;</span><span class="p">,</span> <span class="s1">&#39;yproj&#39;</span><span class="p">,</span> <span class="s1">&#39;zproj&#39;</span><span class="p">):</span>
+            <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">pp</span>
+
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">data_slice</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+            <span class="n">low</span> <span class="o">=</span> <span class="n">data_slice</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">low</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">data_slice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">data_slice</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">low</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">data_slice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">data_slice</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span>
+
+            <span class="n">pp</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data_slice</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+            <span class="n">pp</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+            <span class="n">pp</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+            <span class="n">pp</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Integral projection along the </span><span class="si">{:s}</span><span class="s1"> axis&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">set_window_title</span><span class="p">(</span><span class="n">window_title</span><span class="p">)</span>
+            <span class="n">pp</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+                <span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sv</span> <span class="o">=</span> <span class="n">sliceview</span><span class="o">.</span><span class="n">SliceView</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">slices</span><span class="o">=</span><span class="n">slices</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">logscale</span><span class="o">=</span><span class="n">logscale</span><span class="p">,</span>
+                <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
+                <span class="n">autoscale</span><span class="o">=</span><span class="n">autoscale</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+            <span class="n">sv</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">set_window_title</span><span class="p">(</span><span class="n">window_title</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+                <span class="n">sv</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Fluence(xaxis=</span><span class="si">{}</span><span class="s2">, yaxis=</span><span class="si">{}</span><span class="s2">, zaxis=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_x_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_z_axis</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span> <span class="o">+</span> \
+            <span class="s1">&#39; # object at 0x</span><span class="si">{:&gt;08X}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

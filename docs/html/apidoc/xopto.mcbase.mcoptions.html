@@ -1,39 +1,196 @@
 
+
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.mcbase.mcoptions module &mdash; PyXOpto 0.1.0 documentation</title>
+  
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
 
-    <title>xopto.mcbase.mcoptions module &#8212; PyXOpto 0.1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="xopto.mcbase.mcrmax module" href="xopto.mcbase.mcrmax.html" />
-    <link rel="prev" title="xopto.mcbase.mcobject module" href="xopto.mcbase.mcobject.html" />
+    <link rel="next" title="xopto.mcbase.mcprogress module" href="xopto.mcbase.mcprogress.html" />
+    <link rel="prev" title="xopto.mcbase.mcobject module" href="xopto.mcbase.mcobject.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
    
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
-  </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
           
 
-          <div class="body" role="main">
+          
+            <a href="../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
             
-  <section id="module-xopto.mcbase.mcoptions">
+            <img src="../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="xopto.cl.html">xopto.cl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.data.html">xopto.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.dataset.html">xopto.dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.html">xopto.materials package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="xopto.mcbase.html">xopto.mcbase package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mccyl.html">xopto.mccyl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.html">xopto.mcml package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.html">xopto.mcvox package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.pf.html">xopto.pf package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.src.html">xopto.src package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.util.html">xopto.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">xopto</a> &raquo;</li>
+        
+          <li><a href="xopto.html">xopto package</a> &raquo;</li>
+        
+          <li><a href="xopto.mcbase.html">xopto.mcbase package</a> &raquo;</li>
+        
+      <li>xopto.mcbase.mcoptions module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-xopto.mcbase.mcoptions">
 <span id="xopto-mcbase-mcoptions-module"></span><h1>xopto.mcbase.mcoptions module<a class="headerlink" href="#module-xopto.mcbase.mcoptions" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McBoolOption">
@@ -185,6 +342,80 @@ data to the __constant OpenCL memory.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McMethod">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McMethod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McIntOption" title="xopto.mcbase.mcoptions.McIntOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McIntOption</span></code></a></p>
+<dl class="simple">
+<dt>Selects the Monte Carlo simulation method:</dt><dd><ul class="simple">
+<li><p>Albedo Weight (0)</p></li>
+<li><p>Albedo Rejection (1)</p></li>
+<li><p>Microscopic Beer Lambert (2)</p></li>
+</ul>
+</dd>
+</dl>
+<p>A detailed description of the available methods can be found in:</p>
+<p>A. Sassaroli and F. Martelli
+Equivalence of four Monte Carlo methods for photon migration in turbid media
+J. Opt. Soc. Am. A / Vol. 29, No. 10 / October 2012</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Default method is Albedo Weight. The Albedo Rejection is fast but
+produces noisy results. The Microscopic Beer-Lambert is useful for
+fluence simulations with voxel size that is smaller than the mean
+free path.</p>
+</div>
+<p>Initializes the Monte Carlo simulation method option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>int</em>) – <dl class="simple">
+<dt>Allowed values are:</dt><dd><ul class="simple">
+<li><p>0 for Albedo Weight</p></li>
+<li><p>1 for Albedo Rejection or,</p></li>
+<li><p>2 for Microscopic Beer-Lambert.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McMethod.albedo_rejection">
+<span class="sig-name descname"><span class="pre">albedo_rejection</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McIntOption('MC_METHOD',</span> <span class="pre">1)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McMethod.albedo_rejection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McMethod.albedo_weight">
+<span class="sig-name descname"><span class="pre">albedo_weight</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McIntOption('MC_METHOD',</span> <span class="pre">0)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McMethod.albedo_weight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McMethod.ar">
+<span class="sig-name descname"><span class="pre">ar</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McIntOption('MC_METHOD',</span> <span class="pre">1)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McMethod.ar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McMethod.aw">
+<span class="sig-name descname"><span class="pre">aw</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McIntOption('MC_METHOD',</span> <span class="pre">0)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McMethod.aw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McMethod.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McIntOption('MC_METHOD',</span> <span class="pre">0)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McMethod.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McMethod.mbl">
+<span class="sig-name descname"><span class="pre">mbl</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McIntOption('MC_METHOD',</span> <span class="pre">2)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McMethod.mbl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McMethod.microscopic_beer_lambert">
+<span class="sig-name descname"><span class="pre">microscopic_beer_lambert</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McIntOption('MC_METHOD',</span> <span class="pre">2)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McMethod.microscopic_beer_lambert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McMinimumPacketWeight">
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McMinimumPacketWeight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McMinimumPacketWeight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McMinimumPacketWeight" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McFloatOption" title="xopto.mcbase.mcoptions.McFloatOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McFloatOption</span></code></a></p>
@@ -304,41 +535,79 @@ Default value is 0.1.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseBallisticKernel">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McUseBallisticKernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McUseBallisticKernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseBallisticKernel" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseFluenceCache">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McUseFluenceCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McUseFluenceCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseFluenceCache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McBoolOption" title="xopto.mcbase.mcoptions.McBoolOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McBoolOption</span></code></a></p>
-<p>Turn on or off the use of ballistic Monte Carlo kernel. The ballistic
-kernel either scatters or fully absorbs the packet hence the photon
-packets do not undergo termination through weight threshold and / or
-lottery.
-The values of options <a class="reference internal" href="#xopto.mcbase.mcoptions.McMinimumPacketWeight" title="xopto.mcbase.mcoptions.McMinimumPacketWeight"><code class="xref py py-class docutils literal notranslate"><span class="pre">McMinimumPacketWeight</span></code></a> and
-<a class="reference internal" href="#xopto.mcbase.mcoptions.McUseLottery" title="xopto.mcbase.mcoptions.McUseLottery"><code class="xref py py-class docutils literal notranslate"><span class="pre">McUseLottery</span></code></a> are not used by the ballistic kernel.</p>
-<p>Default is off.</p>
+<p>Turn on or off the use of OpenCL fluence cache.
+Default is off.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The ballistic Monte Carlo kernel is about 2~3-fold faster but produces
-noisy results.</p>
+<p>Fluence cache will improve performance for large deposition voxels, where
+there is a high likelihood that consecutive weight depositions will go
+into the same accumulator.</p>
 </div>
-<p>Initializes the ballistic kernel option.</p>
+<p>Initializes the fluence cache option.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – Use True to enable or False to disable the ballistic implementation
-of the Monte Carlo kernel.</p>
+<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – Use True to enable fluence cache.</p>
 </dd>
 </dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseBallisticKernel.default">
-<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_BALLISTIC_KERNEL',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseBallisticKernel.default" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseFluenceCache.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_FLUENCE_CACHE',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseFluenceCache.default" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseBallisticKernel.off">
-<span class="sig-name descname"><span class="pre">off</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_BALLISTIC_KERNEL',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseBallisticKernel.off" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseFluenceCache.off">
+<span class="sig-name descname"><span class="pre">off</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_FLUENCE_CACHE',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseFluenceCache.off" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseBallisticKernel.on">
-<span class="sig-name descname"><span class="pre">on</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_BALLISTIC_KERNEL',</span> <span class="pre">True)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseBallisticKernel.on" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseFluenceCache.on">
+<span class="sig-name descname"><span class="pre">on</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_FLUENCE_CACHE',</span> <span class="pre">True)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseFluenceCache.on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseHalfMath">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McUseHalfMath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McUseHalfMath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseHalfMath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McBoolOption" title="xopto.mcbase.mcoptions.McBoolOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McBoolOption</span></code></a></p>
+<p>Turn on or off the use of OpenCL half-precision math.
+Default is off.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Half-precision math gives performance benefit at a
+significantly reduced precision. Use this option with care.</p>
+</div>
+<p>Initializes the half-precision math kernel option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – Use True to enable the half-precision math or False to disable
+half-precision math.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The half-precision math and native math
+<a class="reference internal" href="#xopto.mcbase.mcoptions.McUseNativeMath" title="xopto.mcbase.mcoptions.McUseNativeMath"><code class="xref py py-class docutils literal notranslate"><span class="pre">McUseNativeMath</span></code></a> options are
+mutually excluding. Ony one of the two options can be enabled at any
+given time. If both options are enabled, the native math option takes
+precedence.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseHalfMath.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_HALF_MATH',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseHalfMath.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseHalfMath.off">
+<span class="sig-name descname"><span class="pre">off</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_HALF_MATH',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseHalfMath.off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseHalfMath.on">
+<span class="sig-name descname"><span class="pre">on</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_HALF_MATH',</span> <span class="pre">True)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseHalfMath.on" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -415,7 +684,7 @@ Default value is off.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Note that packed structures can lead to significant performance
-degradation of the MonteCarlo kernel. This option is the last resort if
+degradation of the Monte Carlo kernel. This option is the last resort if
 the fields of the OpenCL and host structures cannot be properly aligned.
 When declaring OPenCL or host structures always start with the
 largest data type and move towards smaller data types. Use data types
@@ -531,97 +800,54 @@ ValueError if the same option is defined with different values.</p>
 </dl>
 </dd></dl>
 
-</section>
+</div>
 
 
+           </div>
+           
           </div>
-          
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="xopto.mcbase.mcprogress.html" class="btn btn-neutral float-right" title="xopto.mcbase.mcprogress module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="xopto.mcbase.mcobject.html" class="btn btn-neutral float-left" title="xopto.mcbase.mcobject module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<p class="logo">
-  <a href="../index.html">
-    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
     
-    <h1 class="logo logo-name">PyXOpto</h1>
-    
-  </a>
-</p>
+   
 
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="modules.html">xopto</a><ul>
-  <li><a href="xopto.html">xopto package</a><ul>
-  <li><a href="xopto.mcbase.html">xopto.mcbase package</a><ul>
-      <li>Previous: <a href="xopto.mcbase.mcobject.html" title="previous chapter">xopto.mcbase.mcobject module</a></li>
-      <li>Next: <a href="xopto.mcbase.mcrmax.html" title="next chapter">xopto.mcbase.mcrmax module</a></li>
-  </ul></li>
-  </ul></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2021, XOpto team.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>

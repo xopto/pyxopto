@@ -1,0 +1,7 @@
+xopto.mccyl.mcutil.fiber module
+===============================
+
+.. automodule:: xopto.mccyl.mcutil.fiber
+   :members:
+   :undoc-members:
+   :show-inheritance:

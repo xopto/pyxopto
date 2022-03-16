@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Sources &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Detectors" href="detector.html" />
+    <link rel="prev" title="Scattering phase functions" href="phase_function.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cylindrical MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="layer_stack.html">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Sources</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#isotropic-point">Isotropic point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#line">Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uniform-beam">Uniform beam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gaussian-beam">Gaussian beam</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="detector.html">Detectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surface_layout.html">Surface layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opencl_build_options.html">OpenCL build options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/index.html">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Cylindrical MC</a> &raquo;</li>
+        
+      <li>Sources</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sources">
+<span id="mccyl-source-label"></span><h1>Sources<a class="headerlink" href="#sources" title="Permalink to this headline">¶</a></h1>
+<p>All the photon packet sources that can be used in the Monte Carlo
+simulator are implemented by subclassing
+<a class="reference internal" href="../../apidoc/xopto.mccyl.mcsource.base.html#xopto.mccyl.mcsource.base.Source" title="xopto.mccyl.mcsource.base.Source"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcsource.base.Source</span></code></a>. The
+<a class="reference internal" href="../../apidoc/xopto.mccyl.mcsource.html#module-xopto.mccyl.mcsource" title="xopto.mccyl.mcsource"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mccyl.mcsource</span></code></a> module includes a number of commonly
+used sources:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../apidoc/xopto.mccyl.mcsource.point.html#xopto.mccyl.mcsource.point.IsotropicPoint" title="xopto.mccyl.mcsource.point.IsotropicPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcsource.point.IsotropicPoint</span></code></a> implements an isotropic
+point source.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mccyl.mcsource.line.html#xopto.mccyl.mcsource.line.Line" title="xopto.mccyl.mcsource.line.Line"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcsource.line.Line</span></code></a> implements an infinitely narrow and
+collimated source.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mccyl.mcsource.uniformbeam.html#xopto.mccyl.mcsource.uniformbeam.UniformBeam" title="xopto.mccyl.mcsource.uniformbeam.UniformBeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcsource.uniformbeam.UniformBeam</span></code></a> implements a
+uniform collimated source of elliptical cross section.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mccyl.mcsource.gaussianbeam.html#xopto.mccyl.mcsource.gaussianbeam.GaussianBeam" title="xopto.mccyl.mcsource.gaussianbeam.GaussianBeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcsource.gaussianbeam.GaussianBeam</span></code></a> implements
+a collimated Gaussian source of elliptical cross section.</p></li>
+</ul>
+<p>All sources have a position attribute that defines the position of the
+geometrical center of the source. This position is used as a reference point
+for terminating photon packets that leave the simulation radius set
+through the <a class="reference internal" href="../../apidoc/xopto.mccyl.mc.html#xopto.mccyl.mc.Mc.rmax" title="xopto.mccyl.mc.Mc.rmax"><code class="xref py py-attr docutils literal notranslate"><span class="pre">xopto.mccyl.mc.Mc.rmax</span></code></a> property. Note that by default
+all the sources point along the positive direction of the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis and
+enter the outer layer of the sample on the negative <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis at
+<img class="math" src="../../_images/math/934250f419b25a8bcb58acb3535ed17aad78b71d.png" alt="x=d/2"/> .</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The refractive index of the source (not all the sources implement
+this property) is used to compute the initial photon packet weight (the
+specular reflectance at the source-sample boundary is subtracted from 1.0).
+The sources that do not implement a refractive index, inherit the value from
+the surrounding medium.</p>
+</div>
+<p>The <a class="reference internal" href="../../apidoc/xopto.mccyl.mcsource.uniformbeam.html#xopto.mccyl.mcsource.uniformbeam.UniformBeam" title="xopto.mccyl.mcsource.uniformbeam.UniformBeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">UniformBeam</span></code></a>,
+<a class="reference internal" href="../../apidoc/xopto.mccyl.mcsource.gaussianbeam.html#xopto.mccyl.mcsource.gaussianbeam.GaussianBeam" title="xopto.mccyl.mcsource.gaussianbeam.GaussianBeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcsource.gaussianbeam.GaussianBeam</span></code></a> and all the
+fiber sources</p>
+<div class="section" id="isotropic-point">
+<h2>Isotropic point<a class="headerlink" href="#isotropic-point" title="Permalink to this headline">¶</a></h2>
+<p>This source can be placed inside and outside the sample. The following example
+shows how to create an isotropic point source in the center of the sample:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">mc</span>
+
+<span class="n">src</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">IsotropicPoint</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0e-3</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>If the source is positioned outside of the sample, the entry point
+into the sample is determined by propagating the packet from the source
+position along the launch direction. The MC simulation will start after
+refracting the packet into the sample and subtracting the specular reflectance
+at the sample boundary from the initial weight of the packet.
+If the photon packet does not intersect the sample, the
+initial weight will be set to 0 and the packet
+will be launched from the center of the sample <img class="math" src="../../_images/math/b42354722c31eaeb0774c521b0e0d67a401c12f5.png" alt="(x,y,z)=(0, 0, 0)"/>. Such
+zero-weight packets are immediately terminated and have no contribution to the
+fluence and surface detector, however will be included in the trace (have no
+effect on the sampling volume or other trace-based analysis due to the
+zero-weight).
+Note that in case the position lies within the sample, it will be used as the
+launch point and the packets will retain the full initial weight.</p>
+</div>
+<div class="section" id="line">
+<h2>Line<a class="headerlink" href="#line" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows how to create a Line source that enters the sample
+1 mm of the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis and propagates in the direction of the
+<img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">10.0</span><span class="p">)</span>
+<span class="n">src</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">Line</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0e-3</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">direction</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The packets are always launched from the outer surface of the sample. The
+source position and direction are used to determine the launch point at the
+sample surface. From there, the packet is first refracted into the sample
+and the surface reflectance is subtracted from the initial packet weight.
+If a specular surface <a class="reference internal" href="detector.html#mccyl-detector-label"><span class="std std-ref">detector</span></a> is used, the
+reflectance is deposited into that detector.</p>
+</div>
+<div class="section" id="uniform-beam">
+<h2>Uniform beam<a class="headerlink" href="#uniform-beam" title="Permalink to this headline">¶</a></h2>
+<p>A uniform beam of elliptical cross section can be created with
+<a class="reference internal" href="../../apidoc/xopto.mccyl.mcsource.uniformbeam.html#xopto.mccyl.mcsource.uniformbeam.UniformBeam" title="xopto.mccyl.mcsource.uniformbeam.UniformBeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcsource.uniformbeam.UniformBeam</span></code></a> source. The beam
+diameter along the y and z axis is controlled by the <code class="code docutils literal notranslate"><span class="pre">diameter</span></code> parameter.
+In case the diameter is give as a scalar <code class="code docutils literal notranslate"><span class="pre">float</span></code> value, the cross
+section of the beam becomes circular. Note that the diameters are applied in
+the coordinate system of the beam. Optionally, the beam can be repositioned
+and tilted through the <code class="code docutils literal notranslate"><span class="pre">position</span></code> and <code class="code docutils literal notranslate"><span class="pre">direction</span></code> parameters.
+The following example creates a uniform beam with incidence along the
+<img class="math" src="../../_images/math/ff4524dbd837ea6d376496ae0e3244d2b70ec9e7.png" alt="axis"/> and a circular cross section diameter of 1 mm.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">mc</span>
+
+<span class="n">src</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">UniformBeam</span><span class="p">(</span><span class="mf">1.0e-3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The packets are always launched from the top surface of the sample. The
+source position and direction are used to determine the launch point at the
+sample surface. From there, the packet is first refracted into the sample
+and the surface reflectance is subtracted from the initial packet weight.
+If a specular surface <a class="reference internal" href="detector.html#mccyl-detector-label"><span class="std std-ref">detector</span></a> is used, the
+reflectance is deposited into that detector.</p>
+</div>
+<div class="section" id="gaussian-beam">
+<h2>Gaussian beam<a class="headerlink" href="#gaussian-beam" title="Permalink to this headline">¶</a></h2>
+<p>A Gaussian beam can be created with
+<a class="reference internal" href="../../apidoc/xopto.mccyl.mcsource.gaussianbeam.html#xopto.mccyl.mcsource.gaussianbeam.GaussianBeam" title="xopto.mccyl.mcsource.gaussianbeam.GaussianBeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mccyl.mcsource.gaussianbeam.GaussianBeam</span></code></a> source. The standard
+deviation (<img class="math" src="../../_images/math/b52df27bfb0b1e3af0c2c68a7b9da459178c2a7d.png" alt="\sigma"/>) of the beam can be independently set along
+the x and y axis.
+In case <img class="math" src="../../_images/math/b52df27bfb0b1e3af0c2c68a7b9da459178c2a7d.png" alt="\sigma"/> is give as a scalar <code class="code docutils literal notranslate"><span class="pre">float</span></code> value, the value is
+applied along the y and z axis. The beam is clipped at a distance of
+<img class="math" src="../../_images/math/30371a77d1672b4d8e851aa1dce1982043638e97.png" alt="5\sigma"/> from the beam axis. The clip distance can be customized through
+the <code class="code docutils literal notranslate"><span class="pre">clip</span></code> parameter. Note that <img class="math" src="../../_images/math/b52df27bfb0b1e3af0c2c68a7b9da459178c2a7d.png" alt="\sigma"/> is applied in
+the coordinate system of the beam. Optionally, the beam can be repositioned
+and tilted through the <code class="code docutils literal notranslate"><span class="pre">position</span></code> and <code class="code docutils literal notranslate"><span class="pre">direction</span></code> parameters.
+The following example creates a
+<a class="reference internal" href="../../apidoc/xopto.mccyl.mcsource.gaussianbeam.html#xopto.mccyl.mcsource.gaussianbeam.GaussianBeam" title="xopto.mccyl.mcsource.gaussianbeam.GaussianBeam"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianBeam</span></code></a> source with a
+perpendicular incidence and with <img class="math" src="../../_images/math/1e9fdfdbb28c795915ca4e943fa54b735c212e3c.png" alt="\sigma_y"/> 1 mm and
+<img class="math" src="../../_images/math/67b9677e3989c04e2a0c2106045ae8cc9cc284d5.png" alt="\sigma_z"/> 2 mm.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">mc</span>
+
+<span class="n">src</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">GaussianBeam</span><span class="p">([</span><span class="mf">1.0e-3</span><span class="p">,</span> <span class="mf">2.0e-3</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The packets are always launched from the surface of the sample. The
+source position and direction are used to determine the launch point at the
+sample surface. From there, the packet is first refracted into the sample
+and the reflectance is subtracted from the initial packet weight.
+If a specular surface <a class="reference internal" href="detector.html#mccyl-detector-label"><span class="std std-ref">detector</span></a> is used, the
+reflectance is deposited into that detector.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="detector.html" class="btn btn-neutral float-right" title="Detectors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="phase_function.html" class="btn btn-neutral float-left" title="Scattering phase functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

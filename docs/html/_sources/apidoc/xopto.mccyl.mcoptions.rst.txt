@@ -1,0 +1,10 @@
+xopto.mccyl.mcoptions package
+=============================
+
+Module contents
+---------------
+
+.. automodule:: xopto.mccyl.mcoptions
+   :members:
+   :undoc-members:
+   :show-inheritance:

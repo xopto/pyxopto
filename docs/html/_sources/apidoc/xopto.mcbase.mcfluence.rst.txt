@@ -1,5 +1,21 @@
-xopto.mcbase.mcfluence module
-=============================
+xopto.mcbase.mcfluence package
+==============================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mcbase.mcfluence.fluence
+   xopto.mcbase.mcfluence.fluencecyl
+   xopto.mcbase.mcfluence.fluencecylt
+   xopto.mcbase.mcfluence.fluencerz
+   xopto.mcbase.mcfluence.fluencerzt
+   xopto.mcbase.mcfluence.fluencet
+
+Module contents
+---------------
 
 .. automodule:: xopto.mcbase.mcfluence
    :members:

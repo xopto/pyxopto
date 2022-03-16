@@ -1,0 +1,10 @@
+xopto.mccyl.mctrace package
+===========================
+
+Module contents
+---------------
+
+.. automodule:: xopto.mccyl.mctrace
+   :members:
+   :undoc-members:
+   :show-inheritance:

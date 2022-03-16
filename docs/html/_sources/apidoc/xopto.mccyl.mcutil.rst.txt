@@ -1,0 +1,26 @@
+xopto.mccyl.mcutil package
+==========================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mccyl.mcutil.axis
+   xopto.mccyl.mcutil.boundary
+   xopto.mccyl.mcutil.buffer
+   xopto.mccyl.mcutil.cache
+   xopto.mccyl.mcutil.fiber
+   xopto.mccyl.mcutil.fourier
+   xopto.mccyl.mcutil.geometry
+   xopto.mccyl.mcutil.interp
+   xopto.mccyl.mcutil.lut
+
+Module contents
+---------------
+
+.. automodule:: xopto.mccyl.mcutil
+   :members:
+   :undoc-members:
+   :show-inheritance:

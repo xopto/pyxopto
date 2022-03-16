@@ -1,34 +1,168 @@
 
+
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.dataset.render.mcml_comparison &mdash; PyXOpto 0.1.0 documentation</title>
+  
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>xopto.dataset.render.mcml_comparison &#8212; PyXOpto 0.1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
    
-  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
-  </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
           
 
-          <div class="body" role="main">
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.dataset.render.mcml_comparison</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for xopto.dataset.render.mcml_comparison</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
@@ -55,6 +189,7 @@
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">jinja2</span>
@@ -85,7 +220,7 @@
 
     <span class="s1">&#39;sample&#39;</span><span class="p">:{</span>
         <span class="s1">&#39;1-layer-100mm&#39;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;1-layer-100mm&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;1-layer-100mm&#39;</span><span class="p">,</span>
             <span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="s1">&#39;np.inf&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;mua&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;mus&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
                 <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mf">100.0e-3</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">RI_WATER</span><span class="p">,</span> <span class="s1">&#39;mua&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;mus&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
@@ -96,7 +231,7 @@
             <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span>
         <span class="p">},</span>
         <span class="s1">&#39;1-layer-1mm&#39;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;1-layer-1mm&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;1-layer-1mm&#39;</span><span class="p">,</span>
             <span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="s1">&#39;np.inf&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span> <span class="s1">&#39;mua&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;mus&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
                 <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mf">1.0e-3</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">RI_WATER</span><span class="p">,</span> <span class="s1">&#39;mua&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;mus&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
@@ -107,7 +242,7 @@
             <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span>
         <span class="p">},</span>
         <span class="s1">&#39;2-layer-100um-1mm&#39;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;2-layer-100um-1mm&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="s1">&#39;2-layer-100um-1mm&#39;</span><span class="p">,</span>
             <span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="s1">&#39;np.inf&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">RI_AIR</span><span class="p">,</span>
                  <span class="s1">&#39;mua&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;mus&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
@@ -124,9 +259,14 @@
         <span class="p">},</span>
     <span class="p">}</span>
 <span class="p">}</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">MCML comparison dataset configuration.</span>
+<span class="sd">&#39;&#39;&#39;</span>
 
 <div class="viewcode-block" id="render_mcml_comparison"><a class="viewcode-back" href="../../../../apidoc/xopto.dataset.render.mcml_comparison.html#xopto.dataset.render.mcml_comparison.render_mcml_comparison">[docs]</a><span class="k">def</span> <span class="nf">render_mcml_comparison</span><span class="p">(</span><span class="n">target_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                            <span class="n">cl_device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cl_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                           <span class="n">cl_build_options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                            <span class="n">test</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Render templates with the given configuration.</span>
@@ -141,6 +281,10 @@
 <span class="sd">    config: dict</span>
 <span class="sd">        Configuration / context to use when rendering the run scripts. If None,</span>
 <span class="sd">        the default configuration will be used.</span>
+<span class="sd">    method: str</span>
+<span class="sd">        Monte Carlo stepping method. One of &quot;ar&quot; &quot;aw&quot; or &quot;mbl&quot;.</span>
+<span class="sd">    cache: bool</span>
+<span class="sd">        Enables fluence accumulator cache.</span>
 <span class="sd">    cl_device: str</span>
 <span class="sd">        Default OpenCL device name or None. The value can be also set through</span>
 <span class="sd">        the CL_DEVICE environment variable.</span>
@@ -148,6 +292,9 @@
 <span class="sd">        OpenCL device index (if multiple OpenCL devices of the same kind</span>
 <span class="sd">        are installed). The value can be also set through the CL_INDEX</span>
 <span class="sd">        environment variable.</span>
+<span class="sd">    cl_build_options: List[str]</span>
+<span class="sd">        A list of  OpenCL build options.</span>
+<span class="sd">        See :py:class:`~xopto.cl.cloptions.ClBuildOption` for more details.</span>
 <span class="sd">    test: bool</span>
 <span class="sd">        Do a test run. The run scripts will be rendered but not saved. This</span>
 <span class="sd">        option will automatically enable the verbose mode.</span>
@@ -160,11 +307,19 @@
     <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">CONFIG</span>
 
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;aw&#39;</span>
+
     <span class="k">if</span> <span class="n">target_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">target_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">test</span><span class="p">:</span>
         <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">cl_build_options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cl_build_options</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cl_build_options</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cl_build_options</span><span class="p">]</span>
 
     <span class="n">root_dataset_dir</span> <span class="o">=</span>  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
     <span class="n">mcml_run_script_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="s1">&#39;mcml_comparison&#39;</span><span class="p">)</span>
@@ -196,8 +351,11 @@
             <span class="s1">&#39;num_packets&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sample_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;num_packets&#39;</span><span class="p">,</span>
                                                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;num_packets&#39;</span><span class="p">])),</span>
             <span class="s1">&#39;sample&#39;</span><span class="p">:</span> <span class="n">sample_data</span><span class="p">,</span>
+            <span class="s1">&#39;method&#39;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span>
+            <span class="s1">&#39;cache&#39;</span><span class="p">:</span> <span class="n">cache</span><span class="p">,</span>
             <span class="s1">&#39;cl_device&#39;</span><span class="p">:</span> <span class="n">cl_device</span><span class="p">,</span>
             <span class="s1">&#39;cl_index&#39;</span><span class="p">:</span> <span class="n">cl_index</span><span class="p">,</span>
+            <span class="s1">&#39;cl_build_options&#39;</span><span class="p">:</span> <span class="n">cl_build_options</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="n">out_mcml</span> <span class="o">=</span> <span class="n">T_mcml</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
@@ -212,6 +370,50 @@
                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">run_script_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">rendered_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
                     <span class="n">fid</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="path"><a class="viewcode-back" href="../../../../apidoc/xopto.dataset.render.mcml_comparison.html#xopto.dataset.render.mcml_comparison.path">[docs]</a><span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="n">sample</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">mua</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">musr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+         <span class="n">mcvox</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns path to a dataset file relative to the root directory of the</span>
+<span class="sd">    dataset.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sample: str</span>
+<span class="sd">        One of the sample configurations defined in CONFIG.</span>
+<span class="sd">    g: float</span>
+<span class="sd">        Scattering phase function anisotropy.</span>
+<span class="sd">    mua: float</span>
+<span class="sd">        Absorption coefficient (1/m).</span>
+<span class="sd">    musr: float</span>
+<span class="sd">        Reduced scattering coefficient (1/m).</span>
+<span class="sd">    mcvox: bool</span>
+<span class="sd">        Indicates if the dataset produced by the voxelized MC should be loaded.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pats: str</span>
+<span class="sd">        Path to the dataset file relative to the toot directory of the dataset.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">sample</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;The sample argument must be one of </span><span class="si">{}</span><span class="s1"> but got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">sample</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">g</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">][</span><span class="n">sample</span><span class="p">][</span><span class="s1">&#39;g&#39;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;The g parameter must be one of </span><span class="si">{}</span><span class="s1"> but got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">][</span><span class="n">sample</span><span class="p">][</span><span class="s1">&#39;g&#39;</span><span class="p">],</span> <span class="n">g</span>
+            <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="nb">dir</span> <span class="o">=</span> <span class="s1">&#39;mcml_comparison&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">mcvox</span> <span class="k">else</span> <span class="s1">&#39;mcml_mcvox_comparison&#39;</span>
+    <span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">][</span><span class="n">sample</span><span class="p">][</span><span class="s1">&#39;dir&#39;</span><span class="p">],</span>
+                            <span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="s1">&#39;radial&#39;</span><span class="p">,</span> <span class="s1">&#39;hg&#39;</span><span class="p">,</span> <span class="n">PF_DIR_FORMAT</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">FILENAME_FORMAT</span><span class="p">(</span><span class="n">mua</span><span class="p">,</span> <span class="n">musr</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="load"><a class="viewcode-back" href="../../../../apidoc/xopto.dataset.render.mcml_comparison.html#xopto.dataset.render.mcml_comparison.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">sample</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">mua</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">musr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
          <span class="n">mcvox</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dataset_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -240,29 +442,11 @@
 <span class="sd">    data: dict</span>
 <span class="sd">        Sample data.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">if</span> <span class="n">dataset_dir</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">dataset_dir</span><span class="p">:</span>
-        <span class="n">dataset_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+    <span class="n">rel_filename</span> <span class="o">=</span> <span class="n">path</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">mua</span><span class="p">,</span> <span class="n">musr</span><span class="p">,</span> <span class="n">mcvox</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">sample</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;The sample argument must be one of </span><span class="si">{}</span><span class="s1"> but got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">sample</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-    <span class="k">if</span> <span class="n">g</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">][</span><span class="n">sample</span><span class="p">][</span><span class="s1">&#39;g&#39;</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;The g parameter must be one of </span><span class="si">{}</span><span class="s1"> but got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">][</span><span class="n">sample</span><span class="p">][</span><span class="s1">&#39;g&#39;</span><span class="p">],</span> <span class="n">g</span>
-            <span class="p">)</span>
-    <span class="p">)</span>
-    <span class="nb">dir</span> <span class="o">=</span> <span class="s1">&#39;mcml_comparison&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">mcvox</span> <span class="k">else</span> <span class="s1">&#39;mcml_mcvox_comparison&#39;</span>
-    <span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-        <span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">][</span><span class="n">sample</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="s1">&#39;radial&#39;</span><span class="p">,</span> <span class="s1">&#39;hg&#39;</span><span class="p">,</span> <span class="n">PF_DIR_FORMAT</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+    <span class="n">full_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="n">rel_filename</span><span class="p">)</span>
 
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">FILENAME_FORMAT</span><span class="p">(</span><span class="n">mua</span><span class="p">,</span> <span class="n">musr</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">),</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">full_filename</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="visualize"><a class="viewcode-back" href="../../../../apidoc/xopto.dataset.render.mcml_comparison.html#xopto.dataset.render.mcml_comparison.visualize">[docs]</a><span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="n">sample</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">mua</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">musr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
               <span class="n">mcvox</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dataset_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -329,83 +513,47 @@
     <span class="n">render_mcml_comparison</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 
+           </div>
+           
           </div>
-          
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<p class="logo">
-  <a href="../../../../index.html">
-    <img class="logo" src="../../../../_static/xopto_logo_bright.png" alt="Logo"/>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
     
-    <h1 class="logo logo-name">PyXOpto</h1>
-    
-  </a>
-</p>
+   
 
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../../../index.html">Documentation overview</a><ul>
-  <li><a href="../../../index.html">Module code</a><ul>
-  <li><a href="../../../xopto.html">xopto</a><ul>
-  </ul></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2021, XOpto team.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>

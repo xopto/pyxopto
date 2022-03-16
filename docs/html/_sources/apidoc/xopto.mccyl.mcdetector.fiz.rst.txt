@@ -1,0 +1,7 @@
+xopto.mccyl.mcdetector.fiz module
+=================================
+
+.. automodule:: xopto.mccyl.mcdetector.fiz
+   :members:
+   :undoc-members:
+   :show-inheritance:

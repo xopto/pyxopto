@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Trace &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Sampling volume" href="sampling_volume.html" />
+    <link rel="prev" title="Fluence" href="fluence.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Cylindrical MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="layer_stack.html">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source.html">Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="detector.html">Detectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surface_layout.html">Surface layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fluence.html">Fluence</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Trace</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#trace-filter">Trace Filter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opencl_build_options.html">OpenCL build options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/index.html">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Cylindrical MC</a> &raquo;</li>
+        
+      <li>Trace</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="trace">
+<span id="mccyl-trace-label"></span><h1>Trace<a class="headerlink" href="#trace" title="Permalink to this headline">¶</a></h1>
+<p>Trace allows collection of detailed data along the photon packet path. The
+trace functionality is implemented in <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mctrace.Trace</span></code></a>
+and also conveniently imported into the <a class="reference internal" href="../../apidoc/xopto.mccyl.mctrace.html#module-xopto.mccyl.mctrace" title="xopto.mccyl.mctrace"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mccyl.mctrace</span></code></a> and
+<a class="reference internal" href="../../apidoc/xopto.mccyl.mc.html#module-xopto.mccyl.mc" title="xopto.mccyl.mc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mccyl.mc</span></code></a> modules.</p>
+<p>The events that are traced by <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mctrace.Trace</span></code></a>: can be
+customized through the <code class="code docutils literal notranslate"><span class="pre">options</span></code> argument.</p>
+<ul class="simple">
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">options</span></span><span class="operator"><span class="pre">=</span></span><span class="name"><span class="pre">Trace</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">TRACE_START</span></span></code> - only the start state of the photon
+packets is traced (this is the state of the photon packet after launching and
+subtraction the weight due to specular reflections at the source-medium or
+sample boundary).</p></li>
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">options</span></span><span class="operator"><span class="pre">=</span></span><span class="name"><span class="pre">Trace</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">TRACE_END</span></span></code> - only the end state of the photon packet
+is traced (the photon packet is absorbed, leaves the sample through the top
+or botom surface or escapes the simulation radius).</p></li>
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">options</span></span><span class="operator"><span class="pre">=</span></span><span class="name"><span class="pre">Trace</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">TRACE_START</span></span> <span class="operator"><span class="pre">|</span></span> <span class="name"><span class="pre">Trace</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">TRACE_END</span></span></code> - the start and the end
+states of the photon packet are traced.</p></li>
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">options</span></span><span class="operator"><span class="pre">=</span></span><span class="name"><span class="pre">Trace</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">TRACE_ALL</span></span></code> - the entire path of the photon packet is
+traced (default).</p></li>
+</ul>
+<p>The following events are traced (in addition to the start and end state of
+the photon packet):</p>
+<ul class="simple">
+<li><p>refraction or reflection at the layer/voxel boundary.</p></li>
+<li><p>crossing the layer or voxel boundary (even if the materials of the geometrical
+entities are the same)</p></li>
+<li><p>scattering and absorption events</p></li>
+</ul>
+<p>Each trace entry includes eight floating-point numbers in the following order:</p>
+<ul class="simple">
+<li><p>x - x coordinate of the photon packet position (m).</p></li>
+<li><p>y - y coordinate of the photon packet position (m).</p></li>
+<li><p>z - z coordinate of the photon packet position (m).</p></li>
+<li><p>px - x component of the propagation direction vector (m).</p></li>
+<li><p>py - y component of the propagation direction vector (m).</p></li>
+<li><p>pz - z component of the propagation direction vector (m).</p></li>
+<li><p>w - weight of the photon packet.</p></li>
+<li><p>pl - total optical path length since the start event. Note that tracing of
+the optical path length can be tuned off by passing <code class="code python docutils literal notranslate"><span class="name"><span class="pre">plon</span></span><span class="operator"><span class="pre">=</span></span><span class="keyword constant"><span class="pre">False</span></span></code>
+to <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Trace()</span></code></a>.</p></li>
+</ul>
+<p>After running a Monte carlo simulation, the trace data are stored in
+a structured numpy array of shape <code class="code python docutils literal notranslate"><span class="punctuation"><span class="pre">(</span></span><span class="name"><span class="pre">num_packets</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="name"><span class="pre">max_len</span></span><span class="punctuation"><span class="pre">)</span></span></code>,
+where <code class="code python docutils literal notranslate"><span class="name"><span class="pre">num_packets</span></span></code> is the number of
+launched photon packets and <code class="code python docutils literal notranslate"><span class="name"><span class="pre">maxlen</span></span></code> is the maximum length of the
+trace that is set through the constructor parameter <code class="code python docutils literal notranslate"><span class="name"><span class="pre">maxlen</span></span></code>.
+The actual number of trace entries for each photon packet can be
+obtained from the <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.n" title="xopto.mcbase.mctrace.Trace.n"><code class="xref py py-attr docutils literal notranslate"><span class="pre">n</span></code></a> property, which is a
+numpy vector of length <code class="code python docutils literal notranslate"><span class="name"><span class="pre">num_packets</span></span></code>.</p>
+<p>When tracing the entire path of the photon packets, it is important to select
+an adequate maximum length of the trace. The value will depend on a number of
+factors including the optical properties of the sample and the configuration
+of the investigated source and detector. It is advised to iteratively determine
+the maximum length of the trace by observing the number of trace events
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.n" title="xopto.mcbase.mctrace.Trace.n"><code class="xref py py-attr docutils literal notranslate"><span class="pre">xopto.mcbase.mctrace.Trace.n</span></code></a>. If the maximum trace length is
+exceeded during the Monte Carlo simulation, the last trace entry is overwritten
+with the final state of the photon packet.</p>
+<p>The terminal states of the traced photon packets can be easily accessed through
+the <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.terminal" title="xopto.mcbase.mctrace.Trace.terminal"><code class="xref py py-attr docutils literal notranslate"><span class="pre">terminal</span></code></a> property.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># terminal weights of all the traced photon packets</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span>
+<span class="c1"># terminal x coordinate of all the traced photon packets</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+
+<span class="c1"># terminal y coordinate of the first traced photon packets</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">terminal</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="trace-filter">
+<h2>Trace Filter<a class="headerlink" href="#trace-filter" title="Permalink to this headline">¶</a></h2>
+<p>Frequently, only the traces of photon packets that end with a particular state
+are useful. A versatile filter <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Filter" title="xopto.mcbase.mctrace.Filter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filter</span></code></a> is
+available for filtering the photon packet traces according to the terminal
+position, propagation direction, and optical path length of the photon packet.
+The trace filter <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Filter" title="xopto.mcbase.mctrace.Filter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filter</span></code></a> is also conveniently
+imported into the <a class="reference internal" href="../../apidoc/xopto.mccyl.mctrace.html#module-xopto.mccyl.mctrace" title="xopto.mccyl.mctrace"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mccyl.mctrace</span></code></a> and
+<a class="reference internal" href="../../apidoc/xopto.mcvox.mctrace.html#module-xopto.mcvox.mctrace" title="xopto.mcvox.mctrace"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcvox.mctrace</span></code></a> modules.</p>
+<p>The traces can be filtered by the final state of the photon packet.
+For a detailed list of available options see
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Filter" title="xopto.mcbase.mctrace.Filter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filter</span></code></a>. If a filter object is
+passed to the <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trace</span></code></a> constructor (parameter
+<code class="code docutils literal notranslate"><span class="pre">filter</span></code>) the results of the Monte Carlo simulation will be automatically
+filtered. Alternatively, filters can be easily applied to the existing
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trace</span></code></a> instances by the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">xopto.mcbase.mctrace.Filter.__call__()</span></code> method. By default, the filter
+modifies the trace (does not create a new trace object for the filtered results)
+and returns it. This behavior can be changed by passing <code class="code python docutils literal notranslate"><span class="name"><span class="pre">update</span></span><span class="operator"><span class="pre">=</span></span><span class="keyword constant"><span class="pre">False</span></span></code>
+to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">__call__()</span></code> method. This will create
+a new <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trace</span></code></a> instance for the filtered
+trace.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The filter will also drop all the traces that exceed the maximum
+trace length, even if they satisfy the filter. The number of dropped traces is
+returned as the second output of
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">__call__()</span></code>.</p>
+</div>
+<p>In the following example we create a trace with a maximum number of
+events / length set to 1000 and a filter that only selects traces of photon
+packets that end at the top sample surface and are escaping within
+20 <sup>o</sup> of the surface normal. Note that the z component of
+the propagation direction is negative for photon packets that escape the
+sample through the top surface.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">mc</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">filt</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Filter</span><span class="p">(</span>
+    <span class="n">z</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">pz</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">20.0</span><span class="p">)))</span>
+<span class="p">)</span>
+<span class="n">mc</span><span class="o">.</span><span class="n">mctrace</span><span class="o">.</span><span class="n">Trace</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">filt</span><span class="p">)</span>
+
+<span class="c1"># apply the filter and modify the input trace</span>
+<span class="n">some_trace</span><span class="p">,</span> <span class="n">dropped</span> <span class="o">=</span> <span class="n">filt</span><span class="p">(</span><span class="n">some_trace</span><span class="p">)</span>
+
+<span class="c1"># apply the filter and create a new trace instance</span>
+<span class="n">filtered_trace</span><span class="p">,</span> <span class="n">dropped</span> <span class="o">=</span> <span class="n">filt</span><span class="p">(</span><span class="n">some_trace</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To visualize the paths of photon packets after completing a simulation,
+use the <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.plot" title="xopto.mcbase.mctrace.Trace.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a> method. The traces can be
+plot in several different views:</p>
+<ul class="simple">
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">view</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’3d’</span></span></code> produces a 3D view of the traces (default).</p></li>
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">view</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’xy’</span></span></code> produces a 2D view of the traces projected onto the x-y plane.</p></li>
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">view</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’xz’</span></span></code> produces a 2D view of the traces projected onto the x-z plane.</p></li>
+<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">view</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’yz’</span></span></code> produces a 2D view of the traces projected onto the y-z plane.</p></li>
+</ul>
+<p>The <code class="code docutils literal notranslate"><span class="pre">show</span></code> parameter controls if the plot window is shown before returning
+from <a class="reference internal" href="../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.plot" title="xopto.mcbase.mctrace.Trace.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot()</span></code></a>. Note that the starting point
+of the traced path is highlighted with a green marker and the final point of
+the traced path with a red marker.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">trace</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># produces a 3D view</span>
+<span class="n">trace</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">view</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># produces a 2D view in the x-y plane</span>
+<span class="n">trace</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">view</span><span class="o">=</span><span class="s1">&#39;xz&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># produces a 2D view in the x-z plane</span>
+<span class="n">trace</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">view</span><span class="o">=</span><span class="s1">&#39;yz&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># produces a 2D view in the y-z plane</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="sampling_volume.html" class="btn btn-neutral float-right" title="Sampling volume" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="fluence.html" class="btn btn-neutral float-left" title="Fluence" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

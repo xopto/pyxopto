@@ -1,0 +1,10 @@
+xopto.mccyl.mcobject package
+============================
+
+Module contents
+---------------
+
+.. automodule:: xopto.mccyl.mcobject
+   :members:
+   :undoc-members:
+   :show-inheritance:

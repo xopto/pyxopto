@@ -1,0 +1,592 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.mccyl.mcsource.gaussianbeam &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.mccyl.mcsource.gaussianbeam</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xopto.mccyl.mcsource.gaussianbeam</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mccyl.mcsource.base</span> <span class="kn">import</span> <span class="n">Source</span>
+<span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">mcobject</span>
+<span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">cltypes</span>
+<span class="kn">from</span> <span class="nn">xopto.mccyl</span> <span class="kn">import</span> <span class="n">mctypes</span>
+<span class="kn">from</span> <span class="nn">xopto.mccyl.mcutil</span> <span class="kn">import</span> <span class="n">boundary</span><span class="p">,</span> <span class="n">geometry</span>
+
+<div class="viewcode-block" id="GaussianBeam"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsource.gaussianbeam.html#xopto.mccyl.mcsource.gaussianbeam.GaussianBeam">[docs]</a><span class="k">class</span> <span class="nc">GaussianBeam</span><span class="p">(</span><span class="n">Source</span><span class="p">):</span>
+<div class="viewcode-block" id="GaussianBeam.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsource.gaussianbeam.html#xopto.mccyl.mcsource.gaussianbeam.GaussianBeam.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that is passed to the Monte carlo simulator kernel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: McObject</span>
+<span class="sd">            A Monte Carlo simulator instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        struct: cltypes.Structure</span>
+<span class="sd">            A structure type that represents the Gaussian beam in</span>
+<span class="sd">            the Monte Carlo kernel.</span>
+
+<span class="sd">            The returned structure type implements the following fields:</span>
+
+<span class="sd">            - transformation: mc_matrix3f_t</span>
+<span class="sd">                Transformation from the beam coordinate system to the Monte</span>
+<span class="sd">                Carlo coordinate system.</span>
+<span class="sd">            - position: (float, float, float)</span>
+<span class="sd">                Center of the collimated beam as an array-like object of size 3</span>
+<span class="sd">                (x, y, z). The beam will be always propagated to the top</span>
+<span class="sd">                sample surface.</span>
+<span class="sd">            - direction: (float, float, float)</span>
+<span class="sd">                Direction of the collimated beam as an array-like object of size 3</span>
+<span class="sd">                (px, py, pz). The vector should be normalized to unit length and</span>
+<span class="sd">                have a positive z coordinate (hitting the top sample surface).</span>
+<span class="sd">            - sigma: mc_point2f_t</span>
+<span class="sd">                Width of the Gaussian beam in terms of standard deviation along</span>
+<span class="sd">                the x and y axis,</span>
+<span class="sd">            - clip: mc_fp_t</span>
+<span class="sd">                Clips the gaussian beam at the specified number of sigmas.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClGaussianBeam</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="n">_pack_</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;transformation&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_matrix3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;direction&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point2f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;clip&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">ClGaussianBeam</span></div>
+
+<div class="viewcode-block" id="GaussianBeam.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsource.gaussianbeam.html#xopto.mccyl.mcsource.gaussianbeam.GaussianBeam.cl_declaration">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that defines the source in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McSource{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t position;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t direction;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point2f_t sigma;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t clip;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="GaussianBeam.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsource.gaussianbeam.html#xopto.mccyl.mcsource.gaussianbeam.GaussianBeam.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the source in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;void dbg_print_source(__mc_source_mem const McSource *src){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(&quot;GaussianBeam source:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_matrix3f(INDENT &quot;transformation:&quot;, &amp;src-&gt;transformation);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(INDENT &quot;position:&quot;, &amp;src-&gt;position);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(INDENT &quot;direction:&quot;, &amp;src-&gt;direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point2f(INDENT &quot;sigma:&quot;, &amp;src-&gt;sigma);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT &quot;clip:&quot;, src-&gt;clip);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void mcsim_launch(McSim *mcsim){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	__mc_source_mem const struct McSource *source = mcsim_source(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t cos_fi, sin_fi, r, d1, d2;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t initial_weight = FP_1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_size_t layer_index = 1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t pt_src;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t source_dir = source-&gt;direction;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t initial_dir = source-&gt;direction;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t initial_pos;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	r = mc_sqrt(-FP_2*mc_log(FP_1 - mcsim_random(mcsim)));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	r = mc_fmin(r, source-&gt;clip);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_sincos(FP_2PI*mcsim_random(mcsim), &amp;sin_fi, &amp;cos_fi);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	pt_src.x = r*cos_fi*source-&gt;sigma.x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	pt_src.y = r*sin_fi*source-&gt;sigma.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	pt_src.z = FP_0;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		&amp;source-&gt;transformation, &amp;pt_src, &amp;initial_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	initial_pos.x += source-&gt;position.x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	initial_pos.y += source-&gt;position.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	initial_pos.z += source-&gt;position.z;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	int has_intersection = ray_cylinder_intersections(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_layer_r_inner(mcsim_layer(mcsim, 0)),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		&amp;initial_pos, &amp;source_dir,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		&amp;d1, &amp;d2);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if (has_intersection) {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t k = mc_fmin(d1, d2);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		initial_pos.x += k*source_dir.x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		initial_pos.y += k*source_dir.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		initial_pos.z += k*source_dir.z;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_point3f_t normal;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		radial_normal_inv(&amp;initial_pos, &amp;normal);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t cos1 = normal.x*source_dir.x + &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			normal.y*source_dir.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t specular_r = reflectance(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mc_layer_n(mcsim_layer(mcsim, 0)),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mc_layer_n(mcsim_layer(mcsim, 1)), cos1,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mc_layer_cc_inner(mcsim_layer(mcsim, 0))&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		);&#39;</span>
+            <span class="s1">&#39;		if (cos1 &gt; mc_layer_cc_inner(mcsim_layer(mcsim, 0))) {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			refract(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;				&amp;source_dir, &amp;normal,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;				mc_layer_n(mcsim_layer(mcsim, 0)),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;				mc_layer_n(mcsim_layer(mcsim, 1)), &amp;initial_dir&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		layer_index = 1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		initial_weight = FP_1 - specular_r;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		#if MC_USE_SPECULAR_DETECTOR&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		if(specular_r &gt; FP_0) {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mc_point3f_t reflected_dir;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			reflect(&amp;source_dir, &amp;normal, &amp;reflected_dir);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mcsim_specular_detector_deposit(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;				mcsim, &amp;initial_pos, &amp;reflected_dir, specular_r);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		#endif&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	} else {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		initial_pos = (mc_point3f_t){.x=FP_0, .y=FP_0, .z=FP_0};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		layer_index = mcsim_layer_count(mcsim) - 1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		initial_weight = FP_0;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_set_current_layer_index(mcsim, layer_index);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_set_weight(mcsim, initial_weight);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_set_position(mcsim, &amp;initial_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mcsim_set_direction(mcsim, &amp;initial_dir);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_status(mcsim, &quot;Launch GaussianBeam&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="GaussianBeam.fwhm2sigma"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsource.gaussianbeam.html#xopto.mccyl.mcsource.gaussianbeam.GaussianBeam.fwhm2sigma">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fwhm2sigma</span><span class="p">(</span><span class="n">fwhm</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Converts sigma to Full width at half maximum (FWHM).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sigma: float</span>
+<span class="sd">            Standard deviation of the Gaussian.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fwhm: float</span>
+<span class="sd">            FWHM parameter of the Gaussian</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">fwhm</span><span class="o">/</span><span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span></div>
+
+<div class="viewcode-block" id="GaussianBeam.sigma2fwhm"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsource.gaussianbeam.html#xopto.mccyl.mcsource.gaussianbeam.GaussianBeam.sigma2fwhm">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">sigma2fwhm</span><span class="p">(</span><span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Converts Full width at half maximum (FWHM) to sigma (standard deviation).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fwhm: float</span>
+<span class="sd">            Full width at half maximum (FWHM).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sigma: float</span>
+<span class="sd">            Standard deviation of the Gaussian.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">sigma</span><span class="o">*</span><span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span></div>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">clip</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
+                 <span class="n">position</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                 <span class="n">direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Collimated Gaussian beam photon packet source.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sigma: float or (float, float)</span>
+<span class="sd">            Collimated beam width in terms of standard deviation given along</span>
+<span class="sd">            the y and z axis. If a single value is provided, the same width</span>
+<span class="sd">            is used along the y and z axis.</span>
+<span class="sd">        clip: float</span>
+<span class="sd">            Clip the beam at clip*sigma distance from the beam axis.</span>
+<span class="sd">        position: (float, float, float)</span>
+<span class="sd">            Center of the collimated beam as an array-like object of size 3</span>
+<span class="sd">            (x, y, z).</span>
+<span class="sd">        direction: (float, float, float)</span>
+<span class="sd">            Direction of the collimated beam as an array-like object of size 3</span>
+<span class="sd">            (px, py, pz). The vector should be normalized to unit length.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The beam will be first propagated from the given position to the</span>
+<span class="sd">        entry point on the sample surface along the propagation</span>
+<span class="sd">        direction (no interactions with the medium during this step).</span>
+<span class="sd">        Note that in case the position lies within the sample, the</span>
+<span class="sd">        beam will be propagated to the entry point using reversed direction.</span>
+<span class="sd">        From there it will be refracted into the sample. The MC simulation</span>
+<span class="sd">        will start after subtracting the specular reflectance at the</span>
+<span class="sd">        sample boundary from the initial weight of the packet.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">Source</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_sigma</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_clip</span><span class="p">(</span><span class="n">clip</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_position</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_direction</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GaussianBeam.update"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsource.gaussianbeam.html#xopto.mccyl.mcsource.gaussianbeam.GaussianBeam.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;GaussianBeam&#39;</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update this source configuration from the other source. The</span>
+<span class="sd">        other source must be of the same type as this source or a dict with</span>
+<span class="sd">        appropriate fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other: GaussianBeam or dict</span>
+<span class="sd">            This source is updated with the configuration of the other source.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">GaussianBeam</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">sigma</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clip</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">clip</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">position</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">direction</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clip</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;clip&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;direction&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span>
+    <span class="k">def</span> <span class="nf">_set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">position</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_position</span><span class="p">,</span> <span class="n">_set_position</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Source position.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span>
+    <span class="k">def</span> <span class="nf">_set_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">direction</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">norm</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The norm/length of the propagation direction &#39;</span>
+                             <span class="s1">&#39;vector must not be 0!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span> <span class="o">*=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">norm</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_direction</span><span class="p">,</span> <span class="n">_set_direction</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Source direction.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_sigma</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span>
+    <span class="k">def</span> <span class="nf">_set_sigma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">sigma</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Beam diameter/sigma must not be negative!&#39;</span><span class="p">)</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_sigma</span><span class="p">,</span> <span class="n">_set_sigma</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Beam standard deviation (m).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_clip</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span>
+    <span class="k">def</span> <span class="nf">_set_clip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clip</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">clip</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Clip diameter/sigma must be greater than zero!.&#39;</span><span class="p">)</span>
+    <span class="n">clip</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_clip</span><span class="p">,</span> <span class="n">_set_clip</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;Number of standard deviations at which &#39;</span>
+                    <span class="s1">&#39;the beam is clipped.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GaussianBeam.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsource.gaussianbeam.html#xopto.mccyl.mcsource.gaussianbeam.GaussianBeam.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator. See the :py:meth:`GaussianBeam.cl_type`</span>
+<span class="sd">        for a detailed list of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+<span class="sd">        target: pyopyo.mccyl.mcsource.GaussianBeam.cl_type</span>
+<span class="sd">            Structure that is filled with the source data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: pyopyo.mccyl.mcsource.GaussianBeam.cl_type</span>
+<span class="sd">            Filled structure received as an input argument or a new</span>
+<span class="sd">            instance if the input argument target is None.</span>
+<span class="sd">        topgeometry: None</span>
+<span class="sd">            This source does not use advanced geometry at the top sample surface.</span>
+<span class="sd">        bottomgeometry: None</span>
+<span class="sd">            This source does not use advanced geometry at the bottom sample surface.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="n">T</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">transform_base</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">transformation</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">)</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">direction</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">sigma</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">)</span>
+
+        <span class="n">target</span><span class="o">.</span><span class="n">clip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span>
+
+        <span class="k">return</span> <span class="n">target</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="GaussianBeam.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mcsource.gaussianbeam.html#xopto.mccyl.mcsource.gaussianbeam.GaussianBeam.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> 
+                <span class="s1">&#39;clip&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span><span class="p">,</span>
+                <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;GaussianBeam(sigma=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">), clip=</span><span class="si">{}</span><span class="s1">, &#39;</span>\
+               <span class="s1">&#39;position=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">), direction=(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">))&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                   <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

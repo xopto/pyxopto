@@ -1,0 +1,7 @@
+xopto.mccyl.mcsource.gaussianbeam module
+========================================
+
+.. automodule:: xopto.mccyl.mcsource.gaussianbeam
+   :members:
+   :undoc-members:
+   :show-inheritance:

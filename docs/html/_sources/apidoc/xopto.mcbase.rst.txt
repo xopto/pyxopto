@@ -8,6 +8,7 @@ Subpackages
    :maxdepth: 4
 
    xopto.mcbase.kernel
+   xopto.mcbase.mcfluence
    xopto.mcbase.mcpf
    xopto.mcbase.mcutil
 
@@ -18,9 +19,9 @@ Submodules
    :maxdepth: 4
 
    xopto.mcbase.cltypes
-   xopto.mcbase.mcfluence
    xopto.mcbase.mcobject
    xopto.mcbase.mcoptions
+   xopto.mcbase.mcprogress
    xopto.mcbase.mcrmax
    xopto.mcbase.mcrun
    xopto.mcbase.mcsrc

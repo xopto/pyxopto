@@ -1,0 +1,518 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.mcbase.mcfluence.fluencecylt module &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.mcbase.mcfluence.fluencerz module" href="xopto.mcbase.mcfluence.fluencerz.html" />
+    <link rel="prev" title="xopto.mcbase.mcfluence.fluencecyl module" href="xopto.mcbase.mcfluence.fluencecyl.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="xopto.cl.html">xopto.cl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.data.html">xopto.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.dataset.html">xopto.dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.html">xopto.materials package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="xopto.mcbase.html">xopto.mcbase package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mccyl.html">xopto.mccyl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.html">xopto.mcml package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.html">xopto.mcvox package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.pf.html">xopto.pf package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.src.html">xopto.src package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.util.html">xopto.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">xopto</a> &raquo;</li>
+        
+          <li><a href="xopto.html">xopto package</a> &raquo;</li>
+        
+          <li><a href="xopto.mcbase.html">xopto.mcbase package</a> &raquo;</li>
+        
+          <li><a href="xopto.mcbase.mcfluence.html">xopto.mcbase.mcfluence package</a> &raquo;</li>
+        
+      <li>xopto.mcbase.mcfluence.fluencecylt module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-xopto.mcbase.mcfluence.fluencecylt">
+<span id="xopto-mcbase-mcfluence-fluencecylt-module"></span><h1>xopto.mcbase.mcfluence.fluencecylt module<a class="headerlink" href="#module-xopto.mcbase.mcfluence.fluencecylt" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">FluenceCylt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raxis</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><span class="pre">xopto.mcbase.mcutil.axis.Axis</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fiaxis</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><span class="pre">xopto.mcbase.mcutil.axis.Axis</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zaxis</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><span class="pre">xopto.mcbase.mcutil.axis.Axis</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxis</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><span class="pre">xopto.mcbase.mcutil.axis.Axis</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'deposition'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcfluence/fluencecylt.html#FluenceCylt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcobject.McObject</span></code></a></p>
+<p>Cylindrical Fluence object constructor.
+Default constructor disables the fluence functionality by creating
+a zero-size fluence accumulator array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raxis</strong> (<a class="reference internal" href="xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><em>Axis</em></a><em> or </em><a class="reference internal" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt" title="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt"><em>FluenceCylt</em></a>) – Axis that defines accumulators along the radial axis.
+If FluenceCylt instance, a new copy is created.</p></li>
+<li><p><strong>fiaxis</strong> (<a class="reference internal" href="xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><em>Axis</em></a>) – Axis that defines accumulators along the polar angle axis. The
+range of this axis typically span from 0 to 2*:math:<cite>pi</cite>.</p></li>
+<li><p><strong>zaxis</strong> (<a class="reference internal" href="xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><em>Axis</em></a>) – Axis that defines accumulators along the z axis.</p></li>
+<li><p><strong>taxis</strong> (<a class="reference internal" href="xopto.mcbase.mcutil.axis.html#xopto.mcbase.mcutil.axis.Axis" title="xopto.mcbase.mcutil.axis.Axis"><em>Axis</em></a>) – Axis that defines accumulators along the temporal axis.</p></li>
+<li><p><strong>center</strong> (<em>Tuple</em><em>(</em><em>float</em><em>, </em><em>float</em><em>)</em>) – Center of the cylindrical coordinate system in the x-y plane.</p></li>
+<li><p><strong>mode</strong> (<em>str from</em><em> (</em><em>'deposition'</em><em>, </em><em>'fluence'</em><em>)</em>) – <p>Mode that is used to accumulate the photon packet weight:</p>
+<ul>
+<li><p>fluence - fluence rate ( 1/m <sup>2</sup>)</p></li>
+<li><p>deposition - absorbed energy (sum of photon packet weights
+absorbed in the voxel 1/m <sup>3</sup>).</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The fluence accumulator buffer data type is inherited from the
+Monte Carlo simulator mc_accu_t type.</p>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.center">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">center</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.center" title="Permalink to this definition">¶</a></dt>
+<dd><p>Center of the cylindrical coordinate system in the x-y plane.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.cl_declaration">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">cl_declaration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mcfluence/fluencecylt.html#FluenceCylt.cl_declaration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.cl_declaration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.cl_implementation">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">cl_implementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcfluence/fluencecylt.html#FluenceCylt.cl_implementation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.cl_implementation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.cl_options">
+<span class="sig-name descname"><span class="pre">cl_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/mcbase/mcfluence/fluencecylt.html#FluenceCylt.cl_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.cl_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.cl_pack">
+<span class="sig-name descname"><span class="pre">cl_pack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcfluence/fluencecylt.html#FluenceCylt.cl_pack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.cl_pack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills the structure (target) with the data required by the
+Monte Carlo simulator. See the <a class="reference internal" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.cl_type" title="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.cl_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">FluenceCylt.cl_type()</span></code></a>
+for a detailed list of fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mc</strong> (<a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>mcobject.McObject</em></a>) – Monte Carlo simulator instance.</p></li>
+<li><p><strong>target</strong> (<em>ClFluenceCylt</em>) – CStructure that is filled with the source data.</p></li>
+<li><p><strong>buffer</strong> (<em>np.ndarray</em>) – Accumulator buffer or None. Should be checked for proper size. Use
+py:attr:<cite>mc.types.np_accu</cite> attribute to determine the
+numpy type of the accumulator used in the Monte Carlo simulator.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>target</strong> – Filled structure received as an input argument or a new
+instance if the input argument target is None.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ClFluenceCylt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.cl_type">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">cl_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcfluence/fluencecylt.html#FluenceCylt.cl_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.cl_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.data">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fluence accumulator - deposition or fluence rate.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.dfi">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">dfi</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.dfi" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of voxels along the polar angle axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.dr">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">dr</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.dr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of voxels along the radial axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.dt">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of voxels along the t axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.dz">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">dz</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.dz" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of voxels along the z axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.fi">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fi</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.fi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator centers along the polar angle axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.fiaxis">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fiaxis</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcutil.axis.Axis</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.fiaxis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator axis object along the polar angle axis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt" title="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt"><span class="pre">xopto.mcbase.mcfluence.fluencecylt.FluenceCylt</span></a><a class="reference internal" href="../_modules/xopto/mcbase/mcfluence/fluencecylt.html#FluenceCylt.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a FluenceCylt instance from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Dictionary created by the <a class="reference internal" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.todict" title="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.todict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">FluenceCylt.todict()</span></code></a> method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.k">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">k</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fluence floating point to accumulatorinteger conversion coefficient.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.mode">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">mode</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>The accumulator mode.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.nphotons">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">nphotons</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.nphotons" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of photon packets that produced the raw data accumulator content.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'z'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoscale</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcfluence/fluencecylt.html#FluenceCylt.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show fluence slices or integral projections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scale</strong> (<em>str</em>) – Data scaling can be “log” for logarithmic or “lin” for linear.</p></li>
+<li><p><strong>axis</strong> (<em>str</em>) – The axis of slicing (“z”, “fi” or “r”) or a projection along the
+selected coordinate axis (“rproj”, “fiproj”, “zproj”).
+Alternatively, specify the projection plane as one of
+(“rfi”, “rz”, or “fiz”).</p></li>
+<li><p><strong>autoscale</strong> (<em>bool</em>) – Scale the color coding of individual slices to the corresponding
+range of weights. If True, the color coding changes from slice
+to slice.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.r">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">r</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.r" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator centers along the radial axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.raw">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raw fluence accumulator data if any.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.raxis">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">raxis</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcutil.axis.Axis</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.raxis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator axis object along the radial axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.shape">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">shape</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[int,</span> <span class="pre">int,</span> <span class="pre">int,</span> <span class="pre">int]</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fluence array shape.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.t">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">t</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator centers along the t axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.taxis">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">taxis</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcutil.axis.Axis</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.taxis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator axis object along the t axis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/mcbase/mcfluence/fluencecylt.html#FluenceCylt.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the fluence configuration without the accumulator data to
+a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – Fluence configuration as a dictionary.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt" title="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt"><span class="pre">xopto.mcbase.mcfluence.fluencecylt.FluenceCylt</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcfluence/fluencecylt.html#FluenceCylt.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the fluence accumulator with data from the given fluence object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference internal" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt" title="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt"><em>FluenceCylt</em></a>) – Update the fluence accumulator of this instance with the data
+from fluence instance obj.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.update_data">
+<span class="sig-name descname"><span class="pre">update_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nphotons</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcfluence/fluencecylt.html#FluenceCylt.update_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.update_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update fluence accumulator data with simulation results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mc</strong> (<a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><em>mcobject.McObject</em></a>) – Simulator instance that produced the data.</p></li>
+<li><p><strong>data</strong> (<em>Dict</em><em>[</em><em>np.dtype</em><em>, </em><em>List</em><em>[</em><em>np.ndarray</em><em>]</em><em>]</em>) – List of allocated accumulators (this implementation uses only
+one accumulator buffer).</p></li>
+<li><p><strong>nphotons</strong> (<em>int</em>) – The number of photon packets that produced the raw data
+accumulator content.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional keyword arguments not used by this implementation.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.z">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">z</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator centers along the z axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.zaxis">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">zaxis</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcutil.axis.Axis</span></em><a class="headerlink" href="#xopto.mcbase.mcfluence.fluencecylt.FluenceCylt.zaxis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accumulator axis object along the z axis.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="xopto.mcbase.mcfluence.fluencerz.html" class="btn btn-neutral float-right" title="xopto.mcbase.mcfluence.fluencerz module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="xopto.mcbase.mcfluence.fluencecyl.html" class="btn btn-neutral float-left" title="xopto.mcbase.mcfluence.fluencecyl module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

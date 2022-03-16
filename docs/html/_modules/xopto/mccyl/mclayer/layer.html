@@ -1,0 +1,780 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.mccyl.mclayer.layer &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.mccyl.mclayer.layer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xopto.mccyl.mclayer.layer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase.mcpf.pfbase</span> <span class="kn">import</span> <span class="n">PfBase</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mcobject</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mctypes</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">boundary</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">cltypes</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mcpf</span>
+
+
+<div class="viewcode-block" id="ray_cylinder_intersection"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.ray_cylinder_intersection">[docs]</a><span class="k">def</span> <span class="nf">ray_cylinder_intersection</span><span class="p">(</span><span class="n">r</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                              <span class="n">pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+                              <span class="nb">dir</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> \
+                                  <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Computes intersection between a cylinder :math:`x^2 + y^2 = r^2` that is</span>
+<span class="sd">    centered on the :math:`z` axis and a ray</span>
+<span class="sd">    with origin at :math:`pos=(x_0, y_0, z_0)` and direction</span>
+<span class="sd">    :math:`dir=(p_x, p_y, p_z)`. The ray propagation satisfies</span>
+<span class="sd">    a parametric equation</span>
+<span class="sd">    :math:`(x, y, z) = (x_0, y_0, z_0) + t (p_x, p_y, p_z)`.</span>
+<span class="sd">    The intersection is governed by a  quadratic equation for distance to</span>
+<span class="sd">    intersection :math:`t`:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        t^2 (p_x^2 + p_y^2) + 2 t (x_0 p_x + y_0 p_y) + x_0^2 + y_0^2 - r^2.</span>
+
+<span class="sd">    Solution is found as :math:`t = \\frac{-b \\pm\\sqrt{b^2 - 4 a c}}{2 a}`,</span>
+<span class="sd">    where:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        a = p_x^2 + p_y^2,</span>
+
+<span class="sd">        b = 2 (x_0 p_x + y_0 p_y),</span>
+
+<span class="sd">        c = x_0^2 + y_0^2 - r^2.</span>
+
+<span class="sd">    If :math:`a=0` or :math:`b^2 - 4 a c &lt; 0` there is no intersection.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    r: float</span>
+<span class="sd">        Cylinder radius. The cylinder is aligned along the z axis.</span>
+<span class="sd">    pos: Tuple[float, float, float]</span>
+<span class="sd">        Ray origin as a tuple (x, y, z).</span>
+<span class="sd">    dir: Tuple[float, float, float]</span>
+<span class="sd">        Ray direction as a tuple (x, y, z). Note that the length of the</span>
+<span class="sd">        direction vector must equal 1.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    intersections: Tuple(float, float) or Tuple(None, None)</span>
+<span class="sd">        Returns None if there is no intersection, else the two distances to the</span>
+<span class="sd">        intersection as a tuple (d1, d2).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="nb">dir</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">dir</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">r</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">b</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">4</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">c</span>
+    <span class="k">if</span> <span class="n">D</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="n">a</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">D</span> <span class="o">=</span> <span class="n">D</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">d1</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">b</span> <span class="o">-</span> <span class="n">D</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">d2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">b</span> <span class="o">+</span> <span class="n">D</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span></div>
+
+<div class="viewcode-block" id="Layer"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layer">[docs]</a><span class="k">class</span> <span class="nc">Layer</span><span class="p">(</span><span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Class that represents a single sample layer.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="Layer.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layer.cl_type">[docs]</a>    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns a structure data type that is used to represent one Layer</span>
+<span class="sd">        instance in the OpenCL kernel of the Monte Carlo simulator.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        opencl_t: ClLayer</span>
+<span class="sd">            OpenCL Structure that represents a layer. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">class</span> <span class="nc">ClLayer</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;r_inner&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;r_outer&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;cos_critical_inner&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;cos_critical_outer&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;mus&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;mua&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;inv_mut&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;mua_inv_mut&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;pf&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">fetch_cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">))</span>
+            <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">ClLayer</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">mua</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">mus</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">pf</span><span class="p">:</span> <span class="n">mcpf</span><span class="o">.</span><span class="n">PfBase</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Layer object constructor.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        d: float</span>
+<span class="sd">            Layer diameter (m).</span>
+<span class="sd">        n: float</span>
+<span class="sd">            Index of refraction.</span>
+<span class="sd">        mua: float</span>
+<span class="sd">            Absorption coefficient (1/m).</span>
+<span class="sd">        mus: float</span>
+<span class="sd">            Scattering (NOT reduced) coefficient (1/m).</span>
+<span class="sd">        pf: mcpf.PfBase</span>
+<span class="sd">            Scattering phase function object that is derived from PhBase</span>
+<span class="sd">            class.</span>
+
+
+<span class="sd">        The physical properties of the layer can be read or changed through</span>
+<span class="sd">        member properties:</span>
+
+<span class="sd">            - d: float - </span>
+<span class="sd">              Layer diameter (m).</span>
+<span class="sd">            - n: float - </span>
+<span class="sd">              Index of refraction.</span>
+<span class="sd">            - mua: float - </span>
+<span class="sd">              Absorption coefficient (1/m).</span>
+<span class="sd">            - mus: float - </span>
+<span class="sd">              Scattering (NOT reduced) coefficient (1/m).</span>
+<span class="sd">            - pf: mcpf.PfBase - </span>
+<span class="sd">              Scattering phase function object that is derived from PhBase</span>
+<span class="sd">              class.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The inner layer boundary bellongs to the layer, but the outer does not.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_d</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mua</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mus</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mus</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span> <span class="o">=</span> <span class="n">pf</span>
+
+    <span class="k">def</span> <span class="nf">_set_d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_d</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_get_d</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_d</span><span class="p">,</span> <span class="n">_set_d</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Layer diameter (m).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_n</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_get_n</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_n</span><span class="p">,</span> <span class="n">_set_n</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Refractive index of the layer.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_mua</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mua</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mua</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_get_mua</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span>
+    <span class="n">mua</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_mua</span><span class="p">,</span> <span class="n">_set_mua</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="s1">&#39;Absorption coefficient of the layer (1/m).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_mus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mus</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mus</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mus</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_get_mus</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mus</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_mus</span><span class="p">,</span> <span class="n">_set_mus</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="s1">&#39;Scattering coefficient of the layer (1/m).&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_pf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcpf</span><span class="o">.</span><span class="n">PfBase</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span>
+    <span class="k">def</span> <span class="nf">_set_pf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pf</span><span class="p">:</span> <span class="n">mcpf</span><span class="o">.</span><span class="n">PfBase</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">pf</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The scattering phase function type &#39;</span>\
+                             <span class="s1">&#39;of the layer must not change!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span> <span class="o">=</span> <span class="n">pf</span>
+    <span class="n">pf</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_pf</span><span class="p">,</span> <span class="n">_set_pf</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Phase function object.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Layer.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layer.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_d</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span> <span class="s1">&#39;mua&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_mua</span><span class="p">,</span> <span class="s1">&#39;mus&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_mus</span><span class="p">,</span>
+                <span class="s1">&#39;pf&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;Layer&#39;</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="Layer.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layer.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Layer&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new object from dict. The dict keys must match</span>
+<span class="sd">        the parameter names defined by the constructor.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">!=</span> <span class="s1">&#39;Layer&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot create a Layer instance from the data!&#39;</span><span class="p">)</span>
+        <span class="n">pf_data</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;pf&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">mcpf</span><span class="p">,</span> <span class="n">pf_data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Scattering phase function &quot;</span><span class="si">{}</span><span class="s1">&quot; &#39;</span>
+                            <span class="s1">&#39;not implemented&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pf_data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]))</span>
+        <span class="n">pf_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mcpf</span><span class="p">,</span> <span class="n">pf_data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">pf</span><span class="o">=</span><span class="n">pf_type</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">pf_data</span><span class="p">),</span> <span class="o">**</span><span class="n">data_</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Layer(d=</span><span class="si">{}</span><span class="s1">, n=</span><span class="si">{}</span><span class="s1">, mua=</span><span class="si">{}</span><span class="s1">, mus=</span><span class="si">{}</span><span class="s1">, pf=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_d</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mus</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span>  <span class="s1">&#39;</span><span class="si">{:s}</span><span class="s1"> # id 0x</span><span class="si">{:&gt;08X}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Layers"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers">[docs]</a><span class="k">class</span> <span class="nc">Layers</span><span class="p">(</span><span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Class that represents a stack of concentric layers forming the sample.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    The first layer of the stack is used to describe the</span>
+<span class="sd">    medium that surrounds the sample.</span>
+<span class="sd">    Therefore, at least two layers must be always specified,</span>
+<span class="sd">    namely the layer of the surrounding medium and one sample layer!</span>
+<span class="sd">    The diameter of the outermost layer (first in the list of layers)</span>
+<span class="sd">    will be automatically set to infinity regardless of the layer diameter</span>
+<span class="sd">    set by the user.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Layer</span><span class="p">]</span> <span class="ow">or</span> <span class="s1">&#39;Layers&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Constructs a managed sample layer stack from a list of sample layers.</span>
+<span class="sd">        The outermost layer that sourrounds the sample must be specified first,</span>
+<span class="sd">        followed by the sample layer from the outermost to the innermost.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The first layer of the stack is used to describe the</span>
+<span class="sd">        medium that surrounds the sample.</span>
+<span class="sd">        Therefore, at least two layers must be always specified,</span>
+<span class="sd">        namely one layer of the surrounding medium and one sample layer!</span>
+
+<span class="sd">        The layers extend to infinity along both directions of the z axis.</span>
+
+<span class="sd">        The diameter of the outermost layer will be automatically set</span>
+<span class="sd">        to infinity when passed to the OpenCL kernel (regardless of the</span>
+<span class="sd">        layer diameter set by the user).</span>
+
+<span class="sd">        The layer diameters must be monotonically decreasing. Layers of</span>
+<span class="sd">        zero thickness (diameters of the previous and next layer are the</span>
+<span class="sd">        same) are not allowed.</span>
+
+<span class="sd">        Note that all layers must use the same scattering phase function</span>
+<span class="sd">        model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        layers: list or Layers</span>
+<span class="sd">            A list of sample layers. Requires at least 2 items!</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span> <span class="n">Layers</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Layers.check"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Check if the layers are consistent and using a single</span>
+<span class="sd">        scattering phase function type.</span>
+<span class="sd">        Raises exception on error.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;At least two layers are required, &#39;</span>
+                           <span class="s1">&#39;but got only </span><span class="si">{:d}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="p">)</span>
+
+        <span class="n">d_prev</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">layer_index</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">Layer</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;All layers must be instances of Layer &#39;</span>
+                                <span class="s1">&#39;but found </span><span class="si">{:s}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">pf</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s1">&#39;All the sample layer must use the same scattering phase &#39;</span>
+                    <span class="s1">&#39;function model! Found </span><span class="si">{}</span><span class="s1"> and </span><span class="si">{}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">pf</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">layer_index</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">layer</span><span class="o">.</span><span class="n">d</span> <span class="o">&gt;</span> <span class="n">d_prev</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The diameters of layers must be &#39;</span>
+                                 <span class="s1">&#39;monotonically decreasing!&#39;</span><span class="p">)</span>
+                <span class="n">d_prev</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">d</span></div>
+
+<div class="viewcode-block" id="Layers.layer"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers.layer">[docs]</a>    <span class="k">def</span> <span class="nf">layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Layer</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns layer at the specified index. Note that the first layer</span>
+<span class="sd">        (index 0) represents the medium sourounding the sample.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Layers.layer_index"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers.layer_index">[docs]</a>    <span class="k">def</span> <span class="nf">layer_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the layer index that contains the given radius. Note that</span>
+<span class="sd">        the layer includes the inner surface boundary but not the outer surface</span>
+<span class="sd">        boundary, i.e. the r extent of the layer is [r_inner, r_outer), where</span>
+<span class="sd">        r_outer &gt; r_inner.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        r: float</span>
+<span class="sd">            R coordinate (radius) of a point.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        layer_index: int</span>
+<span class="sd">            Index of the layer that contains the give radius r.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">r</span> <span class="o">&lt;</span> <span class="n">layer</span><span class="o">.</span><span class="n">d</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pos</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">index</span></div>
+
+<div class="viewcode-block" id="Layers.diameter"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers.diameter">[docs]</a>    <span class="k">def</span> <span class="nf">diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Diameter of the layer stack excluding the outermost layer that</span>
+<span class="sd">        sourrounds the sample.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        diameter: float</span>
+<span class="sd">            The sample diameter excluding the outermost layer of</span>
+<span class="sd">            the surrounding medium.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">d</span></div>
+
+<div class="viewcode-block" id="Layers.cl_options"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers.cl_options">[docs]</a>    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL options of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">fetch_cl_options</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Layers.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers.cl_declaration">[docs]</a>    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL declarations of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">fetch_cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Layers.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers.cl_implementation">[docs]</a>    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL implementation of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">fetch_cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Layers.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers.cl_type">[docs]</a>    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns an OpenCL array of ClLayer structures that is used to</span>
+<span class="sd">        represent one instance of a layer stack.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ------- </span>
+<span class="sd">        clarray: cltypes.Structure*len(self)</span>
+<span class="sd">            Array of ClLayers.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fetch_cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Layers.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Array</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Pack the layers into an OpenCL data type. The OpenCL data</span>
+<span class="sd">        type is returned by the :py:meth:`Layers.cl_type` method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+<span class="sd">        target: cltypes.Structure*len(self)</span>
+<span class="sd">            A structure representing an array of Layers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Filled structure received as an input argument or a new</span>
+<span class="sd">            instance if the input argument target is None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+
+        <span class="n">num_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="o">!=</span> <span class="n">num_layers</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetch_cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">):</span>
+            <span class="n">cc_outer</span> <span class="o">=</span> <span class="n">cc_inner</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">cc_outer</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">cos_critical</span><span class="p">(</span>
+                    <span class="n">layer</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">num_layers</span><span class="p">:</span>
+                <span class="n">cc_inner</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">cos_critical</span><span class="p">(</span>
+                    <span class="n">layer</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+
+            <span class="n">mut</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">mua</span> <span class="o">+</span> <span class="n">layer</span><span class="o">.</span><span class="n">mus</span>
+            <span class="k">if</span> <span class="n">mut</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">inv_mut</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">mut</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">inv_mut</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">mus</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">mua_inv_mut</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mua_inv_mut</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">mua</span><span class="o">*</span><span class="n">inv_mut</span>
+
+            <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">d</span>
+            <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">r_outer</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+                <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">r_inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="o">*</span><span class="mf">0.5</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">r_outer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="o">*</span><span class="mf">0.5</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">num_layers</span><span class="p">:</span>
+                    <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">r_inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="o">*</span><span class="mf">0.5</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">r_inner</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">n</span>
+            <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">cos_critical_outer</span> <span class="o">=</span> <span class="n">cc_outer</span>
+            <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">cos_critical_inner</span> <span class="o">=</span> <span class="n">cc_inner</span>
+            <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">mua</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">mua</span>
+            <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">mus</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">mus</span>
+            <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">inv_mut</span> <span class="o">=</span> <span class="n">inv_mut</span>
+            <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">mua_inv_mut</span> <span class="o">=</span> <span class="n">mua_inv_mut</span>
+
+            <span class="n">layer</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">cl_pack</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">target</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">target</span></div>
+
+<div class="viewcode-block" id="Layers.intersect"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers.intersect">[docs]</a>    <span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+                  <span class="nb">dir</span><span class="p">:</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">entrance</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> \
+                      <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> \
+                            <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Intersect the sample with the ray and return the intersection.</span>
+<span class="sd">        Intersection is considered to exist only if the distance to</span>
+<span class="sd">        the intersection is positive or entrance is set to True</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pos: (float, float, float)</span>
+<span class="sd">            Ray origin.</span>
+<span class="sd">        dir: (float, float, float)</span>
+<span class="sd">            Ray direction.</span>
+<span class="sd">        entrance: bool</span>
+<span class="sd">            If True, compute the entrance point regardless of the current</span>
+<span class="sd">            position of the ray (can be propagated backwards).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        intersection: (float, float, float) or None</span>
+<span class="sd">            Returns intersection if one exists, else None.</span>
+<span class="sd">        normal: (float, float, float) or None</span>
+<span class="sd">            Surface normal of the sample that points in the</span>
+<span class="sd">            propagation direction.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span> <span class="o">=</span> <span class="n">ray_cylinder_intersection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">d</span><span class="o">*</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">d1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">d2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">d1</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">d2</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">entrance</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">entrance</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">d1</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">d2</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span>
+
+        <span class="n">intersection</span> <span class="o">=</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nb">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">d</span><span class="p">,</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nb">dir</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">d</span><span class="p">,</span> <span class="n">pos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="nb">dir</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">d</span>
+        <span class="n">normal</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">intersection</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">intersection</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">intersection</span><span class="p">,</span> <span class="n">normal</span></div>
+
+<div class="viewcode-block" id="Layers.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">layer</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">],</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;Layers&#39;</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="Layers.tolist"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers.tolist">[docs]</a>    <span class="k">def</span> <span class="nf">tolist</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Layer</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns a weak copy of the list of managed layers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        layers: list[layers]</span>
+<span class="sd">            List of managed layers</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Layers.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.mccyl.mclayer.layer.html#xopto.mccyl.mclayer.layer.Layers.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Layers&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new Layers object from a dict. The dict keys must match</span>
+<span class="sd">        the parameter names defined by the constructor.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">T</span> <span class="o">!=</span> <span class="s1">&#39;Layers&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Cannot create a Layers instance from the given data!&#39;</span><span class="p">)</span>
+        <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">Layer</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;layers&#39;</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">layers</span><span class="o">=</span><span class="n">layers</span><span class="p">,</span> <span class="o">**</span><span class="n">data_</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="n">what</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="n">what</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;    &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">]</span>
+        <span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span>  <span class="s2">&quot;,  # surrounding medium&quot;</span>
+        <span class="n">layers_str</span> <span class="o">=</span> <span class="s1">&#39;,</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">jtargetoin</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;Layers([</span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s1">])&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layers_str</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span>  <span class="s1">&#39;</span><span class="si">{:s}</span><span class="s1"> # id 0x</span><span class="si">{:&gt;08X}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

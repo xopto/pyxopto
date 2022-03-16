@@ -146,7 +146,7 @@ The Monte Carlo simulator
 Next, we create a Monte Carlo simulator instance from the created layer stack,
 photon packet source and detectors.
 
-.. code-block python
+.. code-block:: python
 
     mc_obj = mc.Mc(layers, source, detectors, cl_devices=gpu)
 

@@ -1,0 +1,41 @@
+xopto.mccyl package
+===================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mccyl.cltypes
+   xopto.mccyl.kernel
+   xopto.mccyl.mcdetector
+   xopto.mccyl.mcfluence
+   xopto.mccyl.mclayer
+   xopto.mccyl.mcobject
+   xopto.mccyl.mcoptions
+   xopto.mccyl.mcpf
+   xopto.mccyl.mcprogress
+   xopto.mccyl.mcrun
+   xopto.mccyl.mcsource
+   xopto.mccyl.mcsurface
+   xopto.mccyl.mcsv
+   xopto.mccyl.mctrace
+   xopto.mccyl.mctypes
+   xopto.mccyl.mcutil
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mccyl.mc
+
+Module contents
+---------------
+
+.. automodule:: xopto.mccyl
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+xopto.mcbase.mcfluence.fluence module
+=====================================
+
+.. automodule:: xopto.mcbase.mcfluence.fluence
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+xopto.mcbase.mcprogress module
+==============================
+
+.. automodule:: xopto.mcbase.mcprogress
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,45 +1,199 @@
 
+
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Installation &mdash; PyXOpto 0.1.0 documentation</title>
+  
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
 
-    <title>Installation &#8212; PyXOpto 0.1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="OpenCL devices" href="opencl_devices.html" />
-    <link rel="prev" title="Welcome to PyXOpto’s documentation!" href="../index.html" />
+    <link rel="prev" title="Welcome to PyXOpto’s documentation!" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
    
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
-  </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
           
 
-          <div class="body" role="main">
+          
+            <a href="../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
             
-  <span class="target" id="installation-label"></span><section id="installation">
+            <img src="../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#opencl">OpenCL</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nvidia">Nvidia</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amd">AMD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#intel">Intel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#python">Python</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#windows-os">Windows OS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linux-os">Linux OS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#integrated-development-environments">Integrated development environments</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pyxopto">PyXOpto</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#as-a-python-package">As a Python package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-from-source">Using from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#binaries">Binaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#local-pyxopto-data">Local PyXOpto data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citing-pyxopto">Citing PyXOpto</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Installation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="installation-label"></span><div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<section id="opencl">
+<div class="section" id="opencl">
 <span id="installation-opencl-label"></span><h2>OpenCL<a class="headerlink" href="#opencl" title="Permalink to this headline">¶</a></h2>
 <p>OpenCL programming language and development tools are available for a number
 of platforms.</p>
-<section id="nvidia">
+<div class="section" id="nvidia">
 <h3>Nvidia<a class="headerlink" href="#nvidia" title="Permalink to this headline">¶</a></h3>
 <p>Windows OS</p>
 <p>On Windows OS Nvidia distributes OpenCL with the CUDA Toolkit. Note that that
@@ -73,13 +227,13 @@ sudo apt install ocl-icd-libopencl1
 sudo apt install clinfo
 </pre></div>
 </div>
-</section>
-<section id="amd">
+</div>
+<div class="section" id="amd">
 <span id="installation-python-label"></span><h3>AMD<a class="headerlink" href="#amd" title="Permalink to this headline">¶</a></h3>
 <p>Drivers and the OpenCL runtime for AMD devices along with installation instructions
 can be downloaded  from <a class="reference external" href="https://www.amd.com/en/support">https://www.amd.com/en/support</a>.</p>
-</section>
-<section id="intel">
+</div>
+<div class="section" id="intel">
 <h3>Intel<a class="headerlink" href="#intel" title="Permalink to this headline">¶</a></h3>
 <p>Instructions for installing Intel OpenCL runtime can be found
 <a class="reference external" href="https://software.intel.com/content/www/us/en/develop/articles/opencl-drivers.html">here</a>.
@@ -87,9 +241,9 @@ Note that some distributions of Linux have native support for installing the
 required packages through the system package manager. On Ubuntu distribution
 the drivers and OpenCL runtime are available through the
 <code class="code docutils literal notranslate"><span class="pre">intel-opencl-icd</span></code> and <code class="code docutils literal notranslate"><span class="pre">beignet-opencl-icd</span></code> packages.</p>
-</section>
-</section>
-<section id="python">
+</div>
+</div>
+<div class="section" id="python">
 <h2>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
 <p>PyXOpto requires <a class="reference external" href="https://www.python.org/">Python 3</a> (version &gt;= 3.7)
 programming language and at least the following extension packages:</p>
@@ -108,7 +262,7 @@ function calculations for layered spherical particles:</p>
 <li><p><a class="reference external" href="https://github.com/ovidiopr/scattnlay">Scattnlay</a> version &gt;= 2.2</p></li>
 </ul>
 <p>Note that the distribution is tested with the listed versions.</p>
-<section id="windows-os">
+<div class="section" id="windows-os">
 <h3>Windows OS<a class="headerlink" href="#windows-os" title="Permalink to this headline">¶</a></h3>
 <p>On Windows OS you can conveniently use
 <a class="reference external" href="https://sourceforge.net/projects/winpython/files/">WinPython</a>,
@@ -160,8 +314,8 @@ and 64-bit Windows binaries of open-source Python extension packages.</p>
 <li><p>Run WinPython Control Panel from the extracted WinPython folder.</p></li>
 <li><p>Add and install the package <em>pyopencl</em> by locating the downloaded .whl file.</p></li>
 </ol>
-</section>
-<section id="linux-os">
+</div>
+<div class="section" id="linux-os">
 <h3>Linux OS<a class="headerlink" href="#linux-os" title="Permalink to this headline">¶</a></h3>
 <p>On Linux operating systems, Python is very likely already installed.
 If not, use the OS package manager to install Python 3.
@@ -190,8 +344,8 @@ sudo pip3 install python-scattnlay
 as <a class="reference external" href="https://anaconda.org/anaconda/python">Anaconda</a> and follow
 the <a class="reference external" href="https://docs.anaconda.com/anaconda/navigator/tutorials/manage-packages/">instructions</a>
 to install the required extension packages.</p>
-</section>
-<section id="integrated-development-environments">
+</div>
+<div class="section" id="integrated-development-environments">
 <h3>Integrated development environments<a class="headerlink" href="#integrated-development-environments" title="Permalink to this headline">¶</a></h3>
 <p>There are numerous Integrated development environments (IDE) that support the
 Python programming language. As already pointed out,
@@ -204,14 +358,14 @@ Other popular full-featured IDEs supported across different operating systems:</
 <li><p>Eclipse with <a class="reference external" href="http://www.pydev.org/">PyDev</a></p></li>
 <li><p><a class="reference external" href="https://www.jetbrains.com/pycharm/">PyCharm</a></p></li>
 </ul>
-</section>
-</section>
-<section id="pyxopto">
+</div>
+</div>
+<div class="section" id="pyxopto">
 <h2>PyXOpto<a class="headerlink" href="#pyxopto" title="Permalink to this headline">¶</a></h2>
 <p>First, download or clone the PyXOpto source repository to a local directory.
 The source code can be installed as a Python package or used directly from
 the downloaded source.</p>
-<section id="as-a-python-package">
+<div class="section" id="as-a-python-package">
 <h3>As a Python package<a class="headerlink" href="#as-a-python-package" title="Permalink to this headline">¶</a></h3>
 <p>PyXOpto can be installed as a package using the setup.py file. Run the
 following command from the root directory of PyXOpto (the one with the
@@ -230,16 +384,16 @@ and jinja2).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python basic.py
 </pre></div>
 </div>
-</section>
-<section id="using-from-source">
+</div>
+<div class="section" id="using-from-source">
 <h3>Using from source<a class="headerlink" href="#using-from-source" title="Permalink to this headline">¶</a></h3>
 <p>To use the PyXOpto package from source, you will have to manually install all
 the Python packages listed in the setup.py file. Follow the
-the installation instructions for <a class="reference internal" href="#installation-python-label"><span class="std std-ref">Python</span></a>.</p>
+installation instructions for <a class="reference internal" href="#installation-python-label"><span class="std std-ref">Python</span></a>.</p>
 <p>You will also have to manually include the root directory of the PyXOpto
 package into the Python search path. This can be conveniently
 accomplished through setting the <code class="code docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> environment variable.</p>
-<p>On Linux operating system use:</p>
+<p>On Linux operating systems use:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PTYTHONPATH</span><span class="o">=</span>path/to/pyxopto:<span class="nv">$PYTHONPATH</span>
 </pre></div>
 </div>
@@ -249,9 +403,9 @@ accomplished through setting the <code class="code docutils literal notranslate"
 </div>
 <p>After installing the dependencies and setting the environment variable
 <code class="code docutils literal notranslate"><span class="pre">PYTHONPATH</span></code>, you should be able to import PyXOpto.</p>
-</section>
-</section>
-<section id="binaries">
+</div>
+</div>
+<div class="section" id="binaries">
 <h2>Binaries<a class="headerlink" href="#binaries" title="Permalink to this headline">¶</a></h2>
 <p>PyXOpto does not require compilation of C/C++ sources. However, performance
 critical parts of the random number generator module <a class="reference internal" href="../apidoc/xopto.cl.clrng.html#module-xopto.cl.clrng" title="xopto.cl.clrng"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.cl.clrng</span></code></a>
@@ -263,15 +417,15 @@ automated and can be executed by running the <a class="reference internal" href=
 </div>
 <p>The build process requires <a class="reference external" href="https://gcc.gnu.org/">GCC</a> or <a class="reference external" href="https://docs.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-160">The Microsoft C++
 (MSVC) compiler toolset</a>.</p>
-</section>
-<section id="local-pyxopto-data">
+</div>
+<div class="section" id="local-pyxopto-data">
 <h2>Local PyXOpto data<a class="headerlink" href="#local-pyxopto-data" title="Permalink to this headline">¶</a></h2>
 <p>PyXOpto will save a small amount of data (built libraries, temporary files and
 performance-critical precalculated data) in the home directory
 of the current user <code class="code docutils literal notranslate"><span class="pre">~/.xopto</span></code>. This location can be customized through
 the <code class="code docutils literal notranslate"><span class="pre">PYXOPTO_USER_PATH</span></code> environment variable.</p>
-</section>
-<section id="environment-variables">
+</div>
+<div class="section" id="environment-variables">
 <h2>Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
 <p>Some properties of PyXOpto can be customized through the use of environment
 variables:</p>
@@ -285,8 +439,8 @@ Location for storing temporary files, built libraries and
 performance-critical precalculated data.</p></li>
 </ul>
 </div></blockquote>
-</section>
-<section id="citing-pyxopto">
+</div>
+<div class="section" id="citing-pyxopto">
 <h2>Citing PyXOpto<a class="headerlink" href="#citing-pyxopto" title="Permalink to this headline">¶</a></h2>
 <p>We, the authors of PyXOpto, expect that the package is used in accordance with
 the <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0-standalone.html">GPL3+</a>
@@ -304,108 +458,55 @@ and at least one of the following references:</p>
 </ol>
 <p>For commercial use or alternative licensing of PyXOpto please contact us at
 <a class="reference external" href="mailto:info&#37;&#52;&#48;xopto&#46;eu">info<span>&#64;</span>xopto<span>&#46;</span>eu</a>.</p>
-</section>
-</section>
+</div>
+</div>
 
 
+           </div>
+           
           </div>
-          
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="opencl_devices.html" class="btn btn-neutral float-right" title="OpenCL devices" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to PyXOpto’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<p class="logo">
-  <a href="../index.html">
-    <img class="logo" src="../_static/xopto_logo_bright.png" alt="Logo"/>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
     
-    <h1 class="logo logo-name">PyXOpto</h1>
-    
-  </a>
-</p>
+   
 
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#opencl">OpenCL</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#nvidia">Nvidia</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amd">AMD</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#intel">Intel</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#python">Python</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#windows-os">Windows OS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#linux-os">Linux OS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#integrated-development-environments">Integrated development environments</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#pyxopto">PyXOpto</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#as-a-python-package">As a Python package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#using-from-source">Using from source</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#binaries">Binaries</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#local-pyxopto-data">Local PyXOpto data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment variables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#citing-pyxopto">Citing PyXOpto</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="opencl_devices.html">OpenCL devices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mcml/index.html">Layered MC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mcvox/index.html">Voxelized MC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dataset/index.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../apidoc/modules.html">xopto</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../index.html" title="previous chapter">Welcome to PyXOpto’s documentation!</a></li>
-      <li>Next: <a href="opencl_devices.html" title="next chapter">OpenCL devices</a></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2021, XOpto team.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>

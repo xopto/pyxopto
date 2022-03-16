@@ -1,0 +1,20 @@
+xopto.mccyl.mcdetector package
+==============================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.mccyl.mcdetector.base
+   xopto.mccyl.mcdetector.fiz
+   xopto.mccyl.mcdetector.total
+
+Module contents
+---------------
+
+.. automodule:: xopto.mccyl.mcdetector
+   :members:
+   :undoc-members:
+   :show-inheritance:

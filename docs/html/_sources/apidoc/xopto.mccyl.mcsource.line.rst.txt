@@ -1,0 +1,7 @@
+xopto.mccyl.mcsource.line module
+================================
+
+.. automodule:: xopto.mccyl.mcsource.line
+   :members:
+   :undoc-members:
+   :show-inheritance:

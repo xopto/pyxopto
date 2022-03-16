@@ -1,0 +1,19 @@
+xopto.util.animation.tr package
+===============================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.util.animation.tr.common
+   xopto.util.animation.tr.deposition
+
+Module contents
+---------------
+
+.. automodule:: xopto.util.animation.tr
+   :members:
+   :undoc-members:
+   :show-inheritance:

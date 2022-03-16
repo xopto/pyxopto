@@ -12,6 +12,7 @@ Subpackages
    xopto.dataset
    xopto.materials
    xopto.mcbase
+   xopto.mccyl
    xopto.mcml
    xopto.mcvox
    xopto.pf

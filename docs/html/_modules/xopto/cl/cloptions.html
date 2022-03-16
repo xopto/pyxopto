@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.cl.cloptions &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.cl.cloptions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xopto.cl.cloptions</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="n">_ALLOWED_BUILD_OPTIONS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s1">&#39;-cl-mad-enable&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;-cl-no-signed-zeros&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;-cl-unsafe-math-optimizations&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;-cl-finite-math-only&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;-cl-fast-relaxed-math&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;-cl-fast-relaxed-math -cl-mad-enable&#39;</span>
+<span class="p">)</span>
+
+<div class="viewcode-block" id="ClBuildOption"><a class="viewcode-back" href="../../../apidoc/xopto.cl.cloptions.html#xopto.cl.cloptions.ClBuildOption">[docs]</a><span class="k">class</span> <span class="nc">ClBuildOption</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Creates an instance of one OpenCL build option. The value of the</span>
+<span class="sd">        options is check against the allowed list of option given by the</span>
+<span class="sd">        OpenCL standard:</span>
+
+<span class="sd">        https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: str</span>
+<span class="sd">            Value of the build option. Must be one of:</span>
+
+<span class="sd">              - &quot;-cl-mad-enable&quot;,</span>
+<span class="sd">              - &quot;-cl-no-signed-zeros&quot;,</span>
+<span class="sd">              - &quot;-cl-unsafe-math-optimizations&quot;,</span>
+<span class="sd">              - &quot;-cl-finite-math-only&quot;,</span>
+<span class="sd">              - &quot;-cl-fast-relaxed-math&quot;</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Use one of the predefined OpenCL build option instances instead of</span>
+<span class="sd">        using this class directly:</span>
+
+<span class="sd">          - :py:data:`MadEnable`</span>
+<span class="sd">          - :py:data:`NoSignedZeros`</span>
+<span class="sd">          - :py:data:`UnsafeMathOptimizations`</span>
+<span class="sd">          - :py:data:`FiniteMathOnly`</span>
+<span class="sd">          - :py:data:`FastRelaxedMath`</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_ALLOWED_BUILD_OPTIONS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;OpenCL build option &quot;</span><span class="si">{}</span><span class="s1">&quot; is not valid!</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s1">&#39;Use one of: </span><span class="se">\n</span><span class="s1">&quot;&#39;</span>
+                <span class="s1">&#39;  &quot;-cl-mad-enable&quot;, &#39;</span>
+                <span class="s1">&#39;  &quot;-cl-no-signed-zeros&quot;, &#39;</span>
+                <span class="s1">&#39;  &quot;-cl-unsafe-math-optimizations&quot;, &#39;</span>
+                <span class="s1">&#39;  &quot;-cl-finite-math-only&quot;, or &#39;</span>
+                <span class="s1">&#39;  &quot;-cl-fast-relaxed-math&quot;.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">value</span><span class="p">,</span> <span class="n">_ALLOWED_BUILD_OPTIONS</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_value</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Value of this OpenCL build option.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;ClBuildOption(&quot;</span><span class="si">{:s}</span><span class="s1">&quot;)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span></div>
+
+<span class="n">MadEnable</span> <span class="o">=</span> <span class="n">ClBuildOption</span><span class="p">(</span><span class="s1">&#39;-cl-mad-enable&#39;</span><span class="p">)</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Allow a * b + c to be replaced by a mad. The mad computes a * b + c with</span>
+<span class="sd">reduced accuracy. For example, some OpenCL devices implement mad as truncate</span>
+<span class="sd">the result of a * b before adding it to c.</span>
+
+<span class="sd">Source of the above  information:</span>
+<span class="sd">https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html </span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="n">NoSignedZeros</span> <span class="o">=</span> <span class="n">ClBuildOption</span><span class="p">(</span><span class="s1">&#39;-cl-no-signed-zeros&#39;</span><span class="p">)</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Allow optimizations for floating-point arithmetic that ignore the signedness</span>
+<span class="sd">of zero. IEEE 754 arithmetic specifies the behavior of distinct</span>
+<span class="sd">+0.0 and -0.0 values, which then prohibits simplification of expressions</span>
+<span class="sd">such as x+0.0 or 0.0*x (even with &quot;-clfinite-math&quot; only). This option implies</span>
+<span class="sd">that the sign of a zero result isn&#39;t significant.</span>
+
+<span class="sd">Source of the above information:</span>
+<span class="sd">https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html </span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="n">UnsafeMathOptimizations</span> <span class="o">=</span> <span class="n">ClBuildOption</span><span class="p">(</span><span class="s1">&#39;-cl-unsafe-math-optimizations&#39;</span><span class="p">)</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Allow optimizations for floating-point arithmetic that (a) assume that</span>
+<span class="sd">arguments and results are valid, (b) may violate IEEE 754 standard and</span>
+<span class="sd">(c) may violate the OpenCL numerical compliance requirements as defined</span>
+<span class="sd">in section 7.4 for single-precision floating-point, section 9.3.9</span>
+<span class="sd">for double-precision floating-point, and edge case behavior in section 7.5.</span>
+<span class="sd">This option includes the &quot;-cl-no-signed-zeros&quot; and &quot;-cl-mad-enable options&quot;. </span>
+
+<span class="sd">Source of the above information:</span>
+<span class="sd">https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html </span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<span class="n">FiniteMathOnly</span> <span class="o">=</span> <span class="n">ClBuildOption</span><span class="p">(</span><span class="s1">&#39;-cl-finite-math-only&#39;</span><span class="p">)</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Allow optimizations for floating-point arithmetic that assume that arguments</span>
+<span class="sd">and results are not NaNs or ±∞. This option may violate the OpenCL numerical</span>
+<span class="sd">compliance requirements defined in in section 7.4 for single-precision</span>
+<span class="sd">floating-point, section 9.3.9 for double-precision floating-point, and edge</span>
+<span class="sd">case behavior in section 7.5.</span>
+
+<span class="sd">Source of the above information:</span>
+<span class="sd">https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html </span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<span class="n">FastRelaxedMath</span> <span class="o">=</span> <span class="n">ClBuildOption</span><span class="p">(</span><span class="s1">&#39;-cl-fast-relaxed-math&#39;</span><span class="p">)</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Sets the optimization options &quot;-cl-finite-math-only&quot; and</span>
+<span class="sd">&quot;-cl-unsafe-math-optimizations&quot;. This allows optimizations for floating-point</span>
+<span class="sd">arithmetic that may violate the IEEE 754 standard and the OpenCL numerical</span>
+<span class="sd">compliance requirements defined in the specification in section 7.4</span>
+<span class="sd">for single-precision floating-point, section 9.3.9 for double-precision</span>
+<span class="sd">floating-point, and edge case behavior in section 7.5. This option causes</span>
+<span class="sd">the preprocessor macro __FAST_RELAXED_MATH__ to be defined in the</span>
+<span class="sd">OpenCL program.</span>
+
+<span class="sd">Source of the above information:</span>
+<span class="sd">https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/clBuildProgram.html </span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="n">FastMath</span> <span class="o">=</span> <span class="n">ClBuildOption</span><span class="p">(</span><span class="s1">&#39;-cl-fast-relaxed-math -cl-mad-enable&#39;</span><span class="p">)</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Sets two optimization options, namely -cl-fast-relaxed-mat and -cl-mad-enable.</span>
+<span class="sd">See :py:data:`FastRelaxedMath` :py:data:`MadEnable`.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

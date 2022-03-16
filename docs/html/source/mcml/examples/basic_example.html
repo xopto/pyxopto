@@ -1,39 +1,205 @@
 
+
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Basic example &mdash; PyXOpto 0.1.0 documentation</title>
+  
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
 
-    <title>Basic example &#8212; PyXOpto 0.1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Reflectance spectrum simulations of human skin" href="reflectance_spectrum_skin.html" />
-    <link rel="prev" title="Examples" href="index.html" />
+    <link rel="prev" title="Examples" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
    
-  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
-  </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
           
 
-          <div class="body" role="main">
+          
+            <a href="../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
             
-  <section id="basic-example">
+            <img src="../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Layered MC</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../layer_stack.html">The layer stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../phase_function.html">Scattering phase functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../source.html">Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../detector.html">Detectors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../surface_layout.html">Surface layouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fluence.html">Fluence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trace.html">Trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sampling_volume.html">Sampling volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_data_types.html">Simulator data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simulator_options.html">Simulator options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../opencl_build_options.html">OpenCL build options</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Basic example</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-layer-stack">The layer stack</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-photon-packet-source">The photon packet source</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-detector">The detector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-opencl-device">The OpenCL device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-monte-carlo-simulator">The Monte Carlo simulator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#visualization-of-results">Visualization of results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-complete-example">The complete example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="reflectance_spectrum_skin.html">Reflectance spectrum simulations of human skin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reflectance_optical_probes.html">Reflectance acquired with optical fibers and probes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scattering_phase_function.html">Reflectance spectrum dependence on scattering phase function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tracing.html">Photon packet tracing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sampling_volume.html">Sampling volume simulations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Layered MC</a> &raquo;</li>
+        
+          <li><a href="index.html">Examples</a> &raquo;</li>
+        
+      <li>Basic example</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="basic-example">
 <span id="mcml-basic-example-label"></span><h1>Basic example<a class="headerlink" href="#basic-example" title="Permalink to this headline">¶</a></h1>
 <p>This basic example is available in the <cite>examples/mcml/basic.py</cite> file.</p>
 <p>The functionality of layered Monte Carlo (MC) is available through the
@@ -41,7 +207,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
 </pre></div>
 </div>
-<section id="the-layer-stack">
+<div class="section" id="the-layer-stack">
 <h2>The layer stack<a class="headerlink" href="#the-layer-stack" title="Permalink to this headline">¶</a></h2>
 <p>The layers of the medium can be defined through the
 <a class="reference internal" href="../../../apidoc/xopto.mcml.mclayer.html#module-xopto.mcml.mclayer" title="xopto.mcml.mclayer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mclayer</span></code></a> submodule. The layers are stacked along the
@@ -82,8 +248,8 @@ boundaries when launched by the source or when escaping the sample.
 The value of the layer thickness <code class="code docutils literal notranslate"><span class="pre">d</span></code> should be given in m and
 the values of the scattering coefficient <code class="code docutils literal notranslate"><span class="pre">mus</span></code> and absorption coefficient
 <code class="code docutils literal notranslate"><span class="pre">mua</span></code> in m <sup>-1</sup>.</p>
-</section>
-<section id="the-photon-packet-source">
+</div>
+<div class="section" id="the-photon-packet-source">
 <h2>The photon packet source<a class="headerlink" href="#the-photon-packet-source" title="Permalink to this headline">¶</a></h2>
 <p>Different sources of photon packets are available through the
 <a class="reference internal" href="../../../apidoc/xopto.mcml.mcsource.html#module-xopto.mcml.mcsource" title="xopto.mcml.mcsource"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.mcml.mcsource</span></code></a> module. The following example creates a basic
@@ -92,8 +258,8 @@ surface (x, y, z)=(0, 0, 0) with a perpendicular incidence (0, 0, 1).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">Line</span><span class="p">()</span>
 </pre></div>
 </div>
-</section>
-<section id="the-detector">
+</div>
+<div class="section" id="the-detector">
 <h2>The detector<a class="headerlink" href="#the-detector" title="Permalink to this headline">¶</a></h2>
 <p>The photon packets can be collected by a surface detector after exiting the
 top or bottom sample surface. Different types of surface detectors are
@@ -119,8 +285,8 @@ to 100 μm. Both detectors are accumulating photon packets from
 photon packets that exit the sample within 20 <sup>o</sup> of the surface
 normal, while the detector at the bottom sample surface collects all the photon
 packets that exit the sample.</p>
-</section>
-<section id="the-opencl-device">
+</div>
+<div class="section" id="the-opencl-device">
 <h2>The OpenCL device<a class="headerlink" href="#the-opencl-device" title="Permalink to this headline">¶</a></h2>
 <p>The OpenCL device that will run the MC simulations can be selected through the
 <a class="reference internal" href="../../../apidoc/xopto.cl.clinfo.html#module-xopto.cl.clinfo" title="xopto.cl.clinfo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.cl.clinfo</span></code></a> module. In the following example we pick the first
@@ -128,11 +294,14 @@ available GPU device.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gpu</span> <span class="o">=</span> <span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">()</span>
 </pre></div>
 </div>
-</section>
-<section id="the-monte-carlo-simulator">
+</div>
+<div class="section" id="the-monte-carlo-simulator">
 <h2>The Monte Carlo simulator<a class="headerlink" href="#the-monte-carlo-simulator" title="Permalink to this headline">¶</a></h2>
 <p>Next, we create a Monte Carlo simulator instance from the created layer stack,
 photon packet source and detectors.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mc_obj</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">detectors</span><span class="p">,</span> <span class="n">cl_devices</span><span class="o">=</span><span class="n">gpu</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>Optionally, we can limit the maximum simulation radius that is measured from
 the position of the photon packet source. In this example, we limit the
 simulation radius to 25 mm.</p>
@@ -151,8 +320,8 @@ results (fluence and trace) will be returned as <code class="code python docutil
 but at a distance / radius that exceeds the maximum radius of the
 detector will be accumulated in the last concentric ring of the
 <a class="reference internal" href="../../../apidoc/xopto.mcml.mcdetector.radial.html#xopto.mcml.mcdetector.radial.Radial" title="xopto.mcml.mcdetector.radial.Radial"><code class="xref py py-class docutils literal notranslate"><span class="pre">Radial</span></code></a> detector.</p>
-</section>
-<section id="visualization-of-results">
+</div>
+<div class="section" id="visualization-of-results">
 <h2>Visualization of results<a class="headerlink" href="#visualization-of-results" title="Permalink to this headline">¶</a></h2>
 <p>We can plot the simulation results using the
 <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.html">matplotlib.pyplot</a>
@@ -172,11 +341,11 @@ logarithmic scale is used in the y axis of the plots.</p>
 </pre></div>
 </div>
 <p>Reflectance and transmittance collected by the surface detectors.</p>
-<figure class="align-center">
-<a class="reference internal image-reference" href="../../../_images/detector.svg"><img alt="../../../_images/detector.svg" src="../../../_images/detector.svg" width="100%" /></a>
-</figure>
-</section>
-<section id="the-complete-example">
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/detector1.svg"><img alt="../../../_images/detector1.svg" src="../../../_images/detector1.svg" width="100%" /></a>
+</div>
+</div>
+<div class="section" id="the-complete-example">
 <h2>The complete example<a class="headerlink" href="#the-complete-example" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1">################################ Begin license #################################</span>
@@ -265,110 +434,55 @@ logarithmic scale is used in the y axis of the plots.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python examples/mcml/basic.py
 </pre></div>
 </div>
-</section>
-</section>
+</div>
+</div>
 
 
+           </div>
+           
           </div>
-          
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="reflectance_spectrum_skin.html" class="btn btn-neutral float-right" title="Reflectance spectrum simulations of human skin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<p class="logo">
-  <a href="../../../index.html">
-    <img class="logo" src="../../../_static/xopto_logo_bright.png" alt="Logo"/>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
     
-    <h1 class="logo logo-name">PyXOpto</h1>
-    
-  </a>
-</p>
+   
 
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../opencl_devices.html">OpenCL devices</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Layered MC</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../layer_stack.html">The layer stack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../phase_function.html">Scattering phase functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../source.html">Sources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../detector.html">Detectors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../surface_layout.html">Surface layouts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../fluence.html">Fluence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../trace.html">Trace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../sampling_volume.html">Sampling volume</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../simulator_data_types.html">Simulator data types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../simulator_options.html">Simulator options</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Basic example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reflectance_spectrum_skin.html">Reflectance spectrum simulations of human skin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reflectance_optical_probes.html">Reflectance acquired with optical fibers and probes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="scattering_phase_function.html">Reflectance spectrum dependence on scattering phase function</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tracing.html">Photon packet tracing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sampling_volume.html">Sampling volume simulations</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../mcvox/index.html">Voxelized MC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../dataset/index.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">Layered MC</a><ul>
-  <li><a href="index.html">Examples</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Examples</a></li>
-      <li>Next: <a href="reflectance_spectrum_skin.html" title="next chapter">Reflectance spectrum simulations of human skin</a></li>
-  </ul></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2021, XOpto team.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>
