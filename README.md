@@ -96,7 +96,7 @@ computing, data management and visualization ([SciPy](https://scipy.org),
 |------------------------------------------------------------------------------------------------------------|--------|---------|--------------|-------|-------|
 | [xopto/pyxopto-intel-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-intel-jupyter)        | v0.2.0 | 0.2.0   | Ubuntu 20.04 | -     | -     | 
 | [xopto/pyxopto-nvidia-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter)      | v0.2.0 | 0.2.0   | Ubuntu 20.04 | 11.03 | 8     |
-| [xopto/pyxopto-intel-jupyter-dl](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter-dl) | v0.2.0 | 0.2.0   | Ubuntu 20.04 | 11.03 | 8     |
+| [xopto/pyxopto-nvidia-jupyter-dl](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter-dl) | v0.2.0 | 0.2.0   | Ubuntu 20.04 | 11.03 | 8     |
 
 
 The [xopto/pyxopto-nvidia-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter), and [xopto/pyxopto-nvidia-jupyter-dl](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter) Docker images can be run by executing the following command:
