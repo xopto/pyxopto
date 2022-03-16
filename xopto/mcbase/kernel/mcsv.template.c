@@ -182,7 +182,7 @@ inline uint32_t sva_deposit_weight(McSamplingVolumeAnalyzer const *sva,
 };
 
 /**
- * @brief Returnflat voxel index into a flat array.
+ * @brief Returns flat voxel index into a flat array.
  * @param[in] sva Pointer to a sampling volume analyzer instance.
  * @param[in] voxel X, y and z indices of the voxel.
  * @return Flat index.
