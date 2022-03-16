@@ -55,8 +55,8 @@ typedef struct McSamplingVolume McSamplingVolume;
 *@{
 */
 struct McSamplingVolumeAnalyzer{
-	__constant McSamplingVolume *sv;		/** < @brief Sampling volume configuration. */
-	__constant McTrace *trace;	/** < @brief Trace configuration. */
+	__constant McSamplingVolume *sv;/** < @brief Sampling volume configuration. */
+	__constant McTrace *trace;		/** < @brief Trace configuration. */
 	mc_cnt_t packet_index;			/** < @brief Current photon packet index. */
 	mc_int_t num_events;			/** < @brief Number of events recorded for this photon packet. */
 	__global mc_fp_t *trace_data;	/** < @brief Event data buffer for this photon packet. */
@@ -74,7 +74,7 @@ typedef struct McSamplingVolumeAnalyzer McSamplingVolumeAnalyzer;
 struct TraceEvent{
 	mc_point3f_t	pos;	/** < @brief Photon packet position. */
 	mc_point3f_t	dir;	/** < @brief Photon packet propagation direction. */
-	mc_fp_t	weight;	/** < @brief Photon packet weight. */
+	mc_fp_t	weight;			/** < @brief Photon packet weight. */
 };
 /**
  * @}
