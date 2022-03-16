@@ -1,4 +1,3 @@
-#!/bin/bash
 ################################ Begin license #################################
 # Copyright (C) Laboratory of Imaging technologies,
 #               Faculty of Electrical Engineering,
@@ -20,33 +19,23 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
-set -e
+ARG UBUNTU_VERSION=18.04
 
-export PYTHONPATH=$PWD/..
+FROM ubuntu:${UBUNTU_VERSION}
 
-if [ -z "$VERSION" ]; then
-    VERSION=v$(python3 -c "import xopto; print(xopto.__version__)")
-fi
+LABEL maintainer="info@xopto.eu"
 
-docker build \
-    --build-arg UBUNTU_VERSION=20.04 \
-    -t xopto/pyxopto-intel-opencl \
-    --file intel_opencl.DOCKERFILE \
-    ..
+# switch to noninteractive apt-get mode
+ARG DEBIAN_FRONTEND=noninteractive
 
-docker build \
-    --build-arg BASE_CONTAINER=xopto/pyxopto-intel-opencl \
-    -t xopto/pyxopto-intel-jupyter-base \
-    --file pyxopto_jupyter.DOCKERFILE \
-    ..
+# to avoid warnings about apt-utils
+#RUN apt-get update && apt-get install --assume-yes apt-utils
 
-docker build \
-    --build-arg BASE_CONTAINER=xopto/pyxopto-intel-jupyter-base \
-    -t xopto/pyxopto-intel-jupyter:$VERSION \
-    --file pyxopto_jupyter_finalize.DOCKERFILE \
-    ..
+# install opencl support
+RUN apt-get update && apt-get install -y --no-install-recommends \
+	ocl-icd-libopencl1 \
+	clinfo \
+	ocl-icd-opencl-dev \
+	intel-opencl-icd
 
-# Tensorflow CUDA compatibility matrix: https://www.tensorflow.org/install/source#gpu
-#
-# Run as:
-#   "docker run --rm --device /dev/dri:/dev/dri -p 8888:8888 -u 0 -it xopto/pyxopto-intel-jupyter:$VERSION"
+RUN rm -rf /var/lib/apt/lists/*
