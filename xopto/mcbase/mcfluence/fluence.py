@@ -40,15 +40,15 @@ class Fluence(mcobject.McObject):
 
             Fields
             ------
-            inv_step: McTypes.cl_point3f
+            inv_step: McTypes.mc_point3f_t
                 Inverse spacings of the fluence accumulators.
-            top_left: McTypes.cl_point3f
+            top_left: McTypes.mc_point3f_t
                 Coordinates of the top-left corner of the fluence accumulators.
-            shape: McTypes.cl_point3
+            shape: McTypes.mc_point3_t
                 Shape/size of the accumulator along the x, y and z axis.
-            offset: McTypes.mc_int_t
+            offset: McTypes.mc_size_t
                 Offset of the first element of the fluence accumulator buffer.
-            k: McTypes.cl_float
+            k: McTypes.mc_int_t
                 Integer factor that converts floating point photon packet
                 weight to integer value compatible with the fluence
                 accumulators.

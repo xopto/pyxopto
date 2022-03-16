@@ -1239,11 +1239,16 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
                 uploadtime = t1 - t0
         exectime = t2 - t1
         downloadtime = time.perf_counter() - t2
+
+        self._run_report.update(upload=uploadtime, download=downloadtime,
+                                execution=exectime, items=nphotons,
+                                threads=int(self.np_buffers['num_kernels'][0]))
+
         if verbose:
             print('SamplingVolume processed {:d} packets in {:d} threads:\n'
-                  '    uploaded/built in: {:7.3f} ms\n'
-                  '    executed in:       {:7.3f} ms\n'
-                  '    downloaded in:     {:7.3f} ms'.format(
+                  '    uploaded/built in: {:10.3f} ms\n'
+                  '    executed in      : {:10.3f} ms\n'
+                  '    downloaded in    : {:10.3f} ms'.format(
                        nphotons, int(self.np_buffers['num_kernels'][0]),
                        uploadtime*1e3, exectime*1e3, downloadtime*1e3)
             )

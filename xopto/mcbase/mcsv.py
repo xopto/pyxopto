@@ -52,22 +52,22 @@ class SamplingVolume(mcobject.McObject):
 
             Fields
             ------
-            top_left: McTypes.cl_point3f
+            top_left: McTypes.mc_point3f_t
                 Coordinates of the top-left corner of the sampling volume accumulators.
-            voxel_size: McTypes.cl_point3f
+            voxel_size: McTypes.mc_point3f_t
                 Size of a voxel.
-            shape: McTypes.cl_point3
+            shape: McTypes.mc_point3_t
                 Shape/size of the accumulator along the x, y and z axis.
             multiplier: mc_fp_t
                 Multiplier that is applied to the product of the photon
                 packet weight and path length traversed through the voxel
                 before converting to integer weight. This value should be
-                approx. the inverse of the voxel size (the smallest dim).
-                This should eliminate the precission due to integer
+                approximately the inverse of the voxel size (the smallest dim).
+                This should eliminate degradation of precission due to integer
                 accumulators.  
-            offset: mc_uint_t
+            offset: mc_size_t
                 Offset of the first element of the accumulator buffer.
-            k: McTypes.cl_float
+            k: McTypes.mc_int_t
                 Integer factor that converts floating point photon packet
                 weight to integer value compatible with the sampling volume
                 accumulators.
