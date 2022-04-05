@@ -640,6 +640,50 @@ class Voxels(mcobject.McObject):
         if show:
             sv.show()
 
+    def render(self, show: bool = True):
+        '''
+        Show the voxelized volume in a 3D viewer.
+
+        Parameters
+        ----------
+        show: bool
+            If True, shows the window and starts the Qt event loop that
+            will block until the window is closed.
+
+        Returns
+        -------
+        viewer: slicer3d.Slicer3D
+            Use the :py:meth:`~xopto.util.widgets.visualization.slicer3d.Slicer3D.exec`
+            method to show the viewer and start the Qt event loop that will
+            block until the window is closed.
+
+        Note
+        ----
+        The 3D viewer requires PySide6 and PyQtGraph.
+        '''
+        from xopto.util.widgets import common
+        from xopto.util.widgets.visualization import slicer3d
+
+        app = common.prepareqt()
+
+        data = self.material
+        span = (data.min(), data.max())
+
+        slicer = slicer3d.Slicer3D()
+        slicer.setData(data, range_=span,
+                       x=self.x*1e3, y=self.y*1e3, z=self.z*1e3)
+        slicer.setXLabel('x (mm)')
+        slicer.setYLabel('y (mm)')
+        slicer.setZLabel('z (mm)')
+        slicer.view3D().setStandardCameraView('isometric')
+        slicer.setWindowTitle('Voxelized medium')
+
+        if show:
+            slicer.show()
+            app.exec()
+
+        return slicer
+
     def todict(self) -> dict:
         '''
         Export object to a dict.
