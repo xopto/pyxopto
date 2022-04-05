@@ -252,8 +252,8 @@ def mhg_inverse_g1gamma(
     valid: bool
         A binary mask indicating valid values of g and b.
     '''
-    g1 = np.asarray(g1, dtype=np.float).flatten()
-    gamma = np.asarray(gamma, dtype=np.float).flatten()
+    g1 = np.asarray(g1, dtype=np.float64).flatten()
+    gamma = np.asarray(gamma, dtype=np.float64).flatten()
 
     n = max(g1.size, gamma.size)
     g_hg = np.zeros((n,))
@@ -333,8 +333,8 @@ def mhg_inverse_gammadelta(
     valid: bool or np.ndarray
         A binary mask indicating valid values of g and b.
     '''
-    gamma = np.asarray(gamma, dtype=np.float).flatten()
-    delta = np.asarray(delta, dtype=np.float).flatten()
+    gamma = np.asarray(gamma, dtype=np.float64).flatten()
+    delta = np.asarray(delta, dtype=np.float64).flatten()
 
     fp_tol = 1e-6
 

@@ -538,11 +538,11 @@ class PfBase:
         # function CDF.
         res1 = minimize(
             lambda x: np.linalg.norm(lut_function(costhetai, x) - cumpfi),
-            [2], bounds=((1 + np.finfo(np.float).eps, np.inf),))
+            [2], bounds=((1 + np.finfo(np.float64).eps, np.inf),))
 
         res2 = minimize(
             lambda x: np.linalg.norm(lut_function(costhetai, x) - cumpfi),
-            [-1], bounds=((-np.inf, -np.finfo(np.float).eps),))
+            [-1], bounds=((-np.inf, -np.finfo(np.float64).eps),))
 
         if res1.fun < res2.fun:
             res = res1

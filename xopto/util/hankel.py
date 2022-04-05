@@ -32,7 +32,7 @@ def _is_uneven(array: np.ndarray) -> bool:
     Returns True, if the points in the array are unevenly spaced.
     '''
     tmp = np.diff(array)
-    return np.any(np.abs(tmp - tmp[0]) > np.finfo(np.float).eps)
+    return np.any(np.abs(tmp - tmp[0]) > np.finfo(np.float64).eps)
 
 def continuous(frequency: np.ndarray, rfun: np.ndarray, rstop: float,
                out: np.ndarray = None, **kwargs) -> np.ndarray:
@@ -66,7 +66,7 @@ def continuous(frequency: np.ndarray, rfun: np.ndarray, rstop: float,
     np_freq = np.asarray(frequency)
 
     if out is None:
-        out = np.empty([np_freq.size], dtype=np.float)
+        out = np.empty([np_freq.size], dtype=np.float64)
 
     for index in range(np_freq.size):
         out[index] = 2*np.pi*quad(
@@ -104,7 +104,7 @@ def discrete(frequency: np.ndarray, rpts: np.ndarray, fpts: np.ndarray,
         The Hankel transfor of rfun at the given frequencies.
     '''
     if logscale:
-        fpts[fpts <= 0.0] = np.finfo(np.float).eps
+        fpts[fpts <= 0.0] = np.finfo(np.float64).eps
         fr = lambda r: np.exp(
             interp1d(rpts, np.log(fpts), assume_sorted=True,
                      bounds_error=False, fill_value='extrapolate')(r)
@@ -154,10 +154,10 @@ def discrete_simpson(frequency: np.ndarray, rpts: np.ndarray, fpts: np.ndarray,
     np_freqs = np.asarray(frequency)
 
     if fpts.ndim > 1:
-        out = np.empty((fpts.shape[0], np_freqs.size,), dtype=np.float)
+        out = np.empty((fpts.shape[0], np_freqs.size,), dtype=np.float64)
         rpts = np.reshape(rpts, (1, rpts.size))
     else:
-        out = np.empty((np_freqs.size,), dtype=np.float)
+        out = np.empty((np_freqs.size,), dtype=np.float64)
 
     if uneven is None:
         uneven = _is_uneven(rpts)

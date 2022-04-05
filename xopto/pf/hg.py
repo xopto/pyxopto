@@ -52,7 +52,7 @@ class Hg(PfBase):
         '''
 
         super().__init__()
-        eps = np.finfo(np.float).eps
+        eps = np.finfo(np.float64).eps
         self._g = max(min(g, 1.0 - eps), -1.0 + eps)
 
     def __call__(self, costheta: float or np.ndarray) -> float or np.ndarray:
@@ -86,7 +86,7 @@ class Hg(PfBase):
         Overloads the :py:meth:`PfBase.gs` method of the base class with
         an analytical solution.
         '''
-        return self._g**np.arange(last + 1, dtype=np.float)
+        return self._g**np.arange(last + 1, dtype=np.float64)
 
     def fastg(self, n, **kwargs):
         '''
@@ -100,7 +100,7 @@ class Hg(PfBase):
         Overloads the :py:meth:`PfBase.gs` method of the base class with
         an analytical solution.
         '''
-        return self._g**np.arange(last + 1, dtype=np.float)
+        return self._g**np.arange(last + 1, dtype=np.float64)
 
     def __repr__(self):
         return 'Hg({})'.format(self._g)

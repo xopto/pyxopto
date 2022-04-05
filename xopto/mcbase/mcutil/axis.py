@@ -105,14 +105,14 @@ class Axis:
         self._n = n
 
         if self._logscale:
-            start = max(start, float(np.finfo(np.float).eps))
+            start = max(start, float(np.finfo(np.float64).eps))
             self._edges = np.logspace(np.log(start), np.log(stop), n + 1,
                                       base=np.e)
             self._step = (np.log(stop) - np.log(start))/self._n
         else:
             self._edges = np.linspace(start, stop, n + 1)
             self._step = (stop - start)/self._n
-        self._span = np.array((start, stop), dtype=np.float)
+        self._span = np.array((start, stop), dtype=np.float64)
 
         if self._logscale:
             self._scaled_span = np.log(self._span)
@@ -363,7 +363,7 @@ class SymmetricAxis:
         self._n = 2*n_half
 
         if self._logscale:
-            eps = np.finfo(np.float).eps
+            eps = np.finfo(np.float64).eps
             tmp = center + np.logspace(
                 np.log(eps), np.log(range), n_half + 1, base=np.e)
             edges_right = tmp[1:]
@@ -382,7 +382,7 @@ class SymmetricAxis:
 
         self._span = np.array(
             (self._center + self._offset, self._center + self._range),
-            dtype=np.float)
+            dtype=np.float64)
         if self._logscale:
             self._scaled_offset = np.log(self._offset)
         else:

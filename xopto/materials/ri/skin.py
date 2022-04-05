@@ -56,7 +56,7 @@ class Ding(RefractiveIndex):
         ri: float or np.ndarray
             Refractive index at the given wavelength(s).
         '''
-        w = np.asarray(wavelength, dtype=np.float)
+        w = np.asarray(wavelength, dtype=np.float64)
         self.check_wavelengths(w)
 
         w = w*1e9

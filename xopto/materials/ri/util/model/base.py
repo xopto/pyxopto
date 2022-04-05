@@ -41,7 +41,7 @@ class Normalize:
             The range of normalized values as [min, max].
         '''
         self._dest_range = (float(dest_range[0]), float(dest_range[1]))
-        src_range = np.asarray(src_range, dtype=np.float)
+        src_range = np.asarray(src_range, dtype=np.float64)
         self._src_range = (float(src_range.min()), float(src_range.max()))
 
         out_span = self._dest_range[1] - self._dest_range[0]
@@ -63,7 +63,7 @@ class Normalize:
             The input data transformed to the output range specified
             in the constructor call.
         '''
-        data = np.asarray(data, dtype=np.float)
+        data = np.asarray(data, dtype=np.float64)
         return self._dest_range[0] + (data - self._low)*self._k
 
     def undo(self, data: np.ndarray) -> np.ndarray:
@@ -81,7 +81,7 @@ class Normalize:
             The input data inversely transformed to the input range specified
             in the constructor call.
         '''
-        data = np.asarray(data, dtype=np.float)
+        data = np.asarray(data, dtype=np.float64)
         return (data - self._dest_range[0])/self._k + self._low
 
     def render(self, input='wavelength', output='wn'):
@@ -138,7 +138,7 @@ class Scale:
         scaled: numpy.ndarray, list or tuple
             The input data shifted and scaled by the values specified
         '''
-        return (np.asarray(data, dtype=np.float) - self._offset)*self._factor
+        return (np.asarray(data, dtype=np.float64) - self._offset)*self._factor
 
     def undo(self, data: np.ndarray) -> np.ndarray:
         '''
@@ -154,7 +154,7 @@ class Scale:
         descaled: numpy.ndarray, list or tuple
             The input data inversely transformed.
         '''
-        return np.asarray(data, dtype=np.float)/self._factor + self._offset
+        return np.asarray(data, dtype=np.float64)/self._factor + self._offset
 
     def render(self, input='wavelength', output='wn'):
         '''

@@ -660,7 +660,7 @@ class SliceViewCyl:
         if self._polar_axis:
             if R is None or Fi is None:
                 fi = np.linspace(0, 2*np.pi, data.shape[2])
-                r = np.arange(data.shape[1], dtype=np.float)
+                r = np.arange(data.shape[1], dtype=np.float64)
                 R, Fi = np.meshgrid(r, fi, indexing='ij')
 
             self._image = pp.pcolormesh(
@@ -954,7 +954,7 @@ class DualSliceViewCyl:
         if self._polar_axis:
             if R is None or Fi is None:
                 fi = np.linspace(0, 2*np.pi, data.shape[2])
-                r = np.arange(data.shape[1], dtype=np.float)
+                r = np.arange(data.shape[1], dtype=np.float64)
                 R, Fi = np.meshgrid(r, fi, indexing='ij')
 
             self._image = pp.pcolormesh(
@@ -1126,7 +1126,7 @@ def show():
 
 
 if __name__ == '__main__':
-    data = np.random.randint(0, 255, (101,101,101, 20)).astype(np.float)
+    data = np.random.randint(0, 255, (101,101,101, 20)).astype(np.float64)
     sv = DualSliceView(
         data,
         axis1=2, slices1=np.linspace(0, 1, 101), slice1_label='Time',
@@ -1138,7 +1138,7 @@ if __name__ == '__main__':
 
     exit(0)
 
-    data = np.random.randint(0, 255, (20,256,256)).astype(np.float)
+    data = np.random.randint(0, 255, (20,256,256)).astype(np.float64)
     for i in range(data.shape[0]):
         data[i] = data[i]*(1.0 - float(i)/data.shape[0])
     sv = SliceView(data, slices=np.linspace(0, 1, 20), cmap='gray')

@@ -211,7 +211,7 @@ class Normal(object):
     def _get_mean(self) -> float:
         return self._mean
     def _set_mean(self, mean: float):
-        self._mean = np.float(mean)
+        self._mean = np.float64(mean)
         self._update()
     mean = property(_get_mean, _set_mean, None,
                     'Mean value of the Normal distribution.')

@@ -125,7 +125,7 @@ class LinearLut(mcobject.McObject):
         else:
             self._first = float(first)
             self._last = float(last)
-            self._lut_data = np.asarray(lut_data, dtype=np.float)
+            self._lut_data = np.asarray(lut_data, dtype=np.float64)
 
     def _get_first(self) -> float:
         return self._first
@@ -287,12 +287,12 @@ class EmissionLut(LinearLut):
             super().__init__(radiance)
 
         else: 
-            radiance = np.asarray(radiance, dtype=np.float)
+            radiance = np.asarray(radiance, dtype=np.float64)
 
             if costheta is None:
                 costheta = np.linspace(0.0, 1.0, radiance.size)
             else:
-                costheta = np.asarray(costheta, dtype=np.float)
+                costheta = np.asarray(costheta, dtype=np.float64)
 
             if radiance.size != costheta.size:
                 raise ValueError(
@@ -348,7 +348,7 @@ class CollectionLut(LinearLut):
         if isinstance(sensitivity, (str, CollectionLut)):
             super().__init__(sensitivity)
         else:
-            sensitivity = np.asarray(sensitivity, dtype=np.float)
+            sensitivity = np.asarray(sensitivity, dtype=np.float64)
             if costheta is None:
                 costheta = np.linspace(0.0, 1.0, sensitivity.size)
             else:

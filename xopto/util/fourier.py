@@ -26,7 +26,7 @@ from scipy.integrate import simps
 
 def _is_uneven(array):
     tmp = np.diff(array)
-    return np.any(np.abs(tmp - tmp[0]) > np.finfo(np.float).eps)
+    return np.any(np.abs(tmp - tmp[0]) > np.finfo(np.float64).eps)
 
 def discrete_simpson(frequency: np.ndarray, xpts: np.ndarray, fpts: np.array,
                      uneven : bool = None) -> np.ndarray:

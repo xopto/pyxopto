@@ -119,7 +119,7 @@ class BufferAllocation:
 
 
 class BufferAllocator:
-    def __init__(self, dtype=np.float):
+    def __init__(self, dtype=np.float64):
         self._dtype = np.dtype(dtype)
         self._allocations = {}
         self._size = 0

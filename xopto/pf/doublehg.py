@@ -57,7 +57,7 @@ class DoubleHg(PfBase):
         '''
 
         super().__init__()
-        eps = np.finfo(np.float).eps
+        eps = np.finfo(np.float64).eps
         self._g1 = max(min(g1, 1.0 - eps), -1 + eps)
         self._g2 = max(min(g2, 1.0 - eps), -1 + eps)
         self._b = min(max(float(b), 0.0), 1.0)

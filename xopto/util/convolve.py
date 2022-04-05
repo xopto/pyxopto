@@ -119,7 +119,7 @@ def fiber_reflectance(r: np.ndarray, reflectance: np.ndarray,
         else:
             # First element of rsimps might be zero ... precision!
             d_times_rsimps = rsimps*d
-            d_times_rsimps[d_times_rsimps == 0.0] = np.finfo(np.float).tiny
+            d_times_rsimps[d_times_rsimps == 0.0] = np.finfo(np.float64).tiny
             fiber_reflectance[:, index] = 2.0*simps(
                 np.arccos(
                     np.clip(

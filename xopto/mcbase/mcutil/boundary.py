@@ -99,10 +99,10 @@ def refract(direction: np.ndarray, normal: np.ndarray, n1: float, n2: float) \
     direction: np.ndarray
         Propagation direction of the refracted beam.
     '''
-    direction = np.asarray(direction, dtype=np.float)
+    direction = np.asarray(direction, dtype=np.float64)
     direction_len = np.linalg.norm(direction)
 
-    normal = np.asarray(normal, dtype=np.float)
+    normal = np.asarray(normal, dtype=np.float64)
     normal_len = np.linalg.norm(normal)
 
     # For outwards pointing normal, cos1 is negative.
@@ -132,12 +132,12 @@ def reflect(direction: np.ndarray, normal: np.ndarray) -> np.ndarray:
     reflected_dir: np.ndarray
         Propagation direction of the reflected beam.
     '''
-    direction = np.asarray(direction, dtype=np.float)
+    direction = np.asarray(direction, dtype=np.float64)
     direction_len = np.linalg.norm(direction)
     if direction_len > 0.0:
         direction = direction/direction_len
 
-    normal = np.asarray(normal, dtype=np.float)
+    normal = np.asarray(normal, dtype=np.float64)
     normal_len = np.linalg.norm(normal)
     if normal_len > 0.0:
         normal = normal/normal_len

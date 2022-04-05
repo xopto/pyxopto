@@ -705,7 +705,7 @@ class UniformRectangularLut(Source):
             This source is updated with the configuration of the other source.
         '''
         if isinstance(other, UniformRectangularLut):
-            self._lut = np.asarray(other.lut, dtype=np.float)
+            self._lut = np.asarray(other.lut, dtype=np.float64)
             self._offset = 0
             self.width = other.width
             self.height = other.height
@@ -715,7 +715,7 @@ class UniformRectangularLut(Source):
         elif isinstance(other, dict):
             new_lut = other.get('lut')
             if new_lut is not None:
-                self._lut = np.asarray(new_lut, dtype=np.float)
+                self._lut = np.asarray(new_lut, dtype=np.float64)
                 self._offset = 0
             self.width = other.get('width', self._width)
             self.height = other.get('height', self._height)

@@ -92,8 +92,8 @@ class Fit:
 
         self._verbose = bool(verbose)
 
-        wavelengths = np.asarray(wavelengths, dtype=np.float)
-        n = np.asarray(n, dtype=np.float)
+        wavelengths = np.asarray(wavelengths, dtype=np.float64)
+        n = np.asarray(n, dtype=np.float64)
 
         if x0 is None:
             x0 = kind.guess(wavelengths, n)
@@ -103,8 +103,8 @@ class Fit:
         if self._verbose:
             print('Initial condition x0:', x0)
 
-        self._wavelengths = np.asarray(wavelengths, dtype=np.float)
-        self._n = np.asarray(n, dtype=np.float)
+        self._wavelengths = np.asarray(wavelengths, dtype=np.float64)
+        self._n = np.asarray(n, dtype=np.float64)
 
         results = minimize(
             lambda x: (
@@ -251,10 +251,10 @@ class ThermalFit:
         self._fit_model = kind 
 
         self._wavelengths = wavelengths = np.asarray(
-            wavelengths, dtype=np.float)
+            wavelengths, dtype=np.float64)
         self._temperatures = temperatures = np.asarray(
-            temperatures, dtype=np.float)
-        self._n = n = np.asarray(n, dtype=np.float)
+            temperatures, dtype=np.float64)
+        self._n = n = np.asarray(n, dtype=np.float64)
 
         fits = []
         params = []

@@ -193,10 +193,10 @@ class PfMap2DBase:
             self._param1_bounds = (self._param1.min(), self._param1.max())
             self._param2_bounds = (self._param2.min(), self._param2.max())
         else:
-            self._param1 = np.asarray(param1, dtype=np.float)
+            self._param1 = np.asarray(param1, dtype=np.float64)
             self._param1_bounds = (self._param1.min(), self._param1.max())
 
-            self._param2 = np.asarray(param2, dtype=np.float)
+            self._param2 = np.asarray(param2, dtype=np.float64)
             self._param2_bounds = (self._param2.min(), self._param2.max())
 
             self._param1_grid, self._param2_grid = np.meshgrid(

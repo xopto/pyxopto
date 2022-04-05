@@ -60,7 +60,7 @@ class Ma(RefractiveIndex):
         ri: float or np.ndarray
             Refractive index at the given wavelength(s).
         '''
-        w = np.asarray(wavelength, dtype=np.float)
+        w = np.asarray(wavelength, dtype=np.float64)
         self.check_wavelengths(w)
 
         w2 = (w*1e6)**2 # wavelength must be in units of um
@@ -117,7 +117,7 @@ class Nikolov(RefractiveIndex):
         ri: float or np.ndarray
             Refractive index at the given wavelength(s).
         '''
-        w = np.asarray(wavelength, dtype=np.float)
+        w = np.asarray(wavelength, dtype=np.float64)
         self.check_wavelengths(w)
 
         n = np.sqrt(

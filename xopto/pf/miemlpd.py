@@ -143,7 +143,7 @@ class MieMlPd(PfBase):
 
         nmedium = np.asarray(nmedium, dtype=np.complex128)
         nlayers = np.asarray(nlayers, dtype=np.complex128)
-        diameters = np.asarray(diameters, dtype=np.float)
+        diameters = np.asarray(diameters, dtype=np.float64)
 
         self._nd = nd
         self._drange = drange

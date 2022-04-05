@@ -48,8 +48,8 @@ def rotation_matrix_2d(a: Vector2, b:Vector2):
         Rotation matrix that rotates the unit vector a onto the
         unit vector b (b = T*a)
     '''
-    a = np.asarray(a, dtype=np.float)
-    b = np.asarray(b, dtype=np.float)
+    a = np.asarray(a, dtype=np.float64)
+    b = np.asarray(b, dtype=np.float64)
     a = a/np.linalg.norm(a)
     b = b/np.linalg.norm(b)
 
@@ -81,8 +81,8 @@ def rotation_matrix(a: Vector3, b: Vector3) -> SquareMatrix3:
     ----
     The general solution fails if a == -b (rotation is not uniquely defined).
     '''
-    a = np.asarray(a, dtype=np.float)
-    b = np.asarray(b, dtype=np.float)
+    a = np.asarray(a, dtype=np.float64)
+    b = np.asarray(b, dtype=np.float64)
     a = a/np.linalg.norm(a)
     b = b/np.linalg.norm(b)
     v = np.cross(a, b)
@@ -91,7 +91,7 @@ def rotation_matrix(a: Vector3, b: Vector3) -> SquareMatrix3:
 
     vx = np.array([[0.0,  -v[2],  v[1]],
                    [v[2],  0.0,  -v[0]],
-                   [-v[1], v[0],  0.0]], dtype=np.float)
+                   [-v[1], v[0],  0.0]], dtype=np.float64)
 
     R = np.identity(3) + vx + np.dot(vx, vx)*(1.0/(1.0 + c))
 

@@ -372,8 +372,8 @@ if __name__ == '__main__':
     H = W = 100
     R = 5
 
-    x = np.arange(-W/2.0, W/2.0, dtype=np.float)
-    y = np.arange(-H/2.0, H/2.0, dtype=np.float)
+    x = np.arange(-W/2.0, W/2.0, dtype=np.float64)
+    y = np.arange(-H/2.0, H/2.0, dtype=np.float64)
     Y, X = np.meshgrid(y, x, indexing='ij')
     frames = np.ones([num_frames, H, W])
     c_x, c_y = -W*0.5, -H*0.5

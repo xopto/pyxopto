@@ -83,7 +83,7 @@ class MieMl(PfBase):
 
         nmedium = np.asarray(nmedium, dtype=np.complex128)
         nlayers = np.asarray(nlayers, dtype=np.complex128)
-        diameters = np.asarray(diameters, dtype=np.float)
+        diameters = np.asarray(diameters, dtype=np.float64)
 
         wavelength_medium = wavelength/nmedium
         m = nlayers/nmedium
@@ -182,7 +182,7 @@ class MieMl(PfBase):
             Scattering phase function at the specified scattering angle cosines.
         '''
         if isinstance(costheta, float):
-            costheta = np.asarray((costheta,), dtype=np.float)
+            costheta = np.asarray((costheta,), dtype=np.float64)
 
         terms, Qext, Qsca, Qabs, Qbk, Qpr, g, Albedo, S1, S2 = scattnlay(
             self._x.real, self._m, theta=np.arccos(costheta))

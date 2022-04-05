@@ -28,7 +28,7 @@ from scipy.integrate import quad, simps
 
 def _uneven(array):
     tmp = np.diff(array)
-    return np.any(np.abs(tmp - tmp[0]) > np.finfo(np.float).eps)
+    return np.any(np.abs(tmp - tmp[0]) > np.finfo(np.float64).eps)
 
 def discreteSimpson(frequency: list or tuple or np.ndarray,
                     xpts: np.ndarray, fpts: np.ndarray, uneven: bool = False) \
