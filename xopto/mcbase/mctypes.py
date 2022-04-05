@@ -95,6 +95,9 @@ class McSizeT32:
     The related numpy data types are defined by the following attributes:
 
     - np_size - For mc_size_t.
+    - np_size2 - For mc_size2_t.
+    - np_size3 - For mc_size3_t.
+    - np_size4 - For mc_size4_t.
 
     Additional attributes of the class:
 
@@ -132,7 +135,13 @@ class McSizeT32:
         ]
 
     mc_maxsize = 4294967295
+
     np_size = 'uint32'
+    np_size2 = np.dtype([('x', np_size), ('y', np_size)])
+    np_size3 = np.dtype([('x', np_size), ('y', np_size),
+                         ('z', np_size), ('_', np_size)])
+    np_size4 = np.dtype([('x', np_size), ('y', np_size),
+                         ('z', np_size), ('w', np_size)])
 
 class McSizeT64:
     '''
@@ -149,6 +158,9 @@ class McSizeT64:
     The related numpy data types are defined by the following attributes:
 
     - np_size - For mc_size_t.
+    - np_size2 - For mc_size2_t.
+    - np_size3 - For mc_size3_t.
+    - np_size4 - For mc_size4_t.
 
     Additional attributes of the class:
 
@@ -188,6 +200,11 @@ class McSizeT64:
 
     mc_maxsize = 18446744073709551615
     np_size = 'uint64'
+    np_size2 = np.dtype([('x', np_size), ('y', np_size)])
+    np_size3 = np.dtype([('x', np_size), ('y', np_size),
+                         ('z', np_size), ('_', np_size)])
+    np_size4 = np.dtype([('x', np_size), ('y', np_size),
+                         ('z', np_size), ('w', np_size)])
 
 
 class McInt32:
@@ -427,7 +444,10 @@ class McFloat:
 
     Attribute that defined the related numpy data type:
 
-    - np_float - Scalar floating-point data type.
+    - np_float - Scalar floating-point data type form mc_fp_t.
+    - np2_float - Vector floating-point data type form mc_fp2_t.
+    - np3_float - Vector floating-point data type form mc_fp3_t.
+    - np4_float - Vector floating-point data type form mc_fp4_t.
 
     Additional attributes of the class:
 
@@ -442,7 +462,13 @@ class McFloat:
     mc_fp16_t = cltypes.cl_float16
     eps = 1.1920929e-07
     mc_fp_maxint = 0x7FFFFF # 23 bits
+
     np_float = 'float32'
+    np_float2 = np.dtype([('x', np_float), ('y', np_float)])
+    np_float3 = np.dtype([('x', np_float), ('y', np_float),
+                          ('z', np_float), ('_', np_float)])
+    np_float4 = np.dtype([('x', np_float), ('y', np_float),
+                          ('z', np_float), ('w', np_float)])
 
     class mc_point2f_t(cltypes.Structure, StructToListBasic, Vector2Helper):
         ''' Structure representing a 2D point using single-precision floating-point. '''
@@ -504,6 +530,9 @@ class McDouble:
     Attribute that defined the related numpy data type:
 
     - np_float - Scalar floating-point data type.
+    - np2_float - Vector floating-point data type form mc_fp2_t.
+    - np3_float - Vector floating-point data type form mc_fp3_t.
+    - np4_float - Vector floating-point data type form mc_fp4_t.
 
     Additional attributes of the class:
 
@@ -518,7 +547,13 @@ class McDouble:
     mc_fp16_t = cltypes.cl_double16
     eps = 2.220446049250313e-16
     mc_fp_maxint = 0xFFFFFFFFFFFFF # 52 bits
+
     np_float = 'float64'
+    np_float2 = np.dtype([('x', np_float), ('y', np_float)])
+    np_float3 = np.dtype([('x', np_float), ('y', np_float),
+                          ('z', np_float), ('_', np_float)])
+    np_float4 = np.dtype([('x', np_float), ('y', np_float),
+                          ('z', np_float), ('w', np_float)])
 
     class mc_point2f_t(cltypes.Structure, StructToListBasic, Vector2Helper):
         ''' Structure representing a 2D point using double-precision floating-point. '''
@@ -563,7 +598,7 @@ McFloat64 = McDouble
 
 
 class _McDataTypesMeta(type):
-    def __repr__(self):
+    def __str__(self):
         int_t = {False:McInt32, True:McInt64}.get(
             cltypes.sizeof(self.mc_int_t) == 8)
         accu_t = {False:McAccu32, True:McAccu64}.get(
@@ -575,8 +610,8 @@ class _McDataTypesMeta(type):
         return 'class McDataTypes({}, {}, {}, {})'.format(
             int_t.__name__, accu_t.__name__, cnt_t.__name__, fp_t.__name__)
 
-    def __str__(self):
-        return self.__repr__()
+    def __repr__(self):
+        return '{} # {}'.format(self.__str__(), id(self))
 
 
 class _McDataTypesHelper:
