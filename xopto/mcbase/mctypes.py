@@ -91,6 +91,7 @@ class McSizeT32:
     - mc_size<n>_t for vectorized unsigned integers (<n> must be one of 2, 3, 4, 8, 16)
     - mc_point2s_t structure for a 2D point with mc_size_t coordinates.
     - mc_point3s_t structure for a 3D point with mc_size_t coordinates.
+    - mc_point4s_t structure for a 4D point with mc_size_t coordinates.
 
     The related numpy data types are defined by the following attributes:
 
@@ -150,6 +151,10 @@ class McSizeT64:
 
     - mc_size_t - Size type.
     - mc_size<n>_t - For vectorized unsigned integers (<n> must be one of 2, 3, 4, 8, 16)
+    - mc_point2s_t structure for a 2D point with mc_size_t coordinates.
+    - mc_point3s_t structure for a 3D point with mc_size_t coordinates.
+    - mc_point4s_t structure for a 4D point with mc_size_t coordinates.
+
     - mc_point2_t - For a structure representing a 2D point with mc_int_t coordinates.
     - mc_point3_t - For a structure representing a 3D point with mc_int_t coordinates.
     - mc_point4_t - For a structure representing a 4D point with mc_int_t coordinates.

@@ -44,7 +44,7 @@ class Fluence(mcobject.McObject):
                 Inverse spacings of the fluence accumulators.
             top_left: McTypes.mc_point3f_t
                 Coordinates of the top-left corner of the fluence accumulators.
-            shape: McTypes.mc_point3_t
+            shape: McTypes.mc_point3s_t
                 Shape/size of the accumulator along the x, y and z axis.
             offset: McTypes.mc_size_t
                 Offset of the first element of the fluence accumulator buffer.
@@ -56,9 +56,9 @@ class Fluence(mcobject.McObject):
             _fields_ = [
                 ('inv_step', T.mc_point3f_t),
                 ('top_left', T.mc_point3f_t),
-                ('shape', T.mc_point3_t),
-                ('offset', T.mc_size_t),
-                ('k', T.mc_int_t),
+                ('shape',    T.mc_point3s_t),
+                ('offset',   T.mc_size_t),
+                ('k',        T.mc_int_t),
             ]
 
         return ClFluence
@@ -69,7 +69,7 @@ class Fluence(mcobject.McObject):
             'struct MC_STRUCT_ATTRIBUTES McFluence{',
             '	mc_point3f_t inv_step;',
             '	mc_point3f_t top_left;',
-            '	mc_point3_t shape;',
+            '	mc_point3s_t shape;',
             '	mc_size_t offset;',
             '	mc_int_t k;',
             '};',
@@ -86,9 +86,9 @@ class Fluence(mcobject.McObject):
             '	dbg_print_float(INDENT "inv_step.x (1/mm):", fluence->inv_step.x*1e-3f);',
             '	dbg_print_float(INDENT "inv_step.y (1/mm):", fluence->inv_step.y*1e-3f);',
             '	dbg_print_float(INDENT "inv_step.z (1/mm):", fluence->inv_step.z*1e-3f);',
-            '	dbg_print_int(INDENT "shape.x:", fluence->shape.x);',
-            '	dbg_print_int(INDENT "shape.y:", fluence->shape.y);',
-            '	dbg_print_int(INDENT "shape.z:", fluence->shape.z);',
+            '	dbg_print_size_t(INDENT "shape.x:", fluence->shape.x);',
+            '	dbg_print_size_t(INDENT "shape.y:", fluence->shape.y);',
+            '	dbg_print_size_t(INDENT "shape.z:", fluence->shape.z);',
             '	dbg_print_size_t(INDENT "offset:", fluence->offset);',
             '	dbg_print_int(INDENT "k:", fluence->k);',
             '',

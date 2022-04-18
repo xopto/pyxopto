@@ -143,7 +143,7 @@ class FiZ(Detector):
             '	radial_normal(pos, &normal);',
             '',
             '	uint32_t ui32w = weight_to_int(weight)*',
-            '		(detector->cos_min <= mc_fabs(dot3f(dir, &normal)));',
+            '		(detector->cos_min <= mc_fabs(mc_dot_point3f(dir, &normal)));',
             '',
             '	if (ui32w > 0){',
             '		dbg_print_uint("{} FiZ detector depositing int:", ui32w);'.format(Loc),

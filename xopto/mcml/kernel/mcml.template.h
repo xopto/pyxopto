@@ -910,15 +910,6 @@ inline mc_fp_t mcsim_position_r2_ex(
 #define mcsim_detectors(psim) ((psim)->detectors)
 
 /**
- * @brief Deposit the photon packet to the accumulator.
- * 
- * @param mcsim Pointer to a simulator instance.
- *
- * @note The source code of this function is implemented in related python modules.
- */
-inline void mcsim_detector_deposit(McSim *mcsim);
-
-/**
  * @brief Evaluates to a pointer to the common accumulator buffer.
  * @param[in] psim Pointer to a simulator instance.  
  */
@@ -1098,8 +1089,7 @@ inline void mcsim_trace_complete(McSim *psim, mc_uint_t event_count);
 #define MC_REFLECTED	0
 /**@brief Photon packet has been refracted into the next layer. */
 #define MC_REFRACTED	1
-/**@brief Photon packet has escaped the sample layers. */
-#define MC_ESCAPED		2
+
 /**
  * @} // end @addtogroup mc_boundary_interaction_outcome
  */
@@ -1108,10 +1098,9 @@ inline void mcsim_trace_complete(McSim *psim, mc_uint_t event_count);
  * @brief Handles layer boundary interactions (refraction/reflection).
  * @param[in] psim Pointer to a simulator instance.
  * @param[in] Next layer nexLayerIndex.
- * @return Returns MC_REFLECTED if the photon packet is reflected from the boundary,
- *         MC_REFRECTED if the photon packet is refracted across the layer boundary,
- *         or MC_ESCAPED if the photon packet escapes the medium through the
- *         topmost or bottommost layers.
+ * @return Returns MC_REFLECTED if the photon packet is reflected from the 
+ *         boundary or MC_REFRECTED if the photon packet is refracted across
+ *         the layer boundary.
  */
 inline mc_int_t mcsim_boundary(McSim *psim, mc_int_t nexLayerIndex);
 

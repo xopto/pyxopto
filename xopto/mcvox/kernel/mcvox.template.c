@@ -265,13 +265,13 @@ inline void mcsim_launch_one(McSim *psim){
 
 /*############## Start layer boundary handler implementation #################*/
 /**
-* @brief Handles voxel boundary interactions (refraction/reflection).
-* @param[in] psim Pointer to a simulator instance.
-* @param[in] distances Distances to the voxel boundaries.
-* @return Returns MC_REFLECTED if photon packet is reflected from the boundary,
-*		MC_REFRECTED if the photon packet is refracted across the voxel boundary,
-*		or MC_ESCAPED if the photon packet escapes the medium.
-*/
+ * @brief Handles voxel boundary interactions (refraction/reflection).
+ * @param[in] psim Pointer to a simulator instance.
+ * @param[in] distances Distances to the voxel boundaries.
+ * @return Returns MC_REFLECTED if the photon packet is reflected from the
+ *         boundary or MC_REFRECTED if the photon packet is refracted across
+ *         the voxel boundary.
+ */
 inline mc_int_t mcsim_boundary(McSim *psim, const mc_point3f_t *distances){
 
 	mc_point3_t normal;
@@ -411,6 +411,14 @@ inline void mcsim_fluence_deposit_weight(
 	#endif
 };
 
+/**
+ * @brief Low-level deposition function that can use an intermediate cache if
+ *        configured so through the ::MC_USE_FLUENCE_CACHE option.
+ * 
+ * @param psim     Simulator instance.
+ * @param offset   Deposition address/offset.
+ * @param weight   Weight to deposit.
+ */
 inline void mcsim_fluence_weight_deposit_ll(
 		McSim *psim, size_t offset, uint32_t weight){
 	#if MC_USE_FLUENCE_CACHE
@@ -961,7 +969,7 @@ __kernel void McKernel(
 			#endif
 
 			/* check if photon escaped the predefined simulation domain */
-			if (point3f_distance_squared(mcsim_position(&sim), &src_pos) >
+			if (mc_distance2_point3f(mcsim_position(&sim), &src_pos) >
 					mc_rmax*mc_rmax || mcsim_weight(&sim) <= FP_0){
 				done = true;
 			};

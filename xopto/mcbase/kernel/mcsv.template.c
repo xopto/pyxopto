@@ -26,11 +26,15 @@
 #if MC_USE_SAMPLING_VOLUME || defined(__DOXYGEN__)
 
 /**
- * @brief Fetches a trace event from the trace data buffer.
- * @param[in] sva Pointer to a sampling volume analyzer instance.
- * @param[out] ev Pointer to an event instance that fill be filled with the event data.
+ * @brief            Fetches a trace event from the trace data buffer.
+ *
+ * @param[in]  sva   Pointer to a sampling volume analyzer instance.
+ * @param[out] ev    Pointer to an event instance that fill be filled with the
+ *                   event data.
  * @param[in]  index Event index (0-based).
- * @returns Pointer to the event instance (input argument) filled with event data.
+ *
+ * @returns          Pointer to the event instance (input argument) filled
+ *                   with event data.
  */
 inline TraceEvent *sva_get_event(McSamplingVolumeAnalyzer const *sva,
 	TraceEvent *ev, mc_int_t ev_index){
@@ -49,12 +53,17 @@ inline TraceEvent *sva_get_event(McSamplingVolumeAnalyzer const *sva,
 };
 
 /**
- * @brief Computes the voxel coordinates at the position of the event.
- * @param[in] sva Pointer to a sampling volume analyzer instance.
- * @param[in] ev Pointer to an event instance.
- * @param[out] voxel Pointer to a 3D integer point that will be filled with the voxel indices.
- * @returns Input argument voxel.
- */ 
+ * @brief            Computes the voxel coordinates at the position
+ *                   of the event.
+ *
+ * @param[in]  sva   Pointer to a sampling volume analyzer instance.
+ * @param[in]  ev    Pointer to an event instance.
+ * @param[out] voxel Pointer to a 3D integer point that will be filled with
+ *                   the voxel indices.
+ *
+ * @returns          Pointer to the voxel coordinates at the position of the
+ *                   event (input argument voxel).
+ */
 inline mc_point3_t *sva_voxel(McSamplingVolumeAnalyzer const *sva,
 		TraceEvent const *ev, mc_point3_t *voxel){
 	voxel->x = mc_fdiv((ev->pos.x - sva->sv->top_left.x), sva->sv->voxel_size.x);
@@ -65,11 +74,14 @@ inline mc_point3_t *sva_voxel(McSamplingVolumeAnalyzer const *sva,
 };
 
 /**
- * @brief Return nonzero if the given voxel is valid / within the voxelized
- *        sampling volume domain.
- * @param[in] sva Pointer to a sampling volume analyzer instance.
+ * @brief            Return nonzero if the given voxel is valid / within
+ *                   the voxelized sampling volume domain.
+ *
+ * @param[in]  sva   Pointer to a sampling volume analyzer instance.
  * @param[out] voxel Voxel to test.
- * @returns Nonzero if the voxel lies within the sampling volume domain.
+ *
+ * @returns          Nonzero if the voxel lies within the sampling volume
+ *                   domain.
  */ 
 inline int sva_is_valid_voxel(McSamplingVolumeAnalyzer const *sva,
 		mc_point3_t const *voxel){
@@ -81,12 +93,15 @@ inline int sva_is_valid_voxel(McSamplingVolumeAnalyzer const *sva,
 };
 
 /**
- * @brief Intersect the voxel at the current position.
- * @param[in] sva Pointer to a sampling volume analyzer instance.
- * @param[in] ev Event at the current position.
- * @param[in] voxel Voxel at the current poosition.
- * @param[out] distances Distances to intersections with the voxel in x, y and z direction.
- * @returns Distance from ev1 to the voxel intersection.
+ * @brief                Intersect the voxel at the current position.
+ *
+ * @param[in]  sva        Pointer to a sampling volume analyzer instance.
+ * @param[in]  ev         Event at the current position.
+ * @param[in]  voxel      Voxel at the current poosition.
+ * @param[out] distances  Distances to the intersection with the voxel in
+ *                        the x, y and z direction.
+ *
+ * @returns               Distance from ev to the nearest voxel boundary.
  */ 
 inline mc_fp_t sva_intersect(
 		McSamplingVolumeAnalyzer const *sva, 
@@ -110,12 +125,16 @@ inline mc_fp_t sva_intersect(
 };
 
 /**
- * @brief Compute the next voxel index.
- * @param[in] sva Pointer to a sampling volume analyzer instance.
- * @param[in] ev  Pointer to the current event instance.
- * @param[in] distances Distances to the current voxel boundaries along the x, y and z axis.
- * @param[in, out] voxel Pointer to the current voxel indices.
- * @returns Input argument voxel.
+ * @brief                    Compute the next voxel index.
+ *
+ * @param[in]      sva       Pointer to a sampling volume analyzer instance.
+ * @param[in]      ev        Pointer to the current event instance.
+ * @param[in]      distances Distances to the current voxel boundaries
+ *                           along the x, y and z axis.
+ * @param[in, out] voxel     Pointer to the current voxel indices.
+ *
+ * @returns                  Updated input argument voxel - the next voxel
+ *                           index.
  */
 inline mc_point3_t *sva_next_voxel(McSamplingVolumeAnalyzer const *sva,
 		TraceEvent const *ev, mc_point3f_t const *distances,
@@ -141,9 +160,11 @@ inline mc_point3_t *sva_next_voxel(McSamplingVolumeAnalyzer const *sva,
 };
 
 /**
- * @brief Compute the total path length of the photon packet.
+ * @brief         Compute the total path length of the photon packet.
+ *
  * @param[in] sva Pointer to a sampling volume analyzer instance.
- * @returns Total path length of the photon packet.
+ * 
+ * @returns       Total path length of the photon packet.
  */
 inline mc_fp_t sva_total_path(McSamplingVolumeAnalyzer const *sva){
 	mc_int_t i;
@@ -160,19 +181,21 @@ inline mc_fp_t sva_total_path(McSamplingVolumeAnalyzer const *sva){
 		pos2.x = sva->trace_data[pos++];
 		pos2.y = sva->trace_data[pos++];
 		pos2.z = sva->trace_data[pos];
-		total_path += point3f_distance(&pos1, &pos2);
+		total_path += mc_distance_point3f(&pos1, &pos2);
 		pos1 = pos2;
 	};
 	return total_path;
 };
 
 /**
- * @brief Compute unsigned 32-bit integer weight that will be deposited to the
- *        sampling volume voxel..
- * @param[in] sva Pointer to a sampling volume analyzer instance.
+ * @brief                     Compute unsigned 32-bit integer weight that
+ *                            will be deposited to the sampling volume voxel.
+ *
+ * @param[in] sva             Pointer to a sampling volume analyzer instance.
  * @param[in] terminal_weight Terminal / final weight of the photon packet.
- * @param[in] l_voxel Length of the path traveled in this voxel.
- * @returns Weight to deposit in this voxel.
+ * @param[in] l_voxel         Length of the path traveled in this voxel.
+ *
+ * @returns                   Weight to deposit at this voxel.
  */
 inline uint32_t sva_deposit_weight(McSamplingVolumeAnalyzer const *sva,
 		mc_fp_t terminal_weight, mc_fp_t l_voxel){
@@ -182,16 +205,34 @@ inline uint32_t sva_deposit_weight(McSamplingVolumeAnalyzer const *sva,
 };
 
 /**
- * @brief Returns flat voxel index into a flat array.
- * @param[in] sva Pointer to a sampling volume analyzer instance.
- * @param[in] voxel X, y and z indices of the voxel.
- * @return Flat index.
+ * @brief          Returns flat voxel index into a flat array.
+ *
+ * @param[in] sva   Pointer to a sampling volume analyzer instance.
+ * @param[in] voxel Indices of the voxel along the x, y and z direction.
+ *
+ * @return          Flat index of the voxel.
  */
-inline mc_int_t sva_flat_voxel_index(McSamplingVolumeAnalyzer const *sva,
+inline mc_size_t sva_flat_voxel_index(McSamplingVolumeAnalyzer const *sva,
 		mc_point3_t const *voxel){
-	return (voxel->z*sva->sv->shape.y + voxel->y)*sva->sv->shape.x + voxel->x;
+	return
+		((mc_size_t)voxel->z*(mc_size_t)sva->sv->shape.y + (mc_size_t)voxel->y)*
+		(mc_size_t)sva->sv->shape.x + (mc_size_t)voxel->x;
 };
 
+/**
+ * @brief                             Sampling volume kernel.
+ * 
+ * @param[in]      npackets           Number of packet traces to process.
+ * @param[in, out] npackets_processed Number of already processed packet traces.
+ * @param[out]     num_kernels        Number of OpenCL threads that are woking
+ *                                    on the job.
+ * @param[in]      trace              Packet trace configuration.
+ * @param[in]      sampling_volume    Sampling volume configuration.
+ * @param[out]     total_weight       Total weight of the processed packets.
+ * @param[in]      int_buffer         Integer OpenCL buffer.
+ * @param[in]      fp_buffer          Floating-point OpenCL buffer.
+ * @param[out]     accu_buffer        Accumulator OpenCL buffer.
+ */
 __kernel void SamplingVolume(
 	mc_cnt_t npackets,
 	__global mc_cnt_t *npackets_processed, 
@@ -267,7 +308,7 @@ __kernel void SamplingVolume(
 		sva_get_event(&sva, &ev2, mc_min(event_index + 1, sva.num_events - 1));
 
 		/* compute distance between the events */
-		d_ev1_ev2 = point3f_distance(&ev1.pos, &ev2.pos);
+		d_ev1_ev2 = mc_distance_point3f(&ev1.pos, &ev2.pos);
 
 		/* get the voxel index at the location of the event */
 		sva_voxel(&sva, &ev1, &voxel);
@@ -291,7 +332,7 @@ __kernel void SamplingVolume(
 				
 				/* leaving this voxel - update the voxel weight */
 				if (sva_is_valid_voxel(&sva, &voxel)){
-					mc_int_t index = sva_flat_voxel_index(&sva, &voxel);
+					mc_size_t index = sva_flat_voxel_index(&sva, &voxel);
 					__global mc_accu_t *address = accu_buffer + sva.sv->offset + index;
 					uint32_t ui32w = sva_deposit_weight(&sva, end_weight, l_voxel);
 					accumulator_deposit(address, ui32w);
@@ -321,10 +362,10 @@ __kernel void SamplingVolume(
 					sva_get_event(&sva, &ev2, event_index + 1);
 
 					/* compute the distance between the two events */
-					d_ev1_ev2 = point3f_distance(&ev1.pos, &ev2.pos);
+					d_ev1_ev2 = mc_distance_point3f(&ev1.pos, &ev2.pos);
 				} else {
 					if (sva_is_valid_voxel(&sva, &voxel)){
-						mc_int_t index = sva_flat_voxel_index(&sva, &voxel);
+						mc_size_t index = sva_flat_voxel_index(&sva, &voxel);
 						__global mc_accu_t *address = accu_buffer + sva.sv->offset + index;
 						uint32_t ui32w = sva_deposit_weight(&sva, end_weight, l_voxel);
 						accumulator_deposit(address, ui32w);
@@ -362,7 +403,7 @@ __kernel void SamplingVolume(
 						sva_get_event(&sva, &ev2, mc_min(event_index + 1, sva.num_events - 1));
 
 						/* compute distance between the events */
-						d_ev1_ev2 = point3f_distance(&ev1.pos, &ev2.pos);
+						d_ev1_ev2 = mc_distance_point3f(&ev1.pos, &ev2.pos);
 
 						/* get the voxel index at the location of the event */
 						sva_voxel(&sva, &ev1, &voxel);

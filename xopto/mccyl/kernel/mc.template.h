@@ -680,7 +680,7 @@ typedef struct mc_matrix3f_t mc_matrix3f_t;
  * 
  * returns Dot product of the two vectors.
  */
-#define dot2f(pt1, pt2) \
+#define mc_dot_point2f(pt1, pt2) \
 	((pt1)->x*(pt2)->x + (pt1)->y*(pt2)->y)
 
 /**
@@ -691,7 +691,7 @@ typedef struct mc_matrix3f_t mc_matrix3f_t;
  * 
  * returns Dot product of the two vectors.
  */
-#define dot3f(pt1, pt2) \
+#define mc_dot_point3f(pt1, pt2) \
 	((pt1)->x*(pt2)->x + (pt1)->y*(pt2)->y + (pt1)->z*(pt2)->z)
 
 /**
@@ -713,35 +713,35 @@ typedef struct mc_matrix3f_t mc_matrix3f_t;
  * @brief Normalizes vector length to unity. 
  * @param[in, out] pv Pointer to a vector normalized on return.
  */		
-void point3f_normalize(mc_point3f_t *pv);
+void mc_normalize_point3f(mc_point3f_t *pv);
 
 /**
  * Squared radius of a 2D point.
  * @param[in] pt Pointer to the point.
  * @return Returns squared polar radius of the point.
  */
-#define point2f_r2(pt) mc_sqrt((pt)->x*(pt)->x + (pt)->y*(pt)->y)
+#define mc_r2_point2f(pt) mc_sqrt((pt)->x*(pt)->x + (pt)->y*(pt)->y)
 
 /**
  * Radius of a 2D point.
  * @param[in] pt Pointer to the point.
  * @return Returns polar radius of the point.
  */
-#define point2f_r(pt) mc_sqrt(point2f_r2(pt))
+#define mc_r_point2f(pt) mc_sqrt(mc_r2_point2f(pt))
 
 /**
  * Squared radius of a 3D point.
  * @param[in] pt Pointer to the point.
  * @return Returns squared polar radius of the point.
  */
-#define point3f_r2(pt) mc_sqrt((pt)->x*(pt)->x + (pt)->y*(pt)->y)
+#define mc_r2_point3f(pt) mc_sqrt((pt)->x*(pt)->x + (pt)->y*(pt)->y)
 
 /**
  * Radius of a 3D point.
  * @param[in] pt Pointer to the point.
  * @return Returns polar radius of the point.
  */
-#define point3f_r(pt) mc_sqrt(point3f_r2(pt))
+#define mc_r_point3f(pt) mc_sqrt(mc_r2_point3f(pt))
 
 /**
  * @brief Calculates square of the Euclidean distance between two points.
@@ -749,7 +749,7 @@ void point3f_normalize(mc_point3f_t *pv);
  * @param[in] pT2 Pointer to the second point.
  * @return Returns the square of Euclidean distance between points T1 and T2.
  */
-inline mc_fp_t point3f_distance_squared(
+inline mc_fp_t mc_distance2_point3f(
 		const mc_point3f_t * pT1, const mc_point3f_t * pT2);
 
 /**
@@ -758,8 +758,8 @@ inline mc_fp_t point3f_distance_squared(
  * @param[in] pT2 Pointer to the second point.
  * @return Returns the square of Euclidean distance between points T1 and T2.
  */
-#define point3f_distance(pT1, pT2) \
-		mc_sqrt(point3f_distance_squared((pT1), (pT2)))
+#define mc_distance_point3f(pT1, pT2) \
+		mc_sqrt(mc_distance2_point3f((pT1), (pT2)))
 
 /**
  * @brief Calculates square of the Euclidean distance between two 2D points.
@@ -778,8 +778,8 @@ inline mc_fp_t xyf_distance_squared(const mc_fp_t x1, mc_fp_t y1,
  * @param[in] ppoint2f Pointer to a 2D point (mc_point2f_t).
  * @return Returns nonzero if rectangle contains the given point.
  */
-#define rectf_contains_pointf(prectf, ppoint2f) \
-		rectf_contains_xy(prectf, (ppoint2f)->x, ppoint2f->y)
+#define mc_rectf_contains_point2f(prectf, ppoint2f) \
+		mc_rectf_contains_xy(prectf, (ppoint2f)->x, ppoint2f->y)
 
 /**
  * @brief Checks if a rectangle contains the given point.
@@ -788,8 +788,8 @@ inline mc_fp_t xyf_distance_squared(const mc_fp_t x1, mc_fp_t y1,
  * @param[in] y Coordinate y of the point (mc_fp_t).
  * @return Returns nonzero if rectangle contains the given point.
  */
-#define rectf_contains_xy(prectf, x, y) \
-		rectf_contains_ex( \
+#define mc_rectf_contains_xy(prectf, x, y) \
+		mc_rectf_contains_ex( \
 			(prectf)->top_left.x, (prectf)->top_left.y, \
 			(prectf)->top_left.width, (prectf)->top_left.height, \
 			x, y \
@@ -805,7 +805,7 @@ inline mc_fp_t xyf_distance_squared(const mc_fp_t x1, mc_fp_t y1,
  * @param[in] y Coordinate y of the point (mc_fp_t).
  * @return Returns nonzero if rectangle contains the given point.
  */
-inline int rectf_contains_ex(
+inline int mc_rectf_contains_ex(
 		mc_fp_t top_left_x, mc_fp_t top_left_y, mc_fp_t width, mc_fp_t height,
 		mc_fp_t x, mc_fp_t y);
 
@@ -815,7 +815,7 @@ inline int rectf_contains_ex(
  * @param[in] ppoint2f Pointer to a 2D point (mc_point2f_t).
  * @return Returns nonzero if rectangle contains the given point.
  */
-#define circf_contains_pointf(pcircf, ppoint2f) \
+#define mc_circf_contains_point2f(pcircf, ppoint2f) \
 	circlf_contains_ex( \
 		(pcircf)->center.x, (pcircf)->center.y, (pcircf)->r, \
 		(ppointf2)->x, (ppoint2f)->y \
@@ -828,7 +828,7 @@ inline int rectf_contains_ex(
  * @param[in] y Coordinate y of the point (mc_fp_t).
  * @return Returns nonzero if rectangle contains the given point.
  */
-#define circf_contains_xy(pcircf, x, y) \
+#define mc_circf_contains_xy(pcircf, x, y) \
 	circlf_contains_ex( \
 		(pcircf)->center.x, (pcircf)->center.y, (pcircf)->r, \
 		x, y \
@@ -843,7 +843,7 @@ inline int rectf_contains_ex(
  * @param[in] y Coordinate y of the point (mc_fp_t).
  * @return Returns nonzero if rectangle contains the given point.
  */
-inline int circf_contains_ex(
+inline int mc_circf_contains_ex(
 	mc_fp_t center_x, mc_fp_t center_y, mc_fp_t r, mc_fp_t x, mc_fp_t y);
 
 /**
@@ -852,7 +852,7 @@ inline int circf_contains_ex(
  * @param[in] pt Pointer to a 2D the point (mc_point2f_t).
  * @returns Returns nonzero if the point is within the slot.
  */
-#define slotf_contains_pointf(pslot, pt) \
+#define mc_slotf_contains_point2f(pslot, pt) \
 	slot_contains_xy(pslot, (pt)->x, (pt)->y)
 
 /**
@@ -862,8 +862,8 @@ inline int circf_contains_ex(
  * @param[in] y Coordinate y of the point.
  * @returns Returns nonzero if the point is within the slot.
  */
-#define slotf_contains_xy(pslot, x, y) \
-	slotf_contains_ex( \
+#define mc_slotf_contains_xy(pslot, x, y) \
+	mc_slotf_contains_ex( \
 		(pslot)->center.x, (pslot)->center.y, \
 		(pslot)->width, (pslot)->height, x, y \
 	)
@@ -878,7 +878,7 @@ inline int circf_contains_ex(
  * @param[in] y Coordinate y of the point.
  * @returns Returns nonzero if the point is within the slot.
  */
-inline int slotf_contains_ex(mc_fp_t cx, mc_fp_t cy,
+inline int mc_slotf_contains_ex(mc_fp_t cx, mc_fp_t cy,
 	mc_fp_t width, mc_fp_t height, mc_fp_t x, mc_fp_t y);
 
 /**
@@ -1789,15 +1789,6 @@ inline void mcsim_detector_deposit(McSim *mcsim);
 	((psim)->integer_buffer + offset)
 
 /**
- * @brief Deposit the photon packet to the accumulator.
- * 
- * @param mcsim Pointer to a simulator instance.
- *
- * @note The source code of this function is implemented in related python modules.
- */
-inline void mcsim_detector_deposit(McSim *mcsim);
-
-/**
 * @brief Evaluates to a pointer to the fluence configuration structure.
 * @param[in] psim Pointer to a simulator instance. 
 */
@@ -1933,20 +1924,20 @@ inline void mcsim_trace_complete(McSim *psim, mc_uint_t event_count);
 #define MC_REFLECTED	0
 /**@brief Photon packet has been refracted into the next layer. */
 #define MC_REFRACTED	1
-/**@brief Photon packet has escaped the sample layers. */
-#define MC_ESCAPED		2
+
 /**
  * @} // end @addtogroup mc_boundary_interaction_outcome
  */
 
 /**
  * @brief Handles layer boundary interactions (refraction/reflection).
+ *
  * @param[in] psim Pointer to a simulator instance.
  * @param[in] Next layer nexLayerIndex.
- * @return Returns MC_REFLECTED if the photon packet is reflected from the boundary,
- *         MC_REFRECTED if the photon packet is refracted across the layer boundary,
- *         or MC_ESCAPED if the photon packet escapes the medium through the
- *         topmost or bottommost layers.
+ * @return Returns MC_REFLECTED if the photon packet is reflected from
+ *         the boundary, or MC_REFRECTED if the photon packet is refracted
+ *         across the layer boundary.
+
  */
 inline mc_int_t mcsim_boundary(McSim *psim, mc_int_t nexLayerIndex);
 
@@ -2200,7 +2191,7 @@ inline uint64_t atomic_inc_uint64(__global uint64_t *ptr){
  * @brief Normalizes vector length to unity. 
  * @param[in, out] pv Pointer to a vector normalized on return.
  */	
-inline void point3f_normalize(mc_point3f_t *v){
+inline void mc_normalize_point3f(mc_point3f_t *v){
 	mc_fp_t k=mc_rsqrt(v->x*v->x + v->y*v->y + v->z*v->z);
 	v->x *= k;
 	v->y *= k;
@@ -2213,7 +2204,7 @@ inline void point3f_normalize(mc_point3f_t *v){
  * @param[in] pT2 Pointer to the second point.
  * @return Returns the square of Euclidean distance between points T1 and T2.
  */
-inline mc_fp_t point3f_distance_squared(
+inline mc_fp_t mc_distance2_point3f(
 		const mc_point3f_t * pT1, const mc_point3f_t * pT2){
 	mc_fp_t d, tmp;
 	tmp = pT1->x - pT2->x; d = tmp*tmp;
@@ -2253,7 +2244,7 @@ inline mc_fp_t xyf_distance_squared(const mc_fp_t x1, mc_fp_t y1,
  * @param[in] y Coordinate y of the point (mc_fp_t).
  * @return Returns nonzero if rectangle contains the given point.
  */
-inline int rectf_contains_ex(
+inline int mc_rectf_contains_ex(
 		mc_fp_t top_left_x, mc_fp_t top_left_y, mc_fp_t width, mc_fp_t height,
 		mc_fp_t x, mc_fp_t y){
 	return	(top_left_x <= x) && 
@@ -2271,7 +2262,7 @@ inline int rectf_contains_ex(
  * @param[in] y Coordinate y of the point (mc_fp_t).
  * @return Returns nonzero if rectangle contains the given point.
  */
-inline int circf_contains_ex(
+inline int mc_circf_contains_ex(
 		mc_fp_t center_x, mc_fp_t center_y, mc_fp_t r, mc_fp_t x, mc_fp_t y){
 	mc_fp_t dx = ((center_x) - (x));
 	mc_fp_t dy = ((center_y) - (y));
@@ -2289,7 +2280,7 @@ inline int circf_contains_ex(
  * @param[in] y Coordinate y of the point.
  * @returns Returns nonzero if the point is within the slot.
  */
-inline int slotf_contains_ex(mc_fp_t cx, mc_fp_t cy,
+inline int mc_slotf_contains_ex(mc_fp_t cx, mc_fp_t cy,
 		mc_fp_t width, mc_fp_t height, mc_fp_t x, mc_fp_t y){
 	mc_fp_t dx = x - cx;
 	mc_fp_t dy = y - cy;
@@ -2450,7 +2441,7 @@ inline mc_fp_t cos_critical(mc_fp_t n1, mc_fp_t n2){
  * @note Reflected beam propagation direction is computed as p - 2*n*(p*n)
  */
 inline mc_point3f_t *reflect(mc_point3f_t const *p, mc_point3f_t const *n, mc_point3f_t *r){
-	mc_fp_t p_n_2 = FP_2*dot3f(p, n);
+	mc_fp_t p_n_2 = FP_2*mc_dot_point3f(p, n);
 	r->x = p->x - n->x*p_n_2;
 	r->y = p->y - n->y*p_n_2;
 	r->z = p->z - n->z*p_n_2;
@@ -2523,7 +2514,7 @@ inline mc_point3f_t *refract(
 		mc_fp_t n1, mc_fp_t n2, mc_point3f_t *r){
 
 	/* For outwards pointing normal, cos1 is negative. */
-	mc_fp_t cos1 = dot3f(p, n);
+	mc_fp_t cos1 = mc_dot_point3f(p, n);
 
 	mc_fp_t n1_d_n2 = mc_fdiv(n1, n2);
 
@@ -2795,7 +2786,7 @@ inline void mcsim_scatter(McSim *psim){
 
 	/* Single precision can lose unity vector length. */
 	#if !defined(MC_DOUBLE_PRECISION)
-		point3f_normalize(dir);
+		mc_normalize_point3f(dir);
 	#endif
 };
 /*################# End scattering handling implementation ###################*/
@@ -3214,7 +3205,7 @@ __kernel void McKernel(
 			}
 
 			/* check if photon escaped the predefined simulation domain */
-			if (point3f_distance_squared(mcsim_position(&sim), &src_pos) >
+			if (mc_distance2_point3f(mcsim_position(&sim), &src_pos) >
 					mc_rmax*mc_rmax){
 				done = true;
 			};

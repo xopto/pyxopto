@@ -747,7 +747,7 @@ __kernel void McKernel(
 			#endif
 
 			/* check if photon escaped the predefined simulation domain */
-			if (point3f_distance_squared(mcsim_position(&sim), &src_pos) >
+			if (mc_distance2_point3f(mcsim_position(&sim), &src_pos) >
 					mc_rmax*mc_rmax) {
 				done = true;
 			};

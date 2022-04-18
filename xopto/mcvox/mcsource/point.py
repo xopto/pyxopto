@@ -115,7 +115,7 @@ class IsotropicPoint(Source):
             '				n_outside, n_inside, &refracted_direction);',
             '',
             '			specular_r = reflectance(n_outside, n_inside, ',
-            '					dot3f(&normal, &direction),',
+            '					mc_dot_point3f(&normal, &direction),',
             '					cos_critical(n_outside, n_inside));',
             '		} else {',
             '			dbg_print("Launch missed the sample box!");',

@@ -56,7 +56,7 @@ class SamplingVolume(mcobject.McObject):
                 Coordinates of the top-left corner of the sampling volume accumulators.
             voxel_size: McTypes.mc_point3f_t
                 Size of a voxel.
-            shape: McTypes.mc_point3_t
+            shape: McTypes.mc_point3s_t
                 Shape/size of the accumulator along the x, y and z axis.
             multiplier: mc_fp_t
                 Multiplier that is applied to the product of the photon
@@ -75,7 +75,7 @@ class SamplingVolume(mcobject.McObject):
             _fields_ = [
                 ('top_left', T.mc_point3f_t),
                 ('voxel_size', T.mc_point3f_t),
-                ('shape', T.mc_point3_t),
+                ('shape', T.mc_point3s_t),
                 ('multiplier', T.mc_fp_t),
                 ('offset', T.mc_size_t),
                 ('k', T.mc_int_t),

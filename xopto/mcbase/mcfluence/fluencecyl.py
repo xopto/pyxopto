@@ -40,48 +40,48 @@ class FluenceCyl(mcobject.McObject):
 
             Fields
             ------
-            center: McTypes.cl_point2f
+            center: McTypes.mc_point2f_t
                 Center of the cylindrical coordinate system in the x-y plane.
-            r_min: McTypes.cl_float
+            r_min: McTypes.mc_fp_t
                 Minimum r coordinate.
-            fi_min: McTypes.cl_float
+            fi_min: McTypes.mc_fp_t
                 Minimum polar angle coordinate.
-            z_min: McTypes.cl_float
+            z_min: McTypes.mc_fp_t
                 Minimum z coordinate.
-            inv_dr: McTypes.cl_float
+            inv_dr: McTypes.mc_fp_t
                 Inverse spacings of the fluence accumulators along the radial axis.
-            inv_dfi: McTypes.cl_float
+            inv_dfi: McTypes.mc_fp_t
                 Inverse spacings of the fluence accumulators along the
                 polar angle axis.
-            inv_dz: McTypes.cl_float
+            inv_dz: McTypes.mc_fp_t
                 Inverse spacings of the fluence accumulators along the
                 z axis.
-            n_r: McTypes.cl_int
+            n_r: McTypes.mc_size_t
                 Number of accumulators along the r axis.
-            n_fi: McTypes.cl_int
+            n_fi: McTypes.mc_size_t
                 Number of accumulators along the polar angle axis.
-            n_z: McTypes.cl_int
+            n_z: McTypes.mc_size_t
                 Number of accumulators along the z axis.
-            offset: McTypes.mc_int_t
+            offset: McTypes.mc_size_t
                 Offset of the first element of the fluence accumulator buffer.
-            k: McTypes.cl_float
+            k: McTypes.mc_fp_t
                 Integer factor that converts floating point photon packet
                 weight to integer value compatible with the fluence
                 accumulators.
             '''
             _fields_ = [
-                ('center', T.mc_point2f_t),
-                ('r_min', T.mc_fp_t),
-                ('fi_min', T.mc_fp_t),
-                ('z_min', T.mc_fp_t),
-                ('inv_dr', T.mc_fp_t),
+                ('center',  T.mc_point2f_t),
+                ('r_min',   T.mc_fp_t),
+                ('fi_min',  T.mc_fp_t),
+                ('z_min',   T.mc_fp_t),
+                ('inv_dr',  T.mc_fp_t),
                 ('inv_dfi', T.mc_fp_t),
-                ('inv_dz', T.mc_fp_t),
-                ('n_r', T.mc_int_t),
-                ('n_fi', T.mc_int_t),
-                ('n_z', T.mc_int_t),
-                ('offset', T.mc_size_t),
-                ('k', T.mc_int_t),
+                ('inv_dz',  T.mc_fp_t),
+                ('n_r',     T.mc_size_t),
+                ('n_fi',    T.mc_size_t),
+                ('n_z',     T.mc_size_t),
+                ('offset',  T.mc_size_t),
+                ('k',       T.mc_int_t),
             ]
 
         return ClFluenceCyl
@@ -97,9 +97,9 @@ class FluenceCyl(mcobject.McObject):
             '	mc_fp_t inv_dr;',
             '	mc_fp_t inv_dfi;',
             '	mc_fp_t inv_dz;',
-            '	mc_int_t n_r;',
-            '	mc_int_t n_fi;',
-            '	mc_int_t n_z;',
+            '	mc_size_t n_r;',
+            '	mc_size_t n_fi;',
+            '	mc_size_t n_z;',
             '	mc_size_t offset;',
             '	mc_int_t k;',
             '};',
@@ -118,9 +118,9 @@ class FluenceCyl(mcobject.McObject):
             '	dbg_print_float(INDENT "inv_dr (1/mm):", fluence->inv_dr*1e-3f);',
             '	dbg_print_float(INDENT "inv_dfi (1/rad):", fluence->inv_dfi);',
             '	dbg_print_float(INDENT "inv_dz (1/mm):", fluence->inv_dz*1e-3f);',
-            '	dbg_print_int(INDENT "n_r:", fluence->n_r);',
-            '	dbg_print_int(INDENT "n_fi:", fluence->n_fi);',
-            '	dbg_print_int(INDENT "n_z:", fluence->n_z);',
+            '	dbg_print_size_t(INDENT "n_r:", fluence->n_r);',
+            '	dbg_print_size_t(INDENT "n_fi:", fluence->n_fi);',
+            '	dbg_print_size_t(INDENT "n_z:", fluence->n_z);',
             '	dbg_print_size_t(INDENT "offset:", fluence->offset);',
             '	dbg_print_int(INDENT "k:", fluence->k);',
             '',

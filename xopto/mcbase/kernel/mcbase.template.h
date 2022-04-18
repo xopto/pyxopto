@@ -19,8 +19,8 @@
  * along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
  ******************************** End license *********************************/
 
-#ifndef __MC_BASE_H
-#define __MC_BASE_H
+#ifndef __MC_OPTIONS_H
+#define __MC_OPTIONS_H
 
 #if !defined(TRUE) || defined(__DOXYGEN__)
 	/** @brief Logical type true value. */
@@ -105,7 +105,7 @@
 #if !defined(MC_USE_64_BIT_INTEGER) || defined(__DOXYGEN__)
 	/** @brief Enable 64-bit default integers. 
 	 *  @note  This option is experimental. */
-	#define MC_USE_64_BIT_INTEGER					FALSE
+	#define MC_USE_64_BIT_INTEGER				FALSE
 #endif 
 
 #if !defined(MC_USE_NATIVE_MATH) || defined(__DOXYGEN__)
@@ -168,7 +168,7 @@
 
 #if !defined(MC_FLOAT_LUT_ARRAY_MEMORY) || defined(__DOXYGEN__)
 	/** @brief Integer lookup table memory space: must be __global or __constant. */
-	#define MC_FLOAT_LUT_ARRAY_MEMORY				__global
+	#define MC_FLOAT_LUT_ARRAY_MEMORY			__global
 #endif
 
 #if !defined(MC_USE_PACKED_STRUCTS) || defined(__DOXYGEN__)
@@ -280,7 +280,13 @@
 /**
  * }@ // end mc_opencl_pragma
  */
-/*############## Start suppot for OpenCL compiler directives  ################*/
+/*############### End suppot for OpenCL compiler directives  #################*/
+
+#endif /* #define __MC_OPTIONS_H */
+
+
+#ifndef __MC_TYPES_H
+#define __MC_TYPES_H
 
 
 /*########## Start basic data types, constants and math functions  ###########*/
@@ -334,45 +340,43 @@ typedef char int8_t;
 #if MC_USE_64_BIT_ACCUMULATORS || defined(__DOXYGEN__)
 	typedef ulong mc_accu_t;
 	#define MC_ACCU_MAX ((ulong)0xFFFFFFFFFFFFFFFFul)
-
-	#define accumulator_deposit(paddress, weight) \
-		accu_64_deposit_32((__global mc_accu_t *)(paddress), (uint)(weight))
 #else
 	typedef uint mc_accu_t;
 	#define MC_ACCU_MAX ((uint)0xFFFFFFFF)
-
-	/** @brief Deposit to 32-bit weight to 32-bit accumulators. */
-	#define accumulator_deposit(paddress, weight) \
-		atomic_add((__gloabal mc_accu_t *)(paddress), (mc_accu_t)(weight))
 #endif
 
 #if MC_USE_64_BIT_PACKET_COUNTER || defined(__DOXYGEN__)
-	/** @brief Using a 64-bit unsigned integer as a packet counter when ::MC_USE_64_BIT_PACKET_COUNTER is TRUE. */
+	/** @brief Using a 64-bit unsigned integer as a packet counter when
+	 * ::MC_USE_64_BIT_PACKET_COUNTER is TRUE. */
 	typedef ulong mc_cnt_t;
-	/** @brief enable 64-bit atomic extension if available. */
-	#if MC_USE_SOFT_64_ATOMICS || !defined(cl_khr_int64_base_atomics)
-		/** @brief Using software implementation for atomic incrementation of 64-bit unsigned integers. */
-		#define pkt_cnt_atomic_inc(pcnt) atomic_inc_uint64(pcnt)
-	#else
-		/** @brief Using 64-bit OpenCL atomic extension. */
-		#pragma OPENCL EXTENSION cl_khr_int64_base_atomics : enable
-		#define pkt_cnt_atomic_inc(pcnt) atom_inc(pcnt)
-	#endif
+
+	/** @brief Maximum value that can be represented by the counter type. */
 	#define MC_CNT_MAX ((ulong)0xFFFFFFFFFFFFFFFFul)
 #else
-	/** @brief Using a 32-bit unsigned integer as a packet counter when ::MC_USE_64_BIT_PACKET_COUNTER is NOT TRUE. */
+	/** @brief Using a 32-bit unsigned integer as a packet counter when
+	 * ::MC_USE_64_BIT_PACKET_COUNTER is NOT TRUE. */
 	typedef uint mc_cnt_t;
-	/** @brief Using OpenCL implementation of atomic incrementation of 32-bit unsigned integers. */
-	#define pkt_cnt_atomic_inc(pcnt) atomic_inc(pcnt)
+
+	/** @brief Maximum value that can be represented by the counter type. */
 	#define MC_CNT_MAX ((uint)0xFFFFFFFF)
 #endif
 
 #if MC_USE_64_BIT_SIZE_T || defined(__DOXYGEN__)
     /* Using 64-bit default size type. */
     typedef ulong mc_size_t;
+	typedef ulong2 mc_size2_t;
+	typedef ulong3 mc_size3_t;
+	typedef ulong4 mc_size4_t;
+	typedef ulong8 mc_size8_t;
+	typedef ulong16 mc_size16_t;
 #else
     /* Using 32-bit default size type. */
     typedef uint mc_size_t;
+	typedef uint2 mc_size2_t;
+	typedef uint3 mc_size3_t;
+	typedef uint4 mc_size4_t;
+	typedef uint8 mc_size8_t;
+	typedef uint16 mc_size16_t;
 #endif
 
 #if MC_USE_64_BIT_INTEGER || defined(__DOXYGEN__)
@@ -607,6 +611,11 @@ typedef char int8_t;
  */
 /*########### End basic data types, constants and math functions  ############*/
 
+#endif /* __MC_TYPES_H */
+
+
+#ifndef __MC_ATOMICS_H
+#define __MC_ATOMICS_H
 
 /*################ Start 64-bit atomic accumulator deposit ###################*/
 /**
@@ -641,13 +650,1418 @@ inline void accu_64_deposit_32(volatile __global ulong *address, uint weight);
  * @return			Returns old value at the pointer location.
  */
 inline uint64_t atomic_inc_uint64(__global uint64_t *ptr);
+#endif
+
+
+#if MC_USE_64_BIT_ACCUMULATORS || defined(__DOXYGEN__)
+    /** @brief Deposit a 32-bit unsigned weight to
+     *         a 64-bit unsigned accumulator. */
+	#define accumulator_deposit(paddress, weight) \
+		accu_64_deposit_32((__global mc_accu_t *)(paddress), (uint)(weight))
+#else
+	/** @brief Deposit a 32-bit unsigned weight to
+     *         a 32-bit unsigned accumulator. */
+	#define accumulator_deposit(paddress, weight) \
+		atomic_add((__gloabal mc_accu_t *)(paddress), (mc_accu_t)(weight))
+#endif
+
+
+#if MC_USE_64_BIT_PACKET_COUNTER || defined(__DOXYGEN__)
+	/** @brief enable 64-bit atomic extension if available. */
+	#if MC_USE_SOFT_64_ATOMICS || !defined(cl_khr_int64_base_atomics)
+		/** @brief Using software implementation of atomic increment
+         *         of 64-bit unsigned integer. */
+		#define pkt_cnt_atomic_inc(pcnt) atomic_inc_uint64(pcnt)
+	#else
+		/** @brief Using 64-bit OpenCL atomics extension. */
+		#pragma OPENCL EXTENSION cl_khr_int64_base_atomics : enable
+
+        /** @brief Using native OpenCL atomic increment for
+         *         64-bit unsigned integers */
+		#define pkt_cnt_atomic_inc(pcnt) atom_inc(pcnt)
+	#endif
+#else
+	/** @brief Using OpenCL implementation of atomic incremet of 32-bit
+     *         unsigned integers. */
+	#define pkt_cnt_atomic_inc(pcnt) atomic_inc(pcnt)
+#endif
 
 /**
  * @} // end @addtogroup mc_atomic
  */
-#endif
+
 /*################ End 64-bit atomic increment declarations ##################*/
 
+#endif /* #define __MC_ATOMICS_H */
+
+
+#ifndef __MC_GEOMETRY_H
+#define __MC_GEOMETRY_H
+
+/*#################### Start vector/matrix declarations ######################*/
+/**
+* @addtogroup mc_vector_and_matrix_types Vector and matrix data types
+* @{
+*/
+
+
+
+/**
+ *@brief 2D vector with components of type ::mc_int_t.
+ */
+typedef MC_STRUCT_ATTRIBUTES struct {
+    mc_int_t x; /**< @brief x component. */
+    mc_int_t y; /**< @brief y component. */
+} mc_intv2_t;
+
+/**
+ * @brief 3D vector with components of type ::mc_int_t.
+ */
+typedef MC_STRUCT_ATTRIBUTES struct {
+    mc_int_t x; /**< @brief x component. */
+    mc_int_t y; /**< @brief y component. */
+    mc_int_t z; /**< @brief z component. */
+} mc_intv3_t;
+
+/**
+ * @brief 4D vector with components of type ::mc_int_t.
+ */
+typedef MC_STRUCT_ATTRIBUTES struct {
+    mc_int_t x; /**< @brief x component. */
+    mc_int_t y; /**< @brief y component. */
+    mc_int_t z; /**< @brief z component. */
+    mc_int_t w; /**< @brief w component. */
+} mc_intv4_t;
+
+/**
+*@brief Data type used to describe a 2x2 matrix of type ::mc_int_t.
+*/
+typedef MC_STRUCT_ATTRIBUTES struct {
+	mc_int_t a_11; /**< @brief first element of the first row */
+	mc_int_t a_12; /**< @brief second element of the first row */
+	mc_int_t a_21; /**< @brief first element of the second row */
+	mc_int_t a_22; /**< @brief second element of the second row */
+} mc_matrix2_int_t;
+
+/**
+*@brief Data type used to describe a 3x3 matrix of type ::mc_int_t.
+*/
+typedef MC_STRUCT_ATTRIBUTES struct {
+	mc_int_t a_11; /**< @brief first element of the first row */
+	mc_int_t a_12; /**< @brief second element of the first row */
+	mc_int_t a_13; /**< @brief third element of the first row */
+	mc_int_t a_21; /**< @brief first element of the second row */
+	mc_int_t a_22; /**< @brief second element of the second row */
+    mc_int_t a_23; /**< @brief third element of the second row */
+	mc_int_t a_31; /**< @brief first element of the third row */
+	mc_int_t a_32; /**< @brief second element of the third row */
+    mc_int_t a_33; /**< @brief third element of the third row */
+} mc_matrix3_int_t;
+
+/**
+*@brief Data type used to describe a 4x4 matrix of type ::mc_int_t.
+*/
+typedef MC_STRUCT_ATTRIBUTES struct {
+	mc_int_t a_11; /**< @brief first element of the first row */
+	mc_int_t a_12; /**< @brief second element of the first row */
+	mc_int_t a_13; /**< @brief third element of the first row */
+    mc_int_t a_14; /**< @brief fourth element of the first row */
+	mc_int_t a_21; /**< @brief first element of the second row */
+	mc_int_t a_22; /**< @brief second element of the second row */
+    mc_int_t a_23; /**< @brief third element of the second row */
+    mc_int_t a_24; /**< @brief fourth element of the second row */
+	mc_int_t a_31; /**< @brief first element of the third row */
+	mc_int_t a_32; /**< @brief second element of the third row */
+    mc_int_t a_33; /**< @brief third element of the third row */
+    mc_int_t a_34; /**< @brief fourth element of the third row */
+	mc_int_t a_41; /**< @brief first element of the fourth row */
+	mc_int_t a_42; /**< @brief second element of the fourth row */
+    mc_int_t a_43; /**< @brief third element of the fourth row */
+    mc_int_t a_44; /**< @brief fourth element of the fourth row */
+} mc_matrix4_int_t;
+
+/**
+ *@brief 2D vector with components of type ::mc_size_t.
+ */
+typedef MC_STRUCT_ATTRIBUTES struct {
+    mc_size_t x; /**< @brief x component. */
+    mc_size_t y; /**< @brief y component. */
+} mc_sizev2_t;
+
+/**
+ * @brief 3D vector with components of type ::mc_size_t.
+ */
+typedef MC_STRUCT_ATTRIBUTES struct {
+    mc_size_t x; /**< @brief x component. */
+    mc_size_t y; /**< @brief y component. */
+    mc_size_t z; /**< @brief z component. */
+} mc_sizev3_t;
+
+/**
+ * @brief 4D vector with components of type ::mc_size_t.
+ */
+typedef MC_STRUCT_ATTRIBUTES struct {
+    mc_size_t x; /**< @brief x component. */
+    mc_size_t y; /**< @brief y component. */
+    mc_size_t z; /**< @brief z component. */
+    mc_size_t w; /**< @brief w component. */
+} mc_sizev4_t;
+
+/**
+*@brief Data type used to describe a 2x2 matrix of type ::mc_size_t.
+*/
+typedef MC_STRUCT_ATTRIBUTES struct {
+	mc_size_t a_11; /**< @brief first element of the first row */
+	mc_size_t a_12; /**< @brief second element of the first row */
+	mc_size_t a_21; /**< @brief first element of the second row */
+	mc_size_t a_22; /**< @brief second element of the second row */
+} mc_matrix2_size_t;
+
+/**
+*@brief Data type used to describe a 3x3 matrix of type ::mc_size_t.
+*/
+typedef MC_STRUCT_ATTRIBUTES struct {
+	mc_size_t a_11; /**< @brief first element of the first row */
+	mc_size_t a_12; /**< @brief second element of the first row */
+	mc_size_t a_13; /**< @brief third element of the first row */
+	mc_size_t a_21; /**< @brief first element of the second row */
+	mc_size_t a_22; /**< @brief second element of the second row */
+    mc_size_t a_23; /**< @brief third element of the second row */
+	mc_size_t a_31; /**< @brief first element of the third row */
+	mc_size_t a_32; /**< @brief second element of the third row */
+    mc_size_t a_33; /**< @brief third element of the third row */
+} mc_matrix3_size_t;
+
+/**
+*@brief Data type used to describe a 4x4 matrix of type ::mc_size_t.
+*/
+typedef MC_STRUCT_ATTRIBUTES struct {
+	mc_size_t a_11; /**< @brief first element of the first row */
+	mc_size_t a_12; /**< @brief second element of the first row */
+	mc_size_t a_13; /**< @brief third element of the first row */
+    mc_size_t a_14; /**< @brief fourth element of the first row */
+	mc_size_t a_21; /**< @brief first element of the second row */
+	mc_size_t a_22; /**< @brief second element of the second row */
+    mc_size_t a_23; /**< @brief third element of the second row */
+    mc_size_t a_24; /**< @brief fourth element of the second row */
+	mc_size_t a_31; /**< @brief first element of the third row */
+	mc_size_t a_32; /**< @brief second element of the third row */
+    mc_size_t a_33; /**< @brief third element of the third row */
+    mc_size_t a_34; /**< @brief fourth element of the third row */
+	mc_size_t a_41; /**< @brief first element of the fourth row */
+	mc_size_t a_42; /**< @brief second element of the fourth row */
+    mc_size_t a_43; /**< @brief third element of the fourth row */
+    mc_size_t a_44; /**< @brief fourth element of the fourth row */
+} mc_matrix4_size_t;
+
+/**
+ *@brief 2D vector with components of type ::mc_fp_t.
+ */
+typedef MC_STRUCT_ATTRIBUTES struct {
+    mc_fp_t x; /**< @brief x component. */
+    mc_fp_t y; /**< @brief y component. */
+} mc_fpv2_t;
+
+/**
+ * @brief 3D vector with components of type ::mc_fp_t.
+ */
+typedef MC_STRUCT_ATTRIBUTES struct {
+    mc_fp_t x; /**< @brief x component. */
+    mc_fp_t y; /**< @brief y component. */
+    mc_fp_t z; /**< @brief z component. */
+} mc_fpv3_t;
+
+/**
+ * @brief 4D vector with components of type ::mc_fp_t.
+ */
+typedef MC_STRUCT_ATTRIBUTES struct {
+    mc_fp_t x; /**< @brief x component. */
+    mc_fp_t y; /**< @brief y component. */
+    mc_fp_t z; /**< @brief z component. */
+    mc_fp_t w; /**< @brief w component. */
+} mc_fpv4_t;
+
+/**
+*@brief Data type used to describe a 2x2 matrix of type ::mc_fp_t.
+*/
+typedef MC_STRUCT_ATTRIBUTES struct {
+	mc_fp_t a_11; /**< @brief first element of the first row */
+	mc_fp_t a_12; /**< @brief second element of the first row */
+	mc_fp_t a_21; /**< @brief first element of the second row */
+	mc_fp_t a_22; /**< @brief second element of the second row */
+} mc_matrix2_fp_t;
+
+/**
+*@brief Data type used to describe a 3x3 matrix of type ::mc_fp_t.
+*/
+typedef MC_STRUCT_ATTRIBUTES struct {
+	mc_fp_t a_11; /**< @brief first element of the first row */
+	mc_fp_t a_12; /**< @brief second element of the first row */
+	mc_fp_t a_13; /**< @brief third element of the first row */
+	mc_fp_t a_21; /**< @brief first element of the second row */
+	mc_fp_t a_22; /**< @brief second element of the second row */
+    mc_fp_t a_23; /**< @brief third element of the second row */
+	mc_fp_t a_31; /**< @brief first element of the third row */
+	mc_fp_t a_32; /**< @brief second element of the third row */
+    mc_fp_t a_33; /**< @brief third element of the third row */
+} mc_matrix3_fp_t;
+
+/**
+*@brief Data type used to describe a 4x4 matrix of type ::mc_fp_t.
+*/
+typedef MC_STRUCT_ATTRIBUTES struct {
+	mc_fp_t a_11; /**< @brief first element of the first row */
+	mc_fp_t a_12; /**< @brief second element of the first row */
+	mc_fp_t a_13; /**< @brief third element of the first row */
+    mc_fp_t a_14; /**< @brief fourth element of the first row */
+	mc_fp_t a_21; /**< @brief first element of the second row */
+	mc_fp_t a_22; /**< @brief second element of the second row */
+    mc_fp_t a_23; /**< @brief third element of the second row */
+    mc_fp_t a_24; /**< @brief fourth element of the second row */
+	mc_fp_t a_31; /**< @brief first element of the third row */
+	mc_fp_t a_32; /**< @brief second element of the third row */
+    mc_fp_t a_33; /**< @brief third element of the third row */
+    mc_fp_t a_34; /**< @brief fourth element of the third row */
+	mc_fp_t a_41; /**< @brief first element of the fourth row */
+	mc_fp_t a_42; /**< @brief second element of the fourth row */
+    mc_fp_t a_43; /**< @brief third element of the fourth row */
+    mc_fp_t a_44; /**< @brief fourth element of the fourth row */
+} mc_matrix4_fp_t;
+
+
+/** @brief Initializer of a 2D vector with elements of type::mc_int_t. */
+#define mc_initializer_intv2(x, y) \
+    (mc_intv2_t){(x), (y)}
+
+/** @brief Initializer of a 3D vector with elements of type::mc_int_t. */
+#define mc_initializer_intv3(x, y, z) \
+    (mc_intv3_t){(x), (y), (z)}
+
+/** @brief Initializer of a 4D vector with elements of type::mc_int_t. */
+#define mc_initializer_intv4(x, y, z, w) \
+    (mc_intv4_t){(x), (y), (z), (w)}
+
+/**
+ * @brief Transforms a 2D vector using a 2D matrix with elements
+ *        of type ::mc_int_t.
+ * 
+ * @param[in]  m   Pointer to a 2D transformation matrix.
+ * @param[in]  v   Pointer to a 2D input vector.
+ * @param[out] r   Pointer to a 2D output vector.
+ *                 Must NOT be the input vector.
+ * 
+ * @returns        Pointer to the transformed input vector r.
+ */
+inline mc_intv2_t *mc_transform_intv2(
+        mc_matrix2_int_t const *m, mc_intv2_t const *v,  mc_intv2_t *r);
+
+/**
+ * @brief Transforms a 3D vector using a 3D matrix with elements
+ *        of type ::mc_int_t.
+ * 
+ * @param[in]  m   Pointer to a 3D transformation matrix.
+ * @param[in]  v   Pointer to a 3D input vector.
+ * @param[out] r   Pointer to a 3D output vector.
+ *                 Must NOT be the input vector.
+ * 
+ * @returns        Pointer to the transformed input vector r.
+ */
+inline mc_intv3_t *mc_transform_intv3(
+        mc_matrix3_int_t const *m, mc_intv3_t const *v,  mc_intv3_t *r);
+
+/**
+ * @brief Transforms a 4D vector using a 3D matrix with elements
+ *        of type ::mc_int_t.
+ * 
+ * @param[in]  m   Pointer to a 4D transformation matrix.
+ * @param[in]  v   Pointer to a 4D input vector.
+ * @param[out] r   Pointer to a 4D output vector.
+ *                 Must NOT be the input vector.
+ * 
+ * @returns        Pointer to the transformed input vector r.
+ */
+inline mc_intv4_t *mc_transform_intv4(
+        mc_matrix4_int_t const *m, mc_intv4_t const *v,  mc_intv4_t *r);
+
+/**
+ * @brief Multiply two 2D matrices with elements
+ *        of type ::mc_int_t.
+ * 
+ * @param[in]  m1  Pointer to the first input 2D matrix.
+ * @param[in]  m2  Pointer to the second input 2D matrix.
+ * @param[out] r   Pointer to the output 2D matrix.
+ *                 Must NOT be any of the two input matrices.
+ * 
+ * @returns        Pointer to the resulting matrix r.
+ */
+inline mc_matrix2_int_t *mc_matrix2_mul_int(
+        mc_matrix2_int_t const *m1, mc_matrix2_int_t const *m2,
+        mc_matrix2_int_t *r);
+
+/**
+ * @brief Multiply two 3D matrices with elements
+ *        of type ::mc_int_t.
+ * 
+ * @param[in]  m1  Pointer to the first input 3D matrix.
+ * @param[in]  m2  Pointer to the second input 3D matrix.
+ * @param[out] r   Pointer to the output 3D matrix.
+ *                 Must NOT be any of the two input matrices.
+ * 
+ * @returns        Pointer to the resulting matrix r.
+ */
+inline mc_matrix3_int_t *mc_matrix3_mul_int(
+        mc_matrix3_int_t const *m1, mc_matrix3_int_t const *m2,
+        mc_matrix3_int_t *r);
+
+/**
+ * @brief Multiply two 3D matrices with elements
+ *        of type ::mc_int_t.
+ * 
+ * @param[in]  m1  Pointer to the first input 3D matrix.
+ * @param[in]  m2  Pointer to the second input 3D matrix.
+ * @param[out] r   Pointer to the output 3D matrix.
+ *                 Must NOT be any of the two input matrices.
+ * 
+ * @returns        Pointer to the resulting matrix r.
+ */
+inline mc_matrix4_int_t *mc_matrix4_mul_int(
+        mc_matrix4_int_t const *m1, mc_matrix4_int_t const *m2,
+        mc_matrix4_int_t *r);
+
+/**
+ * @brief Reverses the direction of a 2D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_intv2_t).
+ * param[out] r    Pointer to the output vector (::mc_intv2_t).
+ *                 Can be the input vector a.
+ * 
+ * @returns        Pointer to the reversed input vector r.
+ */
+inline mc_intv2_t *mc_reverse_intv2(mc_intv2_t const *a, mc_intv2_t *r);
+
+/**
+ * @brief Reverses the direction of a 3D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_intv3_t).
+ * param[out] r    Pointer to the output vector (::mc_intv3_t).
+ *                 Can be the input vector a.
+ * 
+ * @returns        Pointer to the reversed input vector r.
+ */
+inline mc_intv3_t *mc_reverse_intv3(mc_intv3_t const *a, mc_intv3_t *r);
+
+/**
+ * @brief Reverses the direction of a 4D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_intv4_t).
+ * param[out] r    Pointer to the output vector (::mc_intv4_t).
+ *                 Can be the input vector a.
+ * 
+ * @returns        Pointer to the reversed input vector r.
+ */
+inline mc_intv4_t *mc_reverse_intv4(mc_intv4_t const *a, mc_intv4_t *r);
+
+/**
+ * @brief Computes the dot product of two 2D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_intv2_t).
+ * param[in]  b    Pointer to the first input vector (::mc_intv2_t).
+ * 
+ * @returns        Dot product of the two vectors.
+ */
+inline mc_int_t mc_dot_intv2(mc_intv2_t const *a, mc_intv2_t const *b);
+
+/**
+ * @brief Computes the dot product of two 3D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_intv3_t).
+ * param[in]  b    Pointer to the first input vector (::mc_intv3_t).
+ * 
+ * @returns        Dot product of the two vectors.
+ */
+inline mc_int_t mc_dot_intv3(mc_intv3_t const *a, mc_intv3_t const *b);
+
+/**
+ * @brief Computes the dot product of two 4D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_intv4_t).
+ * param[in]  b    Pointer to the first input vector (::mc_intv4_t).
+ * 
+ * @returns        Dot product of the two vectors.
+ */
+inline mc_int_t mc_dot_intv4(mc_intv4_t const *a, mc_intv4_t const *b);
+
+/**
+ * @brief Computes the length of a 2D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_intv2_t).
+ * 
+ * @returns        Length of the input vector.
+ */
+inline mc_fp_t mc_length_intv2(mc_intv2_t const *a);
+
+/**
+ * @brief Computes the length of a 3D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_intv3_t).
+ * 
+ * @returns        Length of the input vector.
+ */
+inline mc_fp_t mc_length_intv3(mc_intv3_t const *a);
+
+/**
+ * @brief Computes the length of a 4D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_intv4_t).
+ * 
+ * @returns        Length of the input vector.
+ */
+inline mc_fp_t mc_length_intv4(mc_intv4_t const *a);
+
+/**
+ * @brief Computes the cross product of two vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_intv3_t).
+ * param[in]  b    Pointer to the second input vector (::mc_intv3_t).
+ *
+ * param[out] r    Pointer to the output vector (::mc_intv3_t)
+ *                 filled with the cross product a x b.
+ *                 Must NOT be any of the two input vectors.
+ * 
+ * @returns        Pointer to the cross product vector r.
+ */
+inline mc_intv3_t *mc_cross_intv3(
+        mc_intv3_t const *a, mc_intv3_t const *b, mc_intv3_t *r);
+
+
+
+/** @brief Initializer of a 2D vector with elements of type::mc_size_t. */
+#define mc_initializer_sizev2(x, y) \
+    (mc_sizev2_t){(x), (y)}
+
+/** @brief Initializer of a 3D vector with elements of type::mc_size_t. */
+#define mc_initializer_sizev3(x, y, z) \
+    (mc_sizev3_t){(x), (y), (z)}
+
+/** @brief Initializer of a 4D vector with elements of type::mc_size_t. */
+#define mc_initializer_sizev4(x, y, z, w) \
+    (mc_sizev4_t){(x), (y), (z), (w)}
+
+/**
+ * @brief Transforms a 2D vector using a 2D matrix with elements
+ *        of type ::mc_size_t.
+ * 
+ * @param[in]  m   Pointer to a 2D transformation matrix.
+ * @param[in]  v   Pointer to a 2D input vector.
+ * @param[out] r   Pointer to a 2D output vector.
+ *                 Must NOT be the input vector.
+ * 
+ * @returns        Pointer to the transformed input vector r.
+ */
+inline mc_sizev2_t *mc_transform_sizev2(
+        mc_matrix2_size_t const *m, mc_sizev2_t const *v,  mc_sizev2_t *r);
+
+/**
+ * @brief Transforms a 3D vector using a 3D matrix with elements
+ *        of type ::mc_size_t.
+ * 
+ * @param[in]  m   Pointer to a 3D transformation matrix.
+ * @param[in]  v   Pointer to a 3D input vector.
+ * @param[out] r   Pointer to a 3D output vector.
+ *                 Must NOT be the input vector.
+ * 
+ * @returns        Pointer to the transformed input vector r.
+ */
+inline mc_sizev3_t *mc_transform_sizev3(
+        mc_matrix3_size_t const *m, mc_sizev3_t const *v,  mc_sizev3_t *r);
+
+/**
+ * @brief Transforms a 4D vector using a 3D matrix with elements
+ *        of type ::mc_size_t.
+ * 
+ * @param[in]  m   Pointer to a 4D transformation matrix.
+ * @param[in]  v   Pointer to a 4D input vector.
+ * @param[out] r   Pointer to a 4D output vector.
+ *                 Must NOT be the input vector.
+ * 
+ * @returns        Pointer to the transformed input vector r.
+ */
+inline mc_sizev4_t *mc_transform_sizev4(
+        mc_matrix4_size_t const *m, mc_sizev4_t const *v,  mc_sizev4_t *r);
+
+/**
+ * @brief Multiply two 2D matrices with elements
+ *        of type ::mc_size_t.
+ * 
+ * @param[in]  m1  Pointer to the first input 2D matrix.
+ * @param[in]  m2  Pointer to the second input 2D matrix.
+ * @param[out] r   Pointer to the output 2D matrix.
+ *                 Must NOT be any of the two input matrices.
+ * 
+ * @returns        Pointer to the resulting matrix r.
+ */
+inline mc_matrix2_size_t *mc_matrix2_mul_size(
+        mc_matrix2_size_t const *m1, mc_matrix2_size_t const *m2,
+        mc_matrix2_size_t *r);
+
+/**
+ * @brief Multiply two 3D matrices with elements
+ *        of type ::mc_size_t.
+ * 
+ * @param[in]  m1  Pointer to the first input 3D matrix.
+ * @param[in]  m2  Pointer to the second input 3D matrix.
+ * @param[out] r   Pointer to the output 3D matrix.
+ *                 Must NOT be any of the two input matrices.
+ * 
+ * @returns        Pointer to the resulting matrix r.
+ */
+inline mc_matrix3_size_t *mc_matrix3_mul_size(
+        mc_matrix3_size_t const *m1, mc_matrix3_size_t const *m2,
+        mc_matrix3_size_t *r);
+
+/**
+ * @brief Multiply two 3D matrices with elements
+ *        of type ::mc_size_t.
+ * 
+ * @param[in]  m1  Pointer to the first input 3D matrix.
+ * @param[in]  m2  Pointer to the second input 3D matrix.
+ * @param[out] r   Pointer to the output 3D matrix.
+ *                 Must NOT be any of the two input matrices.
+ * 
+ * @returns        Pointer to the resulting matrix r.
+ */
+inline mc_matrix4_size_t *mc_matrix4_mul_size(
+        mc_matrix4_size_t const *m1, mc_matrix4_size_t const *m2,
+        mc_matrix4_size_t *r);
+
+/**
+ * @brief Reverses the direction of a 2D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_sizev2_t).
+ * param[out] r    Pointer to the output vector (::mc_sizev2_t).
+ *                 Can be the input vector a.
+ * 
+ * @returns        Pointer to the reversed input vector r.
+ */
+inline mc_sizev2_t *mc_reverse_sizev2(mc_sizev2_t const *a, mc_sizev2_t *r);
+
+/**
+ * @brief Reverses the direction of a 3D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_sizev3_t).
+ * param[out] r    Pointer to the output vector (::mc_sizev3_t).
+ *                 Can be the input vector a.
+ * 
+ * @returns        Pointer to the reversed input vector r.
+ */
+inline mc_sizev3_t *mc_reverse_sizev3(mc_sizev3_t const *a, mc_sizev3_t *r);
+
+/**
+ * @brief Reverses the direction of a 4D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_sizev4_t).
+ * param[out] r    Pointer to the output vector (::mc_sizev4_t).
+ *                 Can be the input vector a.
+ * 
+ * @returns        Pointer to the reversed input vector r.
+ */
+inline mc_sizev4_t *mc_reverse_sizev4(mc_sizev4_t const *a, mc_sizev4_t *r);
+
+/**
+ * @brief Computes the dot product of two 2D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_sizev2_t).
+ * param[in]  b    Pointer to the first input vector (::mc_sizev2_t).
+ * 
+ * @returns        Dot product of the two vectors.
+ */
+inline mc_size_t mc_dot_sizev2(mc_sizev2_t const *a, mc_sizev2_t const *b);
+
+/**
+ * @brief Computes the dot product of two 3D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_sizev3_t).
+ * param[in]  b    Pointer to the first input vector (::mc_sizev3_t).
+ * 
+ * @returns        Dot product of the two vectors.
+ */
+inline mc_size_t mc_dot_sizev3(mc_sizev3_t const *a, mc_sizev3_t const *b);
+
+/**
+ * @brief Computes the dot product of two 4D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_sizev4_t).
+ * param[in]  b    Pointer to the first input vector (::mc_sizev4_t).
+ * 
+ * @returns        Dot product of the two vectors.
+ */
+inline mc_size_t mc_dot_sizev4(mc_sizev4_t const *a, mc_sizev4_t const *b);
+
+/**
+ * @brief Computes the length of a 2D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_sizev2_t).
+ * 
+ * @returns        Length of the input vector.
+ */
+inline mc_fp_t mc_length_sizev2(mc_sizev2_t const *a);
+
+/**
+ * @brief Computes the length of a 3D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_sizev3_t).
+ * 
+ * @returns        Length of the input vector.
+ */
+inline mc_fp_t mc_length_sizev3(mc_sizev3_t const *a);
+
+/**
+ * @brief Computes the length of a 4D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_sizev4_t).
+ * 
+ * @returns        Length of the input vector.
+ */
+inline mc_fp_t mc_length_sizev4(mc_sizev4_t const *a);
+
+/**
+ * @brief Computes the cross product of two vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_sizev3_t).
+ * param[in]  b    Pointer to the second input vector (::mc_sizev3_t).
+ *
+ * param[out] r    Pointer to the output vector (::mc_sizev3_t)
+ *                 filled with the cross product a x b.
+ *                 Must NOT be any of the two input vectors.
+ * 
+ * @returns        Pointer to the cross product vector r.
+ */
+inline mc_sizev3_t *mc_cross_sizev3(
+        mc_sizev3_t const *a, mc_sizev3_t const *b, mc_sizev3_t *r);
+
+
+
+/** @brief Initializer of a 2D vector with elements of type::mc_fp_t. */
+#define mc_initializer_fpv2(x, y) \
+    (mc_fpv2_t){(x), (y)}
+
+/** @brief Initializer of a 3D vector with elements of type::mc_fp_t. */
+#define mc_initializer_fpv3(x, y, z) \
+    (mc_fpv3_t){(x), (y), (z)}
+
+/** @brief Initializer of a 4D vector with elements of type::mc_fp_t. */
+#define mc_initializer_fpv4(x, y, z, w) \
+    (mc_fpv4_t){(x), (y), (z), (w)}
+
+/**
+ * @brief Transforms a 2D vector using a 2D matrix with elements
+ *        of type ::mc_fp_t.
+ * 
+ * @param[in]  m   Pointer to a 2D transformation matrix.
+ * @param[in]  v   Pointer to a 2D input vector.
+ * @param[out] r   Pointer to a 2D output vector.
+ *                 Must NOT be the input vector.
+ * 
+ * @returns        Pointer to the transformed input vector r.
+ */
+inline mc_fpv2_t *mc_transform_fpv2(
+        mc_matrix2_fp_t const *m, mc_fpv2_t const *v,  mc_fpv2_t *r);
+
+/**
+ * @brief Transforms a 3D vector using a 3D matrix with elements
+ *        of type ::mc_fp_t.
+ * 
+ * @param[in]  m   Pointer to a 3D transformation matrix.
+ * @param[in]  v   Pointer to a 3D input vector.
+ * @param[out] r   Pointer to a 3D output vector.
+ *                 Must NOT be the input vector.
+ * 
+ * @returns        Pointer to the transformed input vector r.
+ */
+inline mc_fpv3_t *mc_transform_fpv3(
+        mc_matrix3_fp_t const *m, mc_fpv3_t const *v,  mc_fpv3_t *r);
+
+/**
+ * @brief Transforms a 4D vector using a 3D matrix with elements
+ *        of type ::mc_fp_t.
+ * 
+ * @param[in]  m   Pointer to a 4D transformation matrix.
+ * @param[in]  v   Pointer to a 4D input vector.
+ * @param[out] r   Pointer to a 4D output vector.
+ *                 Must NOT be the input vector.
+ * 
+ * @returns        Pointer to the transformed input vector r.
+ */
+inline mc_fpv4_t *mc_transform_fpv4(
+        mc_matrix4_fp_t const *m, mc_fpv4_t const *v,  mc_fpv4_t *r);
+
+/**
+ * @brief Multiply two 2D matrices with elements
+ *        of type ::mc_fp_t.
+ * 
+ * @param[in]  m1  Pointer to the first input 2D matrix.
+ * @param[in]  m2  Pointer to the second input 2D matrix.
+ * @param[out] r   Pointer to the output 2D matrix.
+ *                 Must NOT be any of the two input matrices.
+ * 
+ * @returns        Pointer to the resulting matrix r.
+ */
+inline mc_matrix2_fp_t *mc_matrix2_mul_fp(
+        mc_matrix2_fp_t const *m1, mc_matrix2_fp_t const *m2,
+        mc_matrix2_fp_t *r);
+
+/**
+ * @brief Multiply two 3D matrices with elements
+ *        of type ::mc_fp_t.
+ * 
+ * @param[in]  m1  Pointer to the first input 3D matrix.
+ * @param[in]  m2  Pointer to the second input 3D matrix.
+ * @param[out] r   Pointer to the output 3D matrix.
+ *                 Must NOT be any of the two input matrices.
+ * 
+ * @returns        Pointer to the resulting matrix r.
+ */
+inline mc_matrix3_fp_t *mc_matrix3_mul_fp(
+        mc_matrix3_fp_t const *m1, mc_matrix3_fp_t const *m2,
+        mc_matrix3_fp_t *r);
+
+/**
+ * @brief Multiply two 3D matrices with elements
+ *        of type ::mc_fp_t.
+ * 
+ * @param[in]  m1  Pointer to the first input 3D matrix.
+ * @param[in]  m2  Pointer to the second input 3D matrix.
+ * @param[out] r   Pointer to the output 3D matrix.
+ *                 Must NOT be any of the two input matrices.
+ * 
+ * @returns        Pointer to the resulting matrix r.
+ */
+inline mc_matrix4_fp_t *mc_matrix4_mul_fp(
+        mc_matrix4_fp_t const *m1, mc_matrix4_fp_t const *m2,
+        mc_matrix4_fp_t *r);
+
+/**
+ * @brief Reverses the direction of a 2D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_fpv2_t).
+ * param[out] r    Pointer to the output vector (::mc_fpv2_t).
+ *                 Can be the input vector a.
+ * 
+ * @returns        Pointer to the reversed input vector r.
+ */
+inline mc_fpv2_t *mc_reverse_fpv2(mc_fpv2_t const *a, mc_fpv2_t *r);
+
+/**
+ * @brief Reverses the direction of a 3D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_fpv3_t).
+ * param[out] r    Pointer to the output vector (::mc_fpv3_t).
+ *                 Can be the input vector a.
+ * 
+ * @returns        Pointer to the reversed input vector r.
+ */
+inline mc_fpv3_t *mc_reverse_fpv3(mc_fpv3_t const *a, mc_fpv3_t *r);
+
+/**
+ * @brief Reverses the direction of a 4D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_fpv4_t).
+ * param[out] r    Pointer to the output vector (::mc_fpv4_t).
+ *                 Can be the input vector a.
+ * 
+ * @returns        Pointer to the reversed input vector r.
+ */
+inline mc_fpv4_t *mc_reverse_fpv4(mc_fpv4_t const *a, mc_fpv4_t *r);
+
+/**
+ * @brief Computes the dot product of two 2D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv2_t).
+ * param[in]  b    Pointer to the first input vector (::mc_fpv2_t).
+ * 
+ * @returns        Dot product of the two vectors.
+ */
+inline mc_fp_t mc_dot_fpv2(mc_fpv2_t const *a, mc_fpv2_t const *b);
+
+/**
+ * @brief Computes the dot product of two 3D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv3_t).
+ * param[in]  b    Pointer to the first input vector (::mc_fpv3_t).
+ * 
+ * @returns        Dot product of the two vectors.
+ */
+inline mc_fp_t mc_dot_fpv3(mc_fpv3_t const *a, mc_fpv3_t const *b);
+
+/**
+ * @brief Computes the dot product of two 4D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv4_t).
+ * param[in]  b    Pointer to the first input vector (::mc_fpv4_t).
+ * 
+ * @returns        Dot product of the two vectors.
+ */
+inline mc_fp_t mc_dot_fpv4(mc_fpv4_t const *a, mc_fpv4_t const *b);
+
+/**
+ * @brief Computes the length of a 2D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_fpv2_t).
+ * 
+ * @returns        Length of the input vector.
+ */
+inline mc_fp_t mc_length_fpv2(mc_fpv2_t const *a);
+
+/**
+ * @brief Computes the length of a 3D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_fpv3_t).
+ * 
+ * @returns        Length of the input vector.
+ */
+inline mc_fp_t mc_length_fpv3(mc_fpv3_t const *a);
+
+/**
+ * @brief Computes the length of a 4D vector.
+ * 
+ * param[in]  a    Pointer to the input vector (::mc_fpv4_t).
+ * 
+ * @returns        Length of the input vector.
+ */
+inline mc_fp_t mc_length_fpv4(mc_fpv4_t const *a);
+
+/**
+ * @brief Computes the cross product of two vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv3_t).
+ * param[in]  b    Pointer to the second input vector (::mc_fpv3_t).
+ *
+ * param[out] r    Pointer to the output vector (::mc_fpv3_t)
+ *                 filled with the cross product a x b.
+ *                 Must NOT be any of the two input vectors.
+ * 
+ * @returns        Pointer to the cross product vector r.
+ */
+inline mc_fpv3_t *mc_cross_fpv3(
+        mc_fpv3_t const *a, mc_fpv3_t const *b, mc_fpv3_t *r);
+
+/**
+ * @brief Normalizes the length of the input 2D vector to unity.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv2_t).
+ * param[out] r    Pointer to output vector (::mc_fpv2_t).
+ *                 Can be the input vector a.
+ * 
+ * @returns        Pointer to the unit length vector r.
+ */
+inline mc_fpv2_t *mc_normalize_fpv2(mc_fpv2_t const *a, mc_fpv2_t *r);
+
+/**
+ * @brief Normalizes the length of the input 3D vector to unity.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv3_t).
+ * param[out] r    Pointer to output vector (::mc_fpv3_t).
+ *                 Can be the input vector a.
+ * 
+ * @returns        Pointer to the unit length vector r.
+ */
+inline mc_fpv3_t *mc_normalize_fpv3(mc_fpv3_t const *a, mc_fpv3_t *r);
+
+/**
+ * @brief Normalizes the length of the input 4D vector to unity.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv4_t).
+ * param[out] r    Pointer to output vector (::mc_fpv4_t).
+ *                 Can be the input vector a.
+ * 
+ * @returns        Pointer to the unit length vector r.
+ */
+inline mc_fpv4_t *mc_normalize_fpv4(mc_fpv4_t const *a, mc_fpv4_t *r);
+
+/**
+ * @brief Computes the squared distance between two 2D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv2_t).
+ * param[in]  b    Pointer to the second input vector (::mc_fpv2_t).
+ * 
+ * @returns        Squared distance between the two vectors.
+ */
+inline mc_fp_t mc_distance2_fpv2(mc_fpv2_t const *a, mc_fpv2_t const *b);
+
+/**
+ * @brief Computes the squared distance between two 3D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv3_t).
+ * param[in]  b    Pointer to the second input vector (::mc_fpv3_t).
+ * 
+ * @returns        Squared distance between the two vectors.
+ */
+inline mc_fp_t mc_distance2_fpv3(mc_fpv3_t const *a, mc_fpv3_t const *b);
+
+/**
+ * @brief Computes the squared distance between two 4D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv4_t).
+ * param[in]  b    Pointer to the second input vector (::mc_fpv4_t).
+ * 
+ * @returns        Squared distance between the two vectors.
+ */
+inline mc_fp_t mc_distance2_fpv4(mc_fpv4_t const *a, mc_fpv4_t const *b);
+
+/**
+ * @brief Computes the distance between two 2D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv2_t).
+ * param[in]  b    Pointer to the second input vector (::mc_fpv2_t).
+ * 
+ * @returns        Distance between the two vectors.
+ */
+inline mc_fp_t mc_distance_fpv2(mc_fpv2_t const *a, mc_fpv2_t const *b);
+
+/**
+ * @brief Computes the distance between two 3D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv3_t).
+ * param[in]  b    Pointer to the second input vector (::mc_fpv3_t).
+ * 
+ * @returns        Distance between the two vectors.
+ */
+inline mc_fp_t mc_distance_fpv3(mc_fpv3_t const *a, mc_fpv3_t const *b);
+
+/**
+ * @brief Computes the distance between two 4D vectors.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv4_t).
+ * param[in]  b    Pointer to the second input vector (::mc_fpv4_t).
+ * 
+ * @returns        Distance between the two vectors.
+ */
+inline mc_fp_t mc_distance_fpv4(mc_fpv4_t const *a, mc_fpv4_t const *b);
+
+/**
+ * @brief Computes a + b*c - multiply-add for 2D vectors of type ::mc_fpv2_t.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv2_t).
+ * param[in]  b    Pointer to the second input vector (::mc_fpv2_t).
+ * param[in]  c    Multiplication factor
+ * param[out] r    Pointer to the output/result vector.
+ *                 Can be any of the two input vectors.
+ * 
+ * @returns        Pointer to the result vector r.
+ */
+inline mc_fpv2_t *mc_mad_fpv2(
+        mc_fpv2_t const *a, mc_fpv2_t const *b, mc_fp_t c, mc_fpv2_t *r);
+
+/**
+ * @brief Computes a + b*c - multiply-add for 3D vectors of type ::mc_fpv3_t.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv2_t).
+ * param[in]  b    Pointer to the second input vector (::mc_fpv2_t).
+ * param[in]  c    Multiplication factor
+ * param[out] r    Pointer to the output/result vector.
+ *                 Can be any of the two input vectors.
+ * 
+ * @returns        Pointer to the result vector r.
+ */
+inline mc_fpv3_t *mc_mad_fpv3(
+        mc_fpv3_t const *a, mc_fpv3_t const *b, mc_fp_t c, mc_fpv3_t *r);
+
+/**
+ * @brief Computes a + b*c - multiply-add for 4D vectors of type ::mc_fpv4_t.
+ * 
+ * param[in]  a    Pointer to the first input vector (::mc_fpv4_t).
+ * param[in]  b    Pointer to the second input vector (::mc_fpv4_t).
+ * param[in]  c    Multiplication factor
+ * param[out] r    Pointer to the output/result vector.
+ *                 Can be any of the two input vectors.
+ * 
+ * @returns        Pointer to the result vector r.
+ */
+inline mc_fpv4_t *mc_mad_fpv4(
+        mc_fpv4_t const *a, mc_fpv4_t const *b, mc_fp_t c, mc_fpv4_t *r);
+
+/** @brief 2D integer data point/vector coordinates data type. */
+typedef mc_intv2_t mc_point2_t;
+
+/** @brief 3D integer data point/vector coordinates data type. */
+typedef mc_intv3_t mc_point3_t;
+
+/** @brief 4D integer data point/vector coordinates data type. */
+typedef mc_intv4_t mc_point4_t;
+
+
+/** @brief 2D point of size_t data type. */
+typedef mc_sizev2_t mc_point2s_t;
+
+/** @brief 3D point of size_t data type. */
+typedef mc_sizev3_t mc_point3s_t;
+
+/** @brief 4D point of size_t data type. */
+typedef mc_sizev4_t mc_point4s_t;
+
+
+/** @brief 2D data point/vector coordinates data type. */
+typedef mc_fpv2_t mc_point2f_t;
+
+/** @brief 3D data point/vector coordinates data type. */
+typedef mc_fpv3_t mc_point3f_t;
+
+/** @brief 4D data point/vector coordinates data type. */
+typedef mc_fpv4_t mc_point4f_t;
+
+/** @brief Initializer of a 2D vector with elements of type ::mc_int_t. */
+#define mc_initializer_point2(x, y)				mc_initializer_intv2(x, y)
+
+/** @brief Initializer of a 3D vector with elements of type ::mc_int_t. */
+#define mc_initializer_point3(x, y, z)			mc_initializer_intv3(x, y, z)
+
+/** @brief Initializer of a 4D vector with elements of type ::mc_int_t. */
+#define mc_initializer_point4(x, y, z, w)		mc_initializer_intv4(x, y, z, w)
+
+/** @brief Initializer of a 2D vector with elements of type ::mc_size_t. */
+#define mc_initializer_point2s(x, y)			mc_initializer_sizev2(x, y)
+
+/** @brief Initializer of a 3D vector with elements of type ::mc_size_t. */
+#define mc_initializer_point3s(x, y, z)			mc_initializer_sizev3(x, y, z)
+
+/** @brief Initializer of a 4D vector with elements of type ::mc_size_t. */
+#define mc_initializer_point4s(x, y, z, w)		mc_initializer_sizev4(x, y, z, w)
+
+/** @brief Initializer of a 2D vector with elements of type ::mc_fp_t. */
+#define mc_initializer_point2f(x, y)			mc_initializer_fpv2(x, y)
+
+/** @brief Initializer of a 3D vector with elements of type ::mc_fp_t. */
+#define mc_initializer_point3f(x, y, z)			mc_initializer_fpv3(x, y, z)
+
+/** @brief Initializer of a 4D vector with elements of type ::mc_fp_t. */
+#define mc_initializer_point4f(x, y, z, w)		mc_initializer_fpv4(x, y, z, w)
+
+/**
+*@brief Data type used to describe a 2D rectangle coordinates in floating-point precision.
+*@{
+*/
+struct MC_STRUCT_ATTRIBUTES mc_rectf_t{
+	mc_point2f_t top_left;	/**< @brief Coordinates of the top-left edge. */
+	mc_fp_t width;	/**< @brief Rectangle width. */
+	mc_fp_t height;	/**< @brief Rectangle height. */
+};
+/**
+ * @}
+ */
+/** @brief Floating-point rectangle data type. */
+typedef struct mc_rectf_t mc_rectf_t;
+
+/**
+*@brief Data type used to describe a 2D circle in floating-point precision.
+*@{
+*/
+struct MC_STRUCT_ATTRIBUTES mc_circf_t{
+	mc_point2f_t center;	/**< @brief Coordinates of the circle center. */
+	mc_fp_t r;	/**< @brief Circle radius. */
+};
+/**
+ * @}
+ */
+/** @brief Floating-point circle data type. */
+typedef struct mc_circf_t mc_circf_t;
+
+
+/**
+*@brief Data type used to describe a 2D slot in floating-point precision.
+*@{
+*/
+struct mc_slotf_t{
+	mc_point2f_t center; /** < @brief Slot center. */
+	mc_fp_t width;		/** < @brief Slot width. */
+	mc_fp_t height; 	/** < @brief Slot height. */
+};
+/**
+ * @}
+ */
+/** @brief Floating-point slot data type. */
+typedef struct mc_slotf_t mc_slotf_t;
+
+
+/** @brief 2D transformation matrix data type. */
+typedef mc_matrix2_fp_t mc_matrix2f_t;
+
+/** @brief 3D transformation matrix data type. */
+typedef mc_matrix3_fp_t mc_matrix3f_t;
+
+/** @brief 4D transformation matrix data type. */
+typedef mc_matrix4_fp_t mc_matrix4f_t;
+
+
+/**
+ * Transfors the z coordinate of a 3D point by the given 3D transformation
+ * matrix.
+ * 
+ * param[in] pT Pointer to a transformation matrix (mc_matrix3f_t).
+ * param[in] pt Pointer to a point (mc_point3f_t) that will be transformed.
+ */
+#define transform_point3f_z(pT, pt) \
+	((pT)->a_31*(pt)->x + (pT)->a_32*(pt)->y + (pT)->a_33*(pt)->z)
+
+/**
+ * Transfors a 3D point by the given 3D transformation matrix.
+ * 
+ * param[in] pT Pointer to a transformation matrix (mc_matrix3f_t).
+ * param[in] pt Pointer to a point (mc_point3f_t) that will be transformed.
+ * param[out] pres Pointer to a point (mc_point3f_t) that will hold the transformation result.
+ */
+#define transform_point3f(pT, pt, pres)		mc_transform_fpv3(pT, pt, pres)
+
+/**
+ * Transfors a 2D point by the given 3D transformation matrix.
+ * 
+ * param[in] pT Pointer to a transformation matrix (mc_matrix2f_t).
+ * param[in] pt Pointer to a point (mc_point2f_t) that will be transformed.
+ * param[out] pres Pointer to a point (mc_point2f_t) that will hold the transformation result.
+ */
+#define transform_point2f(pT, pt, pres)		mc_transform_fpv2(pT, pt, pres)
+
+/**
+ * @brief Computes the dot product of two input vectors.
+ * 
+ * param[in] pt1 Pointer to the first input vector (mc_point2f_t).
+ * param[in] pt2 Pointer to the second input vector (mc_point2f_t).
+ * 
+ * returns Dot product of the two vectors.
+ */
+#define mc_dot_point2f(pt1, pt2) 					mc_dot_fpv2(pt1, pt2)
+
+/**
+ * @brief Computes the dot product of two input vectors.
+ * 
+ * param[in] pt1 Pointer to the first input vector (mc_point3f_t).
+ * param[in] pt2 Pointer to the second input vector (mc_point3f_t).
+ * 
+ * returns Dot product of the two vectors.
+ */
+#define mc_dot_point3f(pt1, pt2) 			mc_dot_fpv3(pt1, pt2)
+
+
+/**
+ * @brief Normalizes vector length to unity. 
+ * @param[in, out] pv Pointer to a vector normalized on return.
+ */		
+#define mc_normalize_point3f(pv)			mc_normalize_fpv3(pv, pv)
+
+/**
+ * @brief Multiply and accumulate 2D vectors: r = a + b*c.
+ * 
+ * @param[in]  pa Pointer to the first input vector of type ::mc_point2f_t.
+ * @param[in]  pb Pointer to the second input vector of type ::mc_point2f_t.
+ * @param[in]  c  Scalar ::mc_fp_t factor applied to the second input vector.
+ * @param[out] pr Pointer to the output/result vector of type ::mc_point2f_t.
+ * 
+ * @returns       Pointer to the results vector pr. 
+ */
+#define mc_mad_point2f(pa, pb, c, pr)			mc_mad_fpv2(pa, pb, c, pr)
+
+/**
+ * @brief Multiply and accumulate 3D vectors: r = a + b*c.
+ * 
+ * @param[in]  pa Pointer to the first input vector of type ::mc_point3f_t.
+ * @param[in]  pb Pointer to the second input vector of type ::mc_point3f_t.
+ * @param[in]  c  Scalar ::mc_fp_t factor applied to the second input vector.
+ * @param[out] pr Pointer to the output/result vector of type ::mc_point3f_t.
+ * 
+ * @returns       Pointer to the results vector pr. 
+ */
+#define mc_mad_point3f(pa, pb, c, pr)			mc_mad_fpv3(pa, pb, c, pr)
+
+/**
+ * @brief Multiply and accumulate 4D vectors: r = a + b*c.
+ * 
+ * @param[in]  pa Pointer to the first input vector of type ::mc_point4f_t.
+ * @param[in]  pb Pointer to the second input vector of type ::mc_point4f_t.
+ * @param[in]  c  Scalar ::mc_fp_t factor applied to the second input vector.
+ * @param[out] pr Pointer to the output/result vector of type ::mc_point4f_t.
+ * 
+ * @returns       Pointer to the results vector pr. 
+ */
+#define mc_mad_point4f(pa, pb, c, pr)		mc_mad_fpv4(pa, pb, c, pr)
+
+/**
+ * Squared radius of a 2D point.
+ * @param[in] pt Pointer to the point.
+ * @return Returns squared polar radius of the point.
+ */
+#define mc_r2_point2f(pt)					mc_dot_fpv2(pt, pt)
+
+/**
+ * Radius of a 2D point.
+ * @param[in] pt Pointer to the point.
+ * @return Returns polar radius of the point.
+ */
+#define mc_r_point2f(pt) 					mc_length_fpv2(pt)
+
+/**
+ * Squared radius of a 3D point.
+ * @param[in] pt Pointer to the point.
+ * @return Returns squared polar radius of the point.
+ */
+#define mc_r2_point3f(pt)					mc_dot_fpv3(pt, pt)
+
+/**
+ * Radius of a 3D point.
+ * @param[in] pt Pointer to the point.
+ * @return Returns polar radius of the point.
+ */
+#define mc_r_point3f(pt)					mc_length_fpv3(pt)
+
+/**
+ * @brief Calculates square of the Euclidean distance between two points.
+ * @param[in] pT1 Pointer to the first point.
+ * @param[in] pT2 Pointer to the second point.
+ * @return Returns the square of Euclidean distance between points T1 and T2.
+ */
+#define mc_distance2_point2f(pT1, pT2)		mc_distance2_fpv2(pT1, pT2)
+
+/**
+ * @brief Calculates the Euclidean distance between two points.
+ * @param[in] pT1 Pointer to the first point.
+ * @param[in] pT2 Pointer to the second point.
+ * @return Returns the square of Euclidean distance between points T1 and T2.
+ */
+#define mc_distance_point2f(pT1, pT2)		mc_distance_fpv2(pT1, pT2)
+
+/**
+ * @brief Calculates square of the Euclidean distance between two points.
+ * @param[in] pT1 Pointer to the first point.
+ * @param[in] pT2 Pointer to the second point.
+ * @return Returns the square of Euclidean distance between points T1 and T2.
+ */
+#define mc_distance2_point3f(pT1, pT2)		mc_distance2_fpv3(pT1, pT2)
+
+/**
+ * @brief Calculates the Euclidean distance between two points.
+ * @param[in] pT1 Pointer to the first point.
+ * @param[in] pT2 Pointer to the second point.
+ * @return Returns the square of Euclidean distance between points T1 and T2.
+ */
+#define mc_distance_point3f(pT1, pT2)		mc_distance_fpv3(pT1, pT2)
+
+/**
+ * @brief Checks if a rectangle contains the given point.
+ * @param[in] prectf Pointer to a rectangle (mc_rectf_t).
+ * @param[in] ppoint2f Pointer to a 2D point (mc_point2f_t).
+ * @return Returns nonzero if rectangle contains the given point.
+ */
+#define mc_rectf_contains_point2f(prectf, ppoint2f) \
+		mc_rectf_contains_xy(prectf, (ppoint2f)->x, ppoint2f->y)
+
+/**
+ * @brief Checks if a rectangle contains the given point.
+ * @param[in] prectf Pointer to a rectangle (mc_rectf_t).
+ * @param[in] x Coordinate x of the point (mc_fp_t).
+ * @param[in] y Coordinate y of the point (mc_fp_t).
+ * @return Returns nonzero if rectangle contains the given point.
+ */
+#define mc_rectf_contains_xy(prectf, x, y) \
+		mc_rectf_contains_ex( \
+			(prectf)->top_left.x, (prectf)->top_left.y, \
+			(prectf)->top_left.width, (prectf)->top_left.height, \
+			x, y \
+		)
+
+/**
+ * @brief Checks if a rectangle contains the given point.
+ * @param[in] top_left_x Coordinate x of the top-left edge of the rectangle (mc_fp_t).
+ * @param[in] top_left_y Coordinate y of the top-left edge of the rectangle (mc_fp_t).
+ * @param[in] width Rectangle width (mc_fp_t).
+ * @param[in] height Rectangle height (mc_fp_t).
+ * @param[in] x Coordinate x of the point (mc_fp_t).
+ * @param[in] y Coordinate y of the point (mc_fp_t).
+ * @return Returns nonzero if rectangle contains the given point.
+ */
+inline int mc_rectf_contains_ex(
+		mc_fp_t top_left_x, mc_fp_t top_left_y, mc_fp_t width, mc_fp_t height,
+		mc_fp_t x, mc_fp_t y);
+
+/**
+ * @brief Checks if a rectangle contains the given point.
+ * @param[in] prectf Pointer to a rectangle (mc_rectf_t).
+ * @param[in] ppoint2f Pointer to a 2D point (mc_point2f_t).
+ * @return Returns nonzero if rectangle contains the given point.
+ */
+#define mc_circf_contains_point2f(pcircf, ppoint2f) \
+	circlf_contains_ex( \
+		(pcircf)->center.x, (pcircf)->center.y, (pcircf)->r, \
+		(ppointf2)->x, (ppoint2f)->y \
+	)
+
+/**
+ * @brief Checks if a rectangle contains the given point.
+ * @param[in] prectf Pointer to a rectangle (mc_rectf_t).
+ * @param[in] x Coordinate x of the point (mc_fp_t).
+ * @param[in] y Coordinate y of the point (mc_fp_t).
+ * @return Returns nonzero if rectangle contains the given point.
+ */
+#define mc_circf_contains_xy(pcircf, x, y) \
+	circlf_contains_ex( \
+		(pcircf)->center.x, (pcircf)->center.y, (pcircf)->r, \
+		x, y \
+	)
+
+/**
+ * @brief Checks if a circle contains the given point.
+ * @param[in] center_x Coordinate x of the circle center (mc_fp_t).
+ * @param[in] center_y Coordinate y of the circle center (mc_fp_t).
+ * @param[in] r Circle radius (mc_fp_t).
+ * @param[in] x Coordinate x of the point (mc_fp_t).
+ * @param[in] y Coordinate y of the point (mc_fp_t).
+ * @return Returns nonzero if rectangle contains the given point.
+ */
+inline int mc_circf_contains_ex(
+	mc_fp_t center_x, mc_fp_t center_y, mc_fp_t r, mc_fp_t x, mc_fp_t y);
+
+/**
+ * @brief Checks if slot contains a point.
+ * @param[in] pslot Pointer to a slot object.
+ * @param[in] pt Pointer to a 2D the point (mc_point2f_t).
+ * @returns Returns nonzero if the point is within the slot.
+ */
+#define mc_slotf_contains_point2f(pslot, pt) \
+	slot_contains_xy(pslot, (pt)->x, (pt)->y)
+
+/**
+ * @brief Checks if slot contains a point.
+ * @param[in] pslot Pointer to a slot object.
+ * @param[in] x Coordinate x of the point.
+ * @param[in] y Coordinate y of the point.
+ * @returns Returns nonzero if the point is within the slot.
+ */
+#define mc_slotf_contains_xy(pslot, x, y) \
+	mc_slotf_contains_ex( \
+		(pslot)->center.x, (pslot)->center.y, \
+		(pslot)->width, (pslot)->height, x, y \
+	)
+
+/**
+ * @brief Checks if slot contains a point.
+ * @param[in] cx Slot center coordinate x.
+ * @param[in] cy Slot center coordinate y.
+ * @param[in] width Slot width.
+ * @param[in] height Slot height.
+ * @param[in] x Coordinate x of the point.
+ * @param[in] y Coordinate y of the point.
+ * @returns Returns nonzero if the point is within the slot.
+ */
+inline int mc_slotf_contains_ex(mc_fp_t cx, mc_fp_t cy,
+	mc_fp_t width, mc_fp_t height, mc_fp_t x, mc_fp_t y);
+
+/**
+ * @} // end @addtogroup mc_vector_and_matrix_types
+ */
+/*##################### End vector/matrix declarations #######################*/
+
+#endif /* __MC_GEOMETRY_H */
+
+
+#ifndef __MC_DEBUG_H
+#define __MC_DEBUG_H
 
 /*#################### Start debug support declarations ######################*/
 /**
@@ -741,6 +2155,23 @@ inline uint64_t atomic_inc_uint64(__global uint64_t *ptr);
 	printf(label " %" FMT_CNT "\n", (mc_cnt_t)(value))
 
 /**
+ * @brief Print a mc_fp2_t value.
+ * param[in] label Label that will prefix the size type value."
+ * param[in] pvalue Pointer to a mc_fp2_t value / structure.
+ */
+#define dbg_print_fp2(label, pvalue) \
+	printf(label "(%.6f, %.6f)\n", (mc_fp_t)(pvalue)->x, (mc_fp_t)(pvalue)->y);
+
+/**
+ * @brief Print a mc_fp3_t value.
+ * param[in] label Label that will prefix the size type value."
+ * param[in] pvalue Pointer to a mc_fp3_t value / structure.
+ */
+#define dbg_print_fp3(label, pvalue) \
+	printf(label " (%.6f, %.6f, %.6f)\n", (mc_fp_t)(pvalue)->x, \
+		(mc_fp_t)(pvalue)->y, (mc_fp_t)(pvalue)->z)
+
+/**
  * @brief Print a mc_point2f_t value.
  * param[in] label Label that will prefix the size type value."
  * param[in] pvalue Pointer to a mc_point2f_t value / structure.
@@ -773,6 +2204,24 @@ inline uint64_t atomic_inc_uint64(__global uint64_t *ptr);
  */
 #define dbg_print_point3(label, pvalue) \
 	printf(label " (%" FMT_INT ", %" FMT_INT ", %" FMT_INT ")\n", \
+		(mc_int_t)(pvalue)->x, (mc_int_t)(pvalue)->y, (mc_int_t)(pvalue)->z)
+
+/** 
+ * @brief Print a mc_point2s_t value with components of type mc_size_t.
+ * param[in] label Label that will prefix the size type value."
+ * param[in] pvalue Pointer to a mc_point2_t value / structure.
+ */
+#define dbg_print_point2s(label, pvalue) \
+	printf(label " (%" FMT_SIZE_T ", %" FMT_SIZE_T ")\n", \
+		(mc_int_t)(pvalue)->x, (mc_int_t)(pvalue)->y)
+
+/** 
+ * @brief Print a mc_point3s_t value with components of type mc_size_t.
+ * param[in] label Label that will prefix the size type value."
+ * param[in] pvalue Pointer to a mc_point3_t value / structure.
+ */
+#define dbg_print_point3s(label, pvalue) \
+	printf(label " (%" FMT_SIZE_T ", %" FMT_SIZE_T ", %" FMT_SIZE_T ")\n", \
 		(mc_int_t)(pvalue)->x, (mc_int_t)(pvalue)->y, (mc_int_t)(pvalue)->z)
 
 #define dbg_print_matrix2f(label, pm) \
@@ -809,532 +2258,11 @@ inline uint64_t atomic_inc_uint64(__global uint64_t *ptr);
  */
 /*##################### End debug support declarations #######################*/
 
-
-/*#################### Start vector/matrix declarations ######################*/
-/**
-* @addtogroup mc_vector_and_matrix_types Vector and matrix data types
-* @{
-*/
-
-/**
-*@brief Data type used to describe a 3D point/vector coordinates in floating-point precision.
-*@{
-*/
-struct MC_STRUCT_ATTRIBUTES mc_point2f_t{
-	mc_fp_t x;	/**< @brief x coordinate. */
-	mc_fp_t y;	/**< @brief y coordinate. */
-};
-/**
- * @}
- */
-/** @brief 2D data point/vector coordinates data type. */
-typedef struct mc_point2f_t mc_point2f_t;
-
-/**
-*@brief Data type used to describe a 3D point/vector of integer type.
-*@{
-*/
-struct MC_STRUCT_ATTRIBUTES mc_point2_t{
-	mc_int_t x;	/**< @brief x coordinate. */
-	mc_int_t y;	/**< @brief y coordinate. */
-};
-/**
- * @}
- */
-/** @brief 2D integer data point/vector coordinates data type. */
-typedef struct mc_point2_t mc_point2_t;
-
-/**
-*@brief Data type used to describe a 3D point/vector coordinates in floating-point precision.
-*@{
-*/
-struct MC_STRUCT_ATTRIBUTES mc_point3f_t{
-	mc_fp_t x;	/**< @brief x coordinate. */
-	mc_fp_t y;	/**< @brief y coordinate. */
-	mc_fp_t z;	/**< @brief z coordinate. */
-};
-
-/**
- * @}
- */
-/** @brief 3D data point/vector coordinates data type. */
-typedef struct mc_point3f_t mc_point3f_t;
-
-/**
-*@brief Data type used to describe a 4D point/vector coordinates in floating-point precision.
-*@{
-*/
-struct MC_STRUCT_ATTRIBUTES mc_point4f_t{
-	mc_fp_t x;	/**< @brief x coordinate. */
-	mc_fp_t y;	/**< @brief y coordinate. */
-	mc_fp_t z;	/**< @brief z coordinate. */
-	mc_fp_t w;	/**< @brief w coordinate. */
-};
-
-/**
- * @}
- */
-/** @brief 4D data point/vector coordinates data type. */
-typedef struct mc_point4f_t mc_point4f_t;
-
-/**
-*@brief Data type used to describe a 3D point/vector of integer type.
-*@{
-*/
-struct MC_STRUCT_ATTRIBUTES mc_point3_t{
-	mc_int_t x;	/**< @brief x coordinate. */
-	mc_int_t y;	/**< @brief y coordinate. */
-	mc_int_t z;	/**< @brief z coordinate. */
-};
-
-/**
- * @}
- */
-/** @brief 3D integer data point/vector coordinates data type. */
-typedef struct mc_point3_t mc_point3_t;
+#endif /* #define __MC_DEBUG_H */
 
 
-/**
-*@brief Data type used to describe a 4D point/vector of integer type.
-*@{
-*/
-struct MC_STRUCT_ATTRIBUTES mc_point4_t{
-	mc_int_t x;	/**< @brief x coordinate. */
-	mc_int_t y;	/**< @brief y coordinate. */
-	mc_int_t z;	/**< @brief z coordinate. */
-	mc_int_t w;	/**< @brief w coordinate. */
-};
-
-/**
- * @}
- */
-/** @brief 4D integer data point/vector coordinates data type. */
-typedef struct mc_point4_t mc_point4_t;
-
-/**
-*@brief Data type used to describe a 3D point/vector of size type.
-*@{
-*/
-struct MC_STRUCT_ATTRIBUTES mc_point3s_t{
-	mc_size_t x;	/**< @brief x coordinate. */
-	mc_size_t y;	/**< @brief y coordinate. */
-	mc_size_t z;	/**< @brief z coordinate. */
-};
-/**
- * @}
- */
-/** @brief 3D point of size_t data type. */
-typedef struct mc_point3s_t mc_point3s_t;
-
-/**
-*@brief Data type used to describe a 2D rectangle coordinates in floating-point precision.
-*@{
-*/
-struct MC_STRUCT_ATTRIBUTES mc_rectf_t{
-	mc_point2f_t top_left;	/**< @brief Coordinates of the top-left edge. */
-	mc_fp_t width;	/**< @brief Rectangle width. */
-	mc_fp_t height;	/**< @brief Rectangle height. */
-};
-/**
- * @}
- */
-/** @brief Floating-point rectangle data type. */
-typedef struct mc_rectf_t mc_rectf_t;
-
-/**
-*@brief Data type used to describe a 2D circle in floating-point precision.
-*@{
-*/
-struct MC_STRUCT_ATTRIBUTES mc_circf_t{
-	mc_point2f_t center;	/**< @brief Coordinates of the circle center. */
-	mc_fp_t r;	/**< @brief Circle radius. */
-};
-/**
- * @}
- */
-/** @brief Floating-point circle data type. */
-typedef struct mc_circf_t mc_circf_t;
-
-
-/**
-*@brief Data type used to describe a 2D slot in floating-point precision.
-*@{
-*/
-struct mc_slotf_t{
-	mc_point2f_t center; /** < @brief Slot center. */
-	mc_fp_t width;		/** < @brief Slot width. */
-	mc_fp_t height; 	/** < @brief Slot height. */
-};
-/**
- * @}
- */
-/** @brief Floating-point slot data type. */
-typedef struct mc_slotf_t mc_slotf_t;
-
-/**
-*@brief Data type used to describe a 2D transformation matrix.
-*@{
-*/
-struct mc_matrix2f_t{
-	mc_fp_t a_11; /**< @brief first element of the first row */
-	mc_fp_t a_12; /**< @brief second element of the first row */
-	mc_fp_t a_21; /**< @brief first element of the second row */
-	mc_fp_t a_22; /**< @brief second element of the second row */
-};
-/**
- * @}
- */
-/** @brief 2D transformation matrix data type. */
-typedef struct mc_matrix2f_t mc_matrix2f_t;
-
-/**
-*@brief Data type used to describe a 3D transformation matrix.
-*@{
-*/
-struct mc_matrix3f_t{
-	mc_fp_t a_11; /**< @brief first element of the first row */
-	mc_fp_t a_12; /**< @brief second element of the first row */
-	mc_fp_t a_13; /**< @brief third element of the first row */
-	mc_fp_t a_21; /**< @brief first element of the second row */
-	mc_fp_t a_22; /**< @brief second element of the second row */
-	mc_fp_t a_23; /**< @brief third element of the second row */
-	mc_fp_t a_31; /**< @brief first element of the third row */
-	mc_fp_t a_32; /**< @brief second element of the third row */
-	mc_fp_t a_33; /**< @brief third element of the third row */
-};
-/**
- * @}
- */
-/** @brief 3D transformation matrix data type. */
-typedef struct mc_matrix3f_t mc_matrix3f_t;
-
-/**
- * @brief Reverse the direction of a 3D vector.
- * 
- * param[in] pt1 Pointer to input vector (mc_point3f_t).
- * param[in] pt2 Pointer to output (reversed input) vector (mc_point3f_t).
- * 
- * returns Dot product of the two vectors.
- */
-#define reverse3f(v1, v2) \
-	{(v2)->x = -(v1)->x; (v2)->y = -(v1)->y; (v2)->z = -(v1)->z;}
-
-/**
- * @brief Reverse the direction of a 2D vector.
- * 
- * param[in] pt1 Pointer to input vector (mc_point3f_t).
- * param[in] pt2 Pointer to output (reversed input) vector (mc_point3f_t).
- * 
- * returns Dot product of the two vectors.
- */
-#define reverse2f(v1, v2) \
-	{(v2)->x = -(v1)->x; (v2)->y = -(v1)->y;}
-
-/**
- * Transfors the x coordinate of a 3D point by the given 3D transformation
- * matrix.
- * 
- * param[in] pT Pointer to a transformation matrix (mc_matrix3f_t).
- * param[in] pt Pointer to a point (mc_point3f_t) that will be transformed.
- */
-#define transform_point3f_x(pT, pt) \
-	((pT)->a_11*(pt)->x + (pT)->a_12*(pt)->y + (pT)->a_13*(pt)->z)
-
-/**
- * Transfors the y coordinate of a 3D point by the given 3D transformation
- * matrix.
- * 
- * param[in] pT Pointer to a transformation matrix (mc_matrix3f_t).
- * param[in] pt Pointer to a point (mc_point3f_t) that will be transformed.
- */
-#define transform_point3f_y(pT, pt) \
-	((pT)->a_21*(pt)->x + (pT)->a_22*(pt)->y + (pT)->a_23*(pt)->z)
-
-/**
- * Transfors the z coordinate of a 3D point by the given 3D transformation
- * matrix.
- * 
- * param[in] pT Pointer to a transformation matrix (mc_matrix3f_t).
- * param[in] pt Pointer to a point (mc_point3f_t) that will be transformed.
- */
-#define transform_point3f_z(pT, pt) \
-	((pT)->a_31*(pt)->x + (pT)->a_32*(pt)->y + (pT)->a_33*(pt)->z)
-
-/**
- * Transfors a 3D point by the given 3D transformation matrix.
- * 
- * param[in] pT Pointer to a transformation matrix (mc_matrix3f_t).
- * param[in] pt Pointer to a point (mc_point3f_t) that will be transformed.
- * param[out] pres Pointer to a point (mc_point3f_t) that will hold the transformation result.
- */
-#define transform_point3f(pT, pt, pres) \
-	(pres)->x = transform_point3f_x(pT, pt); \
-	(pres)->y = transform_point3f_y(pT, pt); \
-	(pres)->z = transform_point3f_z(pT, pt);
-
-/**
- * Transfors the x coordinate of a 2D point by the given 3D transformation
- * matrix.
- * 
- * param[in] pT Pointer to a transformation matrix (mc_matrix2f_t).
- * param[in] pt Pointer to a point (mc_point2f_t) that will be transformed.
- */
-#define transform_point2f_x(pT, pt) \
-	((pT)->a_11*(pt)->x + (pT)->a_12*(pt)->y)
-
-/**
- * Transfors the y coordinate of a 3D point by the given 3D transformation
- * matrix.
- * 
- * param[in] pT Pointer to a transformation matrix (mc_matrix2f_t).
- * param[in] pt Pointer to a point (mc_point2f_t) that will be transformed.
- */
-#define transform_point2f_y(pT, pt) \
-	((pT)->a_21*(pt)->x + (pT)->a_22*(pt)->y)
-
-/**
- * Transfors a 2D point by the given 3D transformation matrix.
- * 
- * param[in] pT Pointer to a transformation matrix (mc_matrix2f_t).
- * param[in] pt Pointer to a point (mc_point2f_t) that will be transformed.
- * param[out] pres Pointer to a point (mc_point2f_t) that will hold the transformation result.
- */
-#define transform_point2f(pT, pt, pres) \
-	(pres)->x = transform_point2f_x(pT, pt); \
-	(pres)->y = transform_point2f_y(pT, pt); \
-
-/**
- * @brief Computes the dot product of two input vectors.
- * 
- * param[in] pt1 Pointer to the first input vector (mc_point2f_t).
- * param[in] pt2 Pointer to the second input vector (mc_point2f_t).
- * 
- * returns Dot product of the two vectors.
- */
-#define dot2f(pt1, pt2) \
-	((pt1)->x*(pt2)->x + (pt1)->y*(pt2)->y)
-
-/**
- * @brief Computes the dot product of two input vectors.
- * 
- * param[in] pt1 Pointer to the first input vector (mc_point3f_t).
- * param[in] pt2 Pointer to the second input vector (mc_point3f_t).
- * 
- * returns Dot product of the two vectors.
- */
-#define dot3f(pt1, pt2) \
-	((pt1)->x*(pt2)->x + (pt1)->y*(pt2)->y + (pt1)->z*(pt2)->z)
-
-/**
- * @brief Computes the cross product of two input vectors.
- * 
- * param[in] pt1 Pointer to the first input vector (mc_point3f_t).
- * param[in] pt2 Pointer to the second input vector (mc_point3f_t).
- * param[out] pres Pointer to the output vector (mc_point3f_t)
- *                 filled with the cross product pt1 x pt2.
- * 
- * returns Dot product of the two vectors.
- */
-#define cross3f(pt1, pt2, pres) \
-	(pres)->x = (pt1->y*(pt2).z - (pt1)->z*(pt2)->y; \
-	(pres)->y = (pt1)->z*(pt2).x - (pt1)->x*(pt2)->z; \
-	(pres)->z = (pt1)->x*(pt2).y - (pt1)->y*(pt2)->x;
-
-/**
- * @brief Normalizes vector length to unity. 
- * @param[in, out] pv Pointer to a vector normalized on return.
- */		
-void point3f_normalize(mc_point3f_t *pv);
-
-/**
- * Squared radius of a 2D point.
- * @param[in] pt Pointer to the point.
- * @return Returns squared polar radius of the point.
- */
-#define point2f_r2(pt) mc_sqrt((pt)->x*(pt)->x + (pt)->y*(pt)->y)
-
-/**
- * Radius of a 2D point.
- * @param[in] pt Pointer to the point.
- * @return Returns polar radius of the point.
- */
-#define point2f_r(pt) mc_sqrt(point2f_r2(pt))
-
-/**
- * Squared radius of a 3D point.
- * @param[in] pt Pointer to the point.
- * @return Returns squared polar radius of the point.
- */
-#define point3f_r2(pt) mc_sqrt((pt)->x*(pt)->x + (pt)->y*(pt)->y)
-
-/**
- * Radius of a 3D point.
- * @param[in] pt Pointer to the point.
- * @return Returns polar radius of the point.
- */
-#define point3f_r(pt) mc_sqrt(point3f_r2(pt))
-
-/**
- * @brief Calculates square of the Euclidean distance between two points.
- * @param[in] pT1 Pointer to the first point.
- * @param[in] pT2 Pointer to the second point.
- * @return Returns the square of Euclidean distance between points T1 and T2.
- */
-inline mc_fp_t point2f_distance_squared(
-		const mc_point2f_t * pT1, const mc_point2f_t * pT2);
-
-/**
- * @brief Calculates the Euclidean distance between two points.
- * @param[in] pT1 Pointer to the first point.
- * @param[in] pT2 Pointer to the second point.
- * @return Returns the square of Euclidean distance between points T1 and T2.
- */
-#define point2f_distance(pT1, pT2) \
-		mc_sqrt(point2f_distance_squared((pT1), (pT2)))
-
-/**
- * @brief Calculates square of the Euclidean distance between two points.
- * @param[in] pT1 Pointer to the first point.
- * @param[in] pT2 Pointer to the second point.
- * @return Returns the square of Euclidean distance between points T1 and T2.
- */
-inline mc_fp_t point3f_distance_squared(
-		const mc_point3f_t * pT1, const mc_point3f_t * pT2);
-
-/**
- * @brief Calculates the Euclidean distance between two points.
- * @param[in] pT1 Pointer to the first point.
- * @param[in] pT2 Pointer to the second point.
- * @return Returns the square of Euclidean distance between points T1 and T2.
- */
-#define point3f_distance(pT1, pT2) \
-		mc_sqrt(point3f_distance_squared((pT1), (pT2)))
-
-/**
- * @brief Calculates square of the Euclidean distance between two 2D points.
- * @param[in] x1 Coordinate x of the first point.
- * @param[in] y1 Coordinate y of the first point.
- * @param[in] x2 Coordinate x the second point.
- * @param[in] x2 Coordinate y the second point.
- * @return Returns the square of Euclidean distance between (x1, y1) and (x2, y2).
- */
-inline mc_fp_t xyf_distance_squared(const mc_fp_t x1, mc_fp_t y1,
-		const mc_fp_t x2, const mc_fp_t y2);
-
-/**
- * @brief Checks if a rectangle contains the given point.
- * @param[in] prectf Pointer to a rectangle (mc_rectf_t).
- * @param[in] ppoint2f Pointer to a 2D point (mc_point2f_t).
- * @return Returns nonzero if rectangle contains the given point.
- */
-#define rectf_contains_pointf(prectf, ppoint2f) \
-		rectf_contains_xy(prectf, (ppoint2f)->x, ppoint2f->y)
-
-/**
- * @brief Checks if a rectangle contains the given point.
- * @param[in] prectf Pointer to a rectangle (mc_rectf_t).
- * @param[in] x Coordinate x of the point (mc_fp_t).
- * @param[in] y Coordinate y of the point (mc_fp_t).
- * @return Returns nonzero if rectangle contains the given point.
- */
-#define rectf_contains_xy(prectf, x, y) \
-		rectf_contains_ex( \
-			(prectf)->top_left.x, (prectf)->top_left.y, \
-			(prectf)->top_left.width, (prectf)->top_left.height, \
-			x, y \
-		)
-
-/**
- * @brief Checks if a rectangle contains the given point.
- * @param[in] top_left_x Coordinate x of the top-left edge of the rectangle (mc_fp_t).
- * @param[in] top_left_y Coordinate y of the top-left edge of the rectangle (mc_fp_t).
- * @param[in] width Rectangle width (mc_fp_t).
- * @param[in] height Rectangle height (mc_fp_t).
- * @param[in] x Coordinate x of the point (mc_fp_t).
- * @param[in] y Coordinate y of the point (mc_fp_t).
- * @return Returns nonzero if rectangle contains the given point.
- */
-inline int rectf_contains_ex(
-		mc_fp_t top_left_x, mc_fp_t top_left_y, mc_fp_t width, mc_fp_t height,
-		mc_fp_t x, mc_fp_t y);
-
-/**
- * @brief Checks if a rectangle contains the given point.
- * @param[in] prectf Pointer to a rectangle (mc_rectf_t).
- * @param[in] ppoint2f Pointer to a 2D point (mc_point2f_t).
- * @return Returns nonzero if rectangle contains the given point.
- */
-#define circf_contains_pointf(pcircf, ppoint2f) \
-	circlf_contains_ex( \
-		(pcircf)->center.x, (pcircf)->center.y, (pcircf)->r, \
-		(ppointf2)->x, (ppoint2f)->y \
-	)
-
-/**
- * @brief Checks if a rectangle contains the given point.
- * @param[in] prectf Pointer to a rectangle (mc_rectf_t).
- * @param[in] x Coordinate x of the point (mc_fp_t).
- * @param[in] y Coordinate y of the point (mc_fp_t).
- * @return Returns nonzero if rectangle contains the given point.
- */
-#define circf_contains_xy(pcircf, x, y) \
-	circlf_contains_ex( \
-		(pcircf)->center.x, (pcircf)->center.y, (pcircf)->r, \
-		x, y \
-	)
-
-/**
- * @brief Checks if a circle contains the given point.
- * @param[in] center_x Coordinate x of the circle center (mc_fp_t).
- * @param[in] center_y Coordinate y of the circle center (mc_fp_t).
- * @param[in] r Circle radius (mc_fp_t).
- * @param[in] x Coordinate x of the point (mc_fp_t).
- * @param[in] y Coordinate y of the point (mc_fp_t).
- * @return Returns nonzero if rectangle contains the given point.
- */
-inline int circf_contains_ex(
-	mc_fp_t center_x, mc_fp_t center_y, mc_fp_t r, mc_fp_t x, mc_fp_t y);
-
-/**
- * @brief Checks if slot contains a point.
- * @param[in] pslot Pointer to a slot object.
- * @param[in] pt Pointer to a 2D the point (mc_point2f_t).
- * @returns Returns nonzero if the point is within the slot.
- */
-#define slotf_contains_pointf(pslot, pt) \
-	slot_contains_xy(pslot, (pt)->x, (pt)->y)
-
-/**
- * @brief Checks if slot contains a point.
- * @param[in] pslot Pointer to a slot object.
- * @param[in] x Coordinate x of the point.
- * @param[in] y Coordinate y of the point.
- * @returns Returns nonzero if the point is within the slot.
- */
-#define slotf_contains_xy(pslot, x, y) \
-	slotf_contains_ex( \
-		(pslot)->center.x, (pslot)->center.y, \
-		(pslot)->width, (pslot)->height, x, y \
-	)
-
-/**
- * @brief Checks if slot contains a point.
- * @param[in] cx Slot center coordinate x.
- * @param[in] cy Slot center coordinate y.
- * @param[in] width Slot width.
- * @param[in] height Slot height.
- * @param[in] x Coordinate x of the point.
- * @param[in] y Coordinate y of the point.
- * @returns Returns nonzero if the point is within the slot.
- */
-inline int slotf_contains_ex(mc_fp_t cx, mc_fp_t cy,
-	mc_fp_t width, mc_fp_t height, mc_fp_t x, mc_fp_t y);
-
-/**
- * @} // end @addtogroup mc_vector_and_matrix_types
- */
-/*##################### End vector/matrix declarations #######################*/
-
+#ifndef __MC_LUT_H
+#define __MC_LUT_H
 
 /*################## Start linear lookup table declarations ##################*/
 /**
@@ -1422,6 +2350,11 @@ typedef struct mc_fp_lut_t mc_fp_lut_t;
 #endif
 /*################### End linear lookup table declarations ###################*/
 
+#endif /* __MC_LUT_H */
+
+
+#ifndef __MC_BOUNDARY_H
+#define __MC_BOUNDARY_H
 
 /*################### Start boundary physics declarations ####################*/
 /**
@@ -1430,78 +2363,84 @@ typedef struct mc_fp_lut_t mc_fp_lut_t;
 */
 
 /**
- * Cosine of the critical angle of incidence beyond which the incident
- * beam is reflected at the boundary n1 => n2.
- * @param[in] n1	Refractive index of the material on the incident side of the 
- * 					boundary.
- * @param[in] n2	Refractive index of the material across the boundary.
- * @return			Critical angle cosine.
+ * @brief Compute cosine of the critical incidence angle beyond which
+ *        the incident beam is reflected at the boundary n1 => n2 of materials
+ *        with refractive indices n1 and n2.
+ *
+ * @param[in] n1 Refractive index of the incident medium.
+ * @param[in] n2 Refractive index of the material across the boundary.
+ *
+ * @return       Cosine of the incident angle beyond which the incident beam
+ *               is reflected at the given boundary.
  */
 inline mc_fp_t cos_critical(mc_fp_t n1, mc_fp_t n2);
 
 /**
  * @brief Computes reflectance for the given boundary conditions.
- * @param[in] n1 Refractive index of the incident layer.
- * @param[in] n2 Refractive index of the layer across the boundary.
- * @param[in] cosIncidence Incidence angle (with respect to the z axis) cosine.
- * @param[in] cosCritical Critical angle cosine for the interface n1 => n2.
- * @return Returns the calculated reflectance probability from [0.0, 1.0].
+ *
+ * @param[in] n1           Refractive index of the incident layer.
+ * @param[in] n2           Refractive index of the layer across the boundary.
+ * @param[in] cos1         Incidence angle (with respect to the z axis) cosine.
+ * @param[in] cos_critical Critical angle cosine for the interface n1 => n2.
+ *
+ * @return                 Returns the calculated reflectance probability
+ *                         from [0.0, 1.0].
  */
 inline mc_fp_t reflectance(
-		mc_fp_t n1, mc_fp_t n2, mc_fp_t cosIncidence, mc_fp_t cosCritical);
+		mc_fp_t n1, mc_fp_t n2, mc_fp_t cos1, mc_fp_t cos_critical);
 
 /**
  * @brief Computes reflectance for the given boundary conditions by
- * using data from the secondary side.
- * @param[in] n1 Refractive index of the incident layer.
- * @param[in] n2 Refractive index of the layer across the boundary.
- * @param[in] cosIncidence2 Incidence angle (with respect to z axis) cosine.
- * @return Returns the calculated reflectance probability from [0.0, 1.0].
+ *        using data from the secondary side.
+ *
+ * @param[in] n1            Refractive index of the incident layer.
+ * @param[in] n2            Refractive index of the layer across the boundary.
+ * @param[in] cos2          Incidence angle cosine (with respect to the
+ *                          boundary normal).
+ *
+ * @return                  Returns the calculated reflectance probability
+ *                          from [0.0, 1.0].
  */
 inline mc_fp_t reflectance_cos2(mc_fp_t n1, mc_fp_t n2, mc_fp_t cosIncidence2);
 
-
 /**
- * Compute cosine of the critical incidence angle beyond which the incident
- * beam is reflected at the boundary of materials with refractive indices
- * n1 and n2.
- * @param[in] n1 Refractive index of the incident medium.
- * @param[in] n2 Refractive index of the material across the boundary.
- * @return Cosine of the incident angle beyond which the incident beam is
- *         reflected at the given boundary.
- */
-inline mc_fp_t cos_critical(mc_fp_t n1, mc_fp_t n2);
-
-/**
- * Computes propagation direction of the reflected beam for the given
- * incident propagation direction and boundary normal.
- * @param[in] p Incident propagation direction.
- * @param[in] n Boundary normal.
- * @param[out] r Reflected beam propagation direction filled in on return.
+ * @brief Computes propagation direction of the reflected beam for the given
+ *        incident propagation direction and boundary normal.
  *
- * @note Reflected beam propagation direction is computed as p - 2*n*(p*n)
+ * @param[in] p  Incident propagation direction.
+ * @param[in] n  Boundary normal (can be pointing outwards or inwards).
+ * @param[out] r Reflected beam propagation direction on return.
+ *
+ * @return Pointer to the propagation direction r of the reflected beam.
+ *
+ * @note Reflected beam propagation direction is computed as p - 2*n*dot(p, n)
  */
 inline mc_point3f_t *reflect(
 		mc_point3f_t const *p, mc_point3f_t const *n, mc_point3f_t *r);
 
 /**
- * Computes propagation direction of the refracted beam for the given
- * incident propagation direction, boundary normal and refractive indices
- * of the materials on each side of the boundary. Requires signed incident
- * angle cosine computed as n*p.
- * @param[in] p Incident propagation direction.
- * @param[in] n Boundary normal (pointing outwards or inwards, requires signed
- *              cos1 to resolve the surface normal direction!).
- * @param[in] n1 Refractive index of the material on the incident side of the boundary.
- * @param[in] n2 Refractive index of the material across the boundary.
- * @param[in] cos1 SIGNED incident angle that must be calculated as n*p.
- * @param[out] r Refrected beam propagation direction filled in on return.
+ * @brief Computes propagation direction of the refracted beam for the given
+ *        incident propagation direction, boundary normal and refractive
+ *        indices of the materials on both sides of the boundary.
+ *        Requires signed incident angle cosine computed as dot(n, p).
+ *
+ * @param[in] p    Incident propagation direction.
+ * @param[in] n    Boundary normal (pointing outwards or inwards, requires
+ *                 signed cos1 to resolve the surface normal direction!).
+ * @param[in] n1   Refractive index of the material on the incident side
+ *                 of the boundary.
+ * @param[in] n2   Refractive index of the material across the boundary.
+ * @param[in] cos1 SIGNED incident angle that must be calculated as dot(n,p).
+ * @param[out] r   Refrected beam propagation direction filled in on return.
+ *
+ * @return         Pointer to the propagation direction r of the refracted beam.
  *
  * @note Refracted beam propagation direction is computed as p - 2*n*(p*n).
+ *
  * @details Refraction for a normal that points inward (n2 => n1) is computed
  *          as:
  *            kn = n1/n2
- *            cos1 = n*p
+ *            cos1 = dot(n, p)
  *            sin1 = (1 - cos1^2)^0.5
  *            cos2 = (1 - kn^2*sin1^2)^0.5
  *            r = kn*p + (kn*cos1 - cos2)*n
@@ -1512,21 +2451,24 @@ inline mc_point3f_t *refract_cos1(
 
 /**
  * @brief Computes propagation direction of the refracted beam for the given
- * incident propagation direction, boundary normal and refractive indices
- * of the materials on each side of the boundary. If the beam is actually
- * reflected, this call can produce unexpected results!
+ *        incident propagation direction, boundary normal and refractive
+ *        indices of the materials on both sides of the boundary.
+ *        
+ * @note  If the beam is actually reflected, this call can produce unexpected
+ *        results!
  * 
- * @param[in] p Incident propagation direction.
- * @param[in] n Boundary normal (pointing outwards or inwards).
- * @param[in] n1 Refractive index of the material on the incident side of the boundary.
+ * @param[in] p  Incident propagation direction.
+ * @param[in] n  Boundary normal (pointing outwards or inwards).
+ * @param[in] n1 Refractive index of the material on the incident side
+ *               of the boundary.
  * @param[in] n2 Refractive index of the material across the boundary.
  * @param[out] r Refrected beam propagation direction filled in on return.
  *
- * @return Returns the refracted propagation direction as a pointer (input argument r).
+ * @return       Pointer to the propagation direction r of the refracted beam.
  *
- * @note Refracted beam propagation direction is computed as p - 2*n*(p*n).
- * @note No checks are made if the beam is actually reflected. This will lead
- *       to NaN components of the refracted vector or unexpected results!
+ * @note    No checks are made if the beam is actually reflected. This can lead
+ *          to NaN components int the direction vector of the refracted beam
+ *          or other unexpected results!
  * @details Refraction for a normal that points inward (n2 => n1) is computed
  *          as:
  *            kn = n1/n2
@@ -1539,25 +2481,22 @@ inline mc_point3f_t *refract(
 		mc_point3f_t const *p, mc_point3f_t const *n,
 		mc_fp_t n1, mc_fp_t n2, mc_point3f_t *r);
 
-
 /**
  * @brief Computes propagation direction of the refracted beam for the given
- * incident propagation direction, boundary normal and refractive indices
- * of the materials on each side of the boundary. If the beam
- * is actually reflected, the call returns nonzero.
+ *        incident propagation direction, boundary normal and refractive
+ *        indices of the materials on each side of the boundary.
+ *        If the beam is actually reflected, the call returns nonzero.
  * 
- * @param[in] p Incident propagation direction.
- * @param[in] n Boundary normal (pointing outwards or inwards).
- * @param[in] n1 Refractive index of the material on the incident side of the boundary.
+ * @param[in] p  Incident propagation direction.
+ * @param[in] n  Boundary normal (pointing outwards or inwards).
+ * @param[in] n1 Refractive index of the material on the incident side
+ *               of the boundary.
  * @param[in] n2 Refractive index of the material across the boundary.
  * @param[out] r Refrected beam propagation direction filled in on return.
  *
- * @return Returns zero if the beam is refracted else nonzero
- *         (the parameter r ios left unchanged).
+ * @return       Returns zero if the beam is refracted else nonzero
+ *               (parameter r is left unchanged if returning nonzero).
  *
- * @note Refracted beam propagation direction is computed as p - 2*n*(p*n).
- * @note No checks are made if the beam is actually reflected. This will lead
- *       to NaN components of the refracted vector or unexpected results!
  * @details Refraction for a normal that points inward (n2 => n1) is computed
  *          as:
  *            kn = n1/n2
@@ -1570,27 +2509,42 @@ inline int refract_safe(
 		mc_point3f_t const *p, mc_point3f_t const *n,
 		mc_fp_t n1, mc_fp_t n2, mc_point3f_t *r);
 
+
 /**
  * @} // end @addtogroup mc_boundary_crossing
  */
 /*#################### End boundary physics declarations #####################*/
 
 
+#endif /* __MC_BOUNDARY_H */
+
+
+#ifndef __MC_SCATTERING_H
+#define __MC_SCATTERING_H
 
 /*################# Start general scattering implementation ##################*/
+
 /**
-* @brief Called when the photon packet needs to be scattered.
-* @param[in] cos_theta Scattering angle cosine.
-* @param[in] fi        Azimuth angle.
-* @param[in, out] dir  Current propagation direction updated on return.
-* @details Function computes and updates the packet propagation direction
-*          and associated states photon packet states.
-*/
+ * @brief Called when the photon packet needs to be scattered.
+ *
+ * @param[in, out] dir       Current propagation direction updated on return.
+ * @param[in]      cos_theta Scattering angle cosine.
+ * @param[in]      fi        Azimuth angle (radians).
+ *
+ * @details                  Function computes and updates the packet
+ *                           propagation direction.
+ */
 inline void scatter_direction(mc_point3f_t *dir, mc_fp_t cos_theta, mc_fp_t fi);
+
 /*################## End general scattering implementation ###################*/
 
+#endif /* #define __MC_SCATTERING_H */
 
-/*########################## Start accumulator cache #########################*/
+
+#ifndef __MC_ACCU_CACHE_H
+#define __MC_ACCU_CACHE_H
+
+/*################### Start accumulator cache declarations ###################*/
 /**
 * @addtogroup mc_accumulator_cache Accumulator cache
 * @{
@@ -1644,7 +2598,7 @@ typedef struct mc_accucache_t mc_accucache_t;
  *
  * @param[in] pcache   Pointer to a cache instance.
  * @param[in] offset   Offset of the target accumulator address.
- * @param[in] weight   New inital weight stored in the cache.
+ * @param[in] weight   Weight to deposit at the given accumulator address/offset.
  * @param[in] target   The cached global buffer.
  */
 #define mc_accucache_weight_add(pcache, offset, weight, target) \
@@ -1677,8 +2631,13 @@ typedef struct mc_accucache_t mc_accucache_t;
  * @} // end @addtogroup mc_accumulator_cache
  */
 
-/*########################### End accumulator cache ##########################*/
+/*#################### End accumulator cache declarations ####################*/
 
+#endif /* #define __MC_ACCU_CACHE_H */
+
+
+#ifndef __MC_RNG_H
+#define __MC_RNG_H
 
 /*############### Start random number generator declarations #################*/
 /**
@@ -1730,6 +2689,4 @@ inline mc_fp_t fp_random_single(unsigned long *x, unsigned a);
  */
 /*################ End random number generator declarations ##################*/
 
-
-
-#endif /* #define __MC_BASE_H */
+#endif /* #define __MC_RNG_H */
