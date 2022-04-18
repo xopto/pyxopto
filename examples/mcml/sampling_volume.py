@@ -20,12 +20,12 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
-# This example covers all the neccessary steps for simulating 
-# sampling volume utilizing multimode optical fibers as 
-# sources and detectors. Sampling volume gives us an 
-# understanding of which part of the turbid medium under 
-# investigation is primarily responsible for the given 
-# detected signal (see Meglinsky, I. V., and S. J. Matcher, 
+# This example covers all the necessary steps for simulating
+# sampling volume utilizing multimode optical fibers as
+# sources and detectors. Sampling volume gives us an
+# understanding of which part of the turbid medium under
+# investigation is primarily responsible for the given
+# detected signal (see Meglinsky, I. V., and S. J. Matcher,
 # Med. Biol. Eng. Comput., 39(1), 44-50 (2001).)
 
 from xopto.mcml import mc
@@ -71,7 +71,7 @@ detectors = mc.mcdetector.Detectors(
     top=detector_top
 )
 
-# DEFINE THE TRACE OJECT WITH FILTER
+# DEFINE THE TRACE OBJECT WITH FILTER
 nphotons = 100000  # should be in the order of 10000 for recording traces
 recorded_traces = 1000  # desired number of recorded traces / only useful when filtering traces
 number_of_events = 500  # maximal number of photon packet interaction events
