@@ -66,10 +66,10 @@ def discreteSimpson(frequency: list or tuple or np.ndarray,
     np_freqs = np.asarray(frequency)
 
     if fpts.ndim > 1:
-        out = np.empty((fpts.shape[0], np_freqs.size,), dtype=np.complex)
+        out = np.empty((fpts.shape[0], np_freqs.size,), dtype=np.complex128)
         xpts = np.reshape(xpts, (1, xpts.size))
     else:
-        out = np.empty((np_freqs.size,), dtype=np.complex)
+        out = np.empty((np_freqs.size,), dtype=np.complex128)
 
     if uneven is None:
         uneven = _uneven(xpts)

@@ -148,7 +148,7 @@ def _Mie_ab(m, x):
     gsx = px - 1.0j*chx
     gs1x = p1x - 1.0j*ch1x
 
-    dnx = np.zeros([nmx], dtype=np.complex)
+    dnx = np.zeros([nmx], dtype=np.complex128)
     for j in range(nmx, 1, -1):      # Computation of Dn(z) according to (4.89) of B+H (1983)
         dnx[j-2] = j/z - 1.0/(dnx[j-1] + j/z)
 
