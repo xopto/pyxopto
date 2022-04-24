@@ -295,6 +295,12 @@ class ClWorker(mcobject.McObject):
         return self._cl_context
     cl_context = property(_get_cl_context, None, None, 'OpenCL context.')
 
+    def _get_cl_build_options(self) -> Tuple[str]:
+        return self._cl_build_options
+    cl_build_options = property(_get_cl_build_options, None, None,
+                                'Returns a tuple of OpenCL build options '
+                                'that were passed to the constructor.')
+
     def _get_cl_profiling(self) -> bool:
         return self._cl_profiling
     cl_profiling = property(_get_cl_profiling, None, None,
