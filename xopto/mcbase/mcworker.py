@@ -237,8 +237,8 @@ class ClWorker(mcobject.McObject):
             (profile.complete - profile.start).
         '''
         if self.cl_profiling:
-            return (event.profile.complete - event.profile.start)*1e-9, \
-                   (event.profile.start - event.profile.submit)*1e-9
+            return  (event.profile.start - event.profile.submit)*1e-9, \
+                    (event.profile.complete - event.profile.start)*1e-9
 
     def cl_build(self, cl_src: str, verbose: bool = False) -> cl.Program:
         '''
