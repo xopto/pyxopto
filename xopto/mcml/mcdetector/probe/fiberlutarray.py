@@ -153,7 +153,7 @@ class FiberLutArray(Detector):
             '	mc_fp_t sensitivity = FP_0;',
             '	fp_linear_lut_rel_sample(mcsim_fp_lut_array(mcsim),',
             '		&detector->lut[fiber_index], pz), &sensitivity);',
-            '	dbg_print_float("{} TotalLut sensitivity:", sensitivity);'.format(Loc),
+            '	dbg_print_float("{} MultimodeFiberLut sensitivity:", sensitivity);'.format(Loc),
             '',
             '	uint32_t ui32w = weight_to_int(weight*sensitivity);',
             '',
