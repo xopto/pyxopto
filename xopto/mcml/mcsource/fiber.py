@@ -983,7 +983,7 @@ class UniformFiberLut(Source):
         target.position.fromarray(self._position)
         target.direction.fromarray(self._direction)
 
-        target.radius = self._fiber.dcladding*0.5
+        target.radius = self._fiber.dcore*0.5
         target.n = self._fiber.ncore
         target.cos_critical = boundary.cos_critical(
             self._fiber.ncore, mc.layers[1].n)

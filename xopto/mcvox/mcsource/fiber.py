@@ -1069,7 +1069,7 @@ class UniformFiberLut(Source):
         target.position.fromarray(self._position)
         target.direction.fromarray(self._direction)
 
-        target.radius = self._fiber.dcladding*0.5
+        target.radius = self._fiber.dcore*0.5
         target.n = self._fiber.ncore
 
         self._fiber.emission.cl_pack(mc, target.lut)
