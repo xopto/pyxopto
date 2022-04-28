@@ -25,7 +25,7 @@ from typing import Tuple, List
 import numpy as np
 
 from xopto.mcml.mcdetector.base import Detector
-from xopto.mcml import cltypes, mctypes, mcobject
+from xopto.mcml import cltypes, mctypes, mcobject, mcoptions
 from xopto.mcml.mcutil.fiber import MultimodeFiberLut, FiberLayout
 from xopto.mcml.mcutil import geometry
 from xopto.mcml.mcutil.lut import CollectionLut
@@ -152,7 +152,7 @@ class FiberLutArray(Detector):
             '',
             '	mc_fp_t sensitivity = FP_0;',
             '	fp_linear_lut_rel_sample(mcsim_fp_lut_array(mcsim),',
-            '		&detector->lut[fiber_index], pz), &sensitivity);',
+            '		&detector->lut[fiber_index], mc_fabs(pz), &sensitivity);',
             '	dbg_print_float("{} MultimodeFiberLut sensitivity:", sensitivity);'.format(Loc),
             '',
             '	uint32_t ui32w = weight_to_int(weight*sensitivity);',
@@ -165,6 +165,13 @@ class FiberLutArray(Detector):
             '	};',
             '};',
         ))
+
+    @staticmethod
+    def cl_options(mc: mcobject.McObject) -> mcoptions.RawOptions:
+        '''
+        This source uses lookup table of floating-point data.
+        '''
+        return [('MC_USE_FP_LUT', True)]
 
     def __init__(self, fibers: List[FiberLayout]):
         '''

@@ -829,7 +829,7 @@ class UniformFiberLut(Source):
         ))
 
     @staticmethod
-    def cl_option(mc: mcobject.McObject) -> mcoptions.RawOptions:
+    def cl_options(mc: mcobject.McObject) -> mcoptions.RawOptions:
         '''
         This source uses lookup table of floating-point data.
         '''
