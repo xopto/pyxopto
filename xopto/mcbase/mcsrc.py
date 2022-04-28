@@ -26,7 +26,15 @@ import os.path
 import jinja2
 import time
 
-def fuse(inputs: List[str], output: str, verbose: bool = False) -> str:
+
+RE_LICENSE = re.compile(
+    '/\*+ Begin license '
+    '[ a-zA-Z0-3.,;:,.\*\n\r\t()/<>]* End license \*+/')
+''' Compiled regular expression that matches the file header - license text. '''
+
+
+def fuse(inputs: List[str], output: str, striplicense: bool = False,
+         verbose: bool = False) -> str:
     '''
     Fuses the source files in inputs into the template defined by the output.
 
@@ -36,6 +44,8 @@ def fuse(inputs: List[str], output: str, verbose: bool = False) -> str:
         A list of source files to fuse.
     output: str
         Output template file.
+    striplicense: bool
+        Strip the license headers if set to True.
     verbose: bool
         Turns on verbose reporting.
 
@@ -60,7 +70,13 @@ def fuse(inputs: List[str], output: str, verbose: bool = False) -> str:
         filename = os.path.basename(fullpath)
         with open(fullpath, 'r') as fid:
             src = fid.read()
-        clean_src, _ = re.subn(r'[ \t]*#include[ \t]+"[_a-zA-Z.]+"[ \t]*', replace_inlude, src)
+
+        if striplicense:
+            src = RE_LICENSE.sub('', src)
+
+        clean_src, _ = re.subn(
+            r'[ \t]*#include[ \t]+"[_a-zA-Z.]+"[ \t]*', replace_inlude, src)
+
 
         var = filename.replace('.', '_')
         var = var.replace('-', '_')

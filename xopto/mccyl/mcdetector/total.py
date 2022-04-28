@@ -286,7 +286,7 @@ class TotalLut(Detector):
             '	mc_point3f_t normal = {pos->x*k, pos->y*k, FP_0};',
             '',
             '	mc_fp_t sensitivity = FP_0;',
-            '	fp_linear_lut_rel_sample(mcsim_fp_lut_array(mcsim),',
+            '	fp_linear_lut_sample(mcsim_fp_lut_array(mcsim),',
             '		&detector->lut, mc_fabs(mc_dot_point3f(dir, &normal)),',
             '		&sensitivity)',
             '	dbg_print_float("{} TotalLut sensitivity:", sensitivity);'.format(Loc),

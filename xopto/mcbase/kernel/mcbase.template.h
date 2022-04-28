@@ -2428,7 +2428,7 @@ typedef struct mc_fp_lut_t mc_fp_lut_t;
 	 * value (pvalue) is not changed / assigned.
 	 * @param[in] buffer  The common lookup table buffer.
 	 * @param[in] plut    Pointer to a mc_fp_lut_t lookup table instance.
-	 * @param in where    A floating-point sampling location from 0.0 to 1.0.
+	 * @param[in] where   A floating-point sampling location from 0.0 to 1.0.
 	 * @param[out] pvalue Pointer to a floating-point value for the sample.
 	 */
 	#define fp_linear_lut_rel_sample(buffer, plut, where, pvalue) \
@@ -2436,6 +2436,27 @@ typedef struct mc_fp_lut_t mc_fp_lut_t;
 			mc_fp_t _fp_index = (where)*((plut)->n - 1); \
 			mc_size_t _index1 = (mc_size_t)(_fp_index + FP_0p5); \
 			if (_index1 >= 0 && _index1 < (plut)->n){ \
+				mc_fp_t _w2 = _fp_index - mc_floor(_fp_index); \
+				mc_size_t _index2 = mc_clip(_index1 + 1, 0, (plut)->n - 1); \
+				*pvalue = (buffer)[(plut)->offset + _index1]*(FP_1 - _w2) + \
+					(buffer)[(plut)->offset + _index2]*_w2; \
+			}; \
+		};
+
+	/**
+	 * @brief Sample a floating-point lookup table with a value.
+	 *        If the index is outside of the valid range, the output
+	 *        value (pvalue) is not changed / assigned.
+	 * @param[in] buffer  The common lookup table buffer.
+	 * @param[in] plut    Pointer to a mc_fp_lut_t lookup table instance.
+	 * @param[in] where    A floating-point sampling location from 0.0 to 1.0.
+	 * @param[out] pvalue Pointer to a floating-point value for the sample.
+	 */
+	#define fp_linear_lut_sample(buffer, plut, where, pvalue) \
+		{ \
+			mc_fp_t _fp_index = (where - (plut)->first)*(plut)->inv_span*((plut)->n - 1); \
+			if (_fp_index >= FP_0 && _fp_index <= (plut)->n - 1){ \
+				mc_size_t _index1 = (mc_size_t)(_fp_index + FP_0p5); \
 				mc_fp_t _w2 = _fp_index - mc_floor(_fp_index); \
 				mc_size_t _index2 = mc_clip(_index1 + 1, 0, (plut)->n - 1); \
 				*pvalue = (buffer)[(plut)->offset + _index1]*(FP_1 - _w2) + \

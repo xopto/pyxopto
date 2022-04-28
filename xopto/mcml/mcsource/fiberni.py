@@ -665,6 +665,7 @@ class UniformFiberLutNI(Source):
             '	sin_theta = mc_sqrt(FP_1 - cos_theta*cos_theta);',
             '	/* Adjust the propagation direction to the sample refractive index */',
             '	sin_theta = mc_fdiv(sin_theta, mc_layer_n(mcsim_layer(mcsim, 1)));',
+            '	cos_theta = mc_sqrt(FP_1 - sin_theta*sin_theta);',
             '',
             '	pt_mc.x = cos_fi*sin_theta;',
             '	pt_mc.y = sin_fi*sin_theta;',

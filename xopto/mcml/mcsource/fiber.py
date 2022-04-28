@@ -794,6 +794,7 @@ class UniformFiberLut(Source):
             '	sin_theta = mc_sqrt(FP_1 - cos_theta*cos_theta);',
             '	/* Adjust the propagation direction to fiber refractive index */',
             '	sin_theta = mc_fdiv(sin_theta, source->n);',
+            '	cos_theta = mc_sqrt(FP_1 - sin_theta*sin_theta);',
             '',
             '	pt_src.x = cos_fi*sin_theta;',
             '	pt_src.y = sin_fi*sin_theta;',
@@ -805,8 +806,8 @@ class UniformFiberLut(Source):
             '	mc_fp_t cc = cos_critical(source->n, mc_layer_n(mcsim_layer(mcsim, 1)));',
             '	mc_point3f_t normal={FP_0, FP_0, FP_1};',
             '	mc_point3f_t refracted_direction = direction;',
-            '	if (pt_mc.z > cc)',
-            '		refract(&pt_mc, &normal,'
+            '	if (direction.z > cc)',
+            '		refract(&direction, &normal,'
             '			source->n, mc_layer_n(mcsim_layer(mcsim, 1)),',
             '			&refracted_direction);',
             '	mcsim_set_direction(mcsim, &refracted_direction);',
