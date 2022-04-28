@@ -253,7 +253,7 @@ class TotalLut(Detector):
             lut: mc_fp_lut_t
                 Detector angular sensitivity lookup table. The lookup table
                 is sampled with the absolute value of the incidence angle
-                cosine compute relative to the detector reference direction.
+                cosine computed relative to the detector reference direction.
             offset: mc_int_t
                 The offset of the first accumulator in the Monte Carlo
                 detector buffer.
@@ -311,7 +311,7 @@ class TotalLut(Detector):
             '	mc_point3f_t detector_direction = detector->direction;',
             '	fp_linear_lut_rel_sample(mcsim_fp_lut_array(mcsim),',
             '		&detector->lut, mc_fabs(mc_dot_point3f(dir, &detector_direction)),',
-            '		&sensitivity)',
+            '		&sensitivity);',
             '	dbg_print_float("{} TotalLut sensitivity:", sensitivity);'.format(Loc),
             '',
             '	uint32_t ui32w = weight_to_int(weight*sensitivity);'

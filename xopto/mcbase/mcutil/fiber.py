@@ -382,7 +382,8 @@ class MultimodeFiberLut:
 
 
 class FiberLayout:
-    def __init__(self, fiber: MultimodeFiber or 'FiberLayout',
+    def __init__(self,
+                 fiber: MultimodeFiber or MultimodeFiberLut or 'FiberLayout',
                  position: Tuple[float, float, float] = (0.0, 0.0, 0.0),
                  direction: Tuple[float, float, float] = (0.0, 0.0 , 1.0)):
         '''
@@ -390,7 +391,7 @@ class FiberLayout:
 
         Parameters
         ----------
-        fiber: MultimodeFiber or FiberLayout
+        fiber: MultimodeFiber or MultimodeFiberLut or FiberLayout
             A multimode optical fiber instance or a fiber layout instance.
             If a fiber layout instance, a new copy is created.
         position: tuple(float, float, float)
@@ -412,9 +413,9 @@ class FiberLayout:
         self._set_position(position)
         self._set_direction(direction)
 
-    def _get_fiber(self) -> Tuple[float, float]:
+    def _get_fiber(self) -> MultimodeFiber or MultimodeFiberLut:
         return self._fiber
-    def _set_fiber(self, value: float or Tuple[float, float]):
+    def _set_fiber(self, value: MultimodeFiber or MultimodeFiberLut):
         self._fiber = value
     fiber = property(_get_fiber, _set_fiber, None,
                      'Properties of the optical fiber.')

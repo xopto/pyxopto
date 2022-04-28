@@ -33,6 +33,7 @@ from .probe.sixaroundonepl import SixAroundOnePl
 from .probe.lineararray import LinearArray
 from .probe.lineararraypl import LinearArrayPl
 from .probe.fiberarray import FiberArray
+from .probe.fiberlutarray import FiberLutArray
 from .probe.fiberarraypl import FiberArrayPl
 
 from xopto.mcml.mcutil.lut import CollectionLut
