@@ -708,6 +708,7 @@ class ClWorker(mcobject.McObject):
                     'Cannot create an OpenCL buffer if the size of the buffer'
                     'is unknown!'
                 )
+            else:
                 cl_buffer = cl.Buffer(
                     self._cl_context, cl.mem_flags.WRITE_ONLY, size)
                 self._cl_buffers[name] = cl_buffer
