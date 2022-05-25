@@ -303,6 +303,12 @@ the [GPL3+](https://www.gnu.org/licenses/gpl-3.0-standalone.html)
 license and that any work using the PyXOpto package also cites the project
 and at least one of the following references:
 
+ - M. Bürmen, F. Pernuš, and P. Naglič, *MCDataset: a public reference dataset*
+   *of Monte Carlo simulated quantities for multilayered and voxelated tissues*
+   *computed by massively parallel PyXOpto Python package*,
+   J. Biomed. Opt., **27** (8), 083012 (2022),
+   https://doi.org/10.1117/1.JBO.27.8.083012.
+
  - P. Naglič, F. Pernuš, B. Likar, and M. Bürmen, *Limitations of the commonly*
    *used simplified laterally uniform optical fiber probe-tissue interface in*
    *Monte Carlo simulations of diffuse reflectance*, Biomed. Opt. Expres,
