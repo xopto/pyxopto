@@ -939,7 +939,7 @@ inline mc_fpv3_t *mc_cross_fpv3(
 inline mc_fpv2_t *mc_normalize_fpv2(mc_fpv2_t const *a, mc_fpv2_t *r){
     mc_fp_t k = mc_fdiv(FP_1, mc_length_fpv2(a));
     r->x = a->x*k;
-    r->x = a->x*k;
+    r->y = a->y*k;
     return r;
 };
 
@@ -955,7 +955,7 @@ inline mc_fpv2_t *mc_normalize_fpv2(mc_fpv2_t const *a, mc_fpv2_t *r){
 inline mc_fpv3_t *mc_normalize_fpv3(mc_fpv3_t const *a, mc_fpv3_t *r){
     mc_fp_t k = mc_fdiv(FP_1, mc_length_fpv3(a));
     r->x = a->x*k;
-    r->x = a->x*k;
+    r->y = a->y*k;
     r->z = a->z*k;
     return r;
 };
@@ -972,7 +972,7 @@ inline mc_fpv3_t *mc_normalize_fpv3(mc_fpv3_t const *a, mc_fpv3_t *r){
 inline mc_fpv4_t *mc_normalize_fpv4(mc_fpv4_t const *a, mc_fpv4_t *r){
     mc_fp_t k = mc_fdiv(FP_1, mc_length_fpv4(a));
     r->x = a->x*k;
-    r->x = a->x*k;
+    r->y = a->y*k;
     r->z = a->z*k;
     r->w = a->w*k;
     return r;

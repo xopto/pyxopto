@@ -20,25 +20,40 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
+from typing import Tuple
+
 import numpy as np
 from scipy.special import jv, yv
 
 from .pfbase import PfBase
 
 
-def _Mie_eff(a, b, x):
+def _Mie_eff(a: np.ndarray, b: np.ndarray, x: float) \
+        -> Tuple[float, float, float, float, float, float]:
     '''
-    Computation of Mie Efficiencies for given
-    complex refractive-index ratio m=m'+im"
-    and size parameter x=k0*a, where k0= wave number in ambient
-    medium, a=sphere radius, using complex Mie Coefficients
-    an and bn for n=1 to nmax,
-    s. Bohren and Huffman (1983) BEWI:TDD122, p. 103,119-122,477.
-    Result: m', m", x, efficiencies for extinction (qext),
-    scattering (qsca), absorption (qabs), backscattering (qb),
-    asymmetry parameter (asy=<costeta>) and (qratio=qb/qsca).
-    Uses the function "Mie_ab" for an and bn, for n=1 to nmax.
-    C. M�tzler, May 2002, revised July 2002.
+    Computation of Mie Efficiencies.
+
+    Parameters
+    ----------
+    a: np.ndarray
+        Matrix of Mie coefficients :math:`a_n` as returned by the
+        :py:func:`~xopto.pf.mie._Mie_ab` function.
+    b: np.ndarray
+        Matrix of Mie coefficients :math:`b_n` as returned by the
+        :py:func:`~xopto.pf.mie._Mie_ab` function.
+    x: float
+        Size parameter defined as :math:`x=k_0 a`, where :math:`k_0` is
+        the wave number in ambient medium for a sphere of radius :math:`a`.
+
+    Returns
+    -------
+    qext: float
+    qsca: float
+    qabs: float
+    qb: float
+    asy: float
+        Anisotropy (first Legendre moment of the phase function).
+    qratio: float
     '''
     if x == 0.0: # To avoid a singularity at x=0
         return 0.0, 0.0, 0.0, 0.0, 0.0, 1.5
@@ -91,15 +106,33 @@ def _Mie_eff(a, b, x):
         return qext, qsca, qabs, qb, asy, qratio
 
 
-def _Mie_S12(a, b, x, costheta):
+def _Mie_S12(a: np.ndarray, b: np.ndarray, x: float, costheta: np.ndarray) \
+        -> Tuple[np.ndarray, np.ndarray]:
+    '''
+    Computation of Mie Scattering functions S1 and S2.
 
-    # Computation of Mie Scattering functions S1 and S2
-    # for complex refractive index m=m'+im",
-    # size parameter x=k0*a, and u=cos(scattering angle),
-    # where k0=vacuum wave number, a=sphere radius;
-    # s. p. 111-114, Bohren and Huffman (1983) BEWI:TDD122
-    # C. M�tzler, May 2002
+    Parameters
+    ----------
+    a: np.ndarray
+        Matrix of Mie coefficients :math:`a_n` as returned by the
+        :py:func:`~xopto.pf.mie._Mie_ab` function.
+    b: np.ndarray
+        Matrix of Mie coefficients :math:`b_n` as returned by the
+        :py:func:`~xopto.pf.mie._Mie_ab` function.
+    x: float
+        Size parameter defined as :math:`x=k_0 a`, where :math:`k_0` is
+        the wave number in ambient medium for a sphere of radius :math:`a`.
+    costheta: np.ndarray
+        Array of scattering angle cosines at which to compute the phase
+        function.
 
+    Returns
+    -------
+    S1: np.ndarray
+        Mie scattering function :math:`S_1`.
+    S2: np.ndarray
+        Mie scattering function :math:`S_2`.
+    '''
     Nmax = int(np.round(2.0 + x + 4.0*x**(1.0/3.0)))
 
     #ab = Mie_ab(m,x);
@@ -120,16 +153,34 @@ def _Mie_S12(a, b, x, costheta):
 
     return S1, S2
 
-def _Mie_ab(m, x):
+def _Mie_ab(m: float or complex, x: float) -> Tuple[np.ndarray, np.ndarray]:
     '''
-    Computes a matrix of Mie Coefficients, an, bn,
-    of orders n=1 to nmax, for given complex refractive-index
-    ratio m=m'+im" and size parameter x=k0*a where k0= wave number in ambient
-    medium for spheres of radius a;
+    Computes a matrix of Mie Coefficients :math:`a_n` and :math:`b_n`
+    of orders :math:`n=1` to :math:`n_{max}`, for the given complex
+    refractive-index ratio :math:`m=m'+im"` and size parameter
+    :math:`x=k_0 a`, where :math:`k_0` is the wave number in ambient medium
+    for sphere of radius :math:`a`.
+
     Eq. (4.88) of Bohren and Huffman (1983), BEWI:TDD122
     using the recurrence relation (4.89) for Dn on p. 127 and
     starting conditions as described in Appendix A.
-    C. M�tzler, July 2002
+    C. Mätzler, July 2002.
+
+    Parameters
+    ----------
+    m: float or complex
+        Ratio between the refractive index of the medium and sphere
+        :math:`n_{sphere}/n_{medium}`.
+    x: float
+        Size parameter defined as :math:`x=k_0 a`, where :math:`k_0` is
+        the wave number in ambient medium for a sphere of radius :math:`a`.
+
+    Returns
+    -------
+    an: np.ndarray
+        Matrix of Mie coefficients :math:`a_n`.
+    bn: np.ndarray
+        Matrix of Mie coefficients :math:`b_n`.
     '''
 
     z = m*x
@@ -163,10 +214,13 @@ def _Mie_ab(m, x):
     return an, bn
 
 
-def _Mie_pt(costheta, Nmax):
-    # pi_n and tau_n, -1 <= u <= 1, n1 integer from 1 to Nmax
-    # angular functions used in Mie Theory
-    # Bohren and Huffman (1983), p. 94 - 95
+def _Mie_pt(costheta: np.ndarray, Nmax: int) -> Tuple[np.ndarray, np.ndarray]:
+    '''
+    Computes pi_n and tau_n, -1 <= u <= 1, n1 integer from 1 to Nmax
+    angular functions used in Mie theory.
+
+    Bohren and Huffman (1983), p. 94 - 95
+    '''
 
     Nmax = int(Nmax)
     n = costheta.size
@@ -201,7 +255,7 @@ class Mie(PfBase):
         Parameters
         ----------
         nsphere:  float or complex
-            Refractive index (complex) of the spherical paricle.
+            Refractive index (complex) of the spherical particle.
         nmedium: float or complex
             Refractive index (complex) of the surrounding medium.
         diameter: float
