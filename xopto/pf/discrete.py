@@ -31,10 +31,10 @@ class Discrete(PfBase):
                  kind: str = 'cubic', **kwargs):
         '''
 
-        Scattering phase function defined on adiscrete grid of
+        Scattering phase function defined on a discrete grid of
         :math:`\\cos(\\theta)`. The grid should always include the -1 and +1
         scattering angle cosines!
-        A cubic interpolating spline is used to estimate the scatterin
+        A cubic interpolating spline is used to estimate the scattering
         phase function at an arbitrary :math:`\\cos(\\theta)`.
 
         Parameters
