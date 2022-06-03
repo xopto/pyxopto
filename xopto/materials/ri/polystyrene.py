@@ -27,7 +27,7 @@ from .base import RefractiveIndex
 class Ma(RefractiveIndex):
     material = 'polystyrene'
 
-    def __init__(self, t=293):
+    def __init__(self, t: float = 293.15):
         '''
         Refractive index of water as given in:
             Ma, Lu, Brock: Phys. Med. Biol. 48 (2003) 4165-4172.
@@ -39,7 +39,7 @@ class Ma(RefractiveIndex):
         Parameters
         ----------
         t: float
-            Temperature of the medium.
+            Defau.t temperature (K) of the medium.
         '''
         super().__init__(t=t, trange=None, wrange=(370e-9, 1610e-9))
 
@@ -75,7 +75,7 @@ class Ma(RefractiveIndex):
 class Nikolov(RefractiveIndex):
     material = 'polystyrene'
 
-    def __init__(self, t=293):
+    def __init__(self, t: float = 293.15):
         '''
         Refractive index of water as given in:
             Nikolov, Ivanov: Appl. Opt. 39 (2000) 2067-2070
@@ -87,7 +87,7 @@ class Nikolov(RefractiveIndex):
         Parameters
         ----------
         t: float
-            Temperature of the medium.
+            Default temperature (K) of the medium.
 
         Note
         ----

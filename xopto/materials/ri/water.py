@@ -28,7 +28,7 @@ from .base import RefractiveIndex
 
 class Daimon(RefractiveIndex):
     material = 'water'
-    def __init__(self, t=293):
+    def __init__(self, t: float = 293.15):
         '''
         Refractive index of water as given in:
             Daimon and Masumura, Appl. Opt. 46, 3811-3820 (2007)
@@ -36,7 +36,7 @@ class Daimon(RefractiveIndex):
         Parameters
         ----------
         t: float
-            Temperature of the medium.
+            Default temperature (K) of the medium.
         '''
         super().__init__(t=t, trange=(292, 297), wrange=(180e-9, 1129e-9))
 
@@ -95,7 +95,7 @@ class Daimon(RefractiveIndex):
             assume_sorted=True,
             axis=-1,
             fill_value='extrapolate'
-        )(t - 273.0)
+        )(t - 273.15)
 
         if isinstance(wavelength, float):
             result = float(result)
@@ -105,7 +105,7 @@ class Daimon(RefractiveIndex):
 
 class Schiebener(RefractiveIndex):
     material = 'water'
-    def __init__(self, t=293):
+    def __init__(self, t: float = 293.15):
         '''
         Refractive index of water as given in:
             Schiebener and Straub, J.Phys. Chem. Ref. Data, (1990).
@@ -113,7 +113,7 @@ class Schiebener(RefractiveIndex):
         Parameters
         ----------
         t: float
-            Temperature of the medium.
+            Default temperature (K) of the medium.
         '''
         super().__init__(
             t=t, trange=(273, 498), wrange=(200e-9, 2500e-9))

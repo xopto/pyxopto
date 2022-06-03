@@ -30,7 +30,7 @@ from .base import RefractiveIndex
 class Nootz(RefractiveIndex):
     material = 'seawater'
 
-    def __init__(self, t=293):
+    def __init__(self, t: float = 293.15):
         '''
         Refractive index of seawater as given in:
             Gero Nootz V1.0 07/08/2015
@@ -123,7 +123,7 @@ class Nootz(RefractiveIndex):
         self.check_temperature(t)
 
         # temperature must be in C
-        t = t - 273
+        t = t - 273.15
 
         # the wavelength must be in nm
         w = w*1e9

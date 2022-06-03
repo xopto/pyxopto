@@ -39,7 +39,7 @@ class Beadie(RefractiveIndex):
         Parameters
         ----------
         t: float
-            Temperature of the medium.
+            Default temperature (K) of the medium.
         '''
         super().__init__(t=t, trange=None, wrange=(420e-9, 1620e-9))
 

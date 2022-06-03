@@ -26,7 +26,7 @@ from .base import RefractiveIndex
 class Naglic(RefractiveIndex):
     material = 'siliglass'
 
-    def __init__(self, t=293):
+    def __init__(self, t: float = 293.15):
         '''
         Refractive index of PlatSil® SiliGlass:
             "P. Naglič, Y. Zelinskyi, L. Rogelj, J. Stergar, M. Milanič,
@@ -68,7 +68,7 @@ class Naglic(RefractiveIndex):
 
 
         inv_wn2 = 1.0/(np.asarray(w)/4.364e-07)**2
-        t_c = t - 273.0
+        t_c = t - 273.15
 
         n_20 = np.sqrt(1.0 + 0.31669505/(1.0 - 0.05941627*inv_wn2) +
                             0.31669505/(1.0 - 0.05941630*inv_wn2) +

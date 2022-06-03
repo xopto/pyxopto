@@ -22,3 +22,4 @@
 
 from . import polystyrene
 from . import water
+from . import sucrose

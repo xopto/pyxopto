@@ -26,7 +26,7 @@ from .base import RefractiveIndex
 class Ding(RefractiveIndex):
     material = 'skin'
 
-    def __init__(self, t=295):
+    def __init__(self, t: float = 295.0):
         '''
         Refractive index of human skin:
             "Huafeng Ding, Phys. Med. Biol.51(2006) 1479–1489,
@@ -35,7 +35,7 @@ class Ding(RefractiveIndex):
         Parameters
         ----------
         t: float
-            Temperature of the medium.
+            Default temperature (K) of the medium.
         '''
         super().__init__(t=t, trange=None, wrange=(325e-9, 1557e-9))
 
