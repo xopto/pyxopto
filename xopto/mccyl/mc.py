@@ -581,7 +581,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             else:
                 raise ValueError(
                     'Simulator options must be a list of McOption or a list '
-                    'of touples!')
+                    'of tuples!')
 
         # Resolve/join all the simulator options.
         resolved_options = mcoptions.resolve_cl_options(
@@ -1244,7 +1244,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
     def _get_run_report(self) -> dict:
         return self._run_report
     run_report = property(_get_run_report, None, None,
-                          'Timing and performance data of the lates kernel '
+                          'Timing and performance data of the latest kernel '
                           'run as a dict with keys "upload", "download", '
                           '"execution", "threads" and "items". '
                           'The timing values with keys "upload", "download" '
