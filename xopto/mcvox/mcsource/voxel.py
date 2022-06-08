@@ -124,7 +124,7 @@ class IsotropicVoxel(Source):
     def _set_voxel(self, voxel: Tuple[int, int, int]):
         self._voxel[:] = voxel
     voxel = property(_get_voxel, _set_voxel, None,
-                        'Source voxel indices.')
+                     'Source voxel indices.')
 
     def update(self, other: 'IsotropicVoxel' or dict):
         '''
