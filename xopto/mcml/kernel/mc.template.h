@@ -47,7 +47,7 @@
  */
 
 #if !defined(MC_ENABLE_DEBUG) || defined(__DOXYGEN__)
-	/** @brief Enables stdout debug information on CPU defices. */
+	/** @brief Enables stdout debug information on CPU devices. */
 	#define MC_ENABLE_DEBUG						FALSE
 #endif
  
