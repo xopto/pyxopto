@@ -70,6 +70,9 @@ MCML_PATH = os.path.join(ROOT_PATH, 'mcml')
 MCVOX_PATH = os.path.join(ROOT_PATH, 'mcvox')
 ''' Root directory of MC VOX. '''
 
+UTIL_PATH = os.path.join(ROOT_PATH, 'util')
+''' Root directory of MC utilities. '''
+
 USER_PATH = os.path.join(os.path.expanduser('~'), '.xopto', 'pyxopto')
 ''' Root path of user data storage. '''
 if 'PYXOPTO_USER_PATH' in os.environ and os.environ['PYXOPTO_USER_PATH']:
