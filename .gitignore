@@ -133,6 +133,9 @@ xopto/util/animation/sv/__pycache__
 xopto/util/animation/sv/fiber/__pycache__
 xopto/util/animation/tr/__pycache__
 
+xopto/util/regression/
+xopto/util/regression/__pycache__
+
 xopto/util/widgets
 xopto/util/widgets/__pycache__
 
