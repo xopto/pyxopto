@@ -144,6 +144,24 @@ class McSizeT32:
     np_size4 = np.dtype([('x', np_size), ('y', np_size),
                          ('z', np_size), ('w', np_size)])
 
+    @staticmethod
+    def size_t_str(value: int) -> str:
+        '''
+        Convert a size type integer value to a string without loosing precision.
+
+        Parameters
+        ----------
+        value: int
+            A size type integer value to convert to string.
+
+        Returns
+        -------
+        str_value: str
+            A string representation of the input size type integer value.
+        '''
+        return '{:d}u'.format(int(value))
+
+
 class McSizeT64:
     '''
     Class that represents 64-bit size type.
@@ -210,6 +228,23 @@ class McSizeT64:
                          ('z', np_size), ('_', np_size)])
     np_size4 = np.dtype([('x', np_size), ('y', np_size),
                          ('z', np_size), ('w', np_size)])
+
+    @staticmethod
+    def size_t_str(value: int) -> str:
+        '''
+        Convert a size type integer value to a string without loosing precision.
+
+        Parameters
+        ----------
+        value: int
+            A size type integer value to convert to string.
+
+        Returns
+        -------
+        str_value: str
+            A string representation of the input size type integer value.
+        '''
+        return '{:d}ul'.format(int(value))
 
 
 class McInt32:
@@ -287,6 +322,42 @@ class McInt32:
     np_int = 'int32'
     np_uint = 'uint32'
 
+    @staticmethod
+    def int_str(value: int) -> str:
+        '''
+        Convert an integer value to a string without loosing precision.
+
+        Parameters
+        ----------
+        value: int
+            An integer value to convert to string.
+
+        Returns
+        -------
+        str_value: str
+            A string representation of the input integer value.
+        '''
+        return '{:d}'.format(int(np.int32(value)))
+
+    @staticmethod
+    def uint_str(value: int) -> str:
+        '''
+        Convert an unsigned integer value to a string without loosing precision.
+
+        Parameters
+        ----------
+        value: int
+            An unsigned integer value to convert to string.
+
+        Returns
+        -------
+        str_value: str
+            A string representation of the input unsigned integer value.
+        '''
+        return '{:d}'.format(int(np.uint32(value)))
+
+
+
 class McInt64:
     '''
     Class that represents a 64-bit default integer type.
@@ -361,6 +432,41 @@ class McInt64:
 
     np_uint = 'int64'
     np_uint = 'uint64'
+
+    @staticmethod
+    def int_str(value: int) -> str:
+        '''
+        Convert an integer value to a string without loosing precision.
+
+        Parameters
+        ----------
+        value: int
+            A integer value to convert to string.
+
+        Returns
+        -------
+        str_value: str
+            A string representation of the input integer value.
+        '''
+        return '{:d}l'.format(int(np.int64(value)))
+
+    @staticmethod
+    def uint_str(value: int) -> str:
+        '''
+        Convert an unsigned integer value to a string without loosing precision.
+
+        Parameters
+        ----------
+        value: int
+            An unsigned integer value to convert to string.
+
+        Returns
+        -------
+        str_value: str
+            A string representation of the input unsigned integer value.
+        '''
+        return '{:d}ul'.format(int(np.uint64(value)))
+
 
 McInt = McInt32
 
@@ -514,6 +620,26 @@ class McFloat:
             ('a_31', cltypes.cl_float), ('a_32', cltypes.cl_float), ('a_33', cltypes.cl_float),
         ]
 
+    @staticmethod
+    def fp_str(value: float) -> str:
+        '''
+        Convert a floating-point value to a string without loosing precision.
+
+        Parameters
+        ----------
+        value: float
+            A floating-point value to convert to string.
+
+        Returns
+        -------
+        str_value: str
+            A string representation of the input floating-point value.
+        '''
+        if np.isinf(value):
+            return 'FP_INF' if value >= 0.0 else '-FP_INF'
+
+        return '{:#.8g}f'.format(float(value))
+
 McFloat32 = McFloat
 McSingle = McFloat
 
@@ -598,6 +724,24 @@ class McDouble:
             ('a_21', cltypes.cl_double), ('a_22', cltypes.cl_double), ('a_23', cltypes.cl_double),
             ('a_31', cltypes.cl_double), ('a_32', cltypes.cl_double), ('a_33', cltypes.cl_double)
         ]
+
+    @staticmethod
+    def fp_str(value: float) -> str:
+        '''
+        Convert a floating-point value to a string without loosing precision.
+
+        Parameters
+        ----------
+        value: float
+            A floating-point value to convert to string.
+
+        Returns
+        -------
+        str_value: str
+            A string representation of the input floating-point value.
+        '''
+        return '{:.16g}'.format(float(value))
+
 
 McFloat64 = McDouble
 
