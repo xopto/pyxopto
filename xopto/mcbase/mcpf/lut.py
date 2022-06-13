@@ -301,6 +301,11 @@ class LutEx(Lut):
         lut_args = self._pf_obj.mclut(lutsize, **kwargs)
         super().__init__(*lut_args)
 
+    def _get_pfargs(self) -> tuple:
+        return tuple(self._pfargs)
+    pfargs = property(_get_pfargs, None, None,
+                      'A tuple of scattering phase function arguments.')
+
     def _get_pf(self) -> PfBase:
         return self._pf_obj
     pf = property(_get_pf, None, None,
