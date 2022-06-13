@@ -57,12 +57,12 @@ class Naglic(RefractiveIndex):
 
         data_20c = np.load(filename_20c)
         self._brix_20c = data_20c['brix'] 
-        self._ri_sellmeir_20c = \
+        self._ri_sellmeier_20c = \
             [Sellmeier_3(item, wavelength_pp) for item in data_20c['coeffs']]
 
         data_25c = np.load(filename_25c)
         self._brix_25c = data_25c['brix'] 
-        self._ri_sellmeir_25c = \
+        self._ri_sellmeier_25c = \
             [Sellmeier_3(item, wavelength_pp) for item in data_25c['coeffs']]
 
         self._brix_range = (0.0, 60.0)
@@ -139,8 +139,8 @@ class Naglic(RefractiveIndex):
         w = np.asarray(wavelength, dtype=np.float64)
         self.check_wavelengths(w)
 
-        ri_20c = [ri(w) for ri in self._ri_sellmeir_20c]
-        ri_25c = [ri(w) for ri in self._ri_sellmeir_25c]
+        ri_20c = [ri(w) for ri in self._ri_sellmeier_20c]
+        ri_25c = [ri(w) for ri in self._ri_sellmeier_25c]
 
         # model uses C
         t = temperature - 273.15
