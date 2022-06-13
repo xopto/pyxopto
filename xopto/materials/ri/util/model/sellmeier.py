@@ -65,7 +65,7 @@ def _ri_ex(params: np.ndarray, pp: Scale or Normalize,
         wavelengths: np.ndarray, num_terms: int) -> np.ndarray:
     '''
     Compute the refractive index for the given model parameters
-    and wavelengths of light using the extended Sellmeir equation.
+    and wavelengths of light using the extended Sellmeier equation.
 
     Parameters
     ----------
