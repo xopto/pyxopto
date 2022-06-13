@@ -50,13 +50,13 @@ class MiePd(PfBase):
             dmin and dmax stand for the minimum and maximum diameters of the
             spherical particles, respectively.
         pd: callable(float) -> float
-            Particlne distribution number probability density function. Integral
+            Particle distribution number probability density function. Integral
             of pd over drange should equal 1.0.
         nd: int
             Number of equally spaced control points between dmin and dmax that
             are used to estimate the scattering phase function.
             A fixed-step Simpson numerical integration is used to estimate
-            the scatterin phase function at the given scattering angle cosines.
+            the scattering phase function at the given scattering angle cosines.
             If nd is None, an adaptive-step numerical integration is used (note
             that the computational time might increase dramatically!!!).
 
@@ -131,13 +131,13 @@ class MiePd(PfBase):
 
     def distribution(self) -> Callable[[float], float]:
         '''
-        Returns the underlaying distribution object.
+        Returns the underlying distribution object.
 
         Returns
         -------
         pd: callable(float) -> float
         '''
-        return self._pdble
+        return self._pd
 
     def pd(self, diameter: float) -> float:
         '''
