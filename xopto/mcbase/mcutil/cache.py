@@ -20,10 +20,12 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
+from typing import Type
 import pickle
 from xopto.pf import PfBase
 from xopto import PICKLE_PROTOCOL
 from xopto.mcbase.mcpf import LutEx
+
 
 class ObjCache:
     @staticmethod
@@ -139,6 +141,35 @@ class ObjCache:
         obj_key = (obj_type, *args)
         return obj_key in self._cache
 
+    def insert(self, value: object, obj_type: type, *args):
+        '''
+        Inserts the specified object into the cache if an existing
+        entry is not found.
+
+        Parameters
+        ----------
+        value: object
+            Value that is attained by calling obj_type(*args)
+        obj_type: object type or callable
+            Any python class or callable.
+        args: list
+            Parameters passed to the object constructor or callable.
+
+        Returns
+        -------
+        found: bool
+            Returns True if the specified object was added to the cache or
+            False if an existing object has been found in the cache.
+        '''
+        obj_key = (obj_type, *args)
+        if obj_key not in self._cache:
+            obj = obj_type(*args)
+            self._cache[obj_key] = obj
+            return True
+
+        return False
+
+
 class LutCache(ObjCache):
     @staticmethod
     def load(cachefile: str, **kwargs) -> 'LutCache':
@@ -209,7 +240,7 @@ class LutCache(ObjCache):
             ObjCache.save(self, cachefile)
             pickle.dump(lut_options, cachefile, protocol=PICKLE_PROTOCOL)
 
-    def get(self, pftype: PfBase, pfargs: tuple, lutsize: int = None) \
+    def get(self, pftype: Type[PfBase], pfargs: tuple, lutsize: int = None) \
             -> object:
         '''
         Prepare a new lookup table-based scattering phase function. Computations
@@ -219,8 +250,8 @@ class LutCache(ObjCache):
 
         Parameters
         ----------
-        pftype: xopto.pf.PfBase
-            Any instance of a scattering phase function that inherits from
+        pftype: Type[xopto.pf.PfBase]
+            Any type of a scattering phase function that inherits from
             the :py:class:`xopto.pf.PfBase` class.
         pfargs: tuple
             Parameters passed to the scattering phase function constructor.
@@ -261,3 +292,41 @@ class LutCache(ObjCache):
         obj = ObjCache.get(self, LutEx, pftype, pfargs, lutsize)
 
         return obj
+
+    def insert(self, lut: LutEx, pftype: Type[PfBase], pfargs: tuple,
+               lutsize: int = None) -> object:
+        '''
+        Inserts an existing lookup table-based scattering phase function into
+        the cache.
+
+        Parameters
+        ----------
+        lut: LutEx
+            Instance of :py:class:`~xopto.mcbase.mcpf.LutEx` created with
+            the specified scattering phase function type, arguments and
+            lookup table size.
+        pftype: Type[xopto.pf.PfBase]
+            Any type of a scattering phase function that inherits from
+            the :py:class:`xopto.pf.PfBase` class.
+        pfargs: tuple
+            Parameters passed to the scattering phase function constructor.
+        lutsize: int
+            Size of the lookup table passed to the
+            py:meth:`xopto.mcbase.pf.lut.LutEx`.
+            If None, the value passed to the constructor is used.
+
+        Returns
+        -------
+        inserted: bool
+            Return True if the scattering phase function was inserted into
+            the cache and False if existing scattering phase function
+            was found in the lookup table.
+        '''
+        if lutsize is not None:
+            lutsize = int(lutsize)
+        else:
+            lutsize = self._lutsize
+
+        pfargs = tuple(pfargs)
+
+        return ObjCache.insert(self, lut, LutEx, pftype, pfargs, lutsize)
