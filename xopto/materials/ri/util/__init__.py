@@ -20,3 +20,4 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
+from .fit import Fit, ThermalFit
