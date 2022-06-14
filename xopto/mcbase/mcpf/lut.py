@@ -55,7 +55,7 @@ class Lut(PfBase):
             - c: mc_fp_t
                 Parameter of the nonlinear lookup table index transformation.
             - offset: mc_int_t
-                Location of the lookuptable as an offset from the start of
+                Location of the lookup table as an offset from the start of
                 the lookup table buffer.
             - size: mc_int_t
                 Number of entries in the lookup table.
@@ -159,7 +159,7 @@ class Lut(PfBase):
     def __init__(self, params: list, lut: np.ndarray):
         '''
         Lookup table-based scattering phase function constructor.
-        Lookuptable is used for efficient computation of deflection
+        Lookup table is used for efficient computation of deflection
         angle cosines.
         A nonlinear transformation is used to compute linear lookup table
         (floating point) index from a uniform random number F:
@@ -174,7 +174,7 @@ class Lut(PfBase):
             Nonlinear index transformation function parameters provided as
             an array of size 3.
         lut: np.ndarray vector
-            Lookuptable data.
+            Lookup table data.
 
         Note
         ----
@@ -194,7 +194,7 @@ class Lut(PfBase):
     def _set_params(self, params: list):
         self._params[:] = params
     params = property(_get_params, _set_params, None,
-                      'Lookup table index trasnformation parameters.')
+                      'Lookup table index transformation parameters.')
 
     def _get_lut(self) -> np.ndarray:
         return self._lut
