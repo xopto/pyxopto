@@ -22,6 +22,8 @@
 
 from .pfbase import PfBase, McObject
 from xopto.mcbase import cltypes
+import xopto.pf
+
 
 class Rayleigh(PfBase):
     @staticmethod
@@ -169,6 +171,19 @@ class Rayleigh(PfBase):
             b = 4.0*(1.0 + 2.0*gamma)/(1.0 - gamma)
 
         self._precalculated = (a, b)
+
+    def pf(self) -> xopto.pf.Rayleigh:
+        '''
+        Returns a new instance of the related utility scattering phase function
+        class that can be used to compute Legendre moments and other
+        scattering phase function quantifiers.
+
+        Returns:
+        -------
+        pf: xopto.pf.Rayleigh
+            Instance of the related utility scattering phase function.
+        '''
+        return xopto.pf.Rayleigh(self.gamma)
 
     def cl_pack(self, mc: McObject, target: cltypes.Structure = None) \
             -> cltypes.Structure:

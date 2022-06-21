@@ -21,6 +21,8 @@
 ################################# End license ##################################
 
 from .pfbase import PfBase, cltypes, McObject
+import xopto.pf
+
 
 class MHg(PfBase):
     @staticmethod
@@ -136,6 +138,19 @@ class MHg(PfBase):
         self._b = min(max(float(b), 0.0), 1.0)
     b = property(_get_b, _set_b, None, 'Contribution of the Henyey-Greenstein '\
                                        'scattering phase function.')
+
+    def pf(self) -> xopto.pf.MHg:
+        '''
+        Returns a new instance of the related utility scattering phase function
+        class that can be used to compute Legendre moments and other
+        scattering phase function quantifiers.
+
+        Returns:
+        -------
+        pf: xopto.pf.MHg
+            Instance of the related utility scattering phase function.
+        '''
+        return xopto.pf.MHg(self.g, self.b)
 
     def cl_pack(self, mc: McObject, target: cltypes.Structure = None) \
             -> cltypes.Structure:

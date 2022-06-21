@@ -21,6 +21,7 @@
 ################################# End license ##################################
 
 from .pfbase import PfBase, cltypes, McObject
+import xopto.pf
 
 
 class Pc(PfBase):
@@ -129,6 +130,19 @@ class Pc(PfBase):
     def _set_n(self, n: float):
         self._n = float(n)
     n = property(_get_n, _set_n, None, 'Power of cosine.')
+
+    def pf(self) -> xopto.pf.Pc:
+        '''
+        Returns a new instance of the related utility scattering phase function
+        class that can be used to compute Legendre moments and other
+        scattering phase function quantifiers.
+
+        Returns:
+        -------
+        pf: xopto.pf.Pc
+            Instance of the related utility scattering phase function.
+        '''
+        return xopto.pf.PPc(self.n)
 
     def cl_pack(self, mc: McObject, target: cltypes.Structure = None) \
             -> cltypes.Structure:

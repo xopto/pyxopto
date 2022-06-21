@@ -21,6 +21,8 @@
 ################################# End license ##################################
 
 from .pfbase import PfBase, cltypes, McObject
+import xopto.pf
+
 
 class Hg(PfBase):
     @staticmethod
@@ -111,6 +113,19 @@ class Hg(PfBase):
     def _set_g(self, g: float):
         self._g = min(max(float(g), -1.0), 1.0)
     g = property(_get_g, _set_g, None, 'Anisotropy factor.')
+
+    def pf(self) -> xopto.pf.Hg:
+        '''
+        Returns a new instance of the related utility scattering phase function
+        class that can be used to compute Legendre moments and other
+        scattering phase function quantifiers.
+
+        Returns:
+        -------
+        pf: xopto.pf.Hg
+            Instance of the related utility scattering phase function.
+        '''
+        return xopto.pf.Hg(self.g)
 
     def cl_pack(self, mc: McObject, target: cltypes.Structure = None) \
             -> cltypes.Structure:

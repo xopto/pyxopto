@@ -25,6 +25,7 @@ from typing import Tuple
 import numpy as np
 
 from .pfbase import PfBase, cltypes, McObject
+import xopto.pf
 
 
 class MGk(PfBase):
@@ -212,6 +213,19 @@ class MGk(PfBase):
             invA = 1.0/a
 
         self._precalculated = [invA, a1, a2]
+
+    def pf(self) -> xopto.pf.MGk:
+        '''
+        Returns a new instance of the related utility scattering phase function
+        class that can be used to compute Legendre moments and other
+        scattering phase function quantifiers.
+
+        Returns:
+        -------
+        pf: xopto.pf.MGk
+            Instance of the related utility scattering phase function.
+        '''
+        return xopto.pf.MGk(self.g, self.a, self.b)
 
     def cl_pack(self, mc: McObject, target: cltypes.Structure = None) \
             -> cltypes.Structure:
