@@ -245,6 +245,6 @@ class Line(Source):
                 'type': self.__class__.__name__}
 
     def __str__(self):
-        return 'Line (position=({}, {}, {}), direction=({}, {}, {}))'.\
+        return 'Line(position=({}, {}, {}), direction=({}, {}, {}))'.\
             format(*self._position, *self._direction)
 
