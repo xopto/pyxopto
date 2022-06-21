@@ -619,8 +619,13 @@ class Normalize(PreprocessorFunction):
         '''
         Internal method that precalculates the scaling factor and offset.
         '''
-        self._scale = (self._output_range[1] - self._output_range[0])/ \
-                      (self._input_range[1] - self._input_range[0])
+        delta_input = self._input_range[1] - self._input_range[0]
+        delta_output = self._output_range[1] - self._output_range[0]
+        if delta_input == 0.0:
+            self._scale = 1.0
+        else:
+            self._scale = delta_output/delta_input
+
         self._offset = -self._input_range[0]*self._scale + self._output_range[0]
 
     def todict(self) -> dict:
@@ -854,7 +859,10 @@ class SNV(PreprocessorFunction):
         '''
         Internal method that precalculates the scaling factor and offset.
         '''
-        self._scale = self._output_std/self._input_std
+        if self._input_std == 0.0:
+            self._scale = 1.0
+        else:
+            self._scale = self._output_std/self._input_std
         self._offset = -self._input_mean*self._scale + self._output_mean
 
     def todict(self) -> dict:
