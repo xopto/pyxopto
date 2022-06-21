@@ -159,7 +159,7 @@ class LogScale(PreprocessorFunction):
         worker: ClWorker
             OpeCL worker instance.
         selector: slice
-            Input data slice that selects th input items to preprocess.
+            Input data slice that selects the input items to preprocess.
         inout_var: str
             Name of the RW variable that holds the data.
         indent: str
@@ -268,7 +268,7 @@ class Log10Scale(PreprocessorFunction):
         worker: ClWorker
             OpeCL worker instance.
         selector: slice
-            Input data slice that selects th input items to preprocess.
+            Input data slice that selects the input items to preprocess.
         inout_var: str
             Name of the RW variable that holds the data.
         indent: str
@@ -375,7 +375,7 @@ class ExpScale(PreprocessorFunction):
         worker: ClWorker
             OpeCL worker instance.
         selector: slice
-            Input data slice that selects th input items to preprocess.
+            Input data slice that selects the input items to preprocess.
         inout_var: str
             Name of the RW variable that holds the data.
             Indentation string. Defaults to 4 spaces.
@@ -485,7 +485,7 @@ class Normalize(PreprocessorFunction):
         worker: ClWorker
             OpeCL worker instance.
         selector: slice
-            Input data slice that selects th input items to preprocess.
+            Input data slice that selects the input items to preprocess.
         inout_var: str
             Name of the RW variable that holds the data.
         indent: str
@@ -697,7 +697,7 @@ class SNV(PreprocessorFunction):
         worker: ClWorker
             OpeCL worker instance.
         selector: slice
-            Input data slice that selects th input items to preprocess.
+            Input data slice that selects the input items to preprocess.
         inout_var: str
             Name of the RW variable that holds the data.
         indent: str
@@ -994,7 +994,7 @@ class PreprocessorItem:
             Selected input data that were preprocessed by the sequence
             of preprocessor functions.
         '''
-        selected = x[self._selector]
+        selected = x[..., self._selector]
         for func in self._sequence:
             selected = func.apply(selected, out=out)
 
@@ -1018,7 +1018,7 @@ class PreprocessorItem:
             Selected output data that were preprocessed by the reversed
             sequence of the inverse preprocessor functions.
         '''
-        selected = y[self._selector]
+        selected = y[..., self._selector]
         for func in self._sequence[::-1]:
             selected = func.undo(selected, out= out)
 
@@ -1033,7 +1033,7 @@ class PreprocessorItem:
         x: np.ndarray
             A representative dataset for the training.
         '''
-        selected = x[self._selector]
+        selected = x[..., self._selector]
         for func in self._sequence:
             func.train(selected)
             selected = func.apply(selected)
@@ -1203,7 +1203,7 @@ class Preprocessor:
             np.copyto(out, x)
 
         for item in self._items:
-            out[item.selector] = item.apply(x)
+            out[..., item.selector] = item.apply(x)
         
         return out
 
@@ -1231,7 +1231,7 @@ class Preprocessor:
             np.copyto(out, y)
 
         for item in self._items:
-            out[item.selector] = item.undo(y)
+            out[..., item.selector] = item.undo(y)
 
         return out
 
