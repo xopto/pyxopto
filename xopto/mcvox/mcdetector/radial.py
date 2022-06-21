@@ -318,6 +318,7 @@ class Radial(Detector):
         data: dict
             Dictionary created by the :py:meth:`Radial.todict` method.
         '''
+        data = dict(data)
         rt_type = data.pop('type')
         if rt_type != 'Radial':
             raise TypeError('Expected "Radial" type bot got "{}"!'.format(rt_type))

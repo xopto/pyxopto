@@ -313,6 +313,7 @@ class SymmetricX(Detector):
         data: dict
             Dictionary created by the :py:meth:`SymmetricX.todict` method.
         '''
+        data = dict(data)
         detector_type = data.pop('type')
         if detector_type != 'SymmetricX':
             raise TypeError(

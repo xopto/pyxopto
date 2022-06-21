@@ -215,6 +215,7 @@ class DetectorDefault(DetectorAny):
         data: dict
             Dictionary created by the :py:meth:`DetectorDefault.todict` method.
         '''
+        data = dict(data)
         detector_type = data.pop('type')
         if detector_type != cls.__name__:
             raise TypeError(

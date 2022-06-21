@@ -397,6 +397,7 @@ class RadialPl(Detector):
         data: dict
             Dictionary created by the :py:meth:`RadialPl.todict` method.
         '''
+        data = dict(data)
         rt_type = data.pop('type')
         if rt_type != 'RadialPl':
             raise TypeError('Expected "RadialPl" type bot got "{}"!'.format(rt_type))
