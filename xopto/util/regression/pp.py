@@ -1199,6 +1199,8 @@ class Preprocessor:
         '''
         if out is None:
             out = np.array(x)
+        else:
+            np.copyto(out, x)
 
         for item in self._items:
             out[item.selector] = item.apply(x)
@@ -1225,6 +1227,9 @@ class Preprocessor:
         '''
         if out is None:
             out = np.array(y)
+        else:
+            np.copyto(out, y)
+
         for item in self._items:
             out[item.selector] = item.undo(y)
 
