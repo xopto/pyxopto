@@ -642,7 +642,7 @@ class Model:
 
         for key, value in self._train_data.items():
             if value is not None:
-                self._train_data[key] = self._topology.reshapeInput(value)
+                self._train_data[key] = self._topology.prepare_input(value)
 
         validate = False
         if self._train_data['validate_input'] is not None or \
