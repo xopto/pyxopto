@@ -23,8 +23,6 @@
 from typing import List
 
 from xopto.mcvox import mcobject
-from xopto.mcvox import mctypes
-from xopto.mcvox.mcutil import boundary
 from xopto.mcvox import cltypes
 from xopto.mcvox import mcpf
 
@@ -105,7 +103,7 @@ class Material(mcobject.McObject):
             '};',
         ))
 
-    def __init__(self, n, mua, mus, pf):
+    def __init__(self, n: float, mua: float, mus: float, pf: mcpf.PfBase):
         '''
         Material object constructor.
 
@@ -117,7 +115,7 @@ class Material(mcobject.McObject):
             Absorption coefficient (1/m).
         mus: float
             Scattering (NOT reduced) coefficient (1/m).
-        pf: PhaseFunction
+        pf: mcpf.PfBase
             Phase function object.
 
 
@@ -138,27 +136,27 @@ class Material(mcobject.McObject):
         self._mus = float(mus)
         self._pf = pf
 
-    def _set_n(self, n):
+    def _set_n(self, n: float):
         self._n = float(n)
-    def _get_n(self):
+    def _get_n(self) -> float:
         return self._n
     n = property(_get_n, _set_n, None, 'Refractive index.')
 
-    def _set_mua(self, mua):
+    def _set_mua(self, mua: float):
         self._mua = float(mua)
-    def _get_mua(self):
+    def _get_mua(self) -> float:
         return self._mua
     mua = property(_get_mua, _set_mua, None, 'Absorption coefficient (1/m).')
 
-    def _set_mus(self, mus):
+    def _set_mus(self, mus: float):
         self._mus = float(mus)
-    def _get_mus(self):
+    def _get_mus(self) -> float:
         return self._mus
     mus = property(_get_mus, _set_mus, None, 'Scattering coefficient (1/m).')
 
-    def _get_pf(self):
+    def _get_pf(self) -> mcpf.PfBase:
         return self._pf
-    def _set_pf(self, pf):
+    def _set_pf(self, pf: mcpf.PfBase):
         if type(self._pf) != type(pf):
             raise ValueError('The scattering phase function type '\
                              'must not change!')
@@ -240,7 +238,7 @@ class Materials(mcobject.McObject):
         '''
         if len(self._materials) < 1:
                 ValueError('At least one material is required, '
-                           'but got an emply list!')
+                           'but got an empty list!')
 
         if self._pf_type is None:
             self._pf_type = type(self._materials[0].pf)
@@ -263,7 +261,7 @@ class Materials(mcobject.McObject):
     def material(self, index: int) -> Material:
         '''
         Returns the material at the specified index. Note that the first
-        material (index 0) represents the medium that sourounds the sample.
+        material (index 0) represents the medium that surrounds the sample.
         '''
         return self._materials[index]
 

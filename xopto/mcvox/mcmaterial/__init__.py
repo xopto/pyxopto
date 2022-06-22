@@ -20,4 +20,4 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
-from .material import Material, Materials
+from xopto.mcbase.mcmaterial import Material, Materials
