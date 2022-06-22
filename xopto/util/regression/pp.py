@@ -1002,7 +1002,7 @@ class PreprocessorItem:
             Selected input data that were preprocessed by the sequence
             of preprocessor functions.
         '''
-        selected = x[..., self._selector]
+        selected = x[(Ellipsis,) + self._selector]
         for func in self._sequence:
             selected = func.apply(selected, out=out)
 
@@ -1026,7 +1026,7 @@ class PreprocessorItem:
             Selected output data that were preprocessed by the reversed
             sequence of the inverse preprocessor functions.
         '''
-        selected = y[..., self._selector]
+        selected = y[(Ellipsis,) + self._selector]
         for func in self._sequence[::-1]:
             selected = func.undo(selected, out= out)
 
@@ -1041,7 +1041,7 @@ class PreprocessorItem:
         x: np.ndarray
             A representative dataset for the training.
         '''
-        selected = x[..., self._selector]
+        selected = x[(Ellipsis,) + self._selector]
         for func in self._sequence:
             func.train(selected)
             selected = func.apply(selected)
@@ -1211,7 +1211,7 @@ class Preprocessor:
             np.copyto(out, x)
 
         for item in self._items:
-            out[..., item.selector] = item.apply(x)
+            out[(Ellipsis,) + item.selector] = item.apply(x)
         
         return out
 
@@ -1239,7 +1239,7 @@ class Preprocessor:
             np.copyto(out, y)
 
         for item in self._items:
-            out[..., item.selector] = item.undo(y)
+            out[(Ellipsis,) + item.selector] = item.undo(y)
 
         return out
 
