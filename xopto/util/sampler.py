@@ -180,10 +180,15 @@ class SequenceSampler(Sampler):
     sequence = property(_get_sequence, None, None,
                         'The sampled data sequence.')
 
-    def __call__(self) -> float:
+    def __call__(self, freeze: bool = False) -> float:
         '''
         Return a sample from the sequence.
 
+
+        Parameters
+        ----------
+        freeze: bool
+            Do not advance the state/position of the sampler if True.
 
         Returns
         -------
@@ -192,9 +197,10 @@ class SequenceSampler(Sampler):
         '''
         sample = self._sequence.flat[self._pos]
 
-        self._pos += 1
-        if self._pos >= self._sequence.size:
-            self._pos = 0
+        if not freeze:
+            self._pos += 1
+            if self._pos >= self._sequence.size:
+                self._pos = 0
 
         return sample
 
@@ -260,7 +266,8 @@ class UniformSampler(Sampler):
     logscale = property(_get_logscale, _set_logscale, None,
                         'Sampling in logarithmic scale.')
 
-    def __call__(self, n: int or Tuple[int] = 1) -> np.ndarray:
+    def __call__(self, n: int or Tuple[int] = 1, freeze: bool = False) \
+            -> np.ndarray:
         '''
         Return the requested number of samples.
 
@@ -268,6 +275,8 @@ class UniformSampler(Sampler):
         ----------
         n: int or Tuple[int]
             The requested number of samples.
+        freeze: bool
+            Do not advance the state of the sampler if True.
 
         Returns
         -------
@@ -353,7 +362,7 @@ class NormalSampler(Sampler):
     clip = property(_get_clip, _set_clip, None,
                     'Clip value range to mean ± clip*sigma.')
 
-    def __call__(self, n: int = 1) -> np.ndarray:
+    def __call__(self, n: int = 1, freeze: bool = False) -> np.ndarray:
         '''
         Return the requested number of samples.
 
@@ -361,6 +370,8 @@ class NormalSampler(Sampler):
         ----------
         n: int or Tuple[int]
             The requested number of samples.
+        freeze: bool
+            Do not advance the state of the sampler if True.
 
         Returns
         -------
@@ -406,7 +417,8 @@ class ConstantSampler(UniformSampler):
         '''
         super().__init__(value, value)
 
-    def __call__(self, n: int or Tuple[int] = 1) -> np.ndarray:
+    def __call__(self, n: int or Tuple[int] = 1, freeze: bool = False) \
+            -> np.ndarray:
         '''
         Return the requested number of samples.
 
@@ -414,6 +426,8 @@ class ConstantSampler(UniformSampler):
         ----------
         n: int or Tuple[int]
             The requested number of samples.
+        freeze: bool
+            Do not advance the state of the sampler if True.
 
         Returns
         -------
@@ -485,11 +499,16 @@ class PfSampler(Sampler):
         for arg in self._pf_args:
             arg.reset()
 
-    def __call__(self) -> mcpf.PfBase:
+    def __call__(self, freeze: bool = False) -> mcpf.PfBase:
         '''
         Sample tha scattering phase function and return a new instance.
+
+        Parameters
+        ----------
+        freeze: bool
+            Do not advance the state of the sampler if True.
         '''
-        return self._pf_type(*[arg() for arg in self._pf_args])
+        return self._pf_type(*[arg(freeze=freeze) for arg in self._pf_args])
 
     def todict(self) -> dict:
         '''
@@ -560,9 +579,14 @@ class MaterialSampler(Sampler):
         self._n.reset()
         self._pf.reset()
 
-    def __call__(self) -> dict:
+    def __call__(self, freeze: bool = False) -> dict:
         '''
         Sample the layer parameters.
+
+        Parameters
+        ----------
+        freeze: bool
+            Do not advance the state of the sampler if True.
 
         Returns
         -------
@@ -570,18 +594,18 @@ class MaterialSampler(Sampler):
             A dict object with keys "mua" (float), "mus" (float),
             "n" (float), "d" (float) and "pf" (:py:class:`mcpf.PfBase`).
         '''
-        mcpf_obj = self._pf()
+        mcpf_obj = self._pf(freeze=freeze)
         pf_obj = mcpf_obj.pf()
 
-        musr = self._musr()
+        musr = self._musr(freeze=freeze)
         g = pf_obj.g(1)
 
         return {
-            'mua': self._mua(),
+            'mua': self._mua(freeze=freeze),
             'musr': musr,
             'mus': musr/(1.0 - g),
             'g': g,
-            'n':self._n(),
+            'n':self._n(freeze=freeze),
             'pf': mcpf_obj
         }
 
@@ -722,9 +746,14 @@ class LayerSampler(Sampler):
         self._d.reset()
         self._pf.reset()
 
-    def __call__(self) -> dict:
+    def __call__(self, freeze: bool = False) -> dict:
         '''
         Sample the layer parameters.
+
+        Parameters
+        ----------
+        freeze: bool
+            Do not advance the state of the sampler if True.
 
         Returns
         -------
@@ -732,19 +761,19 @@ class LayerSampler(Sampler):
             A dict object with keys "mua" (float), "mus" (float),
             "n" (float), "d" (float) and "pf" (:py:class:`mcpf.PfBase`).
         '''
-        mcpf_obj = self._pf()
+        mcpf_obj = self._pf(freeze=freeze)
         pf_obj = mcpf_obj.pf()
 
-        musr = self._musr()
+        musr = self._musr(freeze=freeze)
         g = pf_obj.g(1)
 
         return {
-            'mua': self._mua(),
+            'mua': self._mua(freeze=freeze),
             'musr': musr,
             'mus': musr/(1.0 - g),
             'g': g,
-            'n':self._n(),
-            'd': self._d(),
+            'n':self._n(freeze=freeze),
+            'd': self._d(freeze=freeze),
             'pf': mcpf_obj
         }
 
@@ -863,16 +892,22 @@ class MultilayerSampler(Sampler):
                 raise ValueError('All layers must use the same scattering '
                                  'phase function type!')
 
-    def __call__(self) -> List[dict]:
+    def __call__(self, freeze: bool = False) -> List[dict]:
         '''
         Sample the parameters of the layer stack.
+
+        Parameters
+        ----------
+        freeze: bool
+            Do not advance the state of the sampler if True.
 
         Returns
         -------
         samples: List[dict]
             A list of layer samples.
         '''
-        return [layer_sampler() for layer_sampler in self._samplers]
+        return [layer_sampler(freeze=freeze)
+                for layer_sampler in self._samplers]
 
     def reset(self):
         '''
@@ -998,10 +1033,15 @@ class IncidenceTiltSampler(Sampler):
         self._incidence.reset()
         self._tilt.reset()
 
-    def __call__(self) -> dict:
+    def __call__(self, freeze: bool = False) -> dict:
         '''
         Samples direction of a collimated sources and reference direction
         of the detector.
+
+        Parameters
+        ----------
+        freeze: bool
+            Do not advance the state of the sampler if True.
 
         Returns
         -------
@@ -1009,8 +1049,8 @@ class IncidenceTiltSampler(Sampler):
             A new sample with the following fields: "source_direction",
             "detector_direction", "incidence" and "tilt".
         '''
-        incidence = float(self._incidence())
-        tilt = float(self._tilt())
+        incidence = float(self._incidence(freeze=freeze))
+        tilt = float(self._tilt(freeze=freeze))
         detector_dir = detector_direction(
             incidence, tilt, self._design_angle)
         source_dir = np.array([np.sin(incidence), 0.0, np.cos(incidence)])
@@ -1183,7 +1223,7 @@ class MultilayerSfdi:
         mcobj: mc.Mc
             A new Monte Carlo simulator instance.
         '''
-        pf_obj = self._layers[0].pf()
+        pf_obj = self._layers[0].pf(freeze=True)
         num_layers = len(self._layers)
 
         layers = []
