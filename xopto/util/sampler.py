@@ -134,6 +134,60 @@ class Sampler:
         return '{} #{}'.format(self.__str__(), id(self))
 
 
+class SequenceSampler(Sampler):
+    def __init__(self, sequence: np.ndarray, start: int = 0):
+        '''
+        A sequence sampler.
+
+        Parameters
+        ----------
+        sequence: np.ndarray
+            A sequence of vales to sample. The array is sampled from a flat
+            view.
+        start: int
+            Zero-based index of the first sample.
+
+        Note
+        ----
+        After reaching the end of sequence, the sampling will continue with
+        the first element in the sequence.
+        '''
+        self._sequence = np.asarray(sequence)
+        self._pos = self._start = int(start)
+
+    def _get_pos(self) -> int:
+        return self._pos
+    pos = property(_get_pos, None, None,
+                   'Zero-based index of the next sample.')
+
+    def _get_sequence(self) -> int:
+        return self._sequence
+    sequence = property(_get_sequence, None, None,
+                        'The sampled data sequence.')
+
+    def __call__(self) -> float:
+        '''
+        Return a sample from the sequence.
+
+
+        Returns
+        -------
+        sample: float or np.ndarray
+            The sample.
+        '''
+        sample = self._sequence.flat[self._pos]
+
+        self._pos += 1
+        if self._pos >= self._sequence.size:
+            self._pos = 0
+
+        return sample
+
+    def __str__(self):
+        return 'SequenceSampler(sequence={}, start={})'.format(
+            self._sequence, self._start)
+
+
 class UniformSampler(Sampler):
     def __init__(self, start: float, stop: float, logscale: bool = False):
         '''
