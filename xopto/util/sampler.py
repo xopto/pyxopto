@@ -152,6 +152,7 @@ class SequenceSampler(Sampler):
         After reaching the end of sequence, the sampling will continue with
         the first element in the sequence.
         '''
+        super().__init__()
         self._sequence = np.asarray(sequence)
         self._pos = self._start = int(start)
 
