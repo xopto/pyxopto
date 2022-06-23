@@ -1223,8 +1223,8 @@ class MultilayerSfdi:
         mcobj: mc.Mc
             A new Monte Carlo simulator instance.
         '''
-        # get a scattering phase function initializer without advancing
-        # the sampler state)
+        # Get a scattering phase function initializer without advancing
+        # the sampler state.
         pf_obj = self._layers[0].pf(freeze=True)
         num_layers = len(self._layers)
 

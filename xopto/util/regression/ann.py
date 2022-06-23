@@ -678,6 +678,10 @@ class Model:
                 sys.stdout.write(info)
                 sys.stdout.flush()
 
+            def on_train_end(self, logs=None):
+                sys.stdout.write('\n')
+                sys.stdout.flush()
+
         custom_monitor = CustomCallbackMonitor()
         callbacks_list = [custom_monitor]
 
