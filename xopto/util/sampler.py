@@ -130,6 +130,13 @@ class Sampler:
         sampler_type = globals().get(type_name)
         return sampler_type(**data)
 
+    def reset(self):
+        '''
+        Reset the state of the sampler. Reimplement this method for
+        custom handling of the sampler state.
+        '''
+        pass
+
     def __repr__(self):
         return '{} #{}'.format(self.__str__(), id(self))
 
@@ -155,6 +162,13 @@ class SequenceSampler(Sampler):
         super().__init__()
         self._sequence = np.asarray(sequence)
         self._pos = self._start = int(start)
+
+    def reset(self):
+        '''
+        Reset the sequence sampler to start from the first item as specified
+        by the start parameter of the constructor.
+        '''
+        self._pos = self._start
 
     def _get_pos(self) -> int:
         return self._pos
@@ -463,6 +477,14 @@ class PfSampler(Sampler):
     pf_args = property(_get_pf_args, None, None,
                        'Samplers of the scattering phase function arguments.')
 
+    def reset(self):
+        '''
+        Reset the states of samplers that sample the arguments
+        of the scattering phase function.
+        '''
+        for arg in self._pf_args:
+            arg.reset()
+
     def __call__(self) -> mcpf.PfBase:
         '''
         Sample tha scattering phase function and return a new instance.
@@ -528,6 +550,15 @@ class MaterialSampler(Sampler):
         self._musr = musr
         self._n = n
         self._pf = pf
+
+    def reset(self):
+        '''
+        Reset the states of all the enclosed samplers.
+        '''
+        self._mua.reset()
+        self._musr.reset()
+        self._n.reset()
+        self._pf.reset()
 
     def __call__(self) -> dict:
         '''
@@ -681,6 +712,16 @@ class LayerSampler(Sampler):
         self._d = d
         self._pf = pf
 
+    def reset(self):
+        '''
+        Reset the states of all the enclosed samplers.
+        '''
+        self._mua.reset()
+        self._musr.reset()
+        self._n.reset()
+        self._d.reset()
+        self._pf.reset()
+
     def __call__(self) -> dict:
         '''
         Sample the layer parameters.
@@ -833,6 +874,12 @@ class MultilayerSampler(Sampler):
         '''
         return [layer_sampler() for layer_sampler in self._samplers]
 
+    def reset(self):
+        '''
+        Reset the states of all the layer samplers.
+        '''
+        for sampler in self._samplers:
+            sampler.reset()
 
     def update(self, layers: xopto.mcml.mc.mclayer.Layers,
                sample: dict = None) -> xopto.mcml.mc.mclayer.Layers:
@@ -943,6 +990,13 @@ class IncidenceTiltSampler(Sampler):
         self._design_angle = float(design_angle)
         self._incidence = incidence
         self._tilt = tilt
+
+    def reset(self):
+        '''
+        Reset the states of all the enclosed samplers.
+        '''
+        self._incidence.reset()
+        self._tilt.reset()
 
     def __call__(self) -> dict:
         '''
@@ -1065,6 +1119,15 @@ class MultilayerSfdi:
         self._source_detector = source_detector
         self._sample_number = int(sample_count)
         self._rmax_cache = {}
+
+    def reset(self):
+        '''
+        Reset the states of all the enclosed samplers and set the sample
+        number to 0.
+        '''
+        self._layers.reset()
+        self._source_detector.reset()
+        self._sample_number = 0
 
     def update(self, mcobj: xopto.mcml.mc.Mc) -> dict:
         '''
