@@ -629,12 +629,6 @@ class MaterialSampler(Sampler):
     n = property(_get_n, None, None,
                  'Refractive index sampler.')
 
-    def _get_d(self) -> Sampler:
-        return self._d
-    d = property(_get_n, None, None,
-                 'Layer thickness sampler.')
-
-
     def update(self, layer: mcmaterial.Material, sample: dict = None) \
             -> mcmaterial.Material:
         '''
@@ -799,7 +793,7 @@ class LayerSampler(Sampler):
 
     def _get_d(self) -> Sampler:
         return self._d
-    d = property(_get_n, None, None,
+    d = property(_get_d, None, None,
                  'Layer thickness sampler.')
 
 
@@ -1270,10 +1264,157 @@ class MultilayerSfdi:
             rmax_estimator = mcrmax.RmaxDiffusion(*rmax_args) 
             self._rmax_cache[rmax_args] = rmax_estimator
 
-        num_intrnale_layers = len(mcobj.layers) - 2
-        rmax = np.zeros((num_intrnale_layers,))
+        num_internal_layers = len(mcobj.layers) - 2
+        rmax = np.zeros((num_internal_layers,))
         for index, layer in enumerate(mcobj.layers[1:-1]):
             g = layer.pf.pf().g(1)
-            rmax[index] = rmax_estimator(layer.mua, layer.mus*(1.0 - g))
-
+            key = (rmax_estimator, float(layer.mua), float(layer.mus*(1.0 - g)))
+            rmax_value = self._rmax_cache.get(key)
+            if rmax_value is None:
+                rmax_value = rmax_estimator(key[1], key[2])
+                self._rmax_cache[key] = float(rmax_value)
+            rmax[index] = rmax_value
         return rmax
+
+
+
+if __name__ == '__main__':
+    import time
+    from xopto.mcml import mc
+
+    verbose = True
+    design_angle = np.deg2rad(20.0)
+    tilt_range = (np.deg2rad(0.0), np.deg2rad(0.0))
+    incidence_range = (design_angle, design_angle)
+    detector_acceptance = np.deg2rad(10.0)
+    num_samples = 32000
+    batch_size = 1000
+    num_packets = 1
+    log_sampling_mua = log_sampling_musr = False
+    dataset_location='2layer_grid'
+    dataset_sublocation = 'mc'
+    cl_device = mc.clinfo.gpu(index=-1)
+
+    mua = np.linspace(0.01e2, 5.0e2, 10)
+    musr = np.linspace(5.0e2, 35.0e2, 10)
+    l1_mua, l1_musr, l2_mua, l2_musr = np.meshgrid(mua, musr, mua, musr, indexing='ij')
+    num_samples = l1_mua.size
+
+    ml_sampler = MultilayerSampler((
+        LayerSampler(
+            mua=ConstantSampler(0.0),
+            musr=ConstantSampler(0.0),
+            n=ConstantSampler(1.0),
+            d=ConstantSampler(np.inf),
+            pf=PfSampler(mc.mcpf.Hg, (ConstantSampler(0.0),))
+        ),
+        LayerSampler(
+            mua=SequenceSampler(l1_mua),
+            musr=SequenceSampler(l1_musr),
+            n=ConstantSampler(1.33),
+            d=ConstantSampler(75.0e-6),
+            pf=PfSampler(mc.mcpf.Hg, (ConstantSampler(0.8),))
+        ),
+        LayerSampler(
+            mua=SequenceSampler(l2_mua),
+            musr=SequenceSampler(l2_musr),
+            n=ConstantSampler(1.33),
+            d=ConstantSampler(np.inf),
+            pf=PfSampler(mc.mcpf.Hg, (ConstantSampler(0.8),))
+        ),
+        LayerSampler(
+            mua=ConstantSampler(0.0),
+            musr=ConstantSampler(0.0),
+            n=ConstantSampler(1.0),
+            d=ConstantSampler(np.inf),
+            pf=PfSampler(mc.mcpf.Hg, (ConstantSampler(0.0),))
+        ),
+    ))
+
+    sd_sampler = IncidenceTiltSampler(
+        incidence=UniformSampler(*incidence_range),
+        tilt=UniformSampler(*tilt_range),
+        design_angle=design_angle
+    )
+
+    sfdi_sampler = MultilayerSfdi(
+        ml_sampler, sd_sampler
+    )
+
+    mc_obj = sfdi_sampler.mc_obj(
+        acceptance=detector_acceptance,
+        cl_devices=cl_device,
+        cl_build_options=[mc.cloptions.FastMath]
+    )
+
+    #sfdi_dataset = dataset.Dataset(location=dataset_location, create=True)
+    #dsfiles = sfdi_dataset.files('.pkl', sublocation=dataset_sublocation)
+    first_index = 0
+
+    items = []
+    counter = 0
+    t_start = time.perf_counter()
+    
+    # for existing samples that dont require MC simulations
+    for sample_index in range(0, first_index):
+        sample = sfdi_sampler.update(mc_obj)
+
+    MuA =[]
+
+    # for new samples that require MC simulations
+    for sample_index in range(first_index, num_samples):
+        sample = sfdi_sampler.update(mc_obj)
+        mc_obj.rmax = np.max(sfdi_sampler.rmax(mc_obj))
+        _, _, result = mc_obj.run(num_packets)
+        counter += 1
+
+        MuA.append(float(sample['layers'][1]['mua']))
+
+        if verbose:
+            dt = time.perf_counter() - t_start
+            tmp = np.sum(mc_obj.source.direction*mc_obj.detectors.top.direction)
+            design_angle = np.rad2deg(np.arccos(-tmp))
+            src_dir = mc_obj.source.direction
+            incidence = np.rad2deg(np.arctan(src_dir[0]/src_dir[2]))
+            detector_dir = mc_obj.detectors.top.direction
+            tilt = np.rad2deg(np.arctan(detector_dir[1]/detector_dir[2]))
+            print('='*40)
+            print('Processing {:d}/{:d};  {:.0f} samples/h'.format(
+                sample_index + 1, num_samples, counter*3600/dt))
+            print('-'*40)
+            for layer_index, layer in enumerate(mc_obj.layers[1:-1]):
+                print('Layer {:<2d}    :'.format(layer_index + 1), str(layer))
+            print('Source      :', str(mc_obj.source))
+            print('Detector    :', str(mc_obj.detectors.top))
+            print('rmax        : {:.1f} mm'.format(mc_obj.rmax*1.0e3))
+            print('incidence   : {:.2f}°/{:.2f}°'.format(
+                  incidence, np.rad2deg(sample['source_detector']['incidence'])))
+            print('tilt        : {:.2f}°/{:.2f}°'.format(
+                tilt, np.rad2deg(sample['source_detector']['tilt'])))
+            print('design angle: {:.2f}°/{:.2f}°'.format(
+                design_angle, np.rad2deg(sd_sampler.design_angle)))
+
+        items.append(
+            {
+                'mc':{
+                    'source': mc_obj.source.todict(),
+                    'layers': mc_obj.layers.todict(),
+                    'detectors': mc_obj.detectors.todict(),
+                    'num_packets': int(num_packets),
+                    'rmax': mc_obj.rmax
+                },
+                'sample': sample,
+                'reflectance': result.top.reflectance,
+            }
+        )
+        if len(items) >= batch_size:
+        #    sfdi_dataset.save(
+        #        items, first=sample_index - len(items) + 1,
+        #        n=len(items), sublocation=dataset_sublocation)
+            items.clear()
+
+    import matplotlib.pyplot as pp
+
+    pp.figure()
+    pp.imshow(np.reshape(MuA, (100, 100)))
+    pp.show()
