@@ -445,6 +445,224 @@ class ExpScale(PreprocessorFunction):
         return 'ExpScale()'
 
 
+class CosScale(PreprocessorFunction):
+    @staticmethod
+    def cl_implementation(worker:  ClWorker) -> str:
+        '''
+        Implementation of the cosine scaling preprocessor in OpenCL.
+        '''
+        return '\n'.join((
+            'inline void pp_cosscale_apply(',
+            '		mc_size_t start, mc_size_t stop, mc_size_t step, ',
+            '		mc_fp_t const *inout)',
+            '{',
+            '	for(mc_size_t pos = start; pos < stop; pos += step){',
+            '		inout[pos] = mc_cos(inout[pos]);',
+            '	}',
+            '};',
+            '',
+            'inline void pp_cosscale_undo(',
+            '		mc_size_t start, mc_size_t stop, mc_size_t step, ',
+            '		mc_fp_t *inout)',
+            '{',
+            '	for(mc_size_t pos = start; pos < stop; pos += step){',
+            '		inout[pos] = mc_acos(inout[pos]);',
+            '	}',
+            '};',
+        ))
+
+    def cl_render_call(self, worker: ClWorker, selector: slice,
+                       inout_var: str, indent: str = None,
+                       undo: bool = False) -> List[str]:
+        '''
+        Render preprocessor call to a list of strings, each holding one line
+        of OpenCL code.
+
+        Parameters
+        ----------
+        worker: ClWorker
+            OpeCL worker instance.
+        selector: slice
+            Input data slice that selects the input items to preprocess.
+        inout_var: str
+            Name of the RW variable that holds the data.
+        indent: str
+            Indentation string. Defaults to 4 spaces.
+        undo: bool
+            If True render the undo call, else the apply call.
+
+        Returns
+        -------
+        call: List[str]
+            The rendered preprocessor call as a string.
+        '''
+        T = worker.types
+        indent = '    ' if indent is None else indent
+        return [
+            'pp_cosscale_{:s}('.format('undo' if undo else 'apply'),
+            '{indent:s}{start:s}, {stop:s}, {step:s},'.format(
+                start=T.size_t_str(selector.start),
+                stop=T.size_t_str(selector.stop),
+                step=T.size_t_str(selector.step), indent=indent),
+            '{indent:s}{inout_var:s}'.format(
+                inout_var=inout_var, indent=indent),
+            ');'
+        ]
+
+    def apply(self, x: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+        '''
+        Apply cosine function to the input data.
+
+        Parameters
+        ----------
+        x: np.ndarray
+            Input data array.
+        out: np.ndarray
+            Data array for the results. Must be of the same
+            size and type as the x data array.
+        
+        Returns
+        -------
+        y: np.ndarray
+            Logarithmically scaled input data.
+        '''
+        result = np.cos(x, out=out)
+        return result
+
+    def undo(self, x: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+        '''
+        Undo cosine from the output data.
+
+        Parameters
+        ----------
+        y: np.ndarray
+            Preprocessed output data.
+        out: np.ndarray
+            Data array for the results. Must be of the same
+            size and type as the y data array.
+
+        Returns
+        -------
+        x: np.ndarray
+            Input data obtained by applying inverse preprocessing to the
+            output data.
+        '''
+        result = np.arccos(x, out=out)
+        return result
+
+    def __str__(self):
+        return 'CosScale()'
+
+
+class SinScale(PreprocessorFunction):
+    @staticmethod
+    def cl_implementation(worker:  ClWorker) -> str:
+        '''
+        Implementation of the cosine scaling preprocessor in OpenCL.
+        '''
+        return '\n'.join((
+            'inline void pp_sinscale_apply(',
+            '		mc_size_t start, mc_size_t stop, mc_size_t step, ',
+            '		mc_fp_t const *inout)',
+            '{',
+            '	for(mc_size_t pos = start; pos < stop; pos += step){',
+            '		inout[pos] = mc_cos(inout[pos]);',
+            '	}',
+            '};',
+            '',
+            'inline void pp_sinscale_undo(',
+            '		mc_size_t start, mc_size_t stop, mc_size_t step, ',
+            '		mc_fp_t *inout)',
+            '{',
+            '	for(mc_size_t pos = start; pos < stop; pos += step){',
+            '		inout[pos] = mc_acos(inout[pos]);',
+            '	}',
+            '};',
+        ))
+
+    def cl_render_call(self, worker: ClWorker, selector: slice,
+                       inout_var: str, indent: str = None,
+                       undo: bool = False) -> List[str]:
+        '''
+        Render preprocessor call to a list of strings, each holding one line
+        of OpenCL code.
+
+        Parameters
+        ----------
+        worker: ClWorker
+            OpeCL worker instance.
+        selector: slice
+            Input data slice that selects the input items to preprocess.
+        inout_var: str
+            Name of the RW variable that holds the data.
+        indent: str
+            Indentation string. Defaults to 4 spaces.
+        undo: bool
+            If True render the undo call, else the apply call.
+
+        Returns
+        -------
+        call: List[str]
+            The rendered preprocessor call as a string.
+        '''
+        T = worker.types
+        indent = '    ' if indent is None else indent
+        return [
+            'pp_sinscale_{:s}('.format('undo' if undo else 'apply'),
+            '{indent:s}{start:s}, {stop:s}, {step:s},'.format(
+                start=T.size_t_str(selector.start),
+                stop=T.size_t_str(selector.stop),
+                step=T.size_t_str(selector.step), indent=indent),
+            '{indent:s}{inout_var:s}'.format(
+                inout_var=inout_var, indent=indent),
+            ');'
+        ]
+
+    def apply(self, x: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+        '''
+        Apply cosine function to the input data.
+
+        Parameters
+        ----------
+        x: np.ndarray
+            Input data array.
+        out: np.ndarray
+            Data array for the results. Must be of the same
+            size and type as the x data array.
+        
+        Returns
+        -------
+        y: np.ndarray
+            Logarithmically scaled input data.
+        '''
+        result = np.sin(x, out=out)
+        return result
+
+    def undo(self, x: np.ndarray, out: np.ndarray = None) -> np.ndarray:
+        '''
+        Undo cosine from the output data.
+
+        Parameters
+        ----------
+        y: np.ndarray
+            Preprocessed output data.
+        out: np.ndarray
+            Data array for the results. Must be of the same
+            size and type as the y data array.
+
+        Returns
+        -------
+        x: np.ndarray
+            Input data obtained by applying inverse preprocessing to the
+            output data.
+        '''
+        result = np.arcsin(x, out=out)
+        return result
+
+    def __str__(self):
+        return 'SinScale()'
+
+
 class Normalize(PreprocessorFunction):
     @staticmethod
     def cl_implementation(worker:  ClWorker) -> str:
