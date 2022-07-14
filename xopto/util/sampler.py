@@ -75,6 +75,9 @@ def detector_direction(incidence: float, tilt: float, design_angle: float,
     dir: np.ndarray
         Direction vector of the detector.
     '''
+    # special simplified case for perpendicular incidence
+    if incidence == 0:
+        return np.array([0.0, np.sin(design_angle), -np.cos(design_angle)])
 
     src_direction = np.array([np.sin(incidence), 0.0, np.cos(incidence)])
 
