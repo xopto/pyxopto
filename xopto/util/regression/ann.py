@@ -761,7 +761,8 @@ class Model:
             self._fit_configuration['min_delta'].append(min_delta)
 
         self._fit_results['loss_history'].append(fit.history['loss'])
-        if self._train_data['validate_input'] is not None:
+        if self._train_data['validate_input'] is not None or \
+                validation_split > 0:
             self._fit_results['val_loss_history'].append(
                 fit.history['val_loss'])
         self._fit_results['fit_time'].append(fit_time)
