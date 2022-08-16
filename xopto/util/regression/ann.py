@@ -124,7 +124,7 @@ class Topology:
             The number of hidden layers is one less the number of elements in
             the neurons list/tuple.
         bias: bool or Tuple[bool]
-            Enables additional bias for the layers. If a list or tuple of bools,
+            Enables additional bias for the layers. If a list or tuple of bool,
             the number of elements must match the number of layers. If a bool,
             the value applies to all the layers.
         activation: str or Tuple[str]
@@ -305,7 +305,7 @@ class Topology:
     @classmethod
     def fromdict(cls, data: dict) -> 'Topology':
         '''
-        Load :py:class:`xopto.util.regression.assn.Topology` instance from a
+        Load :py:class:`~xopto.util.regression.assn.Topology` instance from a
         dict object.
 
         Parameters
@@ -316,7 +316,7 @@ class Topology:
         Returns
         -------
         topology: Topology
-            A new instance of :py:class:`xopto.util.regression.ann.Topology`
+            A new instance of :py:class:`~xopto.util.regression.ann.Topology`
             created from the data in the dict.
         '''
         data = dict(data)
@@ -328,7 +328,7 @@ class Topology:
     @classmethod
     def load(cls, filename: str) -> 'Topology':
         '''
-        Load :py:class:`xopto.util.regression.assn.Topology` instance from a
+        Load :py:class:`~xopto.util.regression.assn.Topology` instance from a
         JSON file.
 
         Parameters
@@ -560,7 +560,7 @@ class Model:
               loss: str = 'mse',
               loss_weights=None,
               bestfile: str = None,
-              patience: bool = 20, min_delta: float = 0.1e-5,
+              patience: int = 20, min_delta: float = 0.1e-5,
               shuffle: bool = True,
               validation_split: float = 0.0,
               verbose: bool = False,):
@@ -599,7 +599,8 @@ class Model:
             is observed) is optionally saved to the specified file.
         patience:int
             Number of epochs with no improvement after which the training
-            will be stopped
+            will be stopped. If None, the patience will be set to the number
+            of epochs.
         min_delta: float
             Minimum change in the monitored quantity to qualify as an
             improvement, i.e. an absolute change of less than min_delta,
@@ -613,8 +614,8 @@ class Model:
             and any model metrics on this data at the end of each epoch.
             The validation data is selected from the last samples in the x
             and y data provided, before shuffling. This option is ignored in
-            case a dedicated validation set is provided to the prepareTrain
-            method.
+            case a dedicated validation set is provided to the
+            :py:meth:`~xopto.util.regression.ann.Model.prepare_train` method.
         validation_freq: int
             Only relevant if validation data is provided. Integer or
             list/tuple/set. If an integer, specifies how many training epochs
@@ -628,6 +629,9 @@ class Model:
 
         validation_split = float(validation_split)
         shuffle = bool(shuffle)
+
+        if patience is None:
+            patience = epochs
 
         if shuffle:
             # shuffle the training data set
@@ -650,8 +654,6 @@ class Model:
             validate = True
 
         # create a custom callback monitor
-        best_val_loss = float('inf')
-        best_val_loss_epoch = 0
         class CustomCallbackMonitor(tensorflow.keras.callbacks.Callback):
             def __init__(self):
                 self._best_val_loss = float('inf')
@@ -699,7 +701,10 @@ class Model:
         self._model.compile(optimizer=optimizer, loss=loss,
                             loss_weights=loss_weights)
 
-        if self._train_data['validate_input'] is not None:
+        validation_data  = None
+
+        if self._train_data['validate_input'] is not None or \
+                validation_split > 0.0:
             early_stopping = tensorflow.keras.callbacks.EarlyStopping(
                 monitor='val_loss',
                 min_delta=min_delta,
@@ -721,30 +726,21 @@ class Model:
                 )
                 callbacks_list.append(checkpoint)
 
-            fit = self._model.fit(
-                self._train_data['train_input'],
-                self._train_data['train_output'],
-                epochs=epochs,
-                batch_size=batch_size,
-                verbose=verbose,
-                validation_data=
-                (self._train_data['validate_input'],
-                 self._train_data['validate_output']),
-                callbacks=callbacks_list,
-                validation_split=validation_split,
-                shuffle=shuffle,
-            )
-        else:
-            fit = self._model.fit(
-                self._train_data['train_input'],
-                self._train_data['train_output'],
-                epochs=epochs,
-                batch_size=batch_size,
-                verbose=verbose,
-                callbacks=callbacks_list,
-                validation_split=validation_split,
-                shuffle=shuffle,
-            )
+            if self._train_data['validate_input'] is not None:
+                validation_data = (self._train_data['validate_input'],
+                                   self._train_data['validate_output']),
+
+        fit = self._model.fit(
+            self._train_data['train_input'],
+            self._train_data['train_output'],
+            epochs=epochs,
+            batch_size=batch_size,
+            verbose=verbose,
+            validation_data=validation_data,
+            callbacks=callbacks_list,
+            validation_split=validation_split,
+            shuffle=shuffle,
+        )
 
         fit_time = time.perf_counter() - start_training_timestamp
 
@@ -832,7 +828,7 @@ class Model:
             Array of true values that will be assessed against the model
             predictions using the RMSE and relative RMSE metrics.
         threshold: float
-            Threshold for relative rmse benchmark. Only the true values
+            Threshold for relative RMSE benchmark. Only the true values
             that exceed this threshold are included in the evaluation.
 
         Returns
@@ -884,13 +880,13 @@ class Model:
     @classmethod
     def load(cls, filename: str) -> 'Model':
         '''
-        Load model, underlaying topology, fit configuration and fit results
+        Load model, underlying topology, fit configuration and fit results
         from an existing '.h5' and '.json' files.
 
         Returns
         -------
         model: Model
-            A :py:class:`xopto.util.regression.ann.Model` instance created
+            A :py:class:`~xopto.util.regression.ann.Model` instance created
             from the data in the files.
         '''
         return Model(filename=filename)
