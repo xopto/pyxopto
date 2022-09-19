@@ -869,7 +869,7 @@ __kernel void McKernel(
 				} else {
 					#if MC_METHOD == ALBEDO_REJECTION
 						/* Do absorption or scattering only when no layer boundary has been hit.*/
-						if (mcsim_random(&sim) <= mc_layer_mua_inv_mut(mcsim_current_layer(&sim))){
+						if (mcsim_random(&sim) < mc_layer_mua_inv_mut(mcsim_current_layer(&sim))){
 							/* Deposit the entire weight of the packet. */
 							deposit = mcsim_weight(&sim);
 							done = true;
