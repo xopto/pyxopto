@@ -446,7 +446,7 @@ typedef char int8_t;
 	#define FP_INV_EPS		FP_LITERAL(4503599627370496.0)
 	/** @brief Maximum integer (4503599627370495) that can be represented by a double precision floating-point number. */
 	#define FP_MAX_INT		((uint64_t)0xFFFFFFFFFFFFFul)
-	/** @brief Maximum value that can be represented by a single precision floating-point number. */
+	/** @brief Maximum value that can be represented by a double precision floating-point number. */
 	#define FP_MAX			DBL_MAX
 #else
 	/** @brief Single precision EPS. */
