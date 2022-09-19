@@ -446,6 +446,8 @@ typedef char int8_t;
 	#define FP_INV_EPS		FP_LITERAL(4503599627370496.0)
 	/** @brief Maximum integer (4503599627370495) that can be represented by a double precision floating-point number. */
 	#define FP_MAX_INT		((uint64_t)0xFFFFFFFFFFFFFul)
+	/** @brief Maximum value that can be represented by a single precision floating-point number. */
+	#define FP_MAX			DBL_MAX
 #else
 	/** @brief Single precision EPS. */
 	#define FP_EPS			FP_LITERAL(1.1920929e-07)
@@ -453,6 +455,8 @@ typedef char int8_t;
 	#define FP_INV_EPS		FP_LITERAL(8388608.0)
 	/** @brief Maximum integer (8388607) that can be represented by a single precision floating-point number. */
 	#define FP_MAX_INT		(0x7FFFFF)
+	/** @brief Maximum value that can be represented by a single precision floating-point number. */
+	#define FP_MAX			FLT_MAX
 #endif
 
 /** @brief Minimum radius for logscale radial accumulators. */
