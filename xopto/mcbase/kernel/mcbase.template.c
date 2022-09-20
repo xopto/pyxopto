@@ -1558,10 +1558,17 @@ inline void scatter_direction(mc_point3f_t *dir, mc_fp_t cos_theta, mc_fp_t fi){
 inline mc_fp_t fp_random_single(unsigned long *x, unsigned a){
 	*x = (*x & (uint64_t)0xFFFFFFFFUL)*(a) + (*x >> 32);
 
+	#if MC_USE_ENHANCED_RNG
 	return mc_fdiv(
-		((float)( ((unsigned int)(*x) & 0x7FFFFFU) )),
-		(float)0x7FFFFFU
+		(float)((*x) & 0xFFFFFFFFFFFFFUL),
+		(float)0xFFFFFFFFFFFFFUL
 	);
+	#else
+	return mc_fdiv(
+		(float)( ((unsigned)*x) & 0xFFFFFFFFU ),
+		(float)0xFFFFFFFFU
+	);
+	#endif
 };
 
 #if MC_USE_DOUBLE_PRECISION || defined(__DOXYGEN__)

@@ -538,6 +538,38 @@ class McDebugMode(McBoolOption):
     def __repr__(self):
         return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
 
+class McUseEnhancedRng(McBoolOption):
+    '''
+    Run the kernel with the enhanced version of the random number generator.
+    Default is off.
+    '''
+    on = McBoolOption('MC_USE_ENHANCED_RNG', True)
+
+    off = McBoolOption('MC_USE_ENHANCED_RNG', False)
+
+    default = off
+
+    def __init__(self, value: bool):
+        '''
+        Initializes the enhanced random number generator mode kernel option.
+
+        Note
+        ....
+        The enhanced version is required when performing simulations
+        in large scattering volumes, were the number of scattering
+        events is expected to be on the order of millions.
+
+        Parameters
+        ----------
+        value: bool
+            Use True to enable the enhanced random number generator mode or
+            False to disable the enhanced random number generator mode.
+        '''
+        super().__init__('MC_USE_ENHANCED_RNG', value)
+
+    def __repr__(self):
+        return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
+
 class McUseSoft64Atomics(McBoolOption):
     '''
     Force software implementation of 64-bit atomic operations.

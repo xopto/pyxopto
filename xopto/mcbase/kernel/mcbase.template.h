@@ -71,6 +71,15 @@
 	#define MC_USE_DOUBLE_PRECISION				FALSE
 #endif
 
+#if !defined(MC_USE_ENHANCED_RNG) || defined(__DOXYGEN__)
+	/** @brief Runs MC simulations with an enhanced version of the random
+	 *         number generator. 
+	 *  @note  The enhanced version is required when performing simulations
+	 *         in large scattering volumes, were the number of scattering
+	 *         events is expected to be on the order of millions. */
+	#define MC_USE_ENHANCED_RNG					FALSE
+#endif
+
 #if !defined(MC_USE_64_BIT_SIZE_T) || defined(__DOXYGEN__)
 	/** @brief Enable 64-bit defaut size type. Note that this setting is 
      *         independent of the OpenCL size_t type. */
@@ -505,6 +514,8 @@ typedef char int8_t;
 #define FP_INV_C		FP_LITERAL(3.3356409519815204e-09)
 
 #if MC_USE_NATIVE_MATH || defined(__DOXYGEN__)
+	/** @brief Native tangent function. */
+	#define mc_tan(x)					native_tan(x)
 	/** @brief Native sine function. */
 	#define mc_sin(x)					native_sin(x)
 	/** @brief Native cosine function. */
@@ -528,6 +539,8 @@ typedef char int8_t;
 	/* Native sin and cos functions seem to be highly inacurate on many platforms. */
 	/*#define mc_sincos(fi, ps, pc)		{*(ps) = native_sin(fi); *(pc) = native_cos(fi);} */
 #elif MC_USE_HALF_MATH
+	/** @brief Native half precision tangent function. */
+	#define mc_tan(x)					half_tan(x)
 	/** @brief Native half precision sine function. */
 	#define mc_sin(x)					half_sin(x)
 	/** @brief Native half precision cosine function. */
@@ -551,6 +564,8 @@ typedef char int8_t;
 	/* Half sin and cos functions are far too inacurate. */
 	/* #define mc_sincos(fi, ps, pc)	{*(ps) = half_sin(fi); *(pc) = half_cos(fi);} */
 #else
+	/** @brief Standard tangent function. */
+	#define mc_tan(x)					tan(x)
 	/** @brief Standard sine function. */
 	#define mc_sin(x)					sin(x)
 	/** @brief Standard cosine function. */
@@ -573,6 +588,14 @@ typedef char int8_t;
 	#define mc_sincos(fi, ps, pc)		(*(ps)=sincos(fi, (pc)))
 #endif
 
+/** @brief Arcus sin(x). */
+#define mc_asin(x)					asin((mc_fp_t)(x))
+/** @brief Arcus cos(x). */
+#define mc_acos(x)					acos((mc_fp_t)(x))
+/** @brief Arcus tan(x). */
+#define mc_atan(x)					atan((mc_fp_t)(x))
+/** @brief Hyperbolic tangent function. */
+#define mc_tanh(x)					tanh(x)
 /** @brief Arcus tangens(y/x). */
 #define mc_atan2(y, x)				atan2((mc_fp_t)(y), (mc_fp_t)(x))
 /** @brief Copy the sign of a floating-point number. */
