@@ -380,13 +380,13 @@ class PfBase:
             distribution function is to be computed.
         meth: str
             Numerical integration method:
-                - 'trapez'
+                - 'trapez'  - trapezoidal
                 - 'simpson' - default
                 - 'quad'    - adaptive step; accurate but slower
 
         npts: int
-            Number of control points used by the trapez and simpson numerical
-            integration methods.
+            Number of control points used by the trapezoidal and simpson
+            numerical integration methods.
         kwargs: dict
             Optional keyword arguments passed to the scipy.integrate.quad
             function.
@@ -480,7 +480,7 @@ class PfBase:
         -------
         params: Tuple[float, float, float]
             List or tuple of three parameters [a, b, c] that can be used
-            to estimate the scattering angle cosine from a unifor random number
+            to estimate the scattering angle cosine from a uniform random number
             F from [0, 1]:
 
             .. code-block:: python

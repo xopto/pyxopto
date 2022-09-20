@@ -32,8 +32,8 @@
 	 * @param[in]	psim Pointer to a simulator instance.
 	 * @return		A random number from (0.0, 1.0).
 	 *
-	 * @details George Marsaglia's Random Number Generator. A double precision 
-	 *          floating-point number has a 52-bit mantisa, hence only integers from 
+	 * @details George Marsaglia's Random Number Generator. A double precision
+	 *          floating-point number has a 52-bit mantisa, hence only integers from
 	 *          0, 2^52 - 1] can be represented without loss of information.
 	 */
 	 inline mc_fp_t mcsim_random_double(McSim *psim){
@@ -50,9 +50,9 @@
  * @param[in]	psim Pointer to a simulator instance.
  * @return		A random number from (0.0, 1.0). Due to precision issues
  * 				the open nature of the interval is not guaranteed.
- * 
- @details George Marsaglia's Random Number Generator. A single precision 
- *        floating-point number has a 23-bit mantisa, hence only integers from 
+ *
+ @details George Marsaglia's Random Number Generator. A single precision
+ *        floating-point number has a 23-bit mantisa, hence only integers from
  *        [0, 2^23 - 1] can be represented without loss of information.
  */
  inline mc_fp_t mcsim_random_single(McSim *psim){
@@ -63,7 +63,7 @@
 /**
  * @brief Returns the r squared (polar radius) coordinate of the
  *        photon packet position with respect to the given origin.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in]  Coordinate x of the origin.
  * @param[in] y Coordinate y of the origin.
  * @returns r2 Squared distance from the origin.
@@ -137,7 +137,7 @@ inline mc_int_t mcsim_boundary(McSim *psim, mc_int_t nextLayerIndex){
 
 	cos1 = mc_fabs(dir->z);
 
-	/* check if under the critical angle - otherwise reflection holds */	
+	/* check if under the critical angle - otherwise reflection holds */
 	if(cos1 > cos_critical){
 
 		/* normal incidence */
@@ -158,7 +158,7 @@ inline mc_int_t mcsim_boundary(McSim *psim, mc_int_t nextLayerIndex){
 		n1_d_n2 = mc_fdiv(mc_layer_n(currentLayer), n2);
 
 		sin1 = mc_sqrt(FP_1 - cos1*cos1);
-		if(cos1 >= FP_COS_0) 
+		if(cos1 >= FP_COS_0)
 			sin1 = FP_0;
 
 		sin2 = mc_fmin(FP_1, n1_d_n2*sin1);
@@ -182,9 +182,9 @@ inline mc_int_t mcsim_boundary(McSim *psim, mc_int_t nextLayerIndex){
 
 		R = FP_0p5*(Rs + Rp);
 
-		// Handle special case cos2 == 0 (90 deg) - special if statement used 
+		// Handle special case cos2 == 0 (90 deg) - special if statement used
 		// in previous implementation
-		if (cos1 <= FP_COS_90 || sin2 == FP_1) 
+		if (cos1 <= FP_COS_90 || sin2 == FP_1)
 			R = FP_1;
 
 		if (R < mcsim_random(psim)){ /* [1.0, 0.0) */
@@ -211,7 +211,7 @@ inline mc_int_t mcsim_boundary(McSim *psim, mc_int_t nextLayerIndex){
  * @brief Deposit the given weight to the fluence accumulator. Takes care
  *        of the different function signatures in case of the weight deposition
  *        and fluence rate mode.
- * 
+ *
  * @param sim      Simulator instance.
  * @param deposit  Weight to deposit.
  */
@@ -392,24 +392,24 @@ __kernel void McKernel(
 			,mc_accucache_initializer
 			#endif
 		},
-		
+
 		num_layers,					/* mc_int_t num_layers: Number of layers including the two outermost layers. */
 		layers, 					/* __constant McLayer *layers: Layer objects. */
-		
+
 		source						/* __constant McSource *source: Photon packet source object. */
-		
+
 		#if MC_USE_SURFACE_LAYOUTS
 			,surface_layouts		/* __mc_surface_mem McSurfaceLayouts - Advanced layout at the sample top and bottom surfaces. */
 		#endif
-		
+
 		#if MC_USE_FP_LUT
 			,fp_lut_array				/* __constant mc_fp_t *fp_lut_array: Lookup table(s) data. */
 		#endif
-		
+
 		#if MC_USE_TRACE
 			,trace					/* __mc_trace_mem McTrace: Trace configuration object. */
 		#endif
-		
+
 		#if MC_USE_FLUENCE
 			,fluence				/* __mc_fluence_mem const McFluence *fluence; Fluence configuration struct */
 		#endif
@@ -427,7 +427,7 @@ __kernel void McKernel(
 	#if !MC_USE_SURFACE_LAYOUTS
 		(void)surface_layouts;
 	#endif
-	
+
 	#if !MC_USE_FP_LUT
 		(void)fp_lut_array;
 	#endif
@@ -435,7 +435,7 @@ __kernel void McKernel(
 	#if !MC_USE_TRACE
 		(void)trace;
 	#endif
-	
+
 	#if !MC_USE_FLUENCE
 		(void)fluence;
 	#endif
@@ -519,7 +519,7 @@ __kernel void McKernel(
 			mcsim_trace_this_event(&sim);
 		#endif
 
-		/* loop through the simulation steps until all the photon packets 
+		/* loop through the simulation steps until all the photon packets
 			have been processed */
 		while (!done) {
 
@@ -532,9 +532,9 @@ __kernel void McKernel(
 				step = -mc_log(mcsim_random(&sim))*
 					mc_layer_inv_mut(mcsim_current_layer(&sim));
 			#endif
-			step = mc_fmin(step, FP_MAX);			
+			step = mc_fmin(step, FP_MAX);
 
-			/* initialize the next layer index with the current layer index */ 
+			/* initialize the next layer index with the current layer index */
 			nexLayerIndex = mcsim_current_layer_index(&sim);
 
 			/* check if the photon packet hits the top layer boundary and if so,
@@ -543,22 +543,22 @@ __kernel void McKernel(
 					mc_layer_top(mcsim_current_layer(&sim))) {
 				--nexLayerIndex;
 				if (mc_fabs(mcsim_direction_z(&sim)) != FP_0) {
-					step = mc_fdiv( mc_layer_top(mcsim_current_layer(&sim)) - 
+					step = mc_fdiv( mc_layer_top(mcsim_current_layer(&sim)) -
 						mcsim_position_z(&sim), mcsim_direction_z(&sim) );
 				};
 			};
 			/* check if the photon packet hits the bottom layer boundary and if so,
 				adjust the step size - go only to the layer boundary */
-			if (mcsim_position_z(&sim) + 
+			if (mcsim_position_z(&sim) +
 					step*mcsim_direction_z(&sim) >=
 					mc_layer_bottom(mcsim_current_layer(&sim))) {
 				++nexLayerIndex;
 				if (mc_fabs(mcsim_direction_z(&sim)) != FP_0){
-					step = mc_fdiv( mc_layer_bottom(mcsim_current_layer(&sim)) - 
+					step = mc_fdiv( mc_layer_bottom(mcsim_current_layer(&sim)) -
 						mcsim_position_z(&sim), mcsim_direction_z(&sim) );
 				};
 			};
-			
+
 			/* move the photon packet by the estimated step */
 			mcsim_set_position_coordinates(&sim,
 				mcsim_position_x(&sim) + mcsim_direction_x(&sim)*step,
@@ -574,10 +574,10 @@ __kernel void McKernel(
 
 			/* limit the movement to the layer boundaries - FPU precision related */
 			if (mcsim_current_layer_index(&sim) < nexLayerIndex)
-				mcsim_set_position_z(&sim, 
+				mcsim_set_position_z(&sim,
 					mc_layer_bottom(mcsim_current_layer(&sim)));
 			if (mcsim_current_layer_index(&sim) > nexLayerIndex)
-				mcsim_set_position_z(&sim, 
+				mcsim_set_position_z(&sim,
 					mc_layer_top(mcsim_current_layer(&sim)));
 
 			#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
@@ -649,7 +649,7 @@ __kernel void McKernel(
 							/* mcsim_set_weight(&sim, FP_0); */
 							done = true;
 						}else{
-							mcsim_set_weight(&sim, 
+							mcsim_set_weight(&sim,
 								mc_fdiv(mcsim_weight(&sim), MC_PACKET_LOTTERY_CHANCE));
 						};
 					#else
@@ -731,7 +731,7 @@ __kernel void McKernel(
 									/* mcsim_set_weight(&sim, FP_0); */
 									done = true;
 								}else{
-									mcsim_set_weight(&sim, 
+									mcsim_set_weight(&sim,
 										mc_fdiv(mcsim_weight(&sim), MC_PACKET_LOTTERY_CHANCE));
 								};
 							#else
@@ -759,12 +759,12 @@ __kernel void McKernel(
 			if (done) {
 				/* Finalize the trace - only saves the number of trace events. */
 				#if MC_USE_TRACE
-					mcsim_trace_finalize(&sim); 
+					mcsim_trace_finalize(&sim);
 				#endif
 
 				/* call user defined termination */
 				#if defined(MC_TERMINAL_HOOK)
-					/* Photon packet has escaped the sample layers - 
+					/* Photon packet has escaped the sample layers -
 						call the provided user defined hook. */
 					MC_TERMINAL_HOOK(&sim);
 				#endif
