@@ -532,10 +532,7 @@ __kernel void McKernel(
 				step = -mc_log(mcsim_random(&sim))*
 					mc_layer_inv_mut(mcsim_current_layer(&sim));
 			#endif
-			step = mc_fmin(step, FP_INV_EPS);
-			//step = -mc_log(mcsim_random(&sim));
-			//step = mc_fclip(step, FP_EPS, FP_1 - FP_EPS)*mc_layer_inv_mut(mcsim_current_layer(&sim));
-			
+			step = mc_fmin(step, FP_MAX);			
 
 			/* initialize the next layer index with the current layer index */ 
 			nexLayerIndex = mcsim_current_layer_index(&sim);

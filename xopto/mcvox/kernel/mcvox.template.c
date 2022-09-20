@@ -768,7 +768,7 @@ __kernel void McKernel(
 				step = -mc_log(mcsim_random(&sim))*
 					mc_material_inv_mut(mcsim_current_voxel_material(&sim));
 			#endif
-			step = mc_fmin(step, FP_INV_EPS);
+			step = mc_fmin(step, FP_MAX);
 
 			/* compute distance to the voxel boundaries */ 
 			d = mcsim_intersect(&sim, &distances);
