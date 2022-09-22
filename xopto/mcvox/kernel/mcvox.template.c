@@ -25,7 +25,7 @@
 /**
  * @brief Returns the r squared (polar radius) coordinate of the
  *        photon packet position with respec to the given origin.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in]  Coordinate x of the origin.
  * @param[in] y Coordinate y of the origin.
  * @returns r2 Squared distance from the origin.
@@ -48,8 +48,8 @@ inline mc_fp_t mcsim_position_r2_ex(
 	 * @param[in]	psim Pointer to a simulator instance.
 	 * @return		A random number from (0.0, 1.0).
 	 *
-	 * @details George Marsaglia's Random Number Generator. A double precision 
-	 *          floating-point number has a 52-bit mantisa, hence only integers from 
+	 * @details George Marsaglia's Random Number Generator. A double precision
+	 *          floating-point number has a 52-bit mantisa, hence only integers from
 	 *          0, 2^52 - 1] can be represented without loss of information.
 	 */
 	 inline mc_fp_t mcsim_random_double(McSim *psim){
@@ -66,9 +66,9 @@ inline mc_fp_t mcsim_position_r2_ex(
  * @param[in]	psim Pointer to a simulator instance.
  * @return		A random number from (0.0, 1.0). Due to precision issues
  * 				the open nature of the interval is not guaranteed.
- * 
- @details George Marsaglia's Random Number Generator. A single precision 
- *        floating-point number has a 23-bit mantisa, hence only integers from 
+ *
+ @details George Marsaglia's Random Number Generator. A single precision
+ *        floating-point number has a 23-bit mantisa, hence only integers from
  *        [0, 2^23 - 1] can be represented without loss of information.
  */
  inline mc_fp_t mcsim_random_single(McSim *psim){
@@ -82,13 +82,13 @@ inline mc_fp_t mcsim_position_r2_ex(
 /**
  * @brief Intersect the sample box and return the intersection and surface
  *        normal that points in the propagation direction.
- * 
+ *
  * @param psim Pointer to a simulator instance.
  * @param pos Origin of the intersecting ray.
  * @param dir Propagation direction of the intersecting ray
- * @param intersection Computed intersection 
+ * @param intersection Computed intersection
  * @param normal Computed surface normal at the intersection.
- * 
+ *
  * @return Nonzero if an intersection exists.
  */
 inline int mcsim_sample_box_intersect(
@@ -145,7 +145,7 @@ inline int mcsim_sample_box_intersect(
 	intersection->x = pos->x + t*dir->x;
 	intersection->y = pos->y + t*dir->y;
 	intersection->z = pos->z + t*dir->z;
- 
+
 	dbg_print_point3f("Intersection:", intersection);
 
 	intersection->x = mc_fclip(
@@ -162,7 +162,7 @@ inline int mcsim_sample_box_intersect(
 };
 
 /**
- * @brief Computes distance to intersection along the propagation direction 
+ * @brief Computes distance to intersection along the propagation direction
  * 			with all the boundaries of the current voxel.
  *
  * @param[in] psim Pointer to a simulator instance.
@@ -171,15 +171,15 @@ inline int mcsim_sample_box_intersect(
  * @return Distance to the nearest boundary along the propagation direction.
  */
 inline mc_fp_t mcsim_intersect(McSim *psim, mc_point3f_t *distance){
-	distance->x = mcsim_top_left_x(psim) + 
+	distance->x = mcsim_top_left_x(psim) +
 		((mcsim_direction_x(psim) >= FP_0) + mcsim_voxel_index_x(psim))*
 		mcsim_voxel_size_x(psim) - mcsim_position_x(psim);
 
-	distance->y = mcsim_top_left_y(psim) + 
+	distance->y = mcsim_top_left_y(psim) +
 		((mcsim_direction_y(psim) >= FP_0) + mcsim_voxel_index_y(psim))*
 		mcsim_voxel_size_y(psim) - mcsim_position_y(psim);
 
-	distance->z = mcsim_top_left_z(psim) + 
+	distance->z = mcsim_top_left_z(psim) +
 		((mcsim_direction_z(psim) >= FP_0) + mcsim_voxel_index_z(psim))*
 		mcsim_voxel_size_z(psim) - mcsim_position_z(psim);
 
@@ -251,7 +251,7 @@ inline void mcsim_set_voxel_index_from_position(McSim *psim){
 };
 
 /**
- * @brief Call the user defined photon packet launcher and update the 
+ * @brief Call the user defined photon packet launcher and update the
  *		  current voxel index.
  *
  * param[in] psim Pointer to a simulator instance.
@@ -297,10 +297,10 @@ inline mc_int_t mcsim_boundary(McSim *psim, const mc_point3f_t *distances){
 	next_voxel_index.x = mcsim_voxel_index_x(psim) + normal.x;
 	next_voxel_index.y = mcsim_voxel_index_y(psim) + normal.y;
 	next_voxel_index.z = mcsim_voxel_index_z(psim) + normal.z;
-	
+
 	/* check if the photon packet might escape the sample */
 	int escaping_sample = !mcsim_is_valid_voxel_index(psim, &next_voxel_index);
-	
+
 	/* fetch the materials of this and the next voxel */
 	__mc_material_mem const McMaterial *current_material =
 		mcsim_current_voxel_material(psim);
@@ -309,7 +309,7 @@ inline mc_int_t mcsim_boundary(McSim *psim, const mc_point3f_t *distances){
 		mcsim_voxel_material_index(psim, &next_voxel_index) :
 		mcsim_surrounding_material_index(psim);
 
-	__mc_material_mem const McMaterial *next_material = 
+	__mc_material_mem const McMaterial *next_material =
 		mcsim_material(psim, next_voxel_material_index);
 
 	#if MC_ENABLE_DEBUG_
@@ -322,7 +322,7 @@ inline mc_int_t mcsim_boundary(McSim *psim, const mc_point3f_t *distances){
 
 	/* the same material and not escaping the sample */
 	if (current_material == next_material && !escaping_sample){
-		/* can keep the current material */        
+		/* can keep the current material */
 		mcsim_set_voxel_index(psim, &next_voxel_index);
 		return MC_REFRACTED;
 	};
@@ -395,7 +395,7 @@ inline mc_int_t mcsim_boundary(McSim *psim, const mc_point3f_t *distances){
  * @brief Deposit the given weight to the fluence accumulator. Takes care
  *        of the different function signatures in case of the weight deposition
  *        and fluence rate mode.
- * 
+ *
  * @param[in] sim      Simulator instance.
  * @param[in] pos      Position at which to deposit the weight.
  * @param[in] deposit  Weight to deposit.
@@ -414,7 +414,7 @@ inline void mcsim_fluence_deposit_weight(
 /**
  * @brief Low-level deposition function that can use an intermediate cache if
  *        configured so through the ::MC_USE_FLUENCE_CACHE option.
- * 
+ *
  * @param psim     Simulator instance.
  * @param offset   Deposition address/offset.
  * @param weight   Weight to deposit.
@@ -610,15 +610,15 @@ __kernel void McKernel(
 		#if MC_USE_SURFACE_LAYOUTS
 			,surface_layouts		/* __mc_surface_mem McSurfaceLayouts const *surface_layout: Advanced layout at the sample top and bottom surfaces. */
 		#endif
-		
+
 		#if MC_USE_FP_LUT
 			,fp_lut_array			/* __mc_fp_lut_mem mc_fp_t const *fp_lut_array: Lookup table(s) data. */
 		#endif
-		
+
 		#if MC_USE_TRACE
 			,trace					/* __mc_trace_mem McTrace const *trace: Trace configuration object. */
 		#endif
-		
+
 		#if MC_USE_FLUENCE
 			,fluence				/* __mc_fluence_mem McFluence const *fluence: Fluence configuration struct */
 		#endif
@@ -629,7 +629,7 @@ __kernel void McKernel(
 
 		,integer_buffer		/* __global mc_int_t *integer_buffer: Common integer buffer. */
 		,float_buffer		/* __global mc_fp_t *float_buffer: Common floating-point buffer. */
-		,accumulator_buffer	/* __global mc_accu_t *accumulator_buffer: Common accumulator buffer. */	
+		,accumulator_buffer	/* __global mc_accu_t *accumulator_buffer: Common accumulator buffer. */
 	};
 
 	/* make unused variables void to surpresss compiler warnings */
@@ -770,7 +770,7 @@ __kernel void McKernel(
 			#endif
 			step = mc_fmin(step, FP_MAX);
 
-			/* compute distance to the voxel boundaries */ 
+			/* compute distance to the voxel boundaries */
 			d = mcsim_intersect(&sim, &distances);
 
 			#if MC_ENABLE_DEBUG
@@ -867,7 +867,7 @@ __kernel void McKernel(
 							/* mcsim_set_weight(&sim, FP_0); */
 							done = true;
 						}else{
-							mcsim_set_weight(&sim, 
+							mcsim_set_weight(&sim,
 								mc_fdiv(mcsim_weight(&sim), MC_PACKET_LOTTERY_CHANCE));
 						};
 					#else
@@ -956,7 +956,7 @@ __kernel void McKernel(
 									/* mcsim_set_weight(&sim, FP_0); */
 									done = true;
 								}else{
-									mcsim_set_weight(&sim, 
+									mcsim_set_weight(&sim,
 										mc_fdiv(mcsim_weight(&sim), MC_PACKET_LOTTERY_CHANCE));
 								};
 							#else
@@ -984,12 +984,12 @@ __kernel void McKernel(
 			if (done) {
 				/* Finalize the trace - only saves the number of trace events. */
 				#if MC_USE_TRACE
-					mcsim_trace_finalize(&sim); 
+					mcsim_trace_finalize(&sim);
 				#endif
-				
+
 				/* call user defined termination */
 				#if defined(MC_TERMINAL_HOOK)
-					/* Photon packet has escaped the sample voxels - 
+					/* Photon packet has escaped the sample voxels -
 						call the provided user defined hook. */
 					MC_TERMINAL_HOOK(&sim);
 				#endif

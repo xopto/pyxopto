@@ -120,7 +120,7 @@ typedef struct McPf McPf;
 
 /**
  * @} // end @addtogroup mc_scattering_phase_functions
- */ 
+ */
 /*############### End scattering phase function declarations #################*/
 
 
@@ -148,7 +148,7 @@ typedef struct McSource McSource;
 
 /**
  * @brief Launches a single photon packet.
- * 
+ *
  * @param mcsim A simulator instance.
  */
 inline void mcsim_launch(McSim *mcsim);
@@ -183,7 +183,7 @@ typedef struct McDetectors McDetectors;
 
 /**
  * @} // end @addtogroup mc_detectors
- */ 
+ */
 /*###################### End declarations of detectors #######################*/
 
 
@@ -257,7 +257,7 @@ typedef struct McFluence McFluence;
 
 /**
  * @} // end @addtogroup mc_fluence_accumulator
- */ 
+ */
 /*################## End fluence accumulator declarations ####################*/
 
 
@@ -281,7 +281,7 @@ typedef struct McFluence McFluence;
 
 /**
  * @brief Handles layout at the top (z = 0) sample surface.
- * 
+ *
  * @param[in] psim Pointer to a simulator instance.
  * @param[in, out] n2 Initialized with the refractive index of the surrounding
  *                    medium. Update with a custom value of the refractive
@@ -297,7 +297,7 @@ inline int mcsim_top_surface_layout_handler(McSim *psim, mc_fp_t *n2);
 
 /**
  * @brief Handles advanced layout at the bottom sample surface (z = sample_thickness).
- * 
+ *
  * @param[in] psim Pointer to a simulator instance.
  * @param[in, out] n2 Initialized with the refractive index of the surrounding
  *                    medium. Update with a custom value of the refractive
@@ -322,17 +322,17 @@ inline int mcsim_bottom_surface_layout_handler(McSim *psim, mc_fp_t *n2);
 * @addtogroup mc_materials Materials
 * @{
 */
- 
+
 /**
  * @brief Data type describing a single sample material.
  * @note The members of this object are constant and do not change during the simulation.
  */
 struct McMaterial;
- 
+
 /** @brief A material data type. */
 typedef struct McMaterial McMaterial;
 
-/* Material and scattering phase function structure definitions goe here 
+/* Material and scattering phase function structure definitions goe here
    - DO NOT EDIT! */
 /* START_MATERIALS_DECLARATION_BLOCK */
 {{ materials.declaration }}
@@ -475,8 +475,8 @@ typedef struct McSimState McSimState;
 
 /**
 * @brief Data type holding the simulator state and all required data
-* @details  The McSim::remainingStep is normalized and must be multiplied by the 
-*			inverse of the sum of material absorption and scattering coefficient 
+* @details  The McSim::remainingStep is normalized and must be multiplied by the
+*			inverse of the sum of material absorption and scattering coefficient
 *			to obtain the remaining step size for a particular material.
 * @{
 */
@@ -500,15 +500,15 @@ struct McSim{
 	#if MC_USE_SURFACE_LAYOUTS || defined(__DOXYGEN__)
 		__mc_surface_mem McSurfaceLayouts const *surface_layouts;	/**< Advanced layout at the sample top and bottom surfaces. */
 	#endif
-	
+
 	#if MC_USE_FP_LUT || defined(__DOXYGEN__)
 		__mc_fp_lut_mem mc_fp_t const *fp_lut_array;	/**< Floating-point lookup table(s) data. */
 	#endif
-	
+
 	#if MC_USE_TRACE || defined(__DOXYGEN__)
 		__mc_trace_mem McTrace const *trace;	/**< @brief Trace configuration data. */;
 	#endif
-	
+
 	#if MC_USE_FLUENCE || defined(__DOXYGEN__)
 		__mc_fluence_mem McFluence const *fluence;	/**< @brief Fluence array strides (dimensions) as [nx, ny, nz]. */
 	#endif
@@ -516,7 +516,7 @@ struct McSim{
 	#if MC_USE_DETECTORS || defined(__DOXYGEN__)
 		__mc_detector_mem McDetectors const *detectors;	/**< @brief Reflectance/transmittance detector configuration data. */
 	#endif
-	
+
 	__global mc_int_t *integer_buffer; 		/**< @brief Common integer buffer. */
 	__global mc_fp_t *float_buffer; 		/**< @brief Common floating-point buffer. */
 	__global mc_accu_t *accumulator_buffer; /**< @brief Common accumulator buffer. */
@@ -527,35 +527,35 @@ struct McSim{
 
 /**
  * @brief Evaluates to the photon packet index.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_packet_index(psim) ((psim)->state.photon_index)
 
 /**
  * @brief Evaluates to the current position (::mc_point_t type) of the photon packet.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_position(psim) (&(psim)->state.position)
 
 /**
  * @brief Evaluates to the x coordinate of the current photon packet position.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_position_x(psim) ((psim)->state.position.x)
 /**
  * @brief Evaluates to the y coordinate of the current photon packet position.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_position_y(psim) ((psim)->state.position.y)
 /**
  * @brief Evaluates to the z coordinate of the current photon packet position.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_position_z(psim) ((psim)->state.position.z)
 /**
  * @brief Evaluates to the r squared (polar radius) coordinate of the
  *			photon packet position.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_position_r2(psim) \
 	((psim)->state.position.x*(psim)->state.position.x + \
@@ -563,14 +563,14 @@ struct McSim{
 /**
  * @brief Evaluates to the r (polar radius) coordinate of the
  *			photon packet position.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_position_r(psim) mc_sqrt(mcsim_position_r2(psim))
 
 /**
  * @brief Returns the r squared (polar radius) coordinate of the
  *        photon packet position with respect to the given origin.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in]  Coordinate x of the origin.
  * @param[in] y Coordinate y of the origin.
  * @returns r2 Squared distance from the origin.
@@ -581,9 +581,9 @@ inline mc_fp_t mcsim_position_r2_ex(
 /**
  * @brief Evaluates to the r (polar radius) coordinate of the
  *        photon packet position with  respect to the given origin.
- * @param[in] psim Pointer to a simulator instance.  
- * @param[in]  Coordinate x of the origin.  
- * @param[in] y Coordinate y of the origin.  
+ * @param[in] psim Pointer to a simulator instance.
+ * @param[in]  Coordinate x of the origin.
+ * @param[in] y Coordinate y of the origin.
  */
 #define mcsim_position_r_ex(psim, x, y) \
 	mc_sqrt(mcsim_position_r2_ex((psim), (x), (y)))
@@ -597,17 +597,17 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
  * @brief Sets the current position of the photon packet to the specified value (::mc_point_t type).
- * @param[in] psim Pointer to a simulator instance.  
- * @param[in] ppoint Pointer to the new photon packet position (::mc_point_t type).  
+ * @param[in] psim Pointer to a simulator instance.
+ * @param[in] ppoint Pointer to the new photon packet position (::mc_point_t type).
  */
 #define mcsim_set_position(psim, ppoint) ((psim)->state.position = *(ppoint))
 
 /**
  * @brief Sets the current position of the photon packet to the specified value (::mc_point_t type).
- * @param[in] psim Pointer to a simulator instance.  
- * @param[in] posx X coordinate of the new photon packet position.  
- * @param[in] posy Y coordinate of the new photon packet position.  
- * @param[in] posz Z coordinate of the new photon packet position.  
+ * @param[in] psim Pointer to a simulator instance.
+ * @param[in] posx X coordinate of the new photon packet position.
+ * @param[in] posy Y coordinate of the new photon packet position.
+ * @param[in] posz Z coordinate of the new photon packet position.
  */
 #define mcsim_set_position_coordinates(psim, posx, posy, posz) \
 	{(psim)->state.position.x = (posx); \
@@ -617,7 +617,7 @@ inline mc_fp_t mcsim_position_r2_ex(
 /**
  * @brief Adjusts the current photon packet position by moving along
  * 		the current photon packet propagation direction by d.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in] d Step length along the current photon packet propagation direction.
  */
 #define mcsim_move(psim, d) \
@@ -628,13 +628,13 @@ inline mc_fp_t mcsim_position_r2_ex(
 /**
  * @brief Evaluates to the current propagation direction (::mc_point_t type) of the
  * photon packet.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_direction(psim) (&(psim)->state.direction)
 
 /**
  * @brief Sets the propagation direction of the photon packet.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in] pdir Pointer to the new propagation direction vector.
  */
 #define mcsim_set_direction(psim, pdir) \
@@ -646,14 +646,14 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
  * @brief Reverse the z component of the photon packet propagation direction.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_reverse_direction_z(psim) \
 	{(psim)->state.direction.z = -(psim)->state.direction.z;}
 
 /**
  * @brief Sets the propagation direction of the photon packet.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in] px X component of the new propagation direction vector.
  * @param[in] py Y component of the new propagation direction vector.
  * @param[in] pz Z component of the new propagation direction vector.
@@ -665,17 +665,17 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
  * @brief Evaluates to the x component of the photon packet propagation direction.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_direction_x(psim) ((psim)->state.direction.x)
 /**
  * @brief Evaluates to the y component of the photon packet propagation direction.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_direction_y(psim) ((psim)->state.direction.y)
 /**
  * @brief Evaluates to the z component of the photon packet propagation direction.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_direction_z(psim) ((psim)->state.direction.z)
 
@@ -742,7 +742,7 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
  * @brief Set the current voxel index by components and update the index of material.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in] x Component x of the index.
  * @param[in] y Component y of the index.
  * @param[in] z Component z of the index.
@@ -758,7 +758,7 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
  * @brief Set the current voxel index by components and keep the current index of material.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in] x Component x of the index.
  * @param[in] y Component y of the index.
  * @param[in] z Component z of the index.
@@ -809,7 +809,7 @@ inline mc_fp_t mcsim_position_r2_ex(
 /**
  * @brief Evaluates to a pointer to McMaterial at the specified material index.
  *
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in] index Material index.
  */
 #define mcsim_material(psim, index) (&((psim)->materials[index]))
@@ -830,7 +830,7 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
  * @brief Evaluates to a flat voxel index.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in] pindex Pointer to a voxel index (mc_point3_t value).
  */
 #define mcsim_flat_voxel_index(psim, pindex) \
@@ -838,23 +838,23 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
  * @brief Evaluates to voxel array.
- * 
- * @param[in] psim Pointer to a simulator instance.  
+ *
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_voxels(psim) ((psim)->voxels)
 
 /**
  * @brief Evaluates to the index of the material for the given voxel index.
- * @note Index must be valid, no check is performed! 
+ * @note Index must be valid, no check is performed!
  *
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in] pindex Pointer to a voxel index (mc_point3_t).
  */
 #define mcsim_voxel_material_index(psim, pindex) \
 	((psim)->voxels[mcsim_flat_voxel_index(psim, pindex)].material_index)
 
 /**
- * @brief evaluates to the material at the specified voxel index. 
+ * @brief evaluates to the material at the specified voxel index.
  * @note The specified index is not checked and must be valid!
  * @param[in] psim Pointer to a simulator instance.
  * @param[in] pindex Pointer to a voxel index.
@@ -880,19 +880,19 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
  * @brief Evaluates to the current photon packet weight (from [0.0, 1.0]).
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_weight(psim) ((psim)->state.weight)
 
 /**
  * @brief Convert floating-point weight to integer weight.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define weight_to_int(weight) ((weight)*MC_INT_ACCUMULATOR_K + FP_0p5)
 
 /**
  * @brief Evaluates to the current photon packet weight converted to integer.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_int_weight(psim) weight_to_int((psim)->state.weight)
 
@@ -906,88 +906,88 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
  * @brief Sets the current photon packet weight (from [0.0, 1.0]) to the specified value.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in] w the new photon packet weight from [0.0, 1.0].
  */
 #define mcsim_set_weight(psim, w) ((psim)->state.weight = (w))
 
 /**
- * @brief Adjusts the current photon packet weight (from [0.0, 1.0])by 
+ * @brief Adjusts the current photon packet weight (from [0.0, 1.0]) by
  *			subtracting the specified value.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in] delta Subtracted from the current photon packet weight.
  * @note The resulting photon packet weight is NOT adjusted to valid range [0.0, 1.0].
  */
 #define mcsim_adjust_weight(psim, delta) ((psim)->state.weight -= (delta))
 
-/** 
-* @brief Evaluates to the x component of the current voxel index. 
+/**
+* @brief Evaluates to the x component of the current voxel index.
 * @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_voxel_index_x(psim) ((psim)->state.voxel_index.x)
 
-/** 
-* @brief Evaluates to the y component of the current voxel index. 
+/**
+* @brief Evaluates to the y component of the current voxel index.
 * @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_voxel_index_y(psim) ((psim)->state.voxel_index.y)
 
-/** 
-* @brief Evaluates to the z component of the current voxel index. 
+/**
+* @brief Evaluates to the z component of the current voxel index.
 * @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_voxel_index_z(psim) ((psim)->state.voxel_index.z)
 
-/** 
-* @brief Evaluates to a pointer to the current voxel index. 
+/**
+* @brief Evaluates to a pointer to the current voxel index.
 * @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_voxel_index(psim) (&((psim)->state.voxel_index))
 
-/** 
-* @brief Evaluates to the x component of the current voxel index. 
+/**
+* @brief Evaluates to the x component of the current voxel index.
 * @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_voxel_size_x(psim) ((psim)->voxel_cfg->size.x)
 
-/** 
-* @brief Evaluates to the y component of the current voxel index. 
+/**
+* @brief Evaluates to the y component of the current voxel index.
 * @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_voxel_size_y(psim) ((psim)->voxel_cfg->size.y)
 
-/** 
-* @brief Evaluates to the z component of the current voxel index. 
+/**
+* @brief Evaluates to the z component of the current voxel index.
 * @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_voxel_size_z(psim) ((psim)->voxel_cfg->size.z)
 
-/** 
-* @brief Evaluates to the x coordinate of the voxel center. 
+/**
+* @brief Evaluates to the x coordinate of the voxel center.
 * @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_voxel_center_x(psim) \
 	(mcsim_top_left_x(psim) + \
 	(mcsim_voxel_index_x(psim) + FP_0p5)*mcsim_voxel_size_x(psim))
 
-/** 
-* @brief Evaluates to the y coordinate of the voxel center. 
+/**
+* @brief Evaluates to the y coordinate of the voxel center.
 * @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_voxel_center_y(psim) \
 	(mcsim_top_left_y(psim) + \
 	(mcsim_voxel_index_y(psim) + FP_0p5)*mcsim_voxel_size_y(psim))
 
-/** 
-* @brief Evaluates to the z coordinate of the voxel center. 
+/**
+* @brief Evaluates to the z coordinate of the voxel center.
 * @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_voxel_center_z(psim) \
 	(mcsim_top_left_z(psim) + \
 	(mcsim_voxel_index_z(psim) + FP_0p5)*mcsim_voxel_size_z(psim))
 
-/** 
-* @brief Evaluates to the coordinate of the voxel center. 
+/**
+* @brief Evaluates to the coordinate of the voxel center.
 * @param[in] psim Pointer to a simulator instance.
 * @param[out] point3 Pointer to a mc_point3_t instance that will be filled with coordinates.
 */
@@ -1027,9 +1027,9 @@ inline mc_fp_t mcsim_position_r2_ex(
 #define mcsim_packet_escaped_sample(psim) \
 	(!mcsim_is_valid_voxel_index(psim, mcsim_voxel_index(psim)))
 
-/** 
-* @brief Evaluates to a pointer to the current voxel material scattering phase 
-*		function. 
+/**
+* @brief Evaluates to a pointer to the current voxel material scattering phase
+*		function.
 * @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_current_voxel_pf(psim) \
@@ -1042,7 +1042,7 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
  * @brief Evaluates to a pointer to the photon packet source object (::McSource).
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_source(psim) ((psim)->source)
 
@@ -1062,7 +1062,7 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
 * @brief Evaluates to the number of trace events since packet launch.
-* @param[in] psim Pointer to a simulator instance. 
+* @param[in] psim Pointer to a simulator instance.
 * @note Depending on the available trace length, not all events might be logged.
 */
 #define mcSimTraceCount(psim) ((psim)->state.traceCount)
@@ -1070,7 +1070,7 @@ inline mc_fp_t mcsim_position_r2_ex(
 #if MC_USE_FP_LUT || defined(__DOXYGEN)
     /**
     * @brief Evaluates to the main array of floating-point lookup table data.
-    * @param[in] psim Pointer to a simulator instance. 
+    * @param[in] psim Pointer to a simulator instance.
     */
     #define mcsim_fp_lut_array(psim) ((psim)->fp_lut_array)
 
@@ -1092,13 +1092,13 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
  * @brief Evaluates to a pointer to the detectors configuration structure.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_detectors(psim) ((psim)->detectors)
 
 /**
  * @brief Evaluates to a pointer to the common accumulator buffer.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_accumulator_buffer(psim) ((psim)->accumulator_buffer)
 
@@ -1114,7 +1114,7 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
  * @brief Evaluates to a pointer to the common floating-point buffer.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_float_buffer(psim) ((psim)->float_buffer)
 
@@ -1130,7 +1130,7 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
  * @brief Evaluates to a pointer to the common integer buffer.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  */
 #define mcsim_integer_buffer(psim) ((psim)->integer_buffer)
 
@@ -1146,13 +1146,13 @@ inline mc_fp_t mcsim_position_r2_ex(
 
 /**
 * @brief Evaluates to a pointer to the surface layouts.
-* @param[in] psim Pointer to a simulator instance. 
+* @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_surface_layouts(psim) ((psim)->surface_layouts)
 
 /**
 * @brief Evaluates to a pointer to the fluence configuration structure.
-* @param[in] psim Pointer to a simulator instance. 
+* @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_fluence(psim) ((psim)->fluence)
 
@@ -1161,7 +1161,7 @@ inline mc_fp_t mcsim_position_r2_ex(
  * @brief Deposit the given weight to the fluence accumulator. Takes care
  *        of the different function signatures in case of the weight deposition
  *        and fluence rate mode.
- * 
+ *
  * @param[in] psim     Simulator instance.
  * @param[in] pos      Deposit the weight at this position.
  * @param[in] deposit  Weight to deposit.
@@ -1173,13 +1173,13 @@ inline void mcsim_fluence_deposit_weight(
 /**
  * @brief Deposit the given weight to the fluence accumulator that operates
  *        in fluence rate mode.
- * 
+ *
  * @param[in] mcsim   Simulator instance.
  * @param[in] pos     Deposit the weight at this position.
  * @param[in] weight  Weight to deposit.
  * @param[in] mua     Absorption coefficient of the medium that is required to
  *                    to compute the fluence rate.
- * 
+ *
  * @note The source code of this function is implemented in related python modules.
  */
 inline void mcsim_fluence_deposit_at(
@@ -1188,11 +1188,11 @@ inline void mcsim_fluence_deposit_at(
 /**
  * @brief Deposit the given weight to the fluence accumulator that operates
  *        in energy deposition mode.
- * 
+ *
  * @param[in] mcsim   Simulator instance.
  * @param[in] pos     Deposit the weight at this position.
  * @param[in] weight  Weight to deposit.
- * 
+ *
  * @note The source code of this function is implemented in related python modules.
  */
 inline void mcsim_fluence_deposit_at(
@@ -1202,7 +1202,7 @@ inline void mcsim_fluence_deposit_at(
 #if MC_USE_FLUENCE_CACHE
 	/**
 	 * @brief Evaluates to a pointer to the fluence cache.
-	 * 
+	 *
 	 * @return   Pointer to a fluence cache instance.
 	 */
 	#define mcsim_fluence_cache(psim) (&((psim)->state.fluence_cache))
@@ -1211,7 +1211,7 @@ inline void mcsim_fluence_deposit_at(
 /**
  * @brief Low-level deposition function that can use an intermediate cache if
  *        configured so through the ::MC_USE_FLUENCE_CACHE option.
- * 
+ *
  * @param psim     Simulator instance.
  * @param offset   Deposition address/offset.
  * @param weight   Weight to deposit.
@@ -1223,7 +1223,7 @@ inline void mcsim_fluence_weight_deposit_ll(
 
 /**
 * @brief Evaluates to a pointer to the trace configuration structure.
-* @param[in] psim Pointer to a simulator instance. 
+* @param[in] psim Pointer to a simulator instance.
 */
 #define mcsim_trace(psim) ((psim)->trace)
 
@@ -1235,10 +1235,10 @@ inline void mcsim_fluence_weight_deposit_ll(
 
 /**
  * @brief Logs one trace event.
- * 
+ *
  * @param[in] psim        Pointer to a simulator instance.
  * @param[in] event_count Number of already traced events for this photon packet.
- * 
+ *
  * @return                Returns nonzero if the event counter needs to be incremented.
  *
  * @note The source code of this function is implemented in related python modules.
@@ -1247,10 +1247,10 @@ inline int mcsim_trace_event(McSim *psim, mc_uint_t event_count);
 
 /**
  * @brief Finalizes the trace.
- * 
+ *
  * @param[in] psim Pointer to a simulator instance.
  * @param[in] event_count The number of traced events for this photon packet.
- * 
+ *
  * @note The source code of this function is implemented in related python modules.
  */
 inline void mcsim_trace_complete(McSim *psim, mc_uint_t event_count);
@@ -1269,7 +1269,7 @@ inline void mcsim_trace_complete(McSim *psim, mc_uint_t event_count);
 
 /**
  * @brief Checks if the sample box contains the given point.
- * 
+ *
  * @param psim Pointer to a simulator instance.
  * @param pos Point to check.
  * @return Returns nonzero if the given point lies inside the sample volume.
@@ -1287,13 +1287,13 @@ inline void mcsim_trace_complete(McSim *psim, mc_uint_t event_count);
 /**
  * @brief Intersect the sample box and return the intersection and surface
  *        normal that points in the propagation direction.
- * 
+ *
  * @param psim Pointer to a simulator instance.
  * @param pos Origin of the intersecting ray.
  * @param dir Propagation direction of the intersecting ray.
- * @param intersection Computed intersection 
+ * @param intersection Computed intersection
  * @param normal Computed surface normal at the intersection.
- * 
+ *
  * @return Nonzero if an intersection exists.
  */
 inline int mcsim_sample_box_intersect(
@@ -1301,7 +1301,7 @@ inline int mcsim_sample_box_intersect(
 		mc_point3f_t *intersection, mc_point3f_t *normal);
 
 /**
- * @brief Computes distance to intersection along the propagation direction 
+ * @brief Computes distance to intersection along the propagation direction
  * 			with all the boundaries of the current voxel.
  *
  * @param[in] psim Pointer to a simulator instance.
@@ -1399,9 +1399,9 @@ inline mc_int_t mcsim_boundary(McSim *psim, const mc_point3f_t *distances);
  * @param[in]	psim Pointer to a simulator instance.
  * @return		A random number from (0.0, 1.0). Due to precision issues
  *				the open nature of the interval is not guaranteed.
- * 
- @details George Marsaglia's Random Number Generator. A single precision 
- *        floating-point number has a 23-bit mantisa, hence only integers from 
+ *
+ @details George Marsaglia's Random Number Generator. A single precision
+ *        floating-point number has a 23-bit mantisa, hence only integers from
  *        [0, 2^23 - 1] can be represented without loss of information.
  */
 inline mc_fp_t mcsim_random_single(McSim *psim);
@@ -1415,8 +1415,8 @@ inline mc_fp_t mcsim_random_single(McSim *psim);
 	 * @param[in]	psim Pointer to a simulator instance.
 	 * @return		A random number from (0.0, 1.0).
 	 *
-	 * @details George Marsaglia's Random Number Generator. A double precision 
-	 *          floating-point number has a 52-bit mantisa, hence only integers from 
+	 * @details George Marsaglia's Random Number Generator. A double precision
+	 *          floating-point number has a 52-bit mantisa, hence only integers from
 	 *          0, 2^52 - 1] can be represented without loss of information.
 	 */
 	inline mc_fp_t mcsim_random_double(McSim *psim);
@@ -1450,7 +1450,7 @@ inline void mcsim_scatter(McSim *psim);
 
 /**
  * @brief Implementation of the scattering phase function.
- * 
+ *
  * @param[in, out] psim    Simulator satate.
  * @param[out] azimuth     Azimuth scattering angle. Is usually a uniformly
  *                         distributed number from interval [0.0, 2*pi]
@@ -1473,7 +1473,7 @@ inline mc_fp_t mcsim_sample_pf(McSim *psim, mc_fp_t *azimuth);
 */
 
 #if MC_ENABLE_DEBUG || defined(__DOXYGEN__)
-/** 
+/**
  * @brief Print simulator status.
  * @param[in] psim Pointer to a simulator instance.
  * param[in] label Label that will be printed before the simulator status"

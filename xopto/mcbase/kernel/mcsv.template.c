@@ -82,7 +82,7 @@ inline mc_point3_t *sva_voxel(McSamplingVolumeAnalyzer const *sva,
  *
  * @returns          Nonzero if the voxel lies within the sampling volume
  *                   domain.
- */ 
+ */
 inline int sva_is_valid_voxel(McSamplingVolumeAnalyzer const *sva,
 		mc_point3_t const *voxel){
 
@@ -102,9 +102,9 @@ inline int sva_is_valid_voxel(McSamplingVolumeAnalyzer const *sva,
  *                        the x, y and z direction.
  *
  * @returns               Distance from ev to the nearest voxel boundary.
- */ 
+ */
 inline mc_fp_t sva_intersect(
-		McSamplingVolumeAnalyzer const *sva, 
+		McSamplingVolumeAnalyzer const *sva,
 		TraceEvent const *ev, mc_point3_t const *voxel,
 		mc_point3f_t *distances){
 
@@ -163,7 +163,7 @@ inline mc_point3_t *sva_next_voxel(McSamplingVolumeAnalyzer const *sva,
  * @brief         Compute the total path length of the photon packet.
  *
  * @param[in] sva Pointer to a sampling volume analyzer instance.
- * 
+ *
  * @returns       Total path length of the photon packet.
  */
 inline mc_fp_t sva_total_path(McSamplingVolumeAnalyzer const *sva){
@@ -221,7 +221,7 @@ inline mc_size_t sva_flat_voxel_index(McSamplingVolumeAnalyzer const *sva,
 
 /**
  * @brief                             Sampling volume kernel.
- * 
+ *
  * @param[in]      npackets           Number of packet traces to process.
  * @param[in, out] npackets_processed Number of already processed packet traces.
  * @param[out]     num_kernels        Number of OpenCL threads that are woking
@@ -235,7 +235,7 @@ inline mc_size_t sva_flat_voxel_index(McSamplingVolumeAnalyzer const *sva,
  */
 __kernel void SamplingVolume(
 	mc_cnt_t npackets,
-	__global mc_cnt_t *npackets_processed, 
+	__global mc_cnt_t *npackets_processed,
 
 	__global uint32_t *num_kernels,
 
@@ -245,7 +245,7 @@ __kernel void SamplingVolume(
 	__global mc_accu_t *total_weight,
 
 	__global mc_int_t *int_buffer,
-	__global mc_fp_t *fp_buffer,	
+	__global mc_fp_t *fp_buffer,
 	__global mc_accu_t *accu_buffer
 ){
 	mc_int_t trace_data_offset, trace_length_offset;
@@ -279,7 +279,7 @@ __kernel void SamplingVolume(
 		trace_length_offset = trace->count_buffer_offset + packet_index;
 
 		n_valid = mc_min(trace->max_events, int_buffer[trace_length_offset]);
-	
+
 		/* initializing the samping volume state data type */
 		McSamplingVolumeAnalyzer sva = {
 			sampling_volume,			/* __const McSamplingVolume *sv - sampling volume configuration */
@@ -318,7 +318,7 @@ __kernel void SamplingVolume(
 
 		/* start processing the trace events */
 		while (!done){
-	
+
 			/* get distances to the voxel intersection */
 			d_voxel = sva_intersect(&sva, &ev1, &voxel, &distances);
 
@@ -329,7 +329,7 @@ __kernel void SamplingVolume(
 
 			if (d_voxel < d_ev1_ev2){
 				/* voxel intersection is closer than the position of the next event */
-				
+
 				/* leaving this voxel - update the voxel weight */
 				if (sva_is_valid_voxel(&sva, &voxel)){
 					mc_size_t index = sva_flat_voxel_index(&sva, &voxel);

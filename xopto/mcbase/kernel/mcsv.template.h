@@ -136,7 +136,7 @@ inline int sva_is_valid_voxel(McSamplingVolumeAnalyzer const *sva,
  * @returns               Distance from ev to the nearest voxel boundary.
  */
 inline mc_fp_t sva_intersect(
-		McSamplingVolumeAnalyzer const *sva, 
+		McSamplingVolumeAnalyzer const *sva,
 		TraceEvent const *ev, mc_point3_t const *voxel,
 		mc_point3f_t *distances);
 
@@ -160,7 +160,7 @@ inline mc_point3_t *sva_next_voxel(McSamplingVolumeAnalyzer const *sva,
  * @brief         Compute the total path length of the photon packet.
  *
  * @param[in] sva Pointer to a sampling volume analyzer instance.
- * 
+ *
  * @returns       Total path length of the photon packet.
  */
 inline mc_fp_t sva_total_path(McSamplingVolumeAnalyzer const *sva);

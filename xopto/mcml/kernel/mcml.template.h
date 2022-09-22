@@ -117,7 +117,7 @@ typedef struct McPf McPf;
 
 /**
  * @} // end @addtogroup mc_scattering_phase_functions
- */ 
+ */
 /*############### End scattering phase function declarations #################*/
 
 

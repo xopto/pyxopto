@@ -32,8 +32,8 @@
 	 * @param[in]	psim Pointer to a simulator instance.
 	 * @return		A random number from (0.0, 1.0).
 	 *
-	 * @details George Marsaglia's Random Number Generator. A double precision 
-	 *          floating-point number has a 52-bit mantisa, hence only integers from 
+	 * @details George Marsaglia's Random Number Generator. A double precision
+	 *          floating-point number has a 52-bit mantisa, hence only integers from
 	 *          0, 2^52 - 1] can be represented without loss of information.
 	 */
 	 inline mc_fp_t mcsim_random_double(McSim *psim){
@@ -50,9 +50,9 @@
  * @param[in]	psim Pointer to a simulator instance.
  * @return		A random number from (0.0, 1.0). Due to precision issues
  * 				the open nature of the interval is not guaranteed.
- * 
- @details George Marsaglia's Random Number Generator. A single precision 
- *        floating-point number has a 23-bit mantisa, hence only integers from 
+ *
+ @details George Marsaglia's Random Number Generator. A single precision
+ *        floating-point number has a 23-bit mantisa, hence only integers from
  *        [0, 2^23 - 1] can be represented without loss of information.
  */
  inline mc_fp_t mcsim_random_single(McSim *psim){
@@ -63,7 +63,7 @@
 /**
  * @brief Returns the r squared (polar radius) coordinate of the
  *        photon packet position with respect to the given origin.
- * @param[in] psim Pointer to a simulator instance.  
+ * @param[in] psim Pointer to a simulator instance.
  * @param[in]  Coordinate x of the origin.
  * @param[in] y Coordinate y of the origin.
  * @returns r2 Squared distance from the origin.
@@ -79,8 +79,8 @@ inline mc_fp_t mcsim_position_r2_ex(
 /*########### Start geometry boundary intersection implementation ############*/
 
 /**
-* @brief Calculates distance to the intersections of a cylinder with 
-*        radius r (centered on the z axis) and ray described by initial 
+* @brief Calculates distance to the intersections of a cylinder with
+*        radius r (centered on the z axis) and ray described by initial
 *        position and propagation direction.
 *
 * @param[in] r Radius of the cylinder.
@@ -93,7 +93,7 @@ inline mc_fp_t mcsim_position_r2_ex(
 *         negative distance to intersection).
 *
 * @details Intersection between a cylinder x^2 + y^2 = r^2 and a ray
-*			T = pos + d*dir = (x0, y0, z0) + d*(px, py, pz) yields a 
+*			T = pos + d*dir = (x0, y0, z0) + d*(px, py, pz) yields a
 *			quadratic equation for d:
 *			t^2*(px^2 + py^2) + 2*t*(x0*px + y0*py) + x0^2 + y0^2 - r^2.
 *			Solution is found as d = (-b * sqrt(b^2 - 4*a*c))/2a, where:
@@ -110,7 +110,7 @@ inline int ray_cylinder_intersections(
 	mc_fp_t b = FP_2*(pos->x*dir->x + pos->y*dir->y);
 	/* mc_fp_t c = pos->x*pos->x + pos->y*pos->y - r*r; */
 	mc_fp_t D = b*b - FP_4*a*(pos->x*pos->x + pos->y*pos->y - r*r);
-	
+
 	if(a != FP_0 && D > FP_0){
 		D = mc_sqrt(D);
 		*d1 = mc_fdiv(-b - D, FP_2*a);
@@ -130,7 +130,7 @@ inline int ray_cylinder_intersections(
 * @return Return distance to the closest intersection.
 *
 * @details Intersection between a cylinder x^2 + y^2 = r^2 and a ray
-*			T = pos + d*dir = (x0, y0, z0) + d*(px, py, pz) yields a 
+*			T = pos + d*dir = (x0, y0, z0) + d*(px, py, pz) yields a
 *			quadratic equation for d:
 *			t^2*(px^2 + py^2) + 2*t*(x0*px + y0*py) + x0^2 + y0^2 - r^2.
 *			Solution is found as d = (-b * sqrt(b^2 - 4*a*c))/2a, where:
@@ -143,24 +143,24 @@ inline mc_fp_t mcsim_distance_to_boundary(
 		McSim *psim, mc_fp_t *d_inner, mc_fp_t *d_outer){
 	mc_point3f_t const *pos = mcsim_position(psim);
 	mc_point3f_t const *dir = mcsim_direction(psim);
-	
+
 	/* quadratic equation for distance to intersection: a*d^2 + b*d + c = 0 */
 	mc_fp_t inv_2a;
 	mc_fp_t a = dir->x*dir->x + dir->y*dir->y;
 	mc_fp_t b = FP_2*(pos->x*dir->x + pos->y*dir->y);
 	mc_fp_t c = pos->x*pos->x + pos->y*pos->y; /* - r*r; */
-	mc_fp_t D; 
+	mc_fp_t D;
 	mc_fp_t d1, d2;
 	*d_outer = FP_INF; /* intersection at infinity - sign is irrelevant */
 	*d_inner = FP_INF; /* intersection at infinity - sign is irrelevant */
-	
+
 	/*
 	 * Note that b is also the scalar/dot product of the radial normal vector
 	 * (length is not normalized to 1) with the propagation direction vector.
 	 * The inner boundary can be intersected ony if b is negative!
 	*/
 	inv_2a = mc_fdiv(FP_1, FP_2*a);
-	
+
 	/* Inner boundary intersection:
 	 * If a <= 0 then x and y components of the propagation vector are 0 and
 	 * there is no intersection with the boundary. If D < 0, the photon
@@ -187,7 +187,7 @@ inline mc_fp_t mcsim_distance_to_boundary(
 	}
 
 	/* Outer boundary intersection */
-	D = b*b - FP_4*a*(c - 
+	D = b*b - FP_4*a*(c -
 		mc_fsquare(mc_layer_r_outer(mcsim_current_layer(psim))));
 	#if MC_ENABLE_DEBUG
 		dbg_print_float(INDENT "Discriminant of the outer boundary:", D);
@@ -208,11 +208,11 @@ inline mc_fp_t mcsim_distance_to_boundary(
 /**
  * @brief Computes radial normal vector at the given position. The normal
  *        points outwards.
- * 
+ *
  * @param[in] pos      Position.
  * @param[out] normal  Filled with components of the radial normal on return.
  *
- * @return Pointer to the initialized radial normal vector. 
+ * @return Pointer to the initialized radial normal vector.
  */
 inline mc_point3f_t *radial_normal(const mc_point3f_t *pos, mc_point3f_t *normal){
 	mc_fp_t k = mc_sqrt(pos->x*pos->x + pos->y*pos->y);
@@ -227,11 +227,11 @@ inline mc_point3f_t *radial_normal(const mc_point3f_t *pos, mc_point3f_t *normal
 /**
  * @brief Computes radial normal vector at the given position. The normal
  *        points inwards.
- * 
+ *
  * @param[in] pos      Position.
  * @param[out] normal  Filled with components of the radial normal on return.
  *
- * @return Pointer to the initialized radial normal vector. 
+ * @return Pointer to the initialized radial normal vector.
  */
 inline mc_point3f_t *radial_normal_inv(const mc_point3f_t *pos, mc_point3f_t *normal){
 	mc_fp_t k = mc_sqrt(pos->x*pos->x + pos->y*pos->y);
@@ -310,14 +310,14 @@ inline mc_int_t mcsim_boundary(McSim *psim, mc_int_t nextLayerIndex){
 	}
 
 	cos1 = mc_fmin(
-		mc_fabs(normal.x*mcsim_direction_x(psim) + 
+		mc_fabs(normal.x*mcsim_direction_x(psim) +
 				normal.y*mcsim_direction_y(psim)),
 		FP_1
 	);
 	dbg_print_float("cos1", cos1);
 	dbg_print_float("cos_critical", cos_critical);
 
-	/* check if under the critical angle - otherwise reflection holds */	
+	/* check if under the critical angle - otherwise reflection holds */
 	if(cos1 > cos_critical){
 		/* under the critical cosine ... reflect or refract */
 
@@ -327,14 +327,14 @@ inline mc_int_t mcsim_boundary(McSim *psim, mc_int_t nextLayerIndex){
 		n1_d_n2 = mc_fdiv(mc_layer_n(currentLayer), n2);
 
 		sin1 = mc_sqrt(FP_1 - cos1*cos1);
-		if(cos1 >= FP_COS_0) 
+		if(cos1 >= FP_COS_0)
 			sin1 = FP_0;
 
 		sin2 = mc_fmin(FP_1, n1_d_n2*sin1);
 		cos2 = mc_sqrt(FP_1 - sin2*sin2);
 
 		#if MC_ENABLE_DEBUG
-			printf("At the boundary: sin1 %.9f; sin2 %.9f, cos2 %.9f\n", 
+			printf("At the boundary: sin1 %.9f; sin2 %.9f, cos2 %.9f\n",
 				sin1, sin2, cos2);
 		#endif
 
@@ -357,7 +357,7 @@ inline mc_int_t mcsim_boundary(McSim *psim, mc_int_t nextLayerIndex){
 		R = FP_0p5*(Rp + Rs);
 
 		/* Handle special case cos2 == 0 (90 deg) */
-		if (cos1 <= FP_COS_90 || sin2 == FP_1) 
+		if (cos1 <= FP_COS_90 || sin2 == FP_1)
 			R = FP_1;
 
 		#if MC_ENABLE_DEBUG
@@ -406,7 +406,7 @@ inline mc_int_t mcsim_boundary(McSim *psim, mc_int_t nextLayerIndex){
  * @brief Deposit the given weight to the fluence accumulator. Takes care
  *        of the different function signatures in case of the weight deposition
  *        and fluence rate mode.
- * 
+ *
  * @param sim      Simulator instance.
  * @param deposit  Weight to deposit.
  */
@@ -588,24 +588,24 @@ __kernel void McKernel(
 			,mc_accucache_initializer	/* mc_accucache_t fluence_cache: Fluence cache object. */
 			#endif
 		},
-		
+
 		num_layers,					/* mc_int_t num_layers: Number of layers including the two outermost layers. */
 		layers, 					/* __constant McLayer *layers: Layer objects. */
-		
+
 		source						/* __constant McSource *source: Photon packet source object. */
-		
+
 		#if MC_USE_SURFACE_LAYOUTS
 			,surface_layouts		/* __mc_surface_mem McSurfaceLayouts - Advanced layout at the sample top and bottom surfaces. */
 		#endif
-		
+
 		#if MC_USE_FP_LUT
 			,fp_lut_array				/* __constant mc_fp_t *fp_lut_array: Lookup table(s) data. */
 		#endif
-		
+
 		#if MC_USE_TRACE
 			,trace					/* __mc_trace_mem McTrace: Trace configuration object. */
 		#endif
-		
+
 		#if MC_USE_FLUENCE
 			,fluence				/* __mc_fluence_mem const McFluence *fluence; Fluence configuration struct */
 		#endif
@@ -623,7 +623,7 @@ __kernel void McKernel(
 	#if !MC_USE_SURFACE_LAYOUTS
 		(void)surface_layouts;
 	#endif
-	
+
 	#if !MC_USE_FP_LUT
 		(void)fp_lut_array;
 	#endif
@@ -631,7 +631,7 @@ __kernel void McKernel(
 	#if !MC_USE_TRACE
 		(void)trace;
 	#endif
-	
+
 	#if !MC_USE_FLUENCE
 		(void)fluence;
 	#endif
@@ -715,7 +715,7 @@ __kernel void McKernel(
 			mcsim_trace_this_event(&sim);
 		#endif
 
-		/* loop through the simulation steps until all the photon packets 
+		/* loop through the simulation steps until all the photon packets
 			have been processed */
 		int num_steps = 0;
 		while (!done && num_steps++ < 1000000) {
@@ -731,7 +731,7 @@ __kernel void McKernel(
 			#endif
 			step = mc_fmin(step, FP_MAX);
 
-			/* initialize the next layer index with the current layer index */ 
+			/* initialize the next layer index with the current layer index */
 			nexLayerIndex = mcsim_current_layer_index(&sim);
 
 			dbg_print_status(&sim, "Packet start step");
@@ -739,9 +739,9 @@ __kernel void McKernel(
 			dbg_print_int(INDENT "Current layer index:", mcsim_current_layer_index(&sim));
 			dbg_print("\n");
 
-			/* intersection with boundaries possible only if photon packet is 
+			/* intersection with boundaries possible only if photon packet is
 				not moving in the direction of the z axis */
-			if  ((mcsim_direction_x(&sim) != FP_0) || 
+			if  ((mcsim_direction_x(&sim) != FP_0) ||
 					(mcsim_direction_y(&sim) != FP_0)){
 
 				mc_fp_t d, d_inner, d_outer;
@@ -750,8 +750,8 @@ __kernel void McKernel(
 				dbg_print_float("Distance to outer boundary:", d_outer);
 				dbg_print_float("Free distance d:", d);
 
-				nexLayerIndex = (step > d) ? 
-					(nexLayerIndex + ((d_inner <= d_outer) ? 1 : -1)) : 
+				nexLayerIndex = (step > d) ?
+					(nexLayerIndex + ((d_inner <= d_outer) ? 1 : -1)) :
 					nexLayerIndex;
 
 				/* limit the step size if required */
@@ -829,7 +829,7 @@ __kernel void McKernel(
 							/* mcsim_set_weight(&sim, FP_0); */
 							done = true;
 						}else{
-							mcsim_set_weight(&sim, 
+							mcsim_set_weight(&sim,
 								mc_fdiv(mcsim_weight(&sim), MC_PACKET_LOTTERY_CHANCE));
 						};
 					#else
@@ -907,7 +907,7 @@ __kernel void McKernel(
 									/* mcsim_set_weight(&sim, FP_0); */
 									done = true;
 								}else{
-									mcsim_set_weight(&sim, 
+									mcsim_set_weight(&sim,
 										mc_fdiv(mcsim_weight(&sim), MC_PACKET_LOTTERY_CHANCE));
 								};
 							#else
@@ -919,10 +919,10 @@ __kernel void McKernel(
 				}
 			#endif
 
-			mc_point3f_t *dir = mcsim_direction(&sim); 
+			mc_point3f_t *dir = mcsim_direction(&sim);
 			mc_fp_t dir_len = mc_sqrt(dir->x*dir->x + dir->y*dir->y + dir->z*dir->z);
 			if ( mc_fabs(dir_len - FP_1) > 10*FP_EPS){
-				printf("\nDIRECTION ERROR len=%.8f: (%.8f, %.8f, %.8f)", 
+				printf("\nDIRECTION ERROR len=%.8f: (%.8f, %.8f, %.8f)",
 					dir_len, dir->x, dir->y, dir->z);
 				done = true;
 			}
@@ -942,12 +942,12 @@ __kernel void McKernel(
 			if (done) {
 				/* Finalize the trace - only saves the number of trace events. */
 				#if MC_USE_TRACE
-					mcsim_trace_finalize(&sim); 
+					mcsim_trace_finalize(&sim);
 				#endif
 
 				/* call user defined termination */
 				#if defined(MC_TERMINAL_HOOK)
-					/* Photon packet has escaped the sample layers - 
+					/* Photon packet has escaped the sample layers -
 						call the provided user defined hook. */
 					MC_TERMINAL_HOOK(&sim);
 				#endif
