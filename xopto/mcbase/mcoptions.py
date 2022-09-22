@@ -555,9 +555,12 @@ class McUseEnhancedRng(McBoolOption):
 
         Note
         ....
-        The enhanced version is required when performing simulations
-        in large scattering volumes, were the number of scattering
-        events is expected to be on the order of millions.
+        The enhanced version of random number generator is required when
+        performing simulations in large scattering volumes, were the number of
+        scattering events is expected to be on the order of millions.
+        Depending on the OpenCL device, there might be a small performance
+        cost of about 15%, which is the reason for disabling this option
+        by default.
 
         Parameters
         ----------
