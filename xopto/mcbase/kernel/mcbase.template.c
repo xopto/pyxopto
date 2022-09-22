@@ -30,7 +30,7 @@
 /*############## Start 64-bit atomic increment implementation ################*/
 
 #if MC_USE_64_BIT_ACCUMULATORS || defined(__DOXYGEN__)
-/** 
+/**
  * @brief Atomic deposit of a 32-bit integer weight into 64-bit accumulator.
  * @param[in] address Accumulator addres.
  * @param[in] weight Weight to deposit / add to the accumulator.
@@ -68,12 +68,12 @@ inline uint64_t atomic_inc_uint64(__global uint64_t *ptr){
 /**
  * @brief Transforms a 2D vector using a 2D matrix with elements
  *        of type ::mc_int_t.
- * 
+ *
  * @param[in]  m   Pointer to a 2D transformation matrix.
  * @param[in]  v   Pointer to a 2D input vector.
  * @param[out] r   Pointer to a 2D output vector.
  *                 Must NOT be the input vector.
- * 
+ *
  * @returns        Pointer to the transformed input vector r.
  */
 inline mc_intv2_t *mc_transform_intv2(
@@ -86,12 +86,12 @@ inline mc_intv2_t *mc_transform_intv2(
 /**
  * @brief Transforms a 3D vector using a 3D matrix with elements
  *        of type ::mc_int_t.
- * 
+ *
  * @param[in]  m   Pointer to a 3D transformation matrix.
  * @param[in]  v   Pointer to a 3D input vector.
  * @param[out] r   Pointer to a 3D output vector.
  *                 Must NOT be the input vector.
- * 
+ *
  * @returns        Pointer to the transformed input vector r.
  */
 inline mc_intv3_t *mc_transform_intv3(
@@ -106,12 +106,12 @@ inline mc_intv3_t *mc_transform_intv3(
 /**
  * @brief Transforms a 4D vector using a 3D matrix with elements
  *        of type ::mc_int_t.
- * 
+ *
  * @param[in]  m   Pointer to a 4D transformation matrix.
  * @param[in]  v   Pointer to a 4D input vector.
  * @param[out] r   Pointer to a 4D output vector.
  *                 Must NOT be the input vector.
- * 
+ *
  * @returns        Pointer to the transformed input vector r.
  */
 inline mc_intv4_t *mc_transform_intv4(
@@ -127,12 +127,12 @@ inline mc_intv4_t *mc_transform_intv4(
 /**
  * @brief Multiply two 2D matrices with elements
  *        of type ::mc_int_t.
- * 
+ *
  * @param[in]  m1  Pointer to the first input 2D matrix.
  * @param[in]  m2  Pointer to the second input 2D matrix.
  * @param[out] r   Pointer to the output 2D matrix.
  *                 Must NOT be any of the two input matrices.
- * 
+ *
  * @returns        Pointer to the resulting matrix r.
  */
 inline mc_matrix2_int_t *mc_matrix2_mul_int(
@@ -150,12 +150,12 @@ inline mc_matrix2_int_t *mc_matrix2_mul_int(
 /**
  * @brief Multiply two 3D matrices with elements
  *        of type ::mc_int_t.
- * 
+ *
  * @param[in]  m1  Pointer to the first input 3D matrix.
  * @param[in]  m2  Pointer to the second input 3D matrix.
  * @param[out] r   Pointer to the output 3D matrix.
  *                 Must NOT be any of the two input matrices.
- * 
+ *
  * @returns        Pointer to the resulting matrix r.
  */
 inline mc_matrix3_int_t *mc_matrix3_mul_int(
@@ -179,12 +179,12 @@ inline mc_matrix3_int_t *mc_matrix3_mul_int(
 /**
  * @brief Multiply two 3D matrices with elements
  *        of type ::mc_int_t.
- * 
+ *
  * @param[in]  m1  Pointer to the first input 3D matrix.
  * @param[in]  m2  Pointer to the second input 3D matrix.
  * @param[out] r   Pointer to the output 3D matrix.
  *                 Must NOT be any of the two input matrices.
- * 
+ *
  * @returns        Pointer to the resulting matrix r.
  */
 inline mc_matrix4_int_t *mc_matrix4_mul_int(
@@ -215,11 +215,11 @@ inline mc_matrix4_int_t *mc_matrix4_mul_int(
 
 /**
  * @brief Reverses the direction of a 2D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_intv2_t).
  * @param[out] r   Pointer to the output vector (::mc_intv2_t).
  *                 Can be the input vector a.
- * 
+ *
  * @returns        Pointer to the reversed input vector r.
  */
 inline mc_intv2_t *mc_reverse_intv2(mc_intv2_t const *a, mc_intv2_t *r){
@@ -230,11 +230,11 @@ inline mc_intv2_t *mc_reverse_intv2(mc_intv2_t const *a, mc_intv2_t *r){
 
 /**
  * @brief Reverses the direction of a 3D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_intv3_t).
  * @param[out] r   Pointer to the output vector (::mc_intv3_t).
  *                 Can be the input vector a.
- * 
+ *
  * @returns        Pointer to the reversed input vector r.
  */
 inline mc_intv3_t *mc_reverse_intv3(mc_intv3_t const *a, mc_intv3_t *r){
@@ -246,11 +246,11 @@ inline mc_intv3_t *mc_reverse_intv3(mc_intv3_t const *a, mc_intv3_t *r){
 
 /**
  * @brief Reverses the direction of a 4D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_intv4_t).
  * @param[out] r   Pointer to the output vector (::mc_intv4_t).
  *                 Can be the input vector a.
- * 
+ *
  * @returns        Pointer to the reversed input vector r.
  */
 inline mc_intv4_t *mc_reverse_intv4(mc_intv4_t const *a, mc_intv4_t *r){
@@ -263,10 +263,10 @@ inline mc_intv4_t *mc_reverse_intv4(mc_intv4_t const *a, mc_intv4_t *r){
 
 /**
  * @brief Computes the dot product of two 2D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_intv2_t).
  * @param[in]  b   Pointer to the first input vector (::mc_intv2_t).
- * 
+ *
  * @returns        Dot product of the two vectors.
  */
 inline mc_int_t mc_dot_intv2(mc_intv2_t const *a, mc_intv2_t const *b){
@@ -275,10 +275,10 @@ inline mc_int_t mc_dot_intv2(mc_intv2_t const *a, mc_intv2_t const *b){
 
 /**
  * @brief Computes the dot product of two 3D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_intv3_t).
  * @param[in]  b   Pointer to the first input vector (::mc_intv3_t).
- * 
+ *
  * @returns        Dot product of the two vectors.
  */
 inline mc_int_t mc_dot_intv3(mc_intv3_t const *a, mc_intv3_t const *b){
@@ -287,10 +287,10 @@ inline mc_int_t mc_dot_intv3(mc_intv3_t const *a, mc_intv3_t const *b){
 
 /**
  * @brief Computes the dot product of two 4D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_intv4_t).
  * @param[in]  b   Pointer to the first input vector (::mc_intv4_t).
- * 
+ *
  * @returns        Dot product of the two vectors.
  */
 inline mc_int_t mc_dot_intv4(mc_intv4_t const *a, mc_intv4_t const *b){
@@ -299,9 +299,9 @@ inline mc_int_t mc_dot_intv4(mc_intv4_t const *a, mc_intv4_t const *b){
 
 /**
  * @brief Computes the length of a 2D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_intv2_t).
- * 
+ *
  * @returns        Length of the input vector.
  */
 inline mc_fp_t mc_length_intv2(mc_intv2_t const *a){
@@ -310,9 +310,9 @@ inline mc_fp_t mc_length_intv2(mc_intv2_t const *a){
 
 /**
  * @brief Computes the length of a 3D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_intv3_t).
- * 
+ *
  * @returns        Length of the input vector.
  */
 inline mc_fp_t mc_length_intv3(mc_intv3_t const *a){
@@ -321,9 +321,9 @@ inline mc_fp_t mc_length_intv3(mc_intv3_t const *a){
 
 /**
  * @brief Computes the length of a 4D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_intv4_t).
- * 
+ *
  * @returns        Length of the input vector.
  */
 inline mc_fp_t mc_length_intv4(mc_intv4_t const *a){
@@ -332,14 +332,14 @@ inline mc_fp_t mc_length_intv4(mc_intv4_t const *a){
 
 /**
  * @brief Computes the cross product of two vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_intv3_t).
  * @param[in]  b   Pointer to the second input vector (::mc_intv3_t).
  *
  * @param[out] r   Pointer to the output vector (::mc_intv3_t)
  *                 filled with the cross product a x b.
  *                 Must NOT be any of the two input vectors.
- * 
+ *
  * @returns        Pointer to the cross product vector r.
  */
 inline mc_intv3_t *mc_cross_intv3(
@@ -356,12 +356,12 @@ inline mc_intv3_t *mc_cross_intv3(
 /**
  * @brief Transforms a 2D vector using a 2D matrix with elements
  *        of type ::mc_size_t.
- * 
+ *
  * @param[in]  m   Pointer to a 2D transformation matrix.
  * @param[in]  v   Pointer to a 2D input vector.
  * @param[out] r   Pointer to a 2D output vector.
  *                 Must NOT be the input vector.
- * 
+ *
  * @returns        Pointer to the transformed input vector r.
  */
 inline mc_sizev2_t *mc_transform_sizev2(
@@ -374,12 +374,12 @@ inline mc_sizev2_t *mc_transform_sizev2(
 /**
  * @brief Transforms a 3D vector using a 3D matrix with elements
  *        of type ::mc_size_t.
- * 
+ *
  * @param[in]  m   Pointer to a 3D transformation matrix.
  * @param[in]  v   Pointer to a 3D input vector.
  * @param[out] r   Pointer to a 3D output vector.
  *                 Must NOT be the input vector.
- * 
+ *
  * @returns        Pointer to the transformed input vector r.
  */
 inline mc_sizev3_t *mc_transform_sizev3(
@@ -394,12 +394,12 @@ inline mc_sizev3_t *mc_transform_sizev3(
 /**
  * @brief Transforms a 4D vector using a 3D matrix with elements
  *        of type ::mc_size_t.
- * 
+ *
  * @param[in]  m   Pointer to a 4D transformation matrix.
  * @param[in]  v   Pointer to a 4D input vector.
  * @param[out] r   Pointer to a 4D output vector.
  *                 Must NOT be the input vector.
- * 
+ *
  * @returns        Pointer to the transformed input vector r.
  */
 inline mc_sizev4_t *mc_transform_sizev4(
@@ -415,12 +415,12 @@ inline mc_sizev4_t *mc_transform_sizev4(
 /**
  * @brief Multiply two 2D matrices with elements
  *        of type ::mc_size_t.
- * 
+ *
  * @param[in]  m1  Pointer to the first input 2D matrix.
  * @param[in]  m2  Pointer to the second input 2D matrix.
  * @param[out] r   Pointer to the output 2D matrix.
  *                 Must NOT be any of the two input matrices.
- * 
+ *
  * @returns        Pointer to the resulting matrix r.
  */
 inline mc_matrix2_size_t *mc_matrix2_mul_size(
@@ -438,12 +438,12 @@ inline mc_matrix2_size_t *mc_matrix2_mul_size(
 /**
  * @brief Multiply two 3D matrices with elements
  *        of type ::mc_size_t.
- * 
+ *
  * @param[in]  m1  Pointer to the first input 3D matrix.
  * @param[in]  m2  Pointer to the second input 3D matrix.
  * @param[out] r   Pointer to the output 3D matrix.
  *                 Must NOT be any of the two input matrices.
- * 
+ *
  * @returns        Pointer to the resulting matrix r.
  */
 inline mc_matrix3_size_t *mc_matrix3_mul_size(
@@ -467,12 +467,12 @@ inline mc_matrix3_size_t *mc_matrix3_mul_size(
 /**
  * @brief Multiply two 3D matrices with elements
  *        of type ::mc_size_t.
- * 
+ *
  * @param[in]  m1  Pointer to the first input 3D matrix.
  * @param[in]  m2  Pointer to the second input 3D matrix.
  * @param[out] r   Pointer to the output 3D matrix.
  *                 Must NOT be any of the two input matrices.
- * 
+ *
  * @returns        Pointer to the resulting matrix r.
  */
 inline mc_matrix4_size_t *mc_matrix4_mul_size(
@@ -503,11 +503,11 @@ inline mc_matrix4_size_t *mc_matrix4_mul_size(
 
 /**
  * @brief Reverses the direction of a 2D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_sizev2_t).
  * @param[out] r   Pointer to the output vector (::mc_sizev2_t).
  *                 Can be the input vector a.
- * 
+ *
  * @returns        Pointer to the reversed input vector r.
  */
 inline mc_sizev2_t *mc_reverse_sizev2(mc_sizev2_t const *a, mc_sizev2_t *r){
@@ -518,11 +518,11 @@ inline mc_sizev2_t *mc_reverse_sizev2(mc_sizev2_t const *a, mc_sizev2_t *r){
 
 /**
  * @brief Reverses the direction of a 3D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_sizev3_t).
  * @param[out] r   Pointer to the output vector (::mc_sizev3_t).
  *                 Can be the input vector a.
- * 
+ *
  * @returns        Pointer to the reversed input vector r.
  */
 inline mc_sizev3_t *mc_reverse_sizev3(mc_sizev3_t const *a, mc_sizev3_t *r){
@@ -534,11 +534,11 @@ inline mc_sizev3_t *mc_reverse_sizev3(mc_sizev3_t const *a, mc_sizev3_t *r){
 
 /**
  * @brief Reverses the direction of a 4D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_sizev4_t).
  * @param[out] r   Pointer to the output vector (::mc_sizev4_t).
  *                 Can be the input vector a.
- * 
+ *
  * @returns        Pointer to the reversed input vector r.
  */
 inline mc_sizev4_t *mc_reverse_sizev4(mc_sizev4_t const *a, mc_sizev4_t *r){
@@ -551,10 +551,10 @@ inline mc_sizev4_t *mc_reverse_sizev4(mc_sizev4_t const *a, mc_sizev4_t *r){
 
 /**
  * @brief Computes the dot product of two 2D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_sizev2_t).
  * @param[in]  b   Pointer to the first input vector (::mc_sizev2_t).
- * 
+ *
  * @returns        Dot product of the two vectors.
  */
 inline mc_size_t mc_dot_sizev2(mc_sizev2_t const *a, mc_sizev2_t const *b){
@@ -563,10 +563,10 @@ inline mc_size_t mc_dot_sizev2(mc_sizev2_t const *a, mc_sizev2_t const *b){
 
 /**
  * @brief Computes the dot product of two 3D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_sizev3_t).
  * @param[in]  b   Pointer to the first input vector (::mc_sizev3_t).
- * 
+ *
  * @returns        Dot product of the two vectors.
  */
 inline mc_size_t mc_dot_sizev3(mc_sizev3_t const *a, mc_sizev3_t const *b){
@@ -575,10 +575,10 @@ inline mc_size_t mc_dot_sizev3(mc_sizev3_t const *a, mc_sizev3_t const *b){
 
 /**
  * @brief Computes the dot product of two 4D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_sizev4_t).
  * @param[in]  b   Pointer to the first input vector (::mc_sizev4_t).
- * 
+ *
  * @returns        Dot product of the two vectors.
  */
 inline mc_size_t mc_dot_sizev4(mc_sizev4_t const *a, mc_sizev4_t const *b){
@@ -587,9 +587,9 @@ inline mc_size_t mc_dot_sizev4(mc_sizev4_t const *a, mc_sizev4_t const *b){
 
 /**
  * @brief Computes the length of a 2D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_sizev2_t).
- * 
+ *
  * @returns        Length of the input vector.
  */
 inline mc_fp_t mc_length_sizev2(mc_sizev2_t const *a){
@@ -598,9 +598,9 @@ inline mc_fp_t mc_length_sizev2(mc_sizev2_t const *a){
 
 /**
  * @brief Computes the length of a 3D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_sizev3_t).
- * 
+ *
  * @returns        Length of the input vector.
  */
 inline mc_fp_t mc_length_sizev3(mc_sizev3_t const *a){
@@ -609,9 +609,9 @@ inline mc_fp_t mc_length_sizev3(mc_sizev3_t const *a){
 
 /**
  * @brief Computes the length of a 4D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_sizev4_t).
- * 
+ *
  * @returns        Length of the input vector.
  */
 inline mc_fp_t mc_length_sizev4(mc_sizev4_t const *a){
@@ -620,14 +620,14 @@ inline mc_fp_t mc_length_sizev4(mc_sizev4_t const *a){
 
 /**
  * @brief Computes the cross product of two vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_sizev3_t).
  * @param[in]  b   Pointer to the second input vector (::mc_sizev3_t).
  *
  * @param[out] r   Pointer to the output vector (::mc_sizev3_t)
  *                 filled with the cross product a x b.
  *                 Must NOT be any of the two input vectors.
- * 
+ *
  * @returns        Pointer to the cross product vector r.
  */
 inline mc_sizev3_t *mc_cross_sizev3(
@@ -644,12 +644,12 @@ inline mc_sizev3_t *mc_cross_sizev3(
 /**
  * @brief Transforms a 2D vector using a 2D matrix with elements
  *        of type ::mc_fp_t.
- * 
+ *
  * @param[in]  m   Pointer to a 2D transformation matrix.
  * @param[in]  v   Pointer to a 2D input vector.
  * @param[out] r   Pointer to a 2D output vector.
  *                 Must NOT be the input vector.
- * 
+ *
  * @returns        Pointer to the transformed input vector r.
  */
 inline mc_fpv2_t *mc_transform_fpv2(
@@ -662,12 +662,12 @@ inline mc_fpv2_t *mc_transform_fpv2(
 /**
  * @brief Transforms a 3D vector using a 3D matrix with elements
  *        of type ::mc_fp_t.
- * 
+ *
  * @param[in]  m   Pointer to a 3D transformation matrix.
  * @param[in]  v   Pointer to a 3D input vector.
  * @param[out] r   Pointer to a 3D output vector.
  *                 Must NOT be the input vector.
- * 
+ *
  * @returns        Pointer to the transformed input vector r.
  */
 inline mc_fpv3_t *mc_transform_fpv3(
@@ -682,12 +682,12 @@ inline mc_fpv3_t *mc_transform_fpv3(
 /**
  * @brief Transforms a 4D vector using a 3D matrix with elements
  *        of type ::mc_fp_t.
- * 
+ *
  * @param[in]  m   Pointer to a 4D transformation matrix.
  * @param[in]  v   Pointer to a 4D input vector.
  * @param[out] r   Pointer to a 4D output vector.
  *                 Must NOT be the input vector.
- * 
+ *
  * @returns        Pointer to the transformed input vector r.
  */
 inline mc_fpv4_t *mc_transform_fpv4(
@@ -703,12 +703,12 @@ inline mc_fpv4_t *mc_transform_fpv4(
 /**
  * @brief Multiply two 2D matrices with elements
  *        of type ::mc_fp_t.
- * 
+ *
  * @param[in]  m1  Pointer to the first input 2D matrix.
  * @param[in]  m2  Pointer to the second input 2D matrix.
  * @param[out] r   Pointer to the output 2D matrix.
  *                 Must NOT be any of the two input matrices.
- * 
+ *
  * @returns        Pointer to the resulting matrix r.
  */
 inline mc_matrix2_fp_t *mc_matrix2_mul_fp(
@@ -726,12 +726,12 @@ inline mc_matrix2_fp_t *mc_matrix2_mul_fp(
 /**
  * @brief Multiply two 3D matrices with elements
  *        of type ::mc_fp_t.
- * 
+ *
  * @param[in]  m1  Pointer to the first input 3D matrix.
  * @param[in]  m2  Pointer to the second input 3D matrix.
  * @param[out] r   Pointer to the output 3D matrix.
  *                 Must NOT be any of the two input matrices.
- * 
+ *
  * @returns        Pointer to the resulting matrix r.
  */
 inline mc_matrix3_fp_t *mc_matrix3_mul_fp(
@@ -755,12 +755,12 @@ inline mc_matrix3_fp_t *mc_matrix3_mul_fp(
 /**
  * @brief Multiply two 3D matrices with elements
  *        of type ::mc_fp_t.
- * 
+ *
  * @param[in]  m1  Pointer to the first input 3D matrix.
  * @param[in]  m2  Pointer to the second input 3D matrix.
  * @param[out] r   Pointer to the output 3D matrix.
  *                 Must NOT be any of the two input matrices.
- * 
+ *
  * @returns        Pointer to the resulting matrix r.
  */
 inline mc_matrix4_fp_t *mc_matrix4_mul_fp(
@@ -791,11 +791,11 @@ inline mc_matrix4_fp_t *mc_matrix4_mul_fp(
 
 /**
  * @brief Reverses the direction of a 2D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_fpv2_t).
  * @param[out] r   Pointer to the output vector (::mc_fpv2_t).
  *                 Can be the input vector a.
- * 
+ *
  * @returns        Pointer to the reversed input vector r.
  */
 inline mc_fpv2_t *mc_reverse_fpv2(mc_fpv2_t const *a, mc_fpv2_t *r){
@@ -806,11 +806,11 @@ inline mc_fpv2_t *mc_reverse_fpv2(mc_fpv2_t const *a, mc_fpv2_t *r){
 
 /**
  * @brief Reverses the direction of a 3D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_fpv3_t).
  * @param[out] r   Pointer to the output vector (::mc_fpv3_t).
  *                 Can be the input vector a.
- * 
+ *
  * @returns        Pointer to the reversed input vector r.
  */
 inline mc_fpv3_t *mc_reverse_fpv3(mc_fpv3_t const *a, mc_fpv3_t *r){
@@ -822,11 +822,11 @@ inline mc_fpv3_t *mc_reverse_fpv3(mc_fpv3_t const *a, mc_fpv3_t *r){
 
 /**
  * @brief Reverses the direction of a 4D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_fpv4_t).
  * @param[out] r   Pointer to the output vector (::mc_fpv4_t).
  *                 Can be the input vector a.
- * 
+ *
  * @returns        Pointer to the reversed input vector r.
  */
 inline mc_fpv4_t *mc_reverse_fpv4(mc_fpv4_t const *a, mc_fpv4_t *r){
@@ -839,10 +839,10 @@ inline mc_fpv4_t *mc_reverse_fpv4(mc_fpv4_t const *a, mc_fpv4_t *r){
 
 /**
  * @brief Computes the dot product of two 2D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv2_t).
  * @param[in]  b   Pointer to the first input vector (::mc_fpv2_t).
- * 
+ *
  * @returns        Dot product of the two vectors.
  */
 inline mc_fp_t mc_dot_fpv2(mc_fpv2_t const *a, mc_fpv2_t const *b){
@@ -851,10 +851,10 @@ inline mc_fp_t mc_dot_fpv2(mc_fpv2_t const *a, mc_fpv2_t const *b){
 
 /**
  * @brief Computes the dot product of two 3D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv3_t).
  * @param[in]  b   Pointer to the first input vector (::mc_fpv3_t).
- * 
+ *
  * @returns        Dot product of the two vectors.
  */
 inline mc_fp_t mc_dot_fpv3(mc_fpv3_t const *a, mc_fpv3_t const *b){
@@ -863,10 +863,10 @@ inline mc_fp_t mc_dot_fpv3(mc_fpv3_t const *a, mc_fpv3_t const *b){
 
 /**
  * @brief Computes the dot product of two 4D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv4_t).
  * @param[in]  b   Pointer to the first input vector (::mc_fpv4_t).
- * 
+ *
  * @returns        Dot product of the two vectors.
  */
 inline mc_fp_t mc_dot_fpv4(mc_fpv4_t const *a, mc_fpv4_t const *b){
@@ -875,9 +875,9 @@ inline mc_fp_t mc_dot_fpv4(mc_fpv4_t const *a, mc_fpv4_t const *b){
 
 /**
  * @brief Computes the length of a 2D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_fpv2_t).
- * 
+ *
  * @returns        Length of the input vector.
  */
 inline mc_fp_t mc_length_fpv2(mc_fpv2_t const *a){
@@ -886,9 +886,9 @@ inline mc_fp_t mc_length_fpv2(mc_fpv2_t const *a){
 
 /**
  * @brief Computes the length of a 3D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_fpv3_t).
- * 
+ *
  * @returns        Length of the input vector.
  */
 inline mc_fp_t mc_length_fpv3(mc_fpv3_t const *a){
@@ -897,9 +897,9 @@ inline mc_fp_t mc_length_fpv3(mc_fpv3_t const *a){
 
 /**
  * @brief Computes the length of a 4D vector.
- * 
+ *
  * @param[in]  a   Pointer to the input vector (::mc_fpv4_t).
- * 
+ *
  * @returns        Length of the input vector.
  */
 inline mc_fp_t mc_length_fpv4(mc_fpv4_t const *a){
@@ -908,14 +908,14 @@ inline mc_fp_t mc_length_fpv4(mc_fpv4_t const *a){
 
 /**
  * @brief Computes the cross product of two vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv3_t).
  * @param[in]  b   Pointer to the second input vector (::mc_fpv3_t).
  *
  * @param[out] r   Pointer to the output vector (::mc_fpv3_t)
  *                 filled with the cross product a x b.
  *                 Must NOT be any of the two input vectors.
- * 
+ *
  * @returns        Pointer to the cross product vector r.
  */
 inline mc_fpv3_t *mc_cross_fpv3(
@@ -929,11 +929,11 @@ inline mc_fpv3_t *mc_cross_fpv3(
 
 /**
  * @brief Normalizes the length of the input 2D vector to unity.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv2_t).
  * @param[out] r   Pointer to output vector (::mc_fpv2_t).
  *                 Can be the input vector a.
- * 
+ *
  * @returns        Pointer to the unit length vector r.
  */
 inline mc_fpv2_t *mc_normalize_fpv2(mc_fpv2_t const *a, mc_fpv2_t *r){
@@ -945,11 +945,11 @@ inline mc_fpv2_t *mc_normalize_fpv2(mc_fpv2_t const *a, mc_fpv2_t *r){
 
 /**
  * @brief Normalizes the length of the input 3D vector to unity.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv3_t).
  * @param[out] r   Pointer to output vector (::mc_fpv3_t).
  *                 Can be the input vector a.
- * 
+ *
  * @returns        Pointer to the unit length vector r.
  */
 inline mc_fpv3_t *mc_normalize_fpv3(mc_fpv3_t const *a, mc_fpv3_t *r){
@@ -962,11 +962,11 @@ inline mc_fpv3_t *mc_normalize_fpv3(mc_fpv3_t const *a, mc_fpv3_t *r){
 
 /**
  * @brief Normalizes the length of the input 4D vector to unity.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv4_t).
  * @param[out] r   Pointer to output vector (::mc_fpv4_t).
  *                 Can be the input vector a.
- * 
+ *
  * @returns        Pointer to the unit length vector r.
  */
 inline mc_fpv4_t *mc_normalize_fpv4(mc_fpv4_t const *a, mc_fpv4_t *r){
@@ -980,10 +980,10 @@ inline mc_fpv4_t *mc_normalize_fpv4(mc_fpv4_t const *a, mc_fpv4_t *r){
 
 /**
  * @brief Computes the squared distance between two 2D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv2_t).
  * @param[in]  b   Pointer to the second input vector (::mc_fpv2_t).
- * 
+ *
  * @returns        Squared distance between the two vectors.
  */
 inline mc_fp_t mc_distance2_fpv2(mc_fpv2_t const *a, mc_fpv2_t const *b){
@@ -993,10 +993,10 @@ inline mc_fp_t mc_distance2_fpv2(mc_fpv2_t const *a, mc_fpv2_t const *b){
 
 /**
  * @brief Computes the squared distance between two 3D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv3_t).
  * @param[in]  b   Pointer to the second input vector (::mc_fpv3_t).
- * 
+ *
  * @returns        Squared distance between the two vectors.
  */
 inline mc_fp_t mc_distance2_fpv3(mc_fpv3_t const *a, mc_fpv3_t const *b){
@@ -1006,10 +1006,10 @@ inline mc_fp_t mc_distance2_fpv3(mc_fpv3_t const *a, mc_fpv3_t const *b){
 
 /**
  * @brief Computes the squared distance between two 4D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv4_t).
  * @param[in]  b   Pointer to the second input vector (::mc_fpv4_t).
- * 
+ *
  * @returns        Squared distance between the two vectors.
  */
 inline mc_fp_t mc_distance2_fpv4(mc_fpv4_t const *a, mc_fpv4_t const *b){
@@ -1019,10 +1019,10 @@ inline mc_fp_t mc_distance2_fpv4(mc_fpv4_t const *a, mc_fpv4_t const *b){
 
 /**
  * @brief Computes the distance between two 2D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv2_t).
  * @param[in]  b   Pointer to the second input vector (::mc_fpv2_t).
- * 
+ *
  * @returns        Distance between the two vectors.
  */
 inline mc_fp_t mc_distance_fpv2(mc_fpv2_t const *a, mc_fpv2_t const *b){
@@ -1032,10 +1032,10 @@ inline mc_fp_t mc_distance_fpv2(mc_fpv2_t const *a, mc_fpv2_t const *b){
 
 /**
  * @brief Computes the distance between two 3D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv3_t).
  * @param[in]  b   Pointer to the second input vector (::mc_fpv3_t).
- * 
+ *
  * @returns        Distance between the two vectors.
  */
 inline mc_fp_t mc_distance_fpv3(mc_fpv3_t const *a, mc_fpv3_t const *b){
@@ -1045,10 +1045,10 @@ inline mc_fp_t mc_distance_fpv3(mc_fpv3_t const *a, mc_fpv3_t const *b){
 
 /**
  * @brief Computes the distance between two 4D vectors.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv4_t).
  * @param[in]  b   Pointer to the second input vector (::mc_fpv4_t).
- * 
+ *
  * @returns        Distance between the two vectors.
  */
 inline mc_fp_t mc_distance_fpv4(mc_fpv4_t const *a, mc_fpv4_t const *b){
@@ -1058,13 +1058,13 @@ inline mc_fp_t mc_distance_fpv4(mc_fpv4_t const *a, mc_fpv4_t const *b){
 
 /**
  * @brief Computes a + b*c - multiply-add for 2D vectors of type ::mc_fpv2_t.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv2_t).
  * @param[in]  b   Pointer to the second input vector (::mc_fpv2_t).
  * @param[in]  c   Multiplication factor
  * @param[out] r   Pointer to the output/result vector.
  *                 Can be any of the two input vectors.
- * 
+ *
  * @returns        Pointer to the result vector r.
  */
 inline mc_fpv2_t *mc_mad_fpv2(
@@ -1076,13 +1076,13 @@ inline mc_fpv2_t *mc_mad_fpv2(
 
 /**
  * @brief Computes a + b*c - multiply-add for 3D vectors of type ::mc_fpv3_t.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv2_t).
  * @param[in]  b   Pointer to the second input vector (::mc_fpv2_t).
  * @param[in]  c   Multiplication factor
  * @param[out] r   Pointer to the output/result vector.
  *                 Can be any of the two input vectors.
- * 
+ *
  * @returns        Pointer to the result vector r.
  */
 inline mc_fpv3_t *mc_mad_fpv3(
@@ -1095,13 +1095,13 @@ inline mc_fpv3_t *mc_mad_fpv3(
 
 /**
  * @brief Computes a + b*c - multiply-add for 4D vectors of type ::mc_fpv4_t.
- * 
+ *
  * @param[in]  a   Pointer to the first input vector (::mc_fpv4_t).
  * @param[in]  b   Pointer to the second input vector (::mc_fpv4_t).
  * @param[in]  c   Multiplication factor
  * @param[out] r   Pointer to the output/result vector.
  *                 Can be any of the two input vectors.
- * 
+ *
  * @returns        Pointer to the result vector r.
  */
 inline mc_fpv4_t *mc_mad_fpv4(
@@ -1126,7 +1126,7 @@ inline mc_fpv4_t *mc_mad_fpv4(
 inline int mc_rectf_contains_ex(
 		mc_fp_t top_left_x, mc_fp_t top_left_y, mc_fp_t width, mc_fp_t height,
 		mc_fp_t x, mc_fp_t y){
-	return	(top_left_x <= x) && 
+	return	(top_left_x <= x) &&
 			(top_left_x + width >= x) &&
 			(top_left_y <= y) &&
 			(top_left_y + height) >= y;
@@ -1164,19 +1164,19 @@ inline int mc_slotf_contains_ex(mc_fp_t cx, mc_fp_t cy,
 	mc_fp_t dx = x - cx;
 	mc_fp_t dy = y - cy;
 	mc_fp_t c_offset = FP_0p5*mc_fabs(width - height);
-	
-	mc_fp_t dc = (width >= height) ? 
+
+	mc_fp_t dc = (width >= height) ?
 		(mc_fabs(dx) - c_offset) : (mc_fabs(dy) - c_offset);
-	
+
 	return (width >= height) ?
 		(
 			(mc_fabs(dy) < height*FP_0p5) && (
-				(mc_fabs(dx) <= c_offset) || 
+				(mc_fabs(dx) <= c_offset) ||
 				((dy*dy + dc*dc) < height*height*FP_0p25)
-			) 
+			)
 		) :
 		(
-			(mc_fabs(dx) < width*FP_0p5) && ( 
+			(mc_fabs(dx) < width*FP_0p5) && (
 				(mc_fabs(dy) <= c_offset) ||
 				((dx*dx + dc*dc) < width*width*FP_0p25)
 			)
@@ -1237,7 +1237,7 @@ inline mc_fp_t reflectance(
 		n1_d_n2 = mc_fdiv(n1, n2);
 
 		sin1 = mc_sqrt(FP_1 - cos1*cos1);
-		if(cos1 >= FP_COS_0) 
+		if(cos1 >= FP_COS_0)
 			sin1 = FP_0;
 
 		sin2 = mc_fmin(FP_1, n1_d_n2*sin1);
@@ -1262,7 +1262,7 @@ inline mc_fp_t reflectance(
 		R = FP_0p5*(Rp + Rs);
 
 		/* Handle special case cos2 == 0 (90 deg) */
-		if (cos1 <= FP_COS_90 || sin2 == FP_1) 
+		if (cos1 <= FP_COS_90 || sin2 == FP_1)
 			return FP_1;
 	}
 	return R;
@@ -1320,7 +1320,7 @@ inline mc_fp_t reflectance_cos2(
 		R = FP_0p5*(Rp + Rs);
 
 		/* Handle special case cos2 == 0 (90 deg) */
-		if (cos1 <= FP_COS_90 || sin2 == FP_1) 
+		if (cos1 <= FP_COS_90 || sin2 == FP_1)
 			return FP_1;
 	}
 	return R;
@@ -1396,10 +1396,10 @@ inline mc_point3f_t *refract_cos1(
  * @brief Computes propagation direction of the refracted beam for the given
  *        incident propagation direction, boundary normal and refractive
  *        indices of the materials on both sides of the boundary.
- *        
+ *
  * @note  If the beam is actually reflected, this call can produce unexpected
  *        results!
- * 
+ *
  * @param[in] p  Incident propagation direction.
  * @param[in] n  Boundary normal (pointing outwards or inwards).
  * @param[in] n1 Refractive index of the material on the incident side
@@ -1445,7 +1445,7 @@ inline mc_point3f_t *refract(
  *        incident propagation direction, boundary normal and refractive
  *        indices of the materials on each side of the boundary.
  *        If the beam is actually reflected, the call returns nonzero.
- * 
+ *
  * @param[in] p  Incident propagation direction.
  * @param[in] n  Boundary normal (pointing outwards or inwards).
  * @param[in] n1 Refractive index of the material on the incident side
@@ -1473,7 +1473,7 @@ inline int refract_safe(mc_point3f_t const *p, mc_point3f_t const *n,
 	mc_fp_t n1_d_n2 = mc_fdiv(n1, n2);
 
 	mc_fp_t sin2_squared = n1_d_n2*n1_d_n2*(FP_1 - cos1*cos1);
-	
+
 	if (sin2_squared > FP_1)
 		return 1;
 
@@ -1517,7 +1517,7 @@ inline void scatter_direction(mc_point3f_t *dir, mc_fp_t cos_theta, mc_fp_t fi){
 	if(mc_fabs(dir->z) >= FP_COS_0){
 		dir->x = sin_theta_cos_fi;
 		dir->y = sin_theta_sin_fi;
-		dir->z = mc_fcopysign(cos_theta, dir->z*cos_theta); 
+		dir->z = mc_fcopysign(cos_theta, dir->z*cos_theta);
 	}else{
 		k = mc_sqrt(FP_1 - dir->z*dir->z);
 
@@ -1544,30 +1544,32 @@ inline void scatter_direction(mc_point3f_t *dir, mc_fp_t cos_theta, mc_fp_t fi){
 /**
  * @brief Generates a single precision random number from [0.0, 1.0] and
  *        updates the generator state.
- * @note Due to precision issues
- *       the open nature of the interval is not guaranteed.
  *
  * @param[in,out]	x Mutable state of the random number generator.
  * @param[in]		a Immutable state of the random number generator.
  * @return			A random number from [0.0, 1.0].
- * 
- @details George Marsaglia's Random Number Generator. A single precision 
- *        floating-point number has a 23-bit mantisa, hence only integers from 
- *        [0, 2^23 - 1] can be represented without loss of information.
+ *
+ @details George Marsaglia's Random Number Generator. A single precision
+ *        floating-point number has a 23-bit mantissa, hence only integers
+ *        from [0, 2^23 - 1] can be represented without loss of information.
  */
 inline mc_fp_t fp_random_single(unsigned long *x, unsigned a){
-	*x = (*x & (uint64_t)0xFFFFFFFFUL)*(a) + (*x >> 32);
-
 	#if MC_USE_ENHANCED_RNG
-	return mc_fdiv(
-		(float)((*x) & 0xFFFFFFFFFFFFFUL),
-		(float)0xFFFFFFFFFFFFFUL
-	);
+		*x = (*x & (uint64_t)0xFFFFFFFFUL)*(a) + (*x >> 32);
+		uint32_t high = *x;
+		*x = (*x & (uint64_t)0xFFFFFFFFUL)*(a) + (*x >> 32);
+		uint32_t low = *x;
+
+		return mc_fdiv(
+			(float) ((((uint64_t)high) << 32U) +low),
+			(float) 0xFFFFFFFFFFFFFFFFUL
+		);
 	#else
-	return mc_fdiv(
-		(float)( ((unsigned)*x) & 0xFFFFFFFFU ),
-		(float)0xFFFFFFFFU
-	);
+		*x = (*x & (uint64_t)0xFFFFFFFFUL)*(a) + (*x >> 32);
+		return mc_fdiv(
+			(float)(uint32_t)*x,
+			(float)0xFFFFFFFFU
+		);
 	#endif
 };
 
@@ -1575,34 +1577,43 @@ inline mc_fp_t fp_random_single(unsigned long *x, unsigned a){
 	/**
 	 * @brief Generates a double precision random number from [0.0, 1.0] and
 	 *        update the generator state.
-	 * @note Due to precision issues
-	 *       the open nature of the interval is not guaranteed.
+	 *
 	 * @param[in,out]	x Mutable state of the random number generator.
 	 * @param[in]		a Immutable state of the random number generator.
 	 * @return			A random number from [0.0, 1.0].
 	 *
-	 * @details George Marsaglia's Random Number Generator. A double precision 
-	 *          floating-point number has a 52-bit mantisa, hence only integers from 
-	 *          0, 2^52 - 1] can be represented without loss of information.
+	 * @details George Marsaglia's Random Number Generator. A double precision
+	 *          floating-point number has a 52-bit mantissa, hence only
+	 *          integers from  [0, 2^52 - 1] can be represented without
+	 *          loss of information.
 	 */
 	inline mc_fp_t fp_random_double(unsigned long *x, unsigned a){
-		*x = (*x & (uint64_t)0xFFFFFFFFUL)*(a) + (*x >> 32);
+		#if MC_USE_ENHANCED_RNG
+			*x = (*x & (uint64_t)0xFFFFFFFFUL)*(a) + (*x >> 32);
+			uint32_t high = *x;
+			*x = (*x & (uint64_t)0xFFFFFFFFUL)*(a) + (*x >> 32);
+			uint32_t low = *x;
 
-		/* Generate a random number (0,1). */
-		return mc_fdiv(
-			((double)( (*x & (uint64_t)0xFFFFFFFFFFFFFUL)) ),
-			(double)0xFFFFFFFFFFFFFUL
-		);
+			return mc_fdiv(
+				(double) ((((uint64_t)high) << 32U) + low),
+				(double) 0xFFFFFFFFFFFFFFFFUL
+			);
+		#else
+			*x = (*x & (uint64_t)0xFFFFFFFFUL)*(a) + (*x >> 32);
+			return mc_fdiv(
+				(double)(uint32_t)*x,
+				(double)0xFFFFFFFFU
+			);
+		#endif
 	};
-
 #endif
 
 /**
- * @brief Default floating-point type random number generato kernel.
- * 
+ * @brief Default floating-point type random number generator kernel.
+ *
  * @param[in, out] x    Random number generator seed - updated on each call.
  * @param[in] a         Random number generator seed - fixed.
- * @param[in] n         Number of random numbers to enerate
+ * @param[in] n         Number of random numbers to generate
  * @param buffer        Buffer for the n random numbers.
  *
  */
