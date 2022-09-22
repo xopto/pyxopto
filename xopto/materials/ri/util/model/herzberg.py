@@ -36,7 +36,7 @@ class Herzberger_3_2(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -102,7 +102,7 @@ class HerzbergerEx_3_2(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -167,7 +167,7 @@ class Herzberger_4_2(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -234,7 +234,7 @@ class HerzbergerEx_4_2(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.

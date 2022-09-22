@@ -35,7 +35,7 @@ def _ri(params: np.ndarray, pp: Scale or Normalize,
     ----------
     params: np.ndarray
         Model parameters.
-    pp: Scale or Normalize
+    pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
         Wavelength preprocessor.
     wavelengths: np.ndarray
         Wavelengths of light (m).
@@ -71,7 +71,7 @@ def _ri_ex(params: np.ndarray, pp: Scale or Normalize,
     ----------
     params: np.ndarray
         Model parameters.
-    pp: Scale or Normalize
+    pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
         Wavelength preprocessor.
     wavelengths: np.ndarray
         Wavelengths of light (m).
@@ -108,7 +108,7 @@ class Sellmeier_1(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -167,7 +167,7 @@ class SellmeierEx_1(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -226,7 +226,7 @@ class Sellmeier_2(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -287,7 +287,7 @@ class SellmeierEx_2(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -348,7 +348,7 @@ class Sellmeier_3(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -410,7 +410,7 @@ class SellmeierEx_3(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -472,7 +472,7 @@ class Sellmeier_4(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -535,7 +535,7 @@ class SellmeierEx_4(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -598,7 +598,7 @@ class Sellmeier_5(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -662,7 +662,7 @@ class SellmeierEx_5(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.

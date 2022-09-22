@@ -137,7 +137,7 @@ class Pc(PfBase):
         class that can be used to compute Legendre moments and other
         scattering phase function quantifiers.
 
-        Returns:
+        Returns
         -------
         pf: xopto.pf.Pc
             Instance of the related utility scattering phase function.

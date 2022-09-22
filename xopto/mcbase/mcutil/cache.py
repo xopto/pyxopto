@@ -149,7 +149,7 @@ class ObjCache:
         Parameters
         ----------
         value: object
-            Value that is attained by calling obj_type(*args)
+            Value that is attained by calling ``obj_type(*args)``
         obj_type: object type or callable
             Any python class or callable.
         args: list
@@ -194,10 +194,11 @@ class LutCache(ObjCache):
                  cachefile: str = None):
         '''
         Initializes a lookup table-based Monte Carlo scattering phase function
-        cache (mcpf.LutPhaseFunction objects). This object internally saves
-        all created instances of lookup table-based scattering phase
-        functions and runs computations only if the requested scattering
-        phase function cannot be found in the cache.
+        cache (:py:class:`~xopto.mcbase.mcpf.LutPhaseFunction` objects).
+        This object internally saves all created instances of lookup
+        table-based scattering phase functions and runs computations only
+        if the requested scattering phase function cannot be found
+        in the cache.
 
         Parameters
         ----------

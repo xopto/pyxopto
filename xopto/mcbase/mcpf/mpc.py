@@ -146,7 +146,7 @@ class MPc(PfBase):
         class that can be used to compute Legendre moments and other
         scattering phase function quantifiers.
 
-        Returns:
+        Returns
         -------
         pf: xopto.pf.MPc
             Instance of the related utility scattering phase function.

@@ -46,7 +46,7 @@ import pyopencl as cl
 class ClWorker(mcobject.McObject):
     def __init__(self,
                  types: mctypes.McDataTypesBase = mctypes.McDataTypesSingle,
-                 cl_devices: str or cl.Device or List[cl.Device] 
+                 cl_devices: str or cl.Device or List['cl.Device'] 
                              or cl.Context or cl.CommandQueue = None,
                  cl_build_options: List[str] = None,
                  cl_profiling: bool = False,

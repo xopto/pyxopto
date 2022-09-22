@@ -24,6 +24,7 @@ import numpy as np
 
 from .base import Scale, Normalize, Model
 
+
 class Conrady_1(Model):
     def __init__(self, params, pp: Scale or Normalize = None, **kwargs):
         '''
@@ -35,7 +36,7 @@ class Conrady_1(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -96,7 +97,7 @@ class ConradyEx_1(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -157,7 +158,7 @@ class Conrady_2(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.
@@ -218,7 +219,7 @@ class ConradyEx_2(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.

@@ -27,7 +27,7 @@ Material
 ========
 
 Each voxel of the volume can be assigned a different material. Materials are
-defined as instances of :py:class:`xopto.mcvox.mcmaterial.material.Material`.
+defined as instances of :py:class:`xopto.mcbase.mcmaterial.Material`.
 The constructor takes several parameters that define the optical properties of
 the material.
 
@@ -49,10 +49,10 @@ with anisotropy 0.9.
     material = mc.mcmaterial.Material(n=1.33, mua=1.0e2, mus=50.0e2, pf=mc.mcpf.Hg(0.9))
 
 All the optical properties of a material that were set
-through the constructor :py:meth:`~xopto.mcvox.mcmaterial.material.Material`
+through the constructor :py:meth:`~xopto.mcbase.mcmaterial.Material`
 can be later changed through accessing the instance properties. In case of
 the scattering phase function, first access the 
-:py:attr:`~xopto.mcvox.mcmaterial.material.Material.pf` material property
+:py:attr:`~xopto.mcbase.mcmaterial.Material.pf` material property
 and from there any of the properties implemented by the scattering
 phase function model. Note that the Henyey-Greenstein scattering phase
 function from this example exposes only the anisotropy
@@ -66,8 +66,8 @@ function from this example exposes only the anisotropy
     material.pf.g = 0.9
 
 The individual materials are then combined into a list through
-:py:meth:`~xopto.mcvox.mcmaterial.material.Materials`. The constructor takes
-a list of :py:class:`~xopto.mcvox.mcmaterial.material.Material`. The created
+:py:meth:`~xopto.mcbase.mcmaterial.Materials`. The constructor takes
+a list of :py:class:`~xopto.mcbase.mcmaterial.Material`. The created
 instance manages the transfer of data between the host and the OpenCL device.
 
 .. code-block:: python
@@ -98,7 +98,7 @@ through accessing the individual materials and from there the material
 properties. The number of materials (including the material of the surrounding
 medium) can be determined through the builtin :py:func:`len`. The individual
 materials can be accessed using the :code:`[]` operator or
-:py:meth:`~xopto.mcvox.mcmaterial.material.Materials.material` method.
+:py:meth:`~xopto.mcbase.mcmaterial.Materials.material` method.
 
 .. code-block:: python
 
@@ -107,12 +107,12 @@ materials can be accessed using the :code:`[]` operator or
 
     num_materials = len(materials)
 
-The :py:class:`~xopto.mcvox.mcmaterial.material.Material` and
-:py:class:`~xopto.mcvox.mcmaterial.material.Materials` produce an informative
+The :py:class:`~xopto.mcbase.mcmaterial.Material` and
+:py:class:`~xopto.mcbase.mcmaterial.Materials` produce an informative
 human-readable output when used with the :py:func:`print` builtin.
 
 Applying :py:func:`print` to a material (instance of
-:py:class:`~xopto.mcvox.mcmaterial.material.Material`) will produce the
+:py:class:`~xopto.mcbase.mcmaterial.Material`) will produce the
 following output:
 
 .. code-block:: python
@@ -124,7 +124,7 @@ following output:
     Material(n=1.3, mua=100.0, mus=5000.0, pf=Hg(g=0.9)) # id 0x7F15B4CEF820.
 
 Applying :py:func:`print` to a list of materials (instance of
-:py:class:`~xopto.mcvox.mcmaterial.material.Materials`) will produce the
+:py:class:`~xopto.mcbase.mcmaterial.Materials`) will produce the
 following output:
 
 .. code-block:: python

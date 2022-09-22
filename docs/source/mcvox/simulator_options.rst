@@ -172,6 +172,18 @@ The list of available options is as follows:
   older GPUs. Note that the amount of available "constant_mem" memory on GPUs is
   typically limited to about 64 |nbsp| kB.
 
+* :py:class:`~xopto.mcbase.mcoptions.McUseEnhancedRng`
+  (default is :py:class:`~xopto.mcbase.mcoptions.McUseEnhancedRng.off`) 
+  The enhanced version of random number generator is required when
+  performing simulations in large scattering volumes, were the number of
+  scattering events is expected to be on the order of millions.
+  Depending on the OpenCL device, there might be a small performance
+  cost of about 15%, which is the reason for disabling this option
+  by default. If this option is turned on
+  :py:class:`~xopto.mcbase.mcoptions.McUseEnhancedRng.on`,
+  the Monte Carlo simulator will use the enhanced version of the random number
+  generator.
+
 * :py:class:`~xopto.mcbase.mcoptions.McDebugMode`
   (default is :py:class:`~xopto.mcbase.mcoptions.McDebugMode.off`) -
   Can be used to enable kernel debug mode that will print information to

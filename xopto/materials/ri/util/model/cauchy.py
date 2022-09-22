@@ -24,6 +24,7 @@ import numpy as np
 
 from .base import Scale, Normalize, Model
 
+
 class Cauchy(Model):
     def __init__(self, params, pp: Scale or Normalize = None, **kwargs):
         '''
@@ -35,7 +36,7 @@ class Cauchy(Model):
         ----------
         params: np.ndarray
             Default model parameters.
-        pp: Scale or Normalize
+        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize
             Wavelength preprocessor instance.
         kwargs: dict
             Parameters passed to the baseclass.

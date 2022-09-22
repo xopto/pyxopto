@@ -24,6 +24,7 @@ from typing import Tuple
 
 import numpy as np
 
+
 class Normalize:
     def __init__(self, src_range: Tuple[float, float],
                  dest_range: Tuple[float, float]=(-1.0, 1.0)):

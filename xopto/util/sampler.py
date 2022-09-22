@@ -42,7 +42,7 @@ def detector_direction(incidence: float, tilt: float, design_angle: float,
 
         x^2 + y^2 + z^2 = 1
 
-    In the above equations :math:`\\Theata_i` is the angle of incidence,
+    In the above equations :math:`\Theta_i` is the angle of incidence,
     :math:`\\Theta_t` the detector tilt angle and :math:`\\Theta_0` the
     design angle, i.e. the angle between the source and detector.
 
@@ -77,7 +77,10 @@ def detector_direction(incidence: float, tilt: float, design_angle: float,
     '''
     # special simplified case for perpendicular incidence
     if incidence == 0:
-        return np.array([0.0, np.sin(design_angle), -np.cos(design_angle)])
+        z = -np.cos(design_angle)
+        y = z*np.sin(tilt)/np.cos(tilt)
+        x = np.sqrt(1.0 - y*y - z*z)
+        return np.array([x, y, z])
 
     src_direction = np.array([np.sin(incidence), 0.0, np.cos(incidence)])
 
@@ -1217,7 +1220,7 @@ class MultilayerSfdi:
 
         Returns
         -------
-        mcobj: mc.Mc
+        mcobj: xopto.mcml.mc.Mc
             A new Monte Carlo simulator instance.
         '''
         # Get a scattering phase function initializer without advancing
