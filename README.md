@@ -94,22 +94,22 @@ computing, data management and visualization ([SciPy](https://scipy.org),
 *Summary of the latest PyXOpto Docker images.*
 | Image                                                                                                      | Tag    | PyXOpto | OS           | CUDA  | CUDNN |
 |------------------------------------------------------------------------------------------------------------|--------|---------|--------------|-------|-------|
-| [xopto/pyxopto-intel-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-intel-jupyter)        | v0.2.0 | 0.2.0   | Ubuntu 20.04 | -     | -     | 
-| [xopto/pyxopto-nvidia-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter)      | v0.2.0 | 0.2.0   | Ubuntu 20.04 | 11.03 | 8     |
-| [xopto/pyxopto-nvidia-jupyter-dl](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter-dl) | v0.2.0 | 0.2.0   | Ubuntu 20.04 | 11.03 | 8     |
+| [xopto/pyxopto-intel-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-intel-jupyter)        | v0.2.1 | 0.2.1   | Ubuntu 20.04 | -     | -     | 
+| [xopto/pyxopto-nvidia-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter)      | v0.2.1 | 0.2.1   | Ubuntu 20.04 | 11.03 | 8     |
+| [xopto/pyxopto-nvidia-jupyter-dl](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter-dl) | v0.2.1 | 0.2.1   | Ubuntu 20.04 | 11.03 | 8     |
 
 
 The [xopto/pyxopto-nvidia-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter), and [xopto/pyxopto-nvidia-jupyter-dl](https://hub.docker.com/repository/docker/xopto/pyxopto-nvidia-jupyter) Docker images can be run by executing the following command:
 ```bash
-sudo docker run --rm --runtime nvidia -p 8888:8888 -it xopto/pyxopto-nvidia-jupyter:v0.2.0
+sudo docker run --rm --runtime nvidia -p 8888:8888 -it xopto/pyxopto-nvidia-jupyter:v0.2.1
 ```
 or
 ```bash
-sudo docker run --rm --runtime nvidia -p 8888:8888 -it xopto/pyxopto-nvidia-jupyter-dl:v0.2.0
+sudo docker run --rm --runtime nvidia -p 8888:8888 -it xopto/pyxopto-nvidia-jupyter-dl:v0.2.1
 ```
 The Intel OpenCL images [xopto/pyxopto-intel-jupyter](https://hub.docker.com/repository/docker/xopto/pyxopto-intel-jupyter) can be run as:
 ```bash
-sudo docker run --rm --device /dev/dri:/dev/dri -u 0 -p 8888:8888 -it xopto/pyxopto-intel-jupyter:v0.2.0
+sudo docker run --rm --device /dev/dri:/dev/dri -u 0 -p 8888:8888 -it xopto/pyxopto-intel-jupyter:v0.2.1
 ```
 This will produce output in the terminal that should be similar to:
 ```bash
@@ -134,7 +134,7 @@ the container data.
 All the Python scripts, Jupyter Notebooks and other user files inside
 the container should be placed into the `/home/jovyan/work` directory.
 ```bash
-sudo docker run --rm --runtime nvidia -p 8888:8888  -v /home/someuser/data:/home/jovyan/work -it xopto/pyxopto-nvidia-jupyter:v0.2.0
+sudo docker run --rm --runtime nvidia -p 8888:8888  -v /home/someuser/data:/home/jovyan/work -it xopto/pyxopto-nvidia-jupyter:v0.2.1
 ```
 
 ### Building the Docker images from source
