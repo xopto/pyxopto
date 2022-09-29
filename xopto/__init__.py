@@ -23,7 +23,7 @@
 import os
 import sys
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 
 VERBOSE = False
@@ -95,7 +95,7 @@ USER_PRIMES_PATH = os.path.join(USER_DATA_PATH, 'primes')
 
 def fulfills_min(requirement: str) -> bool:
     '''
-    Checks if this version of PyXOpto fulfills the minimum requiremed version.
+    Checks if this version of PyXOpto fulfills the minimum required version.
 
     Parameters
     ----------
@@ -105,7 +105,7 @@ def fulfills_min(requirement: str) -> bool:
     Returns
     -------
     fulfills: bool
-        Returns True if PyXOpto fullfills the requirement, else False.
+        Returns True if PyXOpto fulfills the requirement, else False.
 
     Note
     ----
