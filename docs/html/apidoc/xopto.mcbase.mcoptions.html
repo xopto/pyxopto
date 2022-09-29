@@ -535,6 +535,42 @@ Default value is 0.1.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseEnhancedRng">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McUseEnhancedRng</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McUseEnhancedRng"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseEnhancedRng" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McBoolOption" title="xopto.mcbase.mcoptions.McBoolOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McBoolOption</span></code></a></p>
+<p>Run the kernel with the enhanced version of the random number generator.
+Default is off.</p>
+<p>Initializes the enhanced random number generator mode kernel option.</p>
+<p>The enhanced version of random number generator is required when
+performing simulations in large scattering volumes, were the number of
+scattering events is expected to be on the order of millions.
+Depending on the OpenCL device, there might be a small performance
+cost of about 15%, which is the reason for disabling this option
+by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – Use True to enable the enhanced random number generator mode or
+False to disable the enhanced random number generator mode.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseEnhancedRng.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_ENHANCED_RNG',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseEnhancedRng.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseEnhancedRng.off">
+<span class="sig-name descname"><span class="pre">off</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_ENHANCED_RNG',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseEnhancedRng.off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseEnhancedRng.on">
+<span class="sig-name descname"><span class="pre">on</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_ENHANCED_RNG',</span> <span class="pre">True)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseEnhancedRng.on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseFluenceCache">
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McUseFluenceCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McUseFluenceCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseFluenceCache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McBoolOption" title="xopto.mcbase.mcoptions.McBoolOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McBoolOption</span></code></a></p>

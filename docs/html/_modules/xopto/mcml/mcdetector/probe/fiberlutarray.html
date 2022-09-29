@@ -1,0 +1,579 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.mcml.mcdetector.probe.fiberlutarray &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.mcml.mcdetector.probe.fiberlutarray</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xopto.mcml.mcdetector.probe.fiberlutarray</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcdetector.base</span> <span class="kn">import</span> <span class="n">Detector</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">cltypes</span><span class="p">,</span> <span class="n">mctypes</span><span class="p">,</span> <span class="n">mcobject</span><span class="p">,</span> <span class="n">mcoptions</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcutil.fiber</span> <span class="kn">import</span> <span class="n">MultimodeFiberLut</span><span class="p">,</span> <span class="n">FiberLayout</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcutil</span> <span class="kn">import</span> <span class="n">geometry</span>
+<span class="kn">from</span> <span class="nn">xopto.mcml.mcutil.lut</span> <span class="kn">import</span> <span class="n">CollectionLut</span>
+
+<div class="viewcode-block" id="FiberLutArray"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcdetector.probe.fiberlutarray.html#xopto.mcml.mcdetector.probe.fiberlutarray.FiberLutArray">[docs]</a><span class="k">class</span> <span class="nc">FiberLutArray</span><span class="p">(</span><span class="n">Detector</span><span class="p">):</span>
+<div class="viewcode-block" id="FiberLutArray.cl_type"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcdetector.probe.fiberlutarray.html#xopto.mcml.mcdetector.probe.fiberlutarray.FiberLutArray.cl_type">[docs]</a>    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+        <span class="k">class</span> <span class="nc">ClFiberLutArray</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            Structure that that represents a detector in the Monte Carlo</span>
+<span class="sd">            simulator core.</span>
+
+<span class="sd">            Fields</span>
+<span class="sd">            ------</span>
+<span class="sd">            transformation: mc_point3f_t*n</span>
+<span class="sd">                Transforms coordinates from Monte Carlo to the detector / fiber</span>
+<span class="sd">                coordinates for each fiber.</span>
+<span class="sd">            core_position: mc_point2f_t*n</span>
+<span class="sd">                Position of the individual fibers.</span>
+<span class="sd">            core_r_squared: mc_fp_t*n</span>
+<span class="sd">                Squared radius of the optical fibers.</span>
+<span class="sd">            lut: mc_fp_lut_t*n</span>
+<span class="sd">                Detector angular sensitivity lookup table. The lookup table</span>
+<span class="sd">                is sampled with the absolute value of the incidence angle</span>
+<span class="sd">                cosine computed relative to the detector reference direction.).</span>
+<span class="sd">            offset: mc_int_t</span>
+<span class="sd">                The offset of the first accumulator in the Monte Carlo</span>
+<span class="sd">                detector buffer.</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;transformation&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_matrix3f_t</span><span class="o">*</span><span class="n">n</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;core_position&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point2f_t</span><span class="o">*</span><span class="n">n</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;core_r_squared&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="o">*</span><span class="n">n</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;lut&#39;</span><span class="p">,</span> <span class="n">CollectionLut</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;offset&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">ClFiberLutArray</span></div>
+
+<div class="viewcode-block" id="FiberLutArray.cl_declaration"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcdetector.probe.fiberlutarray.html#xopto.mcml.mcdetector.probe.fiberlutarray.FiberLutArray.cl_declaration">[docs]</a>    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure that defines the detector in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span>
+        <span class="n">Loc</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES Mc</span><span class="si">{}</span><span class="s1">Detector{{&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation[</span><span class="si">{}</span><span class="s1">];&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+            <span class="s1">&#39;	mc_point2f_t core_position[</span><span class="si">{}</span><span class="s1">];&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+            <span class="s1">&#39;	mc_fp_t core_r_squared[</span><span class="si">{}</span><span class="s1">];&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+            <span class="s1">&#39;	mc_fp_lut_t lut[</span><span class="si">{}</span><span class="s1">];&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+            <span class="s1">&#39;	mc_size_t offset;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="FiberLutArray.cl_implementation"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcdetector.probe.fiberlutarray.html#xopto.mcml.mcdetector.probe.fiberlutarray.FiberLutArray.cl_implementation">[docs]</a>    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the detector in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span>
+        <span class="n">Loc</span> <span class="o">=</span> <span class="n">loc</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;void dbg_print_</span><span class="si">{}</span><span class="s1">_detector(__mc_detector_mem const Mc</span><span class="si">{}</span><span class="s1">Detector *detector){{&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;	dbg_print(&quot;Mc</span><span class="si">{}</span><span class="s1">Detector - FiberLutArray fiber array detector:&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;	for(mc_size_t index=0; index &lt; </span><span class="si">{}</span><span class="s1">; ++index){{&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+            <span class="s1">&#39;		dbg_print_size_t(INDENT &quot;Fiber index:&quot;, index);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_matrix3f(INDENT INDENT &quot;transformation:&quot;, &amp;detector-&gt;transformation[index]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_point2f(INDENT INDENT &quot;core_position:&quot;, &amp;detector-&gt;core_position[index]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_float(INDENT INDENT &quot;core_r_squared (mm2):&quot;, detector-&gt;core_r_squared[index]*1e6f);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_fp_lut(INDENT &quot;lut:&quot;, &amp;detector-&gt;lut[index]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;offset:&quot;, detector-&gt;offset);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void mcsim_</span><span class="si">{}</span><span class="s1">_detector_deposit(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loc</span><span class="p">),</span>
+            <span class="s1">&#39;		McSim *mcsim, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_point3f_t const *pos, mc_point3f_t const *dir, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t weight){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	__global mc_accu_t *address;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_status(mcsim, &quot;</span><span class="si">{}</span><span class="s1"> FiberLutArray fiber array detector hit&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	__mc_detector_mem const Mc</span><span class="si">{}</span><span class="s1">Detector *detector = &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;		mcsim_</span><span class="si">{}</span><span class="s1">_detector(mcsim);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loc</span><span class="p">),</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_size_t fiber_index = </span><span class="si">{}</span><span class="s1">; /* invalid index ... no fiber hit */&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t dx, dy, r_squared;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t mc_pos, detector_pos;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	pragma_unroll_hint(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+            <span class="s1">&#39;	for(mc_size_t index=0; index &lt; </span><span class="si">{}</span><span class="s1">; ++index){{&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+            <span class="s1">&#39;		mc_pos.x = pos-&gt;x - detector-&gt;core_position[index].x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_pos.y = pos-&gt;y - detector-&gt;core_position[index].y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_pos.z = FP_0;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_matrix3f_t transformation = detector-&gt;transformation[index];&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		transform_point3f(&amp;transformation, &amp;mc_pos, &amp;detector_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dx = detector_pos.x;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dy = detector_pos.y;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		r_squared = dx*dx + dy*dy;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		if (r_squared &lt;= detector-&gt;core_r_squared[index]){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			/* hit this fiber */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			fiber_index = index;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			break;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if (fiber_index &gt;= </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+            <span class="s1">&#39;		return;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	address = mcsim_accumulator_buffer_ex(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mcsim, detector-&gt;offset + fiber_index);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	/* Transfor direction vector component z into the detector space. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t pz = transform_point3f_z(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		&amp;detector-&gt;transformation[fiber_index], dir);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(&quot;Packet direction z:&quot;, pz);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t sensitivity = FP_0;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	fp_linear_lut_sample(mcsim_fp_lut_array(mcsim),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		&amp;detector-&gt;lut[fiber_index], mc_fabs(pz), &amp;sensitivity);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(&quot;</span><span class="si">{}</span><span class="s1"> MultimodeFiberLut sensitivity:&quot;, sensitivity);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	uint32_t ui32w = weight_to_int(weight*sensitivity);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if (ui32w &gt; 0){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print(&quot;</span><span class="si">{}</span><span class="s1"> FiberLutArray fiber array detector depositing:&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loc</span><span class="p">),</span>
+            <span class="s1">&#39;		dbg_print_uint(INDENT &quot;uint weight:&quot;, ui32w);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_size_t(INDENT &quot;to fiber index:&quot;, fiber_index);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		accumulator_deposit(address, ui32w);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="FiberLutArray.cl_options"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcdetector.probe.fiberlutarray.html#xopto.mcml.mcdetector.probe.fiberlutarray.FiberLutArray.cl_options">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">RawOptions</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This source uses lookup table of floating-point data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;MC_USE_FP_LUT&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)]</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fibers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FiberLayout</span><span class="p">]):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Optical fiber probe detector with an array of optical fibers that</span>
+<span class="sd">        are optionally tilted(direction parameter). The optical fibers are</span>
+<span class="sd">        always polished in a way that forms a tight optical contact with</span>
+<span class="sd">        the surface of the sample.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fiber: List[FiberLayout]</span>
+<span class="sd">            List of optical fiber configuration that form the fiber array.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fibers</span><span class="p">,</span> <span class="n">FiberLutArray</span><span class="p">):</span>
+            <span class="n">la</span> <span class="o">=</span> <span class="n">fibers</span>
+            <span class="n">fibers</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">fibers</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">la</span><span class="o">.</span><span class="n">raw</span><span class="p">)</span>
+            <span class="n">nphotons</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">nphotons</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nphotons</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">fibers</span><span class="p">),))</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">nphotons</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span> <span class="o">=</span> <span class="n">fibers</span>
+
+<div class="viewcode-block" id="FiberLutArray.update"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcdetector.probe.fiberlutarray.html#xopto.mcml.mcdetector.probe.fiberlutarray.FiberLutArray.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;FiberLutArray&#39;</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update this detector configuration from the other detector. The</span>
+<span class="sd">        other detector must be of the same type as this detector or a dict with</span>
+<span class="sd">        appropriate fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other: FiberLutArray or dict</span>
+<span class="sd">            This source is updated with the configuration of the other source.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">FiberLutArray</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fibers</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">fibers</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fibers</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fibers&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fibers</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_fibers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FiberLayout</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span>
+    <span class="k">def</span> <span class="nf">_set_fibers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fibers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FiberLayout</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fibers</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The number of optical fibers must not change!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">fibers</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;The type of optical fibers must not change!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">fibers</span>
+    <span class="n">fibers</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_fibers</span><span class="p">,</span> <span class="n">_set_fibers</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;List of optical fibers.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_n_fiber</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_n_fiber</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Number of optical fiber in the array.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FiberLutArray.check"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcdetector.probe.fiberlutarray.html#xopto.mcml.mcdetector.probe.fiberlutarray.FiberLutArray.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Check if the configuration has errors and raise exceptions if so.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">fiber_cfg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">other_cfg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">other_cfg</span> <span class="o">!=</span> <span class="n">fiber_cfg</span><span class="p">:</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">fiber_cfg</span><span class="o">.</span><span class="n">position</span> <span class="o">-</span> <span class="n">other_cfg</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">fiber_cfg</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">dcladding</span><span class="p">,</span> <span class="n">other_cfg</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">dcladding</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Some of the fibers in the &#39;</span>
+                                         <span class="s1">&#39;detector array overlap!&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="FiberLutArray.fiber_position"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcdetector.probe.fiberlutarray.html#xopto.mcml.mcdetector.probe.fiberlutarray.FiberLutArray.fiber_position">[docs]</a>    <span class="k">def</span> <span class="nf">fiber_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns the position of the fiber center as a tuple (x, y).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        index: int</span>
+<span class="sd">            Fiber index from 0 to n -1.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        position: (float, float)</span>
+<span class="sd">            The position of the fiber center as a tuple (x, y).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="ow">or</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">n</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;The fiber index is out of valid range!&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">position</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span></div>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">[</span><span class="n">what</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">FiberLayout</span> <span class="ow">or</span> <span class="n">List</span><span class="p">[</span><span class="n">FiberLayout</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">[</span><span class="n">what</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">_get_normalized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nphotons</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+    <span class="n">normalized</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_normalized</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Normalized.&#39;</span><span class="p">)</span>
+    <span class="n">reflectance</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_normalized</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Reflectance.&#39;</span><span class="p">)</span>
+    <span class="n">transmittance</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_normalized</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Transmittance.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FiberLutArray.cl_pack"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcdetector.probe.fiberlutarray.html#xopto.mcml.mcdetector.probe.fiberlutarray.FiberLutArray.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">,</span>
+                <span class="n">target</span> <span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator.</span>
+<span class="sd">        See the :py:meth:`FiberLutArray.cl_type` method for a detailed list</span>
+<span class="sd">        of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: mcobject.McObject</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Ctypes structure that is filled with the source data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Filled structure received as an input argument or a new</span>
+<span class="sd">            instance if the input argument target is None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">fiber_cfg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">):</span>
+            <span class="n">adir</span> <span class="o">=</span> <span class="n">fiber_cfg</span><span class="o">.</span><span class="n">direction</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fiber_cfg</span><span class="o">.</span><span class="n">direction</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> \
+                   <span class="nb">abs</span><span class="p">(</span><span class="n">fiber_cfg</span><span class="o">.</span><span class="n">direction</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">transform_base</span><span class="p">(</span><span class="n">adir</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+
+            <span class="n">core_r_squared</span> <span class="o">=</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">fiber_cfg</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">dcore</span><span class="o">**</span><span class="mi">2</span>
+
+            <span class="n">target</span><span class="o">.</span><span class="n">transformation</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+            <span class="n">target</span><span class="o">.</span><span class="n">core_position</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">fiber_cfg</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+            <span class="n">target</span><span class="o">.</span><span class="n">core_r_squared</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">core_r_squared</span>
+            <span class="n">fiber_cfg</span><span class="o">.</span><span class="n">fiber</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">cl_pack</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">lut</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+
+        <span class="n">allocation</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">cl_allocate_rw_accumulator_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">allocation</span><span class="o">.</span><span class="n">offset</span>
+
+        <span class="k">return</span> <span class="n">target</span></div>
+
+<div class="viewcode-block" id="FiberLutArray.todict"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcdetector.probe.fiberlutarray.html#xopto.mcml.mcdetector.probe.fiberlutarray.FiberLutArray.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Save the accumulator configuration without the accumulator data to</span>
+<span class="sd">        a dictionary. Use the :meth:`FiberLutArray.fromdict` method to create a new</span>
+<span class="sd">        accumulator instance from the returned data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Accumulator configuration as a dictionary.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;FiberLutArray&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;fibers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">],</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="FiberLutArray.fromdict"><a class="viewcode-back" href="../../../../../apidoc/xopto.mcml.mcdetector.probe.fiberlutarray.html#xopto.mcml.mcdetector.probe.fiberlutarray.FiberLutArray.fromdict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create an accumulator instance from a dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Dictionary created by the :py:meth:`FiberLutArray.todict` method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">detector_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">detector_type</span> <span class="o">!=</span> <span class="s1">&#39;FiberLutArray&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s1">&#39;Expected a &quot;FiberLutArray&quot; type bot got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">detector_type</span><span class="p">))</span>
+        <span class="n">fibers</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fibers&#39;</span><span class="p">)</span>
+        <span class="n">fibers</span> <span class="o">=</span> <span class="p">[</span><span class="n">FiberLayout</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">fibers</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">FiberLutArray</span><span class="p">(</span><span class="n">fibers</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;FiberLutArray(fibers=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fibers</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> #</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

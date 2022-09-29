@@ -1,0 +1,1257 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.util.regression.clann &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.util.regression.clann</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xopto.util.regression.clann</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">jinja2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pyopencl</span> <span class="k">as</span> <span class="nn">cl</span>
+
+<span class="kn">from</span> <span class="nn">xopto</span> <span class="kn">import</span> <span class="n">UTIL_PATH</span><span class="p">,</span> <span class="n">USER_DATA_PATH</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase.mcworker</span> <span class="kn">import</span> <span class="n">ClWorker</span>
+<span class="kn">from</span> <span class="nn">xopto.util.regression</span> <span class="kn">import</span> <span class="n">ann</span><span class="p">,</span> <span class="n">pp</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">mcoptions</span>
+<span class="kn">from</span> <span class="nn">xopto.cl</span> <span class="kn">import</span> <span class="n">cloptions</span>
+
+
+<span class="n">ACTIVATION_FUNCTIONS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span> <span class="s1">&#39;tanh&#39;</span><span class="p">,</span> <span class="s1">&#39;exponential&#39;</span><span class="p">,</span> <span class="s1">&#39;softmax&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;softplus&#39;</span><span class="p">,</span> <span class="s1">&#39;sigmoid&#39;</span><span class="p">,</span> <span class="s1">&#39;softsign&#39;</span><span class="p">,</span> <span class="s1">&#39;selu&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot; Tuple of implemented activation functions. &quot;&quot;&quot;</span>
+
+
+<span class="n">CL_ACTIVATION_FUNCTIONS</span> <span class="o">=</span> \
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">inline void activation_relu(</span>
+<span class="sd">    mc_fp_t max_value, mc_fp_t negative_slope, mc_fp_t threshold,</span>
+<span class="sd">    mc_fp_t *in_out, mc_size_t n)</span>
+<span class="sd">{</span>
+<span class="sd">    for(mc_size_t pos=0; pos &lt; n; ++pos){</span>
+<span class="sd">        in_out[pos] = (in_out[pos] &gt; max_value) ? max_value : in_out[pos];</span>
+<span class="sd">        in_out[pos] = (in_out[pos] &gt;= threshold) ?</span>
+<span class="sd">            in_out[pos] : negative_slope*(in_out[pos] - threshold);</span>
+<span class="sd">    }</span>
+<span class="sd">};</span>
+
+<span class="sd">inline void activation_tanh(</span>
+<span class="sd">    mc_fp_t *in_out, mc_size_t n)</span>
+<span class="sd">{</span>
+<span class="sd">    for(mc_size_t pos = 0; pos &lt; n; ++pos){</span>
+<span class="sd">        in_out[pos] = mc_tanh(in_out[pos]);</span>
+<span class="sd">    };</span>
+<span class="sd">};</span>
+
+<span class="sd">inline void activation_elu(</span>
+<span class="sd">    mc_fp_t alpha, mc_fp_t *in_out, mc_size_t n)</span>
+<span class="sd">{</span>
+<span class="sd">    for(mc_size_t pos=0; pos &lt; n; ++pos){</span>
+<span class="sd">        in_out[pos] = (in_out[pos] &gt;= FP_0) ?</span>
+<span class="sd">            in_out[pos] : alpha*(mc_exp(in_out[pos]) - FP_1);</span>
+<span class="sd">    }</span>
+<span class="sd">};</span>
+
+<span class="sd">inline void activation_exponential(</span>
+<span class="sd">    mc_fp_t *in_out, mc_size_t n)</span>
+<span class="sd">{</span>
+<span class="sd">    for(mc_size_t pos=0; pos &lt; n; ++pos){</span>
+<span class="sd">        in_out[pos] = mc_exp(in_out[pos]);</span>
+<span class="sd">    }</span>
+<span class="sd">};</span>
+
+<span class="sd">inline void activation_softmax(</span>
+<span class="sd">    mc_fp_t *in_out, mc_size_t n)</span>
+<span class="sd">{</span>
+<span class="sd">    mc_fp_t total = FP_0;</span>
+<span class="sd">    for(mc_size_t pos = 0; pos &lt; n; ++pos){</span>
+<span class="sd">        in_out[pos] = mc_exp(in_out[pos]);</span>
+<span class="sd">        total += in_out[pos];</span>
+<span class="sd">    };</span>
+
+<span class="sd">    mc_fp_t inv_total = mc_fdiv(FP_1, total);</span>
+<span class="sd">    for(mc_size_t pos = 0; pos &lt; n; ++pos){</span>
+<span class="sd">        in_out[pos] *= inv_total;</span>
+<span class="sd">    };</span>
+<span class="sd">};</span>
+
+<span class="sd">inline void activation_softplus(</span>
+<span class="sd">    mc_fp_t *in_out, mc_size_t n)</span>
+<span class="sd">{</span>
+<span class="sd">    for(mc_size_t pos = 0; pos &lt; n; ++pos)</span>
+<span class="sd">        in_out[pos] = mc_fdiv(FP_1, (FP_1 + mc_exp(-in_out[pos])));</span>
+<span class="sd">};</span>
+
+<span class="sd">inline void activation_sigmoid(</span>
+<span class="sd">    mc_fp_t *in_out, mc_size_t n)</span>
+<span class="sd">{</span>
+<span class="sd">    for(mc_size_t pos = 0; pos &lt; n; ++pos)</span>
+<span class="sd">        in_out[pos] = mc_log(mc_exp(in_out[pos]) + FP_1);</span>
+<span class="sd">};</span>
+
+<span class="sd">inline void activation_softsign(</span>
+<span class="sd">    mc_fp_t *in_out, mc_size_t n)</span>
+<span class="sd">{</span>
+<span class="sd">    for(mc_size_t pos = 0; pos &lt; n; ++pos)</span>
+<span class="sd">        in_out[pos] = mc_fdiv(in_out[pos], mc_fabs(in_out[pos] + FP_1));</span>
+<span class="sd">};</span>
+
+<span class="sd">inline void activation_selu(</span>
+<span class="sd">    mc_fp_t *in_out, mc_size_t n)</span>
+<span class="sd">{</span>
+<span class="sd">    mc_fp_t const scale = FP_LITERAL(1.05070098);</span>
+<span class="sd">    mc_fp_t const alpha = FP_LITERAL(1.67326324);</span>
+<span class="sd"> </span>
+<span class="sd">    for(mc_size_t pos = 0; pos &lt; n; ++pos)</span>
+<span class="sd">        in_out[pos] = (in_out[pos] &gt;= FP_0) ?</span>
+<span class="sd">            scale*in_out[pos] : scale*alpha*(mc_exp(in_out[pos]) - FP_1);</span>
+<span class="sd">};</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">&quot;&quot;&quot; OpenCL source code of the implemented activation functions. &quot;&quot;&quot;</span>
+
+
+<span class="n">CL_COMMON</span> <span class="o">=</span> \
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">void inline fp_copy(</span>
+<span class="sd">    mc_fp_t *dest, mc_fp_t const *src, mc_size_t n)</span>
+<span class="sd">{</span>
+<span class="sd">    for(mc_size_t pos=0; pos &lt; n; ++pos)</span>
+<span class="sd">        dest[pos] = src[pos];</span>
+<span class="sd">};</span>
+
+<span class="sd">void inline fp_copy_from_global(</span>
+<span class="sd">    mc_fp_t *dest, __global mc_fp_t const *src, mc_size_t n)</span>
+<span class="sd">{</span>
+<span class="sd">    for(mc_size_t pos=0; pos &lt; n; ++pos)</span>
+<span class="sd">        dest[pos] = src[pos];</span>
+<span class="sd">};</span>
+
+<span class="sd">void inline fp_copy_to_global(</span>
+<span class="sd">    __global mc_fp_t *dest, mc_fp_t const *src, mc_size_t n)</span>
+<span class="sd">{</span>
+<span class="sd">    for(mc_size_t pos=0; pos &lt; n; ++pos)</span>
+<span class="sd">        dest[pos] = src[pos];</span>
+<span class="sd">};</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">&quot;&quot;&quot; OpenCL source code of support functions. &quot;&quot;&quot;</span>
+
+
+<span class="n">CL_KERNEL_TEMPLATE</span> <span class="o">=</span> \
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">__kernel void {prefix}model_kernel(</span>
+<span class="sd">        __global mc_fp_t const *input,</span>
+<span class="sd">        __global mc_fp_t *output,</span>
+<span class="sd">        mc_size_t num_samples)</span>
+<span class="sd">{{</span>
+<span class="sd">    if (get_global_id(0) &lt; num_samples){{</span>
+<span class="sd">        mc_fp_t one_input[{num_inputs}];</span>
+<span class="sd">        mc_fp_t one_output[{num_outputs}];</span>
+
+<span class="sd">        fp_copy_from_global(one_input, input + {num_inputs}*get_global_id(0), {num_inputs});</span>
+<span class="sd">        {prefix}input_pp_apply(one_input);</span>
+<span class="sd">        {prefix}model(one_input, one_output);</span>
+<span class="sd">        {prefix}output_pp_undo(one_output);</span>
+<span class="sd">        fp_copy_to_global(output + {num_outputs}*get_global_id(0), one_output, {num_outputs});</span>
+<span class="sd">    }}</span>
+<span class="sd">}};</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">OpenCL kernel function template as a python format string with keyword</span>
+<span class="sd">parameters.</span>
+
+<span class="sd">Parameters</span>
+<span class="sd">----------</span>
+<span class="sd">    prefix: str</span>
+<span class="sd">        Prefix for the OpenCL kernel and the related support functions that</span>
+<span class="sd">        implement the model.</span>
+<span class="sd">    num_inputs: int</span>
+<span class="sd">        The number of input variables.</span>
+<span class="sd">    num_outputs: int</span>
+<span class="sd">        The number of output variables</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="get_fp"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.clann.html#xopto.util.regression.clann.get_fp">[docs]</a><span class="k">def</span> <span class="nf">get_fp</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns the input value if it is not None, else returns the default value.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    value: float</span>
+<span class="sd">        Input floating point number or None.</span>
+<span class="sd">    default: float</span>
+<span class="sd">        Default value that is returned if the input value is None.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fp: float</span>
+<span class="sd">        Input value if it is not None, else the default value.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">default</span>
+    <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="prepare_prefix"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.clann.html#xopto.util.regression.clann.prepare_prefix">[docs]</a><span class="k">def</span> <span class="nf">prepare_prefix</span><span class="p">(</span><span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">prefix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">prefix</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">):</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span>
+
+    <span class="k">return</span> <span class="n">prefix</span></div>
+
+
+<div class="viewcode-block" id="Renderer"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.clann.html#xopto.util.regression.clann.Renderer">[docs]</a><span class="k">class</span> <span class="nc">Renderer</span><span class="p">:</span>
+    <span class="n">DEFAULT_INDENT</span> <span class="o">=</span> <span class="s1">&#39;    &#39;</span>
+    <span class="sd">&#39;&#39;&#39; Default indentation. &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">80</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Creates an instance of rendering engine that generates OpenCL code</span>
+<span class="sd">        for dense ANN models.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indent: str</span>
+<span class="sd">            Indentation of the source code.</span>
+<span class="sd">        width: int</span>
+<span class="sd">            Maximum line width of the source code.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_indent</span> <span class="o">=</span> <span class="n">indent</span>
+
+<div class="viewcode-block" id="Renderer.render"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.clann.html#xopto.util.regression.clann.Renderer.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span> <span class="n">models</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">ann</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> \
+            <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render/generate OpenCL source code for the provided dense models.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ctx: ClWorker</span>
+<span class="sd">            OpenCL worker that will be used to run the OpenCL-based</span>
+<span class="sd">            implementation of the model.</span>
+<span class="sd">        models: List[Tuple[ann.Model, str]]</span>
+<span class="sd">            A list of ANN models and corresponding prefixes that will be used</span>
+<span class="sd">            to produce OpenCL code/kernels.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        code: List[str]</span>
+<span class="sd">            Source code lines. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">prefixes</span> <span class="o">=</span> <span class="p">[</span><span class="n">prefix</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">models</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">prefixes</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">prefixes</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Prefixes of ANN models must be unique!&#39;</span><span class="p">)</span>
+            
+        <span class="n">pp_code</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_cl_base</span><span class="p">(),</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;/* Common code */&#39;</span><span class="p">,</span>
+                 <span class="n">CL_COMMON</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;/* Activation functions */&#39;</span><span class="p">,</span>
+                 <span class="n">CL_ACTIVATION_FUNCTIONS</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
+
+        <span class="c1"># All implementations of preprocessors go to a common place</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;/* Preprocessors */&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cl_pp_implementation</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">pp_input</span><span class="p">,</span> <span class="n">pp_code</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cl_pp_implementation</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">pp_input</span><span class="p">,</span> <span class="n">pp_code</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pp_code</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Generate code for the individual models</span>
+        <span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;/* Preprocessor calls */&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">])</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cl_render_pp</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;/* Dense network */&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">])</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cl_render_dense</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;/* Kernel */&#39;</span><span class="p">])</span>
+            <span class="n">num_inputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">num_outputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">CL_KERNEL_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span>
+                                        <span class="n">num_inputs</span><span class="o">=</span><span class="n">num_inputs</span><span class="p">,</span>
+                                        <span class="n">num_outputs</span><span class="o">=</span><span class="n">num_outputs</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">lines</span></div>
+
+    <span class="k">def</span> <span class="nf">_cl_base</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Prepare and return the base code of the OpenCL implementation that</span>
+<span class="sd">        defines the basic data types, math functions and handles the source</span>
+<span class="sd">        code options.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        src: str</span>
+<span class="sd">            The OpenCL source code.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">UTIL_PATH</span><span class="p">,</span> <span class="s1">&#39;regression&#39;</span><span class="p">,</span> <span class="s1">&#39;kernel&#39;</span><span class="p">,</span> <span class="s1">&#39;clann.template.h&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">code</span>
+
+    <span class="k">def</span> <span class="nf">_cl_pp_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span>
+                              <span class="n">preprocessor</span><span class="p">:</span> <span class="n">pp</span><span class="o">.</span><span class="n">Preprocessor</span><span class="p">,</span>
+                              <span class="n">code</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">pp</span><span class="o">.</span><span class="n">PreprocessorFunction</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">pp</span><span class="o">.</span><span class="n">PreprocessorFunction</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Generates OpenCL source code that implements the preprocessor functions</span>
+<span class="sd">        of the ANN model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ctx: ClWorker</span>
+<span class="sd">            OpenCL worker that will be used to run the OpenCL-based</span>
+<span class="sd">            implementation of the model.</span>
+<span class="sd">        preprocessor: pp.Preprocessor</span>
+<span class="sd">            Instance of a preprocessor used by the model.</span>
+<span class="sd">        code: Dict[pp.PreprocessorFunction, str]</span>
+<span class="sd">            Any existing source code that implements preprocessor functions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        code: Dict[pp.PreprocessorFunction, str]</span>
+<span class="sd">            Source code of the individual preprocessor functions in a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">code</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">pp_item</span> <span class="ow">in</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">pp_item</span><span class="o">.</span><span class="n">sequence</span><span class="p">:</span>
+                <span class="n">T</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">T</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">code</span><span class="p">:</span>
+                    <span class="n">func_code</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">fetch_cl_implementation</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">func_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">code</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="n">func_code</span>
+
+        <span class="k">return</span> <span class="n">code</span>
+
+    <span class="k">def</span> <span class="nf">_cl_render_pp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">ann</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">80</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render OpenCL code for a preprocessor call (NOT preprocessor</span>
+<span class="sd">        implementation).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ctx: ClWorker</span>
+<span class="sd">            OpenCL worker that will be used to run the OpenCL-based</span>
+<span class="sd">            implementation of the model.</span>
+<span class="sd">        model: ann.Model</span>
+<span class="sd">            The ANN model that will be converted to OpenCL.</span>
+<span class="sd">        prefix: str</span>
+<span class="sd">            Prefix for the OpenCL kernel and related support functions that</span>
+<span class="sd">            implement the model.</span>
+<span class="sd">        indent: str</span>
+<span class="sd">            Indentation of the source code.</span>
+<span class="sd">        width: int</span>
+<span class="sd">            Maximum line width of the source code.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        code: List[str]</span>
+<span class="sd">            Source code lines that implement the preprocessor call.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">prepare_prefix</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">indent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">indent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_INDENT</span>
+
+        <span class="n">layers</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span>
+        <span class="n">num_inputs</span> <span class="o">=</span> <span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">num_outputs</span> <span class="o">=</span> <span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">topology</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">topology</span>
+        <span class="k">for</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">render</span> <span class="ow">in</span> <span class="p">((</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="n">topology</span><span class="o">.</span><span class="n">pp_input</span><span class="o">.</span><span class="n">cl_render_call</span><span class="p">),</span>
+                            <span class="p">(</span><span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="n">topology</span><span class="o">.</span><span class="n">pp_output</span><span class="o">.</span><span class="n">cl_render_call</span><span class="p">)):</span>
+            <span class="n">in_out_prefix</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="nb">dir</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span>
+            <span class="k">for</span> <span class="n">undo</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                    <span class="n">render</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">in_out_prefix</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">num_inputs</span><span class="p">,</span>
+                           <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">undo</span><span class="o">=</span><span class="n">undo</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">lines</span>
+
+    <span class="k">def</span> <span class="nf">_cl_render_dense</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">ann</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span>
+                         <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">80</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render OpenCL code for the dense ANN network.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ctx: ClWorker</span>
+<span class="sd">            OpenCL worker that will be used to run the OpenCL-based</span>
+<span class="sd">            implementation of the model.</span>
+<span class="sd">        model: ann.Model</span>
+<span class="sd">            The ANN model that will be converted to OpenCL.</span>
+<span class="sd">        prefix: str</span>
+<span class="sd">            Prefix for the OpenCL kernel and related support functions that</span>
+<span class="sd">            implement the model.</span>
+<span class="sd">        indent: str</span>
+<span class="sd">            Indentation of the source code.</span>
+<span class="sd">        width: int</span>
+<span class="sd">            Maximum line width of the source code.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        code: List[str]</span>
+<span class="sd">            Source code lines that implement the dense ANN network.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">prepare_prefix</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">indent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">indent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_INDENT</span>
+
+        <span class="n">input_var</span> <span class="o">=</span> <span class="s1">&#39;input&#39;</span>
+        <span class="n">output_var</span> <span class="o">=</span> <span class="s1">&#39;output&#39;</span>
+        <span class="n">layers</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span>
+        <span class="n">num_inputs</span><span class="p">,</span> <span class="n">num_outputs</span> <span class="o">=</span> <span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">num_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span>
+            <span class="s1">&#39;void </span><span class="si">{prefix}</span><span class="s1">model(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent}</span><span class="s1">mc_fp_t const *input, mc_fp_t *output)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;{&#39;</span>
+        <span class="p">])</span>
+
+        <span class="n">body</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">layer_index</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layers</span><span class="p">):</span>
+            <span class="n">allocate_output_var</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="n">layer_index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">layer_input_var</span> <span class="o">=</span> <span class="s1">&#39;input&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">layer_input_var</span> <span class="o">=</span> <span class="s1">&#39;output_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">alloc_output_var</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">layer_index</span> <span class="o">==</span> <span class="n">num_layers</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">layer_output_var</span> <span class="o">=</span> <span class="s1">&#39;output&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">allocate_output_var</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">layer_output_var</span> <span class="o">=</span> <span class="s1">&#39;output_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer_index</span><span class="p">)</span>
+
+            <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;/* Layer </span><span class="si">{}</span><span class="s1"> of </span><span class="si">{}</span><span class="s1"> */&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">layer_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">allocate_output_var</span><span class="p">:</span>
+                <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="s1">&#39;mc_fp_t </span><span class="si">{layer_output_var}</span><span class="s1">[</span><span class="si">{num_outputs}</span><span class="s1">];&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">layer_output_var</span><span class="o">=</span><span class="n">layer_output_var</span><span class="p">,</span>
+                        <span class="n">num_outputs</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="n">body</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cl_render_layer</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span>
+                                      <span class="n">layer_input_var</span><span class="p">,</span>
+                                      <span class="n">layer_output_var</span><span class="p">,</span>
+                                      <span class="n">width</span><span class="o">=</span><span class="n">width</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">indent</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">body</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indent</span> <span class="o">+</span> <span class="n">line</span><span class="p">)</span>
+
+        <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;};&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">lines</span>
+
+    <span class="k">def</span> <span class="nf">_cl_render_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> 
+                         <span class="n">input_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                         <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render OpenCL code for the dense ANN network.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ctx: ClWorker</span>
+<span class="sd">            OpenCL worker that will be used to run the OpenCL-based</span>
+<span class="sd">            implementation of the model.</span>
+<span class="sd">        layer: object</span>
+<span class="sd">            Native representation of the model layer.</span>
+<span class="sd">        input_var: str</span>
+<span class="sd">            Name of the variable for the input data vector.</span>
+<span class="sd">        output_var: str</span>
+<span class="sd">            Name of the variable for the output data vector.</span>
+<span class="sd">        indent: str</span>
+<span class="sd">            Indentation of the source code.</span>
+<span class="sd">        width: int</span>
+<span class="sd">            Maximum line width of the source code.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        code: List[str]</span>
+<span class="sd">            Source code lines that implement the network layer.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">all_weights</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span>
+        <span class="n">n_in</span><span class="p">,</span> <span class="n">n_out</span> <span class="o">=</span> <span class="n">all_weights</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">num_weights</span> <span class="o">=</span> <span class="n">n_in</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">for</span> <span class="n">output_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_out</span><span class="p">):</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">all_weights</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span> <span class="n">output_index</span><span class="p">]</span><span class="o">.</span><span class="n">flat</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{output_var}</span><span class="s1">[</span><span class="si">{index}</span><span class="s1">] =&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_var</span><span class="o">=</span><span class="n">output_var</span><span class="p">,</span>
+                                                 <span class="n">index</span><span class="o">=</span><span class="n">output_index</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">indent</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">weight_index</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">weights</span><span class="p">):</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{input_var}</span><span class="s1">[</span><span class="si">{index}</span><span class="s1">]*</span><span class="si">{weight}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">input_var</span><span class="o">=</span><span class="n">input_var</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">weight_index</span><span class="p">,</span>
+                    <span class="n">weight</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">fp_str</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">weight_index</span> <span class="o">==</span> <span class="n">num_weights</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">:</span>
+                        <span class="n">line</span> <span class="o">+=</span> <span class="n">item</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                        <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{indent}{item}</span><span class="s1">;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">:</span>
+                        <span class="n">line</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> + &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                        <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{indent}{item}</span><span class="s1"> + &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_weights</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">bias</span> <span class="o">=</span> <span class="n">all_weights</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{output_var}</span><span class="s1">[</span><span class="si">{index}</span><span class="s1">] += </span><span class="si">{bias}</span><span class="s1">;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">output_var</span><span class="o">=</span><span class="n">output_var</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">output_index</span><span class="p">,</span>
+                    <span class="n">bias</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">fp_str</span><span class="p">(</span><span class="n">bias</span><span class="p">[</span><span class="n">output_index</span><span class="p">]))</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+        <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cl_render_activation</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">output_var</span><span class="p">,</span>
+                                       <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">lines</span>
+
+    <span class="k">def</span> <span class="nf">_cl_render_activation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">inout_var</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+                              <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render activation function of the layer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ctx: ClWorker</span>
+<span class="sd">            OpenCL worker that will be used to run the OpenCL-based</span>
+<span class="sd">            implementation of the model.</span>
+<span class="sd">        layer: object</span>
+<span class="sd">            Native representation of the model layer.</span>
+<span class="sd">        inout_var: str</span>
+<span class="sd">            Name of the variable for the input/output data vector.</span>
+<span class="sd">        indent: str</span>
+<span class="sd">            Indentation of the source code.</span>
+<span class="sd">        width: int</span>
+<span class="sd">            Maximum line width of the source code.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        code: List[str]</span>
+<span class="sd">            Source code lines that implement the activation function</span>
+<span class="sd">            of the network layer.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">activation</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">activation</span>
+        <span class="n">activation_name</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">activation</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">if</span> <span class="n">activation_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ACTIVATION_FUNCTIONS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unexpected activation function &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">activation_name</span><span class="p">))</span>
+
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">function</span> <span class="o">=</span> <span class="s1">&#39;activation_</span><span class="si">{:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">activation_name</span><span class="p">)</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">types</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="si">{function}</span><span class="s1">(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="n">function</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">activation_name</span> <span class="o">==</span> <span class="s1">&#39;relu&#39;</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{indent}{max_value:s}</span><span class="s1">, </span><span class="si">{negative_slope:s}</span><span class="s1">, &#39;</span>
+                <span class="s1">&#39;</span><span class="si">{threshold:s}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span>
+                    <span class="n">max_value</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">fp_str</span><span class="p">(</span>
+                        <span class="n">get_fp</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">activation</span><span class="p">,</span> <span class="s1">&#39;max_value&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+                    <span class="p">),</span>
+                    <span class="n">negative_slope</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">fp_str</span><span class="p">(</span>
+                        <span class="n">get_fp</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">activation</span><span class="p">,</span> <span class="s1">&#39;negative_slope&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)</span>
+                    <span class="p">),</span>
+                    <span class="n">threshold</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">fp_str</span><span class="p">(</span>
+                        <span class="n">get_fp</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">activation</span><span class="p">,</span> <span class="s1">&#39;threshold&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">activation</span> <span class="o">==</span> <span class="s1">&#39;elu&#39;</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{indent}{alpha:s}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">fp_str</span><span class="p">(</span>
+                        <span class="n">get_fp</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">activation</span><span class="p">,</span> <span class="s1">&#39;alpha&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="si">{indent}{inout_var}</span><span class="s1">, </span><span class="si">{n}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">inout_var</span><span class="o">=</span><span class="n">inout_var</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;);&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">lines</span></div>
+
+
+<div class="viewcode-block" id="ClModel"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.clann.html#xopto.util.regression.clann.ClModel">[docs]</a><span class="k">class</span> <span class="nc">ClModel</span><span class="p">(</span><span class="n">ClWorker</span><span class="p">):</span>
+    <span class="n">AUTOGEN_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">USER_DATA_PATH</span><span class="p">,</span> <span class="s1">&#39;clann&#39;</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Default directory that is used to save the rendered OpenCL source code.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">AUTOGEN_PATH</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">AUTOGEN_PATH</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="n">ann</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">mcoptions</span><span class="o">.</span><span class="n">McOption</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">renderer</span><span class="p">:</span> <span class="s1">&#39;Renderer&#39;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL implementation of a dense model.</span>
+
+<span class="sd">        model: ann.Model or str</span>
+<span class="sd">            Dense model instance. If a str instance, load the model</span>
+<span class="sd">            from the specified file.</span>
+<span class="sd">        prefix: str</span>
+<span class="sd">            Prefix for the OpenCL kernel and related support functions that</span>
+<span class="sd">            implement the model.</span>
+<span class="sd">        options: List[mcoptions.McOption]</span>
+<span class="sd">            List of options applied to the source code.</span>
+<span class="sd">        renderer: Renderer</span>
+<span class="sd">            An instance of rendering engine that will be used to generate</span>
+<span class="sd">            OpenCL source code representing the model.</span>
+<span class="sd">        args: tuple</span>
+<span class="sd">            Positional arguments passed to the base class</span>
+<span class="sd">            constructor :py:class:`xopto.mcbase.mcworker.ClWorker` class.</span>
+<span class="sd">        kwargs: dict</span>
+<span class="sd">            Keyword arguments passed to the base class</span>
+<span class="sd">            constructor :py:class:`xopto.mcbase.mcworker.ClWorker` class.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cl_src</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cl_exec</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">ann</span><span class="o">.</span><span class="n">Model</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">renderer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">renderer</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">()</span>
+
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">prepare_prefix</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span> <span class="o">=</span> <span class="n">renderer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kernel_options</span> <span class="o">=</span> <span class="n">options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kernel_names</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ninput</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ninput</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noutput</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">noutput</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">topology</span>
+
+        <span class="c1"># the latest kernel timing report and the number of used threads</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_report</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;upload&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;download&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;execution&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;items&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+
+<div class="viewcode-block" id="ClModel.build"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.clann.html#xopto.util.regression.clann.ClModel.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exportsrc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Force build the OpenCL source and executable. The source and executable</span>
+<span class="sd">        are otherwise build on the first use.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        exportsrc: str</span>
+<span class="sd">            Export the generated OpenCL source code to this file before</span>
+<span class="sd">            starting the build process.</span>
+<span class="sd">        verbose: bool</span>
+<span class="sd">            Enables verbose reporting.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cl_exec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_build_exec</span><span class="p">(</span><span class="n">exportsrc</span><span class="o">=</span><span class="n">exportsrc</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_build_src</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Build the OpenCL source code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        verbose: bool</span>
+<span class="sd">            Enables verbose reporting.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">kernel_options</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kernel_options</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">McOption</span><span class="p">):</span>
+                <span class="n">kernel_options</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">fetch_cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+                <span class="n">kernel_options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s1">&#39;Kernel options must be a list of McOption or a list &#39;</span>
+                    <span class="s1">&#39;of tuples!&#39;</span><span class="p">)</span>
+        <span class="n">resolved_options</span> <span class="o">=</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">resolve_cl_options</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_types</span><span class="p">()</span><span class="o">.</span><span class="n">fetch_cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+            <span class="n">kernel_options</span>
+        <span class="p">)</span>
+
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;mc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;options&#39;</span><span class="p">:</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">make_defines</span><span class="p">(</span><span class="n">resolved_options</span><span class="p">)}</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span><span class="p">)])</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># save all the kernel options for later use</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cl_src_options</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">resolved_options</span><span class="p">)</span>
+
+        <span class="c1"># Render the OpenCL source file.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cl_src</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_build_exec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exportsrc</span><span class="p">:</span> <span class="nb">bool</span> <span class="ow">or</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Build the OpenCL executable from the source code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        exportsrc: bool or str</span>
+<span class="sd">            Optional filename that will be used to save the source code.</span>
+<span class="sd">        verbose: bool</span>
+<span class="sd">            Enables verbose reporting.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        buildtime: float</span>
+<span class="sd">            Time required to build the OpenCL executable.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># Rebuild from source if required - first call of the run method.</span>
+        <span class="n">tb</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="c1"># Generate / render the source code for this simulator instance.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cl_src</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_build_src</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">exportsrc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">exportsrc</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exportsrc</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">exportsrc</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">export_src</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="c1"># Compile the OpenCL source code.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cl_exec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cl_src</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cl_exec</span><span class="o">.</span><span class="n">all_kernels</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_kernel_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">function_name</span><span class="p">)</span>
+
+        <span class="c1"># options=[&#39;-cl-opt-disable&#39;, &#39;-Werror&#39;]</span>
+        <span class="n">buildtime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">tb</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;OpenCL engine created in </span><span class="si">{:.3f}</span><span class="s1"> ms.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">buildtime</span><span class="o">*</span><span class="mf">1e3</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">buildtime</span>
+
+<div class="viewcode-block" id="ClModel.allocate_input"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.clann.html#xopto.util.regression.clann.ClModel.allocate_input">[docs]</a>    <span class="k">def</span> <span class="nf">allocate_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Allocates an empty numpy array buffer that can hold the specified</span>
+<span class="sd">        number of input samples.</span>
+<span class="sd">        The floating point type of the buffer matches the floating point type</span>
+<span class="sd">        of the OpenCL kernel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        samples: int</span>
+<span class="sd">            The number of samples</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        buffer: np.ndarray</span>
+<span class="sd">            A 2D numpy buffer of floating point type that can hold the</span>
+<span class="sd">            specified number of input samples. The shape of the buffer is</span>
+<span class="sd">            (samples, ninput).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">ninput</span><span class="p">),</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_float</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ClModel.allocate_output"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.clann.html#xopto.util.regression.clann.ClModel.allocate_output">[docs]</a>    <span class="k">def</span> <span class="nf">allocate_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Allocates an empty numpy array buffer that can hold the specified</span>
+<span class="sd">        number of output samples.</span>
+<span class="sd">        The floating point type of the buffer matches the floating point type</span>
+<span class="sd">        of the OpenCL kernel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        samples: int</span>
+<span class="sd">            The number of samples</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        buffer: np.ndarray</span>
+<span class="sd">            A 2D numpy buffer of floating point type that can hold the</span>
+<span class="sd">            specified number of output samples. The shape of the buffer is</span>
+<span class="sd">            (samples, noutput).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">noutput</span><span class="p">),</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_float</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ClModel.predict"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.clann.html#xopto.util.regression.clann.ClModel.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">wgsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Compute predictions for the input data array using OpenCL</span>
+<span class="sd">        implementation of the model. The input data array is first transferred</span>
+<span class="sd">        to the OpenCL device. After running the OpenCL model kernel, the</span>
+<span class="sd">        prediction results are downloaded into the output data array.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        input: np.ndarray</span>
+<span class="sd">            Input data as a 2D numpy array with shape (samples, n), where n is</span>
+<span class="sd">            the number of inputs and samples the number of samples in the</span>
+<span class="sd">            input array.</span>
+<span class="sd">        output: np.ndarray</span>
+<span class="sd">            Optional data array for the predictions that must have sufficient</span>
+<span class="sd">            space and be of the same floating point type as used</span>
+<span class="sd">            in the OpenCL kernel.</span>
+<span class="sd">        wgsize: int</span>
+<span class="sd">            Local work group size. If None (default), the optimal work group</span>
+<span class="sd">            size is determined automatically.</span>
+<span class="sd">        verbose: bool</span>
+<span class="sd">            Enables verbose reporting.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        output: np.ndarray</span>
+<span class="sd">            Data array with predictions.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">t_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cl_exec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_build_exec</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="nb">input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_float</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">input</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The input data must be a 2D array!&#39;</span><span class="p">)</span>
+
+        <span class="n">num_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">ninput</span>
+        <span class="k">if</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">num_inputs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The number of inputs in the data array (</span><span class="si">{}</span><span class="s1">) does &#39;</span>
+                             <span class="s1">&#39;not match the number of inputs (</span><span class="si">{}</span><span class="s1">) &#39;</span>
+                             <span class="s1">&#39;in the model!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                 <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">num_inputs</span><span class="p">))</span>
+
+        <span class="n">num_samples</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">output</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_float</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;The output array must have the same floating &#39;</span>
+                            <span class="s1">&#39;point type as the OpenCL kernel!&#39;</span><span class="p">)</span>
+
+        <span class="n">num_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">noutput</span>
+
+        <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">num_outputs</span><span class="p">),</span>
+                              <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_float</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">output</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">num_samples</span><span class="o">*</span><span class="n">num_outputs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The output array must be of shape &#39;</span>
+                             <span class="s1">&#39;(nsamples, noutput)!&#39;</span><span class="p">)</span>
+
+        <span class="c1"># configure the local and global work group size</span>
+        <span class="k">if</span> <span class="n">wgsize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">local_wg</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">global_wg</span> <span class="o">=</span> <span class="p">[</span><span class="n">num_samples</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">wgsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">wgsize</span><span class="p">)</span>
+            <span class="n">local_wg</span> <span class="o">=</span> <span class="p">[</span><span class="n">wgsize</span><span class="p">]</span>
+            <span class="n">global_wg</span> <span class="o">=</span> <span class="p">[((</span><span class="n">num_samples</span> <span class="o">+</span> <span class="n">wgsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">wgsize</span><span class="p">)</span><span class="o">*</span><span class="n">wgsize</span><span class="p">]</span>
+
+        <span class="n">cl_buffers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_buffers</span>
+        <span class="n">cl_queue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_queue</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cl_r_buffer</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cl_w_buffer</span><span class="p">(</span><span class="s1">&#39;output&#39;</span><span class="p">,</span>
+                         <span class="n">size</span><span class="o">=</span><span class="n">num_samples</span><span class="o">*</span><span class="n">num_outputs</span><span class="o">*</span><span class="n">output</span><span class="o">.</span><span class="n">itemsize</span><span class="p">)</span>
+        <span class="n">t_upload</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+        <span class="n">kernel_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kernel_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cl_exec</span><span class="p">,</span> <span class="n">kernel_name</span><span class="p">)(</span>
+            <span class="n">cl_queue</span><span class="p">,</span> <span class="n">global_wg</span><span class="p">,</span> <span class="n">local_wg</span><span class="p">,</span>
+            <span class="n">cl_buffers</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">],</span>
+            <span class="n">cl_buffers</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">],</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">np_size</span><span class="p">)</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">num_samples</span><span class="p">),</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="n">t_exec</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+        <span class="n">cl</span><span class="o">.</span><span class="n">enqueue_copy</span><span class="p">(</span><span class="n">cl_queue</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">cl_buffers</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="n">t_download</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+        <span class="n">uploadtime</span> <span class="o">=</span> <span class="n">t_upload</span> <span class="o">-</span> <span class="n">t_start</span>
+        <span class="n">exectime</span> <span class="o">=</span> <span class="n">t_exec</span> <span class="o">-</span> <span class="n">t_upload</span>
+        <span class="n">downloadtime</span> <span class="o">=</span> <span class="n">t_download</span> <span class="o">-</span> <span class="n">t_exec</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_report</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">upload</span><span class="o">=</span><span class="n">uploadtime</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="n">downloadtime</span><span class="p">,</span>
+                                <span class="n">execution</span><span class="o">=</span><span class="n">exectime</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">num_samples</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;OpenCL model processed </span><span class="si">{:,d}</span><span class="s1"> items:</span><span class="se">\n</span><span class="s1">&#39;</span>
+                  <span class="s1">&#39;    uploaded/built in: </span><span class="si">{:10.3f}</span><span class="s1"> ms</span><span class="se">\n</span><span class="s1">&#39;</span>
+                  <span class="s1">&#39;    executed in      : </span><span class="si">{:10.3f}</span><span class="s1"> ms</span><span class="se">\n</span><span class="s1">&#39;</span>
+                  <span class="s1">&#39;    downloaded in    : </span><span class="si">{:10.3f}</span><span class="s1"> ms&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                      <span class="n">num_samples</span><span class="p">,</span> <span class="n">uploadtime</span><span class="o">*</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">exectime</span><span class="o">*</span><span class="mf">1e3</span><span class="p">,</span>
+                      <span class="n">downloadtime</span><span class="o">*</span><span class="mf">1e3</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">output</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_run_report</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_report</span>
+    <span class="n">run_report</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_run_report</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                          <span class="s1">&#39;Timing and performance data of the latest kernel &#39;</span>
+                          <span class="s1">&#39;run as a dict with keys &quot;upload&quot;, &quot;download&quot;, &#39;</span>
+                          <span class="s1">&#39;&quot;execution&quot;, and &quot;items&quot;. &#39;</span>
+                          <span class="s1">&#39;The timing values with keys &quot;upload&quot;, &quot;download&quot; &#39;</span>
+                          <span class="s1">&#39;and &quot;execution&quot; are given in seconds. &#39;</span>
+                          <span class="s1">&#39;The number of processed items with key &quot;items&quot; &#39;</span>
+                          <span class="s1">&#39;is an integer value. &#39;</span>
+                          <span class="s1">&#39;All values are initialized to None.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ClModel.export_src"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.clann.html#xopto.util.regression.clann.ClModel.export_src">[docs]</a>    <span class="k">def</span> <span class="nf">export_src</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export the OpenCL source to a file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename: str</span>
+<span class="sd">            The OpenCL source code will be saved to this file. If a file</span>
+<span class="sd">            name is not provided, the OpenCL source will be saved to</span>
+<span class="sd">            :py:attr:`ClModel.AUTOGEN_PATH` directory with a name</span>
+<span class="sd">            &quot;&lt;prefix&gt;_clmodel_&lt;random&gt;.cl&quot;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        filename: str</span>
+<span class="sd">            The filename that was used to save the OpenCL source code.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cl_src</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">())</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">ClModel</span><span class="o">.</span><span class="n">AUTOGEN_PATH</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">clmodel_</span><span class="si">{}</span><span class="s1">.cl&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+                <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cl_src</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">filename</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ann</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_model</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;ANN regression model instance.&#39;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PYOPENCL_COMPILER_OUTPUT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+
+    <span class="kn">from</span> <span class="nn">xopto.util.regression</span> <span class="kn">import</span> <span class="n">pp</span>
+    <span class="n">topology</span> <span class="o">=</span> <span class="n">ann</span><span class="o">.</span><span class="n">Topology</span><span class="p">(</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">node</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="n">pp_input</span><span class="o">=</span><span class="n">pp</span><span class="o">.</span><span class="n">Preprocessor</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">pp</span><span class="o">.</span><span class="n">PreprocessorItem</span><span class="p">([</span><span class="n">pp</span><span class="o">.</span><span class="n">Normalize</span><span class="p">()],</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+             <span class="n">pp</span><span class="o">.</span><span class="n">PreprocessorItem</span><span class="p">([</span><span class="n">pp</span><span class="o">.</span><span class="n">Normalize</span><span class="p">()],</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">))]</span>
+        <span class="p">),</span>
+        <span class="n">pp_output</span><span class="o">=</span><span class="n">pp</span><span class="o">.</span><span class="n">Preprocessor</span><span class="p">(</span>
+            <span class="n">pp</span><span class="o">.</span><span class="n">PreprocessorItem</span><span class="p">([</span><span class="n">pp</span><span class="o">.</span><span class="n">Normalize</span><span class="p">()])</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">ann</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">topology</span><span class="p">)</span>
+    <span class="n">clmodel</span> <span class="o">=</span> <span class="n">ClModel</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;mua&#39;</span><span class="p">,</span> <span class="n">cl_build_options</span><span class="o">=</span><span class="p">[</span><span class="n">cloptions</span><span class="o">.</span><span class="n">FastMath</span><span class="p">])</span>
+    <span class="c1">#clmodel.build(exportsrc=&#39;/home/miran/tmp/cl_code.c&#39;)</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1920</span><span class="o">*</span><span class="mi">1080</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">clmodel</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">np_float</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">clmodel</span><span class="o">.</span><span class="n">allocate_output</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The first run&#39;</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">clmodel</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">tstart</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">clmodel</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">tstart</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Average(</span><span class="si">{}</span><span class="s1">) OpenCL prediction cycle executed in: </span><span class="si">{:.3f}</span><span class="s1"> ms&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">N</span><span class="p">,</span> <span class="n">dt</span><span class="o">*</span><span class="mf">1e3</span><span class="o">/</span><span class="n">N</span><span class="p">))</span>
+
+    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">tstart</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">tstart</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Native prediction executed in: </span><span class="si">{:.3f}</span><span class="s1"> ms&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dt</span><span class="o">*</span><span class="mf">1e3</span><span class="o">/</span><span class="n">N</span><span class="p">))</span>
+
+    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">clmodel</span> <span class="o">=</span> <span class="n">ClModel</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;mua&#39;</span><span class="p">)</span>
+    <span class="n">model_lines</span> <span class="o">=</span> <span class="n">clmodel</span><span class="o">.</span><span class="n">cl_render_network</span><span class="p">(</span><span class="s1">&#39;mua&#39;</span><span class="p">)</span>
+    <span class="n">pp_lines</span> <span class="o">=</span> <span class="n">clmodel</span><span class="o">.</span><span class="n">cl_render_pp</span><span class="p">(</span><span class="s1">&#39;mua&#39;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/home/miran/tmp/cl_code.c&#39;</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
+        <span class="n">fid</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pp_lines</span><span class="p">)</span>
+        <span class="n">fid</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">fid</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">model_lines</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

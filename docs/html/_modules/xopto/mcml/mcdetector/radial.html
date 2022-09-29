@@ -306,8 +306,9 @@
             <span class="s1">&#39;	address = mcsim_accumulator_buffer_ex(&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		mcsim, detector-&gt;offset + index);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t detector_direction = detector-&gt;direction;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	uint32_t ui32w = weight_to_int(weight)*&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		(detector-&gt;cos_min &lt;= mc_fabs(dot3f(dir, &amp;detector-&gt;direction)));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		(detector-&gt;cos_min &lt;= mc_fabs(mc_dot_point3f(dir, &amp;detector_direction)));&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	if (ui32w &gt; 0){&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_uint(&quot;</span><span class="si">{}</span><span class="s1"> Radial detector depositing int:&quot;, ui32w);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
@@ -484,6 +485,7 @@
 <span class="sd">        data: dict</span>
 <span class="sd">            Dictionary created by the :py:meth:`Radial.todict` method.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="n">rt_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">rt_type</span> <span class="o">!=</span> <span class="s1">&#39;Radial&#39;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Expected &quot;Radial&quot; type bot got &quot;</span><span class="si">{}</span><span class="s1">&quot;!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rt_type</span><span class="p">))</span>

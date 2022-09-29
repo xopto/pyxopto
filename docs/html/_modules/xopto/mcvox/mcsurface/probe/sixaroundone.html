@@ -329,7 +329,8 @@
             <span class="s1">&#39;	mc_pos.x = rel_pos.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.y = rel_pos.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.z = FP_0;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;layout-&gt;transformation, &amp;mc_pos, &amp;layout_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation = layout-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;mc_pos, &amp;layout_pos);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dx = layout_pos.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dy = layout_pos.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	r_squared = dx*dx + dy*dy;&#39;</span><span class="p">,</span>
@@ -348,7 +349,8 @@
             <span class="s1">&#39;	/* The 1st and 4th fibers of the ring. */&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.x = mc_fabs(rel_pos.x) - layout-&gt;core_spacing;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.y = rel_pos.y;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;layout-&gt;transformation, &amp;mc_pos, &amp;layout_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transformation = layout-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;mc_pos, &amp;layout_pos);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dx = layout_pos.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dy = layout_pos.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	r_squared = dx*dx + dy*dy;&#39;</span><span class="p">,</span>
@@ -367,7 +369,8 @@
             <span class="s1">&#39;	/* The 2nd, 3rd, 5th and 6th fibers of the ring. */&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.x = mc_fabs(rel_pos.x) - layout-&gt;core_spacing*FP_0p5;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.y = mc_fabs(rel_pos.y) - layout-&gt;core_spacing*FP_COS_30;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;layout-&gt;transformation, &amp;mc_pos, &amp;layout_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transformation = layout-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;mc_pos, &amp;layout_pos);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dx = layout_pos.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dy = layout_pos.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	r_squared = dx*dx + dy*dy;&#39;</span><span class="p">,</span>

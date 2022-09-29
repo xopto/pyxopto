@@ -9,6 +9,7 @@ Submodules
 
    xopto.materials.density.base
    xopto.materials.density.polystyrene
+   xopto.materials.density.sucrose
    xopto.materials.density.water
 
 Module contents

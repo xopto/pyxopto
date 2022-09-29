@@ -610,6 +610,9 @@ OpenCL data types:</p>
 <p>Attribute that defined the related numpy data type:</p>
 <ul class="simple">
 <li><p>np_float - Scalar floating-point data type.</p></li>
+<li><p>np2_float - Vector floating-point data type form mc_fp2_t.</p></li>
+<li><p>np3_float - Vector floating-point data type form mc_fp3_t.</p></li>
+<li><p>np4_float - Vector floating-point data type form mc_fp4_t.</p></li>
 </ul>
 <p>Additional attributes of the class:</p>
 <ul class="simple">
@@ -620,6 +623,23 @@ OpenCL data types:</p>
 <dt class="sig sig-object py" id="xopto.mcbase.mctypes.McDouble.eps">
 <span class="sig-name descname"><span class="pre">eps</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2.220446049250313e-16</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McDouble.eps" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McDouble.fp_str">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">fp_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mctypes.html#McDouble.fp_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mctypes.McDouble.fp_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a floating-point value to a string without loosing precision.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>float</em>) – A floating-point value to convert to string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>str_value</strong> – A string representation of the input floating-point value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="xopto.mcbase.mctypes.McDouble.mc_fp16_t">
@@ -834,6 +854,21 @@ OpenCL data types:</p>
 <span class="sig-name descname"><span class="pre">np_float</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float64'</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McDouble.np_float" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McDouble.np_float2">
+<span class="sig-name descname"><span class="pre">np_float2</span></span><em class="property"> <span class="pre">=</span> <span class="pre">dtype([('x',</span> <span class="pre">'&lt;f8'),</span> <span class="pre">('y',</span> <span class="pre">'&lt;f8')])</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McDouble.np_float2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McDouble.np_float3">
+<span class="sig-name descname"><span class="pre">np_float3</span></span><em class="property"> <span class="pre">=</span> <span class="pre">dtype([('x',</span> <span class="pre">'&lt;f8'),</span> <span class="pre">('y',</span> <span class="pre">'&lt;f8'),</span> <span class="pre">('z',</span> <span class="pre">'&lt;f8'),</span> <span class="pre">('_',</span> <span class="pre">'&lt;f8')])</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McDouble.np_float3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McDouble.np_float4">
+<span class="sig-name descname"><span class="pre">np_float4</span></span><em class="property"> <span class="pre">=</span> <span class="pre">dtype([('x',</span> <span class="pre">'&lt;f8'),</span> <span class="pre">('y',</span> <span class="pre">'&lt;f8'),</span> <span class="pre">('z',</span> <span class="pre">'&lt;f8'),</span> <span class="pre">('w',</span> <span class="pre">'&lt;f8')])</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McDouble.np_float4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -854,7 +889,10 @@ OpenCL data types:</p>
 </ul>
 <p>Attribute that defined the related numpy data type:</p>
 <ul class="simple">
-<li><p>np_float - Scalar floating-point data type.</p></li>
+<li><p>np_float - Scalar floating-point data type form mc_fp_t.</p></li>
+<li><p>np2_float - Vector floating-point data type form mc_fp2_t.</p></li>
+<li><p>np3_float - Vector floating-point data type form mc_fp3_t.</p></li>
+<li><p>np4_float - Vector floating-point data type form mc_fp4_t.</p></li>
 </ul>
 <p>Additional attributes of the class:</p>
 <ul class="simple">
@@ -865,6 +903,23 @@ OpenCL data types:</p>
 <dt class="sig sig-object py" id="xopto.mcbase.mctypes.McFloat.eps">
 <span class="sig-name descname"><span class="pre">eps</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1.1920929e-07</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McFloat.eps" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McFloat.fp_str">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">fp_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mctypes.html#McFloat.fp_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mctypes.McFloat.fp_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a floating-point value to a string without loosing precision.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>float</em>) – A floating-point value to convert to string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>str_value</strong> – A string representation of the input floating-point value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="xopto.mcbase.mctypes.McFloat.mc_fp16_t">
@@ -1079,6 +1134,21 @@ OpenCL data types:</p>
 <span class="sig-name descname"><span class="pre">np_float</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'float32'</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McFloat.np_float" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McFloat.np_float2">
+<span class="sig-name descname"><span class="pre">np_float2</span></span><em class="property"> <span class="pre">=</span> <span class="pre">dtype([('x',</span> <span class="pre">'&lt;f4'),</span> <span class="pre">('y',</span> <span class="pre">'&lt;f4')])</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McFloat.np_float2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McFloat.np_float3">
+<span class="sig-name descname"><span class="pre">np_float3</span></span><em class="property"> <span class="pre">=</span> <span class="pre">dtype([('x',</span> <span class="pre">'&lt;f4'),</span> <span class="pre">('y',</span> <span class="pre">'&lt;f4'),</span> <span class="pre">('z',</span> <span class="pre">'&lt;f4'),</span> <span class="pre">('_',</span> <span class="pre">'&lt;f4')])</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McFloat.np_float3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McFloat.np_float4">
+<span class="sig-name descname"><span class="pre">np_float4</span></span><em class="property"> <span class="pre">=</span> <span class="pre">dtype([('x',</span> <span class="pre">'&lt;f4'),</span> <span class="pre">('y',</span> <span class="pre">'&lt;f4'),</span> <span class="pre">('z',</span> <span class="pre">'&lt;f4'),</span> <span class="pre">('w',</span> <span class="pre">'&lt;f4')])</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McFloat.np_float4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py attribute">
@@ -1124,6 +1194,23 @@ The OpenCL data types are defined by the following attributes:</p>
 <ul class="simple">
 <li><p>mc_uint_max - maximum unsigned integer value that can be represented by the data type.</p></li>
 </ul>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McInt32.int_str">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">int_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mctypes.html#McInt32.int_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mctypes.McInt32.int_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an integer value to a string without loosing precision.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>int</em>) – An integer value to convert to string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>str_value</strong> – A string representation of the input integer value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="xopto.mcbase.mctypes.McInt32.mc_int16_t">
 <span class="sig-name descname"><span class="pre">mc_int16_t</span></span><a class="headerlink" href="#xopto.mcbase.mctypes.McInt32.mc_int16_t" title="Permalink to this definition">¶</a></dt>
@@ -1352,6 +1439,23 @@ The OpenCL data types are defined by the following attributes:</p>
 <span class="sig-name descname"><span class="pre">np_uint</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint32'</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McInt32.np_uint" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McInt32.uint_str">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">uint_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mctypes.html#McInt32.uint_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mctypes.McInt32.uint_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an unsigned integer value to a string without loosing precision.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>int</em>) – An unsigned integer value to convert to string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>str_value</strong> – A string representation of the input unsigned integer value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1379,6 +1483,23 @@ The OpenCL data types are defined by the following attributes:</p>
 <ul class="simple">
 <li><p>mc_uint_max - maximum unsigned integer value that can be represented by the data type.</p></li>
 </ul>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McInt64.int_str">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">int_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mctypes.html#McInt64.int_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mctypes.McInt64.int_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an integer value to a string without loosing precision.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>int</em>) – A integer value to convert to string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>str_value</strong> – A string representation of the input integer value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="xopto.mcbase.mctypes.McInt64.mc_int16_t">
 <span class="sig-name descname"><span class="pre">mc_int16_t</span></span><a class="headerlink" href="#xopto.mcbase.mctypes.McInt64.mc_int16_t" title="Permalink to this definition">¶</a></dt>
@@ -1602,6 +1723,23 @@ The OpenCL data types are defined by the following attributes:</p>
 <span class="sig-name descname"><span class="pre">np_uint</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint64'</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McInt64.np_uint" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McInt64.uint_str">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">uint_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mctypes.html#McInt64.uint_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mctypes.McInt64.uint_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an unsigned integer value to a string without loosing precision.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>int</em>) – An unsigned integer value to convert to string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>str_value</strong> – A string representation of the input unsigned integer value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py attribute">
@@ -1621,10 +1759,14 @@ The OpenCL data types are defined by the following attributes:</p>
 <li><p>mc_size&lt;n&gt;_t for vectorized unsigned integers (&lt;n&gt; must be one of 2, 3, 4, 8, 16)</p></li>
 <li><p>mc_point2s_t structure for a 2D point with mc_size_t coordinates.</p></li>
 <li><p>mc_point3s_t structure for a 3D point with mc_size_t coordinates.</p></li>
+<li><p>mc_point4s_t structure for a 4D point with mc_size_t coordinates.</p></li>
 </ul>
 <p>The related numpy data types are defined by the following attributes:</p>
 <ul class="simple">
 <li><p>np_size - For mc_size_t.</p></li>
+<li><p>np_size2 - For mc_size2_t.</p></li>
+<li><p>np_size3 - For mc_size3_t.</p></li>
+<li><p>np_size4 - For mc_size4_t.</p></li>
 </ul>
 <p>Additional attributes of the class:</p>
 <ul class="simple">
@@ -1751,6 +1893,38 @@ The OpenCL data types are defined by the following attributes:</p>
 <span class="sig-name descname"><span class="pre">np_size</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint32'</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McSizeT32.np_size" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McSizeT32.np_size2">
+<span class="sig-name descname"><span class="pre">np_size2</span></span><em class="property"> <span class="pre">=</span> <span class="pre">dtype([('x',</span> <span class="pre">'&lt;u4'),</span> <span class="pre">('y',</span> <span class="pre">'&lt;u4')])</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McSizeT32.np_size2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McSizeT32.np_size3">
+<span class="sig-name descname"><span class="pre">np_size3</span></span><em class="property"> <span class="pre">=</span> <span class="pre">dtype([('x',</span> <span class="pre">'&lt;u4'),</span> <span class="pre">('y',</span> <span class="pre">'&lt;u4'),</span> <span class="pre">('z',</span> <span class="pre">'&lt;u4'),</span> <span class="pre">('_',</span> <span class="pre">'&lt;u4')])</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McSizeT32.np_size3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McSizeT32.np_size4">
+<span class="sig-name descname"><span class="pre">np_size4</span></span><em class="property"> <span class="pre">=</span> <span class="pre">dtype([('x',</span> <span class="pre">'&lt;u4'),</span> <span class="pre">('y',</span> <span class="pre">'&lt;u4'),</span> <span class="pre">('z',</span> <span class="pre">'&lt;u4'),</span> <span class="pre">('w',</span> <span class="pre">'&lt;u4')])</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McSizeT32.np_size4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McSizeT32.size_t_str">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">size_t_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mctypes.html#McSizeT32.size_t_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mctypes.McSizeT32.size_t_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a size type integer value to a string without loosing precision.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>int</em>) – A size type integer value to convert to string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>str_value</strong> – A string representation of the input size type integer value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1762,6 +1936,9 @@ The OpenCL data types are defined by the following attributes:</p>
 <ul class="simple">
 <li><p>mc_size_t - Size type.</p></li>
 <li><p>mc_size&lt;n&gt;_t - For vectorized unsigned integers (&lt;n&gt; must be one of 2, 3, 4, 8, 16)</p></li>
+<li><p>mc_point2s_t structure for a 2D point with mc_size_t coordinates.</p></li>
+<li><p>mc_point3s_t structure for a 3D point with mc_size_t coordinates.</p></li>
+<li><p>mc_point4s_t structure for a 4D point with mc_size_t coordinates.</p></li>
 <li><p>mc_point2_t - For a structure representing a 2D point with mc_int_t coordinates.</p></li>
 <li><p>mc_point3_t - For a structure representing a 3D point with mc_int_t coordinates.</p></li>
 <li><p>mc_point4_t - For a structure representing a 4D point with mc_int_t coordinates.</p></li>
@@ -1770,6 +1947,9 @@ The OpenCL data types are defined by the following attributes:</p>
 <p>The related numpy data types are defined by the following attributes:</p>
 <ul class="simple">
 <li><p>np_size - For mc_size_t.</p></li>
+<li><p>np_size2 - For mc_size2_t.</p></li>
+<li><p>np_size3 - For mc_size3_t.</p></li>
+<li><p>np_size4 - For mc_size4_t.</p></li>
 </ul>
 <p>Additional attributes of the class:</p>
 <ul class="simple">
@@ -1895,6 +2075,38 @@ The OpenCL data types are defined by the following attributes:</p>
 <dt class="sig sig-object py" id="xopto.mcbase.mctypes.McSizeT64.np_size">
 <span class="sig-name descname"><span class="pre">np_size</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'uint64'</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McSizeT64.np_size" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McSizeT64.np_size2">
+<span class="sig-name descname"><span class="pre">np_size2</span></span><em class="property"> <span class="pre">=</span> <span class="pre">dtype([('x',</span> <span class="pre">'&lt;u8'),</span> <span class="pre">('y',</span> <span class="pre">'&lt;u8')])</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McSizeT64.np_size2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McSizeT64.np_size3">
+<span class="sig-name descname"><span class="pre">np_size3</span></span><em class="property"> <span class="pre">=</span> <span class="pre">dtype([('x',</span> <span class="pre">'&lt;u8'),</span> <span class="pre">('y',</span> <span class="pre">'&lt;u8'),</span> <span class="pre">('z',</span> <span class="pre">'&lt;u8'),</span> <span class="pre">('_',</span> <span class="pre">'&lt;u8')])</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McSizeT64.np_size3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McSizeT64.np_size4">
+<span class="sig-name descname"><span class="pre">np_size4</span></span><em class="property"> <span class="pre">=</span> <span class="pre">dtype([('x',</span> <span class="pre">'&lt;u8'),</span> <span class="pre">('y',</span> <span class="pre">'&lt;u8'),</span> <span class="pre">('z',</span> <span class="pre">'&lt;u8'),</span> <span class="pre">('w',</span> <span class="pre">'&lt;u8')])</span></em><a class="headerlink" href="#xopto.mcbase.mctypes.McSizeT64.np_size4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcbase.mctypes.McSizeT64.size_t_str">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">size_t_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mctypes.html#McSizeT64.size_t_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mctypes.McSizeT64.size_t_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a size type integer value to a string without loosing precision.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>int</em>) – A size type integer value to convert to string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>str_value</strong> – A string representation of the input size type integer value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

@@ -1,7 +1,7 @@
-xopto.mcvox.mcmaterial.material module
+xopto.materials.density.sucrose module
 ======================================
 
-.. automodule:: xopto.mcvox.mcmaterial.material
+.. automodule:: xopto.materials.density.sucrose
    :members:
    :undoc-members:
    :show-inheritance:

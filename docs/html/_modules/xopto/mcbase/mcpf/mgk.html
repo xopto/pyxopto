@@ -192,6 +192,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">.pfbase</span> <span class="kn">import</span> <span class="n">PfBase</span><span class="p">,</span> <span class="n">cltypes</span><span class="p">,</span> <span class="n">McObject</span>
+<span class="kn">import</span> <span class="nn">xopto.pf</span>
 
 
 <div class="viewcode-block" id="MGk"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.mgk.html#xopto.mcbase.mcpf.mgk.MGk">[docs]</a><span class="k">class</span> <span class="nc">MGk</span><span class="p">(</span><span class="n">PfBase</span><span class="p">):</span>
@@ -379,6 +380,19 @@
             <span class="n">invA</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">a</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_precalculated</span> <span class="o">=</span> <span class="p">[</span><span class="n">invA</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">]</span>
+
+<div class="viewcode-block" id="MGk.pf"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.mgk.html#xopto.mcbase.mcpf.mgk.MGk.pf">[docs]</a>    <span class="k">def</span> <span class="nf">pf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xopto</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">MGk</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns a new instance of the related utility scattering phase function</span>
+<span class="sd">        class that can be used to compute Legendre moments and other</span>
+<span class="sd">        scattering phase function quantifiers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pf: xopto.pf.MGk</span>
+<span class="sd">            Instance of the related utility scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">xopto</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">MGk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MGk.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.mgk.html#xopto.mcbase.mcpf.mgk.MGk.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
             <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>

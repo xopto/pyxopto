@@ -705,6 +705,41 @@
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
 
+<div class="viewcode-block" id="McUseEnhancedRng"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseEnhancedRng">[docs]</a><span class="k">class</span> <span class="nc">McUseEnhancedRng</span><span class="p">(</span><span class="n">McBoolOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Run the kernel with the enhanced version of the random number generator.</span>
+<span class="sd">    Default is off.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">on</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_ENHANCED_RNG&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">off</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_ENHANCED_RNG&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">default</span> <span class="o">=</span> <span class="n">off</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes the enhanced random number generator mode kernel option.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ....</span>
+<span class="sd">        The enhanced version of random number generator is required when</span>
+<span class="sd">        performing simulations in large scattering volumes, were the number of</span>
+<span class="sd">        scattering events is expected to be on the order of millions.</span>
+<span class="sd">        Depending on the OpenCL device, there might be a small performance</span>
+<span class="sd">        cost of about 15%, which is the reason for disabling this option</span>
+<span class="sd">        by default.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: bool</span>
+<span class="sd">            Use True to enable the enhanced random number generator mode or</span>
+<span class="sd">            False to disable the enhanced random number generator mode.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;MC_USE_ENHANCED_RNG&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
+
 <div class="viewcode-block" id="McUseSoft64Atomics"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseSoft64Atomics">[docs]</a><span class="k">class</span> <span class="nc">McUseSoft64Atomics</span><span class="p">(</span><span class="n">McBoolOption</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Force software implementation of 64-bit atomic operations.</span>

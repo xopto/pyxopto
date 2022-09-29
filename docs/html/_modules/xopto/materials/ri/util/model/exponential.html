@@ -191,6 +191,7 @@
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Scale</span><span class="p">,</span> <span class="n">Normalize</span><span class="p">,</span> <span class="n">Model</span>
 
+
 <div class="viewcode-block" id="Exponential"><a class="viewcode-back" href="../../../../../../apidoc/xopto.materials.ri.util.model.exponential.html#xopto.materials.ri.util.model.exponential.Exponential">[docs]</a><span class="k">class</span> <span class="nc">Exponential</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">pp</span><span class="p">:</span> <span class="n">Scale</span> <span class="ow">or</span> <span class="n">Normalize</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -202,7 +203,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        params: np.ndarray</span>
 <span class="sd">            Default model parameters.</span>
-<span class="sd">        pp: Scale or Normalize</span>
+<span class="sd">        pp: xopto.materials.ri.util.model.base.Scale or xopto.materials.ri.util.model.base.Normalize</span>
 <span class="sd">            Wavelength preprocessor instance.</span>
 <span class="sd">        kwargs: dict</span>
 <span class="sd">            Parameters passed to the baseclass.</span>

@@ -283,7 +283,8 @@
             <span class="s1">&#39;	pt_mc.y = mcsim_position_y(psim) - geometry-&gt;position.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.z = FP_0;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;geometry-&gt;transformation, &amp;pt_mc, &amp;pt_src);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation = geometry-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_mc, &amp;pt_src);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t r2 = pt_src.x*pt_src.x + pt_src.y*pt_src.y&#39;</span>
             <span class="s1">&#39;	if (dr2 &lt;= geometry-&gt;cladding_radius*geometry-&gt;cladding_radius){&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		*n2 = geometry-&gt;cladding_n;&#39;</span><span class="p">,</span>
@@ -429,7 +430,8 @@
             <span class="s1">&#39;	pt_src.y = r*sin_fi;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.z = FP_0;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;source-&gt;transformation, &amp;pt_src, &amp;pt_mc);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation = source-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_src, &amp;pt_mc);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.x += source-&gt;position.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.y += source-&gt;position.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.z += source-&gt;position.z;&#39;</span><span class="p">,</span>
@@ -445,12 +447,13 @@
             <span class="s1">&#39;	pt_src.y = sin_fi*sin_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.z = cos_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t packet_direction;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;source-&gt;transformation, &amp;pt_src, &amp;packet_direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transformation = source-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_src, &amp;packet_direction);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t source_direction = source-&gt;direction;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	if (mcsim_sample_box_contains(mcsim, &amp;pt_mc)) {&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		reverse3f(&amp;source_direction, &amp;source_direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_reverse_point3f(&amp;source_direction);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print(&quot;Move to the sample box surface:&quot;);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_point3f(INDENT &quot;from        :&quot;, &amp;pt_mc);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_point3f(INDENT &quot;in direction:&quot;, &amp;source_direction);&#39;</span><span class="p">,</span>
@@ -464,7 +467,7 @@
             <span class="s1">&#39;			&amp;intersection, &amp;normal)) {&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		mcsim_set_position(mcsim, &amp;intersection);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		reverse3f(&amp;normal, &amp;normal);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_reverse_point3f(&amp;normal);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print(&quot;Surface intersection:&quot;);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_point3f(INDENT &quot;position:&quot;, &amp;intersection);&#39;</span><span class="p">,</span>
@@ -488,7 +491,7 @@
             <span class="s1">&#39;			n_outside, n_inside, &amp;refracted_direction);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		specular_r = reflectance(n_outside, n_inside, &#39;</span><span class="p">,</span>
-            <span class="s1">&#39;				dot3f(&amp;normal, &amp;packet_direction),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;				mc_dot_point3f(&amp;normal, &amp;packet_direction),&#39;</span><span class="p">,</span>
             <span class="s1">&#39;				cos_critical(n_outside, n_inside));&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_status(mcsim, &quot;Moved to the sample surface&quot;);&#39;</span><span class="p">,</span>
@@ -770,7 +773,8 @@
             <span class="s1">&#39;	pt_src.y = r*sin_fi;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.z = FP_0;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;source-&gt;transformation, &amp;pt_src, &amp;pt_mc);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation = source-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_src, &amp;pt_mc);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.x += source-&gt;position.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.y += source-&gt;position.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.z += source-&gt;position.z;&#39;</span><span class="p">,</span>
@@ -785,12 +789,13 @@
             <span class="s1">&#39;	pt_src.y = sin_fi*sin_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.z = cos_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t packet_direction;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;source-&gt;transformation, &amp;pt_src, &amp;packet_direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transformation = source-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_src, &amp;packet_direction);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	 mc_point3f_t source_direction = source-&gt;direction;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	if (mcsim_sample_box_contains(mcsim, &amp;pt_mc)) {&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		reverse3f(&amp;source_direction, &amp;source_direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_reverse_point3f(&amp;source_direction);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print(&quot;Move to the sample box surface:&quot;);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_point3f(INDENT &quot;from        :&quot;, &amp;pt_mc);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_point3f(INDENT &quot;in direction:&quot;, &amp;source_direction);&#39;</span><span class="p">,</span>
@@ -804,7 +809,7 @@
             <span class="s1">&#39;			&amp;intersection, &amp;normal)) {&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		mcsim_set_position(mcsim, &amp;intersection);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		reverse3f(&amp;normal, &amp;normal);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_reverse_point3f(&amp;normal);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print(&quot;Surface intersection:&quot;);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_point3f(INDENT &quot;position:&quot;, &amp;intersection);&#39;</span><span class="p">,</span>
@@ -828,7 +833,7 @@
             <span class="s1">&#39;			n_outside, n_inside, &amp;refracted_direction);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		specular_r = reflectance(n_outside, n_inside, &#39;</span><span class="p">,</span>
-            <span class="s1">&#39;				dot3f(&amp;normal, &amp;packet_direction),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;				mc_dot_point3f(&amp;normal, &amp;packet_direction),&#39;</span><span class="p">,</span>
             <span class="s1">&#39;				cos_critical(n_outside, n_inside));&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_status(mcsim, &quot;Moved to the sample surface&quot;);&#39;</span><span class="p">,</span>
@@ -988,7 +993,8 @@
             <span class="s1">&#39;	pt_src.y = r*sin_fi;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.z = FP_0;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;source-&gt;transformation, &amp;pt_src, &amp;pt_mc);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation = source-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_src, &amp;pt_mc);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.x += source-&gt;position.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.y += source-&gt;position.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.z += source-&gt;position.z;&#39;</span><span class="p">,</span>
@@ -999,18 +1005,20 @@
             <span class="s1">&#39;	sin_theta = mc_sqrt(FP_1 - cos_theta*cos_theta);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	/* Adjust the propagation direction to fiber refractive index */&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	sin_theta = mc_fdiv(sin_theta, source-&gt;n);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	cos_theta = mc_sqrt(FP_1 - sin_theta*sin_theta);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.x = cos_fi*sin_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.y = sin_fi*sin_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.z = cos_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t packet_direction;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;source-&gt;transformation, &amp;pt_src, &amp;packet_direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transformation = source-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_src, &amp;packet_direction);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t source_direction = source-&gt;direction;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	if (mcsim_sample_box_contains(mcsim, &amp;pt_mc)) {&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		reverse3f(&amp;source_direction, &amp;source_direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_reverse_point3f(&amp;source_direction);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print(&quot;Move to the sample box surface:&quot;);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_point3f(INDENT &quot;from        :&quot;, &amp;pt_mc);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_point3f(INDENT &quot;in direction:&quot;, &amp;source_direction);&#39;</span><span class="p">,</span>
@@ -1024,7 +1032,7 @@
             <span class="s1">&#39;			&amp;intersection, &amp;normal)) {&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		mcsim_set_position(mcsim, &amp;intersection);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		reverse3f(&amp;normal, &amp;normal);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_reverse_point3f(&amp;normal);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print(&quot;Surface intersection:&quot;);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_point3f(INDENT &quot;position:&quot;, &amp;intersection);&#39;</span><span class="p">,</span>
@@ -1048,7 +1056,7 @@
             <span class="s1">&#39;			n_outside, n_inside, &amp;refracted_direction);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		specular_r = reflectance(n_outside, n_inside, &#39;</span><span class="p">,</span>
-            <span class="s1">&#39;				dot3f(&amp;normal, &amp;packet_direction),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;				mc_dot_point3f(&amp;normal, &amp;packet_direction),&#39;</span><span class="p">,</span>
             <span class="s1">&#39;				cos_critical(n_outside, n_inside));&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_status(mcsim, &quot;Moved to the sample surface&quot;);&#39;</span><span class="p">,</span>
@@ -1071,8 +1079,8 @@
             <span class="s1">&#39;};&#39;</span><span class="p">,</span>
         <span class="p">))</span></div>
 
-<div class="viewcode-block" id="UniformFiberLut.cl_option"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.fiber.html#xopto.mcvox.mcsource.fiber.UniformFiberLut.cl_option">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">cl_option</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">RawOptions</span><span class="p">:</span>
+<div class="viewcode-block" id="UniformFiberLut.cl_options"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcsource.fiber.html#xopto.mcvox.mcsource.fiber.UniformFiberLut.cl_options">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">RawOptions</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        This source uses lookup table of floating-point data.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -1229,7 +1237,7 @@
         <span class="n">target</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">)</span>
         <span class="n">target</span><span class="o">.</span><span class="n">direction</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
 
-        <span class="n">target</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">dcladding</span><span class="o">*</span><span class="mf">0.5</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">dcore</span><span class="o">*</span><span class="mf">0.5</span>
         <span class="n">target</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">ncore</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">emission</span><span class="o">.</span><span class="n">cl_pack</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">lut</span><span class="p">)</span>

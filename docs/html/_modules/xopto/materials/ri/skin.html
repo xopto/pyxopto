@@ -193,7 +193,7 @@
 <div class="viewcode-block" id="Ding"><a class="viewcode-back" href="../../../../apidoc/xopto.materials.ri.skin.html#xopto.materials.ri.skin.Ding">[docs]</a><span class="k">class</span> <span class="nc">Ding</span><span class="p">(</span><span class="n">RefractiveIndex</span><span class="p">):</span>
     <span class="n">material</span> <span class="o">=</span> <span class="s1">&#39;skin&#39;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">295</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">295.0</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Refractive index of human skin:</span>
 <span class="sd">            &quot;Huafeng Ding, Phys. Med. Biol.51(2006) 1479–1489,</span>
@@ -202,7 +202,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        t: float</span>
-<span class="sd">            Temperature of the medium.</span>
+<span class="sd">            Default temperature (K) of the medium.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">trange</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wrange</span><span class="o">=</span><span class="p">(</span><span class="mf">325e-9</span><span class="p">,</span> <span class="mf">1557e-9</span><span class="p">))</span>
 
@@ -223,7 +223,7 @@
 <span class="sd">        ri: float or np.ndarray</span>
 <span class="sd">            Refractive index at the given wavelength(s).</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wavelength</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_wavelengths</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
 
         <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">*</span><span class="mf">1e9</span>

@@ -187,10 +187,12 @@
 <span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
 <span class="c1">################################# End license ##################################</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">xopto.pf</span> <span class="kn">import</span> <span class="n">PfBase</span>
 <span class="kn">from</span> <span class="nn">xopto</span> <span class="kn">import</span> <span class="n">PICKLE_PROTOCOL</span>
 <span class="kn">from</span> <span class="nn">xopto.mcbase.mcpf</span> <span class="kn">import</span> <span class="n">LutEx</span>
+
 
 <div class="viewcode-block" id="ObjCache"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.cache.html#xopto.mcbase.mcutil.cache.ObjCache">[docs]</a><span class="k">class</span> <span class="nc">ObjCache</span><span class="p">:</span>
 <div class="viewcode-block" id="ObjCache.load"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.cache.html#xopto.mcbase.mcutil.cache.ObjCache.load">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -304,7 +306,36 @@
 <span class="sd">            Returns True if the specified object is found in the cache.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">obj_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">obj_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span></div></div>
+        <span class="k">return</span> <span class="n">obj_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span></div>
+
+<div class="viewcode-block" id="ObjCache.insert"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.cache.html#xopto.mcbase.mcutil.cache.ObjCache.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">obj_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Inserts the specified object into the cache if an existing</span>
+<span class="sd">        entry is not found.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: object</span>
+<span class="sd">            Value that is attained by calling ``obj_type(*args)``</span>
+<span class="sd">        obj_type: object type or callable</span>
+<span class="sd">            Any python class or callable.</span>
+<span class="sd">        args: list</span>
+<span class="sd">            Parameters passed to the object constructor or callable.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        found: bool</span>
+<span class="sd">            Returns True if the specified object was added to the cache or</span>
+<span class="sd">            False if an existing object has been found in the cache.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">obj_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">obj_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">obj_type</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">obj_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+
 
 <div class="viewcode-block" id="LutCache"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.cache.html#xopto.mcbase.mcutil.cache.LutCache">[docs]</a><span class="k">class</span> <span class="nc">LutCache</span><span class="p">(</span><span class="n">ObjCache</span><span class="p">):</span>
 <div class="viewcode-block" id="LutCache.load"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.cache.html#xopto.mcbase.mcutil.cache.LutCache.load">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -330,10 +361,11 @@
                  <span class="n">cachefile</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Initializes a lookup table-based Monte Carlo scattering phase function</span>
-<span class="sd">        cache (mcpf.LutPhaseFunction objects). This object internally saves</span>
-<span class="sd">        all created instances of lookup table-based scattering phase</span>
-<span class="sd">        functions and runs computations only if the requested scattering</span>
-<span class="sd">        phase function cannot be found in the cache.</span>
+<span class="sd">        cache (:py:class:`~xopto.mcbase.mcpf.LutPhaseFunction` objects).</span>
+<span class="sd">        This object internally saves all created instances of lookup</span>
+<span class="sd">        table-based scattering phase functions and runs computations only</span>
+<span class="sd">        if the requested scattering phase function cannot be found</span>
+<span class="sd">        in the cache.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -376,7 +408,7 @@
             <span class="n">ObjCache</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cachefile</span><span class="p">)</span>
             <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">lut_options</span><span class="p">,</span> <span class="n">cachefile</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="n">PICKLE_PROTOCOL</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LutCache.get"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.cache.html#xopto.mcbase.mcutil.cache.LutCache.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pftype</span><span class="p">:</span> <span class="n">PfBase</span><span class="p">,</span> <span class="n">pfargs</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">lutsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+<div class="viewcode-block" id="LutCache.get"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.cache.html#xopto.mcbase.mcutil.cache.LutCache.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pftype</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">PfBase</span><span class="p">],</span> <span class="n">pfargs</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">lutsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
             <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Prepare a new lookup table-based scattering phase function. Computations</span>
@@ -386,8 +418,8 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        pftype: xopto.pf.PfBase</span>
-<span class="sd">            Any instance of a scattering phase function that inherits from</span>
+<span class="sd">        pftype: Type[xopto.pf.PfBase]</span>
+<span class="sd">            Any type of a scattering phase function that inherits from</span>
 <span class="sd">            the :py:class:`xopto.pf.PfBase` class.</span>
 <span class="sd">        pfargs: tuple</span>
 <span class="sd">            Parameters passed to the scattering phase function constructor.</span>
@@ -427,7 +459,45 @@
 
         <span class="n">obj</span> <span class="o">=</span> <span class="n">ObjCache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">LutEx</span><span class="p">,</span> <span class="n">pftype</span><span class="p">,</span> <span class="n">pfargs</span><span class="p">,</span> <span class="n">lutsize</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">obj</span></div></div>
+        <span class="k">return</span> <span class="n">obj</span></div>
+
+<div class="viewcode-block" id="LutCache.insert"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.cache.html#xopto.mcbase.mcutil.cache.LutCache.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lut</span><span class="p">:</span> <span class="n">LutEx</span><span class="p">,</span> <span class="n">pftype</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">PfBase</span><span class="p">],</span> <span class="n">pfargs</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+               <span class="n">lutsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Inserts an existing lookup table-based scattering phase function into</span>
+<span class="sd">        the cache.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lut: LutEx</span>
+<span class="sd">            Instance of :py:class:`~xopto.mcbase.mcpf.LutEx` created with</span>
+<span class="sd">            the specified scattering phase function type, arguments and</span>
+<span class="sd">            lookup table size.</span>
+<span class="sd">        pftype: Type[xopto.pf.PfBase]</span>
+<span class="sd">            Any type of a scattering phase function that inherits from</span>
+<span class="sd">            the :py:class:`xopto.pf.PfBase` class.</span>
+<span class="sd">        pfargs: tuple</span>
+<span class="sd">            Parameters passed to the scattering phase function constructor.</span>
+<span class="sd">        lutsize: int</span>
+<span class="sd">            Size of the lookup table passed to the</span>
+<span class="sd">            py:meth:`xopto.mcbase.pf.lut.LutEx`.</span>
+<span class="sd">            If None, the value passed to the constructor is used.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        inserted: bool</span>
+<span class="sd">            Return True if the scattering phase function was inserted into</span>
+<span class="sd">            the cache and False if existing scattering phase function</span>
+<span class="sd">            was found in the lookup table.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">lutsize</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lutsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lutsize</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lutsize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lutsize</span>
+
+        <span class="n">pfargs</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pfargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ObjCache</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lut</span><span class="p">,</span> <span class="n">LutEx</span><span class="p">,</span> <span class="n">pftype</span><span class="p">,</span> <span class="n">pfargs</span><span class="p">,</span> <span class="n">lutsize</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

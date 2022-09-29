@@ -194,7 +194,7 @@
 <span id="xopto-mcbase-mcworker-module"></span><h1>xopto.mcbase.mcworker module<a class="headerlink" href="#module-xopto.mcbase.mcworker" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ClWorker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">types:</span> <span class="pre">xopto.mcbase.mctypes.McDataTypesBase</span> <span class="pre">=</span> <span class="pre">class</span> <span class="pre">McDataTypes(McInt32</span></em>, <em class="sig-param"><span class="pre">McAccu64</span></em>, <em class="sig-param"><span class="pre">McCnt32</span></em>, <em class="sig-param"><span class="pre">McFloat)</span></em>, <em class="sig-param"><span class="pre">cl_devices:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">cl_build_options:</span> <span class="pre">Optional[List[str]]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">cl_profiling:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ClWorker</span></span><a class="reference internal" href="../_modules/xopto/mcbase/mcworker.html#ClWorker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcobject.McObject</span></code></a></p>
 <p>OpenCL worker with support for allocation of read-write data buffers
 of arbitrary types and management of read-only lookup tables.</p>
@@ -419,6 +419,12 @@ the first run.</p>
 <dd class="field-odd"><p>cl.Program</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcworker.ClWorker.cl_build_options">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cl_build_options</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[str]</span></em><a class="headerlink" href="#xopto.mcbase.mcworker.ClWorker.cl_build_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a tuple of OpenCL build options that were passed to the constructor.</p>
 </dd></dl>
 
 <dl class="py property">

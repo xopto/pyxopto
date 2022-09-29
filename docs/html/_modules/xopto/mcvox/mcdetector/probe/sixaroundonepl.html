@@ -313,7 +313,8 @@
             <span class="s1">&#39;	mc_pos.x = rel_pos.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.y = rel_pos.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.z = FP_0;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;detector-&gt;transformation, &amp;mc_pos, &amp;detector_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation = detector-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;mc_pos, &amp;detector_pos);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dx = detector_pos.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dy = detector_pos.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	r_squared = dx*dx + dy*dy;&#39;</span><span class="p">,</span>
@@ -325,7 +326,8 @@
             <span class="s1">&#39;	/* The 1st or 4th fiber in the ring. */&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.x = mc_fabs(rel_pos.x) - detector-&gt;core_spacing;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.y = rel_pos.y;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;detector-&gt;transformation, &amp;mc_pos, &amp;detector_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transformation = detector-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;mc_pos, &amp;detector_pos);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dx = detector_pos.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dy = detector_pos.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	r_squared = dx*dx + dy*dy;&#39;</span><span class="p">,</span>
@@ -337,7 +339,8 @@
             <span class="s1">&#39;	/* The 2nd, 3rd, 5th or 6th fiber in the ring. */&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.x = mc_fabs(rel_pos.x) - detector-&gt;core_spacing*FP_0p5;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.y = mc_fabs(rel_pos.y) - detector-&gt;core_spacing*FP_COS_30;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;detector-&gt;transformation, &amp;mc_pos, &amp;detector_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transformation = detector-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;mc_pos, &amp;detector_pos);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dx = detector_pos.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dy = detector_pos.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	r_squared = dx*dx + dy*dy;&#39;</span><span class="p">,</span>
@@ -363,7 +366,7 @@
             <span class="s1">&#39;		mcsim, detector-&gt;offset + index);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	/* Transfor direction vector component z into the detector space. */&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	mc_fp_t pz = transform_point3f_z(&amp;detector-&gt;transformation, dir);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t pz = _z(&amp;detector-&gt;transformation, dir);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(&quot;Packet direction z:&quot;, pz);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	uint32_t ui32w = weight_to_int(weight)*&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		(detector-&gt;cos_min &lt;= mc_fabs(pz));&#39;</span><span class="p">,</span>

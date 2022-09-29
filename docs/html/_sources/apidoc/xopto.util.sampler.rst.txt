@@ -1,0 +1,7 @@
+xopto.util.sampler module
+=========================
+
+.. automodule:: xopto.util.sampler
+   :members:
+   :undoc-members:
+   :show-inheritance:

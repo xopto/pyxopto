@@ -310,6 +310,17 @@ Selecting <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoption
 will likely lead to a significant performance degradation, in particular on
 older GPUs. Note that the amount of available “constant_mem” memory on GPUs is
 typically limited to about 64 kB.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseEnhancedRng" title="xopto.mcbase.mcoptions.McUseEnhancedRng"><code class="xref py py-class docutils literal notranslate"><span class="pre">McUseEnhancedRng</span></code></a>
+(default is <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseEnhancedRng.off" title="xopto.mcbase.mcoptions.McUseEnhancedRng.off"><code class="xref py py-class docutils literal notranslate"><span class="pre">off</span></code></a>) -
+The enhanced version of random number generator is required when
+performing simulations in large scattering volumes, were the number of
+scattering events is expected to be on the order of millions.
+Depending on the OpenCL device, there might be a small performance
+cost of about 20%, which is the reason for disabling this option
+by default. If this option is turned on
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseEnhancedRng.on" title="xopto.mcbase.mcoptions.McUseEnhancedRng.on"><code class="xref py py-class docutils literal notranslate"><span class="pre">on</span></code></a>,
+the Monte Carlo simulator will use the enhanced version of the random number
+generator.</p></li>
 <li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McDebugMode" title="xopto.mcbase.mcoptions.McDebugMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">McDebugMode</span></code></a>
 (default is <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McDebugMode.off" title="xopto.mcbase.mcoptions.McDebugMode.off"><code class="xref py py-class docutils literal notranslate"><span class="pre">off</span></code></a>) -
 Can be used to enable kernel debug mode that will print information to

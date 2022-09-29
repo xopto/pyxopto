@@ -187,25 +187,40 @@
 <span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
 <span class="c1">################################# End license ##################################</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">jv</span><span class="p">,</span> <span class="n">yv</span>
 
 <span class="kn">from</span> <span class="nn">.pfbase</span> <span class="kn">import</span> <span class="n">PfBase</span>
 
 
-<span class="k">def</span> <span class="nf">_Mie_eff</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_Mie_eff</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> \
+        <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Computation of Mie Efficiencies for given</span>
-<span class="sd">    complex refractive-index ratio m=m&#39;+im&quot;</span>
-<span class="sd">    and size parameter x=k0*a, where k0= wave number in ambient</span>
-<span class="sd">    medium, a=sphere radius, using complex Mie Coefficients</span>
-<span class="sd">    an and bn for n=1 to nmax,</span>
-<span class="sd">    s. Bohren and Huffman (1983) BEWI:TDD122, p. 103,119-122,477.</span>
-<span class="sd">    Result: m&#39;, m&quot;, x, efficiencies for extinction (qext),</span>
-<span class="sd">    scattering (qsca), absorption (qabs), backscattering (qb),</span>
-<span class="sd">    asymmetry parameter (asy=&lt;costeta&gt;) and (qratio=qb/qsca).</span>
-<span class="sd">    Uses the function &quot;Mie_ab&quot; for an and bn, for n=1 to nmax.</span>
-<span class="sd">    C. M�tzler, May 2002, revised July 2002.</span>
+<span class="sd">    Computation of Mie Efficiencies.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a: np.ndarray</span>
+<span class="sd">        Matrix of Mie coefficients :math:`a_n` as returned by the</span>
+<span class="sd">        :py:func:`~xopto.pf.mie._Mie_ab` function.</span>
+<span class="sd">    b: np.ndarray</span>
+<span class="sd">        Matrix of Mie coefficients :math:`b_n` as returned by the</span>
+<span class="sd">        :py:func:`~xopto.pf.mie._Mie_ab` function.</span>
+<span class="sd">    x: float</span>
+<span class="sd">        Size parameter defined as :math:`x=k_0 a`, where :math:`k_0` is</span>
+<span class="sd">        the wave number in ambient medium for a sphere of radius :math:`a`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    qext: float</span>
+<span class="sd">    qsca: float</span>
+<span class="sd">    qabs: float</span>
+<span class="sd">    qb: float</span>
+<span class="sd">    asy: float</span>
+<span class="sd">        Anisotropy (first Legendre moment of the phase function).</span>
+<span class="sd">    qratio: float</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span> <span class="c1"># To avoid a singularity at x=0</span>
         <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.5</span>
@@ -258,15 +273,33 @@
         <span class="k">return</span> <span class="n">qext</span><span class="p">,</span> <span class="n">qsca</span><span class="p">,</span> <span class="n">qabs</span><span class="p">,</span> <span class="n">qb</span><span class="p">,</span> <span class="n">asy</span><span class="p">,</span> <span class="n">qratio</span>
 
 
-<span class="k">def</span> <span class="nf">_Mie_S12</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">costheta</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_Mie_S12</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">costheta</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> \
+        <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Computation of Mie Scattering functions S1 and S2.</span>
 
-    <span class="c1"># Computation of Mie Scattering functions S1 and S2</span>
-    <span class="c1"># for complex refractive index m=m&#39;+im&quot;,</span>
-    <span class="c1"># size parameter x=k0*a, and u=cos(scattering angle),</span>
-    <span class="c1"># where k0=vacuum wave number, a=sphere radius;</span>
-    <span class="c1"># s. p. 111-114, Bohren and Huffman (1983) BEWI:TDD122</span>
-    <span class="c1"># C. M�tzler, May 2002</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a: np.ndarray</span>
+<span class="sd">        Matrix of Mie coefficients :math:`a_n` as returned by the</span>
+<span class="sd">        :py:func:`~xopto.pf.mie._Mie_ab` function.</span>
+<span class="sd">    b: np.ndarray</span>
+<span class="sd">        Matrix of Mie coefficients :math:`b_n` as returned by the</span>
+<span class="sd">        :py:func:`~xopto.pf.mie._Mie_ab` function.</span>
+<span class="sd">    x: float</span>
+<span class="sd">        Size parameter defined as :math:`x=k_0 a`, where :math:`k_0` is</span>
+<span class="sd">        the wave number in ambient medium for a sphere of radius :math:`a`.</span>
+<span class="sd">    costheta: np.ndarray</span>
+<span class="sd">        Array of scattering angle cosines at which to compute the phase</span>
+<span class="sd">        function.</span>
 
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    S1: np.ndarray</span>
+<span class="sd">        Mie scattering function :math:`S_1`.</span>
+<span class="sd">    S2: np.ndarray</span>
+<span class="sd">        Mie scattering function :math:`S_2`.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">Nmax</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="mf">4.0</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)))</span>
 
     <span class="c1">#ab = Mie_ab(m,x);</span>
@@ -287,16 +320,34 @@
 
     <span class="k">return</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S2</span>
 
-<span class="k">def</span> <span class="nf">_Mie_ab</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_Mie_ab</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="nb">complex</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Computes a matrix of Mie Coefficients, an, bn,</span>
-<span class="sd">    of orders n=1 to nmax, for given complex refractive-index</span>
-<span class="sd">    ratio m=m&#39;+im&quot; and size parameter x=k0*a where k0= wave number in ambient</span>
-<span class="sd">    medium for spheres of radius a;</span>
+<span class="sd">    Computes a matrix of Mie Coefficients :math:`a_n` and :math:`b_n`</span>
+<span class="sd">    of orders :math:`n=1` to :math:`n_{max}`, for the given complex</span>
+<span class="sd">    refractive-index ratio :math:`m=m&#39;+im&quot;` and size parameter</span>
+<span class="sd">    :math:`x=k_0 a`, where :math:`k_0` is the wave number in ambient medium</span>
+<span class="sd">    for sphere of radius :math:`a`.</span>
+
 <span class="sd">    Eq. (4.88) of Bohren and Huffman (1983), BEWI:TDD122</span>
 <span class="sd">    using the recurrence relation (4.89) for Dn on p. 127 and</span>
 <span class="sd">    starting conditions as described in Appendix A.</span>
-<span class="sd">    C. M�tzler, July 2002</span>
+<span class="sd">    C. Mätzler, July 2002.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    m: float or complex</span>
+<span class="sd">        Ratio between the refractive index of the medium and sphere</span>
+<span class="sd">        :math:`n_{sphere}/n_{medium}`.</span>
+<span class="sd">    x: float</span>
+<span class="sd">        Size parameter defined as :math:`x=k_0 a`, where :math:`k_0` is</span>
+<span class="sd">        the wave number in ambient medium for a sphere of radius :math:`a`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    an: np.ndarray</span>
+<span class="sd">        Matrix of Mie coefficients :math:`a_n`.</span>
+<span class="sd">    bn: np.ndarray</span>
+<span class="sd">        Matrix of Mie coefficients :math:`b_n`.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="n">z</span> <span class="o">=</span> <span class="n">m</span><span class="o">*</span><span class="n">x</span>
@@ -315,7 +366,7 @@
     <span class="n">gsx</span> <span class="o">=</span> <span class="n">px</span> <span class="o">-</span> <span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">chx</span>
     <span class="n">gs1x</span> <span class="o">=</span> <span class="n">p1x</span> <span class="o">-</span> <span class="mf">1.0</span><span class="n">j</span><span class="o">*</span><span class="n">ch1x</span>
 
-    <span class="n">dnx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">nmx</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex</span><span class="p">)</span>
+    <span class="n">dnx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">nmx</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmx</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>      <span class="c1"># Computation of Dn(z) according to (4.89) of B+H (1983)</span>
         <span class="n">dnx</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span><span class="o">/</span><span class="n">z</span> <span class="o">-</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="n">dnx</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">j</span><span class="o">/</span><span class="n">z</span><span class="p">)</span>
 
@@ -330,10 +381,13 @@
     <span class="k">return</span> <span class="n">an</span><span class="p">,</span> <span class="n">bn</span>
 
 
-<span class="k">def</span> <span class="nf">_Mie_pt</span><span class="p">(</span><span class="n">costheta</span><span class="p">,</span> <span class="n">Nmax</span><span class="p">):</span>
-    <span class="c1"># pi_n and tau_n, -1 &lt;= u &lt;= 1, n1 integer from 1 to Nmax</span>
-    <span class="c1"># angular functions used in Mie Theory</span>
-    <span class="c1"># Bohren and Huffman (1983), p. 94 - 95</span>
+<span class="k">def</span> <span class="nf">_Mie_pt</span><span class="p">(</span><span class="n">costheta</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Nmax</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Computes pi_n and tau_n, -1 &lt;= u &lt;= 1, n1 integer from 1 to Nmax</span>
+<span class="sd">    angular functions used in Mie theory.</span>
+
+<span class="sd">    Bohren and Huffman (1983), p. 94 - 95</span>
+<span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="n">Nmax</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">Nmax</span><span class="p">)</span>
     <span class="n">n</span> <span class="o">=</span> <span class="n">costheta</span><span class="o">.</span><span class="n">size</span>
@@ -368,7 +422,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        nsphere:  float or complex</span>
-<span class="sd">            Refractive index (complex) of the spherical paricle.</span>
+<span class="sd">            Refractive index (complex) of the spherical particle.</span>
 <span class="sd">        nmedium: float or complex</span>
 <span class="sd">            Refractive index (complex) of the surrounding medium.</span>
 <span class="sd">        diameter: float</span>

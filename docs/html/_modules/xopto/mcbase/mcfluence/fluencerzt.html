@@ -221,11 +221,11 @@
 <span class="sd">            inv_dt: McTypes.mc_fp_t</span>
 <span class="sd">                Inverse spacings of the fluence accumulators in the t</span>
 <span class="sd">                axis.</span>
-<span class="sd">            n_r: McTypes.mc_int_t</span>
+<span class="sd">            n_r: McTypes.mc_size_t</span>
 <span class="sd">                Number of accumulators along the r axis.</span>
-<span class="sd">            n_z: McTypes.mc_int_t</span>
+<span class="sd">            n_z: McTypes.mc_size_t</span>
 <span class="sd">                Number of accumulators along the z axis.</span>
-<span class="sd">            n_t: McTypes.mc_int_t</span>
+<span class="sd">            n_t: McTypes.mc_size_t</span>
 <span class="sd">                Number of accumulators along the t axis.</span>
 <span class="sd">            offset: McTypes.mc_size_t</span>
 <span class="sd">                Offset of the first element of the fluence accumulator buffer.</span>
@@ -236,15 +236,15 @@
 <span class="sd">            &#39;&#39;&#39;</span>
             <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="p">(</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;t_min&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;t_min&#39;</span><span class="p">,</span>  <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;inv_dr&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;inv_dz&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;inv_dt&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;n_r&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;n_z&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;n_t&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;n_r&#39;</span><span class="p">,</span>    <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;n_z&#39;</span><span class="p">,</span>    <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;n_t&#39;</span><span class="p">,</span>    <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;offset&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>      <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">),</span>
             <span class="p">]</span>
 
         <span class="k">return</span> <span class="n">ClFluenceRzt</span></div>
@@ -258,9 +258,9 @@
             <span class="s1">&#39;	mc_fp_t inv_dr;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t inv_dz;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t inv_dt;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	mc_int_t n_r;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	mc_int_t n_z;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	mc_int_t n_t;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_size_t n_r;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_size_t n_z;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_size_t n_t;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_size_t offset;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_int_t k;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;};&#39;</span><span class="p">,</span>
@@ -278,9 +278,9 @@
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;inv_dr (1/mm):&quot;, fluence-&gt;inv_dr*1e-3f);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;inv_dz (1/mm):&quot;, fluence-&gt;inv_dz*1e-3f);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;inv_dt (1/ns):&quot;, fluence-&gt;inv_dt*1e-9f);&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	dbg_print_int(INDENT &quot;n_r:&quot;, fluence-&gt;n_r);&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	dbg_print_int(INDENT &quot;n_z:&quot;, fluence-&gt;n_z);&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	dbg_print_int(INDENT &quot;n_t:&quot;, fluence-&gt;n_t);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;n_r:&quot;, fluence-&gt;n_r);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;n_z:&quot;, fluence-&gt;n_z);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;n_t:&quot;, fluence-&gt;n_t);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;offset:&quot;, fluence-&gt;offset);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_int(INDENT &quot;k:&quot;, fluence-&gt;k);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>

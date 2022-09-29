@@ -887,7 +887,7 @@ The simulations are run with 1000 million photon packets.
       -
       -
       - normally incident
-    * - :py:class:`~xopto.mcvox.mcmaterial.material.Material`
+    * - :py:class:`~xopto.mcvox.mcmaterial.Material`
       - :math:`\mu_a`
       - 16.5724 |nbsp| cm :sup:`-1`
       - epidermis
@@ -903,7 +903,7 @@ The simulations are run with 1000 million photon packets.
       - :math:`pf`
       - :py:class:`~xopto.mcbase.mcpf.hg.Hg` (0.9)
       -
-    * - :py:class:`~xopto.mcvox.mcmaterial.material.Material`
+    * - :py:class:`~xopto.mcvox.mcmaterial.Material`
       - :math:`\mu_a`
       - 45.85 |nbsp| cm :sup:`-1`
       - dermis
@@ -919,7 +919,7 @@ The simulations are run with 1000 million photon packets.
       - :math:`pf`
       - :py:class:`~xopto.mcbase.mcpf.hg.Hg` (0.9)
       -
-    * - :py:class:`~xopto.mcvox.mcmaterial.material.Material`
+    * - :py:class:`~xopto.mcvox.mcmaterial.Material`
       - :math:`\mu_a`
       - 230.5427 |nbsp| cm :sup:`-1`
       - blood vessel

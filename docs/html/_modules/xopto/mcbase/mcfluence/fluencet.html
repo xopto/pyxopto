@@ -211,7 +211,7 @@
 <span class="sd">                Inverse spacings of the fluence accumulators.</span>
 <span class="sd">            top_left: McTypes.cl_point4f</span>
 <span class="sd">                Coordinates of the top-left corner of the fluence accumulators.</span>
-<span class="sd">            shape: McTypes.cl_point4</span>
+<span class="sd">            shape: McTypes.mc_point4s_t</span>
 <span class="sd">                Shape/size of the accumulator along the x, y, z and</span>
 <span class="sd">                temporal axis.</span>
 <span class="sd">            offset: McTypes.mc_int_t</span>
@@ -224,9 +224,9 @@
             <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="p">(</span><span class="s1">&#39;inv_step&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point4f_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;top_left&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point4f_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point4_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;offset&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span>    <span class="n">T</span><span class="o">.</span><span class="n">mc_point4s_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;offset&#39;</span><span class="p">,</span>   <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>        <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">),</span>
             <span class="p">]</span>
 
         <span class="k">return</span> <span class="n">ClFluencet</span></div>
@@ -237,7 +237,7 @@
             <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McFluence{&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point4f_t inv_step;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point4f_t top_left;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	mc_point4_t shape;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point4s_t shape;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_size_t offset;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_int_t k;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;};&#39;</span><span class="p">,</span>
@@ -256,10 +256,10 @@
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;inv_step.y (1/mm):&quot;, fluence-&gt;inv_step.y*1e-3f);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;inv_step.z (1/mm):&quot;, fluence-&gt;inv_step.z*1e-3f);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;inv_step.w (1/ns):&quot;, fluence-&gt;inv_step.w*1e-9f);&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	dbg_print_int(INDENT &quot;shape.x:&quot;, fluence-&gt;shape.x);&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	dbg_print_int(INDENT &quot;shape.y:&quot;, fluence-&gt;shape.y);&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	dbg_print_int(INDENT &quot;shape.z:&quot;, fluence-&gt;shape.z);&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	dbg_print_int(INDENT &quot;shape.w:&quot;, fluence-&gt;shape.w);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;shape.x:&quot;, fluence-&gt;shape.x);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;shape.y:&quot;, fluence-&gt;shape.y);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;shape.z:&quot;, fluence-&gt;shape.z);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;shape.w:&quot;, fluence-&gt;shape.w);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;offset:&quot;, fluence-&gt;offset);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_int(INDENT &quot;k:&quot;, fluence-&gt;k);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>

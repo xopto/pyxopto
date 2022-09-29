@@ -1,0 +1,505 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.util.regression.clann module &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.util.regression.pp module" href="xopto.util.regression.pp.html" />
+    <link rel="prev" title="xopto.util.regression.ann module" href="xopto.util.regression.ann.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="xopto.cl.html">xopto.cl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.data.html">xopto.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.dataset.html">xopto.dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.html">xopto.materials package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcbase.html">xopto.mcbase package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mccyl.html">xopto.mccyl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.html">xopto.mcml package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.html">xopto.mcvox package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.pf.html">xopto.pf package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.src.html">xopto.src package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="xopto.util.html">xopto.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">xopto</a> &raquo;</li>
+        
+          <li><a href="xopto.html">xopto package</a> &raquo;</li>
+        
+          <li><a href="xopto.util.html">xopto.util package</a> &raquo;</li>
+        
+          <li><a href="xopto.util.regression.html">xopto.util.regression package</a> &raquo;</li>
+        
+      <li>xopto.util.regression.clann module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-xopto.util.regression.clann">
+<span id="xopto-util-regression-clann-module"></span><h1>xopto.util.regression.clann module<a class="headerlink" href="#module-xopto.util.regression.clann" title="Permalink to this headline">¶</a></h1>
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.ACTIVATION_FUNCTIONS">
+<span class="sig-name descname"><span class="pre">ACTIVATION_FUNCTIONS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">('relu',</span> <span class="pre">'tanh',</span> <span class="pre">'exponential',</span> <span class="pre">'softmax',</span> <span class="pre">'softplus',</span> <span class="pre">'sigmoid',</span> <span class="pre">'softsign',</span> <span class="pre">'selu')</span></em><a class="headerlink" href="#xopto.util.regression.clann.ACTIVATION_FUNCTIONS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tuple of implemented activation functions.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.CL_ACTIVATION_FUNCTIONS">
+<span class="sig-name descname"><span class="pre">CL_ACTIVATION_FUNCTIONS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'\ninline</span> <span class="pre">void</span> <span class="pre">activation_relu(\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">max_value,</span> <span class="pre">mc_fp_t</span> <span class="pre">negative_slope,</span> <span class="pre">mc_fp_t</span> <span class="pre">threshold,\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">*in_out,</span> <span class="pre">mc_size_t</span> <span class="pre">n)\n{\n</span>&#160;&#160;&#160; <span class="pre">for(mc_size_t</span> <span class="pre">pos=0;</span> <span class="pre">pos</span> <span class="pre">&lt;</span> <span class="pre">n;</span> <span class="pre">++pos){\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">in_out[pos]</span> <span class="pre">=</span> <span class="pre">(in_out[pos]</span> <span class="pre">&gt;</span> <span class="pre">max_value)</span> <span class="pre">?</span> <span class="pre">max_value</span> <span class="pre">:</span> <span class="pre">in_out[pos];\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">in_out[pos]</span> <span class="pre">=</span> <span class="pre">(in_out[pos]</span> <span class="pre">&gt;=</span> <span class="pre">threshold)</span> <span class="pre">?\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">in_out[pos]</span> <span class="pre">:</span> <span class="pre">negative_slope*(in_out[pos]</span> <span class="pre">-</span> <span class="pre">threshold);\n</span>&#160;&#160;&#160; <span class="pre">}\n};\n\ninline</span> <span class="pre">void</span> <span class="pre">activation_tanh(\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">*in_out,</span> <span class="pre">mc_size_t</span> <span class="pre">n)\n{\n</span>&#160;&#160;&#160; <span class="pre">for(mc_size_t</span> <span class="pre">pos</span> <span class="pre">=</span> <span class="pre">0;</span> <span class="pre">pos</span> <span class="pre">&lt;</span> <span class="pre">n;</span> <span class="pre">++pos){\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">in_out[pos]</span> <span class="pre">=</span> <span class="pre">mc_tanh(in_out[pos]);\n</span>&#160;&#160;&#160; <span class="pre">};\n};\n\ninline</span> <span class="pre">void</span> <span class="pre">activation_elu(\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">alpha,</span> <span class="pre">mc_fp_t</span> <span class="pre">*in_out,</span> <span class="pre">mc_size_t</span> <span class="pre">n)\n{\n</span>&#160;&#160;&#160; <span class="pre">for(mc_size_t</span> <span class="pre">pos=0;</span> <span class="pre">pos</span> <span class="pre">&lt;</span> <span class="pre">n;</span> <span class="pre">++pos){\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">in_out[pos]</span> <span class="pre">=</span> <span class="pre">(in_out[pos]</span> <span class="pre">&gt;=</span> <span class="pre">FP_0)</span> <span class="pre">?\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">in_out[pos]</span> <span class="pre">:</span> <span class="pre">alpha*(mc_exp(in_out[pos])</span> <span class="pre">-</span> <span class="pre">FP_1);\n</span>&#160;&#160;&#160; <span class="pre">}\n};\n\ninline</span> <span class="pre">void</span> <span class="pre">activation_exponential(\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">*in_out,</span> <span class="pre">mc_size_t</span> <span class="pre">n)\n{\n</span>&#160;&#160;&#160; <span class="pre">for(mc_size_t</span> <span class="pre">pos=0;</span> <span class="pre">pos</span> <span class="pre">&lt;</span> <span class="pre">n;</span> <span class="pre">++pos){\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">in_out[pos]</span> <span class="pre">=</span> <span class="pre">mc_exp(in_out[pos]);\n</span>&#160;&#160;&#160; <span class="pre">}\n};\n\ninline</span> <span class="pre">void</span> <span class="pre">activation_softmax(\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">*in_out,</span> <span class="pre">mc_size_t</span> <span class="pre">n)\n{\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">total</span> <span class="pre">=</span> <span class="pre">FP_0;\n</span>&#160;&#160;&#160; <span class="pre">for(mc_size_t</span> <span class="pre">pos</span> <span class="pre">=</span> <span class="pre">0;</span> <span class="pre">pos</span> <span class="pre">&lt;</span> <span class="pre">n;</span> <span class="pre">++pos){\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">in_out[pos]</span> <span class="pre">=</span> <span class="pre">mc_exp(in_out[pos]);\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">total</span> <span class="pre">+=</span> <span class="pre">in_out[pos];\n</span>&#160;&#160;&#160; <span class="pre">};\n\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">inv_total</span> <span class="pre">=</span> <span class="pre">mc_fdiv(FP_1,</span> <span class="pre">total);\n</span>&#160;&#160;&#160; <span class="pre">for(mc_size_t</span> <span class="pre">pos</span> <span class="pre">=</span> <span class="pre">0;</span> <span class="pre">pos</span> <span class="pre">&lt;</span> <span class="pre">n;</span> <span class="pre">++pos){\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">in_out[pos]</span> <span class="pre">*=</span> <span class="pre">inv_total;\n</span>&#160;&#160;&#160; <span class="pre">};\n};\n\ninline</span> <span class="pre">void</span> <span class="pre">activation_softplus(\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">*in_out,</span> <span class="pre">mc_size_t</span> <span class="pre">n)\n{\n</span>&#160;&#160;&#160; <span class="pre">for(mc_size_t</span> <span class="pre">pos</span> <span class="pre">=</span> <span class="pre">0;</span> <span class="pre">pos</span> <span class="pre">&lt;</span> <span class="pre">n;</span> <span class="pre">++pos)\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">in_out[pos]</span> <span class="pre">=</span> <span class="pre">mc_fdiv(FP_1,</span> <span class="pre">(FP_1</span> <span class="pre">+</span> <span class="pre">mc_exp(-in_out[pos])));\n};\n\ninline</span> <span class="pre">void</span> <span class="pre">activation_sigmoid(\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">*in_out,</span> <span class="pre">mc_size_t</span> <span class="pre">n)\n{\n</span>&#160;&#160;&#160; <span class="pre">for(mc_size_t</span> <span class="pre">pos</span> <span class="pre">=</span> <span class="pre">0;</span> <span class="pre">pos</span> <span class="pre">&lt;</span> <span class="pre">n;</span> <span class="pre">++pos)\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">in_out[pos]</span> <span class="pre">=</span> <span class="pre">mc_log(mc_exp(in_out[pos])</span> <span class="pre">+</span> <span class="pre">FP_1);\n};\n\ninline</span> <span class="pre">void</span> <span class="pre">activation_softsign(\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">*in_out,</span> <span class="pre">mc_size_t</span> <span class="pre">n)\n{\n</span>&#160;&#160;&#160; <span class="pre">for(mc_size_t</span> <span class="pre">pos</span> <span class="pre">=</span> <span class="pre">0;</span> <span class="pre">pos</span> <span class="pre">&lt;</span> <span class="pre">n;</span> <span class="pre">++pos)\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">in_out[pos]</span> <span class="pre">=</span> <span class="pre">mc_fdiv(in_out[pos],</span> <span class="pre">mc_fabs(in_out[pos]</span> <span class="pre">+</span> <span class="pre">FP_1));\n};\n\ninline</span> <span class="pre">void</span> <span class="pre">activation_selu(\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">*in_out,</span> <span class="pre">mc_size_t</span> <span class="pre">n)\n{\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">const</span> <span class="pre">scale</span> <span class="pre">=</span> <span class="pre">FP_LITERAL(1.05070098);\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">const</span> <span class="pre">alpha</span> <span class="pre">=</span> <span class="pre">FP_LITERAL(1.67326324);\n</span> <span class="pre">\n</span>&#160;&#160;&#160; <span class="pre">for(mc_size_t</span> <span class="pre">pos</span> <span class="pre">=</span> <span class="pre">0;</span> <span class="pre">pos</span> <span class="pre">&lt;</span> <span class="pre">n;</span> <span class="pre">++pos)\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">in_out[pos]</span> <span class="pre">=</span> <span class="pre">(in_out[pos]</span> <span class="pre">&gt;=</span> <span class="pre">FP_0)</span> <span class="pre">?\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">scale*in_out[pos]</span> <span class="pre">:</span> <span class="pre">scale*alpha*(mc_exp(in_out[pos])</span> <span class="pre">-</span> <span class="pre">FP_1);\n};\n'</span></em><a class="headerlink" href="#xopto.util.regression.clann.CL_ACTIVATION_FUNCTIONS" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenCL source code of the implemented activation functions.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.CL_COMMON">
+<span class="sig-name descname"><span class="pre">CL_COMMON</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'\nvoid</span> <span class="pre">inline</span> <span class="pre">fp_copy(\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">*dest,</span> <span class="pre">mc_fp_t</span> <span class="pre">const</span> <span class="pre">*src,</span> <span class="pre">mc_size_t</span> <span class="pre">n)\n{\n</span>&#160;&#160;&#160; <span class="pre">for(mc_size_t</span> <span class="pre">pos=0;</span> <span class="pre">pos</span> <span class="pre">&lt;</span> <span class="pre">n;</span> <span class="pre">++pos)\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">dest[pos]</span> <span class="pre">=</span> <span class="pre">src[pos];\n};\n\nvoid</span> <span class="pre">inline</span> <span class="pre">fp_copy_from_global(\n</span>&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">*dest,</span> <span class="pre">__global</span> <span class="pre">mc_fp_t</span> <span class="pre">const</span> <span class="pre">*src,</span> <span class="pre">mc_size_t</span> <span class="pre">n)\n{\n</span>&#160;&#160;&#160; <span class="pre">for(mc_size_t</span> <span class="pre">pos=0;</span> <span class="pre">pos</span> <span class="pre">&lt;</span> <span class="pre">n;</span> <span class="pre">++pos)\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">dest[pos]</span> <span class="pre">=</span> <span class="pre">src[pos];\n};\n\nvoid</span> <span class="pre">inline</span> <span class="pre">fp_copy_to_global(\n</span>&#160;&#160;&#160; <span class="pre">__global</span> <span class="pre">mc_fp_t</span> <span class="pre">*dest,</span> <span class="pre">mc_fp_t</span> <span class="pre">const</span> <span class="pre">*src,</span> <span class="pre">mc_size_t</span> <span class="pre">n)\n{\n</span>&#160;&#160;&#160; <span class="pre">for(mc_size_t</span> <span class="pre">pos=0;</span> <span class="pre">pos</span> <span class="pre">&lt;</span> <span class="pre">n;</span> <span class="pre">++pos)\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">dest[pos]</span> <span class="pre">=</span> <span class="pre">src[pos];\n};\n'</span></em><a class="headerlink" href="#xopto.util.regression.clann.CL_COMMON" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenCL source code of support functions.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.CL_KERNEL_TEMPLATE">
+<span class="sig-name descname"><span class="pre">CL_KERNEL_TEMPLATE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'\n__kernel</span> <span class="pre">void</span> <span class="pre">{prefix}model_kernel(\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">__global</span> <span class="pre">mc_fp_t</span> <span class="pre">const</span> <span class="pre">*input,\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">__global</span> <span class="pre">mc_fp_t</span> <span class="pre">*output,\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">mc_size_t</span> <span class="pre">num_samples)\n{{\n</span>&#160;&#160;&#160; <span class="pre">if</span> <span class="pre">(get_global_id(0)</span> <span class="pre">&lt;</span> <span class="pre">num_samples){{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">one_input[{num_inputs}];\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">mc_fp_t</span> <span class="pre">one_output[{num_outputs}];\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">fp_copy_from_global(one_input,</span> <span class="pre">input</span> <span class="pre">+</span> <span class="pre">{num_inputs}*get_global_id(0),</span> <span class="pre">{num_inputs});\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">{prefix}input_pp_apply(one_input);\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">{prefix}model(one_input,</span> <span class="pre">one_output);\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">{prefix}output_pp_undo(one_output);\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">fp_copy_to_global(output</span> <span class="pre">+</span> <span class="pre">{num_outputs}*get_global_id(0),</span> <span class="pre">one_output,</span> <span class="pre">{num_outputs});\n</span>&#160;&#160;&#160; <span class="pre">}}\n}};\n'</span></em><a class="headerlink" href="#xopto.util.regression.clann.CL_KERNEL_TEMPLATE" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenCL kernel function template as a python format string with keyword
+parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prefix</strong> (<em>str</em>) – Prefix for the OpenCL kernel and the related support functions that
+implement the model.</p></li>
+<li><p><strong>num_inputs</strong> (<em>int</em>) – The number of input variables.</p></li>
+<li><p><strong>num_outputs</strong> (<em>int</em>) – The number of output variables</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.ClModel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ClModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McOption" title="xopto.mcbase.mcoptions.McOption"><span class="pre">xopto.mcbase.mcoptions.McOption</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#xopto.util.regression.clann.Renderer" title="xopto.util.regression.clann.Renderer"><span class="pre">xopto.util.regression.clann.Renderer</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/regression/clann.html#ClModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.clann.ClModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcworker.html#xopto.mcbase.mcworker.ClWorker" title="xopto.mcbase.mcworker.ClWorker"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcworker.ClWorker</span></code></a></p>
+<p>OpenCL implementation of a dense model.</p>
+<dl class="simple">
+<dt>model: ann.Model or str</dt><dd><p>Dense model instance. If a str instance, load the model
+from the specified file.</p>
+</dd>
+<dt>prefix: str</dt><dd><p>Prefix for the OpenCL kernel and related support functions that
+implement the model.</p>
+</dd>
+<dt>options: List[mcoptions.McOption]</dt><dd><p>List of options applied to the source code.</p>
+</dd>
+<dt>renderer: Renderer</dt><dd><p>An instance of rendering engine that will be used to generate
+OpenCL source code representing the model.</p>
+</dd>
+<dt>args: tuple</dt><dd><p>Positional arguments passed to the base class
+constructor <a class="reference internal" href="xopto.mcbase.mcworker.html#xopto.mcbase.mcworker.ClWorker" title="xopto.mcbase.mcworker.ClWorker"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcworker.ClWorker</span></code></a> class.</p>
+</dd>
+<dt>kwargs: dict</dt><dd><p>Keyword arguments passed to the base class
+constructor <a class="reference internal" href="xopto.mcbase.mcworker.html#xopto.mcbase.mcworker.ClWorker" title="xopto.mcbase.mcworker.ClWorker"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcworker.ClWorker</span></code></a> class.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.ClModel.AUTOGEN_PATH">
+<span class="sig-name descname"><span class="pre">AUTOGEN_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/.xopto/pyxopto/data/clann/auto'</span></em><a class="headerlink" href="#xopto.util.regression.clann.ClModel.AUTOGEN_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default directory that is used to save the rendered OpenCL source code.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.ClModel.allocate_input">
+<span class="sig-name descname"><span class="pre">allocate_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/util/regression/clann.html#ClModel.allocate_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.clann.ClModel.allocate_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocates an empty numpy array buffer that can hold the specified
+number of input samples.
+The floating point type of the buffer matches the floating point type
+of the OpenCL kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>samples</strong> (<em>int</em>) – The number of samples</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buffer</strong> – A 2D numpy buffer of floating point type that can hold the
+specified number of input samples. The shape of the buffer is
+(samples, ninput).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.ClModel.allocate_output">
+<span class="sig-name descname"><span class="pre">allocate_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/util/regression/clann.html#ClModel.allocate_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.clann.ClModel.allocate_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocates an empty numpy array buffer that can hold the specified
+number of output samples.
+The floating point type of the buffer matches the floating point type
+of the OpenCL kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>samples</strong> (<em>int</em>) – The number of samples</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>buffer</strong> – A 2D numpy buffer of floating point type that can hold the
+specified number of output samples. The shape of the buffer is
+(samples, noutput).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.ClModel.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exportsrc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/util/regression/clann.html#ClModel.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.clann.ClModel.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force build the OpenCL source and executable. The source and executable
+are otherwise build on the first use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exportsrc</strong> (<em>str</em>) – Export the generated OpenCL source code to this file before
+starting the build process.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Enables verbose reporting.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.ClModel.export_src">
+<span class="sig-name descname"><span class="pre">export_src</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/util/regression/clann.html#ClModel.export_src"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.clann.ClModel.export_src" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export the OpenCL source to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The OpenCL source code will be saved to this file. If a file
+name is not provided, the OpenCL source will be saved to
+<a class="reference internal" href="#xopto.util.regression.clann.ClModel.AUTOGEN_PATH" title="xopto.util.regression.clann.ClModel.AUTOGEN_PATH"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ClModel.AUTOGEN_PATH</span></code></a> directory with a name
+“&lt;prefix&gt;_clmodel_&lt;random&gt;.cl”.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>filename</strong> – The filename that was used to save the OpenCL source code.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.ClModel.model">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.util.regression.ann.Model</span></em><a class="headerlink" href="#xopto.util.regression.clann.ClModel.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>ANN regression model instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.ClModel.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wgsize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/util/regression/clann.html#ClModel.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.clann.ClModel.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute predictions for the input data array using OpenCL
+implementation of the model. The input data array is first transferred
+to the OpenCL device. After running the OpenCL model kernel, the
+prediction results are downloaded into the output data array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<em>np.ndarray</em>) – Input data as a 2D numpy array with shape (samples, n), where n is
+the number of inputs and samples the number of samples in the
+input array.</p></li>
+<li><p><strong>output</strong> (<em>np.ndarray</em>) – Optional data array for the predictions that must have sufficient
+space and be of the same floating point type as used
+in the OpenCL kernel.</p></li>
+<li><p><strong>wgsize</strong> (<em>int</em>) – Local work group size. If None (default), the optimal work group
+size is determined automatically.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Enables verbose reporting.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – Data array with predictions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.ClModel.run_report">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">run_report</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><a class="headerlink" href="#xopto.util.regression.clann.ClModel.run_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timing and performance data of the latest kernel run as a dict with keys “upload”, “download”, “execution”, and “items”. The timing values with keys “upload”, “download” and “execution” are given in seconds. The number of processed items with key “items” is an integer value. All values are initialized to None.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.Renderer">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Renderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">80</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/regression/clann.html#Renderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.clann.Renderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Creates an instance of rendering engine that generates OpenCL code
+for dense ANN models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>str</em>) – Indentation of the source code.</p></li>
+<li><p><strong>width</strong> (<em>int</em>) – Maximum line width of the source code.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.Renderer.DEFAULT_INDENT">
+<span class="sig-name descname"><span class="pre">DEFAULT_INDENT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'</span>&#160;&#160;&#160; <span class="pre">'</span></em><a class="headerlink" href="#xopto.util.regression.clann.Renderer.DEFAULT_INDENT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default indentation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.Renderer.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcworker.html#xopto.mcbase.mcworker.ClWorker" title="xopto.mcbase.mcworker.ClWorker"><span class="pre">xopto.mcbase.mcworker.ClWorker</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.util.regression.ann.html#xopto.util.regression.ann.Model" title="xopto.util.regression.ann.Model"><span class="pre">xopto.util.regression.ann.Model</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/util/regression/clann.html#Renderer.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.clann.Renderer.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render/generate OpenCL source code for the provided dense models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<a class="reference internal" href="xopto.mcbase.mcworker.html#xopto.mcbase.mcworker.ClWorker" title="xopto.mcbase.mcworker.ClWorker"><em>ClWorker</em></a>) – OpenCL worker that will be used to run the OpenCL-based
+implementation of the model.</p></li>
+<li><p><strong>models</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><a class="reference internal" href="xopto.util.regression.ann.html#xopto.util.regression.ann.Model" title="xopto.util.regression.ann.Model"><em>ann.Model</em></a><em>, </em><em>str</em><em>]</em><em>]</em>) – A list of ANN models and corresponding prefixes that will be used
+to produce OpenCL code/kernels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>code</strong> – Source code lines.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.get_fp">
+<span class="sig-name descname"><span class="pre">get_fp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/util/regression/clann.html#get_fp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.clann.get_fp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the input value if it is not None, else returns the default value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>) – Input floating point number or None.</p></li>
+<li><p><strong>default</strong> (<em>float</em>) – Default value that is returned if the input value is None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fp</strong> – Input value if it is not None, else the default value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.util.regression.clann.prepare_prefix">
+<span class="sig-name descname"><span class="pre">prepare_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/util/regression/clann.html#prepare_prefix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.clann.prepare_prefix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="xopto.util.regression.pp.html" class="btn btn-neutral float-right" title="xopto.util.regression.pp module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="xopto.util.regression.ann.html" class="btn btn-neutral float-left" title="xopto.util.regression.ann module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

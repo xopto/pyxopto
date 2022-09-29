@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.materials.density.sucrose &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.materials.density.sucrose</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xopto.materials.density.sucrose</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto</span> <span class="kn">import</span> <span class="n">DATA_PATH</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Density</span>
+
+
+<div class="viewcode-block" id="Lit"><a class="viewcode-back" href="../../../../apidoc/xopto.materials.density.sucrose.html#xopto.materials.density.sucrose.Lit">[docs]</a><span class="k">class</span> <span class="nc">Lit</span><span class="p">(</span><span class="n">Density</span><span class="p">):</span>
+    <span class="n">material</span> <span class="o">=</span> <span class="s1">&#39;sucrose&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">297.45</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Density of sucrose as measured by:</span>
+<span class="sd">            LST: calibrated density bottle</span>
+<span class="sd">            (ISOLAB Laborgeräte GmbH, Eschau, Germany)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t: float</span>
+<span class="sd">            Default temperature (K) of the medium.</span>
+<span class="sd">            Defaults to 297.45 K (24.3 C).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">trange</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">DATA_PATH</span><span class="p">,</span> <span class="s1">&#39;materials&#39;</span><span class="p">,</span> <span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="s1">&#39;sucrose_24p3c_density.npz&#39;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_poly</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;polyval_coefficients&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_brix_range</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">60.0</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Lit.is_valid_brix"><a class="viewcode-back" href="../../../../apidoc/xopto.materials.density.sucrose.html#xopto.materials.density.sucrose.Lit.is_valid_brix">[docs]</a>    <span class="k">def</span> <span class="nf">is_valid_brix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brix</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Check if the Brix value is within the valid range.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        brix: float or np.ndarray</span>
+<span class="sd">            Degree Brix value (1 Brix equals 1 g of sucrose in 100 g</span>
+<span class="sd">            of solution). Defaults to 0 Brix, i.e. pure water.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        valid: bool</span>
+<span class="sd">            True if the Brix value is within the valid range.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_brix_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">brix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">brix</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">brix</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_brix_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                 <span class="n">brix</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_brix_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Lit.check_brix"><a class="viewcode-back" href="../../../../apidoc/xopto.materials.density.sucrose.html#xopto.materials.density.sucrose.Lit.check_brix">[docs]</a>    <span class="k">def</span> <span class="nf">check_brix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brix</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Check if the Brix value is within valid range and display a warning if</span>
+<span class="sd">        not.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        brix: float or np.ndarray</span>
+<span class="sd">            Degree Brix value (1 Brix equals 1 g of sucrose in 100 g</span>
+<span class="sd">            of solution). Defaults to 0 Brix, i.e. pure water.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_valid_brix</span><span class="p">(</span><span class="n">brix</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s1">&#39;Brix value out of valid range &#39;</span>\
+                <span class="s1">&#39;[</span><span class="si">{:.1f}</span><span class="s1">, </span><span class="si">{:.1f}</span><span class="s1">] Brix!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_brix_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_brix_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brix</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Calculate the density of the medium.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        brix: float</span>
+<span class="sd">            Degree Brix value (1 Brix equals 1 g of sucrose in 100 g</span>
+<span class="sd">            of solution). Defaults to 0 Brix, i.e. pure water.</span>
+<span class="sd">        temperature: float or None</span>
+<span class="sd">            Use this temperature instead of the default temperature.</span>
+<span class="sd">            Not used by this implementation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        rho: float or np.ndarray</span>
+<span class="sd">            Density in kg/m^3.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_brix</span><span class="p">(</span><span class="n">brix</span><span class="p">)</span>
+        <span class="n">brix</span> <span class="o">=</span> <span class="n">brix</span><span class="o">/</span><span class="mf">100.0</span> <span class="c1"># relative Brix values used internally</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_poly</span><span class="p">,</span> <span class="n">brix</span><span class="p">)</span></div>
+
+<span class="n">lit</span> <span class="o">=</span> <span class="n">Lit</span><span class="p">()</span>
+
+<span class="n">default</span> <span class="o">=</span> <span class="n">lit</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

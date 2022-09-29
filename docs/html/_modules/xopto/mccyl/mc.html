@@ -748,7 +748,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s1">&#39;Simulator options must be a list of McOption or a list &#39;</span>
-                    <span class="s1">&#39;of touples!&#39;</span><span class="p">)</span>
+                    <span class="s1">&#39;of tuples!&#39;</span><span class="p">)</span>
 
         <span class="c1"># Resolve/join all the simulator options.</span>
         <span class="n">resolved_options</span> <span class="o">=</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">resolve_cl_options</span><span class="p">(</span>
@@ -1411,7 +1411,7 @@
     <span class="k">def</span> <span class="nf">_get_run_report</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_report</span>
     <span class="n">run_report</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_run_report</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
-                          <span class="s1">&#39;Timing and performance data of the lates kernel &#39;</span>
+                          <span class="s1">&#39;Timing and performance data of the latest kernel &#39;</span>
                           <span class="s1">&#39;run as a dict with keys &quot;upload&quot;, &quot;download&quot;, &#39;</span>
                           <span class="s1">&#39;&quot;execution&quot;, &quot;threads&quot; and &quot;items&quot;. &#39;</span>
                           <span class="s1">&#39;The timing values with keys &quot;upload&quot;, &quot;download&quot; &#39;</span>

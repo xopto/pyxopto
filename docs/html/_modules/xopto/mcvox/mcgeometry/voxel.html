@@ -807,6 +807,50 @@
         <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
             <span class="n">sv</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
+<div class="viewcode-block" id="Voxels.render"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Show the voxelized volume in a 3D viewer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        show: bool</span>
+<span class="sd">            If True, shows the window and starts the Qt event loop that</span>
+<span class="sd">            will block until the window is closed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        viewer: slicer3d.Slicer3D</span>
+<span class="sd">            Use the :py:meth:`~xopto.util.widgets.visualization.slicer3d.Slicer3D.exec`</span>
+<span class="sd">            method to show the viewer and start the Qt event loop that will</span>
+<span class="sd">            block until the window is closed.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The 3D viewer requires PySide6 and PyQtGraph.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">xopto.util.widgets</span> <span class="kn">import</span> <span class="n">common</span>
+        <span class="kn">from</span> <span class="nn">xopto.util.widgets.visualization</span> <span class="kn">import</span> <span class="n">slicer3d</span>
+
+        <span class="n">app</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">prepareqt</span><span class="p">()</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">material</span>
+        <span class="n">span</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+        <span class="n">slicer</span> <span class="o">=</span> <span class="n">slicer3d</span><span class="o">.</span><span class="n">Slicer3D</span><span class="p">()</span>
+        <span class="n">slicer</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">range_</span><span class="o">=</span><span class="n">span</span><span class="p">,</span>
+                       <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">*</span><span class="mf">1e3</span><span class="p">)</span>
+        <span class="n">slicer</span><span class="o">.</span><span class="n">setXLabel</span><span class="p">(</span><span class="s1">&#39;x (mm)&#39;</span><span class="p">)</span>
+        <span class="n">slicer</span><span class="o">.</span><span class="n">setYLabel</span><span class="p">(</span><span class="s1">&#39;y (mm)&#39;</span><span class="p">)</span>
+        <span class="n">slicer</span><span class="o">.</span><span class="n">setZLabel</span><span class="p">(</span><span class="s1">&#39;z (mm)&#39;</span><span class="p">)</span>
+        <span class="n">slicer</span><span class="o">.</span><span class="n">view3D</span><span class="p">()</span><span class="o">.</span><span class="n">setStandardCameraView</span><span class="p">(</span><span class="s1">&#39;isometric&#39;</span><span class="p">)</span>
+        <span class="n">slicer</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Voxelized medium&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="n">slicer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="n">app</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">slicer</span></div>
+
 <div class="viewcode-block" id="Voxels.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcvox.mcgeometry.voxel.html#xopto.mcvox.mcgeometry.voxel.Voxels.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Export object to a dict.</span>

@@ -192,15 +192,22 @@
             
   <div class="section" id="module-xopto.mcbase.mcsrc">
 <span id="xopto-mcbase-mcsrc-module"></span><h1>xopto.mcbase.mcsrc module<a class="headerlink" href="#module-xopto.mcbase.mcsrc" title="Permalink to this headline">¶</a></h1>
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.mcbase.mcsrc.RE_LICENSE">
+<span class="sig-name descname"><span class="pre">RE_LICENSE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">re.compile('/\\*+</span> <span class="pre">Begin</span> <span class="pre">license</span> <span class="pre">[</span> <span class="pre">a-zA-Z0-3.,;:,.\\*\n\r\t()/&lt;&gt;]*</span> <span class="pre">End</span> <span class="pre">license</span> <span class="pre">\\*+/')</span></em><a class="headerlink" href="#xopto.mcbase.mcsrc.RE_LICENSE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compiled regular expression that matches the file header - license text.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.mcbase.mcsrc.fuse">
-<span class="sig-name descname"><span class="pre">fuse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mcsrc.html#fuse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcsrc.fuse" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fuse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">striplicense</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcbase/mcsrc.html#fuse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcsrc.fuse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fuses the source files in inputs into the template defined by the output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>inputs</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – A list of source files to fuse.</p></li>
 <li><p><strong>output</strong> (<em>str</em>) – Output template file.</p></li>
+<li><p><strong>striplicense</strong> (<em>bool</em>) – Strip the license headers if set to True.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – Turns on verbose reporting.</p></li>
 </ul>
 </dd>

@@ -1,0 +1,1639 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.util.sampler &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.util.sampler</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xopto.util.sampler</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Type</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">mcrmax</span><span class="p">,</span> <span class="n">mcpf</span><span class="p">,</span> <span class="n">mcmaterial</span>
+<span class="kn">import</span> <span class="nn">xopto.mcml.mc</span>
+
+
+<div class="viewcode-block" id="detector_direction"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.detector_direction">[docs]</a><span class="k">def</span> <span class="nf">detector_direction</span><span class="p">(</span><span class="n">incidence</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">tilt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">design_angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                       <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Determines the direction vector of the detector by solving a quadratic</span>
+<span class="sd">    equation that arises from the following system of equations:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        x\\sin(\\Theta_i) + z\\cos(\\Theta_i) = -\\cos(\\Theta_0)</span>
+
+<span class="sd">        y\\cos(\\Theta_t) - z\\sin(\\Theta_t) = 0</span>
+
+<span class="sd">        x^2 + y^2 + z^2 = 1</span>
+
+<span class="sd">    In the above equations :math:`\Theta_i` is the angle of incidence,</span>
+<span class="sd">    :math:`\\Theta_t` the detector tilt angle and :math:`\\Theta_0` the</span>
+<span class="sd">    design angle, i.e. the angle between the source and detector.</span>
+
+<span class="sd">    The first equation is the dot product of the detector direction vector</span>
+<span class="sd">    and the direction of the incident beam. The angle between the two is</span>
+<span class="sd">    the design angle :math:`180 - \\Theta_0`. The second equation is</span>
+<span class="sd">    the dot product of the detector direction vector and the normal</span>
+<span class="sd">    of the tilted plane that contains the detector direction vector. Note</span>
+<span class="sd">    that the tilted plane is the x-z plane rotated around the x axis.</span>
+
+<span class="sd">    The solution with negative z component that has a polar angle</span>
+<span class="sd">    in the x-z plane smaller than the polar angle of the incident source</span>
+<span class="sd">    is taken (detector always rotates from source towards the x axis).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    incidence: float</span>
+<span class="sd">        Source incidence angle (radians) in the x-z plane, measured from</span>
+<span class="sd">        the z axis.</span>
+<span class="sd">    tilt: float</span>
+<span class="sd">        Detector tilt angle (radians) measured as the angle between the</span>
+<span class="sd">        tilted plane (x-z plane rotated around the x axis) and the z axis. </span>
+<span class="sd">    design_angle: float</span>
+<span class="sd">        Design angle between the source and detector (radians).</span>
+<span class="sd">    verbose: bool</span>
+<span class="sd">        Enables verbose report.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dir: np.ndarray</span>
+<span class="sd">        Direction vector of the detector.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># special simplified case for perpendicular incidence</span>
+    <span class="k">if</span> <span class="n">incidence</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">design_angle</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">z</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">tilt</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">tilt</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span> <span class="o">-</span> <span class="n">z</span><span class="o">*</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+
+    <span class="n">src_direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">incidence</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">incidence</span><span class="p">)])</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">incidence</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">tilt</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1.0</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">design_angle</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">incidence</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">incidence</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">design_angle</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">incidence</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.0</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">4.0</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">c</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+
+    <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">b</span> <span class="o">+</span> <span class="n">d</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">a</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="n">b</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">z1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">tilt</span><span class="p">),</span> <span class="n">z2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">tilt</span><span class="p">)</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">design_angle</span><span class="p">)</span> <span class="o">-</span> <span class="n">z1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">incidence</span><span class="p">))</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">incidence</span><span class="p">)</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">design_angle</span><span class="p">)</span> <span class="o">-</span> <span class="n">z2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">incidence</span><span class="p">))</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">incidence</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;dir 1             :&#39;</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  src-detector (°):&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">],</span> <span class="n">src_direction</span><span class="p">))))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  polar in x-z (°):&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">x1</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;dir 2             :&#39;</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  src-detector (°):&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">([</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span><span class="p">],</span> <span class="n">src_direction</span><span class="p">))))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  polar in x-z (°):&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">x2</span><span class="p">)))</span>
+
+    <span class="k">if</span> <span class="n">z1</span> <span class="o">&gt;=</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">z2</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Detector direction could not be resolved!&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">x1</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">incidence</span><span class="p">):</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">x1</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">y1</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">z1</span><span class="p">)])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">x2</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">y2</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">z2</span><span class="p">)])</span>
+
+    <span class="k">return</span> <span class="n">direction</span></div>
+
+
+<div class="viewcode-block" id="Sampler"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.Sampler">[docs]</a><span class="k">class</span> <span class="nc">Sampler</span><span class="p">:</span>
+<div class="viewcode-block" id="Sampler.fromdict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.Sampler.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Sampler&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance from the data in the dict.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            A sampler instance exported to dict.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sampler: Sampler</span>
+<span class="sd">            A new sampler instance.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">type_name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="n">sampler_type</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">type_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sampler_type</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Sampler.reset"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.Sampler.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Reset the state of the sampler. Reimplement this method for</span>
+<span class="sd">        custom handling of the sampler state.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">pass</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> #</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="SequenceSampler"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.SequenceSampler">[docs]</a><span class="k">class</span> <span class="nc">SequenceSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        A sequence sampler.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sequence: np.ndarray</span>
+<span class="sd">            A sequence of vales to sample. The array is sampled from a flat</span>
+<span class="sd">            view.</span>
+<span class="sd">        start: int</span>
+<span class="sd">            Zero-based index of the first sample.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        After reaching the end of sequence, the sampling will continue with</span>
+<span class="sd">        the first element in the sequence.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SequenceSampler.reset"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.SequenceSampler.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Reset the sequence sampler to start from the first item as specified</span>
+<span class="sd">        by the start parameter of the constructor.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_pos</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="s1">&#39;Zero-based index of the next sample.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span>
+    <span class="n">sequence</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_sequence</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;The sampled data sequence.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freeze</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return a sample from the sequence.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        freeze: bool</span>
+<span class="sd">            Do not advance the state/position of the sampler if True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sample: float or np.ndarray</span>
+<span class="sd">            The sample.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">freeze</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">sample</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;SequenceSampler(sequence=</span><span class="si">{}</span><span class="s1">, start=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="UniformSampler"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.UniformSampler">[docs]</a><span class="k">class</span> <span class="nc">UniformSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">logscale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Randomly samples values from interval [start, stop]. Note that the</span>
+<span class="sd">        values of start and stop can be provided in arbitrary order.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        start: float</span>
+<span class="sd">            Start of the sampling interval.</span>
+<span class="sd">        stop: float</span>
+<span class="sd">            Stop/end of the sampling interval.</span>
+<span class="sd">        logscale: bool</span>
+<span class="sd">            Use logarithmic sampling on the start-stop interval.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_interval</span><span class="p">((</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_logscale</span><span class="p">(</span><span class="n">logscale</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span>
+    <span class="k">def</span> <span class="nf">_set_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">interval</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">interval</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">interval</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_interval</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Sampling interval as a tuple (start, stop)&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">_set_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_start</span><span class="p">,</span> <span class="n">_set_start</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Start of the sampling interval.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">_set_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">stop</span><span class="p">)</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_stop</span><span class="p">,</span> <span class="n">_set_stop</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;Stop of the sampling interval.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_min</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_interval</span><span class="p">)</span>
+    <span class="nb">min</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_min</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="s1">&#39;Lower bound of the sampling interval.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_max</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_interval</span><span class="p">)</span>
+    <span class="nb">max</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_max</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="s1">&#39;Upper bound of the sampling interval.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_logscale</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span>
+    <span class="k">def</span> <span class="nf">_set_logscale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">logscale</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_logscale</span><span class="p">,</span> <span class="n">_set_logscale</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Sampling in logarithmic scale.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">freeze</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the requested number of samples.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n: int or Tuple[int]</span>
+<span class="sd">            The requested number of samples.</span>
+<span class="sd">        freeze: bool</span>
+<span class="sd">            Do not advance the state of the sampler if True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        samples: float or np.ndarray</span>
+<span class="sd">            The samples.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span><span class="p">:</span>
+            <span class="n">log_min</span><span class="p">,</span> <span class="n">log_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">*=</span> <span class="p">(</span><span class="n">log_max</span> <span class="o">-</span> <span class="n">log_min</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">+=</span> <span class="n">log_min</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float_power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">*=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">min</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min</span>
+
+        <span class="k">return</span> <span class="n">data</span>
+
+<div class="viewcode-block" id="UniformSampler.todict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.UniformSampler.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Instance data exported to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
+            <span class="s1">&#39;stop&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
+            <span class="s1">&#39;logscale&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">logscale</span>
+        <span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;UniformSampler(start=</span><span class="si">{:g}</span><span class="s1">, stop=</span><span class="si">{:g}</span><span class="s1">, logscale=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_interval</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logscale</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NormalSampler"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.NormalSampler">[docs]</a><span class="k">class</span> <span class="nc">NormalSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">clip</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Sampler that follows a Normal distribution with the given</span>
+<span class="sd">        mean and standard deviation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mean: float</span>
+<span class="sd">            Mean value of the distribution.</span>
+<span class="sd">        sigma: float</span>
+<span class="sd">            Standard deviation of the distribution.</span>
+<span class="sd">        clip: float</span>
+<span class="sd">            Clip the values to :math:`mean ± clip \\cdot sigma`.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_mean</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_sigma</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_clip</span><span class="p">(</span><span class="n">clip</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span>
+    <span class="k">def</span> <span class="nf">_set_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_mean</span><span class="p">,</span> <span class="n">_set_mean</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;Mean value of the distribution.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_sigma</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span>
+    <span class="k">def</span> <span class="nf">_set_sigma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_sigma</span><span class="p">,</span> <span class="n">_set_sigma</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;Standard deviation of the distribution.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_clip</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span>
+    <span class="k">def</span> <span class="nf">_set_clip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">clip</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_clip</span><span class="p">,</span> <span class="n">_set_clip</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;Clip value range to mean ± clip*sigma.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">freeze</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the requested number of samples.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n: int or Tuple[int]</span>
+<span class="sd">            The requested number of samples.</span>
+<span class="sd">        freeze: bool</span>
+<span class="sd">            Do not advance the state of the sampler if True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        samples: float or np.ndarray</span>
+<span class="sd">            The samples.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mean</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span> <span class="o">-</span> <span class="n">delta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span> <span class="o">+</span> <span class="n">delta</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span>
+
+<div class="viewcode-block" id="NormalSampler.todict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.NormalSampler.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Instance data exported to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span>
+            <span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">,</span>
+            <span class="s1">&#39;clip&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip</span>
+        <span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;NormalSampler(mean=</span><span class="si">{:g}</span><span class="s1">, sigma=</span><span class="si">{:g}</span><span class="s1">, clip=</span><span class="si">{:g}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConstantSampler"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.ConstantSampler">[docs]</a><span class="k">class</span> <span class="nc">ConstantSampler</span><span class="p">(</span><span class="n">UniformSampler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        A sampler that returns a constant value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: float</span>
+<span class="sd">            Constant value that will be returned by the sampler.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">freeze</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the requested number of samples.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n: int or Tuple[int]</span>
+<span class="sd">            The requested number of samples.</span>
+<span class="sd">        freeze: bool</span>
+<span class="sd">            Do not advance the state of the sampler if True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        samples: float or np.ndarray</span>
+<span class="sd">            The samples.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span>
+    <span class="k">def</span> <span class="nf">_set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interval</span> <span class="o">=</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_value</span><span class="p">,</span> <span class="n">_set_value</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="s1">&#39;Value of the sampler.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ConstantSampler.todict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.ConstantSampler.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Instance data exported to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;ConstantSampler(value=</span><span class="si">{:g}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PfSampler"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.PfSampler">[docs]</a><span class="k">class</span> <span class="nc">PfSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pf_type</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="n">Type</span><span class="p">[</span><span class="n">mcpf</span><span class="o">.</span><span class="n">PfBase</span><span class="p">],</span>
+                 <span class="n">pf_args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Sampler</span><span class="p">]):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Monte Carlo simulator scattering phase function sampler.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pf_type: mcpf.PfBase</span>
+<span class="sd">            Scattering phase function type.</span>
+<span class="sd">        pf_args: Tuple[Sampler]</span>
+<span class="sd">            Samplers of the scattering phase function arguments.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pf_type</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">pf_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mcpf</span><span class="p">,</span> <span class="n">pf_type</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span> <span class="o">=</span> <span class="n">pf_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pf_args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pf_args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_pf_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcpf</span><span class="o">.</span><span class="n">PfBase</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span>
+    <span class="n">pf_type</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_pf_type</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="s1">&#39;Scattering phase function type used by the sampler.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_pf_args</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Sampler</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_args</span>
+    <span class="n">pf_args</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_pf_args</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="s1">&#39;Samplers of the scattering phase function arguments.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PfSampler.reset"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.PfSampler.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Reset the states of samplers that sample the arguments</span>
+<span class="sd">        of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_args</span><span class="p">:</span>
+            <span class="n">arg</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freeze</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcpf</span><span class="o">.</span><span class="n">PfBase</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Sample tha scattering phase function and return a new instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        freeze: bool</span>
+<span class="sd">            Do not advance the state of the sampler if True.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">arg</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="n">freeze</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_args</span><span class="p">])</span>
+
+<div class="viewcode-block" id="PfSampler.todict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.PfSampler.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export instance to a dict.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Instance data exported to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;pf_type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;pf_args&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">arg</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_args</span><span class="p">]</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="PfSampler.fromdict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.PfSampler.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;PfSampler&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance from a dict.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Instance data that were exported to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">pf_type</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;pf_type&#39;</span><span class="p">),</span>
+            <span class="n">pf_args</span><span class="o">=</span><span class="p">[</span><span class="n">Sampler</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;pf_args&#39;</span><span class="p">)]</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;PfSampler(pf_type=</span><span class="si">{}</span><span class="s1">, pf_args=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MaterialSampler"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MaterialSampler">[docs]</a><span class="k">class</span> <span class="nc">MaterialSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mua</span><span class="p">:</span> <span class="n">Sampler</span><span class="p">,</span> <span class="n">musr</span><span class="p">:</span> <span class="n">Sampler</span><span class="p">,</span>
+                 <span class="n">n</span><span class="p">:</span> <span class="n">Sampler</span><span class="p">,</span> <span class="n">pf</span><span class="p">:</span> <span class="n">PfSampler</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Samples a material.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mua: Sampler</span>
+<span class="sd">            Sampler of the absorption coefficient (1/m).</span>
+<span class="sd">        musr: Sampler</span>
+<span class="sd">            Sampler of the reduced scattering coefficient (1/m).</span>
+<span class="sd">        n: Sampler</span>
+<span class="sd">            Sampler of the refractive index.</span>
+<span class="sd">        pf: PfSampler</span>
+<span class="sd">            Sampler Of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span> <span class="o">=</span> <span class="n">mua</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_musr</span> <span class="o">=</span> <span class="n">musr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span> <span class="o">=</span> <span class="n">pf</span>
+
+<div class="viewcode-block" id="MaterialSampler.reset"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MaterialSampler.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Reset the states of all the enclosed samplers.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_musr</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freeze</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Sample the layer parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        freeze: bool</span>
+<span class="sd">            Do not advance the state of the sampler if True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sample: dict</span>
+<span class="sd">            A dict object with keys &quot;mua&quot; (float), &quot;mus&quot; (float),</span>
+<span class="sd">            &quot;n&quot; (float), &quot;d&quot; (float) and &quot;pf&quot; (:py:class:`mcpf.PfBase`).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">mcpf_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="n">freeze</span><span class="p">)</span>
+        <span class="n">pf_obj</span> <span class="o">=</span> <span class="n">mcpf_obj</span><span class="o">.</span><span class="n">pf</span><span class="p">()</span>
+
+        <span class="n">musr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_musr</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="n">freeze</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">pf_obj</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;mua&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="n">freeze</span><span class="p">),</span>
+            <span class="s1">&#39;musr&#39;</span><span class="p">:</span> <span class="n">musr</span><span class="p">,</span>
+            <span class="s1">&#39;mus&#39;</span><span class="p">:</span> <span class="n">musr</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">g</span><span class="p">),</span>
+            <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="n">g</span><span class="p">,</span>
+            <span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="n">freeze</span><span class="p">),</span>
+            <span class="s1">&#39;pf&#39;</span><span class="p">:</span> <span class="n">mcpf_obj</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_get_pf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sampler</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span>
+    <span class="n">pf</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_pf</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="s1">&#39;Scattering phase function sampler.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_mua</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sampler</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span>
+    <span class="n">mua</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_mua</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="s1">&#39;Absorption coefficient sampler.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_musr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sampler</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_musr</span>
+    <span class="n">musr</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_musr</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;Reduced scattering coefficient sampler.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_n</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sampler</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_n</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Refractive index sampler.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MaterialSampler.update"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MaterialSampler.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="n">mcmaterial</span><span class="o">.</span><span class="n">Material</span><span class="p">,</span> <span class="n">sample</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">mcmaterial</span><span class="o">.</span><span class="n">Material</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update the material with a new sample.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        layer: mcmaterial.Material</span>
+<span class="sd">            Material to update.</span>
+<span class="sd">        sample: dict</span>
+<span class="sd">            Optional sample. If None, a new sample is generated.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        layer: mcmaterial.Material</span>
+<span class="sd">            Updated material.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">sample</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="p">()</span>
+
+        <span class="n">layer</span><span class="o">.</span><span class="n">mua</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;mua&#39;</span><span class="p">])</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">mus</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;mus&#39;</span><span class="p">])</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">])</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">pf</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;pf&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">layer</span></div>
+
+<div class="viewcode-block" id="MaterialSampler.todict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MaterialSampler.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Instance data exported to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;mua&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;musr&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_musr</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;pf&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="MaterialSampler.fromdict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MaterialSampler.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;MaterialSampler&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance of :py:class:`MaterialSampler` from a dict.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Data that were exported by the :py:meth:`MaterialSampler.todict`</span>
+<span class="sd">            method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sampler: LayerSampler</span>
+<span class="sd">            A new sampler instance.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">musr</span><span class="o">=</span><span class="n">Sampler</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;musr&#39;</span><span class="p">)),</span>
+            <span class="n">mua</span><span class="o">=</span><span class="n">Sampler</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;mua&#39;</span><span class="p">)),</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">Sampler</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)),</span>
+            <span class="n">pf</span><span class="o">=</span><span class="n">PfSampler</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;pf&#39;</span><span class="p">))</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;MaterialSampler(mua=</span><span class="si">{}</span><span class="s1">, musr=</span><span class="si">{}</span><span class="s1">, n=</span><span class="si">{}</span><span class="s1">, pf=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mus</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="LayerSampler"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.LayerSampler">[docs]</a><span class="k">class</span> <span class="nc">LayerSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mua</span><span class="p">:</span> <span class="n">Sampler</span><span class="p">,</span> <span class="n">musr</span><span class="p">:</span> <span class="n">Sampler</span><span class="p">,</span>
+                 <span class="n">d</span><span class="p">:</span> <span class="n">Sampler</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="n">Sampler</span><span class="p">,</span> <span class="n">pf</span><span class="p">:</span> <span class="n">PfSampler</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Samples layer parameters.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mua: Sampler</span>
+<span class="sd">            Sampler of the absorption coefficient (1/m).</span>
+<span class="sd">        musr: Sampler</span>
+<span class="sd">            Sampler of the reduced scattering coefficient (1/m).</span>
+<span class="sd">        d: Sampler</span>
+<span class="sd">            Sampler of the layer thickness.</span>
+<span class="sd">        n: Sampler</span>
+<span class="sd">            Sampler of the refractive index.</span>
+<span class="sd">        pf: PfSampler</span>
+<span class="sd">            Sampler Of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span> <span class="o">=</span> <span class="n">mua</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_musr</span> <span class="o">=</span> <span class="n">musr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_d</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span> <span class="o">=</span> <span class="n">pf</span>
+
+<div class="viewcode-block" id="LayerSampler.reset"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.LayerSampler.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Reset the states of all the enclosed samplers.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_musr</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_d</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freeze</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Sample the layer parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        freeze: bool</span>
+<span class="sd">            Do not advance the state of the sampler if True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sample: dict</span>
+<span class="sd">            A dict object with keys &quot;mua&quot; (float), &quot;mus&quot; (float),</span>
+<span class="sd">            &quot;n&quot; (float), &quot;d&quot; (float) and &quot;pf&quot; (:py:class:`mcpf.PfBase`).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">mcpf_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="n">freeze</span><span class="p">)</span>
+        <span class="n">pf_obj</span> <span class="o">=</span> <span class="n">mcpf_obj</span><span class="o">.</span><span class="n">pf</span><span class="p">()</span>
+
+        <span class="n">musr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_musr</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="n">freeze</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">pf_obj</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;mua&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="n">freeze</span><span class="p">),</span>
+            <span class="s1">&#39;musr&#39;</span><span class="p">:</span> <span class="n">musr</span><span class="p">,</span>
+            <span class="s1">&#39;mus&#39;</span><span class="p">:</span> <span class="n">musr</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">g</span><span class="p">),</span>
+            <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="n">g</span><span class="p">,</span>
+            <span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="n">freeze</span><span class="p">),</span>
+            <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="n">freeze</span><span class="p">),</span>
+            <span class="s1">&#39;pf&#39;</span><span class="p">:</span> <span class="n">mcpf_obj</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_get_pf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sampler</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span>
+    <span class="n">pf</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_pf</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="s1">&#39;Scattering phase function sampler.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_mua</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sampler</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span>
+    <span class="n">mua</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_mua</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="s1">&#39;Absorption coefficient sampler.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_musr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sampler</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_musr</span>
+    <span class="n">musr</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_musr</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;Reduced scattering coefficient sampler.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_n</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sampler</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_n</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Refractive index sampler.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_d</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sampler</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_d</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Layer thickness sampler.&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="LayerSampler.update"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.LayerSampler.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">,</span> <span class="n">sample</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update the layer with a new sample.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        layer: xopto.mcml.mc.mclayer.Layer</span>
+<span class="sd">            Layer to update.</span>
+<span class="sd">        sample: dict</span>
+<span class="sd">            Optional sample. If None, a new sample is generated.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        layer: xopto.mcml.mc.mclayer.Layer</span>
+<span class="sd">            Updated input layer.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">sample</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="p">()</span>
+
+        <span class="n">layer</span><span class="o">.</span><span class="n">mua</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;mua&#39;</span><span class="p">])</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">mus</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;mus&#39;</span><span class="p">])</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">])</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">])</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">pf</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;pf&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">layer</span></div>
+
+<div class="viewcode-block" id="LayerSampler.todict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.LayerSampler.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Instance data exported to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;mua&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;musr&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_musr</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;pf&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="LayerSampler.fromdict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.LayerSampler.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;LayerSampler&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance of :py:class:`LayerSampler` from a dict.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Data that were exported by the :py:meth:`LayerSampler.todict`</span>
+<span class="sd">            method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sampler: LayerSampler</span>
+<span class="sd">            A new sampler instance.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">musr</span><span class="o">=</span><span class="n">Sampler</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;musr&#39;</span><span class="p">)),</span>
+            <span class="n">mua</span><span class="o">=</span><span class="n">Sampler</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;mua&#39;</span><span class="p">)),</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">Sampler</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)),</span>
+            <span class="n">d</span><span class="o">=</span><span class="n">Sampler</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">)),</span>
+            <span class="n">pf</span><span class="o">=</span><span class="n">PfSampler</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;pf&#39;</span><span class="p">))</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;LayerSampler(mua=</span><span class="si">{}</span><span class="s1">, musr=</span><span class="si">{}</span><span class="s1">, d=</span><span class="si">{}</span><span class="s1">, n=</span><span class="si">{}</span><span class="s1">, pf=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mua</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_musr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MultilayerSampler"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MultilayerSampler">[docs]</a><span class="k">class</span> <span class="nc">MultilayerSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samplers</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">LayerSampler</span><span class="p">]):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span> <span class="o">=</span> <span class="n">samplers</span>
+
+        <span class="n">pf_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">pf_type</span>
+        <span class="k">for</span> <span class="n">layer_sampler</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="k">if</span> <span class="n">layer_sampler</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">pf_type</span> <span class="o">!=</span> <span class="n">pf_type</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;All layers must use the same scattering &#39;</span>
+                                 <span class="s1">&#39;phase function type!&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freeze</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Sample the parameters of the layer stack.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        freeze: bool</span>
+<span class="sd">            Do not advance the state of the sampler if True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        samples: List[dict]</span>
+<span class="sd">            A list of layer samples.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">layer_sampler</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="n">freeze</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">layer_sampler</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="p">]</span>
+
+<div class="viewcode-block" id="MultilayerSampler.reset"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MultilayerSampler.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Reset the states of all the layer samplers.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">sampler</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="p">:</span>
+            <span class="n">sampler</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MultilayerSampler.update"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MultilayerSampler.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layers</span><span class="p">:</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">,</span>
+               <span class="n">sample</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update the layer stack with a new sample.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        layers: xopto.mcml.mc.mclayer.Layers</span>
+<span class="sd">            Layer stack to update.</span>
+<span class="sd">        sample: List[dict]</span>
+<span class="sd">            Optional sample. If None, a new sample is generated.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        layers: xopto.mcml.mc.mclayer.Layers</span>
+<span class="sd">            Updated layer stack.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">sample</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">layer_sample</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">layers</span><span class="p">):</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">mua</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">layer_sample</span><span class="p">[</span><span class="s1">&#39;mua&#39;</span><span class="p">])</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">mus</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">layer_sample</span><span class="p">[</span><span class="s1">&#39;mus&#39;</span><span class="p">])</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">layer_sample</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">])</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">layer_sample</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">])</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">pf</span> <span class="o">=</span> <span class="n">layer_sample</span><span class="p">[</span><span class="s1">&#39;pf&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">layers</span></div>
+
+<div class="viewcode-block" id="MultilayerSampler.todict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MultilayerSampler.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Instance data exported to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;samplers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">sampler</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span> <span class="k">for</span> <span class="n">sampler</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="p">]</span>
+        <span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+<div class="viewcode-block" id="MultilayerSampler.fromdict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MultilayerSampler.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;MultilayerSampler&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance of :py:class:`MultilayerSampler` from a dict.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Data that were exported by the :py:meth:`MultilayerSampler.todict`</span>
+<span class="sd">            method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sampler: MultilayerSampler</span>
+<span class="sd">            A new sampler instance.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">samplers</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">LayerSampler</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">sampler</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">sampler</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;samplers&#39;</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;MultilayerSampler(samplers=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_samplers</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="IncidenceTiltSampler"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.IncidenceTiltSampler">[docs]</a><span class="k">class</span> <span class="nc">IncidenceTiltSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">incidence</span><span class="p">:</span> <span class="n">Sampler</span><span class="p">,</span> <span class="n">tilt</span><span class="p">:</span> <span class="n">Sampler</span><span class="p">,</span>
+                 <span class="n">design_angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Samples the incidence angle of a collimated source and tilt of</span>
+<span class="sd">        a surface detector from the given distribution. The angle between the</span>
+<span class="sd">        collimated incident beam and the reference direction of the detector</span>
+<span class="sd">        (design angle) is kept constant.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        incidence: Sampler</span>
+<span class="sd">            Sampler of the angle of incidence (rad). The angle is measured</span>
+<span class="sd">            in the incidence plane x-z from the z axis.</span>
+<span class="sd">            The sampled direction vector of the collimated beam lies</span>
+<span class="sd">            in the x-z plane.</span>
+<span class="sd">        tilt: Sampler</span>
+<span class="sd">            Sampler of the detector tilt angle (rad). The detector direction</span>
+<span class="sd">            lies in the x-z plane that is tilted/rotated around the x axis.</span>
+<span class="sd">            The angle of tilt is defined as the angle between the tilted</span>
+<span class="sd">            plane and the x-z plane.</span>
+<span class="sd">        design_angle: float</span>
+<span class="sd">            Angle between the source and detector (rad) that is kept constant.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_design_angle</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">design_angle</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_incidence</span> <span class="o">=</span> <span class="n">incidence</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tilt</span> <span class="o">=</span> <span class="n">tilt</span>
+
+<div class="viewcode-block" id="IncidenceTiltSampler.reset"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.IncidenceTiltSampler.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Reset the states of all the enclosed samplers.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_incidence</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tilt</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freeze</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Samples direction of a collimated sources and reference direction</span>
+<span class="sd">        of the detector.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        freeze: bool</span>
+<span class="sd">            Do not advance the state of the sampler if True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sample: dict</span>
+<span class="sd">            A new sample with the following fields: &quot;source_direction&quot;,</span>
+<span class="sd">            &quot;detector_direction&quot;, &quot;incidence&quot; and &quot;tilt&quot;.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">incidence</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_incidence</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="n">freeze</span><span class="p">))</span>
+        <span class="n">tilt</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tilt</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="n">freeze</span><span class="p">))</span>
+        <span class="n">detector_dir</span> <span class="o">=</span> <span class="n">detector_direction</span><span class="p">(</span>
+            <span class="n">incidence</span><span class="p">,</span> <span class="n">tilt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_angle</span><span class="p">)</span>
+        <span class="n">source_dir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">incidence</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">incidence</span><span class="p">)])</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;incidence&#39;</span><span class="p">:</span> <span class="n">incidence</span><span class="p">,</span> <span class="s1">&#39;tilt&#39;</span><span class="p">:</span> <span class="n">tilt</span><span class="p">,</span>
+            <span class="s1">&#39;detector_direction&#39;</span><span class="p">:</span> <span class="n">detector_dir</span><span class="p">,</span>
+            <span class="s1">&#39;source_direction&#39;</span><span class="p">:</span> <span class="n">source_dir</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="IncidenceTiltSampler.update"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.IncidenceTiltSampler.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">Line</span><span class="p">,</span>
+               <span class="n">detector</span><span class="p">:</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">SymmetricX</span><span class="p">,</span>
+               <span class="n">sample</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update the Monte Carlo source and detector with the sampled propagation</span>
+<span class="sd">        directions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        src: xopto.mcml.mc.mcsource.Line</span>
+<span class="sd">            Source that will be updated with a new direction.</span>
+<span class="sd">        detector: xopto.mcml.mc.mcdetector.Detector</span>
+<span class="sd">            Detector that will be updated with the new reference direction.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        src: xopto.mcml.mc.mcsource.Line</span>
+<span class="sd">            The updated source.</span>
+<span class="sd">        detector: xopto.mcml.mc.mcdetector.SymmetricX</span>
+<span class="sd">            The updated detector.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">sample</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="p">()</span>
+
+        <span class="n">src</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;source_direction&#39;</span><span class="p">]</span>
+        <span class="n">detector</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;detector_direction&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">src</span><span class="p">,</span> <span class="n">detector</span></div>
+
+<div class="viewcode-block" id="IncidenceTiltSampler.todict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.IncidenceTiltSampler.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Instance data exported to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;incidence&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_incidence</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;tilt&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tilt</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+            <span class="s1">&#39;design_angle&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_angle</span>
+        <span class="p">}</span></div>
+    
+    <span class="k">def</span> <span class="nf">_get_design_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_angle</span>
+    <span class="n">design_angle</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_design_angle</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;Design angle (rad).&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IncidenceTiltSampler.fromdict"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.IncidenceTiltSampler.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;IncidenceTiltSampler&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance of :py:class:`IncidenceTiltSampler`</span>
+<span class="sd">        from a dict.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Data that were exported by the</span>
+<span class="sd">            :py:meth:`IncidenceTiltSampler.todict` method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sampler: IncidenceTiltSampler</span>
+<span class="sd">            A new sampler instance.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">incidence</span><span class="o">=</span><span class="n">Sampler</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;incidence&#39;</span><span class="p">)),</span>
+            <span class="n">tilt</span><span class="o">=</span><span class="n">Sampler</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;tilt&#39;</span><span class="p">)),</span>
+            <span class="n">design_angle</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;design_angle&#39;</span><span class="p">]</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="MultilayerSfdi"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MultilayerSfdi">[docs]</a><span class="k">class</span> <span class="nc">MultilayerSfdi</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layers</span><span class="p">:</span> <span class="n">MultilayerSampler</span><span class="p">,</span>
+                 <span class="n">source_detector</span><span class="p">:</span> <span class="n">IncidenceTiltSampler</span><span class="p">,</span>
+                 <span class="n">sample_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        A sampler for multilayer SFDI Monte Carlo simulations.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        layers: MultilayerSampler</span>
+<span class="sd">            Sampler for the parameters of the layer stack.</span>
+<span class="sd">        source_detector: SfdiSourceDetectorSampler</span>
+<span class="sd">            Sampler for the parameters of the photon packet source and</span>
+<span class="sd">            top surface detector.</span>
+<span class="sd">        sample_count: int</span>
+<span class="sd">            Zero-based index of the first sample.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span> <span class="o">=</span> <span class="n">layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_source_detector</span> <span class="o">=</span> <span class="n">source_detector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sample_number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sample_count</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rmax_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="MultilayerSfdi.reset"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MultilayerSfdi.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Reset the states of all the enclosed samplers and set the sample</span>
+<span class="sd">        number to 0.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_source_detector</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sample_number</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="MultilayerSfdi.update"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MultilayerSfdi.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mcobj</span><span class="p">:</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update the Monte Carlo simulation parameters with a new</span>
+<span class="sd">        sample. This call will update the sample index by 1.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mcobj: xopto.mcml.mc.Mc</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sample: dict</span>
+<span class="sd">            The sample that was used to update the simulator as a dict</span>
+<span class="sd">            with keys &quot;layers&quot; (a list of samples that were used to update</span>
+<span class="sd">            the sample layers, &quot;source_detector&quot; (sample that was used to</span>
+<span class="sd">            update the photon packet source and top surface detector).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">layers_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mcobj</span><span class="o">.</span><span class="n">layers</span><span class="p">,</span> <span class="n">layers_sample</span><span class="p">)</span>
+
+        <span class="n">source_detector_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source_detector</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_source_detector</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">mcobj</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">mcobj</span><span class="o">.</span><span class="n">detectors</span><span class="o">.</span><span class="n">top</span><span class="p">,</span> <span class="n">source_detector_sample</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sample_number</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="n">layers_sample</span><span class="p">,</span>
+                <span class="s1">&#39;source_detector&#39;</span><span class="p">:</span> <span class="n">source_detector_sample</span><span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="nf">_get__sample_number</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_number</span>
+    <span class="n">sample_index</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get__sample_number</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;Number of the current sample &#39;</span>
+                            <span class="s1">&#39;(1 for the first sample)&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MultilayerSfdi.mc_obj"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MultilayerSfdi.mc_obj">[docs]</a>    <span class="k">def</span> <span class="nf">mc_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acceptance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create and initialize a new Monte Carlo simulation model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        acceptance: float</span>
+<span class="sd">            Acceptance angle of the detector.</span>
+<span class="sd">        kwargs: dict</span>
+<span class="sd">            Optional keyword arguments passed to the</span>
+<span class="sd">            :py:meth:`~xopto.mcml.mc.Mc.__init__` constructor.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        mcobj: xopto.mcml.mc.Mc</span>
+<span class="sd">            A new Monte Carlo simulator instance.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># Get a scattering phase function initializer without advancing</span>
+        <span class="c1"># the sampler state.</span>
+        <span class="n">pf_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">freeze</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">num_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">)</span>
+
+        <span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_layers</span><span class="p">):</span>
+            <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span>
+                <span class="n">mua</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mus</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">pf</span><span class="o">=</span><span class="n">pf_obj</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">mc_layers</span> <span class="o">=</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+        <span class="n">mc_source</span> <span class="o">=</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">mcsource</span><span class="o">.</span><span class="n">Line</span><span class="p">()</span>
+        <span class="n">mc_top_detector</span> <span class="o">=</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">SymmetricX</span><span class="p">(</span>
+            <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">SymmetricAxis</span><span class="p">(</span>
+                <span class="mf">0.0</span><span class="p">,</span> <span class="mf">150e-3</span><span class="p">,</span> <span class="mi">4000</span><span class="p">,</span> <span class="n">logscale</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="n">cosmin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">acceptance</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">mc_detectors</span> <span class="o">=</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">mcdetector</span><span class="o">.</span><span class="n">Detectors</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="n">mc_top_detector</span><span class="p">)</span>
+
+        <span class="n">mcobj</span> <span class="o">=</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">(</span><span class="n">mc_layers</span><span class="p">,</span> <span class="n">mc_source</span><span class="p">,</span> <span class="n">mc_detectors</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mcobj</span></div>
+
+<div class="viewcode-block" id="MultilayerSfdi.rmax"><a class="viewcode-back" href="../../../apidoc/xopto.util.sampler.html#xopto.util.sampler.MultilayerSfdi.rmax">[docs]</a>    <span class="k">def</span> <span class="nf">rmax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mcobj</span><span class="p">:</span> <span class="n">xopto</span><span class="o">.</span><span class="n">mcml</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">Mc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Estimate simulation radius for the given simulator instance. </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mcobj: xopto.mcml.mc.Mc</span>
+<span class="sd">            Monte Carlo simulator instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        rmax: np.ndarray</span>
+<span class="sd">            A numpy vector of simulation radius for all the sample</span>
+<span class="sd">            layers (excluding the topmost and bottommost layers).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">rmax_args</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">mcobj</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">n</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">mcobj</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">n</span><span class="p">),</span>
+                     <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">mcobj</span><span class="o">.</span><span class="n">detectors</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">cosmin</span><span class="p">)),</span>
+                     <span class="mf">25.0e-3</span><span class="p">)</span>
+        <span class="n">rmax_estimator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rmax_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rmax_args</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rmax_estimator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rmax_estimator</span> <span class="o">=</span> <span class="n">mcrmax</span><span class="o">.</span><span class="n">RmaxDiffusion</span><span class="p">(</span><span class="o">*</span><span class="n">rmax_args</span><span class="p">)</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rmax_cache</span><span class="p">[</span><span class="n">rmax_args</span><span class="p">]</span> <span class="o">=</span> <span class="n">rmax_estimator</span>
+
+        <span class="n">num_internal_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mcobj</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span>
+        <span class="n">rmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_internal_layers</span><span class="p">,))</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mcobj</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">pf</span><span class="p">()</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">rmax_estimator</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">mua</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">mus</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">g</span><span class="p">)))</span>
+            <span class="n">rmax_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rmax_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rmax_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">rmax_value</span> <span class="o">=</span> <span class="n">rmax_estimator</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">key</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_rmax_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rmax_value</span><span class="p">)</span>
+            <span class="n">rmax</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">rmax_value</span>
+        <span class="k">return</span> <span class="n">rmax</span></div></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">time</span>
+    <span class="kn">from</span> <span class="nn">xopto.mcml</span> <span class="kn">import</span> <span class="n">mc</span>
+
+    <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">design_angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">20.0</span><span class="p">)</span>
+    <span class="n">tilt_range</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
+    <span class="n">incidence_range</span> <span class="o">=</span> <span class="p">(</span><span class="n">design_angle</span><span class="p">,</span> <span class="n">design_angle</span><span class="p">)</span>
+    <span class="n">detector_acceptance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">10.0</span><span class="p">)</span>
+    <span class="n">num_samples</span> <span class="o">=</span> <span class="mi">32000</span>
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="n">num_packets</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">log_sampling_mua</span> <span class="o">=</span> <span class="n">log_sampling_musr</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">dataset_location</span><span class="o">=</span><span class="s1">&#39;2layer_grid&#39;</span>
+    <span class="n">dataset_sublocation</span> <span class="o">=</span> <span class="s1">&#39;mc&#39;</span>
+    <span class="n">cl_device</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">clinfo</span><span class="o">.</span><span class="n">gpu</span><span class="p">(</span><span class="n">index</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">mua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.01e2</span><span class="p">,</span> <span class="mf">5.0e2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">musr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">5.0e2</span><span class="p">,</span> <span class="mf">35.0e2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">l1_mua</span><span class="p">,</span> <span class="n">l1_musr</span><span class="p">,</span> <span class="n">l2_mua</span><span class="p">,</span> <span class="n">l2_musr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">mua</span><span class="p">,</span> <span class="n">musr</span><span class="p">,</span> <span class="n">mua</span><span class="p">,</span> <span class="n">musr</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
+    <span class="n">num_samples</span> <span class="o">=</span> <span class="n">l1_mua</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="n">ml_sampler</span> <span class="o">=</span> <span class="n">MultilayerSampler</span><span class="p">((</span>
+        <span class="n">LayerSampler</span><span class="p">(</span>
+            <span class="n">mua</span><span class="o">=</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+            <span class="n">musr</span><span class="o">=</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span>
+            <span class="n">d</span><span class="o">=</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
+            <span class="n">pf</span><span class="o">=</span><span class="n">PfSampler</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">,</span> <span class="p">(</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),))</span>
+        <span class="p">),</span>
+        <span class="n">LayerSampler</span><span class="p">(</span>
+            <span class="n">mua</span><span class="o">=</span><span class="n">SequenceSampler</span><span class="p">(</span><span class="n">l1_mua</span><span class="p">),</span>
+            <span class="n">musr</span><span class="o">=</span><span class="n">SequenceSampler</span><span class="p">(</span><span class="n">l1_musr</span><span class="p">),</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="mf">1.33</span><span class="p">),</span>
+            <span class="n">d</span><span class="o">=</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="mf">75.0e-6</span><span class="p">),</span>
+            <span class="n">pf</span><span class="o">=</span><span class="n">PfSampler</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">,</span> <span class="p">(</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="mf">0.8</span><span class="p">),))</span>
+        <span class="p">),</span>
+        <span class="n">LayerSampler</span><span class="p">(</span>
+            <span class="n">mua</span><span class="o">=</span><span class="n">SequenceSampler</span><span class="p">(</span><span class="n">l2_mua</span><span class="p">),</span>
+            <span class="n">musr</span><span class="o">=</span><span class="n">SequenceSampler</span><span class="p">(</span><span class="n">l2_musr</span><span class="p">),</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="mf">1.33</span><span class="p">),</span>
+            <span class="n">d</span><span class="o">=</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
+            <span class="n">pf</span><span class="o">=</span><span class="n">PfSampler</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">,</span> <span class="p">(</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="mf">0.8</span><span class="p">),))</span>
+        <span class="p">),</span>
+        <span class="n">LayerSampler</span><span class="p">(</span>
+            <span class="n">mua</span><span class="o">=</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+            <span class="n">musr</span><span class="o">=</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span>
+            <span class="n">d</span><span class="o">=</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
+            <span class="n">pf</span><span class="o">=</span><span class="n">PfSampler</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">mcpf</span><span class="o">.</span><span class="n">Hg</span><span class="p">,</span> <span class="p">(</span><span class="n">ConstantSampler</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),))</span>
+        <span class="p">),</span>
+    <span class="p">))</span>
+
+    <span class="n">sd_sampler</span> <span class="o">=</span> <span class="n">IncidenceTiltSampler</span><span class="p">(</span>
+        <span class="n">incidence</span><span class="o">=</span><span class="n">UniformSampler</span><span class="p">(</span><span class="o">*</span><span class="n">incidence_range</span><span class="p">),</span>
+        <span class="n">tilt</span><span class="o">=</span><span class="n">UniformSampler</span><span class="p">(</span><span class="o">*</span><span class="n">tilt_range</span><span class="p">),</span>
+        <span class="n">design_angle</span><span class="o">=</span><span class="n">design_angle</span>
+    <span class="p">)</span>
+
+    <span class="n">sfdi_sampler</span> <span class="o">=</span> <span class="n">MultilayerSfdi</span><span class="p">(</span>
+        <span class="n">ml_sampler</span><span class="p">,</span> <span class="n">sd_sampler</span>
+    <span class="p">)</span>
+
+    <span class="n">mc_obj</span> <span class="o">=</span> <span class="n">sfdi_sampler</span><span class="o">.</span><span class="n">mc_obj</span><span class="p">(</span>
+        <span class="n">acceptance</span><span class="o">=</span><span class="n">detector_acceptance</span><span class="p">,</span>
+        <span class="n">cl_devices</span><span class="o">=</span><span class="n">cl_device</span><span class="p">,</span>
+        <span class="n">cl_build_options</span><span class="o">=</span><span class="p">[</span><span class="n">mc</span><span class="o">.</span><span class="n">cloptions</span><span class="o">.</span><span class="n">FastMath</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c1">#sfdi_dataset = dataset.Dataset(location=dataset_location, create=True)</span>
+    <span class="c1">#dsfiles = sfdi_dataset.files(&#39;.pkl&#39;, sublocation=dataset_sublocation)</span>
+    <span class="n">first_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">t_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    
+    <span class="c1"># for existing samples that dont require MC simulations</span>
+    <span class="k">for</span> <span class="n">sample_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">first_index</span><span class="p">):</span>
+        <span class="n">sample</span> <span class="o">=</span> <span class="n">sfdi_sampler</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mc_obj</span><span class="p">)</span>
+
+    <span class="n">MuA</span> <span class="o">=</span><span class="p">[]</span>
+
+    <span class="c1"># for new samples that require MC simulations</span>
+    <span class="k">for</span> <span class="n">sample_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">first_index</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">):</span>
+        <span class="n">sample</span> <span class="o">=</span> <span class="n">sfdi_sampler</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mc_obj</span><span class="p">)</span>
+        <span class="n">mc_obj</span><span class="o">.</span><span class="n">rmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">sfdi_sampler</span><span class="o">.</span><span class="n">rmax</span><span class="p">(</span><span class="n">mc_obj</span><span class="p">))</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="n">mc_obj</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">num_packets</span><span class="p">)</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">MuA</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;mua&#39;</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t_start</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mc_obj</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">direction</span><span class="o">*</span><span class="n">mc_obj</span><span class="o">.</span><span class="n">detectors</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
+            <span class="n">design_angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="o">-</span><span class="n">tmp</span><span class="p">))</span>
+            <span class="n">src_dir</span> <span class="o">=</span> <span class="n">mc_obj</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">direction</span>
+            <span class="n">incidence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">src_dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">src_dir</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="n">detector_dir</span> <span class="o">=</span> <span class="n">mc_obj</span><span class="o">.</span><span class="n">detectors</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">direction</span>
+            <span class="n">tilt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">detector_dir</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">detector_dir</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">40</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Processing </span><span class="si">{:d}</span><span class="s1">/</span><span class="si">{:d}</span><span class="s1">;  </span><span class="si">{:.0f}</span><span class="s1"> samples/h&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">sample_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">counter</span><span class="o">*</span><span class="mi">3600</span><span class="o">/</span><span class="n">dt</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">40</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">layer_index</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mc_obj</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Layer </span><span class="si">{:&lt;2d}</span><span class="s1">    :&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">layer</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Source      :&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">mc_obj</span><span class="o">.</span><span class="n">source</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Detector    :&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">mc_obj</span><span class="o">.</span><span class="n">detectors</span><span class="o">.</span><span class="n">top</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rmax        : </span><span class="si">{:.1f}</span><span class="s1"> mm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mc_obj</span><span class="o">.</span><span class="n">rmax</span><span class="o">*</span><span class="mf">1.0e3</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;incidence   : </span><span class="si">{:.2f}</span><span class="s1">°/</span><span class="si">{:.2f}</span><span class="s1">°&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                  <span class="n">incidence</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;source_detector&#39;</span><span class="p">][</span><span class="s1">&#39;incidence&#39;</span><span class="p">])))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;tilt        : </span><span class="si">{:.2f}</span><span class="s1">°/</span><span class="si">{:.2f}</span><span class="s1">°&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">tilt</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;source_detector&#39;</span><span class="p">][</span><span class="s1">&#39;tilt&#39;</span><span class="p">])))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;design angle: </span><span class="si">{:.2f}</span><span class="s1">°/</span><span class="si">{:.2f}</span><span class="s1">°&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">design_angle</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">sd_sampler</span><span class="o">.</span><span class="n">design_angle</span><span class="p">)))</span>
+
+        <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;mc&#39;</span><span class="p">:{</span>
+                    <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="n">mc_obj</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+                    <span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="n">mc_obj</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+                    <span class="s1">&#39;detectors&#39;</span><span class="p">:</span> <span class="n">mc_obj</span><span class="o">.</span><span class="n">detectors</span><span class="o">.</span><span class="n">todict</span><span class="p">(),</span>
+                    <span class="s1">&#39;num_packets&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_packets</span><span class="p">),</span>
+                    <span class="s1">&#39;rmax&#39;</span><span class="p">:</span> <span class="n">mc_obj</span><span class="o">.</span><span class="n">rmax</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;sample&#39;</span><span class="p">:</span> <span class="n">sample</span><span class="p">,</span>
+                <span class="s1">&#39;reflectance&#39;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">reflectance</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">batch_size</span><span class="p">:</span>
+        <span class="c1">#    sfdi_dataset.save(</span>
+        <span class="c1">#        items, first=sample_index - len(items) + 1,</span>
+        <span class="c1">#        n=len(items), sublocation=dataset_sublocation)</span>
+            <span class="n">items</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">pp</span>
+
+    <span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">pp</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">MuA</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)))</span>
+    <span class="n">pp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

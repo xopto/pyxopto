@@ -1,0 +1,7 @@
+xopto.mcml.mcdetector.probe.fiberlutarray module
+================================================
+
+.. automodule:: xopto.mcml.mcdetector.probe.fiberlutarray
+   :members:
+   :undoc-members:
+   :show-inheritance:

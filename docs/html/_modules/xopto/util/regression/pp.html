@@ -1,0 +1,1784 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.util.regression.pp &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.util.regression.pp</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xopto.util.regression.pp</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">builtins</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">xopto.mcbase</span> <span class="kn">import</span> <span class="n">mcobject</span>
+<span class="kn">from</span> <span class="nn">xopto.mcbase.mcworker</span> <span class="kn">import</span> <span class="n">ClWorker</span>
+
+
+<div class="viewcode-block" id="PreprocessorFunction"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.PreprocessorFunction">[docs]</a><span class="k">class</span> <span class="nc">PreprocessorFunction</span><span class="p">(</span><span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PreprocessorFunction.apply"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.PreprocessorFunction.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Base class of preprocessor functions that can be used to scale or</span>
+<span class="sd">        normalize datasets.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data array.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the x data array.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Preprocessed input data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="PreprocessorFunction.undo"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.PreprocessorFunction.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Undo preprocessing from the output data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Preprocessed output data.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the y data array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data obtained by applying inverse preprocessing to the</span>
+<span class="sd">            output data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="PreprocessorFunction.train"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.PreprocessorFunction.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Determine the required statistics of input values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            A representative training dataset.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="PreprocessorFunction.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.PreprocessorFunction.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export instance to a dict object.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Instance exported to a dict object.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="PreprocessorFunction.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.PreprocessorFunction.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Preprocessor&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance from data that were exported to a dict</span>
+<span class="sd">        object with the</span>
+<span class="sd">        :py:meth:`xopto.util.regression.pp.PreprocessorFunction.todict` method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">type_name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">type_name</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">T</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> # </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="LogScale"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.LogScale">[docs]</a><span class="k">class</span> <span class="nc">LogScale</span><span class="p">(</span><span class="n">PreprocessorFunction</span><span class="p">):</span>
+<div class="viewcode-block" id="LogScale.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.LogScale.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">worker</span><span class="p">:</span>  <span class="n">ClWorker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the logarithmic scaling preprocessor in OpenCL.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;inline void pp_logscale_apply(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t *inout)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inout[pos] = mc_log(inout[pos]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void pp_logscale_undo(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t *inout)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inout[pos] = mc_exp(inout[pos]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="LogScale.cl_render_call"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.LogScale.cl_render_call">[docs]</a>    <span class="k">def</span> <span class="nf">cl_render_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">slice</span><span class="p">,</span>
+                       <span class="n">inout_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">undo</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render preprocessor call to a list of strings, each holding one line</span>
+<span class="sd">        of OpenCL code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        worker: ClWorker</span>
+<span class="sd">            OpeCL worker instance.</span>
+<span class="sd">        selector: slice</span>
+<span class="sd">            Input data slice that selects the input items to preprocess.</span>
+<span class="sd">        inout_var: str</span>
+<span class="sd">            Name of the RW variable that holds the data.</span>
+<span class="sd">        indent: str</span>
+<span class="sd">            Indentation string. Defaults to 4 spaces.</span>
+<span class="sd">        undo: bool</span>
+<span class="sd">            If True render the undo call, else the apply call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        call: List[str]</span>
+<span class="sd">            The rendered preprocessor call as a string.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">types</span>
+        <span class="n">indent</span> <span class="o">=</span> <span class="s1">&#39;    &#39;</span> <span class="k">if</span> <span class="n">indent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">indent</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s1">&#39;pp_logscale_</span><span class="si">{:s}</span><span class="s1">(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;undo&#39;</span> <span class="k">if</span> <span class="n">undo</span> <span class="k">else</span> <span class="s1">&#39;apply&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{start:s}</span><span class="s1">, </span><span class="si">{stop:s}</span><span class="s1">, </span><span class="si">{step:s}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">start</span><span class="p">),</span>
+                <span class="n">stop</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">stop</span><span class="p">),</span>
+                <span class="n">step</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">step</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{inout_var:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">inout_var</span><span class="o">=</span><span class="n">inout_var</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;);&#39;</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="LogScale.apply"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.LogScale.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply natural logarithm to the input data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data array.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the x data array.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Logarithmically scaled input data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="LogScale.undo"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.LogScale.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Undo natural logarithm from the output data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Preprocessed output data.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the y data array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data obtained by applying inverse preprocessing to the</span>
+<span class="sd">            output data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;LogScale()&#39;</span></div>
+
+
+<div class="viewcode-block" id="Log10Scale"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Log10Scale">[docs]</a><span class="k">class</span> <span class="nc">Log10Scale</span><span class="p">(</span><span class="n">PreprocessorFunction</span><span class="p">):</span>
+<div class="viewcode-block" id="Log10Scale.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Log10Scale.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">worker</span><span class="p">:</span>  <span class="n">ClWorker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the log10 scaling preprocessor in OpenCL.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;inline void pp_log10scale_apply(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t const *inout)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inout[pos] = mc_log10(inout[pos]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void pp_log10scale_undo(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t *inout)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inout[pos] = mc_pow(FP_10, inout[pos]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Log10Scale.cl_render_call"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Log10Scale.cl_render_call">[docs]</a>    <span class="k">def</span> <span class="nf">cl_render_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">slice</span><span class="p">,</span>
+                       <span class="n">inout_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">undo</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render preprocessor call to a list of strings, each holding one line</span>
+<span class="sd">        of OpenCL code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        worker: ClWorker</span>
+<span class="sd">            OpeCL worker instance.</span>
+<span class="sd">        selector: slice</span>
+<span class="sd">            Input data slice that selects the input items to preprocess.</span>
+<span class="sd">        inout_var: str</span>
+<span class="sd">            Name of the RW variable that holds the data.</span>
+<span class="sd">        indent: str</span>
+<span class="sd">            Indentation string. Defaults to 4 spaces.</span>
+<span class="sd">        undo: bool</span>
+<span class="sd">            If True render the undo call, else the apply call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        call: List[str]</span>
+<span class="sd">            The rendered preprocessor call as a string.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">types</span>
+        <span class="n">indent</span> <span class="o">=</span> <span class="s1">&#39;    &#39;</span> <span class="k">if</span> <span class="n">indent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">indent</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s1">&#39;pp_log10scale_</span><span class="si">{:s}</span><span class="s1">(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;undo&#39;</span> <span class="k">if</span> <span class="n">undo</span> <span class="k">else</span> <span class="s1">&#39;apply&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{start:s}</span><span class="s1">, </span><span class="si">{stop:s}</span><span class="s1">, </span><span class="si">{step:s}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">start</span><span class="p">),</span>
+                <span class="n">stop</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">stop</span><span class="p">),</span>
+                <span class="n">step</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">step</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{inout_var:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">inout_var</span><span class="o">=</span><span class="n">inout_var</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;);&#39;</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="Log10Scale.apply"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Log10Scale.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply log10 function to the input data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data array.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the x data array.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Logarithmically scaled input data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Log10Scale.undo"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Log10Scale.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Undo log10 from the output data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Preprocessed output data.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the y data array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data obtained by applying inverse preprocessing to the</span>
+<span class="sd">            output data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Log10Scale()&#39;</span></div>
+
+
+<div class="viewcode-block" id="ExpScale"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.ExpScale">[docs]</a><span class="k">class</span> <span class="nc">ExpScale</span><span class="p">(</span><span class="n">PreprocessorFunction</span><span class="p">):</span>
+<div class="viewcode-block" id="ExpScale.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.ExpScale.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">worker</span><span class="p">:</span>  <span class="n">ClWorker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the log10 scaling preprocessor in OpenCL.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;inline void pp_expscale_apply(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t *inout){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		output[pos] = mc_exp(inout[pos]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void pp_expscale_undo(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t *inout){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inout[pos] = mc_log(inout[pos]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="ExpScale.cl_render_call"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.ExpScale.cl_render_call">[docs]</a>    <span class="k">def</span> <span class="nf">cl_render_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">slice</span><span class="p">,</span>
+                       <span class="n">inout_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">undo</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render preprocessor call to a list of strings, each holding one</span>
+<span class="sd">        line of OpenCL code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        worker: ClWorker</span>
+<span class="sd">            OpeCL worker instance.</span>
+<span class="sd">        selector: slice</span>
+<span class="sd">            Input data slice that selects the input items to preprocess.</span>
+<span class="sd">        inout_var: str</span>
+<span class="sd">            Name of the RW variable that holds the data.</span>
+<span class="sd">            Indentation string. Defaults to 4 spaces.</span>
+<span class="sd">        undo: bool</span>
+<span class="sd">            If True render the undo call, else the apply call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        call: List[str]</span>
+<span class="sd">            The rendered preprocessor call as a string.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">types</span>
+        <span class="n">indent</span> <span class="o">=</span> <span class="s1">&#39;    &#39;</span> <span class="k">if</span> <span class="n">indent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">indent</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s1">&#39;pp_expscale_</span><span class="si">{:s}</span><span class="s1">(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;undo&#39;</span> <span class="k">if</span> <span class="n">undo</span> <span class="k">else</span> <span class="s1">&#39;apply&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{start:s}</span><span class="s1">, </span><span class="si">{stop:s}</span><span class="s1">, </span><span class="si">{step:s}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">start</span><span class="p">),</span>
+                <span class="n">stop</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">stop</span><span class="p">),</span>
+                <span class="n">step</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">step</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{inout_var:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">inout_var</span><span class="o">=</span><span class="n">inout_var</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;);&#39;</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="ExpScale.apply"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.ExpScale.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply exponential function to the input data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data array.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the x data array.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Exponentially scaled input data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="ExpScale.undo"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.ExpScale.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Undo exponential scale from the output data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Preprocessed output data.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the y data array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data obtained by applying inverse preprocessing to the</span>
+<span class="sd">            output data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;ExpScale()&#39;</span></div>
+
+
+<div class="viewcode-block" id="CosScale"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.CosScale">[docs]</a><span class="k">class</span> <span class="nc">CosScale</span><span class="p">(</span><span class="n">PreprocessorFunction</span><span class="p">):</span>
+<div class="viewcode-block" id="CosScale.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.CosScale.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">worker</span><span class="p">:</span>  <span class="n">ClWorker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the cosine scaling preprocessor in OpenCL.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;inline void pp_cosscale_apply(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t const *inout)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inout[pos] = mc_cos(inout[pos]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void pp_cosscale_undo(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t *inout)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inout[pos] = mc_acos(inout[pos]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="CosScale.cl_render_call"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.CosScale.cl_render_call">[docs]</a>    <span class="k">def</span> <span class="nf">cl_render_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">slice</span><span class="p">,</span>
+                       <span class="n">inout_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">undo</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render preprocessor call to a list of strings, each holding one line</span>
+<span class="sd">        of OpenCL code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        worker: ClWorker</span>
+<span class="sd">            OpeCL worker instance.</span>
+<span class="sd">        selector: slice</span>
+<span class="sd">            Input data slice that selects the input items to preprocess.</span>
+<span class="sd">        inout_var: str</span>
+<span class="sd">            Name of the RW variable that holds the data.</span>
+<span class="sd">        indent: str</span>
+<span class="sd">            Indentation string. Defaults to 4 spaces.</span>
+<span class="sd">        undo: bool</span>
+<span class="sd">            If True render the undo call, else the apply call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        call: List[str]</span>
+<span class="sd">            The rendered preprocessor call as a string.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">types</span>
+        <span class="n">indent</span> <span class="o">=</span> <span class="s1">&#39;    &#39;</span> <span class="k">if</span> <span class="n">indent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">indent</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s1">&#39;pp_cosscale_</span><span class="si">{:s}</span><span class="s1">(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;undo&#39;</span> <span class="k">if</span> <span class="n">undo</span> <span class="k">else</span> <span class="s1">&#39;apply&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{start:s}</span><span class="s1">, </span><span class="si">{stop:s}</span><span class="s1">, </span><span class="si">{step:s}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">start</span><span class="p">),</span>
+                <span class="n">stop</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">stop</span><span class="p">),</span>
+                <span class="n">step</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">step</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{inout_var:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">inout_var</span><span class="o">=</span><span class="n">inout_var</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;);&#39;</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="CosScale.apply"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.CosScale.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply cosine function to the input data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data array.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the x data array.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Logarithmically scaled input data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="CosScale.undo"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.CosScale.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Undo cosine from the output data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Preprocessed output data.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the y data array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data obtained by applying inverse preprocessing to the</span>
+<span class="sd">            output data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;CosScale()&#39;</span></div>
+
+
+<div class="viewcode-block" id="SinScale"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.SinScale">[docs]</a><span class="k">class</span> <span class="nc">SinScale</span><span class="p">(</span><span class="n">PreprocessorFunction</span><span class="p">):</span>
+<div class="viewcode-block" id="SinScale.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.SinScale.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">worker</span><span class="p">:</span>  <span class="n">ClWorker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the cosine scaling preprocessor in OpenCL.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;inline void pp_sinscale_apply(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t const *inout)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inout[pos] = mc_cos(inout[pos]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void pp_sinscale_undo(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t *inout)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inout[pos] = mc_acos(inout[pos]);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="SinScale.cl_render_call"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.SinScale.cl_render_call">[docs]</a>    <span class="k">def</span> <span class="nf">cl_render_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">slice</span><span class="p">,</span>
+                       <span class="n">inout_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">undo</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render preprocessor call to a list of strings, each holding one line</span>
+<span class="sd">        of OpenCL code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        worker: ClWorker</span>
+<span class="sd">            OpeCL worker instance.</span>
+<span class="sd">        selector: slice</span>
+<span class="sd">            Input data slice that selects the input items to preprocess.</span>
+<span class="sd">        inout_var: str</span>
+<span class="sd">            Name of the RW variable that holds the data.</span>
+<span class="sd">        indent: str</span>
+<span class="sd">            Indentation string. Defaults to 4 spaces.</span>
+<span class="sd">        undo: bool</span>
+<span class="sd">            If True render the undo call, else the apply call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        call: List[str]</span>
+<span class="sd">            The rendered preprocessor call as a string.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">types</span>
+        <span class="n">indent</span> <span class="o">=</span> <span class="s1">&#39;    &#39;</span> <span class="k">if</span> <span class="n">indent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">indent</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s1">&#39;pp_sinscale_</span><span class="si">{:s}</span><span class="s1">(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;undo&#39;</span> <span class="k">if</span> <span class="n">undo</span> <span class="k">else</span> <span class="s1">&#39;apply&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{start:s}</span><span class="s1">, </span><span class="si">{stop:s}</span><span class="s1">, </span><span class="si">{step:s}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">start</span><span class="p">),</span>
+                <span class="n">stop</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">stop</span><span class="p">),</span>
+                <span class="n">step</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">step</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{inout_var:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">inout_var</span><span class="o">=</span><span class="n">inout_var</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;);&#39;</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="SinScale.apply"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.SinScale.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply cosine function to the input data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data array.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the x data array.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Logarithmically scaled input data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="SinScale.undo"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.SinScale.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Undo cosine from the output data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Preprocessed output data.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the y data array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data obtained by applying inverse preprocessing to the</span>
+<span class="sd">            output data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;SinScale()&#39;</span></div>
+
+
+<div class="viewcode-block" id="Normalize"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Normalize">[docs]</a><span class="k">class</span> <span class="nc">Normalize</span><span class="p">(</span><span class="n">PreprocessorFunction</span><span class="p">):</span>
+<div class="viewcode-block" id="Normalize.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Normalize.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">worker</span><span class="p">:</span>  <span class="n">ClWorker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the normalization preprocessor in OpenCL.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;inline void pp_normalize_apply(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t scale, mc_fp_t offset, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t *inout)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inout[pos] = inout[pos]*scale + offset;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void pp_normalize_undo(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t inv_scale, mc_fp_t offset, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t *inout)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inout[pos] = (inout[pos] - offset)*inv_scale;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Normalize.cl_render_call"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Normalize.cl_render_call">[docs]</a>    <span class="k">def</span> <span class="nf">cl_render_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">slice</span><span class="p">,</span>
+                       <span class="n">inout_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">undo</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render preprocessor call to a list of strings, each holding one line</span>
+<span class="sd">        of OpenCL code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        worker: ClWorker</span>
+<span class="sd">            OpeCL worker instance.</span>
+<span class="sd">        selector: slice</span>
+<span class="sd">            Input data slice that selects the input items to preprocess.</span>
+<span class="sd">        inout_var: str</span>
+<span class="sd">            Name of the RW variable that holds the data.</span>
+<span class="sd">        indent: str</span>
+<span class="sd">            Indentation string. Defaults to 4 spaces.</span>
+<span class="sd">        undo: bool</span>
+<span class="sd">            If True render the undo call, else the apply call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        call: List[str]</span>
+<span class="sd">            The rendered preprocessor call as a string.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">types</span>
+        <span class="n">indent</span> <span class="o">=</span> <span class="s1">&#39;    &#39;</span> <span class="k">if</span> <span class="n">indent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">indent</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s1">&#39;pp_normalize_</span><span class="si">{:s}</span><span class="s1">(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;undo&#39;</span> <span class="k">if</span> <span class="n">undo</span> <span class="k">else</span> <span class="s1">&#39;apply&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{start:s}</span><span class="s1">, </span><span class="si">{stop:s}</span><span class="s1">, </span><span class="si">{step:s}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">start</span><span class="p">),</span>
+                <span class="n">stop</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">stop</span><span class="p">),</span>
+                <span class="n">step</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">step</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{scale:s}</span><span class="s1">, </span><span class="si">{offset:s}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">fp_str</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="k">if</span> <span class="n">undo</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">),</span>
+                <span class="n">offset</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">fp_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offset</span><span class="p">),</span>
+                <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{inout_var:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">inout_var</span><span class="o">=</span><span class="n">inout_var</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;);&#39;</span>
+        <span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                       <span class="n">input_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Preprocessor that normalizes the values to the specified range.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        output_range: Tuple(float, float)</span>
+<span class="sd">            Range of the output values.</span>
+<span class="sd">        input_range: Tuple(float, float)</span>
+<span class="sd">            Range of the input values. If None, the range must be determined by</span>
+<span class="sd">            calling the</span>
+<span class="sd">            :py:meth:`~xopto.util.regression.sequential.Normalize.train`</span>
+<span class="sd">            method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_range</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">output_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">output_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_input_range</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">input_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_input_range</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">input_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">input_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prepare</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_get_input_range</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_range</span>
+    <span class="n">input_range</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_input_range</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="s1">&#39;Range of value in the input data.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_output_range</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_range</span>
+    <span class="n">output_range</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_output_range</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="s1">&#39;Range of values in the output data.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Normalize.train"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Normalize.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Determine the range of input values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            A representative training dataset.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_input_range</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prepare</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Normalize.apply"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Normalize.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply normalization to the input data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Array of input data to be normalized.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the x data array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Input data normalized to the output range.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The range of input values is undefined!&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="Normalize.undo"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Normalize.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply denormalization to the output data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Array of normalized output data to be denormalized.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Denormalized output data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span>
+        <span class="n">out</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+    <span class="k">def</span> <span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Internal method that precalculates the scaling factor and offset.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">delta_input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">delta_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">delta_input</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">=</span> <span class="n">delta_output</span><span class="o">/</span><span class="n">delta_input</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Normalize.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Normalize.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export instance to a dict object.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Instance data exported to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;input_range&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_range</span><span class="p">,</span>
+            <span class="s1">&#39;output_range&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_range</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="Normalize.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Normalize.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Normalize&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance from data exported to dict.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Data that were exported to a dict by the</span>
+<span class="sd">            :py:meth:`~xopto.util.regression.sequential.Normalize.todict`</span>
+<span class="sd">            method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">PreprocessorFunction</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Normalize(output_range=</span><span class="si">{}</span><span class="s1">, input_range=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output_range</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_range</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SNV"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.SNV">[docs]</a><span class="k">class</span> <span class="nc">SNV</span><span class="p">(</span><span class="n">PreprocessorFunction</span><span class="p">):</span>
+<div class="viewcode-block" id="SNV.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.SNV.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">worker</span><span class="p">:</span>  <span class="n">ClWorker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of the normalization preprocessor in OpenCL.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;inline void pp_snv_apply(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t scale, mc_fp_t offset, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t *inout)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inout[pos] = inout[pos]*scale + offset;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void pp_snv_undo(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_size_t start, mc_size_t stop, mc_size_t step, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t inv_scale, mc_fp_t offset, &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_fp_t *inout)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	for(mc_size_t pos = start; pos &lt; stop; pos += step){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inout[pos] = (inout[pos] - offset)*inv_scale;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="SNV.cl_render_call"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.SNV.cl_render_call">[docs]</a>    <span class="k">def</span> <span class="nf">cl_render_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">slice</span><span class="p">,</span>
+                       <span class="n">inout_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">undo</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render preprocessor call to a list of strings, each holding one line</span>
+<span class="sd">        of OpenCL code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        worker: ClWorker</span>
+<span class="sd">            OpeCL worker instance.</span>
+<span class="sd">        selector: slice</span>
+<span class="sd">            Input data slice that selects the input items to preprocess.</span>
+<span class="sd">        inout_var: str</span>
+<span class="sd">            Name of the RW variable that holds the data.</span>
+<span class="sd">        indent: str</span>
+<span class="sd">            Indentation string. Defaults to 4 spaces.</span>
+<span class="sd">        undo: bool</span>
+<span class="sd">            If True render the undo call, else the apply call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        call: List[str]</span>
+<span class="sd">            The rendered preprocessor call as a string.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">types</span>
+        <span class="n">indent</span> <span class="o">=</span> <span class="s1">&#39;    &#39;</span> <span class="k">if</span> <span class="n">indent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">indent</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s1">&#39;pp_snv_</span><span class="si">{:s}</span><span class="s1">(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;undo&#39;</span> <span class="k">if</span> <span class="n">undo</span> <span class="k">else</span> <span class="s1">&#39;apply&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{start:s}</span><span class="s1">, </span><span class="si">{stop:s}</span><span class="s1">, </span><span class="si">{step:s}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">start</span><span class="p">),</span>
+                <span class="n">stop</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">stop</span><span class="p">),</span>
+                <span class="n">step</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">size_t_str</span><span class="p">(</span><span class="n">selector</span><span class="o">.</span><span class="n">step</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{scale:s}</span><span class="s1">, </span><span class="si">{offset:s}</span><span class="s1">,&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">T</span><span class="o">.</span><span class="n">fp_str</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="k">if</span> <span class="n">undo</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">),</span>
+                <span class="n">T</span><span class="o">.</span><span class="n">fp_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offset</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent:s}{inout_var:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">inout_var</span><span class="o">=</span><span class="n">inout_var</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">),</span>
+            <span class="s1">&#39;);&#39;</span>
+        <span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">output_std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">input_mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">input_std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Preprocessor that normalizes data</span>
+<span class="sd">        to the specified mean and standard deviation (std).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        output_mean: float</span>
+<span class="sd">            The mean value of variables after preprocessing.</span>
+<span class="sd">        output_std: float</span>
+<span class="sd">            The standard deviation of variables after preprocessing.</span>
+<span class="sd">        input_mean: float</span>
+<span class="sd">            The expected mean value of the input variables.</span>
+<span class="sd">        input_std: float</span>
+<span class="sd">            The expected standard deviation of the input variables.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">output_mean</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_std</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">output_std</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_input_mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_std</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="k">if</span> <span class="n">input_mean</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_input_mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">input_mean</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">input_std</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_input_std</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">input_std</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_mean</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_std</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prepare</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_get_input_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_mean</span>
+    <span class="n">input_mean</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_input_mean</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                          <span class="s1">&#39;Mean of the input values.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_input_std</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_std</span>
+    <span class="n">input_std</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_input_std</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="s1">&#39;Standard deviation of the input values.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_output_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_mean</span>
+    <span class="n">output_mean</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_output_mean</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="s1">&#39;Mean of the output values.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_output_std</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_std</span>
+    <span class="n">output_std</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_output_std</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                          <span class="s1">&#39;Standard deviation of the output values.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SNV.train"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.SNV.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Determine the mean and std of the input values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            A representative training dataset.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_input_mean</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_input_std</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prepare</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SNV.apply"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.SNV.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply normalization to the input data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Array of input data to be normalized.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the x data array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Input data normalized to the output range.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_mean</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_std</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;The mean and/or std of input values are undefined!&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="SNV.undo"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.SNV.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply denormalization to the output data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Array of normalized output data to be denormalized.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the y data array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Denormalized output data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">-+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span>
+        <span class="n">out</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+    <span class="k">def</span> <span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Internal method that precalculates the scaling factor and offset.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_std</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_std</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_std</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_mean</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_mean</span>
+
+<div class="viewcode-block" id="SNV.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.SNV.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export instance to a dict object.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Instance data exported to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;input_mean&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_mean</span><span class="p">,</span>
+            <span class="s1">&#39;input_std&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_std</span><span class="p">,</span>
+            <span class="s1">&#39;output_mean&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_mean</span><span class="p">,</span>
+            <span class="s1">&#39;output_std&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_std</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="SNV.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.SNV.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Normalize&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a new instance from data exported to dict.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Data that were exported to a dict by the</span>
+<span class="sd">            :py:meth:`~xopto.util.regression.sequential.SNV.todict`</span>
+<span class="sd">            method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">PreprocessorFunction</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;SNV(output_mean=</span><span class="si">{}</span><span class="s1">, output_std=</span><span class="si">{}</span><span class="s1">, &#39;</span> \
+                    <span class="s1">&#39;input_mean=</span><span class="si">{}</span><span class="s1">, input_stf=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_mean</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_std</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">input_mean</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_std</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PreprocessorItem"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.PreprocessorItem">[docs]</a><span class="k">class</span> <span class="nc">PreprocessorItem</span><span class="p">:</span>
+<div class="viewcode-block" id="PreprocessorItem.cl_render_call"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.PreprocessorItem.cl_render_call">[docs]</a>    <span class="k">def</span> <span class="nf">cl_render_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span>
+                       <span class="n">inout_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">undo</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                       <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render preprocessor item call to a list of strings, each representing</span>
+<span class="sd">        one line of OpenCL code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        worker: ClWorker</span>
+<span class="sd">            OpeCL worker instance.</span>
+<span class="sd">        inout_var: str</span>
+<span class="sd">            Name of the RW variable that holds the data.</span>
+<span class="sd">        n: int</span>
+<span class="sd">            The length of the input/output data vector.</span>
+<span class="sd">        indent: str</span>
+<span class="sd">            Indentation string. Defaults to 4 spaces.</span>
+<span class="sd">        undo: bool</span>
+<span class="sd">            If True render the undo call, else the apply call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        call: List[str]</span>
+<span class="sd">            The rendered preprocessor call as a list of code lines.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequence</span>
+        <span class="k">if</span> <span class="n">undo</span><span class="p">:</span>
+            <span class="n">sequence</span> <span class="o">=</span> <span class="n">sequence</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">selector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">selector</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">selector</span><span class="o">.</span><span class="n">step</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">start</span>
+        <span class="n">stop</span> <span class="o">=</span> <span class="n">n</span> <span class="k">if</span> <span class="n">stop</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">stop</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">step</span>
+        <span class="n">selector</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
+
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">func_index</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sequence</span><span class="p">):</span>
+            <span class="n">func_lines</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">cl_render_call</span><span class="p">(</span>
+                <span class="n">worker</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="n">inout_var</span><span class="p">,</span>
+                <span class="n">undo</span><span class="o">=</span><span class="n">undo</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">func_lines</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">lines</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="n">PreprocessorFunction</span> <span class="ow">or</span> \
+                                 <span class="n">Tuple</span><span class="p">[</span><span class="n">PreprocessorFunction</span><span class="p">],</span>
+                 <span class="n">selector</span><span class="p">:</span> <span class="nb">slice</span> <span class="ow">or</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">slice</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Preprocessor that applies a sequence of preprocessor functions to</span>
+<span class="sd">        the selected data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sequence: PreprocessorFunction or Tuple[PreprocessorFunction]</span>
+<span class="sd">            A sequence of preprocessor functions to apply to the data.</span>
+<span class="sd">        selector: slice or Tuple[slice]</span>
+<span class="sd">            A slice selector for the input data. The preprocessor is only</span>
+<span class="sd">            applied to the selected data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">PreprocessorFunction</span><span class="p">):</span>
+            <span class="n">sequence</span> <span class="o">=</span> <span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="p">)</span>
+ 
+        <span class="k">if</span> <span class="n">selector</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">selector</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selector</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="n">selector</span> <span class="o">=</span> <span class="p">(</span><span class="n">selector</span><span class="p">,</span> <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span> <span class="o">=</span> <span class="n">sequence</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_selector</span> <span class="o">=</span> <span class="n">selector</span>
+
+    <span class="k">def</span> <span class="nf">_get_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">PreprocessorFunction</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span>
+    <span class="n">sequence</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_sequence</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;Sequence of preprocessor functions.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_selector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">slice</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selector</span>
+    <span class="n">selector</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_selector</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Data selector.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PreprocessorItem.apply"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.PreprocessorItem.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply the preprocessor to the input data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the x data array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Selected input data that were preprocessed by the sequence</span>
+<span class="sd">            of preprocessor functions.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="n">x</span><span class="p">[(</span><span class="bp">Ellipsis</span><span class="p">,)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selector</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span><span class="p">:</span>
+            <span class="n">selected</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">selected</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">selected</span></div>
+
+<div class="viewcode-block" id="PreprocessorItem.undo"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.PreprocessorItem.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply inverse of the preprocessor to the selected output data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Output data.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the y data array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Selected output data that were preprocessed by the reversed</span>
+<span class="sd">            sequence of the inverse preprocessor functions.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="n">y</span><span class="p">[(</span><span class="bp">Ellipsis</span><span class="p">,)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selector</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">selected</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">undo</span><span class="p">(</span><span class="n">selected</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span> <span class="n">out</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">selected</span></div>
+
+<div class="viewcode-block" id="PreprocessorItem.train"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.PreprocessorItem.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Train the sequence of the preprocessor functions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            A representative dataset for the training.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="n">x</span><span class="p">[(</span><span class="bp">Ellipsis</span><span class="p">,)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selector</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span><span class="p">:</span>
+            <span class="n">func</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span>
+            <span class="n">selected</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PreprocessorItem.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.PreprocessorItem.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export preprocessor to a dict object.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        preprocessor: dict</span>
+<span class="sd">            Preprocessor exported to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selector</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;sequence&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span><span class="p">],</span>
+            <span class="s1">&#39;selector&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;slice&#39;</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="s1">&#39;stop&#39;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
+                          <span class="s1">&#39;step&#39;</span><span class="p">:</span><span class="n">s</span><span class="o">.</span><span class="n">step</span><span class="p">}</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selector</span><span class="p">],</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="PreprocessorItem.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.PreprocessorItem.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;PreprocessorItem&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Lod a preprocessor item from a dict.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            :py:class:`PreprocessorItem` instance exported to a dict.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        item: PreprocessorItem</span>
+<span class="sd">            An instance of :py:class:`PreprocessorItem` created from the</span>
+<span class="sd">            data in the dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">sequence_list</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;sequence&#39;</span><span class="p">)</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="p">[</span><span class="n">PreprocessorFunction</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sequence_list</span><span class="p">]</span>
+        <span class="n">selector_list</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;selector&#39;</span><span class="p">)</span>
+        <span class="n">selector</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">selector_list</span><span class="p">:</span>
+            <span class="n">item_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="n">type_name</span> <span class="o">=</span> <span class="n">item_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">builtins</span><span class="p">,</span> <span class="n">type_name</span><span class="p">,</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">type</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">T</span> <span class="ow">is</span> <span class="nb">slice</span><span class="p">:</span>
+                <span class="nb">slice</span><span class="p">(</span><span class="n">item_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">),</span> <span class="n">item_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;stop&#39;</span><span class="p">),</span>
+                      <span class="n">item_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;step&#39;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">selector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T</span><span class="p">(</span><span class="o">**</span><span class="n">item_data</span><span class="p">))</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;sequence&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sequence</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;selector&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">selector</span>
+        <span class="n">type_name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">type_name</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">T</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;PreprocessorItem(sequence=</span><span class="si">{}</span><span class="s1">, selector=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sequence</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> # </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Preprocessor"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Preprocessor">[docs]</a><span class="k">class</span> <span class="nc">Preprocessor</span><span class="p">:</span>
+<div class="viewcode-block" id="Preprocessor.cl_render_call"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Preprocessor.cl_render_call">[docs]</a>    <span class="k">def</span> <span class="nf">cl_render_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="n">ClWorker</span><span class="p">,</span>
+                       <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">inout_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                       <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">undo</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                       <span class="n">indent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">80</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Render preprocessor item call to a list of strings, each representing</span>
+<span class="sd">        one line of OpenCL source code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        worker: ClWorker</span>
+<span class="sd">            OpeCL worker instance.</span>
+<span class="sd">        prefix: str</span>
+<span class="sd">            Preprocessor function prefix.</span>
+<span class="sd">        inout_var: str</span>
+<span class="sd">            Name of the RW variable that holds the data.</span>
+<span class="sd">        n: int</span>
+<span class="sd">            The length of the input/output data vector.</span>
+<span class="sd">        undo: bool</span>
+<span class="sd">            If True render the undo call, else the apply call.</span>
+<span class="sd">        indent: str</span>
+<span class="sd">            Indentation string. Defaults to 4 spaces.</span>
+<span class="sd">        width: str</span>
+<span class="sd">           Maximum line width.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        call: List[str]</span>
+<span class="sd">            The rendered preprocessor call as a list of code lines.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span>
+            <span class="s1">&#39;void </span><span class="si">{prefix}</span><span class="s1">pp_</span><span class="si">{apply_or_undo}</span><span class="s1">(&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span>
+                <span class="n">apply_or_undo</span> <span class="o">=</span> <span class="s1">&#39;undo&#39;</span> <span class="k">if</span> <span class="n">undo</span> <span class="k">else</span> <span class="s1">&#39;apply&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;</span><span class="si">{indent}</span><span class="s1">mc_fp_t *</span><span class="si">{inout_var}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">inout_var</span><span class="o">=</span><span class="n">inout_var</span><span class="p">),</span>
+            <span class="s1">&#39;{&#39;</span>
+        <span class="p">])</span>
+
+        <span class="n">body</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item_index</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">):</span>
+            <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s1">&#39;/* preprocessor item </span><span class="si">{}</span><span class="s1"> of </span><span class="si">{}</span><span class="s1"> */&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">item_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">body</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">cl_render_call</span><span class="p">(</span>
+                    <span class="n">worker</span><span class="p">,</span> <span class="n">inout_var</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">undo</span><span class="o">=</span><span class="n">undo</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">body</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indent</span> <span class="o">+</span> <span class="n">line</span><span class="p">)</span>
+
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;};&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">lines</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="n">PreprocessorItem</span> <span class="ow">or</span>
+                              <span class="n">Tuple</span><span class="p">[</span><span class="n">PreprocessorItem</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Preprocessor that is applied to the input data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        items: PreprocessorItem or Tuple[PreprocessorItem]</span>
+<span class="sd">            Preprocessor items.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">items</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">PreprocessorItem</span><span class="p">):</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">PreprocessorItem</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_items</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Preprocessor items.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Preprocessor.apply"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Preprocessor.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Apply preprocessor to the input data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            The input data.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the x data array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Preprocessed input data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[(</span><span class="bp">Ellipsis</span><span class="p">,)</span> <span class="o">+</span> <span class="n">item</span><span class="o">.</span><span class="n">selector</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="Preprocessor.undo"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Preprocessor.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Undo preprocessing from the output data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y: np.ndarray</span>
+<span class="sd">            Preprocessed output data.</span>
+<span class="sd">        out: np.ndarray</span>
+<span class="sd">            Data array for the results. Must be of the same</span>
+<span class="sd">            size and type as the y data array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            Input data obtained by applying inverse preprocessing to the</span>
+<span class="sd">            output data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[(</span><span class="bp">Ellipsis</span><span class="p">,)</span> <span class="o">+</span> <span class="n">item</span><span class="o">.</span><span class="n">selector</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">undo</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="Preprocessor.train"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Preprocessor.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Train the preprocessor items.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">            A representative input training dataset.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">:</span>
+            <span class="n">item</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Preprocessor.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Preprocessor.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export preprocessor to a dict object.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            Preprocessor exported to a dict object.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s1">&#39;items&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span>  <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">]</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="Preprocessor.fromdict"><a class="viewcode-back" href="../../../../apidoc/xopto.util.regression.pp.html#xopto.util.regression.pp.Preprocessor.fromdict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fromdict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Preprocessor&#39;</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Lod a preprocessor item from a dict.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            :py:class:`Preprocessor` instance exported to a dict.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        item: PreprocessorItem</span>
+<span class="sd">            An instance of :py:class:`Preprocessor` created from the</span>
+<span class="sd">            data in the dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">type_name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+        <span class="n">itmes_list</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;items&#39;</span><span class="p">)</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">PreprocessorItem</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">itmes_list</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">items</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">type_name</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">T</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Preprocessor(items=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> # </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="o">**</span><span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="o">**</span><span class="mi">5</span><span class="p">]])</span>
+
+    <span class="n">pp</span> <span class="o">=</span> <span class="n">Preprocessor</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="n">PreprocessorItem</span><span class="p">((</span><span class="n">Log10Scale</span><span class="p">(),</span> <span class="n">Normalize</span><span class="p">()),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="n">PreprocessorItem</span><span class="p">((</span><span class="n">Log10Scale</span><span class="p">(),</span> <span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">d</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span>
+    <span class="n">Preprocessor</span><span class="o">.</span><span class="n">fromdict</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+    <span class="n">pp</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">pp_data</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">data_</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">undo</span><span class="p">(</span><span class="n">pp_data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">fp_str</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:.8e}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="n">bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">generate_transformation</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">line_index</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">weights</span><span class="p">):</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">weight_index</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+                <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:s}</span><span class="s1">*input[</span><span class="si">{:d}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fp_str</span><span class="p">(</span><span class="n">weight</span><span class="p">),</span> <span class="n">weight_index</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fp_str</span><span class="p">(</span><span class="n">bias</span><span class="p">[</span><span class="n">line_index</span><span class="p">]))</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;output[</span><span class="si">{:d}</span><span class="s1">] = &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line_index</span><span class="p">)</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+            <span class="n">active_line</span> <span class="o">=</span> <span class="n">indent</span> <span class="o">+</span> <span class="n">header</span>
+            <span class="n">joiner</span> <span class="o">=</span> <span class="s1">&#39; + &#39;</span>
+            <span class="k">for</span> <span class="n">item_index</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">item_index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">item_index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">active_line</span> <span class="o">+=</span> <span class="n">joiner</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">active_line</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">active_line</span><span class="p">)</span>
+                    <span class="n">active_line</span> <span class="o">=</span> <span class="n">indent</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">*</span><span class="n">offset</span>
+
+                <span class="n">active_line</span> <span class="o">+=</span> <span class="n">item</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">active_line</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;inline void mua_sequential_layer_0(fp_t const *input, fp_t *output){&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;}&#39;</span><span class="p">)</span>
+
+    <span class="n">generate_transformation</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

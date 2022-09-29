@@ -9,6 +9,7 @@ Submodules
 
    xopto.mcml.mcdetector.probe.fiberarray
    xopto.mcml.mcdetector.probe.fiberarraypl
+   xopto.mcml.mcdetector.probe.fiberlutarray
    xopto.mcml.mcdetector.probe.lineararray
    xopto.mcml.mcdetector.probe.lineararraypl
    xopto.mcml.mcdetector.probe.sixaroundone

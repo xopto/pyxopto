@@ -217,13 +217,13 @@
 <span class="sd">            dmin and dmax stand for the minimum and maximum diameters of the</span>
 <span class="sd">            spherical particles, respectively.</span>
 <span class="sd">        pd: callable(float) -&gt; float</span>
-<span class="sd">            Particlne distribution number probability density function. Integral</span>
+<span class="sd">            Particle distribution number probability density function. Integral</span>
 <span class="sd">            of pd over drange should equal 1.0.</span>
 <span class="sd">        nd: int</span>
 <span class="sd">            Number of equally spaced control points between dmin and dmax that</span>
 <span class="sd">            are used to estimate the scattering phase function.</span>
 <span class="sd">            A fixed-step Simpson numerical integration is used to estimate</span>
-<span class="sd">            the scatterin phase function at the given scattering angle cosines.</span>
+<span class="sd">            the scattering phase function at the given scattering angle cosines.</span>
 <span class="sd">            If nd is None, an adaptive-step numerical integration is used (note</span>
 <span class="sd">            that the computational time might increase dramatically!!!).</span>
 
@@ -298,13 +298,13 @@
 
 <div class="viewcode-block" id="MiePd.distribution"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miepd.html#xopto.pf.miepd.MiePd.distribution">[docs]</a>    <span class="k">def</span> <span class="nf">distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Returns the underlaying distribution object.</span>
+<span class="sd">        Returns the underlying distribution object.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        pd: callable(float) -&gt; float</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pdble</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pd</span></div>
 
 <div class="viewcode-block" id="MiePd.pd"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miepd.html#xopto.pf.miepd.MiePd.pd">[docs]</a>    <span class="k">def</span> <span class="nf">pd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diameter</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>

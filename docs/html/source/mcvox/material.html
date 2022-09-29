@@ -180,7 +180,7 @@
   <div class="section" id="material">
 <span id="mcvox-material-label"></span><h1>Material<a class="headerlink" href="#material" title="Permalink to this headline">¶</a></h1>
 <p>Each voxel of the volume can be assigned a different material. Materials are
-defined as instances of <a class="reference internal" href="../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Material" title="xopto.mcvox.mcmaterial.material.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcvox.mcmaterial.material.Material</span></code></a>.
+defined as instances of <a class="reference internal" href="../../apidoc/xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Material" title="xopto.mcbase.mcmaterial.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcmaterial.Material</span></code></a>.
 The constructor takes several parameters that define the optical properties of
 the material.</p>
 <ol class="arabic simple">
@@ -200,10 +200,10 @@ with anisotropy 0.9.</p>
 </pre></div>
 </div>
 <p>All the optical properties of a material that were set
-through the constructor <a class="reference internal" href="../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Material" title="xopto.mcvox.mcmaterial.material.Material"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Material()</span></code></a>
+through the constructor <a class="reference internal" href="../../apidoc/xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Material" title="xopto.mcbase.mcmaterial.Material"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Material()</span></code></a>
 can be later changed through accessing the instance properties. In case of
 the scattering phase function, first access the
-<a class="reference internal" href="../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Material.pf" title="xopto.mcvox.mcmaterial.material.Material.pf"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pf</span></code></a> material property
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Material.pf" title="xopto.mcbase.mcmaterial.Material.pf"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pf</span></code></a> material property
 and from there any of the properties implemented by the scattering
 phase function model. Note that the Henyey-Greenstein scattering phase
 function from this example exposes only the anisotropy
@@ -215,8 +215,8 @@ function from this example exposes only the anisotropy
 </pre></div>
 </div>
 <p>The individual materials are then combined into a list through
-<a class="reference internal" href="../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Materials" title="xopto.mcvox.mcmaterial.material.Materials"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Materials()</span></code></a>. The constructor takes
-a list of <a class="reference internal" href="../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Material" title="xopto.mcvox.mcmaterial.material.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>. The created
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Materials" title="xopto.mcbase.mcmaterial.Materials"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Materials()</span></code></a>. The constructor takes
+a list of <a class="reference internal" href="../../apidoc/xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Material" title="xopto.mcbase.mcmaterial.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>. The created
 instance manages the transfer of data between the host and the OpenCL device.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">materials</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mcmaterial</span><span class="o">.</span><span class="n">Materials</span><span class="p">(</span>
     <span class="p">[</span>
@@ -243,18 +243,18 @@ through accessing the individual materials and from there the material
 properties. The number of materials (including the material of the surrounding
 medium) can be determined through the builtin <code class="xref py py-func docutils literal notranslate"><span class="pre">len()</span></code>. The individual
 materials can be accessed using the <code class="code docutils literal notranslate"><span class="pre">[]</span></code> operator or
-<a class="reference internal" href="../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Materials.material" title="xopto.mcvox.mcmaterial.material.Materials.material"><code class="xref py py-meth docutils literal notranslate"><span class="pre">material()</span></code></a> method.</p>
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Materials.material" title="xopto.mcbase.mcmaterial.Materials.material"><code class="xref py py-meth docutils literal notranslate"><span class="pre">material()</span></code></a> method.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">materials</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mua</span> <span class="o">=</span> <span class="mf">0.5e2</span>
 <span class="n">materials</span><span class="o">.</span><span class="n">material</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mua</span> <span class="o">=</span> <span class="mf">0.5e2</span>
 
 <span class="n">num_materials</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">materials</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The <a class="reference internal" href="../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Material" title="xopto.mcvox.mcmaterial.material.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a> and
-<a class="reference internal" href="../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Materials" title="xopto.mcvox.mcmaterial.material.Materials"><code class="xref py py-class docutils literal notranslate"><span class="pre">Materials</span></code></a> produce an informative
+<p>The <a class="reference internal" href="../../apidoc/xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Material" title="xopto.mcbase.mcmaterial.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a> and
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Materials" title="xopto.mcbase.mcmaterial.Materials"><code class="xref py py-class docutils literal notranslate"><span class="pre">Materials</span></code></a> produce an informative
 human-readable output when used with the <code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code> builtin.</p>
 <p>Applying <code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code> to a material (instance of
-<a class="reference internal" href="../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Material" title="xopto.mcvox.mcmaterial.material.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>) will produce the
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Material" title="xopto.mcbase.mcmaterial.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>) will produce the
 following output:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">materials</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
@@ -263,7 +263,7 @@ following output:</p>
 </pre></div>
 </div>
 <p>Applying <code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code> to a list of materials (instance of
-<a class="reference internal" href="../../apidoc/xopto.mcvox.mcmaterial.material.html#xopto.mcvox.mcmaterial.material.Materials" title="xopto.mcvox.mcmaterial.material.Materials"><code class="xref py py-class docutils literal notranslate"><span class="pre">Materials</span></code></a>) will produce the
+<a class="reference internal" href="../../apidoc/xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Materials" title="xopto.mcbase.mcmaterial.Materials"><code class="xref py py-class docutils literal notranslate"><span class="pre">Materials</span></code></a>) will produce the
 following output:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">materials</span><span class="p">)</span>
 </pre></div>

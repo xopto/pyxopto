@@ -378,7 +378,7 @@
     <span class="k">def</span> <span class="nf">_get_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span>
     <span class="k">def</span> <span class="nf">_set_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">()</span>
     <span class="n">mean</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_mean</span><span class="p">,</span> <span class="n">_set_mean</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;Mean value of the Normal distribution.&#39;</span><span class="p">)</span>

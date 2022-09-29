@@ -207,12 +207,12 @@ of spherical particles over the specified diameter range.</p>
 <li><p><strong>drange</strong> (<em>list</em>) – Diameter range of the spherical particles as [dmin, dmax], where
 dmin and dmax stand for the minimum and maximum diameters of the
 spherical particles, respectively.</p></li>
-<li><p><strong>pd</strong> (<em>callable</em><em>(</em><em>float</em><em>) </em><em>-&gt; float</em>) – Particlne distribution number probability density function. Integral
+<li><p><strong>pd</strong> (<em>callable</em><em>(</em><em>float</em><em>) </em><em>-&gt; float</em>) – Particle distribution number probability density function. Integral
 of pd over drange should equal 1.0.</p></li>
 <li><p><strong>nd</strong> (<em>int</em>) – Number of equally spaced control points between dmin and dmax that
 are used to estimate the scattering phase function.
 A fixed-step Simpson numerical integration is used to estimate
-the scatterin phase function at the given scattering angle cosines.
+the scattering phase function at the given scattering angle cosines.
 If nd is None, an adaptive-step numerical integration is used (note
 that the computational time might increase dramatically!!!).</p></li>
 </ul>
@@ -248,7 +248,7 @@ A 7-sigma diameter range is used for numerical computations.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="xopto.pf.miepd.MiePd.distribution">
 <span class="sig-name descname"><span class="pre">distribution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/pf/miepd.html#MiePd.distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.pf.miepd.MiePd.distribution" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the underlaying distribution object.</p>
+<dd><p>Returns the underlying distribution object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><strong>pd</strong></p>

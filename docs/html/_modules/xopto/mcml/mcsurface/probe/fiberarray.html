@@ -317,7 +317,8 @@
             <span class="s1">&#39;		mc_pos.y = mcsim_position_y(mcsim) - layout-&gt;fiber_position[index].y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		mc_pos.z = FP_0;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		transform_point3f(&amp;layout-&gt;transformation[index], &amp;mc_pos, &amp;layout_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		mc_matrix3f_t transformation = layout-&gt;transformation[index];&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		transform_point3f(&amp;transformation, &amp;mc_pos, &amp;layout_pos);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dx = layout_pos.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dy = layout_pos.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		r_squared = dx*dx + dy*dy;&#39;</span><span class="p">,</span>

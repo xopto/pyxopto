@@ -19,6 +19,7 @@ Submodules
    :maxdepth: 4
 
    xopto.mcbase.cltypes
+   xopto.mcbase.mcmaterial
    xopto.mcbase.mcobject
    xopto.mcbase.mcoptions
    xopto.mcbase.mcprogress

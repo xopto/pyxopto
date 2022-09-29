@@ -547,13 +547,13 @@
 <span class="sd">            distribution function is to be computed.</span>
 <span class="sd">        meth: str</span>
 <span class="sd">            Numerical integration method:</span>
-<span class="sd">                - &#39;trapez&#39;</span>
+<span class="sd">                - &#39;trapez&#39;  - trapezoidal</span>
 <span class="sd">                - &#39;simpson&#39; - default</span>
 <span class="sd">                - &#39;quad&#39;    - adaptive step; accurate but slower</span>
 
 <span class="sd">        npts: int</span>
-<span class="sd">            Number of control points used by the trapez and simpson numerical</span>
-<span class="sd">            integration methods.</span>
+<span class="sd">            Number of control points used by the trapezoidal and simpson</span>
+<span class="sd">            numerical integration methods.</span>
 <span class="sd">        kwargs: dict</span>
 <span class="sd">            Optional keyword arguments passed to the scipy.integrate.quad</span>
 <span class="sd">            function.</span>
@@ -647,7 +647,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        params: Tuple[float, float, float]</span>
 <span class="sd">            List or tuple of three parameters [a, b, c] that can be used</span>
-<span class="sd">            to estimate the scattering angle cosine from a unifor random number</span>
+<span class="sd">            to estimate the scattering angle cosine from a uniform random number</span>
 <span class="sd">            F from [0, 1]:</span>
 
 <span class="sd">            .. code-block:: python</span>
@@ -705,11 +705,11 @@
         <span class="c1"># function CDF.</span>
         <span class="n">res1</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
             <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">lut_function</span><span class="p">(</span><span class="n">costhetai</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">cumpfi</span><span class="p">),</span>
-            <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),))</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),))</span>
 
         <span class="n">res2</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
             <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">lut_function</span><span class="p">(</span><span class="n">costhetai</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">cumpfi</span><span class="p">),</span>
-            <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="p">((</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="p">),))</span>
+            <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="p">((</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="p">),))</span>
 
         <span class="k">if</span> <span class="n">res1</span><span class="o">.</span><span class="n">fun</span> <span class="o">&lt;</span> <span class="n">res2</span><span class="o">.</span><span class="n">fun</span><span class="p">:</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">res1</span>

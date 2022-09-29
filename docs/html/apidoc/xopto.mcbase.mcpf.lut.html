@@ -199,7 +199,7 @@
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Lut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lut</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcpf/lut.html#Lut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcpf.lut.Lut" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcpf.pfbase.html#xopto.mcbase.mcpf.pfbase.PfBase" title="xopto.mcbase.mcpf.pfbase.PfBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcpf.pfbase.PfBase</span></code></a></p>
 <p>Lookup table-based scattering phase function constructor.
-Lookuptable is used for efficient computation of deflection
+Lookup table is used for efficient computation of deflection
 angle cosines.
 A nonlinear transformation is used to compute linear lookup table
 (floating point) index from a uniform random number F:</p>
@@ -211,7 +211,7 @@ A nonlinear transformation is used to compute linear lookup table
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<em>list</em><em>, </em><em>tuple</em><em> or </em><em>ndarray vector of 3 float</em>) – Nonlinear index transformation function parameters provided as
 an array of size 3.</p></li>
-<li><p><strong>lut</strong> (<em>np.ndarray vector</em>) – Lookuptable data.</p></li>
+<li><p><strong>lut</strong> (<em>np.ndarray vector</em>) – Lookup table data.</p></li>
 </ul>
 </dd>
 </dl>
@@ -297,7 +297,7 @@ the Monte Carlo kernel.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>offset: mc_int_t</dt><dd><p>Location of the lookuptable as an offset from the start of
+<dt>offset: mc_int_t</dt><dd><p>Location of the lookup table as an offset from the start of
 the lookup table buffer.</p>
 </dd>
 </dl>
@@ -342,7 +342,7 @@ transformation and <img class="math" src="../_images/math/3bfb3a64189a14b2704f46
 <dl class="py property">
 <dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.Lut.params">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">params</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#xopto.mcbase.mcpf.lut.Lut.params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Lookup table index trasnformation parameters.</p>
+<dd><p>Lookup table index transformation parameters.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -383,6 +383,12 @@ scattering phase function as
 <dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.LutEx.pf">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pf</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcpf.pfbase.PfBase</span></em><a class="headerlink" href="#xopto.mcbase.mcpf.lut.LutEx.pf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scattering phase function object that was used to create a lookup table.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mcpf.lut.LutEx.pfargs">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pfargs</span></span><em class="property"><span class="pre">:</span> <span class="pre">tuple</span></em><a class="headerlink" href="#xopto.mcbase.mcpf.lut.LutEx.pfargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>A tuple of scattering phase function arguments.</p>
 </dd></dl>
 
 <dl class="py method">

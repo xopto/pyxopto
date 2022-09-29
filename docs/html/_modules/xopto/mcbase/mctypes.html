@@ -258,10 +258,14 @@
 <span class="sd">    - mc_size&lt;n&gt;_t for vectorized unsigned integers (&lt;n&gt; must be one of 2, 3, 4, 8, 16)</span>
 <span class="sd">    - mc_point2s_t structure for a 2D point with mc_size_t coordinates.</span>
 <span class="sd">    - mc_point3s_t structure for a 3D point with mc_size_t coordinates.</span>
+<span class="sd">    - mc_point4s_t structure for a 4D point with mc_size_t coordinates.</span>
 
 <span class="sd">    The related numpy data types are defined by the following attributes:</span>
 
 <span class="sd">    - np_size - For mc_size_t.</span>
+<span class="sd">    - np_size2 - For mc_size2_t.</span>
+<span class="sd">    - np_size3 - For mc_size3_t.</span>
+<span class="sd">    - np_size4 - For mc_size4_t.</span>
 
 <span class="sd">    Additional attributes of the class:</span>
 
@@ -299,7 +303,31 @@
         <span class="p">]</span></div>
 
     <span class="n">mc_maxsize</span> <span class="o">=</span> <span class="mi">4294967295</span>
-    <span class="n">np_size</span> <span class="o">=</span> <span class="s1">&#39;uint32&#39;</span></div>
+
+    <span class="n">np_size</span> <span class="o">=</span> <span class="s1">&#39;uint32&#39;</span>
+    <span class="n">np_size2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">)])</span>
+    <span class="n">np_size3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span>
+                         <span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">)])</span>
+    <span class="n">np_size4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span>
+                         <span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">)])</span>
+
+<div class="viewcode-block" id="McSizeT32.size_t_str"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McSizeT32.size_t_str">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">size_t_str</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Convert a size type integer value to a string without loosing precision.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: int</span>
+<span class="sd">            A size type integer value to convert to string.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str_value: str</span>
+<span class="sd">            A string representation of the input size type integer value.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1">u&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div></div>
+
 
 <div class="viewcode-block" id="McSizeT64"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McSizeT64">[docs]</a><span class="k">class</span> <span class="nc">McSizeT64</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -308,6 +336,10 @@
 
 <span class="sd">    - mc_size_t - Size type.</span>
 <span class="sd">    - mc_size&lt;n&gt;_t - For vectorized unsigned integers (&lt;n&gt; must be one of 2, 3, 4, 8, 16)</span>
+<span class="sd">    - mc_point2s_t structure for a 2D point with mc_size_t coordinates.</span>
+<span class="sd">    - mc_point3s_t structure for a 3D point with mc_size_t coordinates.</span>
+<span class="sd">    - mc_point4s_t structure for a 4D point with mc_size_t coordinates.</span>
+
 <span class="sd">    - mc_point2_t - For a structure representing a 2D point with mc_int_t coordinates.</span>
 <span class="sd">    - mc_point3_t - For a structure representing a 3D point with mc_int_t coordinates.</span>
 <span class="sd">    - mc_point4_t - For a structure representing a 4D point with mc_int_t coordinates.</span>
@@ -316,6 +348,9 @@
 <span class="sd">    The related numpy data types are defined by the following attributes:</span>
 
 <span class="sd">    - np_size - For mc_size_t.</span>
+<span class="sd">    - np_size2 - For mc_size2_t.</span>
+<span class="sd">    - np_size3 - For mc_size3_t.</span>
+<span class="sd">    - np_size4 - For mc_size4_t.</span>
 
 <span class="sd">    Additional attributes of the class:</span>
 
@@ -354,7 +389,29 @@
         <span class="p">]</span></div>
 
     <span class="n">mc_maxsize</span> <span class="o">=</span> <span class="mi">18446744073709551615</span>
-    <span class="n">np_size</span> <span class="o">=</span> <span class="s1">&#39;uint64&#39;</span></div>
+    <span class="n">np_size</span> <span class="o">=</span> <span class="s1">&#39;uint64&#39;</span>
+    <span class="n">np_size2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">)])</span>
+    <span class="n">np_size3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span>
+                         <span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">)])</span>
+    <span class="n">np_size4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span>
+                         <span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">np_size</span><span class="p">)])</span>
+
+<div class="viewcode-block" id="McSizeT64.size_t_str"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McSizeT64.size_t_str">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">size_t_str</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Convert a size type integer value to a string without loosing precision.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: int</span>
+<span class="sd">            A size type integer value to convert to string.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str_value: str</span>
+<span class="sd">            A string representation of the input size type integer value.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1">ul&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div></div>
 
 
 <div class="viewcode-block" id="McInt32"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McInt32">[docs]</a><span class="k">class</span> <span class="nc">McInt32</span><span class="p">:</span>
@@ -430,7 +487,43 @@
     <span class="n">mc_int_max</span> <span class="o">=</span> <span class="mi">2147483647</span>
 
     <span class="n">np_int</span> <span class="o">=</span> <span class="s1">&#39;int32&#39;</span>
-    <span class="n">np_uint</span> <span class="o">=</span> <span class="s1">&#39;uint32&#39;</span></div>
+    <span class="n">np_uint</span> <span class="o">=</span> <span class="s1">&#39;uint32&#39;</span>
+
+<div class="viewcode-block" id="McInt32.int_str"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McInt32.int_str">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">int_str</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Convert an integer value to a string without loosing precision.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: int</span>
+<span class="sd">            An integer value to convert to string.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str_value: str</span>
+<span class="sd">            A string representation of the input integer value.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="McInt32.uint_str"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McInt32.uint_str">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">uint_str</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Convert an unsigned integer value to a string without loosing precision.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: int</span>
+<span class="sd">            An unsigned integer value to convert to string.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str_value: str</span>
+<span class="sd">            A string representation of the input unsigned integer value.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span></div></div>
+
+
 
 <div class="viewcode-block" id="McInt64"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McInt64">[docs]</a><span class="k">class</span> <span class="nc">McInt64</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -505,7 +598,42 @@
     <span class="n">mc_int_max</span> <span class="o">=</span> <span class="mi">9223372036854775807</span>
 
     <span class="n">np_uint</span> <span class="o">=</span> <span class="s1">&#39;int64&#39;</span>
-    <span class="n">np_uint</span> <span class="o">=</span> <span class="s1">&#39;uint64&#39;</span></div>
+    <span class="n">np_uint</span> <span class="o">=</span> <span class="s1">&#39;uint64&#39;</span>
+
+<div class="viewcode-block" id="McInt64.int_str"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McInt64.int_str">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">int_str</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Convert an integer value to a string without loosing precision.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: int</span>
+<span class="sd">            A integer value to convert to string.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str_value: str</span>
+<span class="sd">            A string representation of the input integer value.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1">l&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="McInt64.uint_str"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McInt64.uint_str">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">uint_str</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Convert an unsigned integer value to a string without loosing precision.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: int</span>
+<span class="sd">            An unsigned integer value to convert to string.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str_value: str</span>
+<span class="sd">            A string representation of the input unsigned integer value.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1">ul&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span></div></div>
+
 
 <span class="n">McInt</span> <span class="o">=</span> <span class="n">McInt32</span>
 
@@ -594,7 +722,10 @@
 
 <span class="sd">    Attribute that defined the related numpy data type:</span>
 
-<span class="sd">    - np_float - Scalar floating-point data type.</span>
+<span class="sd">    - np_float - Scalar floating-point data type form mc_fp_t.</span>
+<span class="sd">    - np2_float - Vector floating-point data type form mc_fp2_t.</span>
+<span class="sd">    - np3_float - Vector floating-point data type form mc_fp3_t.</span>
+<span class="sd">    - np4_float - Vector floating-point data type form mc_fp4_t.</span>
 
 <span class="sd">    Additional attributes of the class:</span>
 
@@ -609,7 +740,13 @@
     <span class="n">mc_fp16_t</span> <span class="o">=</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_float16</span>
     <span class="n">eps</span> <span class="o">=</span> <span class="mf">1.1920929e-07</span>
     <span class="n">mc_fp_maxint</span> <span class="o">=</span> <span class="mh">0x7FFFFF</span> <span class="c1"># 23 bits</span>
+
     <span class="n">np_float</span> <span class="o">=</span> <span class="s1">&#39;float32&#39;</span>
+    <span class="n">np_float2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">)])</span>
+    <span class="n">np_float3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">)])</span>
+    <span class="n">np_float4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">)])</span>
 
 <div class="viewcode-block" id="McFloat.mc_point2f_t"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McFloat.mc_point2f_t">[docs]</a>    <span class="k">class</span> <span class="nc">mc_point2f_t</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">,</span> <span class="n">StructToListBasic</span><span class="p">,</span> <span class="n">Vector2Helper</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; Structure representing a 2D point using single-precision floating-point. &#39;&#39;&#39;</span>
@@ -648,7 +785,27 @@
             <span class="p">(</span><span class="s1">&#39;a_11&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a_12&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a_13&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_float</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;a_21&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a_22&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a_23&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_float</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;a_31&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a_32&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a_33&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_float</span><span class="p">),</span>
-        <span class="p">]</span></div></div>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="McFloat.fp_str"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McFloat.fp_str">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fp_str</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Convert a floating-point value to a string without loosing precision.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: float</span>
+<span class="sd">            A floating-point value to convert to string.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str_value: str</span>
+<span class="sd">            A string representation of the input floating-point value.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s1">&#39;FP_INF&#39;</span> <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;=</span> <span class="mf">0.0</span> <span class="k">else</span> <span class="s1">&#39;-FP_INF&#39;</span>
+
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:#.8g}</span><span class="s1">f&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div></div>
 
 <span class="n">McFloat32</span> <span class="o">=</span> <span class="n">McFloat</span>
 <span class="n">McSingle</span> <span class="o">=</span> <span class="n">McFloat</span>
@@ -671,6 +828,9 @@
 <span class="sd">    Attribute that defined the related numpy data type:</span>
 
 <span class="sd">    - np_float - Scalar floating-point data type.</span>
+<span class="sd">    - np2_float - Vector floating-point data type form mc_fp2_t.</span>
+<span class="sd">    - np3_float - Vector floating-point data type form mc_fp3_t.</span>
+<span class="sd">    - np4_float - Vector floating-point data type form mc_fp4_t.</span>
 
 <span class="sd">    Additional attributes of the class:</span>
 
@@ -685,7 +845,13 @@
     <span class="n">mc_fp16_t</span> <span class="o">=</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_double16</span>
     <span class="n">eps</span> <span class="o">=</span> <span class="mf">2.220446049250313e-16</span>
     <span class="n">mc_fp_maxint</span> <span class="o">=</span> <span class="mh">0xFFFFFFFFFFFFF</span> <span class="c1"># 52 bits</span>
+
     <span class="n">np_float</span> <span class="o">=</span> <span class="s1">&#39;float64&#39;</span>
+    <span class="n">np_float2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">)])</span>
+    <span class="n">np_float3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">)])</span>
+    <span class="n">np_float4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">np_float</span><span class="p">)])</span>
 
 <div class="viewcode-block" id="McDouble.mc_point2f_t"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDouble.mc_point2f_t">[docs]</a>    <span class="k">class</span> <span class="nc">mc_point2f_t</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">,</span> <span class="n">StructToListBasic</span><span class="p">,</span> <span class="n">Vector2Helper</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; Structure representing a 2D point using double-precision floating-point. &#39;&#39;&#39;</span>
@@ -724,13 +890,31 @@
             <span class="p">(</span><span class="s1">&#39;a_11&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_double</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a_12&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_double</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a_13&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_double</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;a_21&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_double</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a_22&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_double</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a_23&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_double</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;a_31&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_double</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a_32&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_double</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a_33&#39;</span><span class="p">,</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">cl_double</span><span class="p">)</span>
-        <span class="p">]</span></div></div>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="McDouble.fp_str"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDouble.fp_str">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fp_str</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Convert a floating-point value to a string without loosing precision.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: float</span>
+<span class="sd">            A floating-point value to convert to string.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str_value: str</span>
+<span class="sd">            A string representation of the input floating-point value.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:.16g}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div></div>
+
 
 <span class="n">McFloat64</span> <span class="o">=</span> <span class="n">McDouble</span>
 
 
 <span class="k">class</span> <span class="nc">_McDataTypesMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">int_t</span> <span class="o">=</span> <span class="p">{</span><span class="kc">False</span><span class="p">:</span><span class="n">McInt32</span><span class="p">,</span> <span class="kc">True</span><span class="p">:</span><span class="n">McInt64</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
             <span class="n">cltypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">)</span> <span class="o">==</span> <span class="mi">8</span><span class="p">)</span>
         <span class="n">accu_t</span> <span class="o">=</span> <span class="p">{</span><span class="kc">False</span><span class="p">:</span><span class="n">McAccu32</span><span class="p">,</span> <span class="kc">True</span><span class="p">:</span><span class="n">McAccu64</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
@@ -742,8 +926,8 @@
         <span class="k">return</span> <span class="s1">&#39;class McDataTypes(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">int_t</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">accu_t</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">cnt_t</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">fp_t</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> # </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 
 
 <span class="k">class</span> <span class="nc">_McDataTypesHelper</span><span class="p">:</span>

@@ -22,6 +22,7 @@ Submodules
    xopto.materials.ri.seawater
    xopto.materials.ri.siliglass
    xopto.materials.ri.skin
+   xopto.materials.ri.sucrose
    xopto.materials.ri.water
 
 Module contents

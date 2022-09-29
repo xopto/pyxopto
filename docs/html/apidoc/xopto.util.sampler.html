@@ -1,0 +1,1016 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.util.sampler module &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.util.sliceview module" href="xopto.util.sliceview.html" />
+    <link rel="prev" title="xopto.util.hankel module" href="xopto.util.hankel.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="xopto.cl.html">xopto.cl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.data.html">xopto.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.dataset.html">xopto.dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.html">xopto.materials package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcbase.html">xopto.mcbase package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mccyl.html">xopto.mccyl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.html">xopto.mcml package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.html">xopto.mcvox package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.pf.html">xopto.pf package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.src.html">xopto.src package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="xopto.util.html">xopto.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">xopto</a> &raquo;</li>
+        
+          <li><a href="xopto.html">xopto package</a> &raquo;</li>
+        
+          <li><a href="xopto.util.html">xopto.util package</a> &raquo;</li>
+        
+      <li>xopto.util.sampler module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-xopto.util.sampler">
+<span id="xopto-util-sampler-module"></span><h1>xopto.util.sampler module<a class="headerlink" href="#module-xopto.util.sampler" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.sampler.ConstantSampler">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ConstantSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#ConstantSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.ConstantSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.util.sampler.UniformSampler" title="xopto.util.sampler.UniformSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.util.sampler.UniformSampler</span></code></a></p>
+<p>A sampler that returns a constant value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>float</em>) – Constant value that will be returned by the sampler.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.ConstantSampler.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#ConstantSampler.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.ConstantSampler.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – Instance data exported to a dict.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.ConstantSampler.value">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.util.sampler.ConstantSampler.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value of the sampler.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.sampler.IncidenceTiltSampler">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">IncidenceTiltSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incidence</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><span class="pre">xopto.util.sampler.Sampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tilt</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><span class="pre">xopto.util.sampler.Sampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_angle</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#IncidenceTiltSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.IncidenceTiltSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.util.sampler.Sampler</span></code></a></p>
+<p>Samples the incidence angle of a collimated source and tilt of
+a surface detector from the given distribution. The angle between the
+collimated incident beam and the reference direction of the detector
+(design angle) is kept constant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>incidence</strong> (<a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><em>Sampler</em></a>) – Sampler of the angle of incidence (rad). The angle is measured
+in the incidence plane x-z from the z axis.
+The sampled direction vector of the collimated beam lies
+in the x-z plane.</p></li>
+<li><p><strong>tilt</strong> (<a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><em>Sampler</em></a>) – Sampler of the detector tilt angle (rad). The detector direction
+lies in the x-z plane that is tilted/rotated around the x axis.
+The angle of tilt is defined as the angle between the tilted
+plane and the x-z plane.</p></li>
+<li><p><strong>design_angle</strong> (<em>float</em>) – Angle between the source and detector (rad) that is kept constant.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.IncidenceTiltSampler.design_angle">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">design_angle</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.util.sampler.IncidenceTiltSampler.design_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Design angle (rad).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.IncidenceTiltSampler.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.util.sampler.IncidenceTiltSampler" title="xopto.util.sampler.IncidenceTiltSampler"><span class="pre">xopto.util.sampler.IncidenceTiltSampler</span></a><a class="reference internal" href="../_modules/xopto/util/sampler.html#IncidenceTiltSampler.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.IncidenceTiltSampler.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance of <a class="reference internal" href="#xopto.util.sampler.IncidenceTiltSampler" title="xopto.util.sampler.IncidenceTiltSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">IncidenceTiltSampler</span></code></a>
+from a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Data that were exported by the
+<a class="reference internal" href="#xopto.util.sampler.IncidenceTiltSampler.todict" title="xopto.util.sampler.IncidenceTiltSampler.todict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">IncidenceTiltSampler.todict()</span></code></a> method.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sampler</strong> – A new sampler instance.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#xopto.util.sampler.IncidenceTiltSampler" title="xopto.util.sampler.IncidenceTiltSampler">IncidenceTiltSampler</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.IncidenceTiltSampler.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#IncidenceTiltSampler.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.IncidenceTiltSampler.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the states of all the enclosed samplers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.IncidenceTiltSampler.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#IncidenceTiltSampler.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.IncidenceTiltSampler.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – Instance data exported to a dict.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.IncidenceTiltSampler.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcml.mcsource.line.html#xopto.mcml.mcsource.line.Line" title="xopto.mcml.mcsource.line.Line"><span class="pre">xopto.mcml.mcsource.line.Line</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">detector</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcml.mcdetector.symmetric.html#xopto.mcml.mcdetector.symmetric.SymmetricX" title="xopto.mcml.mcdetector.symmetric.SymmetricX"><span class="pre">xopto.mcml.mcdetector.symmetric.SymmetricX</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#IncidenceTiltSampler.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.IncidenceTiltSampler.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the Monte Carlo source and detector with the sampled propagation
+directions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>xopto.mcml.mc.mcsource.Line</em>) – Source that will be updated with a new direction.</p></li>
+<li><p><strong>detector</strong> (<em>xopto.mcml.mc.mcdetector.Detector</em>) – Detector that will be updated with the new reference direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>src</strong> (<em>xopto.mcml.mc.mcsource.Line</em>) – The updated source.</p></li>
+<li><p><strong>detector</strong> (<em>xopto.mcml.mc.mcdetector.SymmetricX</em>) – The updated detector.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.sampler.LayerSampler">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">LayerSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mua</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><span class="pre">xopto.util.sampler.Sampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">musr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><span class="pre">xopto.util.sampler.Sampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><span class="pre">xopto.util.sampler.Sampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><span class="pre">xopto.util.sampler.Sampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.util.sampler.PfSampler" title="xopto.util.sampler.PfSampler"><span class="pre">xopto.util.sampler.PfSampler</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#LayerSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.LayerSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.util.sampler.Sampler</span></code></a></p>
+<p>Samples layer parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mua</strong> (<a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><em>Sampler</em></a>) – Sampler of the absorption coefficient (1/m).</p></li>
+<li><p><strong>musr</strong> (<a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><em>Sampler</em></a>) – Sampler of the reduced scattering coefficient (1/m).</p></li>
+<li><p><strong>d</strong> (<a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><em>Sampler</em></a>) – Sampler of the layer thickness.</p></li>
+<li><p><strong>n</strong> (<a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><em>Sampler</em></a>) – Sampler of the refractive index.</p></li>
+<li><p><strong>pf</strong> (<a class="reference internal" href="#xopto.util.sampler.PfSampler" title="xopto.util.sampler.PfSampler"><em>PfSampler</em></a>) – Sampler Of the scattering phase function.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.LayerSampler.d">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">d</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.util.sampler.Sampler</span></em><a class="headerlink" href="#xopto.util.sampler.LayerSampler.d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layer thickness sampler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.LayerSampler.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.util.sampler.LayerSampler" title="xopto.util.sampler.LayerSampler"><span class="pre">xopto.util.sampler.LayerSampler</span></a><a class="reference internal" href="../_modules/xopto/util/sampler.html#LayerSampler.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.LayerSampler.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance of <a class="reference internal" href="#xopto.util.sampler.LayerSampler" title="xopto.util.sampler.LayerSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">LayerSampler</span></code></a> from a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Data that were exported by the <a class="reference internal" href="#xopto.util.sampler.LayerSampler.todict" title="xopto.util.sampler.LayerSampler.todict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">LayerSampler.todict()</span></code></a>
+method.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sampler</strong> – A new sampler instance.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#xopto.util.sampler.LayerSampler" title="xopto.util.sampler.LayerSampler">LayerSampler</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.LayerSampler.mua">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">mua</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.util.sampler.Sampler</span></em><a class="headerlink" href="#xopto.util.sampler.LayerSampler.mua" title="Permalink to this definition">¶</a></dt>
+<dd><p>Absorption coefficient sampler.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.LayerSampler.musr">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">musr</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.util.sampler.Sampler</span></em><a class="headerlink" href="#xopto.util.sampler.LayerSampler.musr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduced scattering coefficient sampler.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.LayerSampler.n">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">n</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.util.sampler.Sampler</span></em><a class="headerlink" href="#xopto.util.sampler.LayerSampler.n" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refractive index sampler.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.LayerSampler.pf">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pf</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.util.sampler.Sampler</span></em><a class="headerlink" href="#xopto.util.sampler.LayerSampler.pf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scattering phase function sampler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.LayerSampler.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#LayerSampler.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.LayerSampler.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the states of all the enclosed samplers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.LayerSampler.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#LayerSampler.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.LayerSampler.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – Instance data exported to a dict.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.LayerSampler.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layer" title="xopto.mcml.mclayer.layer.Layer"><span class="pre">xopto.mcml.mclayer.layer.Layer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layer" title="xopto.mcml.mclayer.layer.Layer"><span class="pre">xopto.mcml.mclayer.layer.Layer</span></a><a class="reference internal" href="../_modules/xopto/util/sampler.html#LayerSampler.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.LayerSampler.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the layer with a new sample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer</strong> (<em>xopto.mcml.mc.mclayer.Layer</em>) – Layer to update.</p></li>
+<li><p><strong>sample</strong> (<em>dict</em>) – Optional sample. If None, a new sample is generated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>layer</strong> – Updated input layer.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>xopto.mcml.mc.mclayer.Layer</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.sampler.MaterialSampler">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MaterialSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mua</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><span class="pre">xopto.util.sampler.Sampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">musr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><span class="pre">xopto.util.sampler.Sampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><span class="pre">xopto.util.sampler.Sampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.util.sampler.PfSampler" title="xopto.util.sampler.PfSampler"><span class="pre">xopto.util.sampler.PfSampler</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#MaterialSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MaterialSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.util.sampler.Sampler</span></code></a></p>
+<p>Samples a material.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mua</strong> (<a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><em>Sampler</em></a>) – Sampler of the absorption coefficient (1/m).</p></li>
+<li><p><strong>musr</strong> (<a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><em>Sampler</em></a>) – Sampler of the reduced scattering coefficient (1/m).</p></li>
+<li><p><strong>n</strong> (<a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><em>Sampler</em></a>) – Sampler of the refractive index.</p></li>
+<li><p><strong>pf</strong> (<a class="reference internal" href="#xopto.util.sampler.PfSampler" title="xopto.util.sampler.PfSampler"><em>PfSampler</em></a>) – Sampler Of the scattering phase function.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.MaterialSampler.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.util.sampler.MaterialSampler" title="xopto.util.sampler.MaterialSampler"><span class="pre">xopto.util.sampler.MaterialSampler</span></a><a class="reference internal" href="../_modules/xopto/util/sampler.html#MaterialSampler.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MaterialSampler.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance of <a class="reference internal" href="#xopto.util.sampler.MaterialSampler" title="xopto.util.sampler.MaterialSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaterialSampler</span></code></a> from a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Data that were exported by the <a class="reference internal" href="#xopto.util.sampler.MaterialSampler.todict" title="xopto.util.sampler.MaterialSampler.todict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">MaterialSampler.todict()</span></code></a>
+method.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sampler</strong> – A new sampler instance.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#xopto.util.sampler.LayerSampler" title="xopto.util.sampler.LayerSampler">LayerSampler</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.MaterialSampler.mua">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">mua</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.util.sampler.Sampler</span></em><a class="headerlink" href="#xopto.util.sampler.MaterialSampler.mua" title="Permalink to this definition">¶</a></dt>
+<dd><p>Absorption coefficient sampler.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.MaterialSampler.musr">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">musr</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.util.sampler.Sampler</span></em><a class="headerlink" href="#xopto.util.sampler.MaterialSampler.musr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduced scattering coefficient sampler.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.MaterialSampler.n">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">n</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.util.sampler.Sampler</span></em><a class="headerlink" href="#xopto.util.sampler.MaterialSampler.n" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refractive index sampler.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.MaterialSampler.pf">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pf</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.util.sampler.Sampler</span></em><a class="headerlink" href="#xopto.util.sampler.MaterialSampler.pf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scattering phase function sampler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.MaterialSampler.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#MaterialSampler.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MaterialSampler.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the states of all the enclosed samplers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.MaterialSampler.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#MaterialSampler.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MaterialSampler.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – Instance data exported to a dict.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.MaterialSampler.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Material" title="xopto.mcbase.mcmaterial.Material"><span class="pre">xopto.mcbase.mcmaterial.Material</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Material" title="xopto.mcbase.mcmaterial.Material"><span class="pre">xopto.mcbase.mcmaterial.Material</span></a><a class="reference internal" href="../_modules/xopto/util/sampler.html#MaterialSampler.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MaterialSampler.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the material with a new sample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer</strong> (<a class="reference internal" href="xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Material" title="xopto.mcbase.mcmaterial.Material"><em>mcmaterial.Material</em></a>) – Material to update.</p></li>
+<li><p><strong>sample</strong> (<em>dict</em>) – Optional sample. If None, a new sample is generated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>layer</strong> – Updated material.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Material" title="xopto.mcbase.mcmaterial.Material">mcmaterial.Material</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.sampler.MultilayerSampler">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MultilayerSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samplers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typing.Tuple[xopto.util.sampler.LayerSampler]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#MultilayerSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MultilayerSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.util.sampler.Sampler</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.MultilayerSampler.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.util.sampler.MultilayerSampler" title="xopto.util.sampler.MultilayerSampler"><span class="pre">xopto.util.sampler.MultilayerSampler</span></a><a class="reference internal" href="../_modules/xopto/util/sampler.html#MultilayerSampler.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MultilayerSampler.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance of <a class="reference internal" href="#xopto.util.sampler.MultilayerSampler" title="xopto.util.sampler.MultilayerSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultilayerSampler</span></code></a> from a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Data that were exported by the <a class="reference internal" href="#xopto.util.sampler.MultilayerSampler.todict" title="xopto.util.sampler.MultilayerSampler.todict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">MultilayerSampler.todict()</span></code></a>
+method.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sampler</strong> – A new sampler instance.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#xopto.util.sampler.MultilayerSampler" title="xopto.util.sampler.MultilayerSampler">MultilayerSampler</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.MultilayerSampler.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#MultilayerSampler.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MultilayerSampler.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the states of all the layer samplers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.MultilayerSampler.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#MultilayerSampler.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MultilayerSampler.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – Instance data exported to a dict.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.MultilayerSampler.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layers" title="xopto.mcml.mclayer.layer.Layers"><span class="pre">xopto.mcml.mclayer.layer.Layers</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layers" title="xopto.mcml.mclayer.layer.Layers"><span class="pre">xopto.mcml.mclayer.layer.Layers</span></a><a class="reference internal" href="../_modules/xopto/util/sampler.html#MultilayerSampler.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MultilayerSampler.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the layer stack with a new sample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layers</strong> (<em>xopto.mcml.mc.mclayer.Layers</em>) – Layer stack to update.</p></li>
+<li><p><strong>sample</strong> (<em>List</em><em>[</em><em>dict</em><em>]</em>) – Optional sample. If None, a new sample is generated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>layers</strong> – Updated layer stack.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>xopto.mcml.mc.mclayer.Layers</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.sampler.MultilayerSfdi">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MultilayerSfdi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.util.sampler.MultilayerSampler" title="xopto.util.sampler.MultilayerSampler"><span class="pre">xopto.util.sampler.MultilayerSampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_detector</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#xopto.util.sampler.IncidenceTiltSampler" title="xopto.util.sampler.IncidenceTiltSampler"><span class="pre">xopto.util.sampler.IncidenceTiltSampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_count</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#MultilayerSfdi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MultilayerSfdi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A sampler for multilayer SFDI Monte Carlo simulations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layers</strong> (<a class="reference internal" href="#xopto.util.sampler.MultilayerSampler" title="xopto.util.sampler.MultilayerSampler"><em>MultilayerSampler</em></a>) – Sampler for the parameters of the layer stack.</p></li>
+<li><p><strong>source_detector</strong> (<em>SfdiSourceDetectorSampler</em>) – Sampler for the parameters of the photon packet source and
+top surface detector.</p></li>
+<li><p><strong>sample_count</strong> (<em>int</em>) – Zero-based index of the first sample.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.MultilayerSfdi.mc_obj">
+<span class="sig-name descname"><span class="pre">mc_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">acceptance</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.5707963267948966</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.mcml.mc.html#xopto.mcml.mc.Mc" title="xopto.mcml.mc.Mc"><span class="pre">xopto.mcml.mc.Mc</span></a><a class="reference internal" href="../_modules/xopto/util/sampler.html#MultilayerSfdi.mc_obj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MultilayerSfdi.mc_obj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and initialize a new Monte Carlo simulation model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>acceptance</strong> (<em>float</em>) – Acceptance angle of the detector.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Optional keyword arguments passed to the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code> constructor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mcobj</strong> – A new Monte Carlo simulator instance.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="xopto.mcml.mc.html#xopto.mcml.mc.Mc" title="xopto.mcml.mc.Mc">xopto.mcml.mc.Mc</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.MultilayerSfdi.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#MultilayerSfdi.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MultilayerSfdi.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the states of all the enclosed samplers and set the sample
+number to 0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.MultilayerSfdi.rmax">
+<span class="sig-name descname"><span class="pre">rmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mcobj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcml.mc.html#xopto.mcml.mc.Mc" title="xopto.mcml.mc.Mc"><span class="pre">xopto.mcml.mc.Mc</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#MultilayerSfdi.rmax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MultilayerSfdi.rmax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate simulation radius for the given simulator instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mcobj</strong> (<a class="reference internal" href="xopto.mcml.mc.html#xopto.mcml.mc.Mc" title="xopto.mcml.mc.Mc"><em>xopto.mcml.mc.Mc</em></a>) – Monte Carlo simulator instance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>rmax</strong> – A numpy vector of simulation radius for all the sample
+layers (excluding the topmost and bottommost layers).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.MultilayerSfdi.sample_index">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">sample_index</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.util.sampler.MultilayerSfdi.sample_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of the current sample (1 for the first sample)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.MultilayerSfdi.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mcobj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcml.mc.html#xopto.mcml.mc.Mc" title="xopto.mcml.mc.Mc"><span class="pre">xopto.mcml.mc.Mc</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#MultilayerSfdi.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.MultilayerSfdi.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the Monte Carlo simulation parameters with a new
+sample. This call will update the sample index by 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mcobj</strong> (<a class="reference internal" href="xopto.mcml.mc.html#xopto.mcml.mc.Mc" title="xopto.mcml.mc.Mc"><em>xopto.mcml.mc.Mc</em></a>) – Monte Carlo simulator instance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sample</strong> – The sample that was used to update the simulator as a dict
+with keys “layers” (a list of samples that were used to update
+the sample layers, “source_detector” (sample that was used to
+update the photon packet source and top surface detector).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.sampler.NormalSampler">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">NormalSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#NormalSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.NormalSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.util.sampler.Sampler</span></code></a></p>
+<p>Sampler that follows a Normal distribution with the given
+mean and standard deviation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mean</strong> (<em>float</em>) – Mean value of the distribution.</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – Standard deviation of the distribution.</p></li>
+<li><p><strong>clip</strong> (<em>float</em>) – Clip the values to <img class="math" src="../_images/math/2d0d3b86b2cbf113bcaaac6ae830f23aea8994cc.png" alt="mean ± clip \cdot sigma"/>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.NormalSampler.clip">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">clip</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.util.sampler.NormalSampler.clip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clip value range to mean ± clip*sigma.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.NormalSampler.mean">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">mean</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.util.sampler.NormalSampler.mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mean value of the distribution.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.NormalSampler.sigma">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">sigma</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.util.sampler.NormalSampler.sigma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Standard deviation of the distribution.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.NormalSampler.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#NormalSampler.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.NormalSampler.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – Instance data exported to a dict.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.sampler.PfSampler">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">PfSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pf_type</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pf_args</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><span class="pre">xopto.util.sampler.Sampler</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#PfSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.PfSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.util.sampler.Sampler</span></code></a></p>
+<p>Monte Carlo simulator scattering phase function sampler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pf_type</strong> (<em>mcpf.PfBase</em>) – Scattering phase function type.</p></li>
+<li><p><strong>pf_args</strong> (<em>Tuple</em><em>[</em><a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><em>Sampler</em></a><em>]</em>) – Samplers of the scattering phase function arguments.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.PfSampler.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.util.sampler.PfSampler" title="xopto.util.sampler.PfSampler"><span class="pre">xopto.util.sampler.PfSampler</span></a><a class="reference internal" href="../_modules/xopto/util/sampler.html#PfSampler.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.PfSampler.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance from a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Instance data that were exported to a dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.PfSampler.pf_args">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pf_args</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[xopto.util.sampler.Sampler]</span></em><a class="headerlink" href="#xopto.util.sampler.PfSampler.pf_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samplers of the scattering phase function arguments.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.PfSampler.pf_type">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pf_type</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.mcbase.mcpf.pfbase.PfBase</span></em><a class="headerlink" href="#xopto.util.sampler.PfSampler.pf_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scattering phase function type used by the sampler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.PfSampler.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#PfSampler.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.PfSampler.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the states of samplers that sample the arguments
+of the scattering phase function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.PfSampler.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#PfSampler.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.PfSampler.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export instance to a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – Instance data exported to a dict.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.sampler.Sampler">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Sampler</span></span><a class="reference internal" href="../_modules/xopto/util/sampler.html#Sampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.Sampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.Sampler.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><span class="pre">xopto.util.sampler.Sampler</span></a><a class="reference internal" href="../_modules/xopto/util/sampler.html#Sampler.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.Sampler.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance from the data in the dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – A sampler instance exported to dict.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sampler</strong> – A new sampler instance.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler">Sampler</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.Sampler.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#Sampler.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.Sampler.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the state of the sampler. Reimplement this method for
+custom handling of the sampler state.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.sampler.SequenceSampler">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SequenceSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#SequenceSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.SequenceSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.util.sampler.Sampler</span></code></a></p>
+<p>A sequence sampler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sequence</strong> (<em>np.ndarray</em>) – A sequence of vales to sample. The array is sampled from a flat
+view.</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – Zero-based index of the first sample.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>After reaching the end of sequence, the sampling will continue with
+the first element in the sequence.</p>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.SequenceSampler.pos">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pos</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.util.sampler.SequenceSampler.pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zero-based index of the next sample.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.SequenceSampler.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#SequenceSampler.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.SequenceSampler.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the sequence sampler to start from the first item as specified
+by the start parameter of the constructor.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.SequenceSampler.sequence">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">sequence</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.util.sampler.SequenceSampler.sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sampled data sequence.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.sampler.UniformSampler">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">UniformSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logscale</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#UniformSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.UniformSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.util.sampler.Sampler" title="xopto.util.sampler.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.util.sampler.Sampler</span></code></a></p>
+<p>Randomly samples values from interval [start, stop]. Note that the
+values of start and stop can be provided in arbitrary order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<em>float</em>) – Start of the sampling interval.</p></li>
+<li><p><strong>stop</strong> (<em>float</em>) – Stop/end of the sampling interval.</p></li>
+<li><p><strong>logscale</strong> (<em>bool</em>) – Use logarithmic sampling on the start-stop interval.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.UniformSampler.interval">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">interval</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[float,</span> <span class="pre">float]</span></em><a class="headerlink" href="#xopto.util.sampler.UniformSampler.interval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sampling interval as a tuple (start, stop)</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.UniformSampler.logscale">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">logscale</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#xopto.util.sampler.UniformSampler.logscale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sampling in logarithmic scale.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.UniformSampler.max">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">max</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.util.sampler.UniformSampler.max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upper bound of the sampling interval.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.UniformSampler.min">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">min</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.util.sampler.UniformSampler.min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lower bound of the sampling interval.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.UniformSampler.start">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.util.sampler.UniformSampler.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start of the sampling interval.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.sampler.UniformSampler.stop">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">stop</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#xopto.util.sampler.UniformSampler.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop of the sampling interval.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.sampler.UniformSampler.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/sampler.html#UniformSampler.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.UniformSampler.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export object to a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – Instance data exported to a dict.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xopto.util.sampler.detector_direction">
+<span class="sig-name descname"><span class="pre">detector_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incidence</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tilt</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_angle</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/util/sampler.html#detector_direction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.sampler.detector_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the direction vector of the detector by solving a quadratic
+equation that arises from the following system of equations:</p>
+<div class="math">
+<p><img src="../_images/math/d90e0647731e21733a10c5af8a7a8a3ed0fab212.png" alt="x\sin(\Theta_i) + z\cos(\Theta_i) = -\cos(\Theta_0)
+
+y\cos(\Theta_t) - z\sin(\Theta_t) = 0
+
+x^2 + y^2 + z^2 = 1"/></p>
+</div><p>In the above equations <img class="math" src="../_images/math/914f202c43c01ee67c857a6fe2569ca115e879c7.png" alt="\Theta_i"/> is the angle of incidence,
+<img class="math" src="../_images/math/b62eecdf30e0b0934848673af6d7b9a1eda1aee4.png" alt="\Theta_t"/> the detector tilt angle and <img class="math" src="../_images/math/ac616a9bb058bef602c018d44bd56f4527714e86.png" alt="\Theta_0"/> the
+design angle, i.e. the angle between the source and detector.</p>
+<p>The first equation is the dot product of the detector direction vector
+and the direction of the incident beam. The angle between the two is
+the design angle <img class="math" src="../_images/math/a151b79a438082227d446b0c8f4eb05b593c4a09.png" alt="180 - \Theta_0"/>. The second equation is
+the dot product of the detector direction vector and the normal
+of the tilted plane that contains the detector direction vector. Note
+that the tilted plane is the x-z plane rotated around the x axis.</p>
+<p>The solution with negative z component that has a polar angle
+in the x-z plane smaller than the polar angle of the incident source
+is taken (detector always rotates from source towards the x axis).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>incidence</strong> (<em>float</em>) – Source incidence angle (radians) in the x-z plane, measured from
+the z axis.</p></li>
+<li><p><strong>tilt</strong> (<em>float</em>) – Detector tilt angle (radians) measured as the angle between the
+tilted plane (x-z plane rotated around the x axis) and the z axis.</p></li>
+<li><p><strong>design_angle</strong> (<em>float</em>) – Design angle between the source and detector (radians).</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Enables verbose report.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dir</strong> – Direction vector of the detector.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="xopto.util.sliceview.html" class="btn btn-neutral float-right" title="xopto.util.sliceview module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="xopto.util.hankel.html" class="btn btn-neutral float-left" title="xopto.util.hankel module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

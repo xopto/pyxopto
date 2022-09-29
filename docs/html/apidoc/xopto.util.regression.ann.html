@@ -1,0 +1,767 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.util.regression.ann module &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="xopto.util.regression.clann module" href="xopto.util.regression.clann.html" />
+    <link rel="prev" title="xopto.util.regression package" href="xopto.util.regression.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">xopto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="xopto.html">xopto package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="xopto.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="xopto.cl.html">xopto.cl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.data.html">xopto.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.dataset.html">xopto.dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.materials.html">xopto.materials package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcbase.html">xopto.mcbase package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mccyl.html">xopto.mccyl package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcml.html">xopto.mcml package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.html">xopto.mcvox package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.pf.html">xopto.pf package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.src.html">xopto.src package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="xopto.util.html">xopto.util package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.html#module-xopto">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">xopto</a> &raquo;</li>
+        
+          <li><a href="xopto.html">xopto package</a> &raquo;</li>
+        
+          <li><a href="xopto.util.html">xopto.util package</a> &raquo;</li>
+        
+          <li><a href="xopto.util.regression.html">xopto.util.regression package</a> &raquo;</li>
+        
+      <li>xopto.util.regression.ann module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-xopto.util.regression.ann">
+<span id="xopto-util-regression-ann-module"></span><h1>xopto.util.regression.ann module<a class="headerlink" href="#module-xopto.util.regression.ann" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Errors">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Errors</span></span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Errors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Errors.relative_rmse">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">relative_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimated</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Errors.relative_rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Errors.relative_rmse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relative root mean square error estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true</strong> (<em>np.ndarray</em>) – True values stored row-wise.</p></li>
+<li><p><strong>estimated</strong> (<em>np.ndarray</em>) – Estimated values stored row-wise.</p></li>
+<li><p><strong>threshold</strong> (<em>float</em><em> or </em><em>None</em>) – Only the true values that exceed this threshold are included
+in the evaluation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>rrmse</strong> – Estimated relative root mean square error (RMSE).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Errors.rmse">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimated</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Errors.rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Errors.rmse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Root mean square error estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true</strong> (<em>np.ndarray</em>) – True values stored row-wise.</p></li>
+<li><p><strong>estimated</strong> (<em>np.ndarray</em>) – Estimated values stored row-wise.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>rmse</strong> – Root mean square error.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topology</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#xopto.util.regression.ann.Topology" title="xopto.util.regression.ann.Topology"><span class="pre">xopto.util.regression.ann.Topology</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Creates an ANN model from a topology object or a model file.
+To use an existing model, provide two files with same name and
+extensions .h5 (keras model file) and .json (topology file). To
+create a new model, provide a topology object (an instance of
+Topology).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topology</strong> (<a class="reference internal" href="#xopto.util.regression.ann.Topology" title="xopto.util.regression.ann.Topology"><em>Topology</em></a>) – Topology object or None.</p></li>
+<li><p><strong>filename</strong> (<em>str</em><em> or </em><em>(</em><em>str</em><em>, </em><em>str</em><em>)</em>) – Keras model (.h5) file and topology (.json) file
+(extension not required).
+If list or tuple, the first item should be the model file and
+the second item should be the topology file.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.activation">
+<span class="sig-name descname"><span class="pre">activation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">object</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Model.activation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Model.activation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the activation function instance of the layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>layer_index</strong> (<em>int</em>) – Zero-based index of the layer.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>activation</strong> – Weight of the layer connections as a Numpy array.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.benchmark">
+<span class="sig-name descname"><span class="pre">benchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Model.benchmark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Model.benchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predictions are evaluated by the RMSE and relative RMSE metrics.
+Optionally, samples for which the true values do not exceed the
+given threshold can be excluded from the relative RMSE estimation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<em>np.ndarray</em>) – Array of input samples stored row-wise.</p></li>
+<li><p><strong>true_value</strong> (<em>np.ndarray</em>) – Array of true values that will be assessed against the model
+predictions using the RMSE and relative RMSE metrics.</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – Threshold for relative RMSE benchmark. Only the true values
+that exceed this threshold are included in the evaluation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>y</strong> (<em>np.ndarray</em>) – Predicted values.</p></li>
+<li><p><strong>rmse</strong> (<em>float</em>) – Root mean square error</p></li>
+<li><p><strong>rrmse</strong> (<em>float</em>) – Relative root mean square error</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.filename">
+<span class="sig-name descname"><span class="pre">filename</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Model.filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Model.filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the file including path from which the current model was
+loaded or saved to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>filename</strong> – File name.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.layers">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">layers</span></span><em class="property"><span class="pre">:</span> <span class="pre">List[tensorflow.python.keras.layers.core.Dense]</span></em><a class="headerlink" href="#xopto.util.regression.ann.Model.layers" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of layers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.load">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.util.regression.ann.Model" title="xopto.util.regression.ann.Model"><span class="pre">xopto.util.regression.ann.Model</span></a><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Model.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Model.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load model, underlying topology, fit configuration and fit results
+from an existing ‘.h5’ and ‘.json’ files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>model</strong> – A <a class="reference internal" href="#xopto.util.regression.ann.Model" title="xopto.util.regression.ann.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> instance created
+from the data in the files.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#xopto.util.regression.ann.Model" title="xopto.util.regression.ann.Model">Model</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.ninput">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">ninput</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.util.regression.ann.Model.ninput" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of inputs.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.noutput">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">noutput</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.util.regression.ann.Model.noutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of outputs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Model.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Model.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make prediction with the model. Prediction are made in three steps:
+1. Preprocessing (normalization, scaling, …) of the input data.
+2. Predicting outputs by the model.
+3. Postprocessing (denormalization, descaling, …) of the predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> (<em>np.ndarray</em>) – 2D array of shape (m, n) where m is he number of
+observations (e.g. wavelengths) and n is the number of
+variables (e.g. source-detector separations).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>y</strong> – Numpy array of predicted values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.prepare_train">
+<span class="sig-name descname"><span class="pre">prepare_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_input</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_output</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_input</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_output</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Model.prepare_train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Model.prepare_train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Training and validation data sets are prepared using the
+pre/post-processors of the input and output variables defined by
+the topology.
+Validation data set is optional and is used to estimate the point
+when the training process can be stopped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_input</strong> (<em>np.ndarray</em>) – 2D training data set of inputs with shape (m, n) where m
+is the number of observations (e.g. wavelengths) and n is the
+number of variables (e.g. source detector separations).</p></li>
+<li><p><strong>train_output</strong> (<em>np.ndarray</em>) – 1D or 2D array of true values with shape (m, k) where m
+is the number of observations (e.g. wavelengths) and k is the
+number of predicted variables (e.g. mua, musr, gamma, delta, …).
+Usually, k=1 because each parameter is predicted by a dedicated
+network/topology.</p></li>
+<li><p><strong>validate_input</strong> (<em>np.ndarray</em>) – 2D array with input validation data set. The second dimension
+must equal the second dimension of the train_input data set.</p></li>
+<li><p><strong>validate_output</strong> (<em>np.ndarray</em>) – 1D or 2D array of true values of the validation data set. The
+second dimension must equal the second dimension of the
+train_output data set.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Model.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Model.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save trained ANN model for later use. The ANN model is saved in the
+Keras native .h5 file format. In addition, a file with the same name
+and .json extension is created. This file holds the corresponding
+topology data (key “topology”), fit configuration
+(key “fit_configuration”) and fit results (key “fit_configuration”).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Full file name (extension is not required).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.summary">
+<span class="sig-name descname"><span class="pre">summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Model.summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Model.summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a string summary of the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Optional positional arguments passed to the model method.</p></li>
+<li><p><strong>kwargs</strong> – Optional keyword arguments passed to the model method.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.topology">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">topology</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.util.regression.ann.Topology</span></em><a class="headerlink" href="#xopto.util.regression.ann.Model.topology" title="Permalink to this definition">¶</a></dt>
+<dd><p>Topology instance used by this model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lrcb</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'mse'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bestfile</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patience</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_delta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_split</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Model.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Model.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit/train the ANN model. If a validation data set is passed to the
+prepareTrain method, the training process can be stopped early
+depending on the values of the patience and min_delta parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch_size</strong> (<em>int</em>) – Batch size.</p></li>
+<li><p><strong>epochs</strong> (<em>int</em>) – Number of epochs.</p></li>
+<li><p><strong>verbose</strong> (<em>int</em>) – Verbose mode.</p></li>
+<li><p><strong>optimizer</strong> (<em>str</em><em> or </em><em>keras.optimizers.Adam</em><em>, </em><em>...</em>) – One of the Keras optimizers. Default is Adam.</p></li>
+<li><p><strong>lr</strong> (<em>float</em>) – Default Adam optimizer learning rate. Only used if the optimizer
+parameter is not specified (None).</p></li>
+<li><p><strong>lrcb</strong> (<em>Callable</em><em>[</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>, </em><em>float</em><em>]</em>) – A callable that takes takes an epoch index as input
+(integer, indexed from 0) and current learning rate and
+returns a new learning rate as output (float).</p></li>
+<li><p><strong>loss</strong> (<em>str</em>) – Loss metric.</p></li>
+<li><p><strong>loss_weights</strong> (<em>List</em><em>[</em><em>float</em><em>] or </em><em>dict</em>) – Optional list or dictionary specifying scalar coefficients
+(Python floats) to weight the loss contributions of different model
+outputs. If a list, it is expected to have a 1:1 mapping to the
+model’s outputs. If a tensor, it is expected to map output names
+(strings) to scalar coefficients.</p></li>
+<li><p><strong>bestfile</strong> (<em>str</em>) – After each training epoch, the intermediate model (if improvement
+is observed) is optionally saved to the specified file.</p></li>
+<li><p><strong>patience</strong> (<em>int</em>) – Number of epochs with no improvement after which the training
+will be stopped. If None, the patience will be set to the number
+of epochs.</p></li>
+<li><p><strong>min_delta</strong> (<em>float</em>) – Minimum change in the monitored quantity to qualify as an
+improvement, i.e. an absolute change of less than min_delta,
+will not count as an improvement.</p></li>
+<li><p><strong>shuffle</strong> (<em>bool</em>) – Training data set is randomly shuffled if set to True.</p></li>
+<li><p><strong>validation_split</strong> (<em>float</em>) – Float between 0 and 1. Fraction of the training data to be used as
+validation data. The model will set apart this fraction of the
+training data, will not train on it, and will evaluate the loss
+and any model metrics on this data at the end of each epoch.
+The validation data is selected from the last samples in the x
+and y data provided, before shuffling. This option is ignored in
+case a dedicated validation set is provided to the
+<a class="reference internal" href="#xopto.util.regression.ann.Model.prepare_train" title="xopto.util.regression.ann.Model.prepare_train"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_train()</span></code></a> method.</p></li>
+<li><p><strong>validation_freq</strong> (<em>int</em>) – Only relevant if validation data is provided. Integer or
+list/tuple/set. If an integer, specifies how many training epochs
+to run before a new validation run is performed,
+e.g. validation_freq=2 runs validation every 2 epochs. If a list,
+tuple, or set, specifies the epochs on which to run validation,
+e.g. validation_freq=[1, 2, 10] runs validation at the end of
+the 1st, 2nd, and 10th epochs.
+Note: Parameter supported only for keras version &gt;= “2.2.4”!</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.train_configuration">
+<span class="sig-name descname"><span class="pre">train_configuration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Model.train_configuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Model.train_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dict with train configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>cfg</strong> – Train configuration.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.train_report">
+<span class="sig-name descname"><span class="pre">train_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Model.train_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Model.train_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dict with train statistics and data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>report</strong> – Train statistics and data.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Model.weights">
+<span class="sig-name descname"><span class="pre">weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Model.weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Model.weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the weights of the selected layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>layer_index</strong> (<em>int</em>) – Zero-based index of the layer.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>weights, bias</strong> – Weight of the layer connections as a Numpy array.
+Bias terms of the layer as a numpy vector.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[np.ndarray]</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Output of a layer is computed as <img class="math" src="../_images/math/24931ef4ce954b47b45121777ce48534bd311936.png" alt="w \cdot x + b"/>, where
+<img class="math" src="../_images/math/cc87ee665749db882f94e0d3707eb23e39638650.png" alt="w"/> is a matrix of weights of the connections, <img class="math" src="../_images/math/68c7c8c65602677ab56cf7fd88002023f0edc575.png" alt="b"/> is a
+vector of bias terms and <img class="math" src="../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> is the input of the layer.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Topology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'relu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp_input</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.util.regression.pp.html#xopto.util.regression.pp.Preprocessor" title="xopto.util.regression.pp.Preprocessor"><span class="pre">xopto.util.regression.pp.Preprocessor</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp_output</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="xopto.util.regression.pp.html#xopto.util.regression.pp.Preprocessor" title="xopto.util.regression.pp.Preprocessor"><span class="pre">xopto.util.regression.pp.Preprocessor</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Topology"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Topology" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Sequential artificial neural network topology constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputs</strong> (<em>int</em>) – Number of inputs to the network (not the number of neurons in
+the first layer).</p></li>
+<li><p><strong>node</strong> (<em>int Tuple</em><em>[</em><em>int</em><em>]</em>) – Number of nodes/neurons in the layers. The number of elements in the
+list defines the number of layers. The last entry in the list
+represents the number of outputs, i.e. neurons in the output layer.
+The number of hidden layers is one less the number of elements in
+the neurons list/tuple.</p></li>
+<li><p><strong>bias</strong> (<em>bool</em><em> or </em><em>Tuple</em><em>[</em><em>bool</em><em>]</em>) – Enables additional bias for the layers. If a list or tuple of bool,
+the number of elements must match the number of layers. If a bool,
+the value applies to all the layers.</p></li>
+<li><p><strong>activation</strong> (<em>str</em><em> or </em><em>Tuple</em><em>[</em><em>str</em><em>]</em>) – Activation function of each layer. If a list or tuple of str,
+the number of elements must match the number of layers. If a str,
+the same activation function is used for all layers.</p></li>
+<li><p><strong>initializer</strong> (<em>str</em><em> or </em><em>Tuple</em><em>[</em><em>str</em><em>]</em>) – Generator for initialization of network parameters.</p></li>
+<li><p><strong>pp_input</strong> (<a class="reference internal" href="xopto.util.regression.pp.html#xopto.util.regression.pp.Preprocessor" title="xopto.util.regression.pp.Preprocessor"><em>Preprocessor</em></a>) – Preprocessor of the input variables.</p></li>
+<li><p><strong>pp_output</strong> (<a class="reference internal" href="xopto.util.regression.pp.html#xopto.util.regression.pp.Preprocessor" title="xopto.util.regression.pp.Preprocessor"><em>Preprocessor</em></a>) – Preprocessor of the output variables.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology.activation">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">activation</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[str]</span></em><a class="headerlink" href="#xopto.util.regression.ann.Topology.activation" title="Permalink to this definition">¶</a></dt>
+<dd><p>The activation functions used in the individual layers.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology.bias">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">bias</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[str]</span></em><a class="headerlink" href="#xopto.util.regression.ann.Topology.bias" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bias terms used in the individual layers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.util.regression.ann.Topology" title="xopto.util.regression.ann.Topology"><span class="pre">xopto.util.regression.ann.Topology</span></a><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Topology.fromdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Topology.fromdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load <code class="xref py py-class docutils literal notranslate"><span class="pre">Topology</span></code> instance from a
+dict object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Topology object exported to a dict.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>topology</strong> – A new instance of <a class="reference internal" href="#xopto.util.regression.ann.Topology" title="xopto.util.regression.ann.Topology"><code class="xref py py-class docutils literal notranslate"><span class="pre">Topology</span></code></a>
+created from the data in the dict.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#xopto.util.regression.ann.Topology" title="xopto.util.regression.ann.Topology">Topology</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology.initializer">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">initializer</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[str]</span></em><a class="headerlink" href="#xopto.util.regression.ann.Topology.initializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The weight initialization method used in the individual layers.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology.inputs">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">inputs</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.util.regression.ann.Topology.inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of inputs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology.load">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.util.regression.ann.Topology" title="xopto.util.regression.ann.Topology"><span class="pre">xopto.util.regression.ann.Topology</span></a><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Topology.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Topology.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load <code class="xref py py-class docutils literal notranslate"><span class="pre">Topology</span></code> instance from a
+JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Source JSON file. The extension .json is added automatically.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology.model">
+<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">tensorflow.python.keras.engine.sequential.Sequential</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Topology.model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Topology.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ANN model based on the specified topology.
+The last created model can be accessed through the public
+member .model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – Print model summary if nonzero.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>model</strong> – The created sequential ANN model.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensorflow.keras.models.Sequential</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology.node">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">node</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[int]</span></em><a class="headerlink" href="#xopto.util.regression.ann.Topology.node" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of nodes/neurons used in the individual layers.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology.pp_input">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pp_input</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.util.regression.pp.Preprocessor</span></em><a class="headerlink" href="#xopto.util.regression.ann.Topology.pp_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>The input data preprocessor.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology.pp_output">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pp_output</span></span><em class="property"><span class="pre">:</span> <span class="pre">xopto.util.regression.pp.Preprocessor</span></em><a class="headerlink" href="#xopto.util.regression.ann.Topology.pp_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output data preprocessor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology.prepare_input">
+<span class="sig-name descname"><span class="pre">prepare_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Topology.prepare_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Topology.prepare_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reshape/prepare the input data array for use with the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>np.ndarray</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>out</strong> – Reshaped input data array (no copy is made only the shape property
+of the data array is adjusted)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Topology.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Topology.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save network topology to a json file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em><em> or </em><em>dict</em>) – Name of the target file. Extension is not required.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.util.regression.ann.Topology.todict">
+<span class="sig-name descname"><span class="pre">todict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="../_modules/xopto/util/regression/ann.html#Topology.todict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.util.regression.ann.Topology.todict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export topology to a dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – A dictionary with all the topology data required to create
+a model.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="xopto.util.regression.clann.html" class="btn btn-neutral float-right" title="xopto.util.regression.clann module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="xopto.util.regression.html" class="btn btn-neutral float-left" title="xopto.util.regression package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

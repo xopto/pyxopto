@@ -1,14 +1,6 @@
 xopto.mcvox.mcmaterial package
 ==============================
 
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   xopto.mcvox.mcmaterial.material
-
 Module contents
 ---------------
 

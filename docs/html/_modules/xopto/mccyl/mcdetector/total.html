@@ -265,7 +265,7 @@
             <span class="s1">&#39;	mc_point3f_t normal = {pos-&gt;x*k, pos-&gt;y*k, FP_0};&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	uint32_t ui32w = weight_to_int(weight)*&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		(detector-&gt;cos_min &lt;= mc_fabs(dot3f(dir, &amp;normal)));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		(detector-&gt;cos_min &lt;= mc_fabs(mc_dot_point3f(dir, &amp;normal)));&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	if (ui32w &gt; 0){&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		dbg_print_uint(&quot;</span><span class="si">{}</span><span class="s1"> Total detector depositing int:&quot;, ui32w);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
@@ -453,8 +453,8 @@
             <span class="s1">&#39;	mc_point3f_t normal = {pos-&gt;x*k, pos-&gt;y*k, FP_0};&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t sensitivity = FP_0;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	fp_linear_lut_rel_sample(mcsim_fp_lut_array(mcsim),&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		&amp;detector-&gt;lut, mc_fabs(dot3f(dir, &amp;normal)),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	fp_linear_lut_sample(mcsim_fp_lut_array(mcsim),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		&amp;detector-&gt;lut, mc_fabs(mc_dot_point3f(dir, &amp;normal)),&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		&amp;sensitivity)&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(&quot;</span><span class="si">{}</span><span class="s1"> TotalLut sensitivity:&quot;, sensitivity);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Loc</span><span class="p">),</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>

@@ -296,6 +296,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="xopto.mcbase.html#submodules">Submodules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.cltypes.html">xopto.mcbase.cltypes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mcmaterial.html">xopto.mcbase.mcmaterial module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mcobject.html">xopto.mcbase.mcobject module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mcoptions.html">xopto.mcbase.mcoptions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="xopto.mcbase.mcprogress.html">xopto.mcbase.mcprogress module</a></li>
@@ -507,7 +508,6 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="xopto.mcvox.mcmaterial.html">xopto.mcvox.mcmaterial package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcmaterial.html#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="xopto.mcvox.mcmaterial.html#module-xopto.mcvox.mcmaterial">Module contents</a></li>
 </ul>
 </li>
@@ -629,6 +629,11 @@
 <li class="toctree-l4"><a class="reference internal" href="xopto.util.animation.html#module-xopto.util.animation">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.util.regression.html">xopto.util.regression package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="xopto.util.regression.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="xopto.util.regression.html#module-xopto.util.regression">Module contents</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="xopto.util.html#submodules">Submodules</a><ul>
@@ -636,6 +641,7 @@
 <li class="toctree-l3"><a class="reference internal" href="xopto.util.convolve.html">xopto.util.convolve module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="xopto.util.fourier.html">xopto.util.fourier module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="xopto.util.hankel.html">xopto.util.hankel module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xopto.util.sampler.html">xopto.util.sampler module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="xopto.util.sliceview.html">xopto.util.sliceview module</a></li>
 </ul>
 </li>
@@ -744,6 +750,12 @@
 </dd></dl>
 
 <dl class="py data">
+<dt class="sig sig-object py" id="xopto.UTIL_PATH">
+<span class="sig-name descname"><span class="pre">UTIL_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/src/pyxopto/xopto/util'</span></em><a class="headerlink" href="#xopto.UTIL_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Root directory of MC utilities.</p>
+</dd></dl>
+
+<dl class="py data">
 <dt class="sig sig-object py" id="xopto.VERBOSE">
 <span class="sig-name descname"><span class="pre">VERBOSE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#xopto.VERBOSE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Verbose reporting.</p>
@@ -752,13 +764,13 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="xopto.fulfills_min">
 <span class="sig-name descname"><span class="pre">fulfills_min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requirement</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="../_modules/xopto.html#fulfills_min"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.fulfills_min" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if this version of PyXOpto fulfills the minimum requiremed version.</p>
+<dd><p>Checks if this version of PyXOpto fulfills the minimum required version.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>required</strong> (<em>str</em>) – Required version as a string, e.g. “0.2.1”.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>fulfills</strong> – Returns True if PyXOpto fullfills the requirement, else False.</p>
+<dd class="field-even"><p><strong>fulfills</strong> – Returns True if PyXOpto fulfills the requirement, else False.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>bool</p>

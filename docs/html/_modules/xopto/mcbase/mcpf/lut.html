@@ -222,7 +222,7 @@
 <span class="sd">            - c: mc_fp_t</span>
 <span class="sd">                Parameter of the nonlinear lookup table index transformation.</span>
 <span class="sd">            - offset: mc_int_t</span>
-<span class="sd">                Location of the lookuptable as an offset from the start of</span>
+<span class="sd">                Location of the lookup table as an offset from the start of</span>
 <span class="sd">                the lookup table buffer.</span>
 <span class="sd">            - size: mc_int_t</span>
 <span class="sd">                Number of entries in the lookup table.</span>
@@ -326,7 +326,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">lut</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Lookup table-based scattering phase function constructor.</span>
-<span class="sd">        Lookuptable is used for efficient computation of deflection</span>
+<span class="sd">        Lookup table is used for efficient computation of deflection</span>
 <span class="sd">        angle cosines.</span>
 <span class="sd">        A nonlinear transformation is used to compute linear lookup table</span>
 <span class="sd">        (floating point) index from a uniform random number F:</span>
@@ -341,7 +341,7 @@
 <span class="sd">            Nonlinear index transformation function parameters provided as</span>
 <span class="sd">            an array of size 3.</span>
 <span class="sd">        lut: np.ndarray vector</span>
-<span class="sd">            Lookuptable data.</span>
+<span class="sd">            Lookup table data.</span>
 
 <span class="sd">        Note</span>
 <span class="sd">        ----</span>
@@ -361,7 +361,7 @@
     <span class="k">def</span> <span class="nf">_set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">params</span>
     <span class="n">params</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_params</span><span class="p">,</span> <span class="n">_set_params</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
-                      <span class="s1">&#39;Lookup table index trasnformation parameters.&#39;</span><span class="p">)</span>
+                      <span class="s1">&#39;Lookup table index transformation parameters.&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_lut</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lut</span>
@@ -467,6 +467,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_pf_obj</span> <span class="o">=</span> <span class="n">pftype</span><span class="p">(</span><span class="o">*</span><span class="n">pfargs</span><span class="p">)</span>
         <span class="n">lut_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_obj</span><span class="o">.</span><span class="n">mclut</span><span class="p">(</span><span class="n">lutsize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">lut_args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_pfargs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pfargs</span><span class="p">)</span>
+    <span class="n">pfargs</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_pfargs</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="s1">&#39;A tuple of scattering phase function arguments.&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_pf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PfBase</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_obj</span>

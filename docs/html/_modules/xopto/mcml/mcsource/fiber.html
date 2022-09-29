@@ -293,7 +293,8 @@
             <span class="s1">&#39;	pt_mc.y = mcsim_position_y(psim) - geometry-&gt;position.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.z = FP_0;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;geometry-&gt;transformation, &amp;pt_mc, &amp;pt_src);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation = geometry-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_mc, &amp;pt_src);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t r2 = pt_src.x*pt_src.x + pt_src.y*pt_src.y&#39;</span>
             <span class="s1">&#39;	if (dr2 &lt;= geometry-&gt;cladding_radius*geometry-&gt;cladding_radius){&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		*n2 = geometry-&gt;cladding_n;&#39;</span><span class="p">,</span>
@@ -442,7 +443,8 @@
             <span class="s1">&#39;	pt_src.y = r*sin_fi;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.z = FP_0;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;source-&gt;transformation, &amp;pt_src, &amp;pt_mc);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation = source-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_src, &amp;pt_mc);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t k = mc_fdiv(FP_0 - pt_mc.z, source-&gt;direction.z);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.x += k*source-&gt;direction.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.y += k*source-&gt;direction.y;&#39;</span><span class="p">,</span>
@@ -465,8 +467,9 @@
             <span class="s1">&#39;	pt_src.x = cos_fi*sin_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.y = sin_fi*sin_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.z = cos_theta;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	mc_point3f_t direction;&#39;</span>
-            <span class="s1">&#39;	transform_point3f(&amp;source-&gt;transformation, &amp;pt_src, &amp;direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t direction;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transformation = source-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_src, &amp;direction);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t cc = cos_critical(source-&gt;n, mc_layer_n(mcsim_layer(mcsim, 1)));&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t normal={FP_0, FP_0, FP_1};&#39;</span><span class="p">,</span>
@@ -748,7 +751,8 @@
             <span class="s1">&#39;	pt_src.y = r*sin_fi;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.z = FP_0;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;source-&gt;transformation, &amp;pt_src, &amp;pt_mc);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation = source-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_src, &amp;pt_mc);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t k = mc_fdiv(FP_0 - pt_mc.z, source-&gt;direction.z);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.x += k*source-&gt;direction.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.y += k*source-&gt;direction.y;&#39;</span><span class="p">,</span>
@@ -770,8 +774,9 @@
             <span class="s1">&#39;	pt_src.x = cos_fi*sin_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.y = sin_fi*sin_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.z = cos_theta;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	mc_point3f_t direction;&#39;</span>
-            <span class="s1">&#39;	transform_point3f(&amp;source-&gt;transformation, &amp;pt_src, &amp;direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t direction;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transformation = source-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_src, &amp;direction);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t cc = cos_critical(source-&gt;n, mc_layer_n(mcsim_layer(mcsim, 1)));&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t normal={FP_0, FP_0, FP_1};&#39;</span><span class="p">,</span>
@@ -936,7 +941,8 @@
             <span class="s1">&#39;	pt_src.y = r*sin_fi;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.z = FP_0;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&amp;source-&gt;transformation, &amp;pt_src, &amp;pt_mc);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation = source-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_src, &amp;pt_mc);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t k = mc_fdiv(FP_0 - pt_mc.z, source-&gt;direction.z);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.x += k*source-&gt;direction.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_mc.y += k*source-&gt;direction.y;&#39;</span><span class="p">,</span>
@@ -955,18 +961,20 @@
             <span class="s1">&#39;	sin_theta = mc_sqrt(FP_1 - cos_theta*cos_theta);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	/* Adjust the propagation direction to fiber refractive index */&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	sin_theta = mc_fdiv(sin_theta, source-&gt;n);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	cos_theta = mc_sqrt(FP_1 - sin_theta*sin_theta);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.x = cos_fi*sin_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.y = sin_fi*sin_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.z = cos_theta;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	mc_point3f_t direction;&#39;</span>
-            <span class="s1">&#39;	transform_point3f(&amp;source-&gt;transformation, &amp;pt_src, &amp;direction);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3f_t direction;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transformation = source-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_src, &amp;direction);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t cc = cos_critical(source-&gt;n, mc_layer_n(mcsim_layer(mcsim, 1)));&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t normal={FP_0, FP_0, FP_1};&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t refracted_direction = direction;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	if (pt_mc.z &gt; cc)&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		refract(&amp;pt_mc, &amp;normal,&#39;</span>
+            <span class="s1">&#39;	if (direction.z &gt; cc)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		refract(&amp;direction, &amp;normal,&#39;</span>
             <span class="s1">&#39;			source-&gt;n, mc_layer_n(mcsim_layer(mcsim, 1)),&#39;</span><span class="p">,</span>
             <span class="s1">&#39;			&amp;refracted_direction);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mcsim_set_direction(mcsim, &amp;refracted_direction);&#39;</span><span class="p">,</span>
@@ -988,8 +996,8 @@
             <span class="s1">&#39;};&#39;</span><span class="p">,</span>
         <span class="p">))</span></div>
 
-<div class="viewcode-block" id="UniformFiberLut.cl_option"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.fiber.html#xopto.mcml.mcsource.fiber.UniformFiberLut.cl_option">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">cl_option</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">RawOptions</span><span class="p">:</span>
+<div class="viewcode-block" id="UniformFiberLut.cl_options"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.fiber.html#xopto.mcml.mcsource.fiber.UniformFiberLut.cl_options">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">RawOptions</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        This source uses lookup table of floating-point data.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -1143,7 +1151,7 @@
         <span class="n">target</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">)</span>
         <span class="n">target</span><span class="o">.</span><span class="n">direction</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">)</span>
 
-        <span class="n">target</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">dcladding</span><span class="o">*</span><span class="mf">0.5</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">dcore</span><span class="o">*</span><span class="mf">0.5</span>
         <span class="n">target</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">ncore</span>
         <span class="n">target</span><span class="o">.</span><span class="n">cos_critical</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">cos_critical</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_fiber</span><span class="o">.</span><span class="n">ncore</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>

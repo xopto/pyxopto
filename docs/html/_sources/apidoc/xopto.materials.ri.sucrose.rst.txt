@@ -1,0 +1,7 @@
+xopto.materials.ri.sucrose module
+=================================
+
+.. automodule:: xopto.materials.ri.sucrose
+   :members:
+   :undoc-members:
+   :show-inheritance:

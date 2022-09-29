@@ -209,15 +209,15 @@ deflection angle cosines.</p>
 distribution function is to be computed.</p></li>
 <li><p><strong>meth</strong> (<em>str</em>) – <dl class="simple">
 <dt>Numerical integration method:</dt><dd><ul>
-<li><p>’trapez’</p></li>
+<li><p>’trapez’  - trapezoidal</p></li>
 <li><p>’simpson’ - default</p></li>
 <li><p>’quad’    - adaptive step; accurate but slower</p></li>
 </ul>
 </dd>
 </dl>
 </p></li>
-<li><p><strong>npts</strong> (<em>int</em>) – Number of control points used by the trapez and simpson numerical
-integration methods.</p></li>
+<li><p><strong>npts</strong> (<em>int</em>) – Number of control points used by the trapezoidal and simpson
+numerical integration methods.</p></li>
 <li><p><strong>kwargs</strong> (<em>dict</em>) – Optional keyword arguments passed to the scipy.integrate.quad
 function.</p></li>
 </ul>
@@ -399,7 +399,7 @@ scattering phase function.</p></li>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul>
 <li><p><strong>params</strong> (<em>Tuple[float, float, float]</em>) – List or tuple of three parameters [a, b, c] that can be used
-to estimate the scattering angle cosine from a unifor random number
+to estimate the scattering angle cosine from a uniform random number
 F from [0, 1]:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">index</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">F</span> <span class="o">-</span> <span class="n">params</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">lut</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">first</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">index</span><span class="p">)),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lut</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>

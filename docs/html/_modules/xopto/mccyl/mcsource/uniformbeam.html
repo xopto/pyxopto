@@ -282,8 +282,8 @@
             <span class="s1">&#39;	pt_src.y = rand_sqrt*sin_fi*source-&gt;radius.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	pt_src.z = FP_0;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point3f(&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		&amp;source-&gt;transformation, &amp;pt_src, &amp;initial_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix3f_t transformation = source-&gt;transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point3f(&amp;transformation, &amp;pt_src, &amp;initial_pos);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	initial_pos.x += source-&gt;position.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	initial_pos.y += source-&gt;position.y;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	initial_pos.z += source-&gt;position.z;&#39;</span><span class="p">,</span>

@@ -193,7 +193,15 @@
 <span class="kn">import</span> <span class="nn">jinja2</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
-<div class="viewcode-block" id="fuse"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcsrc.html#xopto.mcbase.mcsrc.fuse">[docs]</a><span class="k">def</span> <span class="nf">fuse</span><span class="p">(</span><span class="n">inputs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">output</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<span class="n">RE_LICENSE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="s1">&#39;/\*+ Begin license &#39;</span>
+    <span class="s1">&#39;[ a-zA-Z0-3.,;:,.\*</span><span class="se">\n\r\t</span><span class="s1">()/&lt;&gt;]* End license \*+/&#39;</span><span class="p">)</span>
+<span class="sd">&#39;&#39;&#39; Compiled regular expression that matches the file header - license text. &#39;&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="fuse"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcsrc.html#xopto.mcbase.mcsrc.fuse">[docs]</a><span class="k">def</span> <span class="nf">fuse</span><span class="p">(</span><span class="n">inputs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">output</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">striplicense</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+         <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Fuses the source files in inputs into the template defined by the output.</span>
 
@@ -203,6 +211,8 @@
 <span class="sd">        A list of source files to fuse.</span>
 <span class="sd">    output: str</span>
 <span class="sd">        Output template file.</span>
+<span class="sd">    striplicense: bool</span>
+<span class="sd">        Strip the license headers if set to True.</span>
 <span class="sd">    verbose: bool</span>
 <span class="sd">        Turns on verbose reporting.</span>
 
@@ -227,7 +237,13 @@
         <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fullpath</span><span class="p">)</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fullpath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
             <span class="n">src</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="n">clean_src</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">subn</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[ \t]*#include[ \t]+&quot;[_a-zA-Z.]+&quot;[ \t]*&#39;</span><span class="p">,</span> <span class="n">replace_inlude</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">striplicense</span><span class="p">:</span>
+            <span class="n">src</span> <span class="o">=</span> <span class="n">RE_LICENSE</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
+
+        <span class="n">clean_src</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">subn</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;[ \t]*#include[ \t]+&quot;[_a-zA-Z.]+&quot;[ \t]*&#39;</span><span class="p">,</span> <span class="n">replace_inlude</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
+
 
         <span class="n">var</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
         <span class="n">var</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>

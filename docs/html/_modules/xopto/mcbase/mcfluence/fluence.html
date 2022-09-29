@@ -211,7 +211,7 @@
 <span class="sd">                Inverse spacings of the fluence accumulators.</span>
 <span class="sd">            top_left: McTypes.mc_point3f_t</span>
 <span class="sd">                Coordinates of the top-left corner of the fluence accumulators.</span>
-<span class="sd">            shape: McTypes.mc_point3_t</span>
+<span class="sd">            shape: McTypes.mc_point3s_t</span>
 <span class="sd">                Shape/size of the accumulator along the x, y and z axis.</span>
 <span class="sd">            offset: McTypes.mc_size_t</span>
 <span class="sd">                Offset of the first element of the fluence accumulator buffer.</span>
@@ -223,9 +223,9 @@
             <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="p">(</span><span class="s1">&#39;inv_step&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;top_left&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;offset&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span>    <span class="n">T</span><span class="o">.</span><span class="n">mc_point3s_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;offset&#39;</span><span class="p">,</span>   <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>        <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">),</span>
             <span class="p">]</span>
 
         <span class="k">return</span> <span class="n">ClFluence</span></div>
@@ -236,7 +236,7 @@
             <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McFluence{&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t inv_step;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_point3f_t top_left;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	mc_point3_t shape;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_point3s_t shape;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_size_t offset;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_int_t k;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;};&#39;</span><span class="p">,</span>
@@ -253,9 +253,9 @@
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;inv_step.x (1/mm):&quot;, fluence-&gt;inv_step.x*1e-3f);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;inv_step.y (1/mm):&quot;, fluence-&gt;inv_step.y*1e-3f);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;inv_step.z (1/mm):&quot;, fluence-&gt;inv_step.z*1e-3f);&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	dbg_print_int(INDENT &quot;shape.x:&quot;, fluence-&gt;shape.x);&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	dbg_print_int(INDENT &quot;shape.y:&quot;, fluence-&gt;shape.y);&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	dbg_print_int(INDENT &quot;shape.z:&quot;, fluence-&gt;shape.z);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;shape.x:&quot;, fluence-&gt;shape.x);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;shape.y:&quot;, fluence-&gt;shape.y);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;shape.z:&quot;, fluence-&gt;shape.z);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;offset:&quot;, fluence-&gt;offset);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_int(INDENT &quot;k:&quot;, fluence-&gt;k);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
@@ -692,6 +692,55 @@
             <span class="n">sv</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">set_window_title</span><span class="p">(</span><span class="n">window_title</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
                 <span class="n">sv</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Fluence.render"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcfluence.fluence.html#xopto.mcbase.mcfluence.fluence.Fluence.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logscale</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Show the fluence/deposition volume in a 3D viewer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        logscale: bool</span>
+<span class="sd">            Apply logarithmic scaling if set to True.</span>
+<span class="sd">        show: bool</span>
+<span class="sd">            If True, showw the window and starts the Qt event loop that</span>
+<span class="sd">            will block until the window is closed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        viewer: slicer3d.Slicer3D</span>
+<span class="sd">            Use the :py:meth:`~xopto.util.widgets.visualization.slicer3d.Slicer3D.exec`</span>
+<span class="sd">            method to show the viewer and start the Qt event loop that will</span>
+<span class="sd">            block until the window is closed.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The 3D viewer requires PySide6 and PyQtGraph.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">xopto.util.widgets</span> <span class="kn">import</span> <span class="n">common</span>
+        <span class="kn">from</span> <span class="nn">xopto.util.widgets.visualization</span> <span class="kn">import</span> <span class="n">slicer3d</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="n">app</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">prepareqt</span><span class="p">()</span>
+
+        <span class="n">slicer</span> <span class="o">=</span> <span class="n">slicer3d</span><span class="o">.</span><span class="n">Slicer3D</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">logscale</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">span</span> <span class="o">=</span> <span class="n">slicer3d</span><span class="o">.</span><span class="n">logScaleData</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">span</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+        <span class="n">slicer</span><span class="o">.</span><span class="n">setLogScale</span><span class="p">(</span><span class="n">logscale</span><span class="p">)</span>
+        <span class="n">slicer</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">range_</span><span class="o">=</span><span class="n">span</span><span class="p">,</span>
+                       <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">*</span><span class="mf">1e3</span><span class="p">)</span>
+        <span class="n">slicer</span><span class="o">.</span><span class="n">setXLabel</span><span class="p">(</span><span class="s1">&#39;x (mm)&#39;</span><span class="p">)</span>
+        <span class="n">slicer</span><span class="o">.</span><span class="n">setYLabel</span><span class="p">(</span><span class="s1">&#39;y (mm)&#39;</span><span class="p">)</span>
+        <span class="n">slicer</span><span class="o">.</span><span class="n">setZLabel</span><span class="p">(</span><span class="s1">&#39;z (mm)&#39;</span><span class="p">)</span>
+        <span class="n">slicer</span><span class="o">.</span><span class="n">view3D</span><span class="p">()</span><span class="o">.</span><span class="n">setStandardCameraView</span><span class="p">(</span><span class="s1">&#39;isometric&#39;</span><span class="p">)</span>
+        <span class="n">slicer</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Fluence/Deposition view&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="n">slicer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="n">app</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">slicer</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Fluence(xaxis=</span><span class="si">{}</span><span class="s2">, yaxis=</span><span class="si">{}</span><span class="s2">, zaxis=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>

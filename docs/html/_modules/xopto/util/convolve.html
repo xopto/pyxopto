@@ -286,7 +286,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># First element of rsimps might be zero ... precision!</span>
             <span class="n">d_times_rsimps</span> <span class="o">=</span> <span class="n">rsimps</span><span class="o">*</span><span class="n">d</span>
-            <span class="n">d_times_rsimps</span><span class="p">[</span><span class="n">d_times_rsimps</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">.</span><span class="n">tiny</span>
+            <span class="n">d_times_rsimps</span><span class="p">[</span><span class="n">d_times_rsimps</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">tiny</span>
             <span class="n">fiber_reflectance</span><span class="p">[:,</span> <span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">simps</span><span class="p">(</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span>

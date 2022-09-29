@@ -1,0 +1,7 @@
+xopto.mcbase.mcmaterial module
+==============================
+
+.. automodule:: xopto.mcbase.mcmaterial
+   :members:
+   :undoc-members:
+   :show-inheritance:
