@@ -47,7 +47,7 @@ def long_description():
 
 setup(
     name='pyxopto',
-    version='0.1.0',
+    version=xopto.__version__,
     description='Python Monte Carlo light propagation tools',
     long_description=long_description(),
     long_description_content_type="text/markdown",
