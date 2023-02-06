@@ -57,10 +57,10 @@ setup(
     license='GPLv3+',
     packages=find_packages(
         exclude=['pyxopto.egg-info*', 'build*', 'dist*', 'maintenance*',
-                 'docs*', 'datasets*', 'mcdataset*', 'tmp*']),
+                 'docs*', 'datasets*', 'mcdataset*', 'tmp*', 'xopto.tmp*']),
 
     package_data={
-        '': ['*.c', '*.cpp', '*.h', '*.npz', '*.pkl', '*.md'],
+        '': ['*.c', '*.cpp', '*.h', '*.npz', '*.pkl', '*.md', '*.npy'],
     },
     #include_package_data=True,
 
