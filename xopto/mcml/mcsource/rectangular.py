@@ -33,7 +33,7 @@ class UniformRectangular(Source):
     @staticmethod
     def cl_type(mc: mcobject.McObject) -> cltypes.Structure:
         T = mc.types
-        class ClUniformRectangular(cltypes.Stucture):
+        class ClUniformRectangular(cltypes.Structure):
             '''
             Structure that is passed to the Monte carlo simulator kernel.
 
@@ -50,17 +50,17 @@ class UniformRectangular(Source):
                 source -> sample boundary transition.
             cos_min: mc_fp_t
                 Cosine of the maximum emission angle in air. 
-            layer_index: mc_int_t
+            layer_index: mc_size_t
                 Layer index in which the source is located.
             '''
             _fields_ = [
                 ('position', T.mc_point3f_t),
-                ('width', T.mc_float),
-                ('height', T.mc_float),
-                ('n', T.mc_float),
-                ('cos_critical', T.mc_float),
+                ('width', T.mc_fp_t),
+                ('height', T.mc_fp_t),
+                ('n', T.mc_fp_t),
+                ('cos_critical', T.mc_fp_t),
                 ('cos_min', T.mc_fp_t),
-                ('layer_index', T.mc_int),
+                ('layer_index', T.mc_size_t),
             ]
         return  ClUniformRectangular
 
@@ -76,7 +76,7 @@ class UniformRectangular(Source):
             '	mc_fp_t n;',
             '	mc_fp_t cos_critical;',
             '	mc_fp_t cos_min;',
-            '	mc_int_t layer_index;',
+            '	mc_size_t layer_index;',
             '};'
         ))
 
@@ -124,10 +124,10 @@ class UniformRectangular(Source):
             '		cos_theta',
             '	);',
             '',
-            '	r = mcsim_reflectance_cos2(',
+            '	r = reflectance_cos2(',
             '		source->n, ',
             '		mc_layer_n(mcsim_layer(mcsim, source->layer_index)),',
-            '		cos_theta,'
+            '		cos_theta',
             '	);',
             '	mcsim_set_weight(mcsim, FP_1 - r);',
             '',
@@ -320,7 +320,7 @@ class LambertianRectangular(UniformRectangular):
     @staticmethod
     def cl_type(mc: mcobject.McObject) -> cltypes.Structure:
         T = mc.types
-        class ClLambertianRectangular(cltypes.Stucture):
+        class ClLambertianRectangular(cltypes.Structure):
             '''
             Structure that is passed to the Monte carlo simulator kernel.
 
@@ -337,16 +337,16 @@ class LambertianRectangular(UniformRectangular):
                 source -> sample boundary transition.
             na: mc_fp_t
                 Numerical aperture of the source in air. 
-            layer_index: mc_int_t
+            layer_index: mc_size_t
                 Layer index in which the source is located.
             '''
             _fields_ = [
                 ('position', T.mc_point3f_t),
                 ('size', T.mc_point2f_t),
-                ('n', T.mc_float),
-                ('cos_critical', T.mc_float),
+                ('n', T.mc_fp_t),
+                ('cos_critical', T.mc_fp_t),
                 ('na', T.mc_fp_t),
-                ('layer_index', T.mc_int),
+                ('layer_index', T.mc_size_t),
             ]
         return  ClLambertianRectangular
 
@@ -362,7 +362,7 @@ class LambertianRectangular(UniformRectangular):
             '	mc_fp_t n;',
             '	mc_fp_t cos_critical;',
             '	mc_fp_t na;',
-            '	mc_int_t layer_index;',
+            '	mc_size_t layer_index;',
             '};'
         ))
 
@@ -410,10 +410,10 @@ class LambertianRectangular(UniformRectangular):
             '		cos_theta',
             '	);',
             '',
-            '	r = mcsim_reflectance_cos2(',
+            '	r = reflectance_cos2(',
             '		source->n, ',
             '		mc_layer_n(mcsim_layer(mcsim, source->layer_index)),',
-            '		cos_theta,'
+            '		cos_theta',
             '	);',
             '	mcsim_set_weight(mcsim, FP_1 - r);',
             '',
@@ -534,7 +534,7 @@ class UniformRectangularLut(Source):
     @staticmethod
     def cl_type(mc: mcobject.McObject) -> cltypes.Structure:
         T = mc.types
-        class ClUniformRectangularLut(cltypes.Stucture):
+        class ClUniformRectangularLut(cltypes.Structure):
             '''
             Structure that is passed to the Monte carlo simulator kernel.
 
@@ -551,16 +551,16 @@ class UniformRectangularLut(Source):
                 source -> sample boundary transition.
             lut: cltypes.Structure
                 Linear lookup table structure. 
-            layer_index: mc_int_t
+            layer_index: mc_size_t
                 Layer index in which the source is located.
             '''
             _fields_ = [
                 ('position', T.mc_point3f_t),
                 ('size', T.mc_point2f_t),
-                ('n', T.mc_float),
-                ('cos_critical', T.mc_float),
+                ('n', T.mc_fp_t),
+                ('cos_critical', T.mc_fp_t),
                 ('lut', CollectionLut(mc).cl_type(mc)),
-                ('layer_index', T.mc_int),
+                ('layer_index', T.mc_size_t),
             ]
         return  ClUniformRectangularLut
 
@@ -625,10 +625,10 @@ class UniformRectangularLut(Source):
             '		cos_theta',
             '	);',
             '',
-            '	r = mcsim_reflectance_cos2(',
+            '	r = reflectance_cos2(',
             '		source->n, ',
             '		mcsim_layer(mcsim, source->layer_index)->n,',
-            '		cos_theta,'
+            '		cos_theta',
             '	);',
             '	mcsim_set_weight(mcsim, FP_1 - r);',
             '',
