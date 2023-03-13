@@ -107,7 +107,7 @@ class Layer(mcobject.McObject):
         ----
         The layer boundaries in the z direction are increasing in the
         direction of the layer stack.
-        Z coordinate 0.0 bellongs to the top surface of the first sample layer!
+        Z coordinate 0.0 belongs to the top surface of the first sample layer!
         '''
         self._d = float(d)
         self._n = float(n)
@@ -259,7 +259,7 @@ class Layers(mcobject.McObject):
         '''
         Returns layer at the specified index. Note that the first layer
         (index 0) and the last layer (index -1) represent the medium
-        sourounding the top and bottom surfaces of the sample, respectively
+        surrounding the top and bottom surfaces of the sample, respectively
         '''
         return self._layers[index]
 
@@ -293,7 +293,7 @@ class Layers(mcobject.McObject):
     def thickness(self) -> float:
         '''
         Thickness of the layer stack excluding the topmost and bottommost
-        layers that sourround the sample.
+        layers that surround the sample.
 
         Returns
         -------
