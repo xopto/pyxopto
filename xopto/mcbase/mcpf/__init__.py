@@ -28,6 +28,7 @@ from .rayleigh import Rayleigh
 from .hg import Hg
 from .mhg import MHg
 from .gk import Gk
+from .gk2 import Gk2
 from .mgk import MGk
 from .pc import Pc
 from .mpc import MPc
