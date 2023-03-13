@@ -420,7 +420,7 @@ class Cartesian(Detector):
 
     def plot(self, scale: str = 'log', raw: bool = False, show: bool = True):
         '''
-        Show the detector contet as a 2D image.
+        Show the detector data as a 2D image.
 
         Parameters
         ----------
