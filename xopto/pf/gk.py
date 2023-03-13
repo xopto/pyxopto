@@ -75,6 +75,8 @@ class Gk(PfBase):
                 return K*(1.0 + gg*gg - 2.0*gg*costheta)**(-1.0 - a)
             self._pf = pf
 
+        self._precalculated_gs = self._precalculate_gs()
+
     def __call__(self, costheta: float or np.ndarray) -> float or np.ndarray:
         '''
         Call method of the Gegenbauer kernel scattering phase function.
@@ -94,4 +96,58 @@ class Gk(PfBase):
 
     def __repr__(self):
         return 'Gk({}, {})'.format(self._gg, self._a)
+
+    def fastg(self, n: int, *args, **kwargs) -> float:
+        '''
+        Overloads the :py:meth:`PfBase.fastg` method of the base class.
+
+        Note
+        ----
+            Using analytical solution for n = 0, 1, 2 or 3.
+        '''
+        g = None
+        if n <= 3:
+            g = self._precalculated_gs[n]
+        if g is None:
+            g = PfBase.fastg(self, n, *args, **kwargs)
+
+        return g
+
+    def g(self, n, *args, **kwargs):
+        '''
+        Overloads the :py:meth:`PfBase.g` method of the base class with
+        an analytical solution.
+        '''
+        g = None
+        if n <= 3:
+            g = self._precalculated_gs[n]
+        if g is None:
+            g = PfBase.g(self, n, *args, **kwargs)
+
+        return g
+
+    def _precalculate_gs(self):
+        g, a = self._gg, self._a
+
+        g1 = g2 = g3 = None
+        if a != 1 and  a != 0 and g != 0:
+            g_g = g*g
+
+            t1, t2 = (1.0 + g)**(2.0*a), (1.0 - g)**(2.0*a)
+            if t1 == t2:
+                print(g, a)
+                raise ValueError('Bad')
+
+            L = (t1 + t2)/(t1 - t2)
+
+            g1 = (2.0*g*a*L - (1.0 + g_g))/(2.0*g*(a - 1.0))
+
+            if a != 2:
+                g2 = 3.0*(1.0 + g_g)*g1/(2.0*g*(2.0 - a)) - (1.0 + a)/(2.0 - a)
+
+                if a != 3:
+                    g3 = 5.0/(2.0*(3.0 - a))*((1.0 + g_g)*g2/g - \
+                        a*L + (1.0 + g_g)/(2.0*g)) - 3.0/2.0*g1
+
+        return 1.0, g1, g2, g3
 
