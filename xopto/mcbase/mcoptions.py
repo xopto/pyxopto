@@ -554,7 +554,7 @@ class McUseEnhancedRng(McBoolOption):
         Initializes the enhanced random number generator mode kernel option.
 
         Note
-        ....
+        ----
         The enhanced version of random number generator is required when
         performing simulations in large scattering volumes, were the number of
         scattering events is expected to be on the order of millions.
@@ -690,7 +690,7 @@ class McUsePackedStructures(McBoolOption):
 
     default = off
 
-    def __init__(self, value:bool):
+    def __init__(self, value: bool):
         '''
         Initializes the packed structures kernel option.
 
@@ -705,11 +705,10 @@ class McUsePackedStructures(McBoolOption):
     def __repr__(self):
         return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
 
+
 class McUseEvents(McBoolOption):
     '''
-    Turn on/off tracking of packet events.
-    Default value is off.
-
+    Turn on/off tracking of packet events. Default value is off.
     '''
     on = McBoolOption('MC_USE_EVENTS', True)
 
@@ -717,7 +716,7 @@ class McUseEvents(McBoolOption):
 
     default = off
 
-    def __init__(self, value:bool):
+    def __init__(self, value: bool):
         '''
         Initializes the kernel option for tracking packet events.
 
@@ -731,5 +730,6 @@ class McUseEvents(McBoolOption):
 
     def __repr__(self):
         return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
+
 
 Options = List[McOption]
