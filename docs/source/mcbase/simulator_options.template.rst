@@ -220,6 +220,12 @@ The list of available options is as follows:
   largest data type and move towards smaller data types. Use data types
   that are of size no less than 4 bytes.
 
+* :py:class:`~xopto.mcbase.mcoptions.McUseEvents`
+  (default is :py:class:`~xopto.mcbase.mcoptions.McUseEvents.off`) -
+  Can be used to enable tracking of packet events such as launch, absorption,
+  scattering, reflection, refraction and termination. This option is useful for
+  implementing custom packet trace filters.
+
 
 
 
