@@ -318,114 +318,21 @@ inline int mcsim_bottom_surface_layout_handler(
 * @{
 */
 
- /**
- * @brief Data type describing a single sample layer.
- * @note The members of this object are constant and do not change during the simulation.
- * @{
- */
-struct MC_STRUCT_ATTRIBUTES McLayer {
-	mc_fp_t thickness;					/**< Layer thickness. */
-	mc_fp_t top;						/**< Z coordinate of the layer top surface (z coordinate increases with the layer index). */
-	mc_fp_t bottom;						/**< Z coordinate of the layer bottom surface (z coordinate increases with the layer index). */
-	mc_fp_t n;							/**< Layer index of refraction. */
-	mc_fp_t cos_critical_top;			/**< Total internal reflection angle cosine for the above layer. */
-	mc_fp_t cos_critical_bottom;		/**< Total internalreflection angle cosine for the bellow layer. */
-	mc_fp_t mus;						/**< Scattering coefficient. */
-	mc_fp_t mua;						/**< Absorption coefficient. */
-	mc_fp_t inv_mut;					/**< Reciprocal of the total attenuation coefficient. */
-	mc_fp_t mua_inv_mut;				/**< Absorption coefficient multiplied by the reciprocal of the total attenuation coefficient. */
-	McPf pf;							/**< Scattering phase function parameters. */
-};
+/**
+* @brief Data type describing a single sample layer.
+* @{
+*/
+struct McLayer;
 /**
  * @}
  */
 /** @brief Data type representing a sample layer. */
 typedef struct McLayer McLayer;
 
-/**
- * @brief Evaluates to the layer thickness.
- * @param[in] player Pointer to a layer object.
- */
-#define mc_layer_thickness(player) ((player)->thickness)
-
-/**
- * @brief Evaluates to the z coordinate of the top layer surface.
- * @param[in] player Pointer to a layer object.
- */
-#define mc_layer_top(player) ((player)->top)
-
-/**
- * @brief Evaluates to the z coordinate of the bottom layer surface.
- * @param[in] player Pointer to a layer object.
- */
-#define mc_layer_bottom(player) ((player)->bottom)
-
-/**
- * @brief Evaluates to the layer refractive index.
- * @param[in] player Pointer to a layer object.
- */
- #define mc_layer_n(player) ((player)->n)
-
-/**
- * @brief Evaluates to the critical cosine (total internal reflection)
- *        at the top layer boundary.
- * @details If the absolute cosine of the angle of incidence
- *          (with respect to z axis) is less than the critical cosine,
- @          the incident packet is reflected at the boundary.
- * @param[in] player Pointer to a layer object.
- */
- #define mc_layer_cc_top(player) ((player)->cos_critical_top)
-
-/**
- * @brief Evaluates to the critical cosine (total internal reflection)
- *        at the bottom layer boundary.
- * @details If the absolute cosine of the angle of incidence
- *          (with respect to z axis) is less than the critical cosine, the
- *          incident packet is reflected from the boundary.
- * @param[in] player Pointer to a layer object.
- */
- #define mc_layer_cc_bottom(player) ((player)->cos_critical_bottom)
-
-/**
- * @brief Evaluates to the scattering coefficient of the layer.
- * @param[in] player Pointer to a layer object.
- */
-#define mc_layer_mus(player) ((player)->mus)
-
-/**
- * @brief Evaluates to the absorption coefficient of the layer.
- * @param[in] player Pointer to a layer object.
- */
-#define mc_layer_mua(player) ((player)->mua)
-
-/**
- * @brief Evaluates to the inverse of the absorption coefficient of the layer.
- * @param[in] player Pointer to a layer object.
- */
-#define mc_layer_inv_mua(player) \
-	(((player)->mua != FP_0) ? mc_fdiv(FP_1, (player)->mua) : FP_INF)
-
-/**
- * @brief Evaluates to the total attenuation coefficient, i.e. the sum of the
- *        layer absorption and scattering coefficients.
- * @param[in] player Pointer to a layer object.
- */
-#define mc_layer_mut(player) ((player)->mua + (player)->mus)
-
-/**
- * @brief Evaluates to the reciprocal of the total attenuation coefficient,
- *        i.e. the reciprocal of the sum of the layer absorption and scattering
- *        coefficients.
- * @param[in] player Pointer to a layer object.
- */
-#define mc_layer_inv_mut(player) ((player)->inv_mut)
-
-/**
- * @brief Evaluates to the absorption coefficient of the layer multiplied
- *        by the reciprocal of the total attenuation coefficient.
- * @param[in] player Pointer to a layer object.
- */
-#define mc_layer_mua_inv_mut(player) ((player)->mua_inv_mut)
+/* Sample layer structure definition and related API goes here - DO NOT EDIT! */
+/* START_PF_DECLARATION_BLOCK*/
+{{ layer.declaration or '' }}
+/* END_PF_DECLARATION_BLOCK */
 
 /**
  * @} // end @addtogroup mc_layer
@@ -451,6 +358,9 @@ struct McSimState{
 	mc_fp_t weight;				/**< @brief Photon packet weight. */
 	mc_cnt_t photon_index;		/**< @brief Absolute photon packet index. */
 	mc_int_t layer_index;		/**< Current layer index. */
+	#if MC_USE_EVENTS || defined(__DOXYGEN__)
+	mc_uint_t event_flags;		/**< @brief All events that the packet underwent during this step. */
+	#endif
 	#if MC_TRACK_OPTICAL_PATHLENGTH || defined(__DOXYGEN__)
 	mc_fp_t optical_pathlength;		/**< Optical pathlength traveled by the photon packet. */
 	#endif
@@ -1086,9 +996,9 @@ inline void mcsim_trace_complete(McSim *psim, mc_uint_t event_count);
  * @{
  */
  /**@brief Photon packet has been reflected from the boundary. */
-#define MC_REFLECTED	0
+#define MC_REFLECTED	MC_EVENT_BOUNDARY_REFLECTION
 /**@brief Photon packet has been refracted into the next layer. */
-#define MC_REFRACTED	1
+#define MC_REFRACTED	MC_EVENT_BOUNDARY_REFRACTION
 
 /**
  * @} // end @addtogroup mc_boundary_interaction_outcome
@@ -1134,7 +1044,7 @@ inline mc_fp_t mcsim_random_single(McSim *psim);
 
 #if MC_USE_DOUBLE_PRECISION || defined(__DOXYGEN__)
 	/**
-	 * @brief Generates a double precision random number from (0.0, 1.0) and
+	 * @brief Generates a double precision					(void)flags; random number from (0.0, 1.0) and
 	 *        update the generator state.
 	 * @note Due to precision issues
 	 *       the open nature of the interval is not guaranteed.
@@ -1214,38 +1124,63 @@ inline mc_fp_t mcsim_sample_pf(McSim *psim, mc_fp_t *azimuth);
 			mcsim_direction_y(psim), mcsim_direction_z(psim)); \
 	printf("  Weight: %.6f\n", mcsim_weight(psim));
 
-/**
- * @brief Print one sample layer.
- * param[in] prefix Can be used to pass indent string for the layer parameters."
- * @param[in] player Pointer to a layer instance.
- */
-#define dbg_print_layer(player, prefix) \
-	printf(prefix "d: %.9f\n" \
-			prefix "top: %.9f\n" \
-			prefix "bottom: %.9f\n" \
-			prefix "n: %.9f\n" \
-			prefix "cctop: %.9f\n" \
-			prefix "ccbottom: %.9f\n" \
-			prefix "mua: %.9f\n" \
-			prefix "mus: %.9f\n" \
-			prefix "inv_mut: %.9f\n" \
-			prefix "mua_inv_mut: %.9f\n", \
-					(player)->thickness, (player)->top, (player)->bottom, (player)->n, \
-					(player)->cos_critical_top, (player)->cos_critical_bottom, \
-					(player)->mua, (player)->mus, \
-					(player)->inv_mut, (player)->mua_inv_mut); \
-			{ McPf const _dbg_pf=(player)->pf; dbg_print_pf(&_dbg_pf); };
-
 #else
 
 #define dbg_print_status(psim, label) ;
-#define dbg_print_layer(player, label) ;
 
 #endif
 
 /**
- * @} // end @addtogroup mc_simulator_core
+ * @} // end @addtogroup mc_debug_support
  */
 /*##################### End debug support declarations #######################*/
+
+
+/*#################### Start events support declarations #####################*/
+
+/**
+* @addtogroup mc_events
+* @{
+*/
+#if MC_USE_EVENTS || defined(__DOXYGEN__)
+    /**
+     * @brief Clear all the event flags.
+     *
+     * @param[in] psim      Simulator instance.
+     */
+    static inline void mcsim_event_flags_clear(McSim *psim) {
+        psim->state.event_flags = 0U;
+    };
+    
+    /**
+     * @brief Add packet event flags to the event mask.
+     *
+     * @param[in] psim      Simulator instance.
+     * @param[in] flags     Flags that will be added to the event mask. 
+     */
+    static inline void mcsim_event_flags_add(McSim *psim, mc_uint_t flags) {
+        psim->state.event_flags |= flags;
+    };
+    
+    /**
+     * @brief Returns the event flags.
+     */
+    static inline unsigned int mcsim_event_flags(McSim *psim) {
+        return psim->state.event_flags;
+    };
+#else
+	/** @brief Default implementation is void. */
+	#define mcsim_event_flags_clear(psim)			((void)(psim))
+	/** @brief Default implementation is void. */
+	#define mcsim_event_flags_add(psim, flags)		((void)(psim), (void)(flags))
+	/** @brief Default implementation returns all flags set. */
+	#define mcsim_event_flags(psim)                  (0xFFFFFFFFU)
+#endif
+
+/**
+ * @} // end @addtogroup mc_events
+ */
+
+/*##################### End events support declarations ######################*/
 
 #endif /* #define __MCML_H */

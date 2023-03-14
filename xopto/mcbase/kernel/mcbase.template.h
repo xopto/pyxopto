@@ -155,6 +155,12 @@
 	#define MC_USE_TRACE						FALSE
 #endif
 
+
+#if !defined(MC_USE_EVENTS) || defined(__DOXYGEN__)
+	/** @brief Enables tracking of packet and other events (up to 32 events).*/
+	#define MC_USE_EVENTS						FALSE
+#endif
+
 #if !defined(MC_USE_FP_LUT) || defined(__DOXYGEN__)
 	/** @brief Define to TRUE if floating-point lookup table is used. */
 	#define MC_USE_FP_LUT						FALSE
@@ -643,6 +649,42 @@ typedef char int8_t;
 /*########### End basic data types, constants and math functions  ############*/
 
 #endif /* __MC_TYPES_H */
+
+
+#ifndef __MC_EVENTS_H
+#define __MC_EVENTS_H
+
+/*######################### Start event declarations #########################*/
+/**
+* @addtogroup mc_events Simulator events.
+* @{
+*/
+
+/** @brief Reflection at a geometry boundary. */
+#define MC_EVENT_BOUNDARY_REFLECTION                    1U
+/** @brief Refraction at a geometry boundary. */
+#define MC_EVENT_BOUNDARY_REFRACTION                    2U
+/** @brief Geometry boundary hit. */
+#define MC_EVENT_BOUNDARY_HIT                           4U
+
+/** @brief Photon packet has been launched. */
+#define MC_EVENT_PACKET_LAUNCH                          8U
+
+/** @brief Photon packet underwent absorption. */
+#define MC_EVENT_PACKET_ABSORPTION                      16U
+/** @brief Photon packet underwent scattering. */
+#define MC_EVENT_PACKET_SCATTERING                      32U
+
+/** @brief Photon packet was terminated. */
+#define MC_EVENT_PACKET_TERMINATED                      64U
+/** @brief Photon packet escaped simulation domain. */
+#define MC_EVENT_PACKET_ESCAPED                         128U
+
+/**
+ * @} // end @addtogroup mc_events
+ */
+
+#endif /* __MC_EVENTS_H */
 
 
 #ifndef __MC_ATOMICS_H

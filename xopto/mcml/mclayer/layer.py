@@ -68,6 +68,166 @@ class Layer(mcobject.McObject):
 
         return ClLayer
 
+    @staticmethod
+    def cl_declaration(mc: mcobject.McObject) -> str:
+        '''
+        Structure and related API that defines a layer in the Monte Carlo simulator.
+        '''
+        return '\n'.join((
+            '/**',
+            ' * @brief Projects a 3x3 tensor along the given direction as p*T*p\'.',
+            ' * @param[in] T      Pointer to a tensor T (mc_matrix3f_t).',
+            ' * @param[in] p      Pointer to a direction vector (mc_point3f_t).',
+            ' */',
+            '#define tensor3f_project(T, p) \\',
+            '	((p)->x*((T)->a_11*(p)->x + (T)->a_12*(p)->y + (T)->a_13*(p)->z) + \\',
+            '	 (p)->y*((T)->a_21*(p)->x + (T)->a_22*(p)->y + (T)->a_23*(p)->z) + \\',
+            '	 (p)->z*((T)->a_31*(p)->x + (T)->a_32*(p)->y + (T)->a_33*(p)->z))',
+            '',
+            '/**',
+            ' * @brief Data type describing a single sample layer.',
+            ' * @note The members of this object are constant and do not change during the simulation.',
+            ' * @{',
+            ' */',
+            'struct MC_STRUCT_ATTRIBUTES McLayer {',
+            '	mc_fp_t thickness;                  /**< Layer thickness. */',
+            '	mc_fp_t top;                        /**< Z coordinate of the layer top surface (z coordinate increases with the layer index). */',
+            '	mc_fp_t bottom;                     /**< Z coordinate of the layer bottom surface (z coordinate increases with the layer index). */',
+            '	mc_fp_t n;                          /**< Layer index of refraction. */',
+            '	mc_fp_t cos_critical_top;           /**< Total internal reflection angle cosine for the above layer. */',
+            '	mc_fp_t cos_critical_bottom;        /**< Total internal reflection angle cosine for the bellow layer. */',
+            '	mc_fp_t mus;                        /**< Scattering coefficient. */',
+            '	mc_fp_t mua;                        /**< Absorption coefficient. */',
+            '	mc_fp_t inv_mut;                    /**< Reciprocal value of the total attenuation coefficient. */',
+            '	mc_fp_t mua_inv_mut;                /**< Reciprocal value of the total attenuation coefficient multiplied by the absorption coefficient. */',
+            '	McPf pf;                            /**< Scattering phase function parameters. */',
+            '};',
+            '/**',
+            ' * @}',
+            ' */',
+            '',
+            '/**',
+            ' * @brief Evaluates to the layer thickness.',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' */',
+            '#define mc_layer_thickness(player) ((player)->thickness)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the z coordinate of the layer top surface.',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' */',
+            '#define mc_layer_top(player) ((player)->top)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the z coordinate of the layer bottom surface.',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' */',
+            '#define mc_layer_bottom(player) ((player)->bottom)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the refractive index of the layer.',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' */',
+            '#define mc_layer_n(player) ((player)->n)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the critical cosine (total internal reflection)',
+            ' *        at the top layer boundary.',
+            ' * @details If the absolute cosine of the angle of incidence',
+            ' *          (with respect to z axis) is less than the critical cosine,',
+            ' *          the incident packet is reflected at the boundary.',
+            ' * @param[in] player Pointer to a layer object.',
+            ' */',
+            '#define mc_layer_cc_top(player) ((player)->cos_critical_top)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the critical cosine (total internal reflection)',
+            ' *        at the bottom layer boundary.',
+            ' * @details If the absolute cosine of the angle of incidence',
+            ' *          (with respect to z axis) is less than the critical cosine, the',
+            ' *          incident packet is reflected from the boundary.',
+            ' * @param[in] player Pointer to a layer object.',
+            ' */',
+            '#define mc_layer_cc_bottom(player) ((player)->cos_critical_bottom)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the scattering coefficient along',
+            ' *        the given propagation direction.',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' * @param[in] pdir   Propagation direction vector.',
+            ' */',
+            '#define mc_layer_mus(player, pdir) ((player)->mus)',
+            '',
+            '/**',
+            '* @brief Evaluates to the absorption coefficient along',
+            ' *       the given propagation direction.',
+            '* @param[in] player Pointer to a layer instance.',
+            '* @param[in] pdir   Propagation direction vector.',
+            '*/',
+            '#define mc_layer_mua(player, pdir) ((player)->mua)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the reciprocal value of the total ',
+            ' *        attenuation coefficient.',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' * @param[in] pdir   Propagation direction vector.',
+            ' */',
+            '#define mc_layer_inv_mut(player, pdir) ((player)->inv_mut)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the reciprocal value of the total ',
+            ' *        attenuation coefficient multiplied by the absorption coefficient.',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' * @param[in] pdir   Propagation direction vector.',
+            ' */',
+            '#define mc_layer_mua_inv_mut(player, pdir) ((player)->mua_inv_mut)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the absorption coefficient of the layer multiplied',
+            ' *        by the reciprocal of the total attenuation coefficient along',
+            ' *        the given propagation direction.',
+            ' * @param[in] player Pointer to a layer object.',
+            ' * @param[in] pdir   Propagation direction vector.',
+            ' *',
+            ' * @returns   Absorption coefficient multiplied by the reciprocal',
+            ' *            value of the total attenuation coefficient along the',
+            ' *            given propagation direction.',
+            ' */',
+            '',
+            '/**',
+            ' * @brief Evaluates to a pointer to scattering phase function',
+            ' *       of the layer.',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' */',
+            '#define mc_layer_pf(player) ((player)->pf)',
+            '',
+            '#if MC_ENABLE_DEBUG || defined(__DOXYGEN__)',
+            '/**',
+            ' * @brief Print one sample layer.',
+            ' * param[in] prefix Can be used to pass indent string for the layer parameters."',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' */',
+            '#define dbg_print_layer(player, prefix) \\',
+            '	printf(prefix "d: %.9f\\n" \\',
+            '			prefix "top: %.9f\\n" \\',
+            '			prefix "bottom: %.9f\\n" \\',
+            '			prefix "n: %.9f\\n" \\',
+            '			prefix "cctop: %.9f\\n" \\',
+            '			prefix "ccbottom: %.9f\\n" \\',
+            '			prefix "mua: %.9f\\n" \\',
+            '			prefix "mus: %.9f\\n" \\',
+            '			prefix "inv_mut: %.9f\\n" \\',
+            '			prefix "mua_inv_mut: %.9f\\n", \\',
+            '					(player)->thickness, (player)->top, (player)->bottom, (player)->n, \\',
+            '					(player)->cos_critical_top, (player)->cos_critical_bottom, \\',
+            '					(player)->mua, (player)->mus, \\',
+            '					(player)->inv_mut, (player)->mua_inv_mut); \\',
+            '			{ McPf const _dbg_pf=(player)->pf; dbg_print_pf(&_dbg_pf); };',
+            '#else',
+            '#define dbg_print_layer(player, label) ;',
+            '#endif',
+            ))
+
     def __init__(self, d: float, n: float, mua: float, mus: float,
                  pf: mcpf.PfBase):
         '''
@@ -223,6 +383,7 @@ class Layers(mcobject.McObject):
             A list of sample layers. Requires at least 3 items!
         '''
         self._pf_type = None
+        self._layer_type = None
 
         if isinstance(layers, Layers):
             self._layers = layers.tolist()
@@ -243,8 +404,21 @@ class Layers(mcobject.McObject):
 
         if self._pf_type is None:
             self._pf_type = type(self._layers[1].pf)
+        if self._layer_type is None:
+            self._layer_type = type(self._layers[0])
 
         for layer in self._layers:
+            if not isinstance(layer, (Layer,)):
+                raise TypeError(
+                    'All the sample layers must be instances of Layer '
+                    'but found {:s}!'.format(
+                        type(layer).__name__))
+            if self._layer_type != type(layer):
+                raise TypeError(
+                    'All the sample layers must use the same type!'
+                    'Found {} and {}!'.format(
+                        self._layer_type.__name__, layer.__class__.__name__))
+
             if not isinstance(layer, Layer):
                 raise TypeError('All layers must be instances of Layer '
                                 'but found {:s}!'.format(type(layer).__name__))
@@ -305,24 +479,6 @@ class Layers(mcobject.McObject):
         for layer in self._layers[1:-1]:
             d += layer.d
         return d
-
-    def cl_options(self, mc: mcobject.McObject) -> str:
-        '''
-        OpenCL options of the scattering phase function.
-        '''
-        return self._layers[1].pf.fetch_cl_options(mc)
-
-    def cl_declaration(self, mc: mcobject.McObject) -> str:
-        '''
-        OpenCL declarations of the scattering phase function.
-        '''
-        return self._layers[1].pf.fetch_cl_declaration(mc)
-
-    def cl_implementation(self, mc: mcobject.McObject) -> str:
-        '''
-        OpenCL implementation of the scattering phase function.
-        '''
-        return self._layers[1].pf.fetch_cl_implementation(mc)
 
     def cl_type(self, mc: mcobject.McObject) -> cltypes.Array:
         '''
@@ -423,7 +579,7 @@ class Layers(mcobject.McObject):
 
         Returns
         -------
-        layers: list[layers]
+        layers: List[layers]
             List of managed layers
         '''
         return list(self._layers)

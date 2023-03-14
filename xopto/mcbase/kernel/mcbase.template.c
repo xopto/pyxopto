@@ -27,6 +27,26 @@
 /*########### End basic data types, constants and math functions  ############*/
 
 
+#ifndef __MC_EVENTS_H
+#define __MC_EVENTS_H
+
+
+/**
+* @addtogroup mc_events Simulator events.
+* @{
+*/
+
+/*####################### Start event implementation #########################*/
+
+/*######################## End event implementation ##########################*/
+
+/**
+ * @} // end @addtogroup mc_events
+ */
+
+#endif /* __MC_EVENTS_H */
+
+
 /*############## Start 64-bit atomic increment implementation ################*/
 
 #if MC_USE_64_BIT_ACCUMULATORS || defined(__DOXYGEN__)

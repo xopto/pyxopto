@@ -219,7 +219,7 @@ inline void mcsim_fluence_deposit_weight(
 		McSim *psim, mc_point3f_t const *pos, mc_fp_t deposit){
 	#if MC_FLUENCE_MODE_RATE
 		mcsim_fluence_deposit_at(psim, deposit, pos,
-			mc_layer_mua(mcsim_current_layer(psim))
+			mc_layer_mua(mcsim_current_layer(psim), mcsim_direction(&sim))
 		);
 	#else
 		mcsim_fluence_deposit_at(psim, pos, deposit);
@@ -382,6 +382,9 @@ __kernel void McKernel(
 			,FP_1								/* mc_fp_t weight: Current photon packet weight from [0.0, 1.0]. */
 			,0									/* McUint: Absolute photon packet index. */
 			,0 									/* mc_int_t layer_index: Current layer index. */
+			#if MC_USE_EVENTS || defined(__DOXYGEN__)
+			,0		/* All events that the packet underwent during this step. */
+			#endif
 			#if MC_TRACK_OPTICAL_PATHLENGTH || defined(__DOXYGEN__)
 			,FP_0	/* mc_fp_t optical_pathlength: Optical pathlength traveled by the photon packet. */
 			#endif
@@ -408,6 +411,9 @@ __kernel void McKernel(
 
 		#if MC_USE_TRACE
 			,trace					/* __mc_trace_mem McTrace: Trace configuration object. */
+			#if MC_USE_TRACE_FILTER
+			,trace_event_mask
+			#endif 
 		#endif
 
 		#if MC_USE_FLUENCE
@@ -423,7 +429,7 @@ __kernel void McKernel(
 		,accumulator_buffer	/* __global mc_accu_t *accumulator_buffer: Common accumulator buffer. */
 	};
 
-	/* make unused variables void to surpresss compiler warnings */
+	/* make unused variables void to surpress compiler warnings */
 	#if !MC_USE_SURFACE_LAYOUTS
 		(void)surface_layouts;
 	#endif
@@ -511,8 +517,12 @@ __kernel void McKernel(
 			sim.state.optical_pathlength = FP_0;
 		#endif
 
+		/* clear the event flags */
+		mcsim_event_flags_clear(&sim);
+
 		/* launch a new photon packet */
 		mcsim_launch(&sim);
+		mcsim_event_flags_add(&sim, MC_EVENT_PACKET_LAUNCH);
 
 		#if MC_USE_TRACE & MC_USE_TRACE_START
 			/* initial photon packet state */
@@ -527,10 +537,10 @@ __kernel void McKernel(
 			//step = -mc_log(mc_fclip(mcsim_random(&sim), FP_EPS, FP_1 - FP_EPS))*
 			#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
 				step = mc_fdiv(-mc_log(mcsim_random(&sim)),
-					mc_layer_mus(mcsim_current_layer(&sim)));
+					mc_layer_mus(mcsim_current_layer(&sim)), mcsim_direction(&sim));
 			#else
 				step = -mc_log(mcsim_random(&sim))*
-					mc_layer_inv_mut(mcsim_current_layer(&sim));
+					mc_layer_inv_mut(mcsim_current_layer(&sim), mcsim_direction(&sim));
 			#endif
 			step = mc_fmin(step, FP_MAX);
 
@@ -581,10 +591,11 @@ __kernel void McKernel(
 					mc_layer_top(mcsim_current_layer(&sim)));
 
 			#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
-				mc_fp_t mua = mc_layer_mua(mcsim_current_layer(&sim));
+				mc_fp_t mua = mc_layer_mua(mcsim_current_layer(&sim), mcsim_direction(&sim));
 				mc_fp_t deposit_fraction = FP_1 - mc_exp(-mua*step);
 				deposit = deposit_fraction*mcsim_weight(&sim);
 				mcsim_adjust_weight(&sim, deposit);
+				mcsim_event_flags_add(&sim, MC_EVENT_PACKET_ABSORPTION);
 
 				#if MC_USE_FLUENCE
 					mc_fp_t step_back = (mua != FP_0) ?
@@ -604,7 +615,10 @@ __kernel void McKernel(
 				/* process boundary hit or handle absorption */
 				if (nexLayerIndex != mcsim_current_layer_index(&sim)) {
 					/* deal with the boundary hit ... returns MC_REFRACTED or MC_REFLECTED */
-					mcsim_boundary(&sim, nexLayerIndex);
+					mc_uint_t _boundary_flags = mcsim_boundary(&sim, nexLayerIndex);
+					mcsim_event_flags_add(&sim, _boundary_flags | MC_EVENT_BOUNDARY_HIT);
+					(void)_boundary_flags;
+
 
 					/* handle the sample surface detector */
 					if (mcsim_packet_escaped_sample(&sim)) {
@@ -638,6 +652,7 @@ __kernel void McKernel(
 				} else {
 					/* Scatter the photon packet. */
 						mcsim_scatter(&sim);
+						mcsim_event_flags_add(&sim, MC_EVENT_PACKET_SCATTERING);
 				}
 
 				/* Perform survival lottery if required (packet not done). */
@@ -662,7 +677,9 @@ __kernel void McKernel(
 				/* process boundary hit or handle absorption */
 				if (nexLayerIndex != mcsim_current_layer_index(&sim)) {
 					/* deal with the boundary hit ... returns MC_REFRACTED or MC_REFLECTED */
-					mcsim_boundary(&sim, nexLayerIndex);
+					mc_uint_t _boundary_flags = mcsim_boundary(&sim, nexLayerIndex);
+					mcsim_event_flags_add(&sim, _boundary_flags | MC_EVENT_BOUNDARY_HIT);
+					(void)_boundary_flags;
 
 					/* handle the sample surface detector */
 					if (mcsim_packet_escaped_sample(&sim)) {
@@ -696,11 +713,12 @@ __kernel void McKernel(
 				} else {
 					#if MC_METHOD == ALBEDO_REJECTION
 						/* Do absorption or scattering only when no layer boundary has been hit.*/
-						if (mcsim_random(&sim) < mc_layer_mua_inv_mut(mcsim_current_layer(&sim))){
+						if (mcsim_random(&sim) < mc_layer_mua_inv_mut(mcsim_current_layer(&sim), mcsim_direction(&sim))){
 							/* Deposit the entire weight of the packet. */
 							deposit = mcsim_weight(&sim);
 							done = true;
 							mcsim_adjust_weight(&sim, deposit);
+							mcsim_event_flags_add(&sim, MC_EVENT_PACKET_ABSORPTION);
 							#if MC_USE_FLUENCE
 								mcsim_fluence_deposit_weight(
 									&sim, mcsim_position(&sim), deposit);
@@ -708,12 +726,14 @@ __kernel void McKernel(
 						} else {
 							/* Scatter the photon packet. */
 							mcsim_scatter(&sim);
+							mcsim_event_flags_add(&sim, MC_EVENT_PACKET_SCATTERING);
 						}
 					#else	/* Albedo Weight */
 						/* Do absorption only when no layer boundary has been hit.*/
 						deposit = mcsim_weight(&sim)*
-							mc_layer_mua_inv_mut(mcsim_current_layer(&sim));
+							mc_layer_mua_inv_mut(mcsim_current_layer(&sim), mcsim_direction(&sim));
 						mcsim_adjust_weight(&sim, deposit);
+						mcsim_event_flags_add(&sim, MC_EVENT_PACKET_ABSORPTION);
 						#if MC_USE_FLUENCE
 							mcsim_fluence_deposit_weight(
 								&sim, mcsim_position(&sim), deposit);
@@ -721,6 +741,7 @@ __kernel void McKernel(
 
 						/* Scatter the photon packet. */
 						mcsim_scatter(&sim);
+						mcsim_event_flags_add(&sim, MC_EVENT_PACKET_SCATTERING);
 
 						/* Perform survival lottery if required (packet not done). */
 						if(mcsim_weight(&sim) < MC_PACKET_WEIGHT_MIN){
@@ -747,7 +768,10 @@ __kernel void McKernel(
 			if (mc_distance2_point3f(mcsim_position(&sim), &src_pos) >
 					mc_rmax*mc_rmax) {
 				done = true;
+				mcsim_event_flags_add(&sim, MC_EVENT_PACKET_ESCAPED);
 			};
+
+			mcsim_event_flags_add(&sim, (done) ? MC_EVENT_PACKET_TERMINATED : 0);
 
 			#if MC_USE_TRACE == MC_USE_TRACE_ALL
 				mcsim_trace_this_event(&sim);
@@ -755,6 +779,9 @@ __kernel void McKernel(
 				if (done)
 					mcsim_trace_this_event(&sim);
 			#endif
+
+			/* clear the event flags for this step */
+			mcsim_event_flags_clear(&sim);
 
 			if (done) {
 				/* Finalize the trace - only saves the number of trace events. */
@@ -784,6 +811,7 @@ __kernel void McKernel(
 
 					/* launch a new photon packet */
 					mcsim_launch(&sim);
+					mcsim_event_flags_add(&sim, MC_EVENT_PACKET_LAUNCH);
 
 					#if MC_USE_TRACE & MC_USE_TRACE_START
 						/* initial photon packet state */
