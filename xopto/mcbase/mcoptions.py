@@ -705,4 +705,31 @@ class McUsePackedStructures(McBoolOption):
     def __repr__(self):
         return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
 
+class McUseEvents(McBoolOption):
+    '''
+    Turn on/off tracking of packet events.
+    Default value is off.
+
+    '''
+    on = McBoolOption('MC_USE_EVENTS', True)
+
+    off = McBoolOption('MC_USE_EVENTS', False)
+
+    default = off
+
+    def __init__(self, value:bool):
+        '''
+        Initializes the kernel option for tracking packet events.
+
+        Parameters
+        ----------
+        value: bool
+            Use True to enable tracking of packet events or
+            False to disable tracking of packet events.
+        '''
+        super().__init__('MC_USE_PACKED_STRUCTURES', value)
+
+    def __repr__(self):
+        return '{}({})'.format(self.__class__.__name__, self.cl_options[0][1])
+
 Options = List[McOption]
