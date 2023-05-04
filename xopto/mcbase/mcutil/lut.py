@@ -199,7 +199,7 @@ class LinearLut(mcobject.McObject):
         Parameters
         ----------
         np2list: bool
-            Convert numpy data arryay (lookup table) to a python list.
+            Convert numpy data array (lookup table) to a python list.
 
         Returns
         -------
@@ -337,7 +337,7 @@ class CollectionLut(LinearLut):
             Detector sensitivity (efficiency) as a function of the
             angle of incidence. If the value is a str, an instance is loaded
             from the file represented by the string.
-        cotheta: np.ndarray
+        costheta: np.ndarray
             Angle of incidence cosines at which the detector
             sensitivities are defined. If None, a vector of uniformly
             distributed values from 0 to 1 is used.
@@ -490,7 +490,7 @@ class LutManager:
         list of lookup tables.
         
         Note that the Python id is used to identify lookup table object
-        and not the lookuptable content which is used wen appending a new
+        and not the lookup table content which is used wen appending a new
         lookup table.
 
         Parameters
@@ -511,7 +511,7 @@ class LutManager:
 
     def offset(self, lut: np.ndarray or LutEntry) -> int:
         '''
-        Get the offset of the first element in the lookuptable.
+        Get the offset of the first element in the lookup table.
 
         Parameters
         ----------
