@@ -1,0 +1,7 @@
+xopto.mcbase.mcpf.gk2 module
+============================
+
+.. automodule:: xopto.mcbase.mcpf.gk2
+   :members:
+   :undoc-members:
+   :show-inheritance:

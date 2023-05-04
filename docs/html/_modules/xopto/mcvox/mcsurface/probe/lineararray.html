@@ -358,7 +358,8 @@
             <span class="s1">&#39;	/* The cutout of the stainless steel probe. */&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.x = mcsim_position_x(mcsim) - layout-&gt;position.x;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_pos.y = mcsim_position_y(mcsim) - layout-&gt;position.y;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	transform_point2f(&amp;layout-&gt;cutout_transformation, &amp;mc_pos, &amp;layout_pos);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_matrix2f_t transformation = layout-&gt;cutout_transformation;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	transform_point2f(&amp;transformation, &amp;mc_pos, &amp;layout_pos);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dx = mc_fabs(layout_pos.x);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dy = mc_fabs(layout_pos.y);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	if(dx &lt;= layout-&gt;cutout_width_half &amp;&amp; dy &lt; layout-&gt;cutout_height_half){&#39;</span><span class="p">,</span>

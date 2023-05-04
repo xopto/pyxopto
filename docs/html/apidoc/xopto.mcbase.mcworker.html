@@ -212,11 +212,8 @@ mctypes.McDataTypes:</p>
 <li><p>32-bit default integers,</p></li>
 <li><p>64-bit detector accumulators,</p></li>
 <li><p>single precision floating-point arithmetics,</p></li>
-<li><dl class="simple">
-<dt>32-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call limited to 4,294,967,295)</p>
-</dd>
-</dl>
-</li>
+<li><p>32-bit photon packet counter (maximum number of photon
+packets per OpenCL kernel call limited to 4,294,967,295)</p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -227,11 +224,8 @@ mctypes.McDataTypes:</p>
 <li><p>32-bit default integers,</p></li>
 <li><p>64-bit detector accumulators,</p></li>
 <li><p>double precision floating-point arithmetics,</p></li>
-<li><dl class="simple">
-<dt>32-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call limited to 4,294,967,295)</p>
-</dd>
-</dl>
-</li>
+<li><p>32-bit photon packet counter (maximum number of photon
+packets per OpenCL kernel call limited to 4,294,967,295)</p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -242,11 +236,8 @@ mctypes.McDataTypes:</p>
 <li><p>32-bit default integers,</p></li>
 <li><p>64-bit detector accumulators,</p></li>
 <li><p>single precision floating-point arithmetics,</p></li>
-<li><dl class="simple">
-<dt>64-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call virtually unlimited)</p>
-</dd>
-</dl>
-</li>
+<li><p>64-bit photon packet counter (maximum number of photon
+packets per OpenCL kernel call virtually unlimited)</p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -257,17 +248,14 @@ mctypes.McDataTypes:</p>
 <li><p>32-bit default integers,</p></li>
 <li><p>64-bit detector accumulators,</p></li>
 <li><p>double precision floating-point arithmetics,</p></li>
-<li><dl class="simple">
-<dt>32-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call virtually unlimited)</p>
-</dd>
-</dl>
-</li>
+<li><p>64-bit photon packet counter (maximum number of photon
+packets per OpenCL kernel call virtually unlimited)</p></li>
 </ul>
 </div></blockquote>
 </li>
 </ul>
 </p></li>
-<li><p><strong>cl_devices</strong> (<em>str</em><em> or </em><em>cl.Device</em><em> or </em><em>List</em><em>[</em><em>cl.Device</em><em>] or </em><em>cl.Context cl.CommnadQueue</em>) – A python list of OpenCL devices that are used for
+<li><p><strong>cl_devices</strong> (<em>str</em><em> or </em><em>cl.Device</em><em> or </em><em>List</em><em>[</em><em>cl.Device</em><em>] or </em><em>cl.Context</em><em> or </em><em>cl.CommnadQueue</em>) – A python list of OpenCL devices that are used for
 conducting the simulation. See the clGpuDevices and clCpuDevices
 functions of the <code class="xref py py-mod docutils literal notranslate"><span class="pre">xopto.clinfo</span></code> module for details on
 obtaining a list of OpenCl capable devices. If None is provided,

@@ -541,12 +541,15 @@ Default value is 0.1.</p>
 <p>Run the kernel with the enhanced version of the random number generator.
 Default is off.</p>
 <p>Initializes the enhanced random number generator mode kernel option.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>The enhanced version of random number generator is required when
 performing simulations in large scattering volumes, were the number of
 scattering events is expected to be on the order of millions.
 Depending on the OpenCL device, there might be a small performance
 cost of about 15%, which is the reason for disabling this option
 by default.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – Use True to enable the enhanced random number generator mode or
@@ -566,6 +569,35 @@ False to disable the enhanced random number generator mode.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseEnhancedRng.on">
 <span class="sig-name descname"><span class="pre">on</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_ENHANCED_RNG',</span> <span class="pre">True)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseEnhancedRng.on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseEvents">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">McUseEvents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mcoptions.html#McUseEvents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseEvents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xopto.mcbase.mcoptions.McBoolOption" title="xopto.mcbase.mcoptions.McBoolOption"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcoptions.McBoolOption</span></code></a></p>
+<p>Turn on/off tracking of packet events. Default value is off.</p>
+<p>Initializes the kernel option for tracking packet events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – Use True to enable tracking of packet events or
+False to disable tracking of packet events.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseEvents.default">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_EVENTS',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseEvents.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseEvents.off">
+<span class="sig-name descname"><span class="pre">off</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_EVENTS',</span> <span class="pre">False)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseEvents.off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mcoptions.McUseEvents.on">
+<span class="sig-name descname"><span class="pre">on</span></span><em class="property"> <span class="pre">=</span> <span class="pre">McBoolOption('MC_USE_EVENTS',</span> <span class="pre">True)</span></em><a class="headerlink" href="#xopto.mcbase.mcoptions.McUseEvents.on" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

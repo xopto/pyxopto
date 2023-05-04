@@ -235,6 +235,166 @@
 
         <span class="k">return</span> <span class="n">ClLayer</span></div>
 
+<div class="viewcode-block" id="Layer.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layer.cl_declaration">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Structure and related API that defines a layer in the Monte Carlo simulator.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Projects a 3x3 tensor along the given direction as p*T*p</span><span class="se">\&#39;</span><span class="s1">.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] T      Pointer to a tensor T (mc_matrix3f_t).&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] p      Pointer to a direction vector (mc_point3f_t).&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define tensor3f_project(T, p) </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	((p)-&gt;x*((T)-&gt;a_11*(p)-&gt;x + (T)-&gt;a_12*(p)-&gt;y + (T)-&gt;a_13*(p)-&gt;z) + </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	 (p)-&gt;y*((T)-&gt;a_21*(p)-&gt;x + (T)-&gt;a_22*(p)-&gt;y + (T)-&gt;a_23*(p)-&gt;z) + </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	 (p)-&gt;z*((T)-&gt;a_31*(p)-&gt;x + (T)-&gt;a_32*(p)-&gt;y + (T)-&gt;a_33*(p)-&gt;z))&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Data type describing a single sample layer.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @note The members of this object are constant and do not change during the simulation.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McLayer {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t thickness;                  /**&lt; Layer thickness. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t top;                        /**&lt; Z coordinate of the layer top surface (z coordinate increases with the layer index). */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t bottom;                     /**&lt; Z coordinate of the layer bottom surface (z coordinate increases with the layer index). */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t n;                          /**&lt; Layer index of refraction. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t cos_critical_top;           /**&lt; Total internal reflection angle cosine for the above layer. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t cos_critical_bottom;        /**&lt; Total internal reflection angle cosine for the bellow layer. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t mus;                        /**&lt; Scattering coefficient. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t mua;                        /**&lt; Absorption coefficient. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t inv_mut;                    /**&lt; Reciprocal value of the total attenuation coefficient. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t mua_inv_mut;                /**&lt; Reciprocal value of the total attenuation coefficient multiplied by the absorption coefficient. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	McPf pf;                            /**&lt; Scattering phase function parameters. */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @}&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the layer thickness.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] player Pointer to a layer instance.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_layer_thickness(player) ((player)-&gt;thickness)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the z coordinate of the layer top surface.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] player Pointer to a layer instance.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_layer_top(player) ((player)-&gt;top)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the z coordinate of the layer bottom surface.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] player Pointer to a layer instance.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_layer_bottom(player) ((player)-&gt;bottom)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the refractive index of the layer.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] player Pointer to a layer instance.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_layer_n(player) ((player)-&gt;n)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the critical cosine (total internal reflection)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *        at the top layer boundary.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @details If the absolute cosine of the angle of incidence&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *          (with respect to z axis) is less than the critical cosine,&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *          the incident packet is reflected at the boundary.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] player Pointer to a layer object.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_layer_cc_top(player) ((player)-&gt;cos_critical_top)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the critical cosine (total internal reflection)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *        at the bottom layer boundary.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @details If the absolute cosine of the angle of incidence&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *          (with respect to z axis) is less than the critical cosine, the&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *          incident packet is reflected from the boundary.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] player Pointer to a layer object.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_layer_cc_bottom(player) ((player)-&gt;cos_critical_bottom)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the scattering coefficient along&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *        the given propagation direction.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] player Pointer to a layer instance.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pdir   Propagation direction vector.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_layer_mus(player, pdir) ((player)-&gt;mus)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;* @brief Evaluates to the absorption coefficient along&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *       the given propagation direction.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;* @param[in] player Pointer to a layer instance.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;* @param[in] pdir   Propagation direction vector.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;*/&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_layer_mua(player, pdir) ((player)-&gt;mua)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the reciprocal value of the total &#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *        attenuation coefficient.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] player Pointer to a layer instance.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pdir   Propagation direction vector.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_layer_inv_mut(player, pdir) ((player)-&gt;inv_mut)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the reciprocal value of the total &#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *        attenuation coefficient multiplied by the absorption coefficient.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] player Pointer to a layer instance.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pdir   Propagation direction vector.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_layer_mua_inv_mut(player, pdir) ((player)-&gt;mua_inv_mut)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the absorption coefficient of the layer multiplied&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *        by the reciprocal of the total attenuation coefficient along&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *        the given propagation direction.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] player Pointer to a layer object.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pdir   Propagation direction vector.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @returns   Absorption coefficient multiplied by the reciprocal&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *            value of the total attenuation coefficient along the&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *            given propagation direction.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to a pointer to scattering phase function&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *       of the layer.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] player Pointer to a layer instance.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_layer_pf(player) ((player)-&gt;pf)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#if MC_ENABLE_DEBUG || defined(__DOXYGEN__)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Print one sample layer.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * param[in] prefix Can be used to pass indent string for the layer parameters.&quot;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] player Pointer to a layer instance.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define dbg_print_layer(player, prefix) </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	printf(prefix &quot;d: </span><span class="si">%.9f</span><span class="se">\\</span><span class="s1">n&quot; </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			prefix &quot;top: </span><span class="si">%.9f</span><span class="se">\\</span><span class="s1">n&quot; </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			prefix &quot;bottom: </span><span class="si">%.9f</span><span class="se">\\</span><span class="s1">n&quot; </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			prefix &quot;n: </span><span class="si">%.9f</span><span class="se">\\</span><span class="s1">n&quot; </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			prefix &quot;cctop: </span><span class="si">%.9f</span><span class="se">\\</span><span class="s1">n&quot; </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			prefix &quot;ccbottom: </span><span class="si">%.9f</span><span class="se">\\</span><span class="s1">n&quot; </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			prefix &quot;mua: </span><span class="si">%.9f</span><span class="se">\\</span><span class="s1">n&quot; </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			prefix &quot;mus: </span><span class="si">%.9f</span><span class="se">\\</span><span class="s1">n&quot; </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			prefix &quot;inv_mut: </span><span class="si">%.9f</span><span class="se">\\</span><span class="s1">n&quot; </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			prefix &quot;mua_inv_mut: </span><span class="si">%.9f</span><span class="se">\\</span><span class="s1">n&quot;, </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;					(player)-&gt;thickness, (player)-&gt;top, (player)-&gt;bottom, (player)-&gt;n, </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;					(player)-&gt;cos_critical_top, (player)-&gt;cos_critical_bottom, </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;					(player)-&gt;mua, (player)-&gt;mus, </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;					(player)-&gt;inv_mut, (player)-&gt;mua_inv_mut); </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			{ McPf const _dbg_pf=(player)-&gt;pf; dbg_print_pf(&amp;_dbg_pf); };&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#else&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define dbg_print_layer(player, label) ;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#endif&#39;</span><span class="p">,</span>
+            <span class="p">))</span></div>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">mua</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">mus</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                  <span class="n">pf</span><span class="p">:</span> <span class="n">mcpf</span><span class="o">.</span><span class="n">PfBase</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -274,7 +434,7 @@
 <span class="sd">        ----</span>
 <span class="sd">        The layer boundaries in the z direction are increasing in the</span>
 <span class="sd">        direction of the layer stack.</span>
-<span class="sd">        Z coordinate 0.0 bellongs to the top surface of the first sample layer!</span>
+<span class="sd">        Z coordinate 0.0 belongs to the top surface of the first sample layer!</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_d</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
@@ -390,6 +550,7 @@
 <span class="sd">            A list of sample layers. Requires at least 3 items!</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layer_type</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span> <span class="n">Layers</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -410,8 +571,21 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_pf_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layer_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_layer_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="p">(</span><span class="n">Layer</span><span class="p">,)):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s1">&#39;All the sample layers must be instances of Layer &#39;</span>
+                    <span class="s1">&#39;but found </span><span class="si">{:s}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layer_type</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s1">&#39;All the sample layers must use the same type!&#39;</span>
+                    <span class="s1">&#39;Found </span><span class="si">{}</span><span class="s1"> and </span><span class="si">{}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_layer_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">Layer</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;All layers must be instances of Layer &#39;</span>
                                 <span class="s1">&#39;but found </span><span class="si">{:s}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
@@ -426,7 +600,7 @@
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Returns layer at the specified index. Note that the first layer</span>
 <span class="sd">        (index 0) and the last layer (index -1) represent the medium</span>
-<span class="sd">        sourounding the top and bottom surfaces of the sample, respectively</span>
+<span class="sd">        surrounding the top and bottom surfaces of the sample, respectively</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
 
@@ -460,7 +634,7 @@
 <div class="viewcode-block" id="Layers.thickness"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layers.thickness">[docs]</a>    <span class="k">def</span> <span class="nf">thickness</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Thickness of the layer stack excluding the topmost and bottommost</span>
-<span class="sd">        layers that sourround the sample.</span>
+<span class="sd">        layers that surround the sample.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -472,24 +646,6 @@
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
             <span class="n">d</span> <span class="o">+=</span> <span class="n">layer</span><span class="o">.</span><span class="n">d</span>
         <span class="k">return</span> <span class="n">d</span></div>
-
-<div class="viewcode-block" id="Layers.cl_options"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layers.cl_options">[docs]</a>    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        OpenCL options of the scattering phase function.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">fetch_cl_options</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Layers.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layers.cl_declaration">[docs]</a>    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        OpenCL declarations of the scattering phase function.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">fetch_cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Layers.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layers.cl_implementation">[docs]</a>    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        OpenCL implementation of the scattering phase function.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">fetch_cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Layers.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mclayer.layer.html#xopto.mcml.mclayer.layer.Layers.cl_type">[docs]</a>    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -590,7 +746,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        layers: list[layers]</span>
+<span class="sd">        layers: List[layers]</span>
 <span class="sd">            List of managed layers</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">)</span></div>

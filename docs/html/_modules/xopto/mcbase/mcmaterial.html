@@ -229,8 +229,9 @@
 
 <div class="viewcode-block" id="Material.cl_declaration"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Material.cl_declaration">[docs]</a>    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Structure that defines material in the Monte Carlo simulator. This is</span>
-<span class="sd">        a minimal implementation. All the field are required!</span>
+<span class="sd">        Structure that defines material in the Monte Carlo simulator and the</span>
+<span class="sd">        related API calls. This is a minimal implementation. All the field</span>
+<span class="sd">        are required!</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">fetch_cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">),</span>
@@ -243,6 +244,63 @@
             <span class="s1">&#39;	mc_fp_t mua_inv_mut; /**&lt; @brief Precalculated mua/(mua + mut). */&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	McPf pf;             /**&lt; @brief Custom phase function parameters. */&#39;</span><span class="p">,</span>
             <span class="s1">&#39;};&#39;</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the material refractive index.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pmaterial Pointer to a material object.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; #define mc_material_n(pmaterial) ((pmaterial)-&gt;n)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the material reduced scattering coefficient.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pmaterial Pointer to a material object.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_material_mus(pmaterial) ((pmaterial)-&gt;mus)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the material absorption coefficient.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pmaterial Pointer to a material object.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_material_mua(pmaterial) ((pmaterial)-&gt;mua)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the inverse of the material absorption coefficient.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pmaterial Pointer to a material object.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pdir Propagation direction vector.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_material_inv_mua(pmaterial, pdir) </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	(((pmaterial)-&gt;mua &gt; FP_0) ? </span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fdiv(FP_1, (pmaterial)-&gt;mua) : FP_INF)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the total attenuation coefficient, i.e. sum of the&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *		  material absorption and scattering coefficients.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pmaterial Pointer to a material object.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pdir Propagation direction vector.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_material_mut(pmaterial, pdir) ((pmaterial)-&gt;mua + (pmaterial)-&gt;mus)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the reciprocal of the total attenuation coefficient, i.e.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *		  reciprocal of the sum of the material absorption and scattering coefficients.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pmaterial Pointer to a material object.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pdir Propagation direction vector.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_material_inv_mut(pmaterial, pdir) ((pmaterial)-&gt;inv_mut)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the absorption coefficient multiplied by the reciprocal&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; *			of the total attenuation coefficient.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pmaterial Pointer to a material object.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pdir Propagation direction vector.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_material_mua_inv_mut(pmaterial, pdir) ((pmaterial)-&gt;mua_inv_mut)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/**&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @brief Evaluates to the scattering phase function of the material.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; * @param[in] pmaterial Pointer to a material object.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39; */&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#define mc_material_pf(pmaterial) (&amp;((pmaterial)-&gt;pf))&#39;</span><span class="p">,</span>
         <span class="p">))</span></div>
 
 <div class="viewcode-block" id="Material.cl_options"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcmaterial.html#xopto.mcbase.mcmaterial.Material.cl_options">[docs]</a>    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -258,6 +316,7 @@
         <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">fetch_cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">),</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#if MC_ENABLE_DEBUG || defined(__DOXYGEN__)&#39;</span><span class="p">,</span>
             <span class="s1">&#39;void dbg_print_material(__mc_material_mem McMaterial const *material){&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print(&quot;McMaterial:&quot;);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;n:&quot;, material-&gt;n);&#39;</span><span class="p">,</span>
@@ -268,6 +327,7 @@
             <span class="s1">&#39;	McPf const dbg_pf = material-&gt;pf;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_pf(&amp;dbg_pf);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;#endif&#39;</span><span class="p">,</span>
         <span class="p">))</span></div>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">mua</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">mus</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">pf</span><span class="p">:</span> <span class="n">mcpf</span><span class="o">.</span><span class="n">PfBase</span><span class="p">):</span>

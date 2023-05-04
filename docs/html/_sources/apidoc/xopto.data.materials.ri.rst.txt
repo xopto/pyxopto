@@ -1,0 +1,10 @@
+xopto.data.materials.ri package
+===============================
+
+Module contents
+---------------
+
+.. automodule:: xopto.data.materials.ri
+   :members:
+   :undoc-members:
+   :show-inheritance:

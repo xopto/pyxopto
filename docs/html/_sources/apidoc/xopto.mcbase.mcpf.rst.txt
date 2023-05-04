@@ -8,6 +8,7 @@ Submodules
    :maxdepth: 4
 
    xopto.mcbase.mcpf.gk
+   xopto.mcbase.mcpf.gk2
    xopto.mcbase.mcpf.hg
    xopto.mcbase.mcpf.lut
    xopto.mcbase.mcpf.mgk

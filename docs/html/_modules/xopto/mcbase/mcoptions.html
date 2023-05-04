@@ -721,7 +721,7 @@
 <span class="sd">        Initializes the enhanced random number generator mode kernel option.</span>
 
 <span class="sd">        Note</span>
-<span class="sd">        ....</span>
+<span class="sd">        ----</span>
 <span class="sd">        The enhanced version of random number generator is required when</span>
 <span class="sd">        performing simulations in large scattering volumes, were the number of</span>
 <span class="sd">        scattering events is expected to be on the order of millions.</span>
@@ -857,7 +857,7 @@
 
     <span class="n">default</span> <span class="o">=</span> <span class="n">off</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span><span class="nb">bool</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Initializes the packed structures kernel option.</span>
 
@@ -871,6 +871,33 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="McUseEvents"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseEvents">[docs]</a><span class="k">class</span> <span class="nc">McUseEvents</span><span class="p">(</span><span class="n">McBoolOption</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Turn on/off tracking of packet events. Default value is off.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">on</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_EVENTS&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">off</span> <span class="o">=</span> <span class="n">McBoolOption</span><span class="p">(</span><span class="s1">&#39;MC_USE_EVENTS&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">default</span> <span class="o">=</span> <span class="n">off</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes the kernel option for tracking packet events.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value: bool</span>
+<span class="sd">            Use True to enable tracking of packet events or</span>
+<span class="sd">            False to disable tracking of packet events.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;MC_USE_PACKED_STRUCTURES&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cl_options</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
+
 
 <span class="n">Options</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">McOption</span><span class="p">]</span>
 </pre></div>

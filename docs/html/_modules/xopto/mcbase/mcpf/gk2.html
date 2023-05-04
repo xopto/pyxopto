@@ -1,0 +1,499 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.mcbase.mcpf.gk2 &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.mcbase.mcpf.gk2</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xopto.mcbase.mcpf.gk2</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.pfbase</span> <span class="kn">import</span> <span class="n">PfBase</span><span class="p">,</span> <span class="n">cltypes</span><span class="p">,</span> <span class="n">McObject</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Gk</span>
+<span class="kn">import</span> <span class="nn">xopto.pf</span>
+
+
+<div class="viewcode-block" id="Gk2"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.gk2.html#xopto.mcbase.mcpf.gk2.Gk2">[docs]</a><span class="k">class</span> <span class="nc">Gk2</span><span class="p">(</span><span class="n">PfBase</span><span class="p">):</span>
+<div class="viewcode-block" id="Gk2.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.gk2.html#xopto.mcbase.mcpf.gk2.Gk2.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns an OpenCL structure that can be passed to the Monte carlo</span>
+<span class="sd">        simulator.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: McObject</span>
+<span class="sd">            A Monte Carlo simulator instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        struct: cltypes.Structure</span>
+<span class="sd">            A structure type that represents the scattering phase function in</span>
+<span class="sd">            the Monte Carlo kernel.</span>
+
+<span class="sd">        Structure fields</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        gk_1: mc_pf_gk_t</span>
+<span class="sd">            Parameters of the first Gegenbauer kernel scattering phase function.</span>
+<span class="sd">        gk_2: mc_pf_gk_t</span>
+<span class="sd">            Parameters of the second Gegenbauer kernel scattering phase function.</span>
+<span class="sd">        b: mc_fp_t</span>
+<span class="sd">            Relative contribution of the second Gegenbauer kernel scattering</span>
+<span class="sd">            phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
+        <span class="n">T_GK</span> <span class="o">=</span> <span class="n">Gk</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+        <span class="k">class</span> <span class="nc">ClGk2</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;gk_1&#39;</span><span class="p">,</span> <span class="n">T_GK</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;gk_2&#39;</span><span class="p">,</span> <span class="n">T_GK</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span>    <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+            <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">ClGk2</span></div>
+
+<div class="viewcode-block" id="Gk2.cl_declaration"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.gk2.html#xopto.mcbase.mcpf.gk2.Gk2.cl_declaration">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_declaration</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL declarations of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span>  <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES mc_pf_gk_t {&#39;</span>
+            <span class="s1">&#39;	mc_fp_t g;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t inv_a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a2;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;struct MC_STRUCT_ATTRIBUTES McPf{&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	struct mc_pf_gk_t gk_1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	struct mc_pf_gk_t gk_2;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t b;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Gk2.cl_implementation"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.gk2.html#xopto.mcbase.mcpf.gk2.Gk2.cl_implementation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_implementation</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        OpenCL implementation of the scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+            <span class="s1">&#39;void dbg_print_pf(const McPf *pf) {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(&quot;Gk2 scattering phase function:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(INDENT &quot;The first Gk term:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT INDENT &quot;gk_1.g:&quot;,     pf-&gt;gk_1.g_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT INDENT &quot;gk_1.a:&quot;,     pf-&gt;gk_1.a_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT INDENT &quot;gk_1.inv_a:&quot;, pf-&gt;gk_1.inv_a_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT INDENT &quot;gk_1.a1:&quot;,    pf-&gt;gk_1.a1_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT INDENT &quot;gk_1.a2:&quot;,    pf-&gt;gk_1.a2_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(INDENT &quot;The second Gk term:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT INDENT &quot;gk_2.g:&quot;,     pf-&gt;gk_2.g_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT INDENT &quot;gk_2.a:&quot;,     pf-&gt;gk_2.a_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT INDENT &quot;gk_2.inv_a:&quot;, pf-&gt;gk_2.inv_a_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT INDENT &quot;gk_2.a1:&quot;,    pf-&gt;gk_2.a1_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT INDENT &quot;gk_2.a2:&quot;,    pf-&gt;gk_2.a2_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print(INDENT &quot;Relative contribution of the second Gk term:&quot;);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_float(INDENT INDENT &quot;b:&quot;, pf-&gt;b);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline mc_fp_t mcsim_sample_pf(McSim *mcsim, mc_fp_t *azimuth){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t tmp, cos_theta;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t b = mcsim_current_pf(mcsim)-&gt;b;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t g;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t inv_a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_t a2;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	*azimuth = FP_2PI*mcsim_random(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if (mcsim_random(mcsim) &gt;= b) {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		g = mcsim_current_pf(mcsim)-&gt;gk_1.g;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		a = mcsim_current_pf(mcsim)-&gt;gk_1.a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inv_a = mcsim_current_pf(mcsim)-&gt;gk_1.inv_a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		a1 = mcsim_current_pf(mcsim)-&gt;gk_1.a1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		a2 = mcsim_current_pf(mcsim)-&gt;gk_1.a2;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	} else {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		g = mcsim_current_pf(mcsim)-&gt;gk_2.g;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		a = mcsim_current_pf(mcsim)-&gt;gk_2.a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		inv_a = mcsim_current_pf(mcsim)-&gt;gk_2.inv_a;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		a1 = mcsim_current_pf(mcsim)-&gt;gk_2.a1;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		a2 = mcsim_current_pf(mcsim)-&gt;gk_2.a2;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	if (g == FP_0) {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		cos_theta = FP_1 - FP_2*mcsim_random(mcsim);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	} else if(a == FP_0) {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		cos_theta = a1 + mc_pow(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			mc_fdiv(FP_1 - g, FP_1 + g),&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			FP_2*mcsim_random(mcsim)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		)*a2;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	} else {&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		tmp = a1*mcsim_random(mcsim) + a2;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		tmp = FP_1 + g*g - mc_pow(tmp, -inv_a);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		cos_theta = mc_fdiv(tmp, FP_2*g);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	};&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	return mc_fclip(cos_theta, -FP_1, FP_1);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span>
+        <span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">a1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">a2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gegenbauer kernel scattering phase function constructor.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        g1: float</span>
+<span class="sd">            Parameter of the first Gegenbauer kernel scattering scattering phase</span>
+<span class="sd">            function.</span>
+<span class="sd">            :math:`0 &lt;= g &lt;= 1`</span>
+<span class="sd">        a1: float</span>
+<span class="sd">            Parameter of the first Gegenbauer kernel scattering phase function.</span>
+<span class="sd">            :math:`a &gt; - 1/2`</span>
+<span class="sd">            A value of 0.5 produces the Henyey-Greenstein scattering</span>
+<span class="sd">            phase function.</span>
+<span class="sd">        g2: float</span>
+<span class="sd">            Parameter of the second Gegenbauer kernel scattering scattering phase</span>
+<span class="sd">            function.</span>
+<span class="sd">            :math:`-1 &lt;= g &lt; 0`</span>
+<span class="sd">        a2: float</span>
+<span class="sd">            Parameter of the second Gegenbauer kernel scattering phase function.</span>
+<span class="sd">            :math:`a &gt; - 1/2`</span>
+<span class="sd">            A value of 0.5 produces the Henyey-Greenstein scattering</span>
+<span class="sd">            phase function.</span>
+<span class="sd">        b: float</span>
+<span class="sd">            A value between 0 and 1 that determines the relative contribution of</span>
+<span class="sd">            the second Gegenbauer kernel scattering scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span> <span class="o">=</span> <span class="n">Gk</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="n">a1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span> <span class="o">=</span> <span class="n">Gk</span><span class="p">(</span><span class="n">g2</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_b</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_b</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_g1</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">g</span>
+    <span class="k">def</span> <span class="nf">_set_g1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">g1</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_g1</span><span class="p">,</span> <span class="n">_set_g1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="s1">&#39;Parameter g (anisotropy factor when a=0.5) &#39;</span>
+                  <span class="s1">&#39;of the first GK term.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_a1</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">a</span>
+    <span class="k">def</span> <span class="nf">_set_a1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_a1</span><span class="p">,</span> <span class="n">_set_a1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="s1">&#39;Parameter alpha of the first GK term.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_g2</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">g</span>
+    <span class="k">def</span> <span class="nf">_set_g2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">g2</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_g2</span><span class="p">,</span> <span class="n">_set_g2</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="s1">&#39;Parameter g (anisotropy factor when a=0.5) &#39;</span>
+                  <span class="s1">&#39;of the second GK term.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_a2</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">a</span>
+    <span class="k">def</span> <span class="nf">_set_a2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">a2</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_a2</span><span class="p">,</span> <span class="n">_set_a2</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="s1">&#39;Parameter alpha of the second GK term.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_b</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span>
+    <span class="k">def</span> <span class="nf">_set_b</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_b</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_b</span><span class="p">,</span> <span class="n">_set_b</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="s1">&#39;Relative contribution of the second GK term.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Gk2.pf"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.gk2.html#xopto.mcbase.mcpf.gk2.Gk2.pf">[docs]</a>    <span class="k">def</span> <span class="nf">pf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xopto</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">Gk2</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns a new instance of the related utility scattering phase function</span>
+<span class="sd">        class that can be used to compute Legendre moments and other</span>
+<span class="sd">        scattering phase function quantifiers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pf: xopto.pf.Gk2</span>
+<span class="sd">            Instance of the related utility scattering phase function.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">xopto</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">Gk2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">a</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Gk2.cl_pack"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.gk2.html#xopto.mcbase.mcpf.gk2.Gk2.cl_pack">[docs]</a>    <span class="k">def</span> <span class="nf">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">McObject</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Fills the an OpenCL Structure (target) with the data required by the</span>
+<span class="sd">        Monte Carlo simulator. See the :py:meth:`~Gk2.cl_type` method</span>
+<span class="sd">        for a detailed list of fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mc: McObject</span>
+<span class="sd">            Simulator instance.</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Target OpenCL structure for packing.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        target: cltypes.Structure</span>
+<span class="sd">            Target structure received as an input argument or a new</span>
+<span class="sd">            instance of ClGk if the input argument target is None.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetch_cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target_type</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">cl_pack</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">gk_1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">cl_pack</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">gk_2</span><span class="p">)</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span>
+
+        <span class="k">return</span> <span class="n">target</span></div>
+
+<div class="viewcode-block" id="Gk2.todict"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcpf.gk2.html#xopto.mcbase.mcpf.gk2.Gk2.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Export object to a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;g1&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="s1">&#39;a1&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">a</span><span class="p">,</span>
+                <span class="s1">&#39;g2&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="s1">&#39;a2&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">a</span><span class="p">,</span>
+                <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Gk2(g1=</span><span class="si">{}</span><span class="s1">, a1=</span><span class="si">{}</span><span class="s1">, g2=</span><span class="si">{}</span><span class="s1">, a2=</span><span class="si">{}</span><span class="s1">, b=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

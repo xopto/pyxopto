@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   xopto.data.materials
    xopto.data.mcml
    xopto.data.mcvox
    xopto.data.primes

@@ -1,7 +1,0 @@
-xopto.util.regression.clann module
-==================================
-
-.. automodule:: xopto.util.regression.clann
-   :members:
-   :undoc-members:
-   :show-inheritance:

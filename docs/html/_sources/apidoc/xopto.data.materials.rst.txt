@@ -1,0 +1,20 @@
+xopto.data.materials package
+============================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   xopto.data.materials.absorption
+   xopto.data.materials.density
+   xopto.data.materials.ri
+
+Module contents
+---------------
+
+.. automodule:: xopto.data.materials
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -302,9 +302,63 @@ tuple of intervals.</p></li>
 
 </dd></dl>
 
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.TRACE_EVENT_ABSORPTION">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_ABSORPTION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">16</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.TRACE_EVENT_ABSORPTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trace all packet absorption events.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.TRACE_EVENT_ALL">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_ALL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">-1</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.TRACE_EVENT_ALL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trace all events.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.TRACE_EVENT_BOUNDARY_HIT">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_BOUNDARY_HIT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.TRACE_EVENT_BOUNDARY_HIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trace all geometry boundary hit events.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.TRACE_EVENT_ESCAPE">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_ESCAPE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">128</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.TRACE_EVENT_ESCAPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trace events that are triggered by packet escaping/leaving the simulation domain.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.TRACE_EVENT_LAUNCH">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_LAUNCH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.TRACE_EVENT_LAUNCH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trace all packet launch events.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.TRACE_EVENT_REFLECTION">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_REFLECTION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.TRACE_EVENT_REFLECTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trace all packet reflection events at geometry boundaries.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.TRACE_EVENT_REFRACTION">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_REFRACTION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.TRACE_EVENT_REFRACTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trace all packet refraction events at geometry boundaries.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.TRACE_EVENT_SCATTERING">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_SCATTERING</span></span><em class="property"> <span class="pre">=</span> <span class="pre">32</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.TRACE_EVENT_SCATTERING" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trace all packet scattering events.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.TRACE_EVENT_TERMINATION">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_TERMINATION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">64</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.TRACE_EVENT_TERMINATION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trace all packet termination events.</p>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="xopto.mcbase.mctrace.Trace">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxlen</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#xopto.mcbase.mctrace.Filter" title="xopto.mcbase.mctrace.Filter"><span class="pre">xopto.mcbase.mctrace.Filter</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plon</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mctrace.html#Trace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mctrace.Trace" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxlen</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#xopto.mcbase.mctrace.Filter" title="xopto.mcbase.mctrace.Filter"><span class="pre">xopto.mcbase.mctrace.Filter</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_mask</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plon</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/xopto/mcbase/mctrace.html#Trace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mctrace.Trace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcobject.McObject</span></code></a></p>
 <p>Photon packet trace interface.</p>
 <p>Photon packet trace object constructor.</p>
@@ -337,6 +391,25 @@ following flags:</p>
 A filter class needs to define a __call__ method that returns a
 new Trace instance with filtered events.
 See the Filter class for details and example.</p></li>
+<li><p><strong>event_mask</strong> (<em>int</em>) – <p>A mask of event flags that are recorded/traced in the MC
+kernel. If None, all events are traced and event tracking
+is disabled (default). Note that event tracking comes with some
+performance cost. All events should be traced when computing
+the sampling volume!
+The following events can be used with the event mask:</p>
+<blockquote>
+<div><ul>
+<li><p>TRACE_EVENT_LAUNCH, tracing all packet launch events</p></li>
+<li><p>TRACE_EVENT_ABSORPTION, tracing all packet absorption events</p></li>
+<li><p>TRACE_EVENT_SCATTERING, tracing all packet scattering events</p></li>
+<li><p>TRACE_EVENT_BOUNDARY_HIT, tracing all geometry boundary interactions</p></li>
+<li><p>TRACE_EVENT_REFLECTION, tracing all packet reflection events at geometrical boundaries</p></li>
+<li><p>TRACE_EVENT_REFRACTION, tracing all packet refraction events at geometrical boundaries</p></li>
+<li><p>TRACE_EVENT_TERMINATION, tracing packet termination</p></li>
+<li><p>TRACE_EVENT_ESCAPE, packet escapes the simulation domain</p></li>
+</ul>
+</div></blockquote>
+</p></li>
 <li><p><strong>plon</strong> (<em>bool</em>) – Turn on/off tracking of the optical pathlength. If set to nonzero,
 the simulator option MC_TRACK_OPTICAL_PATHLENGTH will be set
 turning on the tracking of optical pathlength.</p></li>
@@ -374,6 +447,51 @@ be obtained by obj.n (e.g. obj.n[0] for the first photon packet).</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="xopto.mcbase.mctrace.Trace.TRACE_ENTRY_LEN">
 <span class="sig-name descname"><span class="pre">TRACE_ENTRY_LEN</span></span><em class="property"> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.Trace.TRACE_ENTRY_LEN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.Trace.TRACE_EVENT_ABSORPTION">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_ABSORPTION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">16</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.Trace.TRACE_EVENT_ABSORPTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.Trace.TRACE_EVENT_ALL">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_ALL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">-1</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.Trace.TRACE_EVENT_ALL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.Trace.TRACE_EVENT_BOUNDARY_HIT">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_BOUNDARY_HIT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.Trace.TRACE_EVENT_BOUNDARY_HIT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.Trace.TRACE_EVENT_ESCAPE">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_ESCAPE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">128</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.Trace.TRACE_EVENT_ESCAPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.Trace.TRACE_EVENT_LAUNCH">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_LAUNCH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.Trace.TRACE_EVENT_LAUNCH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.Trace.TRACE_EVENT_REFLECTION">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_REFLECTION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.Trace.TRACE_EVENT_REFLECTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.Trace.TRACE_EVENT_REFRACTION">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_REFRACTION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.Trace.TRACE_EVENT_REFRACTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.Trace.TRACE_EVENT_SCATTERING">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_SCATTERING</span></span><em class="property"> <span class="pre">=</span> <span class="pre">32</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.Trace.TRACE_EVENT_SCATTERING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.Trace.TRACE_EVENT_TERMINATION">
+<span class="sig-name descname"><span class="pre">TRACE_EVENT_TERMINATION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">64</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.Trace.TRACE_EVENT_TERMINATION" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -508,6 +626,12 @@ OpenCL device.</p>
 trace object.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="xopto.mcbase.mctrace.Trace.event_mask">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">event_mask</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#xopto.mcbase.mctrace.Trace.event_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mask of traced events.</p>
 </dd></dl>
 
 <dl class="py property">

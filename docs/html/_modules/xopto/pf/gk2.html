@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>xopto.pf.gk2 &mdash; PyXOpto 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyXOpto
+          
+
+          
+            
+            <img src="../../../_static/xopto_logo_dark.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/opencl_devices.html">OpenCL devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcml/index.html">Layered MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mccyl/index.html">Cylindrical MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/mcvox/index.html">Voxelized MC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/dataset/index.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">xopto</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyXOpto</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../xopto.html">xopto</a> &raquo;</li>
+        
+      <li>xopto.pf.gk2</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xopto.pf.gk2</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">################################ Begin license #################################</span>
+<span class="c1"># Copyright (C) Laboratory of Imaging technologies,</span>
+<span class="c1">#               Faculty of Electrical Engineering,</span>
+<span class="c1">#               University of Ljubljana.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of PyXOpto.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># PyXOpto is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with PyXOpto. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">################################# End license ##################################</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.pfbase</span> <span class="kn">import</span> <span class="n">PfBase</span>
+<span class="kn">from</span> <span class="nn">.gk</span>     <span class="kn">import</span> <span class="n">Gk</span>
+
+<div class="viewcode-block" id="Gk2"><a class="viewcode-back" href="../../../apidoc/xopto.pf.gk2.html#xopto.pf.gk2.Gk2">[docs]</a><span class="k">class</span> <span class="nc">Gk2</span><span class="p">(</span><span class="n">PfBase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gg1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">a1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">gg2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">a2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Two-term Gegenbauer Kernel scattering phase function constructor.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gg1: float</span>
+<span class="sd">            Parameter of the first Gegenbauer kernel phase function</span>
+<span class="sd">            (:math:`0 &lt;= gg_1 &lt;= 1`).</span>
+<span class="sd">        a1: float</span>
+<span class="sd">            Parameter of the first Gegenbauer kernel phase function</span>
+<span class="sd">            (:math:`a &gt; - 1/2`).</span>
+<span class="sd">            A value of 0.5 produces the Henyey-Greenstein scattering</span>
+<span class="sd">            phase function.</span>
+<span class="sd">        gg2: float</span>
+<span class="sd">            Parameter of the second Gegenbauer kernel phase function</span>
+<span class="sd">            (:math:`0 &lt;= gg_2 &lt;= 1`).</span>
+<span class="sd">        a2: float</span>
+<span class="sd">            Parameter of the second Gegenbauer kernel phase function</span>
+<span class="sd">            (:math:`a &gt; - 1/2`).</span>
+<span class="sd">            A value of 0.5 produces the Henyey-Greenstein scattering</span>
+<span class="sd">            phase function.</span>
+<span class="sd">        b: float</span>
+<span class="sd">            Contribution of the second Gk.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Two-term Gegenbauer kernel scattering phase function for</span>
+<span class="sd">        gg = {0, 0.3 0.5, 0.8, 0.9, 0.95} and a=0.5.</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from matplotlib import pyplot as pp</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; cos_theta = np.linspace(-1.0, 1.0, 1000)</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; pp.figure()</span>
+<span class="sd">        &gt;&gt;&gt; for gg in [0.0, 0.3, 0.5, 0.8, 0.9, 0.95]:</span>
+<span class="sd">        &gt;&gt;&gt;     pp.semilogy(cos_theta, Gk2(gg, 0.5, -gg, 0.5, 0.1)(cos_theta), label=&#39;a=0.5, gg={}&#39;.format(gg))</span>
+<span class="sd">        &gt;&gt;&gt; pp.legend()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">gg1</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Parameter gg of the first Gk must be positive!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">gg2</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Parameter gg of the second Gk must be negative!&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span> <span class="o">=</span> <span class="n">Gk</span><span class="p">(</span><span class="n">gg1</span><span class="p">,</span> <span class="n">a1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span> <span class="o">=</span> <span class="n">Gk</span><span class="p">(</span><span class="n">gg2</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_b</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        
+        <span class="k">def</span> <span class="nf">pf</span><span class="p">(</span><span class="n">costheta</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="p">(</span><span class="n">costheta</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="p">(</span><span class="n">costheta</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span> <span class="o">=</span> <span class="n">pf</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">costheta</span><span class="p">:</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Call method of the Gegenbauer kernel scattering phase function.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        costheta: float or np.ndarray</span>
+<span class="sd">            Scattering angle cosines at which the scattering phase function</span>
+<span class="sd">            is evaluated.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        f: float or np.ndarray</span>
+<span class="sd">            Scattering phase function at the specified scattering angle cosines.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pf</span><span class="p">(</span><span class="n">costheta</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Gk2.g"><a class="viewcode-back" href="../../../apidoc/xopto.pf.gk2.html#xopto.pf.gk2.Gk2.g">[docs]</a>    <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overloads the :py:meth:`PfBase.g` method of the base class with </span>
+<span class="sd">        an analytical solution.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="bp">self</span><span class="o">.</span><span class="n">_b</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">g</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Gk2.fastg"><a class="viewcode-back" href="../../../apidoc/xopto.pf.gk2.html#xopto.pf.gk2.Gk2.fastg">[docs]</a>    <span class="k">def</span> <span class="nf">fastg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overloads the :py:meth:`PfBase.fastg` method of the base class with </span>
+<span class="sd">        an analytical solution.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">fastg</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">+</span> \
+               <span class="bp">self</span><span class="o">.</span><span class="n">_b</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">fastg</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Gk2(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">_gg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk1</span><span class="o">.</span><span class="n">_a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">_gg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gk2</span><span class="o">.</span><span class="n">_a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, XOpto team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

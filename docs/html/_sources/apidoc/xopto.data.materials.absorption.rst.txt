@@ -1,0 +1,10 @@
+xopto.data.materials.absorption package
+=======================================
+
+Module contents
+---------------
+
+.. automodule:: xopto.data.materials.absorption
+   :members:
+   :undoc-members:
+   :show-inheritance:

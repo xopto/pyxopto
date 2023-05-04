@@ -207,7 +207,7 @@ collection sensitivity is assumed.</p>
 <li><p><strong>sensitivity</strong> (<em>np.ndarray</em><em> or </em><em>str</em>) – Detector sensitivity (efficiency) as a function of the
 angle of incidence. If the value is a str, an instance is loaded
 from the file represented by the string.</p></li>
-<li><p><strong>cotheta</strong> (<em>np.ndarray</em>) – Angle of incidence cosines at which the detector
+<li><p><strong>costheta</strong> (<em>np.ndarray</em>) – Angle of incidence cosines at which the detector
 sensitivities are defined. If None, a vector of uniformly
 distributed values from 0 to 1 is used.</p></li>
 <li><p><strong>n</strong> (<em>int</em>) – The size of lookup table that will be used in Monte Carlo
@@ -412,7 +412,7 @@ the lookup tables.</p>
 <dd><p>Save the lookup table configuration and data to a dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>np2list</strong> (<em>bool</em>) – Convert numpy data arryay (lookup table) to a python list.</p>
+<dd class="field-odd"><p><strong>np2list</strong> (<em>bool</em>) – Convert numpy data array (lookup table) to a python list.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>data</strong> – Linear lookup table configuration as a dictionary.</p>
@@ -522,7 +522,7 @@ this value is always returned as True.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="xopto.mcbase.mcutil.lut.LutManager.offset">
 <span class="sig-name descname"><span class="pre">offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lut</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="../_modules/xopto/mcbase/mcutil/lut.html#LutManager.offset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcbase.mcutil.lut.LutManager.offset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the offset of the first element in the lookuptable.</p>
+<dd><p>Get the offset of the first element in the lookup table.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>lut</strong> (<em>np.ndarray</em>) – Lookup table array as passed to the append method.</p>

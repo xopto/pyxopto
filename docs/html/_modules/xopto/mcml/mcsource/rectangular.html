@@ -200,7 +200,7 @@
 <div class="viewcode-block" id="UniformRectangular.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.rectangular.html#xopto.mcml.mcsource.rectangular.UniformRectangular.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
         <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
-        <span class="k">class</span> <span class="nc">ClUniformRectangular</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Stucture</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">ClUniformRectangular</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
             <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">            Structure that is passed to the Monte carlo simulator kernel.</span>
 
@@ -217,17 +217,16 @@
 <span class="sd">                source -&gt; sample boundary transition.</span>
 <span class="sd">            cos_min: mc_fp_t</span>
 <span class="sd">                Cosine of the maximum emission angle in air. </span>
-<span class="sd">            layer_index: mc_int_t</span>
+<span class="sd">            layer_index: mc_size_t</span>
 <span class="sd">                Layer index in which the source is located.</span>
 <span class="sd">            &#39;&#39;&#39;</span>
             <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;cos_critical&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point2f_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;cos_critical&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;cos_min&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;layer_index&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;layer_index&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
             <span class="p">]</span>
         <span class="k">return</span>  <span class="n">ClUniformRectangular</span></div>
 
@@ -243,7 +242,7 @@
             <span class="s1">&#39;	mc_fp_t n;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t cos_critical;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t cos_min;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	mc_int_t layer_index;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_size_t layer_index;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;};&#39;</span>
         <span class="p">))</span></div>
 
@@ -255,7 +254,7 @@
         <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
             <span class="s1">&#39;void dbg_print_source(__mc_source_mem const McSource *src){&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print(&quot;UniformRectangular source:&quot;);&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	dbg_print_float(INDENT &quot;position:&quot;, &amp;src-&gt;position);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3(INDENT &quot;position:&quot;, &amp;src-&gt;position);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_point2f(INDENT &quot;size:&quot;, &amp;src-&gt;size);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;n:&quot;, src-&gt;n);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;cos_critical:&quot;, src-&gt;cos_critical);&#39;</span><span class="p">,</span>
@@ -291,10 +290,10 @@
             <span class="s1">&#39;		cos_theta&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	r = mcsim_reflectance_cos2(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	r = reflectance_cos2(&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		source-&gt;n, &#39;</span><span class="p">,</span>
             <span class="s1">&#39;		mc_layer_n(mcsim_layer(mcsim, source-&gt;layer_index)),&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		cos_theta,&#39;</span>
+            <span class="s1">&#39;		cos_theta&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mcsim_set_weight(mcsim, FP_1 - r);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
@@ -336,7 +335,7 @@
 <span class="sd">            Refractive index of the source.</span>
 
 <span class="sd">        na: float</span>
-<span class="sd">            Numerical aperture of the source in air (emission is cut off at the</span>
+<span class="sd">            Numerical aperture of the source in air (emission is cut off at</span>
 <span class="sd">            the NA).</span>
 
 <span class="sd">        position: (float, float, float)</span>
@@ -451,8 +450,7 @@
 
         <span class="n">target</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
 
-        <span class="n">target</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
-        <span class="n">target</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">fromarray</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height</span><span class="p">])</span>
 
         <span class="n">target</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
 
@@ -487,7 +485,7 @@
 <div class="viewcode-block" id="LambertianRectangular.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.rectangular.html#xopto.mcml.mcsource.rectangular.LambertianRectangular.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
         <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
-        <span class="k">class</span> <span class="nc">ClLambertianRectangular</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Stucture</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">ClLambertianRectangular</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
             <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">            Structure that is passed to the Monte carlo simulator kernel.</span>
 
@@ -504,16 +502,16 @@
 <span class="sd">                source -&gt; sample boundary transition.</span>
 <span class="sd">            na: mc_fp_t</span>
 <span class="sd">                Numerical aperture of the source in air. </span>
-<span class="sd">            layer_index: mc_int_t</span>
+<span class="sd">            layer_index: mc_size_t</span>
 <span class="sd">                Layer index in which the source is located.</span>
 <span class="sd">            &#39;&#39;&#39;</span>
             <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point2f_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;cos_critical&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;cos_critical&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;na&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;layer_index&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;layer_index&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
             <span class="p">]</span>
         <span class="k">return</span>  <span class="n">ClLambertianRectangular</span></div>
 
@@ -529,7 +527,7 @@
             <span class="s1">&#39;	mc_fp_t n;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t cos_critical;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t na;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	mc_int_t layer_index;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_size_t layer_index;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;};&#39;</span>
         <span class="p">))</span></div>
 
@@ -541,7 +539,7 @@
         <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
             <span class="s1">&#39;void dbg_print_source(__mc_source_mem const McSource *src){&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print(&quot;LambertianRectangular source:&quot;);&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	dbg_print_float(INDENT &quot;position:&quot;, &amp;src-&gt;position);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3(INDENT &quot;position:&quot;, &amp;src-&gt;position);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_point2f(INDENT &quot;size:&quot;, &amp;src-&gt;size);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;n:&quot;, src-&gt;n);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;cos_critical:&quot;, src-&gt;cos_critical);&#39;</span><span class="p">,</span>
@@ -577,10 +575,10 @@
             <span class="s1">&#39;		cos_theta&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	r = mcsim_reflectance_cos2(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	r = reflectance_cos2(&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		source-&gt;n, &#39;</span><span class="p">,</span>
             <span class="s1">&#39;		mc_layer_n(mcsim_layer(mcsim, source-&gt;layer_index)),&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		cos_theta,&#39;</span>
+            <span class="s1">&#39;		cos_theta&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mcsim_set_weight(mcsim, FP_1 - r);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
@@ -622,7 +620,7 @@
 <span class="sd">            Refractive index of the source.</span>
 
 <span class="sd">        na: float</span>
-<span class="sd">            Numerical aperture of the source in air (emission is cut off at the</span>
+<span class="sd">            Numerical aperture of the source in air (emission is cut off at</span>
 <span class="sd">            the NA).</span>
 
 <span class="sd">        position: (float, float, float)</span>
@@ -676,8 +674,7 @@
 
         <span class="n">target</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
 
-        <span class="n">target</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
-        <span class="n">target</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">fromarray</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height</span><span class="p">])</span>
 
         <span class="n">target</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
 
@@ -701,7 +698,7 @@
 <div class="viewcode-block" id="UniformRectangularLut.cl_type"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.rectangular.html#xopto.mcml.mcsource.rectangular.UniformRectangularLut.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
         <span class="n">T</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">types</span>
-        <span class="k">class</span> <span class="nc">ClUniformRectangularLut</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Stucture</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">ClUniformRectangularLut</span><span class="p">(</span><span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
             <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">            Structure that is passed to the Monte carlo simulator kernel.</span>
 
@@ -718,16 +715,16 @@
 <span class="sd">                source -&gt; sample boundary transition.</span>
 <span class="sd">            lut: cltypes.Structure</span>
 <span class="sd">                Linear lookup table structure. </span>
-<span class="sd">            layer_index: mc_int_t</span>
+<span class="sd">            layer_index: mc_size_t</span>
 <span class="sd">                Layer index in which the source is located.</span>
 <span class="sd">            &#39;&#39;&#39;</span>
             <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point3f_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_point2f_t</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;cos_critical&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_float</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;lut&#39;</span><span class="p">,</span> <span class="n">CollectionLut</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)),</span>
-                <span class="p">(</span><span class="s1">&#39;layer_index&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;cos_critical&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_fp_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;lut&#39;</span><span class="p">,</span> <span class="n">CollectionLut</span><span class="o">.</span><span class="n">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;layer_index&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
             <span class="p">]</span>
         <span class="k">return</span>  <span class="n">ClUniformRectangularLut</span></div>
 
@@ -742,7 +739,7 @@
             <span class="s1">&#39;	mc_point2f_t size;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t n;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t cos_critical;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	mc_fp_lut_t lut_lut;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_fp_lut_t lut;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_size_t layer_index;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;};&#39;</span>
         <span class="p">))</span></div>
@@ -755,14 +752,15 @@
         <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
             <span class="s1">&#39;void dbg_print_source(__mc_source_mem const McSource *src){&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print(&quot;UniformRectangularLut source:&quot;);&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	dbg_print_point3f(INDENT &quot;position:&quot;, &amp;src-&gt;position.);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	dbg_print_point3f(INDENT &quot;position:&quot;, &amp;src-&gt;position);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_point2f(INDENT &quot;size:&quot;, &amp;src-&gt;size);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;n:&quot;, src-&gt;n);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;   dbg_print_fp_lut(INDENT &quot;lut: &quot;, &amp;src-&gt;lut);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_float(INDENT &quot;cos_critical:&quot;, src-&gt;cos_critical);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	dbg_print_size_t(INDENT &quot;layer_index:&quot;, src-&gt;layer_index);&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;};&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;ivoid mcsim_launch(McSim *mcsim){&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;inline void mcsim_launch(McSim *mcsim){&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t sin_fi, cos_fi, sin_theta, cos_theta;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_fp_t r;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	__mc_source_mem const struct McSource *source = mcsim_source(mcsim);&#39;</span><span class="p">,</span>
@@ -792,10 +790,10 @@
             <span class="s1">&#39;		cos_theta&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;	r = mcsim_reflectance_cos2(&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	r = reflectance_cos2(&#39;</span><span class="p">,</span>
             <span class="s1">&#39;		source-&gt;n, &#39;</span><span class="p">,</span>
             <span class="s1">&#39;		mcsim_layer(mcsim, source-&gt;layer_index)-&gt;n,&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;		cos_theta,&#39;</span>
+            <span class="s1">&#39;		cos_theta&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mcsim_set_weight(mcsim, FP_1 - r);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
@@ -814,7 +812,8 @@
             <span class="s1">&#39;};&#39;</span><span class="p">,</span>
         <span class="p">))</span></div>
 
-<div class="viewcode-block" id="UniformRectangularLut.cl_options"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.rectangular.html#xopto.mcml.mcsource.rectangular.UniformRectangularLut.cl_options">[docs]</a>    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">RawOptions</span><span class="p">:</span>
+<div class="viewcode-block" id="UniformRectangularLut.cl_options"><a class="viewcode-back" href="../../../../apidoc/xopto.mcml.mcsource.rectangular.html#xopto.mcml.mcsource.rectangular.UniformRectangularLut.cl_options">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">RawOptions</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;MC_USE_FP_LUT&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)]</span></div>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lut</span><span class="p">:</span> <span class="n">CollectionLut</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -962,8 +961,7 @@
 
         <span class="n">target</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
 
-        <span class="n">target</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
-        <span class="n">target</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">fromarray</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height</span><span class="p">])</span>
 
         <span class="n">target</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
 

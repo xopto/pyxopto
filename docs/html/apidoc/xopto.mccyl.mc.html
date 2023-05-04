@@ -196,7 +196,6 @@
 <dt class="sig sig-object py" id="xopto.mccyl.mc.Mc">
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">Mc</span></span><a class="reference internal" href="../_modules/xopto/mccyl/mc.html#Mc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mccyl.mc.Mc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="xopto.mcbase.mcworker.html#xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin" title="xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcworker.ClWorkerStandardBufferLutMixin</span></code></a>, <a class="reference internal" href="xopto.mcbase.mcworker.html#xopto.mcbase.mcworker.ClWorkerRngMixin" title="xopto.mcbase.mcworker.ClWorkerRngMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcworker.ClWorkerRngMixin</span></code></a>, <a class="reference internal" href="xopto.mcbase.mcworker.html#xopto.mcbase.mcworker.ClWorker" title="xopto.mcbase.mcworker.ClWorker"><code class="xref py py-class docutils literal notranslate"><span class="pre">xopto.mcbase.mcworker.ClWorker</span></code></a></p>
-<p>Location of the OpenCL source template file.</p>
 <p>Cylindrical Multilayer Monte Carlo light propagation simulator object
 constructor.
 The object uses existing OpenCL kernel code in the mccyl.h and mccyl.c
@@ -240,12 +239,10 @@ specular reflections.</p>
 </p></li>
 <li><p><strong>trace</strong> (<a class="reference internal" href="xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace" title="xopto.mcbase.mctrace.Trace"><em>mctrace.Trace</em></a>) – <p>Trace object that can collect the various states of the photon
 packet including the initial, all intermediate and/or the final.</p>
-<dl class="simple">
-<dt>The Trace object will set the following simulator options:</dt><dd><ul>
+<p>The Trace object will set the following simulator options:</p>
+<ul>
 <li><p>MC_USE_TRACE</p></li>
 </ul>
-</dd>
-</dl>
 </p></li>
 <li><p><strong>fluence</strong> (<em>mcfluence.Fluence</em><em> or </em><em>mcfluence.FluenceCyl</em><em> or </em><em>mcfluence.FluenceRz</em>) – <p>Fluence object that collects the energy deposited by the photon
 packets on a regular 3D grid.</p>
@@ -267,8 +264,7 @@ as required:</p>
 <li><p><strong>types</strong> (<a class="reference internal" href="xopto.mcbase.mctypes.html#xopto.mcbase.mctypes.McDataTypes" title="xopto.mcbase.mctypes.McDataTypes"><em>mctypes.McDataTypes</em></a>) – <p>A class that defines all the simulator data types. Use one
 of the following predefined type classes derived from
 mctypes.McDataTypes:</p>
-<blockquote>
-<div><ul>
+<ul>
 <li><p>mctypes.McDataTypesSingle</p>
 <blockquote>
 <div><ul class="simple">
@@ -276,11 +272,8 @@ mctypes.McDataTypes:</p>
 <li><p>32-bit default integers,</p></li>
 <li><p>64-bit detector accumulators,</p></li>
 <li><p>32-bit single precision floating-point arithmetics,</p></li>
-<li><dl class="simple">
-<dt>32-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call limited to 4,294,967,295)</p>
-</dd>
-</dl>
-</li>
+<li><p>32-bit photon packet counter (maximum number of photon
+packets per OpenCL kernel call limited to 4,294,967,295)</p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -291,11 +284,8 @@ mctypes.McDataTypes:</p>
 <li><p>32-bit default integers,</p></li>
 <li><p>64-bit detector accumulators,</p></li>
 <li><p>64-bit double precision floating-point arithmetics,</p></li>
-<li><dl class="simple">
-<dt>32-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call limited to 4,294,967,295)</p>
-</dd>
-</dl>
-</li>
+<li><p>32-bit photon packet counter (maximum number of photon
+packets per OpenCL kernel call limited to 4,294,967,295)</p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -306,11 +296,8 @@ mctypes.McDataTypes:</p>
 <li><p>32-bit default integers,</p></li>
 <li><p>64-bit detector accumulators,</p></li>
 <li><p>32-bit single precision floating-point arithmetics,</p></li>
-<li><dl class="simple">
-<dt>64-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call virtually unlimited)</p>
-</dd>
-</dl>
-</li>
+<li><p>64-bit photon packet counter (maximum number of photon
+packets per OpenCL kernel call virtually unlimited)</p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -321,52 +308,36 @@ mctypes.McDataTypes:</p>
 <li><p>32-bit default integers,</p></li>
 <li><p>64-bit detector accumulators,</p></li>
 <li><p>64-bit double precision floating-point arithmetics,</p></li>
-<li><dl class="simple">
-<dt>32-bit photon packet counter (maximum number of photon</dt><dd><p>packets per OpenCL kernel call virtually unlimited)</p>
-</dd>
-</dl>
-</li>
+<li><p>64-bit photon packet counter (maximum number of photon
+packets per OpenCL kernel call virtually unlimited)</p></li>
 </ul>
 </div></blockquote>
 </li>
 </ul>
-</div></blockquote>
 <p>A custom combination of data types can be defined by the
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">mctypes.McDataTypes.custom()</span></code> method.</p>
 </p></li>
 <li><p><strong>options</strong> (<em>List</em><em>[</em><a class="reference internal" href="xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McOption" title="xopto.mcbase.mcoptions.McOption"><em>mcoptions.McOption</em></a><em>]</em>) – <p>A list of compile-time options for the simulator core.</p>
 <ul>
-<li><dl class="simple">
-<dt>mcoptions.McUseNativeMath: mcoptions.McUseNativeMath.on or mcoptions.McUseNativeMath.off</dt><dd><p>Use of native math functions.
+<li><p>mcoptions.McUseNativeMath: mcoptions.McUseNativeMath.on or mcoptions.McUseNativeMath.off
+Use of native math functions.
 Native functions are usually faster but less accurate.
-Default value is mcoptions.McUseNativeMath.off.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>mcoptions.McMinimumPacketWeight: mcoptions.McMinimumPacketWeight(float)</dt><dd><p>Minimum photon packet weight
+Default value is mcoptions.McUseNativeMath.off.</p></li>
+<li><p>mcoptions.McMinimumPacketWeight: mcoptions.McMinimumPacketWeight(float)
+Minimum photon packet weight
 before going through photon packet termination or lottery.
-Default value is mcoptions.McMinimumPacketWeight(1e-4).</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>mcoptions.McUseLottery: mcoptions.McUseLottery(float)</dt><dd><p>Terminate photon packet by lottery.
-Default value is mcoptions.McUseLottery.on.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>mcoptions.McPacketLotteryChance: mcoptions.McPacketLotteryChance(float)</dt><dd><p>Used if photon packets are terminated by lottery.
+Default value is mcoptions.McMinimumPacketWeight(1e-4).</p></li>
+<li><p>mcoptions.McUseLottery: mcoptions.McUseLottery(float)
+Terminate photon packet by lottery.
+Default value is mcoptions.McUseLottery.on.</p></li>
+<li><p>mcoptions.McPacketLotteryChance: mcoptions.McPacketLotteryChance(float)
+Used if photon packets are terminated by lottery.
 If the value of a uniform random number exceeds the specified
 chance, the photon packet is terminated.
-Default value is mcoptions.McPacketLotteryChance(0.01).</p>
-</dd>
-</dl>
-</li>
+Default value is mcoptions.McPacketLotteryChance(0.01).</p></li>
 <li><p>mcoptions.McLutMemory: mcoptions.McLutMemory.global_mem or mcoptions.McLutMemory.constant_mem</p></li>
-<li><dl class="simple">
-<dt>McFpLutMemory: mcoptions.McFpLutMemory.global_mem or mcoptions.McFpLutMemory.constant_mem</dt><dd><p>Set the OpenCL memory type for integer and floating-point
+<li><p>McFpLutMemory: mcoptions.McFpLutMemory.global_mem or mcoptions.McFpLutMemory.constant_mem
+Set the OpenCL memory type for integer and floating-point
 data lookup tables that are used by some scattering phase
 functions, accumulators with custom angular sensitivity and
 photon packet sources with custom emission characteristics.
@@ -382,16 +353,10 @@ This can significantly speed up the MC simulations (~ 10x).
 To further reduce the amount of constant GPU memory required
 by the lookup table data arrays, set the scattering phase
 functions of the first and last layer (the sourrounding medium)
-to one that is used by the internal (sample) layers.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>mcoptions.McDebugMode: mcoptions.McDebugMode.on or mcoptions.McDebugMode.off</dt><dd><p>Enables stdout debug information on some devices.
-Default value is mcoptions.McDebugMode.off.</p>
-</dd>
-</dl>
-</li>
+to one that is used by the internal (sample) layers.</p></li>
+<li><p>mcoptions.McDebugMode: mcoptions.McDebugMode.on or mcoptions.McDebugMode.off
+Enables stdout debug information on some devices.
+Default value is mcoptions.McDebugMode.off.</p></li>
 </ul>
 </p></li>
 <li><p><strong>rnginit</strong> (<em>np.uint64</em>) – OpenCL random number generator initializer as a 64-bit unsigned
@@ -413,13 +378,17 @@ instance of OpenCL Context or an instance of OpenCL CommandQueue.
 Note that in case an instance of CommandQueue is passed, the value
 of parameter cl_profiling is ignored since it is not possible to
 enable or disable profiling on an existing OpenCL CommandQueue.</p></li>
-<li><p><strong>cl_build_options</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – A list of OpenCL build option as specified by the OpenCl manuals at
+<li><p><strong>cl_build_options</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – <p>A list of OpenCL build option as specified by the OpenCl manuals at
 <a class="reference external" href="https://www.khronos.org/">https://www.khronos.org/</a>.
-An example of commonly used build options:
-cloptions=[‘-cl-opt-disable’, ‘-Werror’, ‘-cl-fast-relaxed-math’, ‘-cl-mad-enable’].
-Note that the “-cl-fast-relaxed-math” build option will likely
+An example of commonly used build options:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cloptions</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-cl-opt-disable&#39;</span><span class="p">,</span> <span class="s1">&#39;-Werror&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;-cl-fast-relaxed-math&#39;</span><span class="p">,</span> <span class="s1">&#39;-cl-mad-enable&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Note that the “-cl-fast-relaxed-math” build option will likely
 lead to a significant performance improvement but may on some
-platforms lead to errors in the simulated quantities.</p></li>
+platforms lead to errors in the simulated quantities.</p>
+</p></li>
 <li><p><strong>cl_profiling</strong> (<em>bool</em>) – Enables OpenCL command queue profiling if set to True.
 Note that in case an instance of CommandQueue is passed as the
 cl_devices parameter, the value of parameter cl_profiling is
@@ -444,12 +413,14 @@ on an existing OpenCL CommandQueue.</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="xopto.mccyl.mc.Mc.AUTOGEN_PATH">
 <span class="sig-name descname"><span class="pre">AUTOGEN_PATH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/.xopto/pyxopto/data/mccyl/auto'</span></em><a class="headerlink" href="#xopto.mccyl.mc.Mc.AUTOGEN_PATH" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Directory that will be used to save the rendered OpenCL source code.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="xopto.mccyl.mc.Mc.MC_CL_TEMPLATE_FILE">
-<span class="sig-name descname"><span class="pre">MC_CL_TEMPLATE_FILE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/src/pyxopto/xopto/mccyl/kernel/mc.template.h'</span></em><a class="headerlink" href="#xopto.mccyl.mc.Mc.MC_CL_TEMPLATE_FILE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">MC_CL_TEMPLATE_FILE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'/home/miran/src/pyxopto/tmp/release/pyxopto/xopto/mccyl/kernel/mc.template.h'</span></em><a class="headerlink" href="#xopto.mccyl.mc.Mc.MC_CL_TEMPLATE_FILE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of the OpenCL source template file.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="xopto.mccyl.mc.Mc.append_r_lut">
@@ -595,10 +566,10 @@ The states / seeds x and a can be optionally generated with the
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>data</strong> – A vector of random numbers.</p>
+<dd class="field-even"><p><strong>data</strong> – A vector of n random numbers.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.ndarray of length n</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>

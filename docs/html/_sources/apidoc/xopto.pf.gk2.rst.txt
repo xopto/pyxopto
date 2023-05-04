@@ -1,0 +1,7 @@
+xopto.pf.gk2 module
+===================
+
+.. automodule:: xopto.pf.gk2
+   :members:
+   :undoc-members:
+   :show-inheritance:

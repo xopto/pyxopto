@@ -233,8 +233,14 @@ class.</p></li>
 <p class="admonition-title">Note</p>
 <p>The layer boundaries in the z direction are increasing in the
 direction of the layer stack.
-Z coordinate 0.0 bellongs to the top surface of the first sample layer!</p>
+Z coordinate 0.0 belongs to the top surface of the first sample layer!</p>
 </div>
+<dl class="py method">
+<dt class="sig sig-object py" id="xopto.mcml.mclayer.layer.Layer.cl_declaration">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">cl_declaration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcml/mclayer/layer.html#Layer.cl_declaration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mclayer.layer.Layer.cl_declaration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structure and related API that defines a layer in the Monte Carlo simulator.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="xopto.mcml.mclayer.layer.Layer.cl_type">
 <span class="sig-name descname"><span class="pre">cl_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="xopto.cl.cltypes.html#xopto.cl.cltypes.Structure" title="xopto.cl.cltypes.Structure"><span class="pre">xopto.cl.cltypes.Structure</span></a><a class="reference internal" href="../_modules/xopto/mcml/mclayer/layer.html#Layer.cl_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mclayer.layer.Layer.cl_type" title="Permalink to this definition">¶</a></dt>
@@ -342,24 +348,6 @@ Raises exception on error.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="xopto.mcml.mclayer.layer.Layers.cl_declaration">
-<span class="sig-name descname"><span class="pre">cl_declaration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcml/mclayer/layer.html#Layers.cl_declaration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mclayer.layer.Layers.cl_declaration" title="Permalink to this definition">¶</a></dt>
-<dd><p>OpenCL declarations of the scattering phase function.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="xopto.mcml.mclayer.layer.Layers.cl_implementation">
-<span class="sig-name descname"><span class="pre">cl_implementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcml/mclayer/layer.html#Layers.cl_implementation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mclayer.layer.Layers.cl_implementation" title="Permalink to this definition">¶</a></dt>
-<dd><p>OpenCL implementation of the scattering phase function.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="xopto.mcml.mclayer.layer.Layers.cl_options">
-<span class="sig-name descname"><span class="pre">cl_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/xopto/mcml/mclayer/layer.html#Layers.cl_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mclayer.layer.Layers.cl_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>OpenCL options of the scattering phase function.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="xopto.mcml.mclayer.layer.Layers.cl_pack">
 <span class="sig-name descname"><span class="pre">cl_pack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="xopto.mcbase.mcobject.html#xopto.mcbase.mcobject.McObject" title="xopto.mcbase.mcobject.McObject"><span class="pre">xopto.mcbase.mcobject.McObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">_ctypes.Array</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">_ctypes.Array</span><a class="reference internal" href="../_modules/xopto/mcml/mclayer/layer.html#Layers.cl_pack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mclayer.layer.Layers.cl_pack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pack the layers into an OpenCL data type. The OpenCL data
@@ -411,7 +399,7 @@ the parameter names defined by the constructor.</p>
 <span class="sig-name descname"><span class="pre">layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#xopto.mcml.mclayer.layer.Layer" title="xopto.mcml.mclayer.layer.Layer"><span class="pre">xopto.mcml.mclayer.layer.Layer</span></a><a class="reference internal" href="../_modules/xopto/mcml/mclayer/layer.html#Layers.layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mclayer.layer.Layers.layer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns layer at the specified index. Note that the first layer
 (index 0) and the last layer (index -1) represent the medium
-sourounding the top and bottom surfaces of the sample, respectively</p>
+surrounding the top and bottom surfaces of the sample, respectively</p>
 </dd></dl>
 
 <dl class="py method">
@@ -438,7 +426,7 @@ z_bottom &gt; z_top.</p>
 <dt class="sig sig-object py" id="xopto.mcml.mclayer.layer.Layers.thickness">
 <span class="sig-name descname"><span class="pre">thickness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../_modules/xopto/mcml/mclayer/layer.html#Layers.thickness"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#xopto.mcml.mclayer.layer.Layers.thickness" title="Permalink to this definition">¶</a></dt>
 <dd><p>Thickness of the layer stack excluding the topmost and bottommost
-layers that sourround the sample.</p>
+layers that surround the sample.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><strong>thickness</strong> – The sample thickness excluding the topmost and bottommost layers of
@@ -465,7 +453,7 @@ the surrounding medium.</p>
 <dd class="field-odd"><p><strong>layers</strong> – List of managed layers</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list[layers]</p>
+<dd class="field-even"><p>List[layers]</p>
 </dd>
 </dl>
 </dd></dl>

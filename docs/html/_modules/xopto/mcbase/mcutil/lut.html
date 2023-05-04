@@ -366,7 +366,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        np2list: bool</span>
-<span class="sd">            Convert numpy data arryay (lookup table) to a python list.</span>
+<span class="sd">            Convert numpy data array (lookup table) to a python list.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -504,7 +504,7 @@
 <span class="sd">            Detector sensitivity (efficiency) as a function of the</span>
 <span class="sd">            angle of incidence. If the value is a str, an instance is loaded</span>
 <span class="sd">            from the file represented by the string.</span>
-<span class="sd">        cotheta: np.ndarray</span>
+<span class="sd">        costheta: np.ndarray</span>
 <span class="sd">            Angle of incidence cosines at which the detector</span>
 <span class="sd">            sensitivities are defined. If None, a vector of uniformly</span>
 <span class="sd">            distributed values from 0 to 1 is used.</span>
@@ -657,7 +657,7 @@
 <span class="sd">        list of lookup tables.</span>
 <span class="sd">        </span>
 <span class="sd">        Note that the Python id is used to identify lookup table object</span>
-<span class="sd">        and not the lookuptable content which is used wen appending a new</span>
+<span class="sd">        and not the lookup table content which is used wen appending a new</span>
 <span class="sd">        lookup table.</span>
 
 <span class="sd">        Parameters</span>
@@ -678,7 +678,7 @@
 
 <div class="viewcode-block" id="LutManager.offset"><a class="viewcode-back" href="../../../../apidoc/xopto.mcbase.mcutil.lut.html#xopto.mcbase.mcutil.lut.LutManager.offset">[docs]</a>    <span class="k">def</span> <span class="nf">offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lut</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="ow">or</span> <span class="n">LutEntry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Get the offset of the first element in the lookuptable.</span>
+<span class="sd">        Get the offset of the first element in the lookup table.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>

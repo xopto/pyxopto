@@ -351,6 +351,11 @@ the fields of the OpenCL and host structures cannot be properly aligned.
 When declaring OPenCL or host structures always start with the
 largest data type and move towards smaller data types. Use data types
 that are of size no less than 4 bytes.</p></li>
+<li><p><a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseEvents" title="xopto.mcbase.mcoptions.McUseEvents"><code class="xref py py-class docutils literal notranslate"><span class="pre">McUseEvents</span></code></a>
+(default is <a class="reference internal" href="../../apidoc/xopto.mcbase.mcoptions.html#xopto.mcbase.mcoptions.McUseEvents.off" title="xopto.mcbase.mcoptions.McUseEvents.off"><code class="xref py py-class docutils literal notranslate"><span class="pre">off</span></code></a>) -
+Can be used to enable tracking of packet events such as launch, absorption,
+scattering, reflection, refraction and termination. This option is useful for
+implementing custom packet trace filters.</p></li>
 </ul>
 </div>
 

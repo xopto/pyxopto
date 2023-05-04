@@ -241,14 +241,17 @@
 
 <div class="viewcode-block" id="Mc"><a class="viewcode-back" href="../../../apidoc/xopto.mcml.mc.html#xopto.mcml.mc.Mc">[docs]</a><span class="k">class</span> <span class="nc">Mc</span><span class="p">(</span><span class="n">mcworker</span><span class="o">.</span><span class="n">ClWorkerStandardBufferLutMixin</span><span class="p">,</span> <span class="n">mcworker</span><span class="o">.</span><span class="n">ClWorkerRngMixin</span><span class="p">,</span>
          <span class="n">mcworker</span><span class="o">.</span><span class="n">ClWorker</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Location of the OpenCL source template file.&#39;&#39;&#39;</span>
     <span class="n">MC_CL_TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
         <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="s1">&#39;mcml&#39;</span><span class="p">,</span> <span class="s1">&#39;kernel&#39;</span><span class="p">,</span> <span class="s1">&#39;mc.template.h&#39;</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39; Location of the OpenCL source template file. &#39;&#39;&#39;</span>
 
-    <span class="c1"># Directory that will be used to save the rendered OpenCL source code.</span>
     <span class="n">AUTOGEN_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">USER_DATA_PATH</span><span class="p">,</span> <span class="s1">&#39;mcml&#39;</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39; Directory that will be used to save the rendered OpenCL source code. &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">AUTOGEN_PATH</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">AUTOGEN_PATH</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">AUTOGEN_PATH</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">pass</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layers</span><span class="p">:</span> <span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span> <span class="ow">or</span> <span class="n">List</span><span class="p">[</span><span class="n">mclayer</span><span class="o">.</span><span class="n">Layer</span><span class="p">],</span>
                  <span class="n">source</span><span class="p">:</span> <span class="n">mcsource</span><span class="o">.</span><span class="n">Source</span><span class="p">,</span>
@@ -313,7 +316,8 @@
 <span class="sd">            packet including the initial, all intermediate and/or the final.</span>
 
 <span class="sd">            The Trace object will set the following simulator options:</span>
-<span class="sd">                - MC_USE_TRACE</span>
+
+<span class="sd">            - MC_USE_TRACE</span>
 
 <span class="sd">        fluence: mcfluence.Fluence or mcfluence.FluenceCyl or mcfluence.FluenceRz</span>
 <span class="sd">            Fluence object that collects the energy deposited by the photon</span>
@@ -339,41 +343,41 @@
 <span class="sd">            of the following predefined type classes derived from</span>
 <span class="sd">            mctypes.McDataTypes:</span>
 
-<span class="sd">                - mctypes.McDataTypesSingle</span>
+<span class="sd">            - mctypes.McDataTypesSingle</span>
 
-<span class="sd">                    - 32-bit size type</span>
-<span class="sd">                    - 32-bit default integers,</span>
-<span class="sd">                    - 64-bit detector accumulators,</span>
-<span class="sd">                    - 32-bit single precision floating-point arithmetics,</span>
-<span class="sd">                    - 32-bit photon packet counter (maximum number of photon</span>
-<span class="sd">                             packets per OpenCL kernel call limited to 4,294,967,295)</span>
+<span class="sd">                - 32-bit size type</span>
+<span class="sd">                - 32-bit default integers,</span>
+<span class="sd">                - 64-bit detector accumulators,</span>
+<span class="sd">                - 32-bit single precision floating-point arithmetics,</span>
+<span class="sd">                - 32-bit photon packet counter (maximum number of photon</span>
+<span class="sd">                  packets per OpenCL kernel call limited to 4,294,967,295)</span>
 
-<span class="sd">                - mctypes.McDataTypesDouble</span>
+<span class="sd">            - mctypes.McDataTypesDouble</span>
 
-<span class="sd">                    - 32-bit size type</span>
-<span class="sd">                    - 32-bit default integers,</span>
-<span class="sd">                    - 64-bit detector accumulators,</span>
-<span class="sd">                    - 64-bit double precision floating-point arithmetics,</span>
-<span class="sd">                    - 32-bit photon packet counter (maximum number of photon</span>
-<span class="sd">                             packets per OpenCL kernel call limited to 4,294,967,295)</span>
+<span class="sd">                - 32-bit size type</span>
+<span class="sd">                - 32-bit default integers,</span>
+<span class="sd">                - 64-bit detector accumulators,</span>
+<span class="sd">                - 64-bit double precision floating-point arithmetics,</span>
+<span class="sd">                - 32-bit photon packet counter (maximum number of photon</span>
+<span class="sd">                  packets per OpenCL kernel call limited to 4,294,967,295)</span>
 
-<span class="sd">                - mctypes.McDataTypesSingleCnt64</span>
+<span class="sd">            - mctypes.McDataTypesSingleCnt64</span>
 
-<span class="sd">                    - 64-bit size type</span>
-<span class="sd">                    - 32-bit default integers,</span>
-<span class="sd">                    - 64-bit detector accumulators,</span>
-<span class="sd">                    - 32-bit single precision floating-point arithmetics,</span>
-<span class="sd">                    - 64-bit photon packet counter (maximum number of photon</span>
-<span class="sd">                             packets per OpenCL kernel call virtually unlimited)</span>
+<span class="sd">                - 64-bit size type</span>
+<span class="sd">                - 32-bit default integers,</span>
+<span class="sd">                - 64-bit detector accumulators,</span>
+<span class="sd">                - 32-bit single precision floating-point arithmetics,</span>
+<span class="sd">                - 64-bit photon packet counter (maximum number of photon</span>
+<span class="sd">                  packets per OpenCL kernel call virtually unlimited)</span>
 
-<span class="sd">                - mctypes.McDataTypesDoubleCnt64</span>
+<span class="sd">            - mctypes.McDataTypesDoubleCnt64</span>
 
-<span class="sd">                    - 64-bit size type</span>
-<span class="sd">                    - 32-bit default integers,</span>
-<span class="sd">                    - 64-bit detector accumulators,</span>
-<span class="sd">                    - 64-bit double precision floating-point arithmetics,</span>
-<span class="sd">                    - 32-bit photon packet counter (maximum number of photon</span>
-<span class="sd">                           packets per OpenCL kernel call virtually unlimited)</span>
+<span class="sd">                - 64-bit size type</span>
+<span class="sd">                - 32-bit default integers,</span>
+<span class="sd">                - 64-bit detector accumulators,</span>
+<span class="sd">                - 64-bit double precision floating-point arithmetics,</span>
+<span class="sd">                - 64-bit photon packet counter (maximum number of photon</span>
+<span class="sd">                  packets per OpenCL kernel call virtually unlimited)</span>
 
 <span class="sd">            A custom combination of data types can be defined by the</span>
 <span class="sd">            :py:meth:`mctypes.McDataTypes.custom` method.</span>
@@ -382,48 +386,48 @@
 <span class="sd">            A list of compile-time options for the simulator core.</span>
 
 <span class="sd">            - mcoptions.McUseNativeMath: mcoptions.McUseNativeMath.on or mcoptions.McUseNativeMath.off</span>
-<span class="sd">                Use of native math functions.</span>
-<span class="sd">                Native functions are usually faster but less accurate.</span>
-<span class="sd">                Default value is mcoptions.McUseNativeMath.off.</span>
+<span class="sd">              Use of native math functions.</span>
+<span class="sd">              Native functions are usually faster but less accurate.</span>
+<span class="sd">              Default value is mcoptions.McUseNativeMath.off.</span>
 
 <span class="sd">            - mcoptions.McMinimumPacketWeight: mcoptions.McMinimumPacketWeight(float)</span>
-<span class="sd">                Minimum photon packet weight</span>
-<span class="sd">                before going through photon packet termination or lottery.</span>
-<span class="sd">                Default value is mcoptions.McMinimumPacketWeight(1e-4).</span>
+<span class="sd">              Minimum photon packet weight</span>
+<span class="sd">              before going through photon packet termination or lottery.</span>
+<span class="sd">              Default value is mcoptions.McMinimumPacketWeight(1e-4).</span>
 
 <span class="sd">            - mcoptions.McUseLottery: mcoptions.McUseLottery(float) </span>
-<span class="sd">                Terminate photon packet by lottery.</span>
-<span class="sd">                Default value is mcoptions.McUseLottery.on.</span>
+<span class="sd">              Terminate photon packet by lottery.</span>
+<span class="sd">              Default value is mcoptions.McUseLottery.on.</span>
 
 <span class="sd">            - mcoptions.McPacketLotteryChance: mcoptions.McPacketLotteryChance(float)</span>
-<span class="sd">                Used if photon packets are terminated by lottery.</span>
-<span class="sd">                If the value of a uniform random number exceeds the specified</span>
-<span class="sd">                chance, the photon packet is terminated.</span>
-<span class="sd">                Default value is mcoptions.McPacketLotteryChance(0.01).</span>
+<span class="sd">              Used if photon packets are terminated by lottery.</span>
+<span class="sd">              If the value of a uniform random number exceeds the specified</span>
+<span class="sd">              chance, the photon packet is terminated.</span>
+<span class="sd">              Default value is mcoptions.McPacketLotteryChance(0.01).</span>
 
 <span class="sd">            - mcoptions.McLutMemory: mcoptions.McLutMemory.global_mem or mcoptions.McLutMemory.constant_mem</span>
 <span class="sd">            - McFpLutMemory: mcoptions.McFpLutMemory.global_mem or mcoptions.McFpLutMemory.constant_mem</span>
-<span class="sd">                Set the OpenCL memory type for integer and floating-point</span>
-<span class="sd">                data lookup tables that are used by some scattering phase</span>
-<span class="sd">                functions, accumulators with custom angular sensitivity and</span>
-<span class="sd">                photon packet sources with custom emission characteristics.</span>
-<span class="sd">                Note that the default setting is mcoptions.McFpLutMemory.global_mem.</span>
-<span class="sd">                Using the constant memory (mcoptions.McFpLutMemory.constant_mem)</span>
-<span class="sd">                can be significantly (10x or more) faster, in particular on</span>
-<span class="sd">                older GPUs. However, note that the amount of constant</span>
-<span class="sd">                memory available on GPUs is typically limited to about 64k.</span>
-<span class="sd">                If using lookup table-based scattering phase</span>
-<span class="sd">                functions that can be fit into the constant memory, then</span>
-<span class="sd">                set this option to mcoptions.McFpLutMemory.constant_mem.</span>
-<span class="sd">                This can significantly speed up the MC simulations (~ 10x).</span>
-<span class="sd">                To further reduce the amount of constant GPU memory required</span>
-<span class="sd">                by the lookup table data arrays, set the scattering phase</span>
-<span class="sd">                functions of the first and last layer (the sourrounding medium)</span>
-<span class="sd">                to one that is used by the internal (sample) layers.</span>
+<span class="sd">              Set the OpenCL memory type for integer and floating-point</span>
+<span class="sd">              data lookup tables that are used by some scattering phase</span>
+<span class="sd">              functions, accumulators with custom angular sensitivity and</span>
+<span class="sd">              photon packet sources with custom emission characteristics.</span>
+<span class="sd">              Note that the default setting is mcoptions.McFpLutMemory.global_mem.</span>
+<span class="sd">              Using the constant memory (mcoptions.McFpLutMemory.constant_mem)</span>
+<span class="sd">              can be significantly (10x or more) faster, in particular on</span>
+<span class="sd">              older GPUs. However, note that the amount of constant</span>
+<span class="sd">              memory available on GPUs is typically limited to about 64k.</span>
+<span class="sd">              If using lookup table-based scattering phase</span>
+<span class="sd">              functions that can be fit into the constant memory, then</span>
+<span class="sd">              set this option to mcoptions.McFpLutMemory.constant_mem.</span>
+<span class="sd">              This can significantly speed up the MC simulations (~ 10x).</span>
+<span class="sd">              To further reduce the amount of constant GPU memory required</span>
+<span class="sd">              by the lookup table data arrays, set the scattering phase</span>
+<span class="sd">              functions of the first and last layer (the sourrounding medium)</span>
+<span class="sd">              to one that is used by the internal (sample) layers.</span>
 
 <span class="sd">            - mcoptions.McDebugMode: mcoptions.McDebugMode.on or mcoptions.McDebugMode.off</span>
-<span class="sd">                Enables stdout debug information on some devices.</span>
-<span class="sd">                Default value is mcoptions.McDebugMode.off.</span>
+<span class="sd">              Enables stdout debug information on some devices.</span>
+<span class="sd">              Default value is mcoptions.McDebugMode.off.</span>
 
 <span class="sd">        rnginit: np.uint64</span>
 <span class="sd">            OpenCL random number generator initializer as a 64-bit unsigned</span>
@@ -452,7 +456,12 @@
 <span class="sd">            A list of OpenCL build option as specified by the OpenCl manuals at</span>
 <span class="sd">            https://www.khronos.org/.</span>
 <span class="sd">            An example of commonly used build options:</span>
-<span class="sd">            cloptions=[&#39;-cl-opt-disable&#39;, &#39;-Werror&#39;, &#39;-cl-fast-relaxed-math&#39;, &#39;-cl-mad-enable&#39;].</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                cloptions=[&#39;-cl-opt-disable&#39;, &#39;-Werror&#39;,</span>
+<span class="sd">                           &#39;-cl-fast-relaxed-math&#39;, &#39;-cl-mad-enable&#39;].</span>
+
 <span class="sd">            Note that the &quot;-cl-fast-relaxed-math&quot; build option will likely</span>
 <span class="sd">            lead to a significant performance improvement but may on some</span>
 <span class="sd">            platforms lead to errors in the simulated quantities.</span>
@@ -493,14 +502,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_sizeof_types</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># Data types of the simulator objects.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mc_obj_types</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;pf&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;detectors&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mc_obj_types</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;pf&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                              <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;detectors&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                               <span class="s1">&#39;fluence&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;trace&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                               <span class="s1">&#39;surface_layouts&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
 
         <span class="c1"># Prepare the sample layer stack.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span> <span class="o">=</span> <span class="n">mclayer</span><span class="o">.</span><span class="n">Layers</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
-        <span class="c1"># Save the type of scattering phase function.</span>
+        <span class="c1"># Save the types of layer and scattering phase function.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mc_obj_types</span><span class="p">[</span><span class="s1">&#39;layer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mc_obj_types</span><span class="p">[</span><span class="s1">&#39;pf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="p">)</span>
 
         <span class="c1"># Photon packet source.</span>
@@ -639,9 +650,13 @@
         <span class="c1"># Finalize and pack the sample layer stack.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_packed</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="o">.</span><span class="n">cl_pack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packed</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">])</span>
 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mc_obj_types</span><span class="p">[</span><span class="s1">&#39;layer&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The layer type kind/type must not&#39;</span> \
+                             <span class="s1">&#39;change between simulation calls!&#39;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mc_obj_types</span><span class="p">[</span><span class="s1">&#39;pf&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The scattering phase function kind/type must not&#39;</span> \
-                             <span class="s1">&#39;change simulation calls!&#39;</span><span class="p">)</span>
+                             <span class="s1">&#39;change between simulation calls!&#39;</span><span class="p">)</span>
 
         <span class="c1"># Finalize and pack the photon packet source.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_packed</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">],</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> \
@@ -689,8 +704,9 @@
         <span class="c1">#    template = jinja2.Template(fp.read())</span>
         <span class="n">template</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">mcsrc</span><span class="o">.</span><span class="n">fuse</span><span class="p">(</span><span class="o">**</span><span class="n">_MCML_FUSION_SPEC</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">))</span>
 
-        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:{},</span> <span class="s1">&#39;trace&#39;</span><span class="p">:{},</span> <span class="s1">&#39;fluence&#39;</span><span class="p">:{},</span> <span class="s1">&#39;detectors&#39;</span><span class="p">:</span> <span class="p">{},</span>
-                   <span class="s1">&#39;surface_layouts&#39;</span><span class="p">:{},</span> <span class="s1">&#39;mc&#39;</span><span class="p">:{}}</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="p">{},</span> <span class="s1">&#39;pf&#39;</span><span class="p">:</span> <span class="p">{},</span> <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="p">{},</span>
+                   <span class="s1">&#39;trace&#39;</span><span class="p">:</span> <span class="p">{},</span> <span class="s1">&#39;fluence&#39;</span><span class="p">:{},</span> <span class="s1">&#39;detectors&#39;</span><span class="p">:</span> <span class="p">{},</span>
+                   <span class="s1">&#39;surface_layouts&#39;</span><span class="p">:</span> <span class="p">{},</span> <span class="s1">&#39;mc&#39;</span><span class="p">:</span> <span class="p">{}}</span>
 
         <span class="c1"># Collect the photon packet source type compile context.</span>
         <span class="n">context</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
@@ -699,11 +715,18 @@
             <span class="s1">&#39;implementation&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="o">.</span><span class="n">fetch_cl_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="p">}</span>
 
-        <span class="c1"># Collect the layer stack and scattering phase function compile context.</span>
+        <span class="c1"># Collect the layer stack compile context.</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;layer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;options&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fetch_cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+            <span class="s1">&#39;declaration&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fetch_cl_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+            <span class="s1">&#39;implementation&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fetch_cl_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Collect the scattering phase function compile context.</span>
         <span class="n">context</span><span class="p">[</span><span class="s1">&#39;pf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;options&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="o">.</span><span class="n">fetch_cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
-            <span class="s1">&#39;declaration&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="o">.</span><span class="n">fetch_cl_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
-            <span class="s1">&#39;implementation&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="o">.</span><span class="n">fetch_cl_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+            <span class="s1">&#39;options&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">fetch_cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+            <span class="s1">&#39;declaration&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">fetch_cl_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+            <span class="s1">&#39;implementation&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">fetch_cl_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
         <span class="p">}</span>
 
         <span class="c1"># Collect the photon packet trace type compile context.</span>
@@ -753,6 +776,7 @@
         <span class="n">resolved_options</span> <span class="o">=</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">resolve_cl_options</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_types</span><span class="p">()</span><span class="o">.</span><span class="n">fetch_cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
             <span class="n">context</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="p">[]),</span>
+            <span class="n">context</span><span class="p">[</span><span class="s1">&#39;layer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="p">[]),</span>
             <span class="n">context</span><span class="p">[</span><span class="s1">&#39;pf&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="p">[]),</span>
             <span class="n">context</span><span class="p">[</span><span class="s1">&#39;detectors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="p">[]),</span>
             <span class="n">context</span><span class="p">[</span><span class="s1">&#39;fluence&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="p">[]),</span>
@@ -1480,8 +1504,8 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        data: np.ndarray of length n</span>
-<span class="sd">            A vector of random numbers.</span>
+<span class="sd">        data: np.ndarray</span>
+<span class="sd">            A vector of n random numbers.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">seeds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>

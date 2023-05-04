@@ -624,6 +624,25 @@
     <span class="c1"># Number of fields in a single trace entry.</span>
     <span class="n">TRACE_ENTRY_LEN</span> <span class="o">=</span> <span class="mi">8</span>
 
+    <span class="c1"># Trace all packet reflection events at geometry boundaries.</span>
+    <span class="n">TRACE_EVENT_REFLECTION</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1"># Trace all packet refraction events at geometry boundaries.</span>
+    <span class="n">TRACE_EVENT_REFRACTION</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="c1"># Trace all geometry boundary hit events.</span>
+    <span class="n">TRACE_EVENT_BOUNDARY_HIT</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="c1"># Trace all packet launch events.</span>
+    <span class="n">TRACE_EVENT_LAUNCH</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="c1"># Trace all packet absorption events.</span>
+    <span class="n">TRACE_EVENT_ABSORPTION</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="c1"># Trace all packet scattering events.</span>
+    <span class="n">TRACE_EVENT_SCATTERING</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="c1"># Trace all packet termination events.</span>
+    <span class="n">TRACE_EVENT_TERMINATION</span> <span class="o">=</span> <span class="mi">64</span>
+    <span class="c1"># Trace events that are triggered by packet escaping/leaving the simulation domain.</span>
+    <span class="n">TRACE_EVENT_ESCAPE</span> <span class="o">=</span> <span class="mi">128</span>
+    <span class="c1"># Trace all events</span>
+    <span class="n">TRACE_EVENT_ALL</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
 <div class="viewcode-block" id="Trace.cl_type"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.cl_type">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">cl_type</span><span class="p">(</span><span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cltypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -654,6 +673,7 @@
                 <span class="p">(</span><span class="s1">&#39;max_events&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_int_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;data_buffer_offset&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;count_buffer_offset&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_size_t</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;event_mask&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">mc_uint_t</span><span class="p">),</span>
             <span class="p">]</span>
 
         <span class="k">return</span> <span class="n">ClTrace</span></div>
@@ -668,6 +688,7 @@
             <span class="s1">&#39;	mc_int_t max_events;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_size_t data_buffer_offset;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mc_size_t count_buffer_offset;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	mc_uint_t event_mask;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;};&#39;</span><span class="p">,</span>
         <span class="p">))</span></div>
 
@@ -700,6 +721,12 @@
             <span class="s1">&#39;		dbg_print_float(INDENT &quot;path length :&quot;, mcsim_optical_pathlength(mcsim));&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	#endif&#39;</span><span class="p">,</span>
             <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	#if MC_USE_EVENTS&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		dbg_print_uint(&quot;Trace called with events:&quot;, mcsim_event_flags(mcsim));&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;		if (!(trace-&gt;event_mask &amp; mcsim_event_flags(mcsim)))&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;			return 0;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;	#endif&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mcsim_float_buffer(mcsim)[pos++] = mcsim_position_x(mcsim);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mcsim_float_buffer(mcsim)[pos++] = mcsim_position_y(mcsim);&#39;</span><span class="p">,</span>
             <span class="s1">&#39;	mcsim_float_buffer(mcsim)[pos++] = mcsim_position_z(mcsim);&#39;</span><span class="p">,</span>
@@ -726,13 +753,15 @@
         <span class="p">))</span></div>
 
 <div class="viewcode-block" id="Trace.cl_options"><a class="viewcode-back" href="../../../apidoc/xopto.mcbase.mctrace.html#xopto.mcbase.mctrace.Trace.cl_options">[docs]</a>    <span class="k">def</span> <span class="nf">cl_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mc</span><span class="p">:</span> <span class="n">mcobject</span><span class="o">.</span><span class="n">McObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mcoptions</span><span class="o">.</span><span class="n">RawOptions</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;MC_USE_TRACE&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">),</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;MC_USE_EVENTS&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;MC_USE_TRACE&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;TRACE_ENTRY_LEN&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_ENTRY_LEN</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s1">&#39;MC_USE_SAMPLING_VOLUME&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;MC_TRACK_OPTICAL_PATHLENGTH&#39;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plon</span><span class="p">))]</span></div>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">:</span> <span class="nb">int</span> <span class="ow">or</span> <span class="s1">&#39;Trace&#39;</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">TRACE_ALL</span><span class="p">,</span>
-                 <span class="nb">filter</span><span class="p">:</span> <span class="n">Filter</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">plon</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+                 <span class="nb">filter</span><span class="p">:</span> <span class="n">Filter</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">event_mask</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">plon</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Photon packet trace object constructor.</span>
 
@@ -776,6 +805,22 @@
 <span class="sd">            A filter class needs to define a __call__ method that returns a</span>
 <span class="sd">            new Trace instance with filtered events.</span>
 <span class="sd">            See the Filter class for details and example.</span>
+<span class="sd">        event_mask: int</span>
+<span class="sd">            A mask of event flags that are recorded/traced in the MC</span>
+<span class="sd">            kernel. If None, all events are traced and event tracking</span>
+<span class="sd">            is disabled (default). Note that event tracking comes with some</span>
+<span class="sd">            performance cost. All events should be traced when computing</span>
+<span class="sd">            the sampling volume!</span>
+<span class="sd">            The following events can be used with the event mask:</span>
+
+<span class="sd">              - TRACE_EVENT_LAUNCH, tracing all packet launch events</span>
+<span class="sd">              - TRACE_EVENT_ABSORPTION, tracing all packet absorption events</span>
+<span class="sd">              - TRACE_EVENT_SCATTERING, tracing all packet scattering events</span>
+<span class="sd">              - TRACE_EVENT_BOUNDARY_HIT, tracing all geometry boundary interactions </span>
+<span class="sd">              - TRACE_EVENT_REFLECTION, tracing all packet reflection events at geometrical boundaries</span>
+<span class="sd">              - TRACE_EVENT_REFRACTION, tracing all packet refraction events at geometrical boundaries</span>
+<span class="sd">              - TRACE_EVENT_TERMINATION, tracing packet termination</span>
+<span class="sd">              - TRACE_EVENT_ESCAPE, packet escapes the simulation domain</span>
 
 <span class="sd">        plon: bool</span>
 <span class="sd">            Turn on/off tracking of the optical pathlength. If set to nonzero,</span>
@@ -801,7 +846,6 @@
 <span class="sd">        The number of valid trace entries for each photon packet can</span>
 <span class="sd">        be obtained by obj.n (e.g. obj.n[0] for the first photon packet).</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">maxlen</span><span class="p">,</span> <span class="n">Trace</span><span class="p">):</span>
             <span class="n">trace</span> <span class="o">=</span> <span class="n">maxlen</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_maxlen</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">maxlen</span>
@@ -811,6 +855,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">filter</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_n_dropped</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">dropped</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_plon</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">plon</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event_mask</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">event_mask</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="kc">None</span>
@@ -819,6 +864,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span> <span class="o">=</span> <span class="nb">filter</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_n_dropped</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_plon</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">plon</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">event_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">event_mask</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">event_mask</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event_mask</span> <span class="o">=</span> <span class="n">event_mask</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_overflow_mask</span> <span class="o">=</span> <span class="kc">None</span>
@@ -939,6 +987,11 @@
     <span class="n">plon</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_plon</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;State of the optical pathlength tracking.&#39;</span><span class="p">)</span>
 
+
+    <span class="k">def</span> <span class="nf">_get_event_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_mask</span>
+    <span class="n">event_mask</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_event_mask</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                          <span class="s1">&#39;Mask of traced events.&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
@@ -1087,6 +1140,11 @@
         <span class="n">target</span><span class="o">.</span><span class="n">count_buffer_offset</span> <span class="o">=</span> <span class="n">allocation</span><span class="o">.</span><span class="n">offset</span>
 
         <span class="n">target</span><span class="o">.</span><span class="n">max_events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxlen</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target</span><span class="o">.</span><span class="n">event_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_mask</span><span class="p">;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">target</span><span class="o">.</span><span class="n">event_mask</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
         <span class="k">return</span> <span class="n">target</span></div>
 
@@ -1313,6 +1371,34 @@
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span> <span class="o">+</span> \
             <span class="s1">&#39; # Trace object at 0x</span><span class="si">{:&gt;08X}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+<span class="n">TRACE_EVENT_REFLECTION</span> <span class="o">=</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_EVENT_REFLECTION</span>
+<span class="sd">&#39;&#39;&#39;Trace all packet reflection events at geometry boundaries. &#39;&#39;&#39;</span>
+
+<span class="n">TRACE_EVENT_REFRACTION</span> <span class="o">=</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_EVENT_REFRACTION</span>
+<span class="sd">&#39;&#39;&#39; Trace all packet refraction events at geometry boundaries. &#39;&#39;&#39;</span>
+
+<span class="n">TRACE_EVENT_BOUNDARY_HIT</span> <span class="o">=</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_EVENT_BOUNDARY_HIT</span>
+<span class="sd">&#39;&#39;&#39; Trace all geometry boundary hit events. &#39;&#39;&#39;</span>
+
+<span class="n">TRACE_EVENT_LAUNCH</span> <span class="o">=</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_EVENT_LAUNCH</span>
+<span class="sd">&#39;&#39;&#39; Trace all packet launch events. &#39;&#39;&#39;</span>
+
+<span class="n">TRACE_EVENT_ABSORPTION</span> <span class="o">=</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_EVENT_ABSORPTION</span>
+<span class="sd">&#39;&#39;&#39; Trace all packet absorption events. &#39;&#39;&#39;</span>
+
+<span class="n">TRACE_EVENT_SCATTERING</span> <span class="o">=</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_EVENT_SCATTERING</span>
+<span class="sd">&#39;&#39;&#39; Trace all packet scattering events. &#39;&#39;&#39;</span>
+
+<span class="n">TRACE_EVENT_TERMINATION</span> <span class="o">=</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_EVENT_TERMINATION</span>
+<span class="sd">&#39;&#39;&#39; Trace all packet termination events. &#39;&#39;&#39;</span>
+
+<span class="n">TRACE_EVENT_ESCAPE</span> <span class="o">=</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_EVENT_ESCAPE</span>
+<span class="sd">&#39;&#39;&#39; Trace events that are triggered by packet escaping/leaving the simulation domain. &#39;&#39;&#39;</span>
+
+<span class="n">TRACE_EVENT_ALL</span><span class="o">=</span> <span class="n">Trace</span><span class="o">.</span><span class="n">TRACE_EVENT_ALL</span>
+<span class="sd">&#39;&#39;&#39; Trace all events. &#39;&#39;&#39;</span>
 </pre></div>
 
            </div>

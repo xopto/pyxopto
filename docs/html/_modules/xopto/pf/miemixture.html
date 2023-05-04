@@ -188,6 +188,7 @@
 <span class="c1">################################# End license ##################################</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -219,16 +220,18 @@
 
 <span class="sd">        &gt;&gt;&gt; from matplotlib import pyplot as pp</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from xopto import pf</span>
 <span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &gt;&gt;&gt; cost_heta = np.linspace(-1.0, 1.0, 1000)</span>
-<span class="sd">        &gt;&gt;&gt; normal1 = MieNormal(0.5e-6, 15e-9, nsphere=1.6, nmedium=1.33, wavelength=550e-9, nd=1000)</span>
-<span class="sd">        &gt;&gt;&gt; normal2 = MieNormal(1e-6, 25e-9, nsphere=1.6, nmedium=1.33, wavelength=550e-9, nd=1000)</span>
-<span class="sd">        &gt;&gt;&gt; mixture = MieMixture((normal1, normal2), (0.98, 0.02))</span>
+<span class="sd">        &gt;&gt;&gt; normal1 = pf.MieNormal(0.5e-6, 15e-9, nsphere=1.6, nmedium=1.33, wavelength=550e-9, nd=1000)</span>
+<span class="sd">        &gt;&gt;&gt; normal2 = pf.MieNormal(1e-6, 25e-9, nsphere=1.6, nmedium=1.33, wavelength=550e-9, nd=1000)</span>
+<span class="sd">        &gt;&gt;&gt; mixture = pf.MieMixture((normal1, normal2), (0.98, 0.02))</span>
 <span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &gt;&gt;&gt; pp.figure()</span>
 <span class="sd">        &gt;&gt;&gt; pp.semilogy(cost_heta, mixture(cost_heta), label=&#39;Mixture 0.98*N(0.5 um, 15 nm) + 0.02*N(1 um, 25 nm)&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; pp.grid()</span>
 <span class="sd">        &gt;&gt;&gt; pp.legend()</span>
+<span class="sd">        &gt;&gt;&gt; pp.show()</span>
 <span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -239,12 +242,14 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
             <span class="n">weights</span> <span class="o">=</span> <span class="p">(</span><span class="n">weights</span><span class="p">,)</span>
 
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">!=</span> <span class="mf">1.0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="n">weights_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">/</span><span class="n">weights_sum</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">weights_sum</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                 <span class="s1">&#39;The sum of scattering phase function weights should be 1!&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_miepds</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">miepds</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
 
 <div class="viewcode-block" id="MieMixture.distribution"><a class="viewcode-back" href="../../../apidoc/xopto.pf.miemixture.html#xopto.pf.miemixture.MieMixture.distribution">[docs]</a>    <span class="k">def</span> <span class="nf">distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mixture</span><span class="p">:</span>
         <span class="sd">&#39;&#39;&#39;</span>

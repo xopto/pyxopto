@@ -19,6 +19,7 @@ Submodules
    xopto.pf.distribution
    xopto.pf.doublehg
    xopto.pf.gk
+   xopto.pf.gk2
    xopto.pf.hg
    xopto.pf.mgk
    xopto.pf.mhg
