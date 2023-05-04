@@ -69,7 +69,7 @@ class ClWorker(mcobject.McObject):
                 - 64-bit detector accumulators,
                 - single precision floating-point arithmetics,
                 - 32-bit photon packet counter (maximum number of photon
-                    packets per OpenCL kernel call limited to 4,294,967,295)
+                  packets per OpenCL kernel call limited to 4,294,967,295)
 
             - mctypes.McDataTypesDouble
 
@@ -78,7 +78,7 @@ class ClWorker(mcobject.McObject):
                 - 64-bit detector accumulators,
                 - double precision floating-point arithmetics,
                 - 32-bit photon packet counter (maximum number of photon
-                    packets per OpenCL kernel call limited to 4,294,967,295)
+                  packets per OpenCL kernel call limited to 4,294,967,295)
 
             - mctypes.McDataTypesSingleCnt64
 
@@ -87,7 +87,7 @@ class ClWorker(mcobject.McObject):
                 - 64-bit detector accumulators,
                 - single precision floating-point arithmetics,
                 - 64-bit photon packet counter (maximum number of photon
-                    packets per OpenCL kernel call virtually unlimited)
+                  packets per OpenCL kernel call virtually unlimited)
 
             - mctypes.McDataTypesDoubleCnt64
 
@@ -95,8 +95,8 @@ class ClWorker(mcobject.McObject):
                 - 32-bit default integers,
                 - 64-bit detector accumulators,
                 - double precision floating-point arithmetics,
-                - 32-bit photon packet counter (maximum number of photon
-                    packets per OpenCL kernel call virtually unlimited)
+                - 64-bit photon packet counter (maximum number of photon
+                  packets per OpenCL kernel call virtually unlimited)
 
         cl_devices: str or cl.Device or List[cl.Device] or cl.Context or cl.CommnadQueue
             A python list of OpenCL devices that are used for

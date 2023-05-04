@@ -74,14 +74,19 @@ _MCML_FUSION_SPEC = {
 
 class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
          mcworker.ClWorker):
-    '''Location of the OpenCL source template file.'''
+
     MC_CL_TEMPLATE_FILE = os.path.join(
         ROOT_PATH, 'mccyl', 'kernel', 'mc.template.h')
+    ''' Location of the OpenCL source template file. '''
 
-    # Directory that will be used to save the rendered OpenCL source code.
     AUTOGEN_PATH = os.path.join(USER_DATA_PATH, 'mccyl', 'auto')
+    ''' Directory that will be used to save the rendered OpenCL source code. '''
+
     if not os.path.exists(AUTOGEN_PATH):
-        os.makedirs(AUTOGEN_PATH)
+        try:
+            os.makedirs(AUTOGEN_PATH, exist_ok=True)
+        except OSError:
+            pass
 
     def __init__(self, layers: mclayer.Layers or List[mclayer.Layer],
                  source: mcsource.Source,
@@ -147,14 +152,15 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             packet including the initial, all intermediate and/or the final.
 
             The Trace object will set the following simulator options:
-                - MC_USE_TRACE
+
+            - MC_USE_TRACE
 
         fluence: mcfluence.Fluence or mcfluence.FluenceCyl or mcfluence.FluenceRz
             Fluence object that collects the energy deposited by the photon
             packets on a regular 3D grid.
 
             The Fluence object will set the following simulator options:
-            
+
             - MC_USE_FLUENCE
 
         surface: mcsurface.SurfaceLayouts
@@ -173,41 +179,41 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             of the following predefined type classes derived from
             mctypes.McDataTypes:
 
-                - mctypes.McDataTypesSingle
+            - mctypes.McDataTypesSingle
 
-                    - 32-bit size type
-                    - 32-bit default integers,
-                    - 64-bit detector accumulators,
-                    - 32-bit single precision floating-point arithmetics,
-                    - 32-bit photon packet counter (maximum number of photon
-                             packets per OpenCL kernel call limited to 4,294,967,295)
+                - 32-bit size type
+                - 32-bit default integers,
+                - 64-bit detector accumulators,
+                - 32-bit single precision floating-point arithmetics,
+                - 32-bit photon packet counter (maximum number of photon
+                  packets per OpenCL kernel call limited to 4,294,967,295)
 
-                - mctypes.McDataTypesDouble
+            - mctypes.McDataTypesDouble
 
-                    - 32-bit size type
-                    - 32-bit default integers,
-                    - 64-bit detector accumulators,
-                    - 64-bit double precision floating-point arithmetics,
-                    - 32-bit photon packet counter (maximum number of photon
-                             packets per OpenCL kernel call limited to 4,294,967,295)
+                - 32-bit size type
+                - 32-bit default integers,
+                - 64-bit detector accumulators,
+                - 64-bit double precision floating-point arithmetics,
+                - 32-bit photon packet counter (maximum number of photon
+                  packets per OpenCL kernel call limited to 4,294,967,295)
 
-                - mctypes.McDataTypesSingleCnt64
+            - mctypes.McDataTypesSingleCnt64
 
-                    - 64-bit size type
-                    - 32-bit default integers,
-                    - 64-bit detector accumulators,
-                    - 32-bit single precision floating-point arithmetics,
-                    - 64-bit photon packet counter (maximum number of photon
-                             packets per OpenCL kernel call virtually unlimited)
+                - 64-bit size type
+                - 32-bit default integers,
+                - 64-bit detector accumulators,
+                - 32-bit single precision floating-point arithmetics,
+                - 64-bit photon packet counter (maximum number of photon
+                  packets per OpenCL kernel call virtually unlimited)
 
-                - mctypes.McDataTypesDoubleCnt64
+            - mctypes.McDataTypesDoubleCnt64
 
-                    - 64-bit size type
-                    - 32-bit default integers,
-                    - 64-bit detector accumulators,
-                    - 64-bit double precision floating-point arithmetics,
-                    - 32-bit photon packet counter (maximum number of photon
-                           packets per OpenCL kernel call virtually unlimited)
+                - 64-bit size type
+                - 32-bit default integers,
+                - 64-bit detector accumulators,
+                - 64-bit double precision floating-point arithmetics,
+                - 64-bit photon packet counter (maximum number of photon
+                  packets per OpenCL kernel call virtually unlimited)
 
             A custom combination of data types can be defined by the
             :py:meth:`mctypes.McDataTypes.custom` method.
@@ -216,48 +222,48 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             A list of compile-time options for the simulator core.
 
             - mcoptions.McUseNativeMath: mcoptions.McUseNativeMath.on or mcoptions.McUseNativeMath.off
-                Use of native math functions.
-                Native functions are usually faster but less accurate.
-                Default value is mcoptions.McUseNativeMath.off.
+              Use of native math functions.
+              Native functions are usually faster but less accurate.
+              Default value is mcoptions.McUseNativeMath.off.
 
             - mcoptions.McMinimumPacketWeight: mcoptions.McMinimumPacketWeight(float)
-                Minimum photon packet weight
-                before going through photon packet termination or lottery.
-                Default value is mcoptions.McMinimumPacketWeight(1e-4).
+              Minimum photon packet weight
+              before going through photon packet termination or lottery.
+              Default value is mcoptions.McMinimumPacketWeight(1e-4).
 
             - mcoptions.McUseLottery: mcoptions.McUseLottery(float) 
-                Terminate photon packet by lottery.
-                Default value is mcoptions.McUseLottery.on.
+              Terminate photon packet by lottery.
+              Default value is mcoptions.McUseLottery.on.
 
             - mcoptions.McPacketLotteryChance: mcoptions.McPacketLotteryChance(float)
-                Used if photon packets are terminated by lottery.
-                If the value of a uniform random number exceeds the specified
-                chance, the photon packet is terminated.
-                Default value is mcoptions.McPacketLotteryChance(0.01).
+              Used if photon packets are terminated by lottery.
+              If the value of a uniform random number exceeds the specified
+              chance, the photon packet is terminated.
+              Default value is mcoptions.McPacketLotteryChance(0.01).
 
             - mcoptions.McLutMemory: mcoptions.McLutMemory.global_mem or mcoptions.McLutMemory.constant_mem
             - McFpLutMemory: mcoptions.McFpLutMemory.global_mem or mcoptions.McFpLutMemory.constant_mem
-                Set the OpenCL memory type for integer and floating-point
-                data lookup tables that are used by some scattering phase
-                functions, accumulators with custom angular sensitivity and
-                photon packet sources with custom emission characteristics.
-                Note that the default setting is mcoptions.McFpLutMemory.global_mem.
-                Using the constant memory (mcoptions.McFpLutMemory.constant_mem)
-                can be significantly (10x or more) faster, in particular on
-                older GPUs. However, note that the amount of constant
-                memory available on GPUs is typically limited to about 64k.
-                If using lookup table-based scattering phase
-                functions that can be fit into the constant memory, then
-                set this option to mcoptions.McFpLutMemory.constant_mem.
-                This can significantly speed up the MC simulations (~ 10x).
-                To further reduce the amount of constant GPU memory required
-                by the lookup table data arrays, set the scattering phase
-                functions of the first and last layer (the sourrounding medium)
-                to one that is used by the internal (sample) layers.
+              Set the OpenCL memory type for integer and floating-point
+              data lookup tables that are used by some scattering phase
+              functions, accumulators with custom angular sensitivity and
+              photon packet sources with custom emission characteristics.
+              Note that the default setting is mcoptions.McFpLutMemory.global_mem.
+              Using the constant memory (mcoptions.McFpLutMemory.constant_mem)
+              can be significantly (10x or more) faster, in particular on
+              older GPUs. However, note that the amount of constant
+              memory available on GPUs is typically limited to about 64k.
+              If using lookup table-based scattering phase
+              functions that can be fit into the constant memory, then
+              set this option to mcoptions.McFpLutMemory.constant_mem.
+              This can significantly speed up the MC simulations (~ 10x).
+              To further reduce the amount of constant GPU memory required
+              by the lookup table data arrays, set the scattering phase
+              functions of the first and last layer (the sourrounding medium)
+              to one that is used by the internal (sample) layers.
 
             - mcoptions.McDebugMode: mcoptions.McDebugMode.on or mcoptions.McDebugMode.off
-                Enables stdout debug information on some devices.
-                Default value is mcoptions.McDebugMode.off.
+              Enables stdout debug information on some devices.
+              Default value is mcoptions.McDebugMode.off.
 
         rnginit: np.uint64
             OpenCL random number generator initializer as a 64-bit unsigned
@@ -286,7 +292,12 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             A list of OpenCL build option as specified by the OpenCl manuals at
             https://www.khronos.org/.
             An example of commonly used build options:
-            cloptions=['-cl-opt-disable', '-Werror', '-cl-fast-relaxed-math', '-cl-mad-enable'].
+
+            .. code-block:: python
+
+                cloptions=['-cl-opt-disable', '-Werror',
+                           '-cl-fast-relaxed-math', '-cl-mad-enable']
+
             Note that the "-cl-fast-relaxed-math" build option will likely
             lead to a significant performance improvement but may on some
             platforms lead to errors in the simulated quantities.
@@ -1314,8 +1325,8 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
 
         Returns
         -------
-        data: np.ndarray of length n
-            A vector of random numbers.
+        data: np.ndarray
+            A vector of n random numbers.
         '''
         if x is None or a is None:
             x, a = self.rng.seeds(1)
