@@ -168,7 +168,7 @@ class UniformRectangular(Source):
             Refractive index of the source.
 
         na: float
-            Numerical aperture of the source in air (emission is cut off at the
+            Numerical aperture of the source in air (emission is cut off at
             the NA).
 
         position: (float, float, float)
@@ -453,7 +453,7 @@ class LambertianRectangular(UniformRectangular):
             Refractive index of the source.
 
         na: float
-            Numerical aperture of the source in air (emission is cut off at the
+            Numerical aperture of the source in air (emission is cut off at
             the NA).
 
         position: (float, float, float)
