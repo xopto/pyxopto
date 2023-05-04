@@ -20,4 +20,4 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
-from .layer import Layer, Layers
+from .layer import Layer, AnisotropicLayer, Layers
