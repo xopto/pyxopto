@@ -98,7 +98,7 @@ class ClWorker(mcobject.McObject):
                 - 32-bit photon packet counter (maximum number of photon
                     packets per OpenCL kernel call virtually unlimited)
 
-        cl_devices: str or cl.Device or List[cl.Device] or cl.Context cl.CommnadQueue
+        cl_devices: str or cl.Device or List[cl.Device] or cl.Context or cl.CommnadQueue
             A python list of OpenCL devices that are used for
             conducting the simulation. See the clGpuDevices and clCpuDevices
             functions of the :py:mod:`xopto.clinfo` module for details on
