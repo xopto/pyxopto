@@ -62,8 +62,9 @@ class Material(mcobject.McObject):
 
     def cl_declaration(self, mc: mcobject.McObject) -> str:
         '''
-        Structure that defines material in the Monte Carlo simulator. This is
-        a minimal implementation. All the field are required!
+        Structure that defines material in the Monte Carlo simulator and the
+        related API calls. This is a minimal implementation. All the field
+        are required!
         '''
         return '\n'.join((
             self.pf.fetch_cl_declaration(mc),
@@ -76,6 +77,63 @@ class Material(mcobject.McObject):
             '	mc_fp_t mua_inv_mut; /**< @brief Precalculated mua/(mua + mut). */',
             '	McPf pf;             /**< @brief Custom phase function parameters. */',
             '};'
+            '',
+            '/**',
+            ' * @brief Evaluates to the material refractive index.',
+            ' * @param[in] pmaterial Pointer to a material object.',
+            ' */',
+            ' #define mc_material_n(pmaterial) ((pmaterial)->n)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the material reduced scattering coefficient.',
+            ' * @param[in] pmaterial Pointer to a material object.',
+            ' */',
+            '#define mc_material_mus(pmaterial) ((pmaterial)->mus)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the material absorption coefficient.',
+            ' * @param[in] pmaterial Pointer to a material object.',
+            ' */',
+            '#define mc_material_mua(pmaterial) ((pmaterial)->mua)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the inverse of the material absorption coefficient.',
+            ' * @param[in] pmaterial Pointer to a material object.',
+            ' * @param[in] pdir Propagation direction vector.',
+            ' */',
+            '#define mc_material_inv_mua(pmaterial, pdir) \\',
+            '	(((pmaterial)->mua > FP_0) ? \\',
+            '	mc_fdiv(FP_1, (pmaterial)->mua) : FP_INF)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the total attenuation coefficient, i.e. sum of the',
+            ' *		  material absorption and scattering coefficients.',
+            ' * @param[in] pmaterial Pointer to a material object.',
+            ' * @param[in] pdir Propagation direction vector.',
+            ' */',
+            '#define mc_material_mut(pmaterial, pdir) ((pmaterial)->mua + (pmaterial)->mus)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the reciprocal of the total attenuation coefficient, i.e.',
+            ' *		  reciprocal of the sum of the material absorption and scattering coefficients.',
+            ' * @param[in] pmaterial Pointer to a material object.',
+            ' * @param[in] pdir Propagation direction vector.',
+            ' */',
+            '#define mc_material_inv_mut(pmaterial, pdir) ((pmaterial)->inv_mut)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the absorption coefficient multiplied by the reciprocal',
+            ' *			of the total attenuation coefficient.',
+            ' * @param[in] pmaterial Pointer to a material object.',
+            ' * @param[in] pdir Propagation direction vector.',
+            ' */',
+            '#define mc_material_mua_inv_mut(pmaterial, pdir) ((pmaterial)->mua_inv_mut)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the scattering phase function of the material.',
+            ' * @param[in] pmaterial Pointer to a material object.',
+            ' */',
+            '#define mc_material_pf(pmaterial) (&((pmaterial)->pf))',
         ))
 
     def cl_options(self, mc: mcobject.McObject) -> str:
@@ -91,6 +149,7 @@ class Material(mcobject.McObject):
         return '\n'.join((
             self.pf.fetch_cl_implementation(mc),
             '',
+            '#if MC_ENABLE_DEBUG || defined(__DOXYGEN__)',
             'void dbg_print_material(__mc_material_mem McMaterial const *material){',
             '	dbg_print("McMaterial:");',
             '	dbg_print_float(INDENT "n:", material->n);',
@@ -101,6 +160,7 @@ class Material(mcobject.McObject):
             '	McPf const dbg_pf = material->pf;',
             '	dbg_print_pf(&dbg_pf);',
             '};',
+            '#endif',
         ))
 
     def __init__(self, n: float, mua: float, mus: float, pf: mcpf.PfBase):

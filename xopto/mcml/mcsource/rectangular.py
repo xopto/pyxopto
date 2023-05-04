@@ -55,8 +55,7 @@ class UniformRectangular(Source):
             '''
             _fields_ = [
                 ('position', T.mc_point3f_t),
-                ('width', T.mc_fp_t),
-                ('height', T.mc_fp_t),
+                ('size', T.mc_point2f_t),
                 ('n', T.mc_fp_t),
                 ('cos_critical', T.mc_fp_t),
                 ('cos_min', T.mc_fp_t),
@@ -88,7 +87,7 @@ class UniformRectangular(Source):
         return '\n'.join((
             'void dbg_print_source(__mc_source_mem const McSource *src){',
             '	dbg_print("UniformRectangular source:");',
-            '	dbg_print_float(INDENT "position:", &src->position);',
+            '	dbg_print_point3(INDENT "position:", &src->position);',
             '	dbg_print_point2f(INDENT "size:", &src->size);',
             '	dbg_print_float(INDENT "n:", src->n);',
             '	dbg_print_float(INDENT "cos_critical:", src->cos_critical);',
@@ -284,8 +283,7 @@ class UniformRectangular(Source):
 
         target.position.fromarray(position)
 
-        target.width = self._width
-        target.height = self._height
+        target.size.fromarray([self._width, self._height])
 
         target.n = self._n
 
@@ -374,7 +372,7 @@ class LambertianRectangular(UniformRectangular):
         return '\n'.join((
             'void dbg_print_source(__mc_source_mem const McSource *src){',
             '	dbg_print("LambertianRectangular source:");',
-            '	dbg_print_float(INDENT "position:", &src->position);',
+            '	dbg_print_point3(INDENT "position:", &src->position);',
             '	dbg_print_point2f(INDENT "size:", &src->size);',
             '	dbg_print_float(INDENT "n:", src->n);',
             '	dbg_print_float(INDENT "cos_critical:", src->cos_critical);',
@@ -509,8 +507,7 @@ class LambertianRectangular(UniformRectangular):
 
         target.position.fromarray(position)
 
-        target.width = self._width
-        target.height = self._height
+        target.size.fromarray([self._width, self._height])
 
         target.n = self._n
 
@@ -559,7 +556,7 @@ class UniformRectangularLut(Source):
                 ('size', T.mc_point2f_t),
                 ('n', T.mc_fp_t),
                 ('cos_critical', T.mc_fp_t),
-                ('lut', CollectionLut(mc).cl_type(mc)),
+                ('lut', CollectionLut.cl_type(mc)),
                 ('layer_index', T.mc_size_t),
             ]
         return  ClUniformRectangularLut
@@ -575,7 +572,7 @@ class UniformRectangularLut(Source):
             '	mc_point2f_t size;',
             '	mc_fp_t n;',
             '	mc_fp_t cos_critical;',
-            '	mc_fp_lut_t lut_lut;',
+            '	mc_fp_lut_t lut;',
             '	mc_size_t layer_index;',
             '};'
         ))
@@ -588,14 +585,15 @@ class UniformRectangularLut(Source):
         return '\n'.join((
             'void dbg_print_source(__mc_source_mem const McSource *src){',
             '	dbg_print("UniformRectangularLut source:");',
-            '	dbg_print_point3f(INDENT "position:", &src->position.);',
+            '	dbg_print_point3f(INDENT "position:", &src->position);',
             '	dbg_print_point2f(INDENT "size:", &src->size);',
             '	dbg_print_float(INDENT "n:", src->n);',
             '   dbg_print_fp_lut(INDENT "lut: ", &src->lut);',
             '	dbg_print_float(INDENT "cos_critical:", src->cos_critical);',
             '	dbg_print_size_t(INDENT "layer_index:", src->layer_index);',
+            '};',
             '',
-            'ivoid mcsim_launch(McSim *mcsim){',
+            'inline void mcsim_launch(McSim *mcsim){',
             '	mc_fp_t sin_fi, cos_fi, sin_theta, cos_theta;',
             '	mc_fp_t r;',
             '	__mc_source_mem const struct McSource *source = mcsim_source(mcsim);',
@@ -647,6 +645,7 @@ class UniformRectangularLut(Source):
             '};',
         ))
 
+    @staticmethod
     def cl_options(mc: mcobject.McObject) -> mcoptions.RawOptions:
         return [('MC_USE_FP_LUT', True)]
 
@@ -795,8 +794,7 @@ class UniformRectangularLut(Source):
 
         target.position.fromarray(position)
 
-        target.width = self._width
-        target.height = self._height
+        target.size.fromarray([self._width, self._height])
 
         target.n = self._n
 

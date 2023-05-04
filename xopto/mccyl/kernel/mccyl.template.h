@@ -462,6 +462,9 @@ struct McSimState{
 	mc_fp_t weight;				/**< @brief Photon packet weight. */
 	mc_cnt_t photon_index;		/**< @brief Absolute photon packet index. */
 	mc_int_t layer_index;		/**< Current layer index. */
+	#if MC_USE_EVENTS || defined(__DOXYGEN__)
+	mc_uint_t event_flags;		/**< @brief All events that the packet underwent during this step. */
+	#endif
 	#if MC_TRACK_OPTICAL_PATHLENGTH || defined(__DOXYGEN__)
 	mc_fp_t optical_pathlength;		/**< Optical pathlength traveled by the photon packet. */
 	#endif
@@ -1330,8 +1333,56 @@ inline mc_fp_t mcsim_sample_pf(McSim *psim, mc_fp_t *azimuth);
 #endif
 
 /**
- * @} // end @addtogroup mc_simulator_core
+ * @} // end @addtogroup mc_debug_support
  */
 /*##################### End debug support declarations #######################*/
+
+
+/*#################### Start events support declarations #####################*/
+
+/**
+* @addtogroup mc_events
+* @{
+*/
+#if MC_USE_EVENTS || defined(__DOXYGEN__)
+    /**
+     * @brief Clear all the event flags.
+     *
+     * @param[in] psim      Simulator instance.
+     */
+    static inline void mcsim_event_flags_clear(McSim *psim) {
+        psim->state.event_flags = 0U;
+    };
+    
+    /**
+     * @brief Add packet event flags to the event mask.
+     *
+     * @param[in] psim      Simulator instance.
+     * @param[in] flags     Flags that will be added to the event mask. 
+     */
+    static inline void mcsim_event_flags_add(McSim *psim, mc_uint_t flags) {
+        psim->state.event_flags |= flags;
+    };
+    
+    /**
+     * @brief Returns the event flags.
+     */
+    static inline unsigned int mcsim_event_flags(McSim *psim) {
+        return psim->state.event_flags;
+    };
+#else
+	/** @brief Default implementation is void. */
+	#define mcsim_event_flags_clear(psim)			((void)(psim))
+	/** @brief Default implementation is void. */
+	#define mcsim_event_flags_add(psim, flags)		((void)(psim), (void)(flags))
+	/** @brief Default implementation returns all flags set. */
+	#define mcsim_event_flags(psim)                  (0xFFFFFFFFU)
+#endif
+
+/**
+ * @} // end @addtogroup mc_events
+ */
+
+/*##################### End events support declarations ######################*/
 
 #endif /* #define __MCCYL_H */

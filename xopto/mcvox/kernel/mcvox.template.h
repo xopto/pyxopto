@@ -332,64 +332,11 @@ struct McMaterial;
 /** @brief A material data type. */
 typedef struct McMaterial McMaterial;
 
-/* Material and scattering phase function structure definitions goe here
+/* Material and scattering phase function structure and API definitions go here
    - DO NOT EDIT! */
 /* START_MATERIALS_DECLARATION_BLOCK */
 {{ materials.declaration }}
 /* END_MATERIALS_DECLARATION_BLOCK */
-
-/**
- * @brief Evaluates to the material refractive index.
- * @param[in] pmaterial Pointer to a material object.
- */
- #define mc_material_n(pmaterial) ((pmaterial)->n)
-
-/**
- * @brief Evaluates to the material reduced scattering coefficient.
- * @param[in] pmaterial Pointer to a material object.
- */
-#define mc_material_mus(pmaterial) ((pmaterial)->mus)
-
-/**
- * @brief Evaluates to the material absorption coefficient.
- * @param[in] pmaterial Pointer to a material object.
- */
-#define mc_material_mua(pmaterial) ((pmaterial)->mua)
-
-/**
- * @brief Evaluates to the inverse of the material absorption coefficient.
- * @param[in] pmaterial Pointer to a material object.
- */
-#define mc_material_inv_mua(pmaterial) \
-	(((pmaterial)->mua > FP_0) ? \
-	mc_fdiv(FP_1, (pmaterial)->mua) : FP_INF)
-
-/**
- * @brief Evaluates to the total attenuation coefficient, i.e. sum of the
- *		  material absorption and scattering coefficients.
- * @param[in] pmaterial Pointer to a material object.
- */
-#define mc_material_mut(pmaterial) ((pmaterial)->mua + (pmaterial)->mus)
-
-/**
- * @brief Evaluates to the reciprocal of the total attenuation coefficient, i.e.
- *		  reciprocal of the sum of the material absorption and scattering coefficients.
- * @param[in] pmaterial Pointer to a material object.
- */
-#define mc_material_inv_mut(pmaterial) ((pmaterial)->inv_mut)
-
-/**
- * @brief Evaluates to the absorption coefficient multiplied by the reciprocal
- *			of the total attenuation coefficient.
- * @param[in] pmaterial Pointer to a material object.
- */
-#define mc_material_mua_inv_mut(pmaterial) ((pmaterial)->mua_inv_mut)
-
-/**
- * @brief Evaluates to the scattering phase function of the material.
- * @param[in] pmaterial Pointer to a material object.
- */
-#define mc_material_pf(pmaterial) (&((pmaterial)->pf))
 
 /**
 * @} // mc_materials Materials
@@ -460,6 +407,9 @@ struct McSimState{
 	uint32_t rngStateA;			/**< Random generator state A (not changed by mcsim_random call). */
 	mc_fp_t weight;				/**< @brief Photon packet weight. */
 	mc_cnt_t photon_index;		/**< @brief Absolute photon packet index. */
+	#if MC_USE_EVENTS || defined(__DOXYGEN__)
+	mc_uint_t event_flags;		/**< @brief All events that the packet underwent during this step. */
+	#endif
 	#if MC_TRACK_OPTICAL_PATHLENGTH || defined(__DOXYGEN__)
 	mc_fp_t optical_pathlength;		/**< Optical pathlength traveled by the photon packet. */
 	#endif
@@ -1494,9 +1444,56 @@ inline mc_fp_t mcsim_sample_pf(McSim *psim, mc_fp_t *azimuth);
 #endif
 
 /**
- * @} // end @addtogroup mc_simulator_core
+ * @} // end @addtogroup mc_debug_support
  */
 /*##################### End debug support declarations #######################*/
 
+
+/*#################### Start events support declarations #####################*/
+
+/**
+* @addtogroup mc_events
+* @{
+*/
+#if MC_USE_EVENTS || defined(__DOXYGEN__)
+    /**
+     * @brief Clear all the event flags.
+     *
+     * @param[in] psim      Simulator instance.
+     */
+    static inline void mcsim_event_flags_clear(McSim *psim) {
+        psim->state.event_flags = 0U;
+    };
+    
+    /**
+     * @brief Add packet event flags to the event mask.
+     *
+     * @param[in] psim      Simulator instance.
+     * @param[in] flags     Flags that will be added to the event mask. 
+     */
+    static inline void mcsim_event_flags_add(McSim *psim, mc_uint_t flags) {
+        psim->state.event_flags |= flags;
+    };
+    
+    /**
+     * @brief Returns the event flags.
+     */
+    static inline unsigned int mcsim_event_flags(McSim *psim) {
+        return psim->state.event_flags;
+    };
+#else
+	/** @brief Default implementation is void. */
+	#define mcsim_event_flags_clear(psim)			((void)(psim))
+	/** @brief Default implementation is void. */
+	#define mcsim_event_flags_add(psim, flags)		((void)(psim), (void)(flags))
+	/** @brief Default implementation returns all flags set. */
+	#define mcsim_event_flags(psim)                  (0xFFFFFFFFU)
+#endif
+
+/**
+ * @} // end @addtogroup mc_events
+ */
+
+/*##################### End events support declarations ######################*/
 
 #endif /* #define __MCVOX_H */
