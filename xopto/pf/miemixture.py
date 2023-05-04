@@ -21,6 +21,7 @@
 ################################# End license ##################################
 
 from typing import Tuple
+import warnings
 
 import numpy as np
 
@@ -52,16 +53,18 @@ class MieMixture(PfBase):
 
         >>> from matplotlib import pyplot as pp
         >>> import numpy as np
+        >>> from xopto import pf
         >>>
         >>> cost_heta = np.linspace(-1.0, 1.0, 1000)
-        >>> normal1 = MieNormal(0.5e-6, 15e-9, nsphere=1.6, nmedium=1.33, wavelength=550e-9, nd=1000)
-        >>> normal2 = MieNormal(1e-6, 25e-9, nsphere=1.6, nmedium=1.33, wavelength=550e-9, nd=1000)
-        >>> mixture = MieMixture((normal1, normal2), (0.98, 0.02))
+        >>> normal1 = pf.MieNormal(0.5e-6, 15e-9, nsphere=1.6, nmedium=1.33, wavelength=550e-9, nd=1000)
+        >>> normal2 = pf.MieNormal(1e-6, 25e-9, nsphere=1.6, nmedium=1.33, wavelength=550e-9, nd=1000)
+        >>> mixture = pf.MieMixture((normal1, normal2), (0.98, 0.02))
         >>>
         >>> pp.figure()
         >>> pp.semilogy(cost_heta, mixture(cost_heta), label='Mixture 0.98*N(0.5 um, 15 nm) + 0.02*N(1 um, 25 nm)')
         >>> pp.grid()
         >>> pp.legend()
+        >>> pp.show()
         >>>
         '''
         super().__init__()
@@ -72,12 +75,14 @@ class MieMixture(PfBase):
         if not isinstance(weights, (tuple, list, np.ndarray)):
             weights = (weights,)
 
-        if np.sum(weights) != 1.0:
-            raise ValueError(
+        weights_sum = np.sum(weights)
+        weights = np.asarray(weights, dtype=np.float64)/weights_sum
+        if np.abs(weights_sum - 1.0) > 10*np.finfo(weights.dtype).eps:
+            warnings.warn(
                 'The sum of scattering phase function weights should be 1!')
 
         self._miepds = tuple(miepds)
-        self._weights = tuple(np.asarray(weights).tolist())
+        self._weights = tuple(weights.tolist())
 
     def distribution(self) -> Mixture:
         '''

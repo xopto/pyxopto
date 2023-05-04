@@ -20,7 +20,7 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
-from typing import Callable, Tuple, List
+from typing import Callable, Tuple
 
 import numpy as np
 from scipy.stats import norm
@@ -258,7 +258,7 @@ class Fractal(object):
         ----------
         alpha: float
             Parameter alpha of the fractal distribution.
-        range: (float, float) or [float, float]
+        range: Tuple[float, float]
             The nonzero distribution range as a tuple (start, stop), e.g.
             use (10e-9, 10e-6) for fractal distribution of particles
             limited to the finite range from 10 nm to 10 um.
@@ -340,18 +340,19 @@ class Fractal(object):
     def __str__(self):
         return '{} # object @{}'.format(self.__repr__(), id(self))
 
+
 class Mixture(object):
-    def __init__(self, distributions: List[Callable[[float], float]],
-                 weights: List[float]):
+    def __init__(self, distributions: Tuple[Callable[[float], float]],
+                 weights: Tuple[float] or np.ndarray):
         '''
-        Create a mixture distribution instance. The object is callable as
-        obj(x) and returns the value of distribution at x.
+        Create a mixture distribution instance. Distribution objects
+        must be callable as obj(x) and return the value of distribution at x.
 
         Parameters
         ----------
-        distributions: list or tuple of distribution objects
+        distributions: Tuple[Callable[[float], float]]
             Individual distributions of the mixture.
-        weights: list, tuple or numpy.ndarrayvector
+        weights: Tuple[float] or np.ndarray
             Weights of the individual distributions. The sum of weights should
             equal 1.
 

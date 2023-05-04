@@ -41,6 +41,7 @@ from .mienormal import MieNormal
 from .miefractal import MieFractal
 from .miepolystyrene import MiePolystyrene, MieFractalPolystyrene, MieNormalPolystyrene
 
+from .miemixture import MieMixture
 
 try:
     from .mieml import MieMl
