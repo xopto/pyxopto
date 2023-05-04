@@ -219,7 +219,7 @@ inline void mcsim_fluence_deposit_weight(
 		McSim *psim, mc_point3f_t const *pos, mc_fp_t deposit){
 	#if MC_FLUENCE_MODE_RATE
 		mcsim_fluence_deposit_at(psim, deposit, pos,
-			mc_layer_mua(mcsim_current_layer(psim), mcsim_direction(&sim))
+			mc_layer_mua(mcsim_current_layer(psim), mcsim_direction(psim))
 		);
 	#else
 		mcsim_fluence_deposit_at(psim, pos, deposit);
@@ -372,9 +372,9 @@ __kernel void McKernel(
 	bool done = false;
 	mc_point3f_t src_pos = source->position;
 
-	/* prepare a simulation structure - the part that does not change between simulations */
+	/* create and initialize a simulation structure */
 	McSim sim = {
-		{
+		{			/* McSimState state: simulator state */
 			{FP_0, FP_0, FP_0}			/* mc_point3f_t position: Current photon packet position. */
 			,{FP_0, FP_0, FP_0}			/* mc_point3f_t direction: Current photon packet propagation direction. */
 			,rng_state_x[get_global_id(0)]		/* Random generator state X (changes on each mcsim_random call). */
@@ -383,7 +383,7 @@ __kernel void McKernel(
 			,0									/* McUint: Absolute photon packet index. */
 			,0 									/* mc_int_t layer_index: Current layer index. */
 			#if MC_USE_EVENTS || defined(__DOXYGEN__)
-			,0		/* All events that the packet underwent during this step. */
+			,0		/* mc_uint_t event_flags: All events that the packet underwent during this step. */
 			#endif
 			#if MC_TRACK_OPTICAL_PATHLENGTH || defined(__DOXYGEN__)
 			,FP_0	/* mc_fp_t optical_pathlength: Optical pathlength traveled by the photon packet. */
@@ -505,21 +505,6 @@ __kernel void McKernel(
 		};
 		#endif
 
-		/* initialize a new photon packet trace */
-		#if MC_USE_TRACE
-			/* initialize the trace */
-			sim.state.trace_count = 0;
-		#endif
-
-		/* initialize the optical pathlength */
-		#if MC_TRACK_OPTICAL_PATHLENGTH
-			/* initialize the trace */
-			sim.state.optical_pathlength = FP_0;
-		#endif
-
-		/* clear the event flags */
-		mcsim_event_flags_clear(&sim);
-
 		/* launch a new photon packet */
 		mcsim_launch(&sim);
 		mcsim_event_flags_add(&sim, MC_EVENT_PACKET_LAUNCH);
@@ -537,7 +522,7 @@ __kernel void McKernel(
 			//step = -mc_log(mc_fclip(mcsim_random(&sim), FP_EPS, FP_1 - FP_EPS))*
 			#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
 				step = mc_fdiv(-mc_log(mcsim_random(&sim)),
-					mc_layer_mus(mcsim_current_layer(&sim)), mcsim_direction(&sim));
+					mc_layer_mus(mcsim_current_layer(&sim), mcsim_direction(&sim)));
 			#else
 				step = -mc_log(mcsim_random(&sim))*
 					mc_layer_inv_mut(mcsim_current_layer(&sim), mcsim_direction(&sim));
