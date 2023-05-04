@@ -457,6 +457,25 @@ class Trace(mcobject.McObject):
     # Number of fields in a single trace entry.
     TRACE_ENTRY_LEN = 8
 
+    # Trace all packet reflection events at geometry boundaries.
+    TRACE_EVENT_REFLECTION = 1
+    # Trace all packet refraction events at geometry boundaries.
+    TRACE_EVENT_REFRACTION = 2
+    # Trace all geometry boundary hit events.
+    TRACE_EVENT_BOUNDARY_HIT = 4
+    # Trace all packet launch events.
+    TRACE_EVENT_LAUNCH = 8
+    # Trace all packet absorption events.
+    TRACE_EVENT_ABSORPTION = 16
+    # Trace all packet scattering events.
+    TRACE_EVENT_SCATTERING = 32
+    # Trace all packet termination events.
+    TRACE_EVENT_TERMINATION = 64
+    # Trace events that are triggered by packet escaping/leaving the simulation domain.
+    TRACE_EVENT_ESCAPE = 128
+    # Trace all events
+    TRACE_EVENT_ALL = -1
+
     @staticmethod
     def cl_type(mc: mcobject.McObject) -> cltypes.Structure:
         '''
@@ -487,6 +506,7 @@ class Trace(mcobject.McObject):
                 ('max_events', T.mc_int_t),
                 ('data_buffer_offset', T.mc_size_t),
                 ('count_buffer_offset', T.mc_size_t),
+                ('event_mask', T.mc_uint_t),
             ]
 
         return ClTrace
@@ -501,6 +521,7 @@ class Trace(mcobject.McObject):
             '	mc_int_t max_events;',
             '	mc_size_t data_buffer_offset;',
             '	mc_size_t count_buffer_offset;',
+            '	mc_uint_t event_mask;',
             '};',
         ))
 
@@ -533,6 +554,12 @@ class Trace(mcobject.McObject):
             '		dbg_print_float(INDENT "path length :", mcsim_optical_pathlength(mcsim));',
             '	#endif',
             '',
+            '	#if MC_USE_EVENTS',
+            '		dbg_print_uint("Trace called with events:", mcsim_event_flags(mcsim));',
+            '		if (!(trace->event_mask & mcsim_event_flags(mcsim)))',
+            '			return 0;',
+            '	#endif',
+            '',
             '	mcsim_float_buffer(mcsim)[pos++] = mcsim_position_x(mcsim);',
             '	mcsim_float_buffer(mcsim)[pos++] = mcsim_position_y(mcsim);',
             '	mcsim_float_buffer(mcsim)[pos++] = mcsim_position_z(mcsim);',
@@ -559,13 +586,15 @@ class Trace(mcobject.McObject):
         ))
 
     def cl_options(self, mc: mcobject.McObject) -> mcoptions.RawOptions:
-        return [('MC_USE_TRACE', self._options),
+        return [('MC_USE_EVENTS', self._event_mask is not None),
+                ('MC_USE_TRACE', self._options),
                 ('TRACE_ENTRY_LEN', int(Trace.TRACE_ENTRY_LEN)),
                 ('MC_USE_SAMPLING_VOLUME', True),
                 ('MC_TRACK_OPTICAL_PATHLENGTH', bool(self.plon))]
 
     def __init__(self, maxlen: int or 'Trace' = 500, options: int = TRACE_ALL,
-                 filter: Filter = None, plon: bool = True):
+                 filter: Filter = None, event_mask: int = None,
+                 plon: bool = True):
         '''
         Photon packet trace object constructor.
 
@@ -609,6 +638,22 @@ class Trace(mcobject.McObject):
             A filter class needs to define a __call__ method that returns a
             new Trace instance with filtered events.
             See the Filter class for details and example.
+        event_mask: int
+            A mask of event flags that are recorded/traced in the MC
+            kernel. If None, all events are traced and event tracking
+            is disabled (default). Note that event tracking comes with some
+            performance cost. All events should be traced when computing
+            the sampling volume!
+            The following events can be used with the event mask:
+
+              - TRACE_EVENT_LAUNCH, tracing all packet launch events
+              - TRACE_EVENT_ABSORPTION, tracing all packet absorption events
+              - TRACE_EVENT_SCATTERING, tracing all packet scattering events
+              - TRACE_EVENT_BOUNDARY_HIT, tracing all geometry boundary interactions 
+              - TRACE_EVENT_REFLECTION, tracing all packet reflection events at geometrical boundaries
+              - TRACE_EVENT_REFRACTION, tracing all packet refraction events at geometrical boundaries
+              - TRACE_EVENT_TERMINATION, tracing packet termination
+              - TRACE_EVENT_ESCAPE, packet escapes the simulation domain
 
         plon: bool
             Turn on/off tracking of the optical pathlength. If set to nonzero,
@@ -634,7 +679,6 @@ class Trace(mcobject.McObject):
         The number of valid trace entries for each photon packet can
         be obtained by obj.n (e.g. obj.n[0] for the first photon packet).
         '''
-
         if isinstance(maxlen, Trace):
             trace = maxlen
             self._maxlen = trace.maxlen
@@ -644,6 +688,7 @@ class Trace(mcobject.McObject):
             self._filter = trace.filter
             self._n_dropped = trace.dropped
             self._plon = trace.plon
+            self._event_mask = trace.event_mask
         else:
             self._data = None
             self._n = None
@@ -652,6 +697,9 @@ class Trace(mcobject.McObject):
             self._filter = filter
             self._n_dropped = 0
             self._plon = bool(plon)
+            if event_mask is not None:
+                event_mask = int(event_mask)
+            self._event_mask = event_mask
 
         self._terminal = None
         self._overflow_mask = None
@@ -772,6 +820,11 @@ class Trace(mcobject.McObject):
     plon = property(_get_plon, None, None,
                     'State of the optical pathlength tracking.')
 
+
+    def _get_event_mask(self) -> int or None:
+        return self._event_mask
+    event_mask = property(_get_event_mask, None, None,
+                          'Mask of traced events.')
 
     def _get_data(self) -> np.ndarray:
         return self._data
@@ -920,6 +973,11 @@ class Trace(mcobject.McObject):
         target.count_buffer_offset = allocation.offset
 
         target.max_events = self.maxlen
+
+        if self._event_mask is not None:
+            target.event_mask = self._event_mask;
+        else:
+            target.event_mask = 0;
 
         return target
 
@@ -1146,3 +1204,31 @@ class Trace(mcobject.McObject):
     def __repr__(self):
         return self.__str__() + \
             ' # Trace object at 0x{:>08X}.'.format(id(self))
+
+
+TRACE_EVENT_REFLECTION = Trace.TRACE_EVENT_REFLECTION
+'''Trace all packet reflection events at geometry boundaries. '''
+
+TRACE_EVENT_REFRACTION = Trace.TRACE_EVENT_REFRACTION
+''' Trace all packet refraction events at geometry boundaries. '''
+
+TRACE_EVENT_BOUNDARY_HIT = Trace.TRACE_EVENT_BOUNDARY_HIT
+''' Trace all geometry boundary hit events. '''
+
+TRACE_EVENT_LAUNCH = Trace.TRACE_EVENT_LAUNCH
+''' Trace all packet launch events. '''
+
+TRACE_EVENT_ABSORPTION = Trace.TRACE_EVENT_ABSORPTION
+''' Trace all packet absorption events. '''
+
+TRACE_EVENT_SCATTERING = Trace.TRACE_EVENT_SCATTERING
+''' Trace all packet scattering events. '''
+
+TRACE_EVENT_TERMINATION = Trace.TRACE_EVENT_TERMINATION
+''' Trace all packet termination events. '''
+
+TRACE_EVENT_ESCAPE = Trace.TRACE_EVENT_ESCAPE
+''' Trace events that are triggered by packet escaping/leaving the simulation domain. '''
+
+TRACE_EVENT_ALL= Trace.TRACE_EVENT_ALL
+''' Trace all events. '''

@@ -13,9 +13,13 @@ xopto/cl/__pycache__
 xopto/cl/kernel/__pycache__
 
 xopto/data/__pycache__
-xopto/data/primes/__pycache__
+xopto/data/materials/__pycache__
+xopto/data/materials/absorption/__pycache__
+xopto/data/materials/density/__pycache__
+xopto/data/materials/ri/__pycache__
 xopto/data/mcml/__pycache__
 xopto/data/mcvox/__pycache__
+xopto/data/primes/__pycache__
 
 xopto/dataset/__pycache__
 xopto/dataset/run
