@@ -238,7 +238,8 @@ class LinearLut(mcobject.McObject):
 
 
 class EmissionLut(LinearLut):
-    def __init__(self, radiance: np.ndarray, costheta: np.ndarray=None,
+    def __init__(self, radiance: np.ndarray or 'EmissionLut' or str,
+                 costheta: np.ndarray=None,
                  n: int=2000, npts: int=10000, meth: str='simps'):
         '''
         Constructs a lookup table for numerical sampling of the emission
@@ -324,8 +325,8 @@ class EmissionLut(LinearLut):
 
 
 class CollectionLut(LinearLut):
-    def __init__(self, sensitivity: np.ndarray, costheta: np.ndarray=None,
-                 n: int = 1000):
+    def __init__(self, sensitivity: np.ndarray or str or 'CollectionLut',
+                 costheta: np.ndarray=None, n: int = 1000):
         '''
         A lookup table of detector sensitivity (collection efficiency)
         as a function of the angle of incidence. Azimuthal symmetry of the
@@ -333,7 +334,7 @@ class CollectionLut(LinearLut):
 
         Parameters
         ----------
-        sensitivity: np.ndarray or str
+        sensitivity: np.ndarray or str or CollectionLut
             Detector sensitivity (efficiency) as a function of the
             angle of incidence. If the value is a str, an instance is loaded
             from the file represented by the string.

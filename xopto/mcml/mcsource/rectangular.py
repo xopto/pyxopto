@@ -27,7 +27,7 @@ import numpy as np
 from xopto.mcml.mcsource.base import Source
 from xopto.mcml import mcobject, mctypes, cltypes, mcoptions
 from xopto.mcml.mcutil import boundary, geometry
-from xopto.mcml.mcutil.lut import CollectionLut
+from xopto.mcml.mcutil.lut import EmissionLut
 
 class UniformRectangular(Source):
     @staticmethod
@@ -556,7 +556,7 @@ class UniformRectangularLut(Source):
                 ('size', T.mc_point2f_t),
                 ('n', T.mc_fp_t),
                 ('cos_critical', T.mc_fp_t),
-                ('lut', CollectionLut.cl_type(mc)),
+                ('lut', EmissionLut.cl_type(mc)),
                 ('layer_index', T.mc_size_t),
             ]
         return  ClUniformRectangularLut
@@ -649,7 +649,7 @@ class UniformRectangularLut(Source):
     def cl_options(mc: mcobject.McObject) -> mcoptions.RawOptions:
         return [('MC_USE_FP_LUT', True)]
 
-    def __init__(self, lut: CollectionLut, width: float, height: float, n: float,
+    def __init__(self, lut: EmissionLut, width: float, height: float, n: float,
                  position: Tuple[float, float, float] = (0.0, 0.0, 0.0)):
         '''
         A rectangular optical photon packet source with emission characteristics
@@ -667,8 +667,8 @@ class UniformRectangularLut(Source):
 
         Parameters
         ----------
-        lut: CollectionLut
-            Lookup table of the angular sensitivity.
+        lut: EmissionLut
+            Lookup table of the angular emission.
 
         width: float
             Source width (x) in (m).
@@ -704,7 +704,7 @@ class UniformRectangularLut(Source):
             This source is updated with the configuration of the other source.
         '''
         if isinstance(other, UniformRectangularLut):
-            self._lut = np.asarray(other.lut, dtype=np.float64)
+            self._lut = EmissionLut(other.lut)
             self._offset = 0
             self.width = other.width
             self.height = other.height
@@ -714,7 +714,7 @@ class UniformRectangularLut(Source):
         elif isinstance(other, dict):
             new_lut = other.get('lut')
             if new_lut is not None:
-                self._lut = np.asarray(new_lut, dtype=np.float64)
+                self._lut = new_lut
                 self._offset = 0
             self.width = other.get('width', self._width)
             self.height = other.get('height', self._height)
@@ -742,8 +742,8 @@ class UniformRectangularLut(Source):
     height = property(_get_height, _set_height, None,
                       'Source height (m).')
 
-    def _get_lut(self) -> CollectionLut:
-        return self._lut.data
+    def _get_lut(self) -> EmissionLut:
+        return self._lut
     lut = property(_get_lut, None, None,
                    'Lookup table of angular sensitivity.')
 
@@ -840,7 +840,7 @@ class UniformRectangularLut(Source):
             raise TypeError(
                 'Expected "UniformRectangularLut" type bot got "{}"!'.format(
                     source_type))
-        lut = CollectionLut.fromdict(data.pop('lut'))
+        lut = EmissionLut.fromdict(data.pop('lut'))
 
         return UniformRectangularLut(lut, **data)
 
