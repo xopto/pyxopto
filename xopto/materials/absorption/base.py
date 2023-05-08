@@ -180,7 +180,7 @@ class Interpolator:
             wavelength = self.wavelength
         pp.semilogy(wavelength*1e9, self(wavelength), label=label)
         pp.xlabel('Wavelength (nm)')
-        pp.ylabel('Absorption coefficient (1/cm)')
+        pp.ylabel('Absorption coefficient (1/m)')
 
         if show:
             pp.show()
