@@ -71,7 +71,7 @@ class Interpolator:
             Absorption coefficient (1/m) at the wavelengths of light.
             Points that will define the interpolation function.
         args, kwargs: tuple, dict
-            Optional positional and keyword arguments passed to the intep1d
+            Optional positional and keyword arguments passed to the interp1d
             function of scipy.interpolate module.
         '''
         self._wavelength = np.array(wavelength)
@@ -102,7 +102,7 @@ class Interpolator:
 
     def is_valid_range(self, wavelength: float or np.ndarray) -> bool:
         '''
-        Check the wavelngths of light (m) for valid range.
+        Check the wavelengths of light (m) for valid range.
 
         Parameters
         ----------
@@ -112,7 +112,7 @@ class Interpolator:
         Returns
         -------
         ok: bool
-            Returns True if all the wavelengthsare within the valid range.
+            Returns True if all the wavelengths are within the valid range.
         '''
         return not (np.all(wavelength >= self._wavelength_range[0]) and \
                     np.all(wavelength <= self._wavelength_range[1]))
@@ -167,7 +167,7 @@ class Interpolator:
 
         Parameters
         ----------
-        wavlength: np.ndarray
+        wavelength: np.ndarray
             Wavelengths of light.
         label: str
             Plot label.
