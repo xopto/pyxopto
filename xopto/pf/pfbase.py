@@ -266,7 +266,7 @@ class PfBase:
         Returns
         -------
         p: np.ndarray
-            Legendre moments of the scatteing phase function
+            Legendre moments of the scattering phase function
             from 0 to 'last' as a vector a numpy vector
             ([g_0, g_1, ..., g_last]).
         '''
