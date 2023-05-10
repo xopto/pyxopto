@@ -208,12 +208,13 @@ class LinearArray(SurfaceLayoutAny):
             '	};',
             '',
             '	/* The cutout of the stainless steel probe. */',
-            '	mc_pos.x = mcsim_position_x(mcsim) - layout->position.x;',
-            '	mc_pos.y = mcsim_position_y(mcsim) - layout->position.y;',
+            '	mc_point2f_t cutout_pos_in, cutout_pos_out;',
+            '	cutout_pos_in.x = mcsim_position_x(mcsim) - layout->position.x;',
+            '	cutout_pos_in.y = mcsim_position_y(mcsim) - layout->position.y;',
             '	mc_matrix2f_t transformation = layout->cutout_transformation;',
-            '	transform_point2f(&transformation, &mc_pos, &layout_pos);',
-            '	dx = mc_fabs(layout_pos.x);',
-            '	dy = mc_fabs(layout_pos.y);',
+            '	transform_point2f(&transformation, &cutout_pos_in, &cutout_pos_out);',
+            '	dx = mc_fabs(cutout_pos_out.x);',
+            '	dy = mc_fabs(cutout_pos_out.y);',
             '	if(dx <= layout->cutout_width_half && dy < layout->cutout_height_half){',
             '		*n2 = layout->cutout_n;',
             '		*cc = layout->cutout_cos_critical;',
@@ -601,7 +602,7 @@ class LinearArray(SurfaceLayoutAny):
                'position=({}, {}), direction=({}, {}, {}))'.format(
                    self._fiber, self._n, self._spacing, *self._orientation,
                    self._diameter, self._reflectivity,
-                   *self._cutout, self._cutout_n
+                   *self._cutout, self._cutout_n,
                    *self._position, *self._direction)
 
     def __repr__(self):
