@@ -77,14 +77,10 @@ class GkSampler(PfSampler):
             # check gamma range if required
             if self._gamma is not None:
                 if self._gamma[0] > gamma or gamma > self._gamma[1]:
-                    if freeze:
-                        raise RuntimeError('Cannot freeze a rejected sample!')
                     continue
             # check delta range if required
             if self._delta is not None:
                 if self._delta[0] > delta or delta > self._delta[1]:
-                    if freeze:
-                        raise RuntimeError('Cannot freeze a rejected sample!')
                     continue
             break
 
@@ -179,8 +175,6 @@ class GkGammaDeltaSampler(PfSampler):
             delta = self._pf_args[1](freeze=freeze)
             if bool(self._polygon.contains(gamma=gamma, delta=delta)):
                 break
-            elif freeze:
-                raise RuntimeError('Cannot freeze illegal sample value!')
 
         raw_args = self._map.invgammadelta(gamma, delta)
         pf_sample = self._pf_type(*raw_args)

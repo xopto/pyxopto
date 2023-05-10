@@ -82,13 +82,9 @@ class Gk2Sampler(PfSampler):
             gamma, delta = g2gamma(gs[1], gs[2]), g2delta(gs[1], gs[3])
             if self._gamma is not None:
                 if self._gamma[0] > gamma or gamma > self._gamma[1]:
-                    if freeze:
-                        raise RuntimeError('Cannot freeze a rejected sample!')
                     continue
             if self._delta is not None:
                 if self._delta[0] > delta or delta > self._delta[1]:
-                    if freeze:
-                        raise RuntimeError('Cannot freeze a rejected sample!')
                     continue
             break
 
