@@ -194,7 +194,7 @@ class GammaDeltaPolygonBase:
         Parameters
         ----------
         gamma: float
-            Gamma value at which to find two nearets points on the boundary
+            Gamma value at which to find two nearest points on the boundary
             of the domain.
 
         Returns
@@ -232,11 +232,11 @@ class GammaDeltaPolygonBase:
 
             return gamma_candidates[:n], delta_candidates[:n]
 
-        return None
+        return None, None
 
     def gamma(self, delta: float) -> Tuple[np.ndarray, np.ndarray]:
         '''
-        Returns two nearest points on the domainn boundary for the
+        Returns two nearest points on the domain boundary for the
         given delta value or None if the given delta value is out of range.
 
         Parameters
@@ -279,7 +279,83 @@ class GammaDeltaPolygonBase:
 
             return gamma_candidates[:n], delta_candidates[:n]
 
-        return None
+        return None, None
+
+    def bounding_box(self,
+                    gamma: Tuple[float, float] or None = None,
+                    delta: Tuple[float, float] or None = None) -> \
+                        Tuple[Tuple[float, float], Tuple[float, float]]:
+        '''
+        Compute valid bounding box in the gamma-delta plane.
+
+        Parameters
+        ----------
+        gamma: Tuple[float, float] or None
+            Range of gamma values as a tuple (low, high). If None, the
+            range is derived from the delta parameter. If gamma and
+            delta are None, the full range of values is included in
+            in the bounding box.
+        delta: Tuple[float, float] or None
+            Range of delta values as a tuple (low, high). If gamma and
+            delta are None, the full range of values is included in
+            in the bounding box.
+
+        Returns
+        -------
+        gamma_range: Tuple[float, float]
+            Valid range of gamma values as a tuple (low, high).
+        delta_range: Tuple[float, float]
+            Valid range of delta values as a tuple (low, high).
+        '''
+        gamma_boundary, delta_boundary = self.boundary()
+        gamma_min, gamma_max = gamma_boundary.min(), gamma_boundary.max()
+        delta_min, delta_max =  delta_boundary.min(), delta_boundary.max()
+
+        if gamma is None and delta is None:
+            gamma = (gamma_min, gamma_max)
+            delta = (delta_min, delta_max)
+        else:
+            if gamma is not None:
+                if gamma[0] < gamma_min and gamma[1] < gamma_max:
+                    raise ValueError('The given range of gamma values does not '
+                                     'intersect the domain!')
+                if gamma[0] > gamma_max and gamma[1] > gamma_max:
+                    raise ValueError('The given range of gamma values does not '
+                                    'intersect the domain!')
+
+                gamma = np.clip(gamma, gamma_min, gamma_max)
+            if delta is not None:
+                if delta[0] < delta_min and delta[1] < delta_max:
+                    raise ValueError('The given range of delta values does not '
+                                     'intersect the domain!')
+                if delta[0] > delta_max and delta[1] > delta_max:
+                    raise ValueError('The given range of delta values does not '
+                                     'intersect the domain!')
+                delta = np.clip(delta, delta_min, delta_max)
+
+        if delta is None:
+            _, delta_1 = self.delta(gamma[0])
+            _, delta_2 = self.delta(gamma[1])
+
+            delta = (
+                float(np.min([np.min(delta_1), np.min(delta_2)])),
+                float(np.max([np.max(delta_1), np.max(delta_2)]))
+            )
+        else:
+            delta = float(np.min(delta)), float(np.max(delta))
+
+        if gamma is None:
+            gamma_1, _ = self.gamma(delta[0])
+            gamma_2, _ = self.gamma(delta[1])
+
+            gamma = (
+                float(np.min(np.min(gamma_1), np.min(gamma_2))),
+                float(np.max(np.max(gamma_1), np.max(gamma_2)))
+            )
+        else:
+            gamma = float(np.min(gamma)), float(np.max(gamma))
+
+        return gamma, delta
 
     def contains(self, gamma: float or np.ndarray, delta: float or np.ndarray,
                  boundary: bool = True) -> bool or np.ndarray:
