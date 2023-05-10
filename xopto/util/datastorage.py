@@ -71,7 +71,8 @@ class DatasetFiles:
         prefix: str
             Data file name prefix.
         '''
-        pattern = re.compile('(?P<prefix>.*)_(?P<start>[0-9]+)_(?P<stop>[0-9]+)')
+        pattern = re.compile(
+            '(?P<prefix>.*)_(?P<start>[0-9]+)_(?P<stop>[0-9]+)')
 
         start = stop = prefix = None
 
@@ -115,12 +116,14 @@ class DatasetFiles:
                     self._prefix = prefix
                 else:
                     if prefix != self._prefix:
-                        raise ValueError('Dataset files must have the same prefix!')
+                        raise ValueError(
+                            'Dataset files must have the same prefix!')
 
                 if start is not None and stop is not None:
                     indices.append([start, stop])
                 else:
-                    raise ValueError('Failed to parse file name "{}"!'.format(filename))
+                    raise ValueError(
+                        'Failed to parse file name "{}"!'.format(filename))
             indices = np.asarray(indices)
             
         if indices.size > 0:
@@ -329,7 +332,8 @@ class Dataset:
             data_files = glob.glob(os.path.join(location, '*' + ext))
             for data_file in data_files:
                 start, stop, prefix = DatasetFiles.parse_filename(data_file)
-                if start is not None and stop is not None and prefix is not None:
+                if start is not None and stop is not None and \
+                        prefix is not None:
                     group = groups.get(prefix, [])
                     group.append(data_file)
                     groups[prefix] = group
