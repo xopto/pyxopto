@@ -131,6 +131,6 @@ class GkPolygon(GammaDeltaPolygonBase):
         marker: str
             Standard matplotlib line style, color and and point marker.
         step: int
-            Smaple the boundary points with the given step.
+            Sample the boundary points with the given step.
         '''
         GammaDeltaPolygonBase.show(self, marker, step, 'Gk')

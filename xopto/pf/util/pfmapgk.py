@@ -28,6 +28,7 @@ from .pfmapbase import PfMap2DBase
 from ..gk import Gk
 from xopto import DATA_PATH
 
+
 class GkMap(PfMap2DBase):
     DEFAULT_MAP_FILE = 'gk_map.npz'
     XLABEL = '$g_{gk}$'
