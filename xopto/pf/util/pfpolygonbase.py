@@ -316,7 +316,7 @@ class GammaDeltaPolygonBase:
             delta = (delta_min, delta_max)
         else:
             if gamma is not None:
-                if gamma[0] < gamma_min and gamma[1] < gamma_max:
+                if gamma[0] < gamma_min and gamma[1] < gamma_min:
                     raise ValueError('The given range of gamma values does not '
                                      'intersect the domain!')
                 if gamma[0] > gamma_max and gamma[1] > gamma_max:
@@ -325,7 +325,7 @@ class GammaDeltaPolygonBase:
 
                 gamma = np.clip(gamma, gamma_min, gamma_max)
             if delta is not None:
-                if delta[0] < delta_min and delta[1] < delta_max:
+                if delta[0] < delta_min and delta[1] < delta_min:
                     raise ValueError('The given range of delta values does not '
                                      'intersect the domain!')
                 if delta[0] > delta_max and delta[1] > delta_max:
