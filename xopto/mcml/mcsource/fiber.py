@@ -400,7 +400,7 @@ class UniformFiber(Source):
     def _get_fiber(self) -> fiberutil.MultimodeFiber:
         return self._fiber
     def _set_fiber(self, fib: fiberutil.MultimodeFiber):
-        self._fiber = fiberutil.MultimodeFiber(fib)
+        self._fiber = fib
     fiber = property(_get_fiber, _set_fiber, None,
                      'Multimode optical fiber.')
 
@@ -922,7 +922,7 @@ class UniformFiberLut(Source):
     def _get_fiber(self) -> fiberutil.MultimodeFiberLut:
         return self._fiber
     def _set_fiber(self, fib: fiberutil.MultimodeFiberLut):
-        self._fiber = fiberutil.MultimodeFiber(fib)
+        self._fiber = fib
     fiber = property(_get_fiber, _set_fiber, None,
                      'Multimode lookup table optical fiber.')
 
