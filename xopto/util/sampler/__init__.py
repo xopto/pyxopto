@@ -23,6 +23,8 @@
 from .base import Sampler, PfSampler, ConstantSampler, UniformSampler, \
                   NormalSampler
 from .gksampler import GkGammaDeltaSampler, GkSampler
+from .mhgsampler import MHgGammaDeltaSampler, MHgSampler
+from .mpcsampler import MPcGammaDeltaSampler, MPcSampler
 from .gk2sampler import Gk2Sampler
 from .common import detector_direction
 from .mcml import LayerSampler, MultilayerSampler
