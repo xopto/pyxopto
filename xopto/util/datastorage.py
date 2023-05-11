@@ -111,7 +111,7 @@ class DatasetFiles:
     def __init__(self, filenames: List[str], indices: np.ndarray = None,
                  prefix: str = None):
         '''
-        Creates a dataset filens object.
+        Creates a dataset files object.
 
         Parameters
         ----------
@@ -155,7 +155,7 @@ class DatasetFiles:
 
             filenames = [filenames[index] for index in sort_indices]
 
-        span, missing, overlapping = DatasetFiles.analyse_indices(indices)
+        span, missing, overlapping = DatasetFiles.analyze_indices(indices)
         
         self._indices = indices
         self._filenames = filenames
