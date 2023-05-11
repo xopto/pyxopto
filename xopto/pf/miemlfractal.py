@@ -32,7 +32,7 @@ from .miemlpd import MieMlPd, ComplexVector, FloatVector
 class MieMlFractal(MieMlPd):
     def __init__(self, alpha: float,
                  nlayers: ComplexVector, nmedium: ComplexVector,
-                 diameters: FloatVector, wavelength: float,
+                 wavelength: float,
                  drange: Tuple[float, float] = (10e-9, 10e-6),
                  nd: int = 1000, limit: int = None):
         '''
@@ -55,7 +55,7 @@ class MieMlFractal(MieMlPd):
         ----------
         alpha: float
             Parameter alpha of the fractal distribution.
-        nlayers, nmedium, diameters, wavelength, drange, nd:
+        nlayers, nmedium, wavelength, drange, nd:
             Parameters passed to the
             :py:meth:`xopto.pf.miemlpd.MieMlPd` base class
             constructor. See help of :py:class:`xopto.pf.miemlpd.MieMlPd`
@@ -74,8 +74,7 @@ class MieMlFractal(MieMlPd):
         >>>
         >>> cost_heta = np.linspace(-1.0, 1.0, 1000)
         >>> nlayers=[1.0, 1.45]
-        >>> diameters=[0.9e-6, 1e-6]
-        >>> fmieml = MieMlFractal(alpha=2.4, drange=[10e-9, 10e-6], nlayers=nlayers, nmedium=1.33, diameters=diameters, wavelength=550e-9, nd=1000)
+        >>> fmieml = MieMlFractal(alpha=2.4, drange=[10e-9, 10e-6], nlayers=nlayers, nmedium=1.33, wavelength=550e-9, nd=1000)
         >>>
         >>> pp.figure()
         >>> pp.semilogy(cost_heta, fmieml(cost_heta))
