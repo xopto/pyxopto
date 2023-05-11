@@ -31,16 +31,17 @@ from .distribution import Mixture
 
 
 class MieMixture(PfBase):
-    def __init__(self, miepds: Tuple[MiePd], weights: list):
+    def __init__(self, miepds: Tuple[MiePd],
+                 weights: Tuple[float] or np.ndarray):
         '''
         Scattering phase function of a mixture of MiePd scattering
         phase functions.
 
         Parameters
         ----------
-        miepds`: list or tuple of MiePd
+        miepds`: Tuple[MiePd]
             A list of scattering phase functions.
-        weights: tuple, list or numpy.ndarray
+        weights: Tuple[float] or numpy.ndarray
             Weights of the individual scattering phase functions.
             The sum of weights should equal 1.
 
@@ -55,13 +56,13 @@ class MieMixture(PfBase):
         >>> import numpy as np
         >>> from xopto import pf
         >>>
-        >>> cost_heta = np.linspace(-1.0, 1.0, 1000)
+        >>> cost_theta = np.linspace(-1.0, 1.0, 1000)
         >>> normal1 = pf.MieNormal(0.5e-6, 15e-9, nsphere=1.6, nmedium=1.33, wavelength=550e-9, nd=1000)
         >>> normal2 = pf.MieNormal(1e-6, 25e-9, nsphere=1.6, nmedium=1.33, wavelength=550e-9, nd=1000)
         >>> mixture = pf.MieMixture((normal1, normal2), (0.98, 0.02))
         >>>
         >>> pp.figure()
-        >>> pp.semilogy(cost_heta, mixture(cost_heta), label='Mixture 0.98*N(0.5 um, 15 nm) + 0.02*N(1 um, 25 nm)')
+        >>> pp.semilogy(cost_theta, mixture(cost_theta), label='Mixture 0.98*N(0.5 um, 15 nm) + 0.02*N(1 um, 25 nm)')
         >>> pp.grid()
         >>> pp.legend()
         >>> pp.show()
