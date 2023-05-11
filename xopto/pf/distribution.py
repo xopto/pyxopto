@@ -278,7 +278,9 @@ class Fractal(object):
         self._update()
 
     def _update(self):
-
+        '''
+        Internal method that is used to update precalculated values.
+        '''
         d1, d2 = self._range
         self._k = (1 - self._alpha)/(
             (d2**(1 - self._alpha) - d1**(1 - self._alpha)))
