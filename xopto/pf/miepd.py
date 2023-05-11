@@ -39,17 +39,17 @@ class MiePd(PfBase):
 
         Parameters
         ----------
-        nsphere: float, complex
+        nsphere: float or complex
             Refractive index (complex) of the spherical particles.
-        nmedium: float, complex
+        nmedium: float or complex
             Refractive index (complex) of the surrounding medium.
         wavelength: float
             Wavelength of light (m).
-        drange: list
+        drange: Tuple[float, float]
             Diameter range of the spherical particles as [dmin, dmax], where
             dmin and dmax stand for the minimum and maximum diameters of the
             spherical particles, respectively.
-        pd: callable(float) -> float
+        pd: Callable[[float], float]
             Particle distribution number probability density function. Integral
             of pd over drange should equal 1.0.
         nd: int
@@ -90,6 +90,10 @@ class MiePd(PfBase):
         self._nmedium = nmedium
         self._nsphere = nsphere
 
+        if self._drange[0] < 0.0 or self._drange[1] <= 0.0:
+            raise ValueError(
+                'The range of diameters includes negative values or equals 0!')
+ 
         if self._nd is None:
             self._scs = quad(
                 lambda d: pd(d)*Mie(nsphere, nmedium, d, wavelength).scs(),
