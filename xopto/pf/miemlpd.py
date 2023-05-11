@@ -74,13 +74,13 @@ class MieMlPd(PfBase):
             Diameters of the concentric spherical layers (m), starting with
             the innermost layer. The layer stack is scaled according
             to the current diameter of the distribution. A custom scaling
-            function can be passed in the scalefum parameter.
+            function can be passed in the scalefun parameter.
             A multiplicative scaling of the layer stack to the current
             outer diameter given by the distribution is used by default.
         wavelength: float
             Wavelength of light (m).
         pd: Callable[[float], float]
-            Particlne number density distribution function. Integral
+            Particle number density distribution function. Integral
             of pd over diameter range given in drange should equal 1.0.
         drange: [float, float] or (float, float)
             Layered spherical particle outer diameter range as [dmin, dmax],
@@ -96,7 +96,7 @@ class MieMlPd(PfBase):
         scalefun: Callable[[np.ndarray, float], float]
             A function that scales the layer stack to the current outer diameter
             of the distribution.
-            If None (default), multiplicative scaling is used to transfor
+            If None (default), multiplicative scaling is used to transform
             the layer stack so that the outermost layer diameter matches the
             current distribution diameter.
         limit: int
