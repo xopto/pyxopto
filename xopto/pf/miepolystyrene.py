@@ -44,7 +44,7 @@ class MiePolystyrene(Mie):
             Diameter of the Microspherical particle (m).
 
         wavelength: float or complex
-            Wavelength (m).
+            Wavelength of light (m).
 
         ripolystyrene: float or complex
             Refractive index of polystyrene at the specified wavelength.
