@@ -42,7 +42,7 @@ class Gk2(PfBase):
             phase function.
         gg2: float
             Parameter of the second Gegenbauer kernel phase function
-            (:math:`0 <= gg_2 <= 1`).
+            (:math:`-1.0 <= gg_2 <= 0`).
         a2: float
             Parameter of the second Gegenbauer kernel phase function
             (:math:`a > - 1/2`).
