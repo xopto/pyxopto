@@ -428,6 +428,9 @@ class PfMap2DBase:
             return self._gamma_map
         else:
             gs = self._pf(param1, param2).gs(2)
+            if gs[1] == 1.0:
+                return (1.0 - gs[2])/np.finfo(np.float64).eps
+
             return (1.0 - gs[2])/(1.0 - gs[1])
 
     def delta(self, param1: float or np.ndarray = None,
@@ -455,6 +458,9 @@ class PfMap2DBase:
             return self._delta_map
         else:
             gs = self._pf(param1, param2).gs(3)
+            if gs[1] == 1.0:
+                return (1.0 - gs[3]) / np.finfo(np.float64).eps
+
             return (1.0 - gs[3]) / (1.0 - gs[1])
 
     def gammadelta(self, param1: float or np.ndarray = None,
@@ -482,6 +488,9 @@ class PfMap2DBase:
             return self._gamma_map, self._delta_map
         else:
             gs = self._pf(param1, param2).gs(3)
+            if gs[1] == 1.0:
+                fp_eps = np.finfo(np.float64).eps
+                return (1.0 - gs[2]) / fp_eps, (1.0 - gs[3]) / fp_eps
             return (1.0 - gs[2])/(1.0 - gs[1]), (1.0 - gs[3])/(1.0 - gs[1])
 
     def sigma(self, param1: float or np.ndarray = None,
