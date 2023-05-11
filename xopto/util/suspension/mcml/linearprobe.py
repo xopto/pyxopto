@@ -21,6 +21,7 @@
 ################################# End license ##################################
 
 from typing import Callable, List
+import time
 
 from xopto.mcml import mc
 from xopto.pf import distribution
@@ -266,50 +267,53 @@ class LinearProbe:
         probe_reflectivity = float(self._probe_reflectivity(wavelength, temperature))
         epoxy_fill_ri = float(self._epoxy_fill_ri(wavelength, temperature))
 
+        mc_obj = self.mc_obj
+
         # compute scattering phase function LUT using cache
         mcpf_obj = self._suspension.mcpf(wavelength, temperature)
 
         # update the layers
-        self._mc_obj.layers[0].pf = mcpf_obj
-        self._mc_obj.layers[0].n = surrounding_ri
+        mc_obj.layers[0].pf = mcpf_obj
+        mc_obj.layers[0].n = surrounding_ri
         #
-        self._mc_obj.layers[1].pf = mcpf_obj
-        self._mc_obj.layers[1].n = medium_ri
-        self._mc_obj.layers[1].mus = self._suspension.mus(
-            wavelength, temperature)
+        mc_obj.layers[1].pf = mcpf_obj
+        mc_obj.layers[1].n = medium_ri
+        mc_obj.layers[1].mus = self._suspension.mus(wavelength, temperature)
         #
-        self._mc_obj.layers[2].pf = mcpf_obj
-        self._mc_obj.layers[2].n = surrounding_ri
+        mc_obj.layers[2].pf = mcpf_obj
+        mc_obj.layers[2].n = surrounding_ri
 
         # update the source
-        self._mc_obj.source.fiber.na = fiber_na
-        self._mc_obj.source.fiber.ncore = fiber_core_ri
+        mc_obj.source.fiber.na = fiber_na
+        mc_obj.source.fiber.ncore = fiber_core_ri
 
         # update the top surface layout
-        self._mc_obj.surface.top.fiber.na = fiber_na
-        self._mc_obj.surface.top.fiber.ncore = fiber_core_ri
-        self._mc_obj.surface.top.ncutout = epoxy_fill_ri
-        self._mc_obj.surface.top.reflectivity = probe_reflectivity
-        self._mc_obj.surface.top.ncutout = epoxy_fill_ri
+        mc_obj.surface.top.fiber.na = fiber_na
+        mc_obj.surface.top.fiber.ncore = fiber_core_ri
+        mc_obj.surface.top.ncutout = epoxy_fill_ri
+        mc_obj.surface.top.reflectivity = probe_reflectivity
+        mc_obj.surface.top.ncutout = epoxy_fill_ri
 
         # update the reflectance detector
-        self._mc_obj.detectors.top.fiber.na = fiber_na
-        self._mc_obj.detectors.top.fiber.ncore = fiber_core_ri
+        mc_obj.detectors.top.fiber.na = fiber_na
+        mc_obj.detectors.top.fiber.ncore = fiber_core_ri
 
-        _, _, detectors_res = self._mc_obj.run(*args, **kwargs)
+        _, _, detectors_res = mc_obj.run(*args, **kwargs)
 
         data = {
+            'epoch_timestamp': time.time(),
+            'mc': {
+                'source': mc_obj.source.todict(),
+                'surface': mc_obj.surface.todict(),
+                'layers': mc_obj.layers.todict(),
+                'detectors': mc_obj.detectors.todict(),
+                'num_packets': int(detectors_res.top.nphotons),
+                'rmax': mc_obj.rmax,
+                'run_report': mc_obj.run_report
+            },
             'reflectance': detectors_res.top.reflectance,
             'wavelength': wavelength,
             'temperature': temperature,
-            'mc': {
-                'source': self._mc_obj.source.todict(),
-                'surface': self._mc_obj.surface.todict(),
-                'layers': self._mc_obj.layers.todict(),
-                'detectors': self._mc_obj.detectors.todict(),
-                'num_packets': int(detectors_res.top.nphotons),
-                'rmax': self._mc_obj.rmax
-            }
         }
 
         return data

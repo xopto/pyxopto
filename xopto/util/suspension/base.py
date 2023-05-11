@@ -29,11 +29,11 @@ class Suspension:
             probability. The object must implement raw_moment method
             that computes the requested statistical moment of the distribution.
             The object must also implement range method that returns a
-            tuple with full range of size/diamer covered by the distribution
+            tuple with full range of size/diameter covered by the distribution
             as (dmin, dmax). 
             Use one of the distributions implemented in
             :py:mod:`xopto.pf.distribution`.
-            If this parameter is a Suspension istance, a new copy is
+            If this parameter is a Suspension instance, a new copy is
             created, which inherits all the properties of the original
             suspension including the cache.
         particle_ri: float or Callable[[float, float], float]
@@ -498,4 +498,3 @@ class Suspension:
         required_volume = solid_mass/self.solid_content()
 
         return required_volume, diluted_suspension
-
