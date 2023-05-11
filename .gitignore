@@ -143,6 +143,9 @@ xopto/util/regression/kernel/template/__pycache__
 
 xopto/util/sampler/__pycache__
 
+xopto/util/suspension/__pycache__
+xopto/util/suspension/mcml/__pycache__
+
 xopto/util/widgets
 xopto/util/widgets/__pycache__
 xopto/util/widgets/resources/__pycache__
