@@ -65,13 +65,13 @@ class Suspension:
             floating-point value that is independent of temperature.
             Default implementation of the polystyrene density
             is used by default.
-        particle_mua: float or Callable[[float, float], float] :
+        particle_mua: float or Callable[[float, float], float]:
             Absorption coefficient (1/m) of the suspended particles.
             A callable that takes wavelength and temperature or a fixed
             floating-point value that is independent of wavelength and
             temperature.
             Default implementation is 0.0 1/m.
-        medium_mua: float or Callable[[float, float], float] :
+        medium_mua: float or Callable[[float, float], float]:
             Absorption coefficient (1/m) of the medium surrounding
             the suspended particles.
             A callable that takes wavelength and temperature or a fixed
@@ -544,6 +544,11 @@ class Suspension:
         diluted_suspension: Suspension
             Diluted suspension
         '''
+        if mus > self.mus(wavelength, temperature):
+            raise ValueError(
+                'The scattering coefficient of the diluted '
+                'suspension exceeds the value of this suspension!')
+
         diluted_suspension = Suspension(self)
         diluted_suspension.set_mus(mus, wavelength, temperature)
         solid_mass = diluted_suspension.solid_content()*volume
@@ -577,6 +582,11 @@ class Suspension:
         diluted_suspension: Suspension
             Diluted suspension
         '''
+        if musr > self.musr(wavelength, temperature):
+            raise ValueError(
+                'The reduced scattering coefficient of the diluted '
+                'suspension exceeds the value of this suspension!')
+
         diluted_suspension = Suspension(self)
         diluted_suspension.set_musr(musr, wavelength, temperature)
         solid_mass = diluted_suspension.solid_content()*volume
