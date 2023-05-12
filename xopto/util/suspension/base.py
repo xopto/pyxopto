@@ -1,4 +1,7 @@
 from typing import Callable, Tuple
+import io
+import os.path
+import pickle
 
 from xopto import pf
 from xopto.materials import ri
@@ -26,13 +29,19 @@ class Suspension:
 
         pd: Callable[[float], float] or Suspension
             Particle size distribution that takes diameter and returns
-            probability. The object must implement raw_moment method
+            probability.
+            This object must be hashable and implement several methods.
+            The object must implement raw_moment method
             that computes the requested statistical moment of the distribution.
-            The object must also implement range method that returns a
+            The object must implement range method that returns a
             tuple with full range of size/diameter covered by the distribution
             as (dmin, dmax). 
+            The object must implement todict/fromdict methods. Fromdict
+            exports the object to a dict from which it can be constructed by
+            calling static method fromdict.
             Use one of the distributions implemented in
-            :py:mod:`xopto.pf.distribution`.
+            :py:mod:`xopto.pf.distribution` or derive a custom distribution
+            by following these implementations.
             If this parameter is a Suspension instance, a new copy is
             created, which inherits all the properties of the original
             suspension including the cache.
@@ -293,14 +302,13 @@ class Suspension:
         '''
         return self._pf_cache.get(
             pf.MiePd,
-            self._particle_ri(wavelength, temperature),
-            self._medium_ri(wavelength, temperature),
-            wavelength,
-            self._pd, self._pd.range, self._nd
+            float(self._particle_ri(wavelength, temperature)),
+            float(self._medium_ri(wavelength, temperature)),
+            float(wavelength),
+            self._pd, self._pd.range, int(self._nd)
         )
 
-    def mcpf(self, wavelength: float, temperature: float = 293.15,
-             nd: int or None = 100) \
+    def mcpf(self, wavelength: float, temperature: float = 293.15) \
             -> xopto.mcbase.mcpf.PfBase:
         '''
         Returns a Monte Carlo simulator-compatible scattering phase function
@@ -323,7 +331,8 @@ class Suspension:
             (
                 float(self._particle_ri(wavelength, temperature)),
                 float(self._medium_ri(wavelength, temperature)),
-                wavelength, self._pd, self._pd.range, self._nd
+                float(wavelength),
+                self._pd, self._pd.range, int(self._nd)
             )
         )
 
@@ -498,3 +507,58 @@ class Suspension:
         required_volume = solid_mass/self.solid_content()
 
         return required_volume, diluted_suspension
+
+    def _get_cache(self) -> Tuple[cache.ObjCache, cache.LutCache]:
+        return self._pf_cache, self._mcpf_lut_cache
+    cache = property(_get_cache, None, None,
+                    'Returns the scattering phase function and '
+                    'corresponding MC lookup table cache objects as tuple '
+                    '(pf_cache, mcpf_cache).')
+
+    def save_cache(self, filename: str or io.IOBase):
+        '''
+        Save scattering phase function and corresponding MC lookup table
+        cache to a file.
+
+        Parameters
+        ----------
+        filename: str or io.IOBase
+            Target filename or a file like object. If filename is a string,
+            ".pkl" extension is added automatically. If filename is a file
+            like object, it must support binary write operation.
+        '''
+        if isinstance(filename, str):
+            if not filename.endswith(('.pkl', '.PKL')):
+                filename = filename + '.pkl'
+
+        if isinstance(filename, str):
+            with open(filename, 'wb') as fid:
+                self._pf_cache.save(fid)
+                self._mcpf_lut_cache.save(fid)
+        else:
+            self._pf_cache.save(fid)
+            self._mcpf_lut_cache.save(fid)
+
+    def load_cache(self, filename: str or io.IOBase):
+        '''
+        Load scattering phase function and corresponding MC lookup table
+        cache from a file.
+
+        Parameters
+        ----------
+        filename: str or io.IOBase
+            Source filename or a file like object. If filename is a string,
+            ".pkl" extension is added automatically. If filename is a file
+            like object, it must support binary read operation.
+        '''
+        if isinstance(filename, str):
+            if not filename.endswith(('.pkl', '.PKL')):
+                filename = filename + '.pkl'
+
+        if isinstance(filename, str):
+            with open(filename, 'rb') as fid:
+                self._pf_cache = cache.ObjCache.load(fid)
+                self._mcpf_lut_cache = cache.LutCache.load(fid)
+        else:
+            self._pf_cache = cache.ObjCache.load(fid)
+            self._mcpf_lut_cache = cache.LutCache.load(fid)
