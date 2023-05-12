@@ -22,3 +22,4 @@
 
 from .linearprobe import LinearProbe
 from .sixaroundoneprobe import SixAroundOneProbe
+from .uniformbeamcuvette import UniformBeamCuvette
