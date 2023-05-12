@@ -231,6 +231,66 @@ class Suspension:
             average_particle_volume*self._particle_density(temperature)
         self._number_density = sc/average_particle_weight
 
+    def mua(self, wavelength: float, temperature: float = 293.15) -> float:
+        '''
+        Computes the absorption coefficient of the suspension medium at
+        the given wavelength and temperature.
+
+        Parameters
+        ----------
+        wavelength: float
+            Wavelength of light (m).
+        temperature: float
+            Suspension temperature (K).
+
+        Returns
+        -------
+        mua: float
+            Absorption coefficient (1/m) of the suspension medium
+            at the given wavelength and temperature.
+        '''
+        return self.medium_mua(wavelength, temperature)
+
+    def medium_mua(self, wavelength: float, temperature: float = 293.15) -> float:
+        '''
+        Computes the absorption coefficient of the suspension medium at
+        the given wavelength and temperature.
+
+        Parameters
+        ----------
+        wavelength: float
+            Wavelength of light (m).
+        temperature: float
+            Suspension temperature (K).
+
+        Returns
+        -------
+        mua: float
+            Absorption coefficient (1/m) of the suspension medium
+            at the given wavelength and temperature.
+        '''
+        return self._medium_mua(wavelength, temperature)
+
+    def particle_mua(self, wavelength: float, temperature: float = 293.15) -> float:
+        '''
+        Computes the absorption coefficient of the suspended particles at
+        the given wavelength and temperature.
+
+        Parameters
+        ----------
+        wavelength: float
+            Wavelength of light (m).
+        temperature: float
+            Suspension temperature (K).
+
+        Returns
+        -------
+        mua: float
+            Absorption coefficient (1/m) of the suspended particles
+            at the given wavelength and temperature.
+        '''
+        return self._particle_mua(wavelength, temperature)
+
     def mus(self, wavelength: float, temperature: float = 293.15) -> float:
         '''
         Computes the scattering coefficient of the suspension at
