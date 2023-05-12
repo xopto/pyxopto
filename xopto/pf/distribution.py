@@ -54,6 +54,50 @@ class Uniform(object):
         self._inv_range = 1.0
         self._set_range([lower, upper])
 
+    def __eq__(self, other: 'Uniform'):
+        return self.range[0] == other.range[0] and \
+               self.range[1] == other.range[1]
+
+    def __hash__(self) -> int:
+        return hash((float(self._range[0]), float(self._range[1])))
+
+    def todict(self) -> dict:
+        '''
+        Export distribution object to a dict.
+
+        Returns
+        -------
+        data: dict
+            Distribution object exported to a dict.
+        '''
+        return {
+            'type': self.__class__.__name__,
+            'lower': self.lower, 'upper': self.upper
+        }
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'Uniform':
+        '''
+        Create a new object from dict data.
+
+        Parameters
+        ----------
+        data: dict
+            Data as returned by the  :py:meth`Uniform.todict` method.
+
+        Returns
+        -------
+        distribution: Uniform
+            A new instance of :py:class:`Uniform` class that is initialized
+            with data from the input dict.
+        '''
+        data = dict(data)
+        T = data.pop('type')
+        if T != cls.__name__:
+            raise TypeError(
+                'Expected data for type "Uniform" but got "{}"!'.format(T))
+        return cls(**data)
+
     def raw_moment(self, n: int) -> float:
         '''
         Computes the n-th raw moment of the distribution p(x) as:
@@ -167,6 +211,53 @@ class Normal(object):
         self._clip = clip
         self._update()
 
+    def __eq__(self, other: 'Normal'):
+        return self.sigma == other.sigma and self.mean == other.mean and \
+               self.range[0] == other.range[0] and \
+               self.range[1] == other.range[1]
+
+    def __hash__(self) -> int:
+        return hash((float(self.mean), float(self.sigma),
+                     float(self._range[0]), float(self._range[1])))
+
+    def todict(self) -> dict:
+        '''
+        Export distribution object to a dict.
+
+        Returns
+        -------
+        data: dict
+            Distribution object exported to a dict.
+        '''
+        return {
+            'type': self.__class__.__name__,
+            'mean': self._mean, 'sigma': self._sigma,
+            'clip': self._clip
+        }
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'Normal':
+        '''
+        Create a new object from dict data.
+
+        Parameters
+        ----------
+        data: dict
+            Data as returned by the  :py:meth`Normal.todict` method.
+
+        Returns
+        -------
+        distribution: Normal
+            A new instance of :py:class:`Normal` class that is initialized
+            with data from the input dict.
+        '''
+        data = dict(data)
+        T = data.pop('type')
+        if T != cls.__name__:
+            raise TypeError(
+                'Expected data for type "Normal" but got "{}"!'.format(T))
+        return cls(**data)
+
     def raw_moment(self, n: int) -> float:
         '''
         Computes the n-th raw moment of the distribution p(x) as:
@@ -277,6 +368,52 @@ class Fractal(object):
         self._range = (float(range[0]), float(range[1]),)
         self._update()
 
+    def __eq__(self, other: 'Fractal'):
+        return self.alpha == other.alpha and \
+               self.range[0] == other.range[0] and \
+               self.range[1] == other.range[1]
+
+    def __hash__(self) -> int:
+        return hash((float(self.alpha),
+                     float(self._range[0]), float(self._range[1])))
+
+    def todict(self) -> dict:
+        '''
+        Export distribution object to a dict.
+
+        Returns
+        -------
+        data: dict
+            Distribution object exported to a dict.
+        '''
+        return {
+            'type': self.__class__.__name__,
+            'alpha': self._alpha, 'range': self._range
+        }
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'Fractal':
+        '''
+        Create a new object from dict data.
+
+        Parameters
+        ----------
+        data: dict
+            Data as returned by the  :py:meth`Fractal.todict` method.
+
+        Returns
+        -------
+        distribution: Fractal
+            A new instance of :py:class:`Fractal` class that is initialized
+            with data from the input dict.
+        '''
+        data = dict(data)
+        T = data.pop('type')
+        if T != cls.__name__:
+            raise TypeError(
+                'Expected data for type "Fractal" but got "{}"!'.format(T))
+        return cls(**data)
+
     def _update(self):
         '''
         Internal method that is used to update precalculated values.
@@ -375,9 +512,78 @@ class Mixture(object):
         if not isinstance(weights, (tuple, list, np.ndarray)):
             weights = (weights,)
 
+        if len(distributions) != len(weights):
+            raise ValueError('The number of distributions must be the same '
+                             'as the number of weights!')
+
         self._distributions = tuple(distributions)
         self._weights = tuple(np.asarray(weights).tolist())
-   
+
+    def __eq__(self, other: 'Mixture'):
+        if len(self) == len(other):
+            for dist1, dist2 in zip(self.distributions, other.distributions):
+                if dist1 != dist2:
+                    return False
+
+            for w1, w2 in zip(self.weights, other.weights):
+                if w1 != w2:
+                    return False
+
+        return True
+
+    def __hash__(self) -> int:
+        return hash(
+            tuple((p, w) for p, w in zip(self.distributions, self.weights))
+        )
+
+    def todict(self) -> dict:
+        '''
+        Export distribution object to a dict.
+
+        Returns
+        -------
+        data: dict
+            Distribution object exported to a dict.
+        '''
+        return {
+            'type': self.__class__.__name__,
+            'distributions': [item.todict() for item in self._distributions],
+            'weights': [float(item) for item in self._weights],
+        }
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'Mixture':
+        '''
+        Create a new object from dict data.
+
+        Parameters
+        ----------
+        data: dict
+            Data as returned by the  :py:meth`Mixture.todict` method.
+
+        Returns
+        -------
+        distribution: Mixture
+            A new instance of :py:class:`Mixture` class that is initialized
+            with data from the input dict.
+        '''
+        data = dict(data)
+        T = data.pop('type')
+        if T != cls.__name__:
+            raise TypeError(
+                'Expected data for type "Mixture" but got "{}"!'.format(T))
+        distributions = []
+        for item in data.pop('distributions'):
+            Ts = item.pop('type')
+            T = globals().get(Ts)
+            if T is None:
+                T = locals().get(Ts)
+            if T is None:
+                raise TypeError('Unsupported distribution "{}"!'.format(Ts))
+            distributions.append(T(**item))
+
+        return cls(distributions, **data)
+
     def  weight(self, index: int) -> float:
         '''
         Returns weight of the distribution at the specified index or slice.
@@ -431,6 +637,15 @@ class Mixture(object):
             m += weight*distribution.raw_moment(n)
         return m
 
+    def _get_weights(self) -> Tuple[float]:
+        return self._weights
+    weights = property(_get_weights, None, None, 'Distribution weights.')
+
+    def _get_distributions(self) -> Tuple[Callable[[float], float]]:
+        return self._distributions
+    distributions = property(_get_distributions, None, None,
+                             'Mixture distributions')
+
     def __call__(self, x: float) -> float:
         f = None
         for weight, distribution in zip(self._weights, self._distributions):
@@ -454,6 +669,9 @@ class Mixture(object):
         ranges = [pd.range for pd in self._distributions]
         return (np.min(ranges), np.max(ranges))   
     range = property(_get_range, None, None, 'Mixture range.')
+
+    def __len__(self):
+        return len(self._distributions)
 
     def __repr__(self):
         return 'Mixture(distributions={}, weights={})'.format(
