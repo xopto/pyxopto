@@ -85,7 +85,7 @@ class SixAroundOneProbe:
         probe_diameter: float
             diameter of the optical fiber probe.
         probe_reflectivity: float or Callable[[float, float], float]]
-            Reflectivity of the stainelss steel fiber probe tip as a callable
+            Reflectivity of the stainless steel fiber probe tip as a callable
             that takes wavelength and temperature or a fixed floating-point
             value that is independent of wavelength and temperature.
         probe_cutout: bool
