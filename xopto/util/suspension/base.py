@@ -1,7 +1,5 @@
 from typing import Callable, Tuple
 import io
-import os.path
-import pickle
 
 from xopto import pf
 from xopto.materials import ri
@@ -22,6 +20,8 @@ class Suspension:
             particle_ri: float or Callable[[float, float], float] = None,
             medium_ri: float or Callable[[float, float], float] = None,
             particle_density: float or Callable[[float], float] = None,
+            particle_mua: float or Callable[[float, float], float] = 0.0,
+            medium_mua: float or Callable[[float, float], float] = 0.0,
             solid_content: float = 0.1, nd: int or None = 100):
         '''
         Suspension of spherical particles that follows the provided size
@@ -65,6 +65,19 @@ class Suspension:
             floating-point value that is independent of temperature.
             Default implementation of the polystyrene density
             is used by default.
+        particle_mua: float or Callable[[float, float], float] :
+            Absorption coefficient (1/m) of the suspended particles.
+            A callable that takes wavelength and temperature or a fixed
+            floating-point value that is independent of wavelength and
+            temperature.
+            Default implementation is 0.0 1/m.
+        medium_mua: float or Callable[[float, float], float] :
+            Absorption coefficient (1/m) of the medium surrounding
+            the suspended particles.
+            A callable that takes wavelength and temperature or a fixed
+            floating-point value that is independent of wavelength and
+            temperature.
+            Default implementation is 0.0 1/m.
         solid_content: float
             Solid content of the suspension given as a decimal
             number (e.g. 0.1 for 10%). The value represents mass
@@ -91,6 +104,8 @@ class Suspension:
             particle_ri = obj._particle_ri
             medium_ri = obj._medium_ri
             particle_density = obj._particle_density
+            particle_mua = obj._particle_mua
+            medium_mua = obj._medium_mua
             solid_content = obj.solid_content()
             nd = obj._nd
             self._pf_cache = obj._pf_cache
@@ -122,12 +137,22 @@ class Suspension:
             medium_ri_value = float(medium_ri)
             medium_ri = lambda w, t: medium_ri_value
 
+        if isinstance(particle_mua, (float, int)):
+            particle_mua_value = float(particle_mua)
+            particle_mua = lambda w, t: particle_mua_value
+
+        if isinstance(medium_mua, (float, int)):
+            medium_mua_value = float(medium_mua)
+            medium_mua = lambda w, t: medium_mua_value
+
         if isinstance(particle_density, (float, int)):
             particle_density_value = float(particle_density)
             particle_density = lambda t: particle_density_value
 
         self._particle_ri = particle_ri
         self._medium_ri = medium_ri
+        self._particle_mua = particle_mua
+        self._medium_mua = medium_mua
         self._particle_density = particle_density
         self._pd = pd
 
@@ -302,8 +327,12 @@ class Suspension:
         '''
         return self._pf_cache.get(
             pf.MiePd,
-            float(self._particle_ri(wavelength, temperature)),
-            float(self._medium_ri(wavelength, temperature)),
+            float(self._particle_ri(wavelength, temperature)) +
+                1j*float(self._particle_mua(wavelength, temperature))*
+                    wavelength/(4.0*np.pi),
+            float(self._medium_ri(wavelength, temperature)) +
+                1j*float(self._medium_mua(wavelength, temperature))*
+                    wavelength/(4.0*np.pi),
             float(wavelength),
             self._pd, self._pd.range, int(self._nd)
         )
@@ -329,8 +358,12 @@ class Suspension:
         return self._mcpf_lut_cache.get(
             pf.MiePd,
             (
-                float(self._particle_ri(wavelength, temperature)),
-                float(self._medium_ri(wavelength, temperature)),
+                float(self._particle_ri(wavelength, temperature)) + 
+                    1j*float(self._particle_mua(wavelength, temperature))*
+                        wavelength/(4.0*np.pi),
+                float(self._medium_ri(wavelength, temperature)) +
+                    1j*float(self._medium_mua(wavelength, temperature))*
+                        wavelength/(4.0*np.pi),
                 float(wavelength),
                 self._pd, self._pd.range, int(self._nd)
             )
@@ -422,6 +455,49 @@ class Suspension:
             particles at the given wavelength and temperature.
         '''
         return self._medium_ri(wavelength, temperature)
+
+    def particle_mua(self, wavelength: float,
+                     temperature: float = 293.15) -> float:
+        '''
+        Computes and returns the absorption coefficient of suspended particles
+        at the given wavelength and temperature.
+
+        Parameters
+        -----------
+        wavelength: float
+            Wavelength of light.
+        temperature: float
+            Suspension temperature (K).
+
+        Returns
+        -------
+        mua: float
+            Absorption coefficient of the suspended particles at the given
+            wavelength and temperature.
+        '''
+        return self._particle_mua(wavelength, temperature)
+
+    def medium_mua(self, wavelength: float,
+                   temperature: float = 293.15) -> float:
+        '''
+        Computes and returns the absorption coefficient (1/m) of medium
+        that surrounds the suspended particles at the given
+        wavelength and temperature.
+
+        Parameters
+        -----------
+        wavelength: float
+            Wavelength of light.
+        temperature: float
+            Suspension temperature (K).
+
+        Returns
+        -------
+        mua: float
+            Absorption coefficient of the medium that surrounds the suspended
+            particles at the given wavelength and temperature.
+        '''
+        return self._medium_mua(wavelength, temperature)
 
     def particle_density(self, temperature: float = 293.15) -> float:
         '''

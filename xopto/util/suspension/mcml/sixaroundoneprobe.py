@@ -24,7 +24,6 @@ from typing import Callable, List
 import time
 
 from xopto.mcml import mc
-from xopto.pf import distribution
 from xopto.materials import ri
 from xopto.mcml.mcutil import fiber
 
@@ -92,7 +91,7 @@ class SixAroundOneProbe:
         probe_cutout: bool
             If True, the fibers of the probe are placed in a rectangular cutout
             filled with epoxy.
-        epoxy_fill_ri: float or Callable[[floar, float], float]
+        epoxy_fill_ri: float or Callable[[float, float], float]
             Refractive index of the epoxy fill that surrounds the fibers in the
             cutout.
             This value is only used if the probe_cutout is set to True.
@@ -134,16 +133,19 @@ class SixAroundOneProbe:
 
         if isinstance(fiber_core_ri, (float, int)):
             fiber_core_ri_value = float(fiber_core_ri)
-            fiber_core_ri = lambda w, t=default_temperature: fiber_core_ri_value
+            fiber_core_ri = \
+                lambda w, t=default_temperature: fiber_core_ri_value
         if isinstance(fiber_na, (float, int)):
             fiber_na_value = float(fiber_na)
             fiber_na = lambda w, t=default_temperature: fiber_na_value
         if isinstance(epoxy_fill_ri, (float, int)):
             epoxy_fill_ri_value = float(epoxy_fill_ri)
-            epoxy_fill_ri = lambda w, t=default_temperature: epoxy_fill_ri_value
+            epoxy_fill_ri = \
+                lambda w, t=default_temperature: epoxy_fill_ri_value
         if isinstance(probe_reflectivity, (float, int)):
             probe_reflectivity_value = float(probe_reflectivity)
-            probe_reflectivity = lambda w, t=default_temperature: probe_reflectivity_value
+            probe_reflectivity = \
+                lambda w, t=default_temperature: probe_reflectivity_value
 
         if surrounding_ri is None:
             surrounding_ri = suspension.medium_ri
@@ -214,11 +216,14 @@ class SixAroundOneProbe:
 
         layers = mc.mclayer.Layers([
             mc.mclayer.Layer(d=float('inf'), mua=0.0, mus=0.0,
-                             n=surrounding_ri(init_wavelength), pf=mcpf_obj),
+                             n=surrounding_ri(init_wavelength),
+                             pf=mcpf_obj),
             mc.mclayer.Layer(d=float('inf'), mua=0.0, mus=0.0,
-                             n=suspension.medium_ri(init_wavelength), pf=mcpf_obj),
+                             n=suspension.medium_ri(init_wavelength),
+                             pf=mcpf_obj),
             mc.mclayer.Layer(d=float('inf'), mua=0.0, mus=0.0,
-                             n=surrounding_ri(init_wavelength), pf=mcpf_obj)
+                             n=surrounding_ri(init_wavelength),
+                             pf=mcpf_obj)
         ])
 
         self._mc_obj = mc.Mc(
@@ -256,7 +261,8 @@ class SixAroundOneProbe:
         surrounding_ri = float(self._surrounding_ri(wavelength, temperature))
         fiber_na = float(self._fiber_na(wavelength, temperature))
         fiber_core_ri = float(self._fiber_core_ri(wavelength, temperature))
-        probe_reflectivity = float(self._probe_reflectivity(wavelength, temperature))
+        probe_reflectivity = float(
+            self._probe_reflectivity(wavelength, temperature))
         epoxy_fill_ri = float(self._epoxy_fill_ri(wavelength, temperature))
 
         # compute scattering phase function LUT using cache
@@ -271,6 +277,8 @@ class SixAroundOneProbe:
         mc_obj.layers[1].pf = mcpf_obj
         mc_obj.layers[1].n = medium_ri
         mc_obj.layers[1].mus = self._suspension.mus(wavelength, temperature)
+        mc_obj.layers[1].mua = self._suspension.medium_mua(
+            wavelength, temperature)
         #
         mc_obj.layers[2].pf = mcpf_obj
         mc_obj.layers[2].n = surrounding_ri
