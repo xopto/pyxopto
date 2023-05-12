@@ -102,6 +102,15 @@ class MieMlPd(PfBase):
         limit: int
             An upper bound on the number of subintervals used in the quad
             adaptive algorithm. Set to None for default value.
+
+        Note
+        ----
+        If the medium or particle have a nonzero absorption coefficient, the
+        refractive index becomes complex :math:`n + ik`, where :math:`k` is
+        related to the absorption coefficient :math:`\\mu_{a}` as
+        :math:`\\mu_{a} = 4 \\pi k / \\lambda_0`, where :math:`\\lambda_0`
+        is the wavelength of light in vacuum.
+
         Examples
         --------
         Mie scattering phase function for a normal distribution of

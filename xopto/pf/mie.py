@@ -263,6 +263,14 @@ class Mie(PfBase):
         wavelength: float
             Wavelength of light (m).
 
+        Note
+        ----
+        If the medium or particle have a nonzero absorption coefficient, the
+        refractive index becomes complex :math:`n + ik`, where :math:`k` is
+        related to the absorption coefficient :math:`\\mu_{a}` as
+        :math:`\\mu_{a} = 4 \\pi k / \\lambda_0`, where :math:`\\lambda_0`
+        is the wavelength of light in vacuum.
+
         Examples
         --------
         Mie scattering phase function for a 1 um spherical particle

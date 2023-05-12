@@ -53,6 +53,14 @@ class MiePolystyrene(Mie):
         riliquid: float
             Refrective index of the liquid phase (water by default).
             If None, the builtin refractive index of water is used.
+
+        Note
+        ----
+        If the medium or particle have a nonzero absorption coefficient, the
+        refractive index becomes complex :math:`n + ik`, where :math:`k` is
+        related to the absorption coefficient :math:`\\mu_{a}` as
+        :math:`\\mu_{a} = 4 \\pi k / \\lambda_0`, where :math:`\\lambda_0`
+        is the wavelength of light in vacuum.
         '''
         if ripolystyrene is None:
             ripolystyrene = ri.polystyrene.default(wavelength)
