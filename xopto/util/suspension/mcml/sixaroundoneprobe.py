@@ -284,7 +284,6 @@ class SixAroundOneProbe:
         mc_obj.surface.top.fiber.ncore = fiber_core_ri
         mc_obj.surface.top.ncutout = epoxy_fill_ri
         mc_obj.surface.top.reflectivity = probe_reflectivity
-        mc_obj.surface.top.ncutout = epoxy_fill_ri
 
         # update the reflectance detector
         mc_obj.detectors.top.fiber.na = fiber_na
