@@ -81,7 +81,7 @@ class Suspension:
         solid_content: float
             Solid content of the suspension given as % wt/v
             (1% wt/v equals 1 g/100 ml, i.e. 1g of particles per 100 ml
-            of suspension).
+            of suspension). Defaults to 10% wt/v.
         nd: int or None
             If an integer, the number of nodes to use when integrating
             the Mie scattering phase functions. If None, adaptive step
