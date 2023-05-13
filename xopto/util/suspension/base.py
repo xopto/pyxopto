@@ -537,6 +537,28 @@ class Suspension:
         '''
         return self._medium_ri(wavelength, temperature)
 
+    def ri(self, wavelength: float,
+                  temperature: float = 293.15) -> float:
+        '''
+        Computes and returns the refractive index of suspension that equals
+        the refractive index of the medium that surrounds
+        the suspended particles at the given wavelength and temperature.
+
+        Parameters
+        -----------
+        wavelength: float
+            Wavelength of light.
+        temperature: float
+            Suspension temperature (K).
+
+        Returns
+        -------
+        ri: float
+            Refractive index of the suspension/medium that surrounds the
+            suspended particles at the given wavelength and temperature.
+        '''
+        return self.medium_ri(wavelength, temperature)
+
     def particle_mua(self, wavelength: float,
                      temperature: float = 293.15) -> float:
         '''
