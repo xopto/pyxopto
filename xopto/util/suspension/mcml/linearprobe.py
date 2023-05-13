@@ -168,10 +168,31 @@ class LinearProbe:
 
         self._probe_reflectivity = probe_reflectivity
 
+        surrounding_ri_value = \
+            float(self._surrounding_ri(init_wavelength, init_temperature))
+
+        suspension_mus_value = \
+            float(self._suspension.mus(init_wavelength, init_temperature))
+        suspension_mua_value = \
+            float(self._suspension.mua(init_wavelength, init_temperature))
+        suspension_ri_value = \
+            float(self._suspension.ri(init_wavelength, init_temperature))
+
+        fiber_core_ri_value = \
+            float(self._fiber_core_ri(init_wavelength, init_temperature))
+        fiber_na_value = \
+            float(self._fiber_na(init_wavelength, init_temperature))
+
+        probe_reflectivity_value = \
+            float(self._probe_reflectivity(init_wavelength, init_temperature))
+
+        epoxy_fill_ri_value = \
+            float(self._epoxy_fill_ri(init_wavelength, init_temperature))
+
         multimode_fiber = fiber.MultimodeFiber(
             dcore=fiber_core_d, dcladding=fiber_cladding_d,
-            ncore=fiber_core_ri(init_wavelength, init_temperature),
-            na=fiber_na(init_wavelength, init_temperature)
+            ncore=fiber_core_ri_value,
+            na=fiber_na_value
         )
 
         if probe_cutout:
@@ -187,8 +208,8 @@ class LinearProbe:
             n=fiber_count,
             spacing=fiber_spacing,
             cutout=cutout,
-            cutoutn=epoxy_fill_ri(init_wavelength, init_temperature),
-            reflectivity=probe_reflectivity(init_wavelength, init_temperature),
+            cutoutn=epoxy_fill_ri_value,
+            reflectivity=probe_reflectivity_value,
             diameter=probe_diameter
         )
 
@@ -216,14 +237,12 @@ class LinearProbe:
 
         layers = mc.mclayer.Layers([
             mc.mclayer.Layer(d=float('inf'), mua=0.0, mus=0.0,
-                             n=surrounding_ri(init_wavelength),
-                             pf=mcpf_obj),
+                             n=surrounding_ri_value, pf=mcpf_obj),
+            mc.mclayer.Layer(d=float('inf'),
+                             mua=suspension_mua_value, mus=suspension_mus_value,
+                             n=suspension_ri_value, pf=mcpf_obj),
             mc.mclayer.Layer(d=float('inf'), mua=0.0, mus=0.0,
-                             n=suspension.medium_ri(init_wavelength),
-                             pf=mcpf_obj),
-            mc.mclayer.Layer(d=float('inf'), mua=0.0, mus=0.0,
-                             n=surrounding_ri(init_wavelength),
-                             pf=mcpf_obj)
+                             n=surrounding_ri_value, pf=mcpf_obj)
         ])
 
         self._mc_obj = mc.Mc(
@@ -258,12 +277,17 @@ class LinearProbe:
         temperature = float(temperature)
 
         # recompute wavelength and temperature dependent values
-        medium_ri = float(self._suspension.medium_ri(wavelength, temperature))
+        suspension_mus = float(self._suspension.mus(wavelength, temperature))
+        suspension_mua = float(self._suspension.mua(wavelength, temperature))
+        suspension_ri = float(self._suspension.ri(wavelength, temperature))
+
         surrounding_ri = float(self._surrounding_ri(wavelength, temperature))
+
         fiber_na = float(self._fiber_na(wavelength, temperature))
         fiber_core_ri = float(self._fiber_core_ri(wavelength, temperature))
-        probe_reflectivity = float(
-            self._probe_reflectivity(wavelength, temperature))
+
+        probe_reflectivity = \
+            float(self._probe_reflectivity(wavelength, temperature))
         epoxy_fill_ri = float(self._epoxy_fill_ri(wavelength, temperature))
 
         mc_obj = self.mc_obj
@@ -276,10 +300,9 @@ class LinearProbe:
         mc_obj.layers[0].n = surrounding_ri
         #
         mc_obj.layers[1].pf = mcpf_obj
-        mc_obj.layers[1].n = medium_ri
-        mc_obj.layers[1].mus = self._suspension.mus(wavelength, temperature)
-        mc_obj.layers[1].mua = self._suspension.medium_mua(
-            wavelength, temperature)
+        mc_obj.layers[1].n = suspension_ri
+        mc_obj.layers[1].mus = suspension_mus
+        mc_obj.layers[1].mua = suspension_mua
         #
         mc_obj.layers[2].pf = mcpf_obj
         mc_obj.layers[2].n = surrounding_ri

@@ -251,22 +251,26 @@ class UniformBeamCuvette:
 
         # create initialize the simulator objects
         surrounding_ri_value = \
-            self._surrounding_ri(init_wavelength, init_temperature)
+            float(self._surrounding_ri(init_wavelength, init_temperature))
         surrounding_mua_value = \
-            self._surrounding_mua(init_wavelength, init_temperature)
+            float(self._surrounding_mua(init_wavelength, init_temperature))
 
-        cuvette_ri_value = self._cuvette_ri(init_wavelength, init_temperature)
-        cuvette_mua_value = self._cuvette_mua(init_wavelength, init_temperature)
+        cuvette_ri_value = \
+            float(self._cuvette_ri(init_wavelength, init_temperature))
+        cuvette_mua_value = \
+            float(self._cuvette_mua(init_wavelength, init_temperature))
 
         suspension_ri_value = \
-            self._suspension.medium_ri(init_wavelength, init_temperature)
+            float(self._suspension.ri(init_wavelength, init_temperature))
         suspension_mua_value = \
-            self._suspension.mua(init_wavelength, init_temperature)
+            float(self._suspension.mua(init_wavelength, init_temperature))
         suspension_mus_value = \
-            self._suspension.mus(init_wavelength, init_temperature)
+            float(self._suspension.mus(init_wavelength, init_temperature))
 
-        beam_na_value = self._beam_na(init_wavelength, init_temperature)
-        detector_na_value = self._detector_na(init_wavelength, init_temperature)
+        beam_na_value = \
+            float(self._beam_na(init_wavelength, init_temperature))
+        detector_na_value = \
+            float(self._detector_na(init_wavelength, init_temperature))
 
         source_fiber = fiber.MultimodeFiber(
             dcore=self._beam_d, dcladding=self._beam_d,
@@ -382,7 +386,7 @@ class UniformBeamCuvette:
 
         suspension_mus = self._suspension.mus(wavelength, temperature)
         suspension_mua = self._suspension.mua(wavelength, temperature)
-        suspension_ri = self._suspension.medium_ri(wavelength, temperature)
+        suspension_ri = self._suspension.ri(wavelength, temperature)
 
         # compute scattering phase function LUT using cache
         mcpf_obj = self._suspension.mcpf(wavelength, temperature)
@@ -458,5 +462,5 @@ if __name__ == '__main__':
         Suspension(Normal(1.0e-6, 0.01e-6)),
         beam_fi_theta=(0.0, np.deg2rad(0.1))
     )
-
+    cuvette.suspension.set_mus(1.0e2, 400e-9)
     r = cuvette.run(550e-9, nphotons=100)
