@@ -93,8 +93,16 @@ class Suspension:
         the :py:meth:`~Suspension.set_mus`, :py:meth:`~Suspension.set_musr`,
         :py:meth:`~Suspension.set_number_density` or
         :py:meth:`~Suspension.set_solid_content` methods.
-        This class uses :py:class:`xopto.pf.MiePd` scattering phase function
-        to make the required computations.
+        This class uses :py:class:`~xopto.pf.miepd.MiePd` scattering phase
+        function to make the required computations.
+
+        If the absorption coefficients of the medium or particles are nonzero,
+        the corresponding refractive index that is used to compute the
+        scattering phase function and related properties becomes complex
+        :math:`n + ik`. Imaginary part :math:`k` is related to the absorption
+        coefficient :math:`\\mu_{a}` as
+        :math:`\\mu_{a} = 4 \\pi k / \\lambda_0`, where :math:`\\lambda_0`
+        is the wavelength of light in vacuum.
         '''
         if isinstance(pd, Suspension):
             obj = pd
@@ -256,8 +264,9 @@ class Suspension:
         ----
         The absorption coefficient of the suspension depends on the absorption
         coefficients of the medium and absorption coefficient of the particles.
-        The two absorption coefficients must be weighted by their corresponding
-        volume fractions. 
+        The two absorption coefficients are weighted by their corresponding
+        volume fractions when computing the absorption coefficient of
+        the suspension. 
         '''
         # solid content 1% wt/v equals 1 g/ 100 ml or 10 g/l or 10 kg/m3
         particle_volume_fraction = self.solid_content()*10.0/ \
