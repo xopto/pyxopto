@@ -111,7 +111,7 @@ class UniformBeamCuvette:
             Detector azimuth and incidence angles (rad) as a tuple
             (azimuth, incidence).
         detector_lateral_offset: Tuple[float, float]
-            Later displacement of the detector from the axis of the
+            Later displacement of the detector from the position/center of the
             source as a tuple (x, y).
         detector_axial_offset: float
             Axial distance (m) of the detector from the transmittance side
