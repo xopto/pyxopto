@@ -105,20 +105,13 @@ class SixAroundOneProbe:
         cl_build_options: None or List[str or cloptions.ClBuildOption]
             OpenCL build options. See the Mont Carlo constructor
             :py:meth:`~xopto.mcml.mc.Mc.__init__` for more details.
-            Default build options are set to:
-
-            .. code-block:: python
-
-                :py:code:`[mc.cloptions.FastRelaxedMath]`.
+            Default build options are set to `[mc.cloptions.FastRelaxedMath]`.
 
         options: None or List[mcoptions.McOption]
             Monte Carlo simulator options. See the Mont Carlo constructor
             :py:meth:`~xopto.mcml.mc.Mc.__init__` for more details.
-            Default options are set to:
-
-            .. code-block:: python
-
-                :py:code:`[mc.mcoptions.McFloatLutMemory.constant_mem]`.
+            Default options are set to
+            `[mc.mcoptions.McFloatLutMemory.constant_mem]`.
 
         '''
         self._suspension = suspension
