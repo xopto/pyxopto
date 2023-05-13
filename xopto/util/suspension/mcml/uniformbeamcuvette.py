@@ -61,15 +61,16 @@ class UniformBeamCuvette:
         Parameters
         ----------
         suspension: Suspension
-            Suspension instance use with the Monte Carlo simulations.
+            Suspension instance that is used to set the optical properties
+             of the volume inside the cuvette.
         cuvette_ri:  float or Callable[[float, float], float]
-            Refractive index of the cuvette.
+            Refractive index of the cuvette walls.
             A callable that takes wavelength and temperature or a fixed
             floating-point value that is independent of wavelength and
             temperature.
             Default implementation uses fused silica.
         cuvette_mua: float or Callable[[float, float], float]
-            Absorption coefficient (1/m) of the cuvette.
+            Absorption coefficient (1/m) of the cuvette walls.
             A callable that takes wavelength and temperature or a fixed
             floating-point value that is independent of wavelength and
             temperature.
@@ -117,7 +118,8 @@ class UniformBeamCuvette:
             Axial distance (m) of the detector from the transmittance side
             of the cuvette (must be zero or a positive value). If nonzero, an
             additional layer is used to fill the space between the cuvette
-            and the detector.
+            and the detector. The optical properties of this additional layer
+            are equal to the optical properties of the surrounding medium.
         cl_device: None or str or cl.Device or List[cl.Device] or cl.Context or cl.CommandQueue
             OpenCL device that will run the simulations. The first available
             GPU is used if None.
@@ -141,6 +143,7 @@ class UniformBeamCuvette:
                (thickness equals `cuvette_path`) 
             4. Cuvette wall (thickness equals `cuvette_wall`)
             5. Detector offset layer (thickness equals `detector_axial_offset`)
+               that uses the optical properties of the surrounding medium.
                This layer is created only if `detector_axial_offset > 0.0`!
             6. Surrounding medium (infinite thickness)
 
