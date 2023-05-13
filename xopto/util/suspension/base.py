@@ -264,20 +264,35 @@ class Suspension:
         ----
         The absorption coefficient of the suspension depends on the absorption
         coefficients of the medium and absorption coefficient of the particles.
-        The two absorption coefficients are weighted by their corresponding
-        volume fractions when computing the absorption coefficient of
-        the suspension. 
+        The absorption coefficient of the suspension is computed as the
+        sum of the effective absorption coefficient of the medium
+        and the effective absorption coefficient of the particles.
+        The effective absorption coefficient of the medium is computed as
+        the absorption coefficient of the medium weighted by the
+        volume fraction of the medium.
+        The effective absorption coefficient of the particles is computed
+        using the Mie solution for the absorption cross section multiplied
+        by the number density of the particles in the suspension.
         '''
         # solid content 1% wt/v equals 1 g/ 100 ml or 10 g/l or 10 kg/m3
-        particle_volume_fraction = self.solid_content()*10.0/ \
-            self._particle_density(temperature)
-        medium_mua = self.medium_mua(wavelength, temperature)
-        particle_mua = self.particle_mua(wavelength, temperature)
+        particle_volume_fraction = self.particle_volume_fraction(temperature)
 
-        return  particle_volume_fraction*particle_mua + \
+        # absorption coefficient of a pure/bulk medium
+        medium_mua = self.medium_mua(wavelength, temperature)
+
+        # absorption coefficient of bulk particles (for comparison)
+        #particle_mua = self.particle_mua(wavelength, temperature)
+
+        # computing the absorption cross section and from there the effective
+        # absorption coefficient of the suspended particles
+        pf_obj = self.pf(wavelength, temperature)
+        mua_particle_effective = pf_obj.acs()*self.number_density()
+
+        return  mua_particle_effective + \
             (1.0 - particle_volume_fraction)*medium_mua
 
-    def medium_mua(self, wavelength: float, temperature: float = 293.15) -> float:
+    def medium_mua(self, wavelength: float,
+                   temperature: float = 293.15) -> float:
         '''
         Computes the absorption coefficient of the suspension medium at
         the given wavelength and temperature.
@@ -297,7 +312,8 @@ class Suspension:
         '''
         return self._medium_mua(wavelength, temperature)
 
-    def particle_mua(self, wavelength: float, temperature: float = 293.15) -> float:
+    def particle_mua(self, wavelength: float,
+                     temperature: float = 293.15) -> float:
         '''
         Computes the absorption coefficient of the suspended particles at
         the given wavelength and temperature.
@@ -358,6 +374,58 @@ class Suspension:
         '''
         g = self.g(wavelength, temperature)
         return self.mus(wavelength, temperature)*(1.0 - g)
+
+    def particle_volume_fraction(self, temperature: float = 293.15) -> float:
+        '''
+        Computes and returns the volume fraction of particles in the suspension.
+        (a value from 0.0, to 1.0).
+
+        Parameters
+        ----------
+        temperature: float
+            Suspension temperature (K).
+
+        Returns
+        -------
+        fraction: float
+            Volume fraction of particles in the suspension, i.e. total
+            volume of particles divided by the total volume of suspension.
+
+        Note
+        ----
+        The volume fractions of particles and medium returned by
+        the :py:meth:`~Suspension.particle_volume_fraction` and
+        :py:meth:`Suspension.medium_volume_fraction` sum up to 1 if computed
+        at the same temperature.
+        '''
+        return self.solid_content(temperature)*10.0/ \
+            self._particle_density(temperature)
+
+    def medium_volume_fraction(self, temperature: float = 293.15) -> float:
+        '''
+        Computes and returns the volume fraction of medium in the suspension.
+        (a value from 0.0, to 1.0).
+
+        Parameters
+        ----------
+        temperature: float
+            Suspension temperature (K).
+
+        Returns
+        -------
+        fraction: float
+            Volume fraction of medium in the suspension, i.e. total
+            volume of medium divided by the total volume of suspension.
+
+        Note
+        ----
+        The volume fractions of particles and medium returned by
+        the :py:meth:`~Suspension.particle_volume_fraction` and
+        :py:meth:`Suspension.medium_volume_fraction` sum up to 1 if computed
+        at the same temperature.
+        '''
+        return 1.0 - self.particle_volume_fraction(temperature)
+
 
     def number_density(self) -> float:
         '''
@@ -568,49 +636,6 @@ class Suspension:
         '''
         return self.medium_ri(wavelength, temperature)
 
-    def particle_mua(self, wavelength: float,
-                     temperature: float = 293.15) -> float:
-        '''
-        Computes and returns the absorption coefficient of suspended particles
-        at the given wavelength and temperature.
-
-        Parameters
-        -----------
-        wavelength: float
-            Wavelength of light.
-        temperature: float
-            Suspension temperature (K).
-
-        Returns
-        -------
-        mua: float
-            Absorption coefficient of the suspended particles at the given
-            wavelength and temperature.
-        '''
-        return self._particle_mua(wavelength, temperature)
-
-    def medium_mua(self, wavelength: float,
-                   temperature: float = 293.15) -> float:
-        '''
-        Computes and returns the absorption coefficient (1/m) of medium
-        that surrounds the suspended particles at the given
-        wavelength and temperature.
-
-        Parameters
-        -----------
-        wavelength: float
-            Wavelength of light.
-        temperature: float
-            Suspension temperature (K).
-
-        Returns
-        -------
-        mua: float
-            Absorption coefficient of the medium that surrounds the suspended
-            particles at the given wavelength and temperature.
-        '''
-        return self._medium_mua(wavelength, temperature)
-
     def particle_density(self, temperature: float = 293.15) -> float:
         '''
         Computes and returns the density (kg/m3) of the suspended particles at
@@ -760,3 +785,4 @@ class Suspension:
         else:
             self._pf_cache = cache.ObjCache.load(fid)
             self._mcpf_lut_cache = cache.LutCache.load(fid)
+
