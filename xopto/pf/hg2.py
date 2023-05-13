@@ -35,7 +35,7 @@ class Hg2(PfBase):
         g1: float
             Anisotropy factor of the first HG scattering phase function. Must
             be from interval [0, 1].
-        g1: float
+        g2: float
             Anisotropy factor of the second HG scattering phase function. Must
             be from interval [-1, 0]
         b: float
