@@ -22,7 +22,7 @@ class Suspension:
             particle_density: float or Callable[[float], float] = None,
             particle_mua: float or Callable[[float, float], float] = 0.0,
             medium_mua: float or Callable[[float, float], float] = 0.0,
-            solid_content: float = 0.1, nd: int or None = 100):
+            solid_content: float = 10.0, nd: int or None = 100):
         '''
         Suspension of spherical particles that follows the provided size
         distribution function.
@@ -79,11 +79,9 @@ class Suspension:
             temperature.
             Default implementation is 0.0 1/m.
         solid_content: float
-            Solid content of the suspension given as a decimal
-            number (e.g. 0.1 for 10%). The value represents mass
-            volume fraction, e.g. mg/ml, which has to be divided by
-            the density of the bulk material in order to obtain the
-            volume fraction.
+            Solid content of the suspension given as % wt/v
+            (1% wt/v equals 1 g/100 ml, i.e. 1g of particles per 100 ml
+            of suspension).
         nd: int or None
             If an integer, the number of nodes to use when integrating
             the Mie scattering phase functions. If None, adaptive step
@@ -218,23 +216,28 @@ class Suspension:
         Parameters
         ----------
         sc: float
-            Solid content of the suspension given as a decimal
-            number (e.g. 0.1 for 10%). The value represents mass
-            volume fraction, e.g. mg/ml, which has to be divided by
-            the density of the bulk material in order to obtain the
-            volume fraction.
+            Solid content of the suspension given as % g/ml
+            (1% wt/v equals 1 g/100 ml, i.e. 1g of particles per 100 ml
+            of suspension).
         temperature: float
-            Suspension temperature (K).
+            Suspension temperature (K)
+
+        Note
+        -----
+        Solid content of 1% wt/v equals 1 g/100 ml, which equals 10 g/l or
+        10 kg/m3. 
         '''
         average_particle_volume = np.pi/6.0*self._pd.raw_moment(3)
         average_particle_weight = \
             average_particle_volume*self._particle_density(temperature)
-        self._number_density = sc/average_particle_weight
+        # 1 % g/ml ~ 0.01 g/ml ~ 10 g/l ~ 10 kg/m3
+        self._number_density = sc*10.0/average_particle_weight
 
     def mua(self, wavelength: float, temperature: float = 293.15) -> float:
         '''
-        Computes the absorption coefficient of the suspension medium at
-        the given wavelength and temperature.
+        Computes the absorption coefficient of the suspension (contributions
+        from both the medium and particles) at the given wavelength and
+        temperature.
 
         Parameters
         ----------
@@ -246,10 +249,23 @@ class Suspension:
         Returns
         -------
         mua: float
-            Absorption coefficient (1/m) of the suspension medium
+            Absorption coefficient (1/m) of the suspension
             at the given wavelength and temperature.
+
+        Note
+        ----
+        The absorption coefficient of the suspension depends on the absorption
+        coefficients of the medium and absorption coefficient of the particles.
+        The two absorption coefficients must be weighted by their corresponding
+        volume fractions. 
         '''
-        return self.medium_mua(wavelength, temperature)
+        particle_volume_fraction = self.solid_content()/ \
+            self._particle_density(temperature)
+        medium_mua = self.medium_mua(wavelength, temperature)
+        particle_mua = self.particle_mua(wavelength, temperature)
+
+        return  particle_volume_fraction*particle_mua + \
+            (1.0 - particle_volume_fraction)*medium_mua
 
     def medium_mua(self, wavelength: float, temperature: float = 293.15) -> float:
         '''
@@ -355,16 +371,20 @@ class Suspension:
         Returns
         -------
         sc: float
-            Solid content of the suspension given as a decimal
-            number (e.g. 0.1 for 10%). The value represents mass
-            volume fraction, e.g. mg/ml, which has to be divided by
-            the density of the bulk material in order to obtain the
-            volume fraction.
+            Solid content of the suspension given as 1% wt/v
+            (1% wt/v equals 1 g/100 ml, i.e 1g of particles per 100 ml
+            of suspension).
+
+        Note
+        -----
+        Solid content of 1% wt/v equals 1 g/100 ml, which equals 10 g/l or
+        10 kg/m3.
         '''
         average_particle_volume = np.pi/6.0*self._pd.raw_moment(3)
         average_particle_weight = \
             average_particle_volume*self._particle_density(temperature)
-        return self.number_density()*average_particle_weight
+        # kg/m3 ~ g/l ~ 0.001 g/ml ~ 0.1 % g/ml
+        return self.number_density()*average_particle_weight*0.1
 
     def pf(self, wavelength: float, temperature: float = 293.15) -> pf.MiePd:
         '''
