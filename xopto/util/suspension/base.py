@@ -666,9 +666,9 @@ class Suspension:
         Parameters
         ----------
         mus: float
-            Target scattering coefficient of the diluted suspension.
+            Target scattering coefficient (1/m) of the diluted suspension.
         volume: float
-            Volume of the target suspension.
+            Volume of the target suspension (m3).
         wavelength: float
             Wavelength of light (m).
         temperature: float
@@ -677,7 +677,7 @@ class Suspension:
         Returns
         -------
         required_volume: float
-            The required volume of this suspension.
+            The required volume of this suspension (m3).
         diluted_suspension: Suspension
             Diluted suspension
         '''
@@ -688,8 +688,9 @@ class Suspension:
 
         diluted_suspension = Suspension(self)
         diluted_suspension.set_mus(mus, wavelength, temperature)
-        solid_mass = diluted_suspension.solid_content()*volume
-        required_volume = solid_mass/self.solid_content()
+        # solid content units % wt/v or 1 g/100 ml or 10 g/l or 10 kg/m3
+        solid_mass = diluted_suspension.solid_content()*10.0*volume
+        required_volume = solid_mass/(self.solid_content()*10.0)
 
         return required_volume, diluted_suspension
 
@@ -704,9 +705,10 @@ class Suspension:
         Parameters
         ----------
         musr: float
-            Target reduced scattering coefficient of the diluted suspension.
+            Target reduced scattering coefficient (1/m) of the diluted
+            suspension.
         volume: float
-            Volume of the target suspension.
+            Volume of the target suspension (m3).
         wavelength: float
             Wavelength of light (m).
         temperature: float
@@ -726,8 +728,9 @@ class Suspension:
 
         diluted_suspension = Suspension(self)
         diluted_suspension.set_musr(musr, wavelength, temperature)
-        solid_mass = diluted_suspension.solid_content()*volume
-        required_volume = solid_mass/self.solid_content()
+        # solid content units % wt/v or 1 g/100 ml or 10 g/l or 10 kg/m3
+        solid_mass = diluted_suspension.solid_content()*10.0*volume
+        required_volume = solid_mass/(self.solid_content()*10.0)
 
         return required_volume, diluted_suspension
 
@@ -785,4 +788,3 @@ class Suspension:
         else:
             self._pf_cache = cache.ObjCache.load(fid)
             self._mcpf_lut_cache = cache.LutCache.load(fid)
-
