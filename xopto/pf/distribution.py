@@ -36,7 +36,7 @@ class Uniform(object):
 
             p(d) =
             \\begin{cases}
-            \\frac{d}{d_{max} - d_{min}} & d_{min} \\geq d \\leq d_{max} \\\\
+            \\frac{d}{d_{max} - d_{min}} & d_{min} \\leq d \\leq d_{max} \\\\
             0 & \\text{elsewhere}
             \\end{cases}
 
@@ -59,7 +59,7 @@ class Uniform(object):
 
         The overloaded `__hash__` method computes the instance hash from the
         parameters of the distribution. All distribution instances with
-        exactly the same parameter values return the same hash value. 
+        exactly the same values of all parameters return equal hash values. 
 
         Examples
         --------
@@ -222,7 +222,9 @@ class Normal(object):
             (:math:`\\sigma` in :math:`p(d)`).
         clip: float
             The range of Normal distribution is clipped to
-            :math:`[\\mu - \\sigma \\cdot \\text{clip}, \\mu + \\sigma \\cdot \\text{clip}]`.
+            :math:`[\\mu - \\sigma \\cdot \\text{clip}, \\mu + \\sigma \\cdot \\text{clip}]`
+            and the distribution is scaled to yield unity integral over the
+            clipped interval.
 
         Note
         ----
@@ -231,8 +233,8 @@ class Normal(object):
 
         The overloaded `__hash__` method computes the instance hash from the
         parameters of the distribution (including the value of `clip`).
-        All distribution instances with exactly the same parameter values
-        return the same hash value. 
+        All distribution instances with exactly the same values of all the
+        parameters return equal hash values. 
 
         Examples
         --------
@@ -382,7 +384,7 @@ class Fractal(object):
 
             p(d) =
             \\begin{cases}
-            A \\left(\\frac{1}{d}\\right)^{\\alpha} & d_{min} \\geq d \\leq d_{max} \\\\
+            A \\left(\\frac{1}{d}\\right)^{\\alpha} & d_{min} \\leq d \\leq d_{max} \\\\
             0 & \\text{elsewhere}
             \\end{cases}
 
@@ -412,7 +414,7 @@ class Fractal(object):
 
         The overloaded `__hash__` method computes the instance hash from the
         parameters of the distribution. All distribution instances with
-        exactly the same parameter values return the same hash value. 
+        exactly the same values of all parameters return equal hash values. 
 
         Examples
         --------
@@ -562,8 +564,9 @@ class Mixture(object):
 
         The overloaded `__hash__` method computes the instance hash from the
         parameters and weights of all the distributions.
-        All distribution instances with exactly the same parameters and weights
-        return the same hash value. 
+        All distribution instances with exactly the same values of all
+        parameters and exactly the same values of all weights
+        return equal hash values. 
 
         Examples
         --------
