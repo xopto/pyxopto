@@ -259,7 +259,8 @@ class Suspension:
         The two absorption coefficients must be weighted by their corresponding
         volume fractions. 
         '''
-        particle_volume_fraction = self.solid_content()/ \
+        # solid content 1% wt/v equals 1 g/100 ml or 10 g/l or 10 kg/m3
+        particle_volume_fraction = self.solid_content()*10.0/ \
             self._particle_density(temperature)
         medium_mua = self.medium_mua(wavelength, temperature)
         particle_mua = self.particle_mua(wavelength, temperature)
