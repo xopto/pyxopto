@@ -190,7 +190,12 @@ class Gk2(PfBase):
         self._gk2 = Gk(g2, a2)
         self._b = 0.0
 
+        self._set_g1(g1)
+        self._set_g2(g2)
+        self._set_a1(a1)
+        self._set_a2(a2)
         self._set_b(b)
+
 
     def _get_g1(self) -> float:
         return self._gk1.g
