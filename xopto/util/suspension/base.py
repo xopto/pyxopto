@@ -40,7 +40,7 @@ class Suspension:
             exports the object to a dict from which it can be constructed by
             calling static method fromdict.
             Use one of the distributions implemented in
-            :py:mod:`xopto.pf.distribution` or derive a custom distribution
+            :py:mod:`xopto.util.distribution` or derive a custom distribution
             by following these implementations.
             If this parameter is a Suspension instance, a new copy is
             created, which inherits all the properties of the original
