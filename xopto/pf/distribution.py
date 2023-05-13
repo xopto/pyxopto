@@ -30,15 +30,36 @@ from scipy.integrate import quad
 class Uniform(object):
     def __init__(self, lower: float, upper: float):
         '''
-        Create a uniform distribution instance. The object is callable as
-        obj(x) and returns the value of distribution at x.
+        Create a uniform size distribution:
+
+        .. math::
+
+            p(d) =
+            \\begin{cases}
+            \\frac{d}{d_{max} - d_{min}} & d_{min} \\geq d \\leq d_{max} \\\\
+            0 & \\text{elsewhere}
+            \\end{cases}
+
+        The object is callable as `obj(x)` and returns the value
+        of the distribution at x.
 
         Parameters
         ----------
         lower: float
-            Lower bound of the uniform distribution.
+            Lower bound of the uniform distribution
+            (:math:`d_{min}` in :math:`p(d)`).
         upper: float
-            Upper bound of the uniform distribution.
+            Upper bound of the uniform distribution
+            (:math:`d_{max}` in :math:`p(d)`).
+
+        Note
+        ----
+        This class reimplements the equality/inequality operator by
+        overloading the `__eq__` method.
+
+        The overloaded `__hash__` method computes the instance hash from the
+        parameters of the distribution. All distribution instances with
+        exactly the same parameter values return the same hash value. 
 
         Examples
         --------
@@ -182,18 +203,36 @@ class Uniform(object):
 class Normal(object):
     def __init__(self, mean: float, sigma: float, clip: float = 5):
         '''
-        Create a Normal distribution instance. The object is callable as
-        obj(x) and returns the value of distribution at x.
+        Create a Normal distribution instance with mean :math:`\mu` and
+        standard deviation :math:`\\sigma`:
+
+        .. math::
+
+            p(d) = \\frac{1}{\\sigma\\sqrt{2\\pi}}e^{-\\frac{1}{2}\\left(\\frac{d - \\mu}{\\sigma}\\right)^2}
+
+        The created object is callable as obj(x) and returns the value
+        of Normal distribution at x.
 
         Parameters
         ----------
         mean: float
-            Normal distribution mean.
+            Normal distribution mean (:math:`\\mu` in :math:`p(d)`).
         sigma: float
-            Normal distribution standard deviation.
+            Normal distribution standard deviation
+            (:math:`\\sigma` in :math:`p(d)`).
         clip: float
-            The range of Normal distribution is clipped to:
-                [mean - sigma*clip, mean + sigma*clip]
+            The range of Normal distribution is clipped to
+            :math:`[\\mu - \\sigma \\cdot \\text{clip}, \\mu + \\sigma \\cdot \\text{clip}]`.
+
+        Note
+        ----
+        This class reimplements the equality/inequality operator by
+        overloading the `__eq__` method.
+
+        The overloaded `__hash__` method computes the instance hash from the
+        parameters of the distribution (including the value of `clip`).
+        All distribution instances with exactly the same parameter values
+        return the same hash value. 
 
         Examples
         --------
@@ -336,23 +375,44 @@ class Normal(object):
 class Fractal(object):
     def __init__(self, alpha: float, range: Tuple[float, float] = (10e-9, 10e-6)):
         '''
-        Fractal distribution with one parameter alpha:
+        Fractal distribution of size :math:`d` has one parameter
+        :math:`\\alpha`:
 
-            p(d) = A*(1/d)**alpha
+        .. math::
 
-        The value of parameter A is computed so as to normalize the integral
-        of the density function on the specified range to 1:
+            p(d) =
+            \\begin{cases}
+            A \\left(\\frac{1}{d}\\right)^{\\alpha} & d_{min} \\geq d \\leq d_{max} \\\\
+            0 & \\text{elsewhere}
+            \\end{cases}
 
-            A = (range[0])**(alpha + 1)/(alpha*(1 - (range[0]/range[1])**(alpha + 1)))
+        The value of constant :math:`A` is computed so as to normalize the
+        integral of :math:`p(d)` over :math:`[d_{min}, d_{max}]` to 1:
+
+        .. math::
+
+            A =\\frac{r_{0}^{\\alpha + 1}}
+            {\\alpha \\left(1 - \\left(\\frac{r_0}{r_1}\\right)^{\\alpha + 1}\\right)}
 
         Parameters
         ----------
         alpha: float
-            Parameter alpha of the fractal distribution.
+            Parameter alpha of the fractal distribution
+            (:math:`\\alpha` in :math:`p(d)`).
         range: Tuple[float, float]
             The nonzero distribution range as a tuple (start, stop), e.g.
             use (10e-9, 10e-6) for fractal distribution of particles
             limited to the finite range from 10 nm to 10 um.
+            (:math:`\\left(d_{min}, d_{max})\\right)` in :math:`p(d)`).
+
+        Note
+        ----
+        This class reimplements the equality/inequality operator by
+        overloading the `__eq__` method.
+
+        The overloaded `__hash__` method computes the instance hash from the
+        parameters of the distribution. All distribution instances with
+        exactly the same parameter values return the same hash value. 
 
         Examples
         --------
@@ -494,6 +554,16 @@ class Mixture(object):
         weights: Tuple[float] or np.ndarray
             Weights of the individual distributions. The sum of weights should
             equal 1.
+
+        Note
+        ----
+        This class reimplements the equality/inequality operator by
+        overloading the `__eq__` method.
+
+        The overloaded `__hash__` method computes the instance hash from the
+        parameters and weights of all the distributions.
+        All distribution instances with exactly the same parameters and weights
+        return the same hash value. 
 
         Examples
         --------

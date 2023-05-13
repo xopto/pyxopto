@@ -55,6 +55,9 @@ class UniformBeamCuvette:
             cl_device: str or mc.cl.Device or List[mc.cl.Device] or
                        mc.cl.Context or mc.cl.CommandQueue = None):
         '''
+        Creates a layered Monte Carlo simulation model of a transmittance
+        cuvette.
+
         Parameters
         ----------
         suspension: Suspension
@@ -93,44 +96,75 @@ class UniformBeamCuvette:
             Numerical aperture of the beam as a callable that takes
             wavelength and temperature or a fixed floating-point value that
             is independent of wavelength and temperature.
-            Divergence of the beam be computed as :math:`\\asin(NA)`.
+            Divergence of the beam be computed as :math:`\\arcsin(NA)`.
         beam_fi_theta: Tuple[float, float]
-            Beam azimuth and incidence angles.
+            Beam azimuth and incidence angles (rad) as a tuple
+            (azimuth, incidence).
         detector_d: float
             Detector diameter.
         detector_na: float or Callable[[float, float], float]
             Numerical aperture of the detector as a callable that takes
             wavelength and temperature or a fixed floating-point value that
             is independent of wavelength and temperature.
-            Detector acceptance angle can be computed as :math:`\\asin(NA)`.
+            Detector acceptance angle can be computed as :math:`\\arcsin(NA)`.
         detector_fi_theta: float
-            Detector azimuth and incidence angles (rad).
+            Detector azimuth and incidence angles (rad) as a tuple
+            (azimuth, incidence).
         detector_lateral_offset: Tuple[float, float]
             Later displacement of the detector from the axis of the
             source as a tuple (x, y).
         detector_axial_offset: float
             Axial distance (m) of the detector from the transmittance side
-            of the cuvette (must be zero or a positive value). 
+            of the cuvette (must be zero or a positive value). If nonzero, an
+            additional layer is used to fill the space between the cuvette
+            and the detector.
         cl_device: None or str or cl.Device or List[cl.Device] or cl.Context or cl.CommandQueue
             OpenCL device that will run the simulations. The first available
             GPU is used if None.
         cl_build_options: None or List[str or cloptions.ClBuildOption]
             OpenCL build options. See the Mont Carlo constructor
             :py:meth:`~xopto.mcml.mc.Mc.__init__` for more details.
-            Default build options are set to:
-
-            .. code-block:: python
-
-                :py:code:`[mc.cloptions.FastRelaxedMath]`.
+            Default build options are set to `[mc.cloptions.FastRelaxedMath]`.
 
         options: None or List[mcoptions.McOption]
             Monte Carlo simulator options. See the Mont Carlo constructor
             :py:meth:`~xopto.mcml.mc.Mc.__init__` for more details.
             Default options are set to:
+            `[mc.mcoptions.McFloatLutMemory.constant_mem]`.
 
-            .. code-block:: python
+        Note
+        ----
+        The layer stack:
+            1. Surrounding medium (infinite thickness)
+            2. Cuvette wall (thickness equals `cuvette_wall`)
+            3. Internal cuvette volume filled with the given suspension
+               (thickness equals `cuvette_path`) 
+            4. Cuvette wall (thickness equals `cuvette_wall`)
+            5. Detector offset layer (thickness equals `detector_axial_offset`)
+               This layer is created only if `detector_axial_offset > 0.0`!
+            6. Surrounding medium (infinite thickness)
 
-                :py:code:`[mc.mcoptions.McFloatLutMemory.constant_mem]`.
+        The source:
+            An instance of :py:class:`~xopto.mcml.mcsource.fiber.UniformFiber`
+            with the refractive index of core set to the refractive index
+            of the surrounding medium. The cladding thickness is 0.
+            The direction of the source can be set through
+            the `beam_fi_theta` parameter and the emission divergence
+            through the beam NA that is set by the `beam_na` parameter
+            Note that the emission cone cone is centered around beam
+            direction defined by `beam_fi_theta` parameter.
+
+        The detector:
+            An instance of
+            :py:class:`~xopto.mcml.mcdetector.probe.lineararray.LinearArray`
+            with a single fiber. The refractive index of the fiber core
+            is set to the refractive index of the surrounding medium,
+            the cladding thickness is set to 0. The orientation/direction
+            of the detector can be set through the `detector_fi_theta`
+            parameter and the acceptance cone through the detector NA
+            that is set by the `detector_na` parameter.
+            Note that the acceptance cone is centered around the detector
+            direction defined by the `detector_fi_theta` parameter. 
 
         '''
         if detector_axial_offset < 0.0:
@@ -418,7 +452,8 @@ if __name__ == '__main__':
     from xopto.pf.distribution import Normal
 
     cuvette = UniformBeamCuvette(
-        Suspension(Normal(1.0e-6, 0.01e-6))
+        Suspension(Normal(1.0e-6, 0.01e-6)),
+        beam_fi_theta=(0.0, np.deg2rad(0.1))
     )
 
     r = cuvette.run(550e-9, nphotons=100)

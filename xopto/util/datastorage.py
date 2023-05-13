@@ -43,9 +43,9 @@ class DatasetFiles:
         indices: np.ndarray
             A 2D numpy array of item indices contained within the returned
             files. The indices are organized as
-            :py:code:`indices[file_index] => (first, last)`,
-            where :py:code:`first` is the index of the first item in the file
-            and :py:code:`last` the index of last plus 1 item in the file.
+            `indices[file_index] => (first, last)`,
+            where `first` is the index of the first item in the file
+            and `last` the index of last plus 1 item in the file.
 
         Returns
         -------
@@ -262,9 +262,9 @@ class Dataset:
         indices: np.ndarray
             A 2D numpy array of item indices contained within the returned
             files. The indices are organized as
-            :py:code:`indices[file_index] => (first, last)`,
-            where :py:code:`first` is the index of the first item in the file
-            and :py:code:`last` the index of last plus 1 item in the file.
+            `indices[file_index] => (first, last)`,
+            where `first` is the index of the first item in the file
+            and `last` the index of last plus 1 item in the file.
         '''
         indices = []
         data_files = []
