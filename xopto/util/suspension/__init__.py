@@ -22,4 +22,3 @@
 
 from .base import Suspension
 from . import mcml
-from xopto.util import distribution
