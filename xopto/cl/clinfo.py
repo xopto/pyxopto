@@ -114,11 +114,24 @@ def info(show: bool = True, devices: list = None) -> str:
                     device.max_write_image_args)
             info_str += '\tDevice profiling timer resolution: {} ns\n'.format(
                 device.profiling_timer_resolution)
+            if hasattr(device, 'svm_capabilities'):
+                info_str += '\tDevice SVM capabilities:\n'
+                flags = cl.device_svm_capabilities
+                if device.svm_capabilities & flags.COARSE_GRAIN_BUFFER:
+                    info_str += '\t\tcl_device_svm_coarse_grained buffer\n'
+                if device.svm_capabilities & flags.FINE_GRAIN_BUFFER:
+                    info_str += '\t\tcl_device_svm_fine_grained buffer\n'
+                if device.svm_capabilities & flags.FINE_GRAIN_SYSTEM:
+                    info_str += '\t\tcl_device_svm_fine_grained system\n'
+                if device.svm_capabilities & flags.ATOMICS:
+                    info_str += '\t\tcl_device_svm_atomics\n'
+            else:
+                info_str += '\tDevice SVM capabilities: No\n'
 
             info_str += '\tDevice supported OpenCL extensions:\n'
             extensions = device.extensions.strip().split(' ')
             for extension in extensions:
-                info_str += '\t\t {}\n'.format(extension)
+                info_str += '\t\t{}\n'.format(extension)
 
     if show:
         print(info_str)
@@ -289,6 +302,8 @@ def device_info(device: cl.Device) -> dict:
     * maxClkFrequency: int,
     * computeUnits: int,
     * maxWorkGroupSize: int
+    * svmCapabilities: Dict[str, bool] with keys coarse_grained_buffer,
+      fine_grained_buffer, fine_grained_system and atomics
 
     Parameters
     ----------
@@ -301,6 +316,7 @@ def device_info(device: cl.Device) -> dict:
     info: dict
         A dictionary with device information.
     '''
+    has_svm = hasattr(device, 'svm_capabilities')
     return {
         'name':device.name,
         'vendor':device.vendor,
@@ -318,7 +334,26 @@ def device_info(device: cl.Device) -> dict:
         'constantMemory':device.max_constant_buffer_size,
         'maxClkFrequency':device.max_clock_frequency,
         'computeUnits':device.max_compute_units,
-        'maxWorkGroupSize':device.max_work_group_size
+        'maxWorkGroupSize':device.max_work_group_size,
+        'maxWorkGroupSize':device.max_work_group_size,
+        'svmCapabilities':{
+            'coarse_grained_buffer':
+                bool(device.svm_capabilities &
+                     cl.device_svm_capabilities.COARSE_GRAIN_BUFFER) 
+                     if has_svm else False,
+            'fine_grained_buffer':
+                bool(device.svm_capabilities &
+                     cl.device_svm_capabilities.FINE_GRAIN_BUFFER) 
+                     if has_svm else False,
+            'fine_grained_system':
+                bool(device.svm_capabilities &
+                     cl.device_svm_capabilities.FINE_GRAIN_SYSTEM) 
+                     if has_svm else False,
+            'atomics':
+                bool(device.svm_capabilities &
+                     cl.device_svm_capabilities.ATOMICS) 
+                     if has_svm else False,
+        }
     }
 
 def device(what: str or List[str] or cl.Device = None, index: int = 0) \
