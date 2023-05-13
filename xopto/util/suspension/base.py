@@ -224,7 +224,7 @@ class Suspension:
         Parameters
         ----------
         sc: float
-            Solid content of the suspension given as % g/ml
+            Solid content of the suspension given as % wt/v
             (1% wt/v equals 1 g/100 ml, i.e. 1g of particles per 100 ml
             of suspension).
         temperature: float
@@ -381,7 +381,7 @@ class Suspension:
         Returns
         -------
         sc: float
-            Solid content of the suspension given as 1% wt/v
+            Solid content of the suspension given as % wt/v
             (1% wt/v equals 1 g/100 ml, i.e 1g of particles per 100 ml
             of suspension).
 
