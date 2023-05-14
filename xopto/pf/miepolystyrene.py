@@ -51,7 +51,7 @@ class MiePolystyrene(Mie):
             If None, the builtin polystyrene refractive index is used.
 
         riliquid: float
-            Refrective index of the liquid phase (water by default).
+            Refractive index of the liquid phase (water by default).
             If None, the builtin refractive index of water is used.
 
         Note
@@ -96,10 +96,10 @@ class MieNormalPolystyrene(MieNormal):
         wavelength: float
             Wavelength of light (m).
         ripolystyrene: float
-            Refrective index of polystyrene at the specified wavelength.
+            Refractive index of polystyrene at the specified wavelength.
             If None, the builtin polystyrene refractive index is used.
         riliquid: float
-            Refrective index of the liquid phase (water by default).
+            Refractive index of the liquid phase (water by default).
             If None, the builtin refractive index of water is used.
         clip: float
             Distribution/diameter range used to estimate the phase function
@@ -155,11 +155,11 @@ class MieFractalPolystyrene(MieFractal):
             a range [5e-9, 30e-6] m is used.
 
         ripolystyrene: float
-            Refrective index of polystyrene at the specified wavelength.
+            Refractive index of polystyrene at the specified wavelength.
             If None, the builtin polystyrene refractive index is used.
 
         riliquid: float
-            Refrective index of the liquid phase (water by default).
+            Refractive index of the liquid phase (water by default).
             If None, the builtin refractive index of water is used.
 
         nd: int

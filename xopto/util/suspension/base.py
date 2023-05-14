@@ -84,8 +84,9 @@ class Suspension:
             of suspension). Defaults to 10% wt/v.
         nd: int or None
             If an integer, the number of nodes to use when integrating
-            the Mie scattering phase functions. If None, adaptive step
-            is used (slow).
+            the Mie scattering phase function over the range of the size
+            distribution `pd`.
+            If None, adaptive step integration is used (slow).
 
         Note
         ----
