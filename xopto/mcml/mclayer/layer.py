@@ -332,6 +332,9 @@ class Layer(mcobject.McObject):
             raise TypeError('Scattering phase function "{}" '
                             'not implemented'.format(pf_data['type']))
         pf_type = getattr(mcpf, pf_data['type'])
+        if pf_type is None:
+            raise TypeError('Scattering phase function type "{}" not '
+                            'found!'.format(t))
         return cls(pf=pf_type.fromdict(pf_data), **data_)
 
     def __str__(self):
