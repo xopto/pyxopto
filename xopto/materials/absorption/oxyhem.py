@@ -37,7 +37,7 @@ class OxyHem(Absorption):
 
         self._interpolator = Interpolator.fromfile(filename) 
 
-    def __call__(self, wavelength: float or np.ndarray, t: float) \
+    def __call__(self, wavelength: float or np.ndarray, t: float = None) \
             -> np.ndarray or float:
         '''
         computes the absorption coefficient of oxygenated blood.

@@ -37,7 +37,7 @@ class Jacques(Absorption):
         '''
         super().__init__()
 
-    def __call__(self, wavelength: float or np.ndarray, t: float = 293.15) \
+    def __call__(self, wavelength: float or np.ndarray, t: float = None) \
             -> np.ndarray or float:
         '''
         Absorption coefficient (1/m) of melanin as a function of

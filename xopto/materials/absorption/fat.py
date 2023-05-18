@@ -37,7 +37,7 @@ class Fat(Absorption):
 
         self._interpolator = Interpolator.fromfile(filename) 
 
-    def __call__(self, wavelength: float or np.ndarray, t: float) \
+    def __call__(self, wavelength: float or np.ndarray, t: float = None) \
             -> np.ndarray or float:
         '''
         Computes the absorption coefficient of fat (1/m).
