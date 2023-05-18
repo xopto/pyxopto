@@ -83,6 +83,8 @@ class Andreia(Absorption):
         if wavelength is None:
             wavelength = DEFAULT_WAVELENGTHS
         pp.semilogy(wavelength, self(wavelength, gamma), label=self.material)
+        if show:
+            pp.show()
 
 
 andreia = Andreia()
