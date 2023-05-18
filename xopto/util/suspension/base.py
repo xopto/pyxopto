@@ -484,6 +484,7 @@ class Suspension:
             Scattering phase function instance at the given wavelength
             and temperature.
         '''
+        nd = int(self._nd) if self._nd is not None else None
         return self._pf_cache.get(
             pf.MiePd,
             float(self._particle_ri(wavelength, temperature)) +
@@ -493,7 +494,7 @@ class Suspension:
                 1j*float(self._medium_mua(wavelength, temperature))*
                     wavelength/(4.0*np.pi),
             float(wavelength),
-            self._pd, self._pd.range, int(self._nd)
+            self._pd, self._pd.range, nd
         )
 
     def mcpf(self, wavelength: float, temperature: float = 293.15) \
@@ -514,6 +515,7 @@ class Suspension:
             Monte Carlo simulator-compatible scattering phase function
             instance at the given wavelength and temperature.
         '''
+        nd = int(self._nd) if self._nd is not None else None
         return self._mcpf_lut_cache.get(
             pf.MiePd,
             (
@@ -524,7 +526,7 @@ class Suspension:
                     1j*float(self._medium_mua(wavelength, temperature))*
                         wavelength/(4.0*np.pi),
                 float(wavelength),
-                self._pd, self._pd.range, int(self._nd)
+                self._pd, self._pd.range, nd
             )
         )
 
