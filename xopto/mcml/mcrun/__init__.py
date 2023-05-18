@@ -22,3 +22,5 @@
 
 from .mcrun import RunMinWeightTop, RunMinWeightBottom, RunMinWeightSpecular, \
                    RunMinWeightTrace, RunMinPacketsTrace
+
+from .helper import McRunHelper
