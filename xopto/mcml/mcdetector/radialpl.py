@@ -23,6 +23,7 @@
 from typing import Tuple
 
 import numpy as np
+import scipy.constants
 
 from xopto.mcml.mcdetector.base import Detector
 from xopto.mcml import cltypes, mcobject, mcoptions
@@ -77,7 +78,7 @@ class RadialPl(Detector):
                 ('position', T.mc_point2f_t),
                 ('r_min', T.mc_fp_t),
                 ('inv_dr', T.mc_fp_t),
-                ('l_min', T.mc_fp_t),
+                ('pl_min', T.mc_fp_t),
                 ('inv_dpl', T.mc_fp_t),
                 ('cos_min', T.mc_fp_t),
                 ('n_r', T.mc_size_t),
@@ -251,6 +252,15 @@ class RadialPl(Detector):
         return self._pl_axis
     plaxis = property(_get_plaxis, None, None, 'Path length axis object.')
 
+
+    def _get_taxis(self) -> axis.Axis:
+        return axis.Axis(
+            self._pl_axis.start/scipy.constants.c,
+            self._pl_axis.stop/scipy.constants.c,
+            self._pl_axis.n, logscale=self._pl_axis.logscale)
+    taxis = property(_get_taxis, None, None, 'Time axis (s) derived from '
+                                             'the path length axis object.')
+
     def _get_position(self) -> Tuple[float, float]:
         return self._position
     def _set_position(self, value: float or Tuple[float, float]):
@@ -309,6 +319,22 @@ class RadialPl(Detector):
         return self._pl_axis.n
     npl = property(_get_npl, None, None,
                    'Number of accumulators in the optical pathlength axis.')
+
+    def _get_t(self):
+        return self._pl_axis.centers*(1.0/scipy.constants.c)
+    t = property(_get_t, None, None,
+                  'Centers of the optical pathlength axis accumulators '
+                  'expressed in propagation time (s).')
+
+    nt = property(_get_npl, None, None,
+                  'Number of accumulators in the time axis derived from the '
+                  'optical pathlength axis.')
+
+    def _get_tedges(self):
+        return self._pl_axis.edges*(1.0/scipy.constants.c)
+    tedges = property(_get_tedges, None, None,
+                      'Edges (s) of the time axis accumulators derived from '
+                      'the optical pathlength axis.')
 
     def _get_normalized(self) -> np.ndarray:
         return self.raw*self._inv_accumulators_area*(1.0/max(self.nphotons, 1.0))
