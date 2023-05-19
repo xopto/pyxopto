@@ -34,8 +34,10 @@ class Fat(Absorption):
         super().__init__()
         filename = os.path.join(
             DATA_PATH, 'materials', 'absorption', 'fat_absorption.npy')
-
-        self._interpolator = Interpolator.fromfile(filename) 
+        data = np.load(filename)
+    
+        self._interpolator = Interpolator.fromfile(
+            filename, bounds_error=False, fill_value=(data[1, 0], data[1, -1])) 
 
     def __call__(self, wavelength: float or np.ndarray, t: float = None) \
             -> np.ndarray or float:
