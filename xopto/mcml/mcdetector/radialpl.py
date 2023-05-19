@@ -437,6 +437,65 @@ class RadialPl(Detector):
             getattr(axis, pl_axis_type)(**pl_axis_data), 
             **data)
 
+    def plot(self, scale: str = 'log', raw: bool = False,
+             axis: str = 'pl', show: bool = True, **kwargs):
+        '''
+        Show the detector data as a 2D image.
+
+        Parameters
+        ----------
+        scale: str
+            Data scaling can be "log" for logarithmic or "lin" for linear.
+        raw: bool
+            Set to True to show the raw data. Default is False and shows the
+            normalized (reflectance) content.
+        axis: str
+            Use "pl" to show the path lengths or "t" to show the time
+            computed from the path length.
+        show: bool
+            Show the plot window if True.
+            normalized (reflectance) content.
+        **kwargs: dict
+            Additional keyword arguments passed to pyplot.imshow.
+        '''
+        import matplotlib.pyplot as pp
+
+        aspect = 'auto'
+        if 'aspect' in kwargs:
+            aspect = kwargs.pop('aspect')
+
+        if axis == 't':
+            pl_t_axis, pl_t_label = self.taxis, 'Time'
+        else:
+            pl_t_axis, pl_t_label = self.plaxis, 'Path length'
+
+        extent = [self._r_axis.start, self._r_axis.stop,
+                  pl_t_axis.start, pl_t_axis.stop]
+
+        data = self.raw if raw else self.reflectance
+        which = 'raw' if raw else 'reflectance'
+        
+
+        if scale == 'log':
+            mask = data > 0.0
+            if mask.size > 0:
+                log_data = np.tile(np.log10(data[mask].min()), data.shape)
+                log_data[mask] = np.log10(data[mask])
+                data = log_data
+
+        fig, ax = pp.subplots()
+        img = ax.imshow(data, extent=extent, origin='lower',
+                        aspect=aspect, **kwargs)
+        ax.set_xlabel('r')
+        ax.set_ylabel(pl_t_label)
+        pp.colorbar(img)
+
+        fig.canvas.manager.set_window_title(
+            'RadialPl detector - {} - {}'.format(scale, which))
+
+        if show:
+            pp.show()
+
     def __str__(self):
         return 'RadialPl(raxis={}, plaxis={}, position=({}, {}), cosmin={}, '\
                'direction=({}, {}, {}))'.format(
