@@ -1041,18 +1041,21 @@ class Skin3:
                     musr=ReducedScatteringPower(15e2, 0.1, 580e-9),
                     n=ri.water.default,
                     g=0.9,
+                    baseline_absorption=EpidermisBaselineAbsorption(),
                     melanin=0.05, water=0.02),
                 SkinLayer(
                     d=2.0e-3,
-                    musr=ReducedScatteringPower(20e2, 0.1, 580e-9),
+                    musr=ReducedScatteringPower(20e2, 0.15, 580e-9),
                     n=ri.skin.default,
-                    g=0.9,
+                    g=0.8,
+                    baseline_absorption=DermisBaselineAbsorption(),
                     water=0.65, blood=0.04, spo2=0.97),
                 SkinLayer(
                     d=np.inf,
-                    musr=ReducedScatteringPower(10e2, 0.1, 580e-9),
+                    musr=ReducedScatteringPower(10e2, 0.15, 580e-9),
                     n=ri.skin.default,
-                    g=0.9,
+                    g=0.8,
+                    baseline_absorption=DermisBaselineAbsorption(),
                     water=0.05, fat=0.4, blood=0.03, spo2=0.97,),
             )
         else:

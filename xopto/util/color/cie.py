@@ -49,6 +49,25 @@ Vector of standard wavelengths (m) that can be used by external libraries
 to better match the internal resolution/grid of datasets.
 '''
 
+STANDARD_WAVELENGTHS_5_NM = STANDARD_WAVELENGTHS
+'''
+Vector of standard wavelengths (m) with resolution of 5 nm that can be used
+by external libraries to better match the internal resolution/grid of datasets.
+'''
+
+STANDARD_WAVELENGTHS_10_NM = STANDARD_WAVELENGTHS[::2]
+'''
+Vector of standard wavelengths (m) with resolution of 10 nm that can be used
+by external libraries to better match the internal resolution/grid of datasets.
+'''
+
+STANDARD_WAVELENGTHS_20_NM = STANDARD_WAVELENGTHS[::4]
+'''
+Vector of standard wavelengths (m) with resolution of 20 nm that can be used
+by external libraries to better match the internal resolution/grid of datasets.
+'''
+
+
 RGB_COLOR_SPACES = {
     'adobe':         {'companding': 'gamma', 'gamma': 2.2, 'illuminant': 'd65', 'r': (0.6400, 0.3300, 0.297361), 'g': (0.2100, 0.7100, 0.627355), 'b': (0.1500, 0.0600, 0.075285)},
     'apple':         {'companding': 'gamma', 'gamma': 1.8, 'illuminant': 'd65', 'r': (0.6250, 0.3400, 0.244634), 'g': (0.2800, 0.5950, 0.672034), 'b': (0.1550, 0.0700, 0.083332)},
@@ -611,7 +630,8 @@ class RGB:
     illuminant = property(_get_illuminant, None ,None,
                                    'Color space illuminant.')
 
-    def to_xyz_transformation(self, observer: Observer, normalize: bool = True):
+    def to_xyz_transformation(self, observer: Observer,
+                              normalize: bool or float = True):
         '''
         Compute transformation from normalized linear RGB coordinates
         to XYZ coordinates of the specified observer.
@@ -620,11 +640,14 @@ class RGB:
         ----------
         observer: Observer
             Target observer.
-        normalize: bool
+        normalize: bool of float
             If True, the transformation matrix is computed from the XYZ
             coordinates of the illuminant the are normalized
             by the illuminant luminosity Y as
             :math:`X_n, Y_n, Z_n = X/Y, 1.0, Z/Y`.
+            If a floating-point value, the transformation matrix is computed
+            from the XYZ coordinates of the illuminant the are weighted
+            by the given value.
 
         Returns
         -------
@@ -658,7 +681,7 @@ class RGB:
         return M
 
     def to_xyz(self, rgb: np.ndarray, observer: Observer,
-               normalize: bool = True) -> np.ndarray:
+               normalize: bool or float = True) -> np.ndarray:
         '''
         Transforms normalized linear R, G, B color coordinates to X, Y, Z
         coordinates.
@@ -674,6 +697,9 @@ class RGB:
             coordinates of the illuminant that are normalized
             by the illuminant luminosity Y as
             :math:`X_n, Y_n, Z_n = X/Y, 1.0, Z/Y`.
+            If a floating-point value, the transformation matrix is computed
+            from the XYZ coordinates of the illuminant the are weighted
+            by the given value.
 
         Returns
         -------
@@ -685,7 +711,7 @@ class RGB:
         return np.dot(T, rgb)
 
     def from_xyz_transformation(self, observer: Observer,
-                                normalize: bool = True) -> np.ndarray:
+                                normalize: bool or float = True) -> np.ndarray:
         '''
         Compute transformation from XYZ coordinates of the specified
         observer to normalized linear RGB coordinates.
@@ -694,11 +720,14 @@ class RGB:
         ----------
         observer: Observer
             Target observer.
-        normalize: bool
+        normalize: bool or float
             If True, the transformation matrix is computed from the XYZ
             coordinates of the illuminant that are normalized
             by the illuminant luminosity Y as
             :math:`X_n, Y_n, Z_n = X/Y, 1.0, Z/Y`.
+            If a floating-point value, the transformation matrix is computed
+            from the XYZ coordinates of the illuminant the are weighted
+            by the given value.
 
         Returns
         -------
@@ -709,7 +738,7 @@ class RGB:
             self.to_xyz_transformation(observer, normalize=normalize))
 
     def from_xyz(self, xyz: np.ndarray, observer: Observer,
-                 normalize: bool = True) -> np.ndarray:
+                 normalize: bool or float = True) -> np.ndarray:
         '''
         Transforms X, Y, Z color coordinates computed with the specified
         observer to normalized R, G, B coordinates.
@@ -720,11 +749,14 @@ class RGB:
             Coordinates X, Y and Z to transform.  The (X, Y, Z) values must be
             stored in rows of the input array if multiple colors are
             transformed.
-        normalize: bool
+        normalize: bool or float
             If True, the transformation matrix is computed from the XYZ
             coordinates of the illuminant that are normalized
             by the illuminant luminosity Y as
             :math:`X_n, Y_n, Z_n = X/Y, 1.0, Z/Y`.
+            If a floating-point value, the transformation matrix is computed
+            from the XYZ coordinates of the illuminant the are weighted
+            by the given value.
 
         Returns
         -------
@@ -737,7 +769,7 @@ class RGB:
 
     def from_spectrum(self, wavelengths: np.ndarray, spectrum: np.ndarray,
                       observer: Observer, companding: bool = True,
-                      normalize: bool = True):
+                      normalize: bool or float = True):
         '''
         A convenience method that first computes XYZ coordinates and from there
         linear RGB coordinates. If companding is True, nonlinear transformation
@@ -755,13 +787,16 @@ class RGB:
             If True, nonlinear transformation is applied to the linear
             RGB components, which yields the "standard" nonlinear RGB
             components normalized to range :math:`[0, 1]`.
-        normalize: bool
+        normalize: bool or float
             If True, the transformation matrix from XYZ to RGB is computed
             from the XYZ coordinates of the illuminant that are normalized
             by the illuminant luminosity Y as
             :math:`X_n, Y_n, Z_n = X/Y, 1.0, Z/Y`. If True, the XYZ
             components computed from the spectrum are also normalized by
             the luminosity Y of the illuminant.
+            If a floating-point value, the transformation matrix is computed
+            from the XYZ coordinates of the illuminant the are weighted
+            by the given value.
 
         Returns
         -------
@@ -878,7 +913,7 @@ class Illuminant:
         '''
         return self._estimator()
 
-    def XYZ(self, observer: str or Observer, normalize: bool = False):
+    def XYZ(self, observer: str or Observer, normalize: bool or float = False):
         '''
         Returns the X, Y, Z color components of the illuminant for the
         specified observer. Luminosity Y is not normalized by default.
@@ -889,9 +924,11 @@ class Illuminant:
             Selected standard observer :py:class`CIE1931` ("cie1931") or
             :py:class;`CIE1964` ("cie1964").
 
-        normalize: bool
-            If nonzero, the computed X, Y, and Z components are divided by the
+        normalize: bool or float
+            If True, the computed X, Y, and Z components are divided by the
             luminance Y (the returned components will be X/Y, 1.0, Z/Y).
+            If a floating-point value, the computed X, Y and Z components are
+            weighted with the provided value
 
         Returns
         -------
@@ -911,9 +948,11 @@ class Illuminant:
             dx=STANDARD_WAVELENGTH_STEP
         )
 
-        if normalize:
+        if isinstance(normalize, (bool)) and normalize:
             XYZ = XYZ/XYZ[1]
-
+        elif isinstance(normalize, float):
+            XYZ *= normalize
+    
         return XYZ
 
     def xyY(self, observer: Observer) -> Tuple[float, float, float]:
@@ -976,6 +1015,10 @@ class Illuminant:
         M = np.diag(XYZw2/XYZw1)
 
         return M
+
+    def _get_name(self) -> str:
+        return self._name
+    name = property(_get_name, None, None, 'Illuminant name.')
 
     def __str__(self):
         return '{} illuminant'.format(self._name)
