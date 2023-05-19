@@ -481,7 +481,7 @@ class Fluencet(mcobject.McObject):
         return target
 
     def plot(self, scale: str = 'log', axis: str ='z', autoscale: bool = True,
-             show: bool = True):
+             show: bool = True, **kwargs):
         '''
         Show fluence slices or integral projections.
 
@@ -499,8 +499,15 @@ class Fluencet(mcobject.McObject):
             range of weights. If True, the color coding changes from slice
             to slice.
         show: bool 
+            Show the plot window if True
+        kwargs: dict
+            Optional keyword arguments passed to pyplot.imshow.
         '''
         from xopto.util import sliceview
+
+        aspect = 'auto'
+        if 'aspect' in kwargs:
+            aspect = kwargs.pop('aspect')
 
         data = self.data
 
@@ -545,7 +552,7 @@ class Fluencet(mcobject.McObject):
                 slice_label='Time', slice_valfmt='%.1f ps',
                 title=title, logscale=logscale,
                 extent=extent, xlabel=xlabel, ylabel=ylabel, origin='lower',
-                autoscale=autoscale, aspect='auto')
+                autoscale=autoscale, aspect=aspect, **kwargs)
 
             sv.fig.canvas.manager.set_window_title(window_title)
             if show:
@@ -562,7 +569,7 @@ class Fluencet(mcobject.McObject):
                 axis2=ax, slices2=slices, slice2_label='Slice {}'.format(axis),
                 title=title, logscale=logscale,
                 extent=extent, xlabel=xlabel, ylabel=ylabel, origin='lower',
-                autoscale=autoscale, aspect='auto')
+                autoscale=autoscale, aspect=aspect, **kwargs)
             sv.fig.canvas.manager.set_window_title(window_title)
             if show:
                 sv.show()
