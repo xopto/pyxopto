@@ -136,7 +136,9 @@ class Interpolator:
         if not self.is_valid_range(wavelength):
             warnings.warn(
                 'Wavelength is out of valid range '\
-                '[{:.1f}, {:.1f}] K!'.format(*self._wavelength_range)
+                '[{:.1f}, {:.1f}] nm!'.format(
+                    self._wavelength_range[0]*1e9,
+                    self._wavelength_range[1]*1e9)
             )
 
     def _get_wavelength(self):
@@ -238,7 +240,8 @@ class Absorption:
         Parameters
         ----------
         kwargs: dict
-            Keyword arguments passed to the __call__ method of the instance. 
+            Keyword arguments passed to the :py:meth:`Absorption.__call__`
+            method of the instance. 
         '''
         import matplotlib.pyplot as pp
 
