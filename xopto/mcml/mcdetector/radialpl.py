@@ -454,7 +454,6 @@ class RadialPl(Detector):
             computed from the path length.
         show: bool
             Show the plot window if True.
-            normalized (reflectance) content.
         **kwargs: dict
             Additional keyword arguments passed to pyplot.imshow.
         '''

@@ -556,7 +556,6 @@ class CartesianPl(Detector):
             Set to True to show the raw data. Default is False and shows the
         show: bool
             Show the plot window if True.
-            normalized (reflectance) content.
         **kwargs: dict
             Additional keyword arguments passed to pyplot.imshow.
         '''
