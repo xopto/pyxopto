@@ -308,33 +308,33 @@ class RadialPl(Detector):
     def _get_pl(self):
         return self._pl_axis.centers
     pl = property(_get_pl, None, None,
-                  'Centers of the optical pathlength axis accumulators.')
+                  'Centers of the optical path length axis accumulators.')
 
     def _get_pledges(self):
         return self._pl_axis.edges
     pledges = property(_get_pledges, None, None,
-                       'Edges of the optical pathlength axis accumulators.')
+                       'Edges of the optical path length axis accumulators.')
 
     def _get_npl(self):
         return self._pl_axis.n
     npl = property(_get_npl, None, None,
-                   'Number of accumulators in the optical pathlength axis.')
+                   'Number of accumulators in the optical path length axis.')
 
     def _get_t(self):
         return self._pl_axis.centers*(1.0/scipy.constants.c)
     t = property(_get_t, None, None,
-                  'Centers of the optical pathlength axis accumulators '
+                  'Centers of the optical path length axis accumulators '
                   'expressed in propagation time (s).')
 
     nt = property(_get_npl, None, None,
                   'Number of accumulators in the time axis derived from the '
-                  'optical pathlength axis.')
+                  'optical path length axis.')
 
     def _get_tedges(self):
         return self._pl_axis.edges*(1.0/scipy.constants.c)
     tedges = property(_get_tedges, None, None,
                       'Edges (s) of the time axis accumulators derived from '
-                      'the optical pathlength axis.')
+                      'the optical path length axis.')
 
     def _get_normalized(self) -> np.ndarray:
         return self.raw*self._inv_accumulators_area*(1.0/max(self.nphotons, 1.0))

@@ -197,7 +197,7 @@ class CartesianPl(Detector):
         2D Cartesian reflectance/transmittance accumulator in the x-y plane.
 
         The grid of the Cartesian accumulators corresponds to a 3D numpy array
-        with the first dimension representing the optical pathlength axis,
+        with the first dimension representing the optical path length axis,
         the second dimension representing the y axis and the third dimension
         representing the x axis (reflectance[pl, y, x] or
         transmittance[pl, y, x]).
@@ -326,48 +326,48 @@ class CartesianPl(Detector):
     def _get_pl(self):
         return self._pl_axis.centers
     pl = property(_get_pl, None, None,
-                  'Centers of the optical pathlength axis accumulators.')
+                  'Centers of the optical path length axis accumulators.')
 
     def _get_pledges(self):
         return self._pl_axis.edges
     pledges = property(_get_pledges, None, None,
-                       'Edges of the optical pathlength axis accumulators.')
+                       'Edges of the optical path length axis accumulators.')
 
     def _get_npl(self):
         return self._pl_axis.n
     npl = property(_get_npl, None, None,
-                   'Number of accumulators in the optical pathlength axis.')
+                   'Number of accumulators in the optical path length axis.')
 
     def _get_t(self):
         return self._pl_axis.centers*(1.0/scipy.constants.c)
     t = property(_get_t, None, None,
-                  'Centers of the optical pathlength axis accumulators '
+                  'Centers of the optical path length axis accumulators '
                   'expressed in propagation time (s).')
 
     nt = property(_get_npl, None, None,
                   'Number of accumulators in the time axis derived from the '
-                  'optical pathlength axis.')
+                  'optical path length axis.')
 
     def _get_tedges(self):
         return self._pl_axis.edges*(1.0/scipy.constants.c)
     tedges = property(_get_tedges, None, None,
                       'Edges (s) of the time axis accumulators derived from '
-                      'the optical pathlength axis.')
+                      'the optical path length axis.')
 
     def meshgrid(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         '''
-        Returns 3D arrays of x, y and pathlength coordinates of the centers
+        Returns 3D arrays of x, y and path length coordinates of the centers
         of accumulators that match the size of the reflectance / transmittance
         arrays.
         The grid of the Cartesian accumulators corresponds to a 2D numpy array
         with the first dimension representing the y axis, the second dimension
         representing the x axis (reflectance[y, x] or transmittance[y, x])
-        and the third dimension the optical pathlength axis.
+        and the third dimension the optical path length axis.
 
         Returns
         -------
         pl: np.ndarray
-            A 3D array of optical pathlength coordinates.
+            A 3D array of optical path length coordinates.
         x: np.ndarray
             A 3D array of x coordinates.
         y: np.ndarray
@@ -547,7 +547,7 @@ class CartesianPl(Detector):
         axis: str
             The axis of slicing ("pl", "t", "y" or "x") or ome of the
             projection planes ("xy", "xpl", "xt", "ypl" or "yt"). Note that
-            the time axis (s) is derived from the pathlength axis.
+            the time axis (s) is derived from the path length axis.
         autoscale: bool
             Scale the color coding of individual slices to the corresponding
             range of weights. If True, the color coding changes from slice
@@ -573,7 +573,7 @@ class CartesianPl(Detector):
         ax = {'pl': 0, 't': 0, 'y': 1, 'x': 2,
               'xy': 0, 'xpl': 1, 'xt': 1, 'ypl': 2, 'yt': 2}.get(axis)
 
-        # time or pathlength axis
+        # time or path length axis
         if 'pl' in axis:
             pl_t_axis, pl_t_label = self._pl_axis, 'pl'
         else:
