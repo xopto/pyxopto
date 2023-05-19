@@ -536,7 +536,7 @@ class CartesianPl(Detector):
         )
 
     def plot(self, scale: str = 'log', axis: str ='z', autoscale: bool = True,
-             show: bool = True, **kwargs):
+             raw: bool = False, show: bool = True, **kwargs):
         '''
         Show detector slices or integral projections.
 
@@ -552,8 +552,11 @@ class CartesianPl(Detector):
             Scale the color coding of individual slices to the corresponding
             range of weights. If True, the color coding changes from slice
             to slice.
+        raw: bool
+            Set to True to show the raw data. Default is False and shows the
         show: bool
             Show the plot window if True.
+            normalized (reflectance) content.
         **kwargs: dict
             Additional keyword arguments passed to pyplot.imshow.
         '''
@@ -563,7 +566,7 @@ class CartesianPl(Detector):
         if 'aspect' in kwargs:
             aspect = kwargs.pop('aspect')
 
-        data = self.reflectance
+        data = self.raw if raw else self.reflectance
 
         if axis == 'plproj': axis = 'xy'
         if axis == 'yproj': axis = 'xpl'
