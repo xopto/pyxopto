@@ -21,7 +21,8 @@
 ################################# End license ##################################
 
 from .base import Sampler, PfSampler, ConstantSampler, UniformSampler, \
-                  NormalSampler
+                  NormalSampler, ModelSampler, MultiplicativeSampler, \
+                  VectorSampler
 from .gksampler import GkGammaDeltaSampler, GkSampler
 from .mhgsampler import MHgGammaDeltaSampler, MHgSampler
 from .mpcsampler import MPcGammaDeltaSampler, MPcSampler
