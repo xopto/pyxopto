@@ -40,6 +40,7 @@ xopto/materials/ri/__pycache__
 xopto/materials/ri/glass/__pycache__
 xopto/materials/ri/util/__pycache__
 xopto/materials/ri/util/model/__pycache__
+xopto/materials/skin/__pycache__
 
 xopto/mcbase/__pycache__
 xopto/mcbase/kernel/__pycache__
