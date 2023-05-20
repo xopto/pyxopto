@@ -277,6 +277,7 @@ class ReducedScatteringPower:
     def fromdict(cls, data: dict) -> 'ReducedScatteringPower':
         '''
         Create new model instance from data in the dict.
+
         Parameters
         ----------
         data: dict
@@ -285,7 +286,7 @@ class ReducedScatteringPower:
 
         Returns
         -------
-        obj:  ReducedScatteringPower
+        obj: ReducedScatteringPower
             A new instance of :py:class:`ReducedScatteringPower`.
         '''
         data_ = dict(data)
@@ -446,7 +447,7 @@ class DermisBaselineAbsorption:
         ----------
         data: dict
             Model data as returned by the
-            :py:met:`DermisBaselineAbsorption.todict` method.
+            :py:meth:`DermisBaselineAbsorption.todict` method.
 
         Returns
         -------
@@ -550,7 +551,7 @@ class EpidermisBaselineAbsorption:
         ----------
         data: dict
             Model data as returned by the
-            :py:met:`EpidermisBaselineAbsorption.todict` method.
+            :py:meth:`EpidermisBaselineAbsorption.todict` method.
 
         Returns
         -------
@@ -612,14 +613,14 @@ class SkinLayer:
         n: None or float or Callable[[float], float]
             Layer refractive index as a callable that takes one parameter,
             the wavelength of light (m), and returns the layer refractive index.
-            Set to :py:fun:`xopto.materials.ri.skin.default` by default.
+            Set to :py:func:`xopto.materials.ri.skin.default` by default.
         musr: float or Callable[[float], float]
             Reduced scattering coefficient as constant wavelength independent
             value or callable that takes the wavelength of light (m) and
             returns the reduced scattering coefficient (1/m).
             Instance of :py:class:`ReducedScatteringPower` can be used
             to define the reduced scattering coefficient wavelength dependence
-            by a common power model .
+            by a common power model.
         g: float or Callable[[float], float]
             A constant wavelength independent value of the scattering phase
             function anisotropy or a callable that takes the wavelength of
@@ -653,8 +654,14 @@ class SkinLayer:
             Object with callables that take the wavelength of light (m)
             and return the absorption coefficient (1/m) of the chromophore.
             The object must have the following callable methods:
-                oxyhem_mua, deoxyhem_mua, melanin_mua, carotenoid_mua,
-                water_mua, fat_mua.
+
+            - oxyhem_mua,
+            - deoxyhem_mua,
+            - melanin_mua,
+            - carotenoid_mua,
+            - water_mua,
+            - fat_mua.
+
             Set to :py:class:`TissueDatabase` by default.
         '''
         if isinstance(d, SkinLayer):
