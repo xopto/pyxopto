@@ -571,7 +571,7 @@ class AnisotropicLayer(mcobject.McObject):
     def __init__(self, d: float, n: float, mua: float, mus: float,
                  pf: mcpf.PfBase):
         '''
-        Layer object constructor.
+        Anisotropic layer object constructor.
 
         Parameters
         ----------
@@ -580,22 +580,21 @@ class AnisotropicLayer(mcobject.McObject):
         n: float
             Index of refraction.
         mua: float or np.ndarray
-            Absorption coefficient tensor (1/m). A scalar float for isotropic
-            material. A vector of length 3 if only the diagonal elements
-            of the tensor are nonnegative. A numpy array os shape
-            (3, 3) for the complete tensor.
+            Absorption coefficient tensor (1/m). A scalar float value for an
+            isotropic material. A vector of length 3 for the diagonal elements
+            of the tensor (non-diagonal elements are set to 0).
+            A numpy array of shape (3, 3) for the complete tensor.
         mus: float
-            Scattering coefficient tensor (1/m). A scalar float for isotropic
-            material. A vector of length 3 if only the diagonal elements
-            of the tensor are nonnegative. A numpy array os shape
-            (3, 3) for the complete tensor.
+            Scattering coefficient tensor (1/m). A scalar float value for
+            an isotropic material. A vector of length 3 if only the diagonal
+            elements of the tensor are nonzero (non-diagonal elements are set to 0).
+            A numpy array of shape (3, 3) for the complete tensor.
         pf: mcpf.PfBase
-            Scattering phase function object that is derived from PhBase
-            class.
-
+            Scattering phase function object that is derived from
+            :py:class:`xopto.mcbase.mcpf.pfbase.PfBase` class.
 
         The physical properties of the layer can be read or changed through
-        member properties:
+        properties:
 
             - d: float - 
               Layer thickness (m).
@@ -606,8 +605,8 @@ class AnisotropicLayer(mcobject.McObject):
             - mus: float - 
               Scattering (NOT reduced) coefficient tensor (1/m).
             - pf: mcpf.PfBase - 
-              Scattering phase function object that is derived from PhBase
-              class.
+              Scattering phase function object that is derived from
+              :py:class:`xopto.mcbase.mcpf.pfbase.PfBase` class.
 
         Note
         ----
@@ -628,7 +627,7 @@ class AnisotropicLayer(mcobject.McObject):
         self._d = float(d)
     def _get_d(self) -> float:
         return self._d
-    d = property(_get_d, _set_d, None, 'Layer thickens (m).')
+    d = property(_get_d, _set_d, None, 'Layer thickness (m).')
 
     def _set_n(self, n: float):
         self._n = float(n)
@@ -648,10 +647,10 @@ class AnisotropicLayer(mcobject.McObject):
         else:
             self._mua[:] = mua
  
-    def _get_mua(self) -> float:
+    def _get_mua(self) -> np.ndarray:
         return self._mua
     mua = property(_get_mua, _set_mua, None,
-                   'Absorption coefficient tensor of the layer (1/m).')
+                   'Absorption coefficient tensor (3x3) of the layer (1/m).')
 
     def _set_mus(self, mus: float or np.ndarray):
         if isinstance(mus, (float, int)):
@@ -664,10 +663,10 @@ class AnisotropicLayer(mcobject.McObject):
             self._mus[2, 2] = mus[2] 
         else:
             self._mus[:] = mus
-    def _get_mus(self) -> float:
+    def _get_mus(self) -> np.ndarray:
         return self._mus
     mus = property(_get_mus, _set_mus, None,
-                   'Scattering coefficient tensor of the layer (1/m).')
+                   'Scattering coefficient tensor (3x3) of the layer (1/m).')
 
     def _get_pf(self) -> mcpf.PfBase:
         return self._pf
@@ -676,7 +675,8 @@ class AnisotropicLayer(mcobject.McObject):
             raise ValueError('The scattering phase function type '\
                              'of the layer must not change!')
         self._pf = pf
-    pf = property(_get_pf, _set_pf, None, 'Phase function object.')
+    pf = property(_get_pf, _set_pf, None,
+                  'Scattering phase function object.')
 
     def todict(self) -> dict:
         '''
