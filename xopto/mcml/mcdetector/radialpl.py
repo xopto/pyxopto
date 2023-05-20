@@ -458,6 +458,7 @@ class RadialPl(Detector):
             Additional keyword arguments passed to pyplot.imshow.
         '''
         import matplotlib.pyplot as pp
+        from matplotlib.colors import LogNorm
 
         aspect = 'auto'
         if 'aspect' in kwargs:
@@ -473,21 +474,22 @@ class RadialPl(Detector):
 
         data = self.raw if raw else self.reflectance
         which = 'raw' if raw else 'reflectance'
-        
 
+        imshow_norm = None
         if scale == 'log':
             mask = data > 0.0
             if mask.size > 0:
-                log_data = np.tile(np.log10(data[mask].min()), data.shape)
-                log_data[mask] = np.log10(data[mask])
-                data = log_data
+                log_safe_data = np.tile(data[mask].min(), data.shape)
+                log_safe_data[mask] = data[mask]
+                data = log_safe_data
+            imshow_norm = LogNorm(vmin=data.min(), vmax=data.max())
 
         fig, ax = pp.subplots()
         img = ax.imshow(data, extent=extent, origin='lower',
-                        aspect=aspect, **kwargs)
+                        aspect=aspect, norm=imshow_norm, **kwargs)
         ax.set_xlabel('r')
         ax.set_ylabel(pl_t_label)
-        pp.colorbar(img)
+        colorbar = pp.colorbar(img)
 
         fig.canvas.manager.set_window_title(
             'RadialPl detector - {} - {}'.format(scale, which))
