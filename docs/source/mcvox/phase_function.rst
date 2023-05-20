@@ -36,11 +36,21 @@ used scattering phase functions:
 * :py:class:`xopto.mcbase.mcpf.hg.Hg` implements the Henyey-Greenstein
   scattering phase function
 
+* :py:class:`xopto.mcbase.mcpf.hg2.Hg2` implements a dual Henyey-Greenstein
+  scattering phase function, i.e. a linear combination of two 
+  :py:class:`~xopto.mcbase.mcpf.hg.Hg` scattering phase functions where
+  one is scattering in the forward and the other in the backward direction
+
 * :py:class:`xopto.mcbase.mcpf.mhg.MHg` implements the Modified 
   Henyey-Greenstein scattering phase function
 
 * :py:class:`xopto.mcbase.mcpf.gk.Gk` implements the Gegenbauer kernel
   scattering phase function
+
+* :py:class:`xopto.mcbase.mcpf.gk2.Gk2` implements a dual Gegenbauer kernel
+  scattering phase function, i.e. a linear combination of two 
+  :py:class:`~xopto.mcbase.mcpf.gk.Gk` scattering phase functions where
+  one is scattering in the forward and the other in the backward direction
 
 * :py:class:`xopto.mcbase.mcpf.mgk.MGk` implements the modified
   Gegenbauer kernel scattering phase function
