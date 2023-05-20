@@ -534,7 +534,8 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         #    template = jinja2.Template(fp.read())
         template = jinja2.Template(mcsrc.fuse(**_MCML_FUSION_SPEC, verbose=verbose))
 
-        context = {'source':{}, 'trace':{}, 'fluence':{}, 'detectors': {},
+        context = {'layer': {}, 'pf': {}, 'source':{},
+                   'trace':{}, 'fluence':{}, 'detectors': {},
                    'surface_layouts':{}, 'mc':{}}
 
         # Collect the photon packet source type compile context.
@@ -542,6 +543,13 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             'options': self._source.fetch_cl_options(self),
             'declaration': self._source.fetch_cl_declaration(self),
             'implementation': self._source.fetch_cl_implementation(self)
+        }
+
+        # Collect the layer stack compile context.
+        context['layer'] = {
+            'options': self._layers[0].fetch_cl_options(self),
+            'declaration': self._layers[0].fetch_cl_declaration(self),
+            'implementation': self._layers[0].fetch_cl_implementation(self),
         }
 
         # Collect the layer stack and scattering phase function compile context.
@@ -598,6 +606,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         resolved_options = mcoptions.resolve_cl_options(
             self._types().fetch_cl_options(self),
             context['source'].get('options', []),
+            context['layer'].get('options', []),
             context['pf'].get('options', []),
             context['detectors'].get('options', []),
             context['fluence'].get('options', []),

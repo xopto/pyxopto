@@ -414,7 +414,7 @@ inline void mcsim_fluence_deposit_weight(
 		McSim *psim, mc_point3f_t const *pos, mc_fp_t deposit){
 	#if MC_FLUENCE_MODE_RATE
 		mcsim_fluence_deposit(psim, pos, deposit,
-			mc_layer_mua(mcsim_current_layer(psim))
+			mc_layer_mua(mcsim_current_layer(psim), mcsim_direction(psim))
 		);
 	#else
 		mcsim_fluence_deposit(psim, pos, deposit);
@@ -716,10 +716,10 @@ __kernel void McKernel(
 			//step = -mc_log(mc_fclip(mcsim_random(&sim), FP_EPS, FP_1 - FP_EPS))*
 			#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
 				step = mc_fdiv(-mc_log(mcsim_random(&sim)),
-					mc_layer_mus(mcsim_current_layer(&sim)));
+					mc_layer_mus(mcsim_current_layer(&sim), mcsim_direction(&sim)));
 			#else
 				step = -mc_log(mcsim_random(&sim))*
-					mc_layer_inv_mut(mcsim_current_layer(&sim));
+					mc_layer_inv_mut(mcsim_current_layer(&sim), mcsim_direction(&sim));
 			#endif
 			step = mc_fmin(step, FP_MAX);
 
@@ -764,7 +764,7 @@ __kernel void McKernel(
 			#endif
 
 			#if MC_METHOD == MICROSCOPIC_BEER_LAMBERT
-				mc_fp_t mua = mc_layer_mua(mcsim_current_layer(&sim));
+				mc_fp_t mua = mc_layer_mua(mcsim_current_layer(&sim), mcsim_direction(&sim));
 				mc_fp_t deposit_fraction = FP_1 - mc_exp(-mua*d_ok);
 				deposit = deposit_fraction*mcsim_weight(&sim);
 				mcsim_adjust_weight(&sim, deposit);
@@ -867,7 +867,7 @@ __kernel void McKernel(
 				} else {
 					#if MC_METHOD == ALBEDO_REJECTION
 						/* Do absorption or scattering only when no layer boundary has been hit.*/
-						if (mcsim_random(&sim) < mc_layer_mua_inv_mut(mcsim_current_layer(&sim))){
+						if (mcsim_random(&sim) < mc_layer_mua_inv_mut(mcsim_current_layer(&sim)), mcsim_direction(&sim)){
 							/* Deposit the entire weight of the packet. */
 							deposit = mcsim_weight(&sim);
 							done = true;
@@ -885,7 +885,7 @@ __kernel void McKernel(
 					#else /* Albedo Weight */
 						/* Do absorption only when no layer boundary has been hit.*/
 						deposit = mcsim_weight(&sim)*
-							mc_layer_mua_inv_mut(mcsim_current_layer(&sim));
+							mc_layer_mua_inv_mut(mcsim_current_layer(&sim), mcsim_direction(&sim));
 						mcsim_adjust_weight(&sim, deposit);
 						mcsim_event_flags_add(&sim, MC_EVENT_PACKET_ABSORPTION);
 						#if MC_USE_FLUENCE
