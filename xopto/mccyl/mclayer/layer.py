@@ -299,8 +299,8 @@ class Layer(mcobject.McObject):
         mus: float
             Scattering (NOT reduced) coefficient (1/m).
         pf: mcpf.PfBase
-            Scattering phase function object that is derived from PhBase
-            class.
+            Scattering phase function object that is derived from the
+            :py:class:`xopto.mcbase.mcpf.pfbase.PfBase` class.
 
 
         The physical properties of the layer can be read or changed through
@@ -315,8 +315,8 @@ class Layer(mcobject.McObject):
             - mus: float - 
               Scattering (NOT reduced) coefficient (1/m).
             - pf: mcpf.PfBase - 
-              Scattering phase function object that is derived from PhBase
-              class.
+              Scattering phase function object that is derived from the
+              :py:class:`xopto.mcbase.mcpf.pfbase.PfBase` class.
 
         Note
         ----

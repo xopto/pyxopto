@@ -191,7 +191,8 @@ class Material(mcobject.McObject):
             - mus: float - 
               Scattering (NOT reduced) coefficient (1/m).
             - pf: mcpf.PfBase -
-              Scattering phase function object that is derived from PhBase class.
+              Scattering phase function object that is derived from the
+              :py:class:`xopto.mcbase.mcpf.pfbase.PfBase` class.
         '''
         self._n = float(n)
         self._mua = float(mua)
