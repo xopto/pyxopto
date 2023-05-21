@@ -279,10 +279,42 @@ Standard CIE A source x, y chromaticities for CIE 1931 color-matching functions.
 '''
 
 class Observer:
-    def __init__(self, estimator, rgb_estimator, name='Observer'):
+    def __init__(self, estimator: _Data.Estimator,
+                 rgb_estimator: _Data.Estimator,
+                 fov_deg: float, name: str = 'Observer'):
+        '''
+        Parameters
+        ----------
+        estimator: _Data.Estimator
+            Estimator of color matching functions for the X, Y and Z color
+            components as a function of wavelength.
+        rgb_estimator: _Data.Estimator
+            Estimator of color matching functions for the linear CIE
+            R, G and B color components as a function of wavelength.
+        fov_deg: float
+            Field of fow (degree).
+        name: str
+            Observer name.
+        '''
         self._xyz_estimator = estimator
         self._rgb_estimator = rgb_estimator
         self._name = name
+        self._fov_deg = float(fov_deg)
+        self._fov_rad = float(np.deg2rad(fov_deg))
+
+    def _get_fov_deg(self) -> float:
+        return self._fov_deg
+    fov_deg = property(_get_fov_deg, None, None,
+                       'Observer field of view (deg)')
+
+    def _get_fov_rad(self) -> float:
+        return self._fov_rad
+    fov = property(_get_fov_rad, None, None,
+                  'Observer field of view (rad)')
+
+    def _get_name(self) -> str:
+        return self._name
+    name = property(_get_name, None, None, 'Observer name.')
 
     def xyz_cmf(self, wavelengths: None or float or np.ndarray = None) \
             -> np.ndarray:
@@ -511,11 +543,11 @@ class Observer:
 
 
 CIE1931 = Observer(_cmf_1931_xyz_estimator, _cmf_1931_rgb_estimator,
-                   name='CIE 1931')
+                   fov_deg=2.0, name='CIE 1931')
 ''' Instance of CIE 1931 observer (2 degree field of view). '''
 
 CIE1964 = Observer(_cmf_1964_xyz_estimator, _cmf_1964_rgb_estimator,
-                   name='CIR 1964')
+                   fov_deg=10.0, name='CIE 1964')
 ''' Instance of CIE 1964 observer (10 degree field of view). '''
 
 
@@ -834,6 +866,10 @@ class RGB:
             result = self.gamma_companding(linear_rgb, gamma=gamma)
 
         return result
+
+    def _get_name(self) -> str:
+        return self._pretty_name
+    name = property(_get_name, None, None, 'Name of the RGB color space.')
 
     def __str__(self):
         return '{}'.format(self._pretty_name)

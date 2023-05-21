@@ -36,7 +36,7 @@ model = skin.Skin3()
 # and the last layer in the stack represent the surrounding medium)
 layers = model.create_mc_layers(550e-9)
 
-# use low melanin and blood content
+# customization of the skin model
 model[0].n = ri.skin.default
 model[0].d = 0.100e-3
 model[0].melanin = 0.02
@@ -54,7 +54,7 @@ incidence_angle = np.deg2rad(45.0) # 0 deg for perpendicular incidence
 source = mc.mcsource.Line(
     direction=[np.sin(incidence_angle), 0.0, np.cos(incidence_angle)])
 
-# RGB color space and observer
+# RGB color space and observer selection
 RGB = color.cie.SRGB
 #observer = color.cie.CIE1931 # 2 deg field of view
 observer = color.cie.CIE1964 # 10 deg field of view
@@ -71,13 +71,14 @@ with_specular = False
 # selecting the first available OpenCL GPU device
 gpu = mc.clinfo.gpu()
 
-# creating a Monte Carlo simulator
+# creating a Monte Carlo simulator instance
 mc_obj = mc.Mc(layers, source, detectors, cl_devices=gpu)
 mc_obj.rmax = 50.0e-3
 
-# standard wavelength range with 10 nm spectral resolution
+# standard wavelength range with a 10 nm spectral resolution
 wavelengths = color.cie.STANDARD_WAVELENGTHS_10_NM
 
+# running MC simulations for each wavelength
 reflectance = np.zeros_like(wavelengths)
 for index, wavelength in enumerate(wavelengths):
     print('Processing wavelength {:d}/{:<10d}'.format(
@@ -103,16 +104,19 @@ rgb_uint8 = np.round(np.clip(rgb, 0.0, 1.0)*255).astype(np.uint8)
 print('Raw normalized RGB components:', rgb)
 
 fig, ax = pp.subplots(1, 2)
-ax[0].plot(wavelengths*1e9, reflectance, label='skin')
+pp.suptitle('Skin color - {} color space'.format(RGB.name))
+ax[0].plot(wavelengths*1e9, reflectance, label='Skin')
 ax[0].plot(wavelengths*1e9,
            RGB.illuminant.spd(wavelengths)*(1.0 - observer_cosmin),
-           label=RGB.illuminant.name)
+           label='Lambertian-{}'.format(RGB.illuminant.name))
 ax[0].set_xlabel('Wavelength (nm)')
 ax[0].set_ylabel('Reflectance (a.u.)')
-ax[0].set_title('Reflectance for illuminant {:s}'.format(RGB.illuminant.name))
+ax[0].set_title('Illuminant {:s} & observer {:s}'.format(
+    RGB.illuminant.name, observer.name))
 ax[0].legend()
 
 ax[1].imshow(np.reshape(rgb_uint8, [1, 1, 3]))
 ax[1].set_title('Skin color: RGB=({:d}, {:d}, {:d})'.format(*rgb_uint8))
 ax[1].set_axis_off()
+pp.tight_layout()
 pp.show()
