@@ -450,8 +450,9 @@ class RadialPl(Detector):
             Set to True to show the raw data. Default is False and shows the
             normalized (reflectance) content.
         axis: str
-            Use "pl" to show the path lengths or "t" to show the time
-            computed from the path length.
+            Use "pl" to show the path lengths or "t" to show the time that is
+            computed by dividing the path length with the speed of light in
+            vacuum.
         show: bool
             Show the plot window if True.
         **kwargs: dict

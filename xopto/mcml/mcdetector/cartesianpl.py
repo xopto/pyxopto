@@ -547,7 +547,8 @@ class CartesianPl(Detector):
         axis: str
             The axis of slicing ("pl", "t", "y" or "x") or ome of the
             projection planes ("xy", "xpl", "xt", "ypl" or "yt"). Note that
-            the time axis (s) is derived from the path length axis.
+            the time axis "t" (s) is derived from the path length axis by
+            dividing the path length with the speed of light in vacuum.
         autoscale: bool
             Scale the color coding of individual slices to the corresponding
             range of weights. If True, the color coding changes from slice
