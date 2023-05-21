@@ -804,9 +804,6 @@ class RGB:
             Normalized RGB components as a numpy vector of length 3. 
         '''
         xyz = observer.XYZ(wavelengths, spectrum)
-        if normalize:
-            _, _, Yw = self.illuminant.XYZ(observer)
-            xyz /= Yw
         rgb = self.from_xyz(xyz, observer, normalize=normalize)
         if companding:
             rgb = self.apply_companding(rgb)
@@ -928,7 +925,7 @@ class Illuminant:
             If True, the computed X, Y, and Z components are divided by the
             luminance Y (the returned components will be X/Y, 1.0, Z/Y).
             If a floating-point value, the computed X, Y and Z components are
-            weighted with the provided value
+            weighted with the provided value.
 
         Returns
         -------
@@ -962,12 +959,6 @@ class Illuminant:
 
             Parameters
             ----------
-            wavelength: np.ndarray
-                Wavelengths of light (m) in the spectrum.
-
-            spectrum: np.ndarray
-                Intensity at the given wavelengths
-
             observer: Observer or str
                 Color-matching functions that are used to compute the x and y
                 chromaticities and luminosity Y.
@@ -978,9 +969,9 @@ class Illuminant:
             Returns
             -------
             x,: float
-                Chromaticity y of the illuminant.
+                Chromaticity y of the illuminant: math:`y=\\frac{Y}{X + Y + Z}`.
             y: float
-                Chromaticity y of the illuminant.
+                Chromaticity x of the illuminant: math:`x=\\frac{X}{X + Y + Z}`.
             Y: float
                 Luminosity of the illuminant.
         '''
@@ -989,11 +980,38 @@ class Illuminant:
 
         return X/sum_XYZ, Y/sum_XYZ, Y
 
+    def Y(self, observer: Observer) -> float:
+        '''
+            Compute CIE luminosity (Y) of the illuminant for the specified
+            observer.
+
+            Parameters
+            ----------
+            observer: Observer or str
+                Color-matching functions that are used to compute the x and y
+                chromaticities and luminosity Y.
+                Should be one of "1931" or "1964" for CIE 1931
+                (2 deg observer) or CIE 1964 (10 deg observer), respectively.
+                Default value is set to "1931".
+
+            Returns
+            -------
+            Y: float
+                Luminosity of the illuminant.
+
+            Note
+            ----
+            Luminosity of the illuminant depends on its spectral power
+            density and the color/luminosity matching/sensitivity of
+            the observer. 
+        '''
+        return self.XYZ(observer, normalize=False)[1]
+
     def transformation_to_illuminant(
             self, illuminant: 'Illuminant', observer: Observer) -> np.ndarray:
         '''
-        Compute a matrix that will map X, Y, Z to the
-        specified illuminant.
+        Compute a matrix that will map X, Y, Z from this illuminant to the
+        specified target illuminant.
 
         Parameters
         ----------
