@@ -23,6 +23,7 @@
 from xopto.mcml import mc
 from xopto.materials import skin
 from xopto.util import color
+from xopto.materials import ri
 
 import numpy as np
 from matplotlib import pyplot as pp
@@ -36,20 +37,33 @@ model = skin.Skin3()
 layers = model.create_mc_layers(550e-9)
 
 # use low melanin and blood content
-model[0].melanin = 0.001
-model[1].blood = 0.02
+model[0].n = ri.skin.default
+model[0].d = 0.100e-3
+model[0].melanin = 0.02
+model[0].baseline_absorption = 0.0
+model[1].d = 1.5e-3
+model[1].blood = 0.005
+model[1].spo2 = 0.97
+model[1].baseline_absorption = 0.0
 model[2].blood = 0.01
+model[2].spo2 = 0.97
+model[2].baseline_absorption = 0.0
 
 # creating the source of photon packets
-source = mc.mcsource.Line(direction=[np.sin(np.pi/4), 0.0, np.cos(np.pi/4)])
+incidence_angle = np.deg2rad(45.0) # 0 deg for perpendicular incidence
+source = mc.mcsource.Line(
+    direction=[np.sin(incidence_angle), 0.0, np.cos(incidence_angle)])
 
-# using CIE1964 observer, field of view is 10 deg
-cosmin = np.cos(np.deg2rad(10.0/2))
+# RGB color space and observer
+RGB = color.cie.SRGB
+#observer = color.cie.CIE1931 # 2 deg field of view
+observer = color.cie.CIE1964 # 10 deg field of view
+observer_cosmin = np.cos(observer.fov/2)
 
 # creating total reflectance surface detector
 detectors = mc.mcdetector.Detectors(
-    top=mc.mcdetector.Total(cosmin=cosmin),
-    specular=mc.mcdetector.Total(cosmin=cosmin)
+    top=mc.mcdetector.Total(cosmin=observer_cosmin),
+    specular=mc.mcdetector.Total(cosmin=observer_cosmin)
 )
 # include specular component in color computation
 with_specular = False
@@ -59,9 +73,9 @@ gpu = mc.clinfo.gpu()
 
 # creating a Monte Carlo simulator
 mc_obj = mc.Mc(layers, source, detectors, cl_devices=gpu)
-mc_obj.rmax = 25.0e-3
+mc_obj.rmax = 50.0e-3
 
-# standard wavelength range
+# standard wavelength range with 10 nm spectral resolution
 wavelengths = color.cie.STANDARD_WAVELENGTHS_10_NM
 
 reflectance = np.zeros_like(wavelengths)
@@ -74,27 +88,31 @@ for index, wavelength in enumerate(wavelengths):
     _, _, detectors_res = mc_obj.run(1e6)
     # extract reflectance
     r = detectors_res.top.reflectance
-    if with_specular:
+    if with_specular: # include specular component if required
         r += detectors_res.specular.reflectance
-    # using SRGB color space illuminant spectral power density
-    reflectance[index] = r*color.cie.SRGB.illuminant.spd(wavelength)
+    # using RGB color space illuminant spectral power density
+    reflectance[index] = r*RGB.illuminant.spd(wavelength)
 
 print()
 # compute color, correct illuminant luminosity for Lambertian reflector and
 # solid acceptance angle of the CIE observer
-rgb = color.cie.SRGB.from_spectrum(wavelengths, reflectance,
-                                   observer=color.cie.CIE1964,
-                                   normalize=1.0/(1.0 - cosmin))
-print('Raw normalized SRGB components:', rgb)
+rgb = RGB.from_spectrum(wavelengths, reflectance,
+                        observer=observer,
+                        normalize=(1.0 - observer_cosmin))
+rgb_uint8 = np.round(np.clip(rgb, 0.0, 1.0)*255).astype(np.uint8)
+print('Raw normalized RGB components:', rgb)
+
 fig, ax = pp.subplots(1, 2)
-ax[0].plot(wavelengths*1e9, reflectance)
+ax[0].plot(wavelengths*1e9, reflectance, label='skin')
+ax[0].plot(wavelengths*1e9,
+           RGB.illuminant.spd(wavelengths)*(1.0 - observer_cosmin),
+           label=RGB.illuminant.name)
 ax[0].set_xlabel('Wavelength (nm)')
 ax[0].set_ylabel('Reflectance (a.u.)')
-ax[0].set_title('Reflectance for illuminant {:s}'.format(
-    color.cie.SRGB.illuminant.name))
-rgb_uint8 = np.round(np.clip(rgb, 0.0, 1.0)*255).astype(np.uint8)
-r, g, b = rgb_uint8 
-rgb_uint8.shape = (1, 1, 3)
-ax[1].imshow(rgb_uint8)
-ax[1].set_title('Skin color: RGB=({:d}, {:d}, {:d})'.format(r, g, b))
+ax[0].set_title('Reflectance for illuminant {:s}'.format(RGB.illuminant.name))
+ax[0].legend()
+
+ax[1].imshow(np.reshape(rgb_uint8, [1, 1, 3]))
+ax[1].set_title('Skin color: RGB=({:d}, {:d}, {:d})'.format(*rgb_uint8))
+ax[1].set_axis_off()
 pp.show()
