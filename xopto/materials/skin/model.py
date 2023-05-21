@@ -20,7 +20,7 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
-from typing import Callable, Tuple
+from typing import Callable, Tuple, List
 
 import numpy as np
 from scipy.interpolate import interp1d
@@ -1161,10 +1161,14 @@ class Skin3:
             'layers': [layer.todict() for layer in self._layers]
         }
 
-    def __getitem__(self, index):
+    def _get_layers(self) -> List[SkinLayer]:
+        return self._layers
+    layers = property(_get_layers, None, None, 'The skin layer stack')
+
+    def __getitem__(self, index) -> SkinLayer:
         return self._layers[index]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._layers)
 
     def __str__(self):
