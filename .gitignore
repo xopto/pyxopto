@@ -13,6 +13,7 @@ xopto/cl/__pycache__
 xopto/cl/kernel/__pycache__
 
 xopto/data/__pycache__
+xopto/data/color/__pycache__
 xopto/data/materials/__pycache__
 xopto/data/materials/absorption/__pycache__
 xopto/data/materials/density/__pycache__
