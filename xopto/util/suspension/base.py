@@ -113,7 +113,7 @@ class Suspension:
             particle_density = obj._particle_density
             particle_mua = obj._particle_mua
             medium_mua = obj._medium_mua
-            solid_content = obj.solid_content()
+            solid_content = obj.solid_content(293.15)
             nd = obj._nd
             self._pf_cache = obj._pf_cache
             self._mcpf_lut_cache = obj._mcpf_lut_cache
@@ -164,7 +164,7 @@ class Suspension:
         self._pd = pd
 
         # this will initialize self._number_density
-        self.set_solid_content(solid_content)
+        self.set_solid_content(solid_content, 293.15)
 
     def set_musr(self, musr: float, wavelength: float,
                  temperature: float = 293.15):
@@ -692,8 +692,8 @@ class Suspension:
         diluted_suspension = Suspension(self)
         diluted_suspension.set_mus(mus, wavelength, temperature)
         # solid content units % wt/v or 1 g/100 ml or 10 g/l or 10 kg/m3
-        solid_mass = diluted_suspension.solid_content()*10.0*volume
-        required_volume = solid_mass/(self.solid_content()*10.0)
+        solid_mass = diluted_suspension.solid_content(temperature)*10.0*volume
+        required_volume = solid_mass/(self.solid_content(temperature)*10.0)
 
         return required_volume, diluted_suspension
 
@@ -732,8 +732,8 @@ class Suspension:
         diluted_suspension = Suspension(self)
         diluted_suspension.set_musr(musr, wavelength, temperature)
         # solid content units % wt/v or 1 g/100 ml or 10 g/l or 10 kg/m3
-        solid_mass = diluted_suspension.solid_content()*10.0*volume
-        required_volume = solid_mass/(self.solid_content()*10.0)
+        solid_mass = diluted_suspension.solid_content(temperature)*10.0*volume
+        required_volume = solid_mass/(self.solid_content(temperature)*10.0)
 
         return required_volume, diluted_suspension
 
