@@ -49,6 +49,9 @@ model[2].blood = 0.01
 model[2].spo2 = 0.97
 model[2].baseline_absorption = 0.0
 
+# plot the skin model
+model.plot()
+
 # creating the source of photon packets
 incidence_angle = np.deg2rad(45.0) # 0 deg for perpendicular incidence
 source = mc.mcsource.Line(
@@ -95,20 +98,22 @@ for index, wavelength in enumerate(wavelengths):
     reflectance[index] = r*RGB.illuminant.spd(wavelength)
 
 print()
+k = RGB.autoexposure(wavelengths, reflectance, observer, 1.0)
+k = 0.006999074230406075
 # compute color, correct illuminant luminosity for Lambertian reflector and
 # solid acceptance angle of the CIE observer
 rgb = RGB.from_spectrum(wavelengths, reflectance,
                         observer=observer,
-                        normalize=(1.0 - observer_cosmin))
+                        normalize=k)
 rgb_uint8 = np.round(np.clip(rgb, 0.0, 1.0)*255).astype(np.uint8)
 print('Raw normalized RGB components:', rgb)
 
 fig, ax = pp.subplots(1, 2)
 pp.suptitle('Skin color - {} color space'.format(RGB.name))
-ax[0].plot(wavelengths*1e9, reflectance, label='Skin')
+ax[0].plot(wavelengths*1e9, reflectance, label='Skin') #(1.0 - observer_cosmin)
 ax[0].plot(wavelengths*1e9,
-           RGB.illuminant.spd(wavelengths)*(1.0 - observer_cosmin),
-           label='Lambertian-{}'.format(RGB.illuminant.name))
+           RGB.illuminant.spd(wavelengths)*k,
+           label='Normalized-{}'.format(RGB.illuminant.name))
 ax[0].set_xlabel('Wavelength (nm)')
 ax[0].set_ylabel('Reflectance (a.u.)')
 ax[0].set_title('Illuminant {:s} & observer {:s}'.format(

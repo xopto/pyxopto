@@ -724,6 +724,8 @@ class RGB:
             Normalized linear coordinates R, G and B to transform. The
             (R, G, B) values must be stored in rows of the input array if
             multiple colors are transformed.
+        observer: Observer
+            Target observer.
         normalize: bool
             If True, the transformation matrix is computed from the XYZ
             coordinates of the illuminant that are normalized
@@ -781,6 +783,8 @@ class RGB:
             Coordinates X, Y and Z to transform.  The (X, Y, Z) values must be
             stored in rows of the input array if multiple colors are
             transformed.
+        observer: Observer
+            Target observer.
         normalize: bool or float
             If True, the transformation matrix is computed from the XYZ
             coordinates of the illuminant that are normalized
@@ -799,6 +803,44 @@ class RGB:
 
         return np.dot(T, xyz)
 
+    def autoexposure(self, wavelengths: np.ndarray, spectrum: np.ndarray,
+                     observer: Observer, target=1.0) -> float:
+        '''
+        Computes the intensity normalization factor so as to attain
+        maximum value of linear normalized RGB color components that equals
+        the specified target value.
+
+        Parameters
+        ----------
+        wavelengths: np.ndarray
+            Wavelengths od light (m) at which the spectrum intensities are
+            defined.
+        spectrum: np.ndarray
+            Spectrum defined at specified intensities.
+        observer: Observer
+            Target observer.
+        target: float
+            Target for the maximum linear normalized RGB value. Use a value
+            from 0.0 to 1.0.
+
+        Returns
+        -------
+        normalization: float
+            Returns a normalization factor that can be used with the
+            :py:meth:`RGB.from_spectrum`, :py:meth:`RGB.from_xyz`,
+            :py:meth:`RGB.from_xyz_transformation`, :py:meth:`RGB.to_xyz` or
+            :py:meth:`RGB.to_xyz_transformation` methods (parameter
+            `normalize`).
+        '''
+        normalization = 1.0/target
+        xyz = observer.XYZ(wavelengths, spectrum)
+        rgb = self.from_xyz(xyz, observer, normalize=False)
+        mask = rgb != 0.0
+        if np.count_nonzero(mask):
+            normalization = 1.0/target*float(np.max(rgb[mask]))
+
+        return normalization
+
     def from_spectrum(self, wavelengths: np.ndarray, spectrum: np.ndarray,
                       observer: Observer, companding: bool = True,
                       normalize: bool or float = True):
@@ -815,6 +857,8 @@ class RGB:
             defined.
         spectrum: np.ndarray
             Spectrum defined at specified intensities.
+        observer: Observer
+            Target observer.
         companding: bool
             If True, nonlinear transformation is applied to the linear
             RGB components, which yields the "standard" nonlinear RGB
@@ -876,6 +920,7 @@ class RGB:
 
     def __repr__(self):
         return self.__str__()
+
 
 # creating instances of implemented RGB color spaces
 AppleRGB = RGB('apple', RGB_COLOR_SPACES['apple'],

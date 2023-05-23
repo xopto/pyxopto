@@ -1147,6 +1147,50 @@ class Skin3:
 
         return layers
 
+    def plot(self, wavelengths: None or np.ndarray = None,
+             show: bool = True, **kwargs):
+        '''
+        Plot the optical properties of the layer stack for the specified
+        wavelengths.
+
+        Parameters
+        ----------
+        wavelengths: np.ndarray
+            Wavelengths (m) at which the optical properties are computed.
+            Defaults to `numpy.linspace(400e-9, 800e-9, 81).
+        show: bool
+            Shows the graphic plot window if True.
+        kwargs: dict
+            Keyword arguments passed to the :py:func:`matplotlib.pyplot.imshow`
+            function.
+        '''
+        import matplotlib.pyplot as pp
+
+        if wavelengths is None:
+            wavelengths = np.linspace(400e-9, 800e-9, 81)
+
+        fig, ax = pp.subplots(2, 2)
+
+        wavelengths_nm = wavelengths*1.0e9
+        for i, (layer, name) in enumerate(zip(self._layers, self._layer_names)):
+            ax[0, 0].plot(wavelengths_nm, layer.mua(wavelengths)*1.0e-2)
+            ax[0, 1].plot(wavelengths_nm, layer.musr(wavelengths)*1.0e-2)
+            ax[1, 0].plot(wavelengths_nm, layer.g(wavelengths),
+                       label='L-{}-{}'.format(i + 1, name))
+
+        ax[0, 0].set_xlabel('Wavelength (nm)')
+        ax[0, 0].set_ylabel('Absorption coefficient (1/cm)')
+        ax[0, 1].set_xlabel('Wavelength (nm)')
+        ax[0, 1].set_ylabel('Red. scatt. coefficient (1/cm)')
+        ax[1, 0].set_xlabel('Wavelength (nm)')
+        ax[1, 0].set_ylabel('Scattering anisotropy')
+        ax[1, 0].legend()
+
+        pp.tight_layout()
+
+        if show:
+            pp.show()
+
     def todict(self) -> dict:
         '''
         Export skin model to a dict.
