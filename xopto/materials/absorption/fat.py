@@ -37,7 +37,7 @@ class Fat(Absorption):
         data = np.load(filename)
     
         self._interpolator = Interpolator.fromfile(
-            filename, bounds_error=False, fill_value=(data[1, 0], data[1, -1])) 
+            filename, bounds_error=False, fill_value=(data[0, 1], data[-1, 1]))
 
     def __call__(self, wavelength: float or np.ndarray, t: float = None) \
             -> np.ndarray or float:
