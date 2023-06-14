@@ -80,7 +80,7 @@ class Suspension:
             Default implementation is 0.0 1/m.
         solid_content: float
             Solid content of the suspension given as % wt/v
-            (1% wt/v equals 1 g/100 ml, i.e. 1g of particles per 100 ml
+            (1% wt/v equals 1 g/100 ml, i.e. 1 g of particles per 100 ml
             of suspension). Defaults to 10% wt/v.
         nd: int or None
             If an integer, the number of nodes to use when integrating
@@ -226,7 +226,7 @@ class Suspension:
         ----------
         sc: float
             Solid content of the suspension given as % wt/v
-            (1% wt/v equals 1 g/100 ml, i.e. 1g of particles per 100 ml
+            (1% wt/v equals 1 g/100 ml, i.e. 1 g of particles per 100 ml
             of suspension).
         temperature: float
             Suspension temperature (K)
@@ -451,7 +451,7 @@ class Suspension:
         -------
         sc: float
             Solid content of the suspension given as % wt/v
-            (1% wt/v equals 1 g/100 ml, i.e 1g of particles per 100 ml
+            (1% wt/v equals 1 g/100 ml, i.e 1 g of particles per 100 ml
             of suspension).
 
         Note
@@ -682,7 +682,7 @@ class Suspension:
         required_volume: float
             The required volume of this suspension (m3).
         diluted_suspension: Suspension
-            Diluted suspension
+            Diluted suspension.
         '''
         if mus > self.mus(wavelength, temperature):
             raise ValueError(
@@ -696,6 +696,47 @@ class Suspension:
         required_volume = solid_mass/(self.solid_content(temperature)*10.0)
 
         return required_volume, diluted_suspension
+
+    def make_mus_inv(self, mus: float, volume: float,
+                     wavelength: float, temperature: float = 293.15) \
+                        -> Tuple[float, 'Suspension']:
+        '''
+        Compute the volume of a new suspension that is obtained by
+        taking the specified volume of this suspension and diluting it to
+        the specified target scattering coefficient at the given wavelength
+        and temperature.
+
+        Parameters
+        ----------
+        mus: float
+            Target scattering coefficient (1/m) of the diluted suspension.
+        volume: float
+            Volume taken from this suspension (m3).
+        wavelength: float
+            Wavelength of light (m).
+        temperature: float
+            temperature of the suspension (K).
+
+        Returns
+        -------
+        total_volume: float
+            Total volume of the diluted suspension (m3).
+        diluted_suspension: Suspension
+            Diluted suspension.
+        '''
+        if mus > self.mus(wavelength, temperature):
+            raise ValueError(
+                'The scattering coefficient of the diluted '
+                'suspension exceeds the value of this suspension!')
+
+        diluted_suspension = Suspension(self)
+        diluted_suspension.set_mus(mus, wavelength, temperature)
+        # solid content units % wt/v or 1 g/100 ml or 10 g/l or 10 kg/m3
+        solid_mass = self.solid_content(temperature)*10.0*volume
+        total_volume = \
+            solid_mass/(diluted_suspension.solid_content(temperature)*10.0)
+
+        return total_volume, diluted_suspension
 
     def make_musr(self, musr: float, volume: float,
                   wavelength: float, temperature: float = 293.15) \
@@ -722,7 +763,7 @@ class Suspension:
         required_volume: float
             The required volume of this suspension.
         diluted_suspension: Suspension
-            Diluted suspension
+            Diluted suspension.
         '''
         if musr > self.musr(wavelength, temperature):
             raise ValueError(
@@ -736,6 +777,127 @@ class Suspension:
         required_volume = solid_mass/(self.solid_content(temperature)*10.0)
 
         return required_volume, diluted_suspension
+
+    def make_musr_inv(self, musr: float, volume: float,
+                      wavelength: float, temperature: float = 293.15) \
+                        -> Tuple[float, 'Suspension']:
+        '''
+        Compute the volume of a new suspension that is obtained by
+        taking the specified volume of this suspension and diluting it to
+        the specified target reduced scattering coefficient at the given
+        wavelength and temperature.
+
+        Parameters
+        ----------
+        musr: float
+            Target reduced scattering coefficient (1/m) of the diluted
+            suspension.
+        volume: float
+            Volume taken from this suspension (m3).
+        wavelength: float
+            Wavelength of light (m).
+        temperature: float
+            temperature of the suspension (K).
+
+        Returns
+        -------
+        total_volume: float
+            Total volume of the diluted suspension (m3).
+        diluted_suspension: Suspension
+            Diluted suspension.
+        '''
+        if musr > self.musr(wavelength, temperature):
+            raise ValueError(
+                'The reduced scattering coefficient of the diluted '
+                'suspension exceeds the value of this suspension!')
+
+        diluted_suspension = Suspension(self)
+        diluted_suspension.set_musr(musr, wavelength, temperature)
+        # solid content units % wt/v or 1 g/100 ml or 10 g/l or 10 kg/m3
+        solid_mass = self.solid_content(temperature)*10.0*volume
+        total_volume = \
+            solid_mass/(diluted_suspension.solid_content(temperature)*10.0)
+
+        return total_volume, diluted_suspension
+
+    def make_solid_content(self, solid_content: float, volume: float,
+                           temperature: float = 293.15) \
+                            -> Tuple[float, 'Suspension']:
+        '''
+        Compute the volume that needs to be taken from this suspension to
+        prepare a diluted suspension with target volume and target solid
+        content at the given temperature.
+
+        Parameters
+        ----------
+        solid_content: float
+            Target solid content of the diluted suspension given as % wt/v
+            (1% wt/v equals 1 g/100 ml, i.e. 1 g of particles per 100 ml
+            of suspension). Defaults to 10% wt/v.
+        volume: float
+            Volume of the target suspension (m3).
+        temperature: float
+            temperature of the suspension (K).
+
+        Returns
+        -------
+        required_volume: float
+            The required volume of this suspension (m3).
+        diluted_suspension: Suspension
+            Diluted suspension.
+        '''
+        if solid_content > self.solid_content(temperature):
+            raise ValueError(
+                'The solid content of the diluted '
+                'suspension exceeds the solid content of this suspension!')
+
+        diluted_suspension = Suspension(self)
+        diluted_suspension.set_solid_content(solid_content, temperature)
+        # solid content units % wt/v or 1 g/100 ml or 10 g/l or 10 kg/m3
+        solid_mass = solid_content*10.0*volume
+        required_volume = solid_mass/(self.solid_content(temperature)*10.0)
+
+        return required_volume, diluted_suspension
+
+    def make_solid_content_inv(self, solid_content: float, volume: float,
+                               temperature: float = 293.15) \
+                                -> Tuple[float, 'Suspension']:
+        '''
+        Compute the volume of a new suspension that is obtained by
+        taking the specified volume of this suspension and diluting it to
+        the specified target solid content at the given temperature.
+
+        Parameters
+        ----------
+        solid_content: float
+            Target solid content of the diluted suspension given as % wt/v
+            (1% wt/v equals 1 g/100 ml, i.e. 1 g of particles per 100 ml
+            of suspension). Defaults to 10% wt/v.
+        volume: float
+            Volume taken from this suspension (m3).
+        temperature: float
+            temperature of the suspension (K).
+
+        Returns
+        -------
+        total_volume: float
+            Total volume of the diluted suspension (m3).
+        diluted_suspension: Suspension
+            Diluted suspension
+        '''
+        if solid_content > self.solid_content(temperature):
+            raise ValueError(
+                'The solid content of the diluted '
+                'suspension exceeds the solid content of this suspension!')
+
+        diluted_suspension = Suspension(self)
+        diluted_suspension.set_solid_content(solid_content, temperature)
+        # solid content units % wt/v or 1 g/100 ml or 10 g/l or 10 kg/m3
+        solid_mass = solid_content*10.0*volume
+        total_volume = solid_mass/ \
+            (diluted_suspension.solid_content(temperature)*10.0)
+
+        return total_volume, diluted_suspension
 
     def _get_cache(self) -> Tuple[cache.ObjCache, cache.LutCache]:
         return self._pf_cache, self._mcpf_lut_cache
