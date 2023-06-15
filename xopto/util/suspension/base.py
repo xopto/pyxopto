@@ -697,8 +697,8 @@ class Suspension:
 
         return required_volume, diluted_suspension
 
-    def make_mus_inv(self, mus: float, volume: float,
-                     wavelength: float, temperature: float = 293.15) \
+    def make_mus_from(self, mus: float, volume: float,
+                      wavelength: float, temperature: float = 293.15) \
                         -> Tuple[float, 'Suspension']:
         '''
         Compute the volume of a new suspension that is obtained by
@@ -778,8 +778,8 @@ class Suspension:
 
         return required_volume, diluted_suspension
 
-    def make_musr_inv(self, musr: float, volume: float,
-                      wavelength: float, temperature: float = 293.15) \
+    def make_musr_from(self, musr: float, volume: float,
+                       wavelength: float, temperature: float = 293.15) \
                         -> Tuple[float, 'Suspension']:
         '''
         Compute the volume of a new suspension that is obtained by
@@ -859,9 +859,9 @@ class Suspension:
 
         return required_volume, diluted_suspension
 
-    def make_solid_content_inv(self, solid_content: float, volume: float,
-                               temperature: float = 293.15) \
-                                -> Tuple[float, 'Suspension']:
+    def make_solid_content_from(self, solid_content: float, volume: float,
+                                temperature: float = 293.15) \
+                                    -> Tuple[float, 'Suspension']:
         '''
         Compute the volume of a new suspension that is obtained by
         taking the specified volume of this suspension and diluting it to
