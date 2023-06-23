@@ -23,7 +23,8 @@
 from typing import Callable, Tuple
 
 import numpy as np
-from scipy.stats import norm
+from scipy.stats import norm, lognorm
+from scipy.special import erf
 from scipy.integrate import quad
 
 
@@ -369,6 +370,249 @@ class Normal(object):
     def __repr__(self):
         return 'Normal(mean={}, sigma={}, clip={})'.format(
             self._mean, self._sigma, self._clip)
+
+    def __str__(self):
+        return '{} # object @{}'.format(self.__repr__(), id(self))
+
+
+class LogNormal(object):
+    @staticmethod
+    def from_peak_var(peak: float, var: float, **kwargs):
+        '''
+        Creates a log-normal distribution instance from distribution peak
+        position (mode) and variance.
+
+        The peak :math:`p` and variance :math:`v` are connected to the
+        parameters :math:`\\mu` and :math:`\\sigma` of the log-normal
+        through:
+
+        .. math::
+
+            p = e^{\\mu - \\sigma^2}
+            v = e^{\\sigma^2 + 2\\mu}\\left(e^{\\sigma^2 - 1}\\right)
+
+        The system of two equations can be solved by introducing new
+        variables :math:`a=e^{\\sigma^2}` and :math:`b=e^{\\mu}`, which yield
+        :math:`p a=b` and a polynomial equation
+        :math:`p^2 a^4 - p^2 a^3 - v = 0`. A valid solution of the polynomial
+        equation :math:`a` must be real and greater than 1, since
+        :math:`a=e^{\\sigma^2}` cannot be less than 1 for real values of
+        :math:`\\sigma`.
+
+        Parameters
+        ----------
+        peak: float
+            Position of the distribution peak (mode).
+        var: float
+            Distribution variance.
+
+        Returns
+        -------
+        dist: LogNormal
+            Distribution instance with the specified peak position
+            and variance.
+        '''
+        if var < 0.0:
+            raise ValueError('Variance must be a positive value!')
+
+        if peak < 0.0:
+            raise ValueError('Peak position must be a positive value!')
+
+        roots = np.roots([peak**2, -peak**2, 0.0, 0.0, -var])
+        print(roots)
+        eps = np.finfo(float).eps
+        candidates = []
+        for root in roots:
+            if abs(root.imag) < 10.0*eps and root.real > 1.0:
+                a = root.real
+                sigma = np.sqrt(np.log(a))
+                b = peak*a
+                mu = np.log(b)
+                candidates.append((mu, sigma))
+
+        if len(candidates) > 1:
+            raise ValueError('Distribution cannot be uniquely resolved!')
+        if len(candidates) == 0:
+            raise ValueError('Distribution cannot be resolved!')
+        
+        return LogNormal(*candidates[0], **kwargs)
+
+    def __init__(self, mu: float, sigma: float, clip: float = 10):
+        '''
+        Create a log-normal distribution instance with parameters :math:`\mu`
+        and :math:`\\sigma`:
+
+        .. math::
+
+            p(d) = \\frac{1}{d\\sigma\\sqrt{2\\pi}}e^{-\\frac{1}{2}\\left(\\frac{\\ln d - \\mu}{\\sigma}\\right)^2}
+
+        The created object is callable as obj(x) and returns the value
+        of log-normal distribution at x.
+
+        Parameters
+        ----------
+        mu: float
+            Log-normal distribution parameter :math:`\\mu`
+            (:math:`\\mu` in :math:`p(d)`).
+        sigma: float
+            Log-normal distribution parameter :math:`\\sigma`
+            (:math:`\\sigma` in :math:`p(d)`).
+        clip: float
+            The range of log-normal distribution is clipped to
+            :math:`[e^{\\mu} \\cdot \\text{clip^{-1}}, e^{\\mu} \\cdot \\text{clip}]`
+            and the distribution is scaled to yield unity integral over the
+            clipped interval.
+
+        Note
+        ----
+        This class reimplements the equality/inequality operator by
+        overloading the `__eq__` method.
+
+        The overloaded `__hash__` method computes the instance hash from the
+        parameters of the distribution (including the value of `clip`).
+        All distribution instances with exactly the same values of all the
+        parameters return equal hash values. 
+
+        Examples
+        --------
+        Creates object representing log-normal distribution with
+        :math:`\\mu=1` :math:`\\sigma=0.1`.
+
+        >>> lnd = LogNormal(1.0, 0.1, clip=5)
+        >>> from matplotlib import pyplot as pp
+        >>> x = np.linspace(0.1, 5, 1000)
+        >>> pp.plot(x, lnd(x))
+        >>>
+        '''
+        self._sigma = float(sigma)
+        self._mu = float(mu)
+        self._clip = clip
+        self._update()
+
+    def __eq__(self, other: 'LogNormal'):
+        return self.sigma == other.sigma and self.mu == other.mu and \
+               self.range[0] == other.range[0] and \
+               self.range[1] == other.range[1]
+
+    def __hash__(self) -> int:
+        return hash((float(self.mu), float(self.sigma),
+                     float(self._range[0]), float(self._range[1])))
+
+    def todict(self) -> dict:
+        '''
+        Export distribution object to a dict.
+
+        Returns
+        -------
+        data: dict
+            Distribution object exported to a dict.
+        '''
+        return {
+            'type': self.__class__.__name__,
+            'mu': self._mu, 'sigma': self._sigma,
+            'clip': self._clip
+        }
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'LogNormal':
+        '''
+        Create a new object from dict data.
+
+        Parameters
+        ----------
+        data: dict
+            Data as returned by the  :py:meth`LogNormal.todict` method.
+
+        Returns
+        -------
+        distribution: LogNormal
+            A new instance of :py:class:`LogNormal` class that is initialized
+            with data from the input dict.
+        '''
+        data = dict(data)
+        T = data.pop('type')
+        if T != cls.__name__:
+            raise TypeError(
+                'Expected data for type "LogNormal" but got "{}"!'.format(T))
+        return cls(**data)
+
+    def raw_moment(self, n: int) -> float:
+        '''
+        Computes the n-th raw moment of the distribution p(x) as:
+            int(p(x)*x**n) on the interval [range[0], range[1]].
+
+        Parameters
+        ----------
+        n: int
+            The requested raw moment.
+
+        Returns
+        -------
+        n-th raw moment of the distribution defined on the interval
+        on the interval [range[0], range[1]].
+        '''
+        return quad(lambda x: self(x)*(x**n), *self._range)[0]
+
+    def _update(self):
+        self._range = np.exp(self._mu)/self._clip, np.exp(self._mu)*self._clip
+        left, right = 0.5*(1.0 + erf((np.log(self._range) - self._mu)/
+                                     (self._sigma*np.sqrt(2))))
+        self._cdfoffset = left
+        self._k = 1.0/(right - left)
+
+    def __call__(self, x):
+        if np.isscalar(x):
+            if x < self._range[0] or x > self._range[1]:
+                f = 0.0
+            else:
+                f = 1.0/(x*self._sigma*np.sqrt(2.0*np.pi))*np.exp(
+                    -(np.log(x) - self._mu)**2/(2.0*self._sigma**2)
+                )*self._k
+        else:
+            f = 1.0/(x*self._sigma*np.sqrt(2.0*np.pi))*np.exp(
+                -(np.log(x) - self._mu)**2/(2.0*self._sigma**2)
+            )*self._k
+
+            f[x < self._range[0]] = 0.0
+            f[x > self._range[1]] = 0.0
+
+        return f
+
+    def cdf(self, x: float) -> float:
+        tmp = 0.5*(1.0 + erf((np.log(x) - self._mu)/(self._sigma*np.sqrt(2))))
+        tmp -= self._cdfoffset
+        tmp *= self._k
+        return np.clip(tmp, 0.0, 1.0)
+
+    def _get_mu(self) -> float:
+        return self._mu
+    def _set_mu(self, mu: float):
+        self._mu = np.float64(mu)
+        self._update()
+    mu = property(_get_mu, _set_mu, None,
+                  'Parameter mu of the log-normal distribution.')
+
+    def _get_sigma(self) -> float:
+        return self._sigma
+    def _set_sigma(self, sigma: float):
+        self._sigma = float(sigma)
+        self._update()
+    sigma = property(_get_sigma, _set_sigma, None,
+                     'Parameter sigma of the log-normal distribution.')
+
+    def _get_parameters(self) -> dict:
+        return {'mu':self._mu, 'sigma':self._sigma, 'clip':self._clip}
+    parameters = property(
+        _get_parameters, None, None,
+        'All log-normal distribution parameters as a dict object.')
+
+    def _get_range(self) -> Tuple[float, float]:
+        return self._range
+    range = property(_get_range, None, None, 'Distribution range.')
+
+    def __repr__(self):
+        return 'LogNormal(mu={}, sigma={}, clip={})'.format(
+            self._mu, self._sigma, self._clip)
 
     def __str__(self):
         return '{} # object @{}'.format(self.__repr__(), id(self))
@@ -752,3 +996,19 @@ class Mixture(object):
 
     def __str__(self):
         return '{} # object @{}'.format(self.__repr__(), id(self))
+
+
+
+if __name__ == '__main__':
+    import numpy as np
+    import matplotlib.pyplot as pp
+
+    p = LogNormal.from_peak_var(1e-6, 0.02e-6**2, clip=10.0)
+    pn = Normal(1e-6, 0.02e-6)
+
+    x = np.logspace(-7, -5, 10000)
+    pp.semilogy(x, pn(x), label='normal')
+    pp.semilogy(x, p(x), label='lognormal')
+    pp.legend()
+    pp.show()
+    
