@@ -1005,7 +1005,7 @@ class McDataTypesDouble(*McDataTypes.make_base(McDouble),
         Use McAccu64 for 64-bit detector accumulators.
     '''
     @classmethod
-    def double_precsision(cls) -> 'McDataTypesDouble':
+    def double_precision(cls) -> 'McDataTypesDouble':
         ''' Returns a double-precision floating-point variant of the data type. '''
         return cls
 
@@ -1033,7 +1033,7 @@ class McDataTypesDoubleCnt64(
         Use McAccu64 for 64-bit detector accumulators.
     '''
     @classmethod
-    def double_precsision(cls) -> 'McDataTypesDoubleCnt64':
+    def double_precision(cls) -> 'McDataTypesDoubleCnt64':
         ''' Returns a double-precision floating-point variant of the data type. '''
         return cls
 
