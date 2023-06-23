@@ -23,6 +23,8 @@
 from xopto.mcml import mcoptions
 from xopto.mcml import mcobject
 from xopto.mcml import cltypes
+from xopto.mcml import mctypes
+
 
 TOP = 'top'
 ''' Identifier of the top sample surface. '''
@@ -145,7 +147,7 @@ class SurfaceLayoutDefault(SurfaceLayoutAny):
         '''
         T = mc.types
         class ClSurfaceLayoutDefault(cltypes.Structure):
-            _fields_ = [('dummy', T.mc_int_t)]
+            _fields_ = [('dummy', cltypes.cl_int64_t)]
         return ClSurfaceLayoutDefault
 
     @staticmethod
@@ -160,7 +162,7 @@ class SurfaceLayoutDefault(SurfaceLayoutAny):
         Structure that defines the dummy reflector in the Monte Carlo simulator.
         '''
         Loc = self.location.capitalize()
-        return 'struct Mc{}SurfaceLayout{{mc_int_t dummy;}};'.format(Loc)
+        return 'struct Mc{}SurfaceLayout{{int64_t dummy;}};'.format(Loc)
 
     def cl_implementation(self, mc: mcobject.McObject) -> str:
         '''
