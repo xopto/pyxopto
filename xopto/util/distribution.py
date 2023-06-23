@@ -1011,4 +1011,3 @@ if __name__ == '__main__':
     pp.semilogy(x, p(x), label='lognormal')
     pp.legend()
     pp.show()
-    
