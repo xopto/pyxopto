@@ -131,7 +131,7 @@ class DetectorDefault(DetectorAny):
         '''
         T = mc.types
         class ClDetectorDefault(cltypes.Structure):
-            _fields_ = [('dummy', T.mc_int_t)]
+            _fields_ = [('dummy', cltypes.cl_int64_t)]
         return ClDetectorDefault
 
     @staticmethod
@@ -143,7 +143,7 @@ class DetectorDefault(DetectorAny):
         Structure that defines the default detector in the Monte Carlo simulator.
         '''
         Loc = self.location.capitalize()
-        return 'struct Mc{}Detector{{mc_int_t dummy;}};'.format(Loc)
+        return 'struct Mc{}Detector{{int64_t dummy;}};'.format(Loc)
 
     def cl_implementation(self, mc: mcobject.McObject) -> str:
         '''
