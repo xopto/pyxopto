@@ -384,12 +384,13 @@ class LogNormal(object):
 
         The peak :math:`p` and variance :math:`v` are connected to the
         parameters :math:`\\mu` and :math:`\\sigma` of the log-normal
-        through:
+        distribution through:
 
         .. math::
 
-            p = e^{\\mu - \\sigma^2}
-            v = e^{\\sigma^2 + 2\\mu}\\left(e^{\\sigma^2 - 1}\\right)
+            p &= e^{\\mu - \\sigma^2}
+
+            v &= e^{\\sigma^2 + 2\\mu}\\left(e^{\\sigma^2} - 1\\right)
 
         The system of two equations can be solved by introducing new
         variables :math:`a=e^{\\sigma^2}` and :math:`b=e^{\\mu}`, which yield
@@ -437,6 +438,61 @@ class LogNormal(object):
         
         return LogNormal(*candidates[0], **kwargs)
 
+    @staticmethod
+    def from_mean_var(mean: float, var: float, **kwargs):
+        '''
+        Creates a log-normal distribution instance from distribution mean
+        and variance.
+
+        The mean :math:`m` and variance :math:`v` are connected to the
+        parameters :math:`\\mu` and :math:`\\sigma` of the log-normal
+        distribution through:
+
+        .. math::
+
+            m &= e^{\\mu + \\sigma^{2}/2}
+
+            v &= e^{\\sigma^2 + 2\\mu}\\left(e^{\\sigma^2} - 1\\right)
+
+        The system of two equations can be solved by introducing new
+        variables :math:`a=e^{\\sigma^2}` and :math:`b=e^{\\mu}`, which yield
+        :math:`m=b\\sqrt{a}` and explicit solution 
+        :math:`a = 1 + \\frac{v}{m^2}`.
+
+        Parameters
+        ----------
+        mean: float
+            Distribution mean.
+        var: float
+            Distribution variance.
+
+        Returns
+        -------
+        dist: LogNormal
+            Distribution instance with the specified mean and variance.
+        '''
+        if mean <= 0.0:
+            raise ValueError('Mean must be a positive value!')
+
+        if var < 0.0:
+            raise ValueError('Variance must be a positive value!')
+
+        candidates = []
+        a = 1.0 + var/mean**2
+        if a > 0.0:
+            sigma = np.sqrt(np.log(a))
+            b = mean/np.sqrt(a)
+            if b > 0.0:
+                mu = np.log(b)
+                candidates.append((mu, sigma))
+
+        if len(candidates) > 1:
+            raise ValueError('Distribution cannot be uniquely resolved!')
+        if len(candidates) == 0:
+            raise ValueError('Distribution cannot be resolved!')
+        
+        return LogNormal(*candidates[0], **kwargs)
+
     def __init__(self, mu: float, sigma: float, clip: float = 10):
         '''
         Create a log-normal distribution instance with parameters :math:`\mu`
@@ -459,7 +515,7 @@ class LogNormal(object):
             (:math:`\\sigma` in :math:`p(d)`).
         clip: float
             The range of log-normal distribution is clipped to
-            :math:`[e^{\\mu} \\cdot \\text{clip^{-1}}, e^{\\mu} \\cdot \\text{clip}]`
+            :math:`[e^{\\mu} \\cdot \\text{clip}^{-1}, e^{\\mu} \\cdot \\text{clip}]`
             and the distribution is scaled to yield unity integral over the
             clipped interval.
 
@@ -475,7 +531,7 @@ class LogNormal(object):
 
         Examples
         --------
-        Creates object representing log-normal distribution with
+        Creates na object representing a log-normal distribution with
         :math:`\\mu=1` :math:`\\sigma=0.1`.
 
         >>> lnd = LogNormal(1.0, 0.1, clip=5)
@@ -486,7 +542,7 @@ class LogNormal(object):
         '''
         self._sigma = float(sigma)
         self._mu = float(mu)
-        self._clip = clip
+        self._clip = float(clip)
         self._update()
 
     def __eq__(self, other: 'LogNormal'):
@@ -1004,10 +1060,11 @@ if __name__ == '__main__':
     import matplotlib.pyplot as pp
 
     p = LogNormal.from_peak_var(1e-6, 0.02e-6**2, clip=10.0)
+    p = LogNormal.from_mean_var(1e-6, 0.02e-6**2, clip=10.0)
     pn = Normal(1e-6, 0.02e-6)
 
     x = np.logspace(-7, -5, 10000)
-    pp.semilogy(x, pn(x), label='normal')
-    pp.semilogy(x, p(x), label='lognormal')
+    pp.plot(x, pn(x), label='normal')
+    pp.plot(x, p(x), label='lognormal')
     pp.legend()
     pp.show()
