@@ -180,7 +180,7 @@ def generate_primes_fast(n):
     return out
 
 
-@nb.jit
+@nb.jit(nopython=True)
 def _rng_init(x: np.uint64, a: np.uint32, fora: np.uint32, n_rng: int, xinit: np.uint64) -> int:
     begin = fora[0]
 
