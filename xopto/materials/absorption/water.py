@@ -35,9 +35,12 @@ class Water(Absorption):
         filename = os.path.join(
             DATA_PATH, 'materials', 'absorption', 'water_absorption.npy')
 
-        self._interpolator = Interpolator.fromfile(filename) 
+        data = np.load(filename)
 
-    def __call__(self, wavelength: float or np.ndarray, t: float) \
+        self._interpolator = Interpolator.fromfile(
+            filename, bounds_error=False, fill_value=(data[0, 1], data[-1, 1]))
+
+    def __call__(self, wavelength: float or np.ndarray, t: float = None) \
             -> np.ndarray or float:
         '''
         Computes the absorption coefficient of water.

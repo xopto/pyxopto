@@ -43,9 +43,9 @@ class DatasetFiles:
         indices: np.ndarray
             A 2D numpy array of item indices contained within the returned
             files. The indices are organized as
-            :py:code:`indices[file_index] => (first, last)`,
-            where :py:code:`first` is the index of the first item in the file
-            and :py:code:`last` the index of last plus 1 item in the file.
+            `indices[file_index] => (first, last)`,
+            where `first` is the index of the first item in the file
+            and `last` the index of last plus 1 item in the file.
 
         Returns
         -------
@@ -198,7 +198,7 @@ class DatasetFiles:
         'is a tuple (first, n), where first is the index of the first '
         'missing item and n the number of missing items that follow the '
         'first missing item.')
-    
+
     def _get_overlapping(self) -> List[Tuple[int, int]]:
         return self._overlapping
     overlapping = property(
@@ -207,6 +207,54 @@ class DatasetFiles:
         'in the list is a tuple (first, n), where first is the index '
         'of the first overlapping item and n the number of overlapping items '
         'that follow the first overlapping item.')
+
+    def check_range(self, first: int, n: int):
+        '''
+        Check the range for missing items.
+
+        Parameters
+        ----------
+        first: int
+            First item in the range to check.
+        n: int
+            Number of items from and including the first item.
+
+        Returns
+        -------
+        missing: Tuple[Tuple[int, int]]
+            A tuple of missing items in the range. The returned tuple
+            contains multiple items, if multiple discontinuous
+            intervals of items are missing in the given range.
+        '''
+        pos = first
+        last = first + n
+        intervals = []
+        for item_first, item_last in self._indices:
+            if pos < item_first:
+                intervals.append((pos, item_first))
+            pos = item_last
+            if pos >= last:
+                break
+        if pos < last:
+            intervals.append((pos, last))
+
+        # join continuous intervals into a single interval
+        out_intervals = []
+        if intervals:
+            start = stop = None
+            for interval in intervals:
+                if start is None:
+                    start, stop = interval
+                else:
+                    if interval[0] == stop:
+                        stop = interval[1]
+                    else:
+                        out_intervals.append((start, (stop - start )))
+                        start, stop = interval
+            if start is not None:
+                out_intervals.append((start, stop - start))
+
+        return tuple(out_intervals)
 
     def __getitem__(self, index) -> str:
         return self._filenames[index]
@@ -239,7 +287,7 @@ class Dataset:
         self._create = bool(create)
         self._overwrite = bool(overwrite)
 
-        if not os.path.isdir(self._location):
+        if location and not os.path.isdir(self._location):
             if not self._create:
                 raise ValueError('Dataset location does not exist!')
             else:
@@ -262,9 +310,9 @@ class Dataset:
         indices: np.ndarray
             A 2D numpy array of item indices contained within the returned
             files. The indices are organized as
-            :py:code:`indices[file_index] => (first, last)`,
-            where :py:code:`first` is the index of the first item in the file
-            and :py:code:`last` the index of last plus 1 item in the file.
+            `indices[file_index] => (first, last)`,
+            where `first` is the index of the first item in the file
+            and `last` the index of last plus 1 item in the file.
         '''
         indices = []
         data_files = []
@@ -466,3 +514,8 @@ class Dataset:
 
     def __repr__(self):
         return '{} # {}'.format(self.__str__(), id(self))
+
+if __name__ == '__main__':
+    ds = Dataset('/home/miran/src/pyxopto/tmp/templates')
+    f = ds.find('mc_r')[0]
+    f.check_range(20, 100)

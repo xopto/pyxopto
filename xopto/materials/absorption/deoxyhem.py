@@ -35,10 +35,12 @@ class DeOxyHem(Absorption):
         super().__init__()
         filename = os.path.join(
             DATA_PATH, 'materials', 'absorption', 'blood_deoxy_absorption.npy')
+        data = np.load(filename)
 
-        self._interpolator = Interpolator.fromfile(filename) 
+        self._interpolator = Interpolator.fromfile(
+            filename, bounds_error=False, fill_value=(data[0, 1], data[-1, 1])) 
 
-    def __call__(self, wavelength: float or np.ndarray, t: float) \
+    def __call__(self, wavelength: float or np.ndarray, t: float = None) \
             -> np.ndarray or float:
         '''
         Computes the absorption coefficient of deoxygenated blood.

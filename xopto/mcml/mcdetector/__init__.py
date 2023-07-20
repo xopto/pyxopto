@@ -26,6 +26,7 @@ from .totalpl import TotalPl, TotalLutPl
 from .radial import Radial
 from .radialpl import RadialPl
 from .cartesian import Cartesian
+from .cartesianpl import CartesianPl
 from .symmetric import SymmetricX
 
 from .probe.sixaroundone import SixAroundOne

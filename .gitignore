@@ -13,6 +13,7 @@ xopto/cl/__pycache__
 xopto/cl/kernel/__pycache__
 
 xopto/data/__pycache__
+xopto/data/color/__pycache__
 xopto/data/materials/__pycache__
 xopto/data/materials/absorption/__pycache__
 xopto/data/materials/density/__pycache__
@@ -40,6 +41,7 @@ xopto/materials/ri/__pycache__
 xopto/materials/ri/glass/__pycache__
 xopto/materials/ri/util/__pycache__
 xopto/materials/ri/util/model/__pycache__
+xopto/materials/skin/__pycache__
 
 xopto/mcbase/__pycache__
 xopto/mcbase/kernel/__pycache__
@@ -137,11 +139,16 @@ xopto/util/animation/sv/__pycache__
 xopto/util/animation/sv/fiber/__pycache__
 xopto/util/animation/tr/__pycache__
 
+xopto/util/color/__pycache__
+
 xopto/util/regression/__pycache__
 xopto/util/regression/kernel/__pycache__
 xopto/util/regression/kernel/template/__pycache__
 
 xopto/util/sampler/__pycache__
+
+xopto/util/suspension/__pycache__
+xopto/util/suspension/mcml/__pycache__
 
 xopto/util/widgets
 xopto/util/widgets/__pycache__

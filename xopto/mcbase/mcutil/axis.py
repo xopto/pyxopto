@@ -30,8 +30,8 @@ class Axis:
     An accumulator/detector axis with linearly or logarithmically spaced
     points/bins.
     '''
-    def __init__(self, start: float=0.0, stop: float=1.0, n: int=1,
-                 logscale: bool=False):
+    def __init__(self, start: float or 'Axis' = 0.0, stop: float = 1.0, 
+                 n: int = 1, logscale: bool=False):
         '''
         Creates a linearly or logarithmically spaced accumulator/detector axis.
         The parameters and data points of the axis can be accessed through
@@ -39,8 +39,9 @@ class Axis:
 
         Parameters
         ----------
-        start: float
-            Start coordinate (left edge) of the accumulator.
+        start: float or Axis
+            Start coordinate (left edge) of the accumulator. If an instance of
+            Axis, an identical copy of the instance is created.
         stop: float
             Stop coordinate (right edge) of the accumulator.
         n: int

@@ -51,8 +51,16 @@ class MiePolystyrene(Mie):
             If None, the builtin polystyrene refractive index is used.
 
         riliquid: float
-            Refrective index of the liquid phase (water by default).
+            Refractive index of the liquid phase (water by default).
             If None, the builtin refractive index of water is used.
+
+        Note
+        ----
+        If the medium or particle have a nonzero absorption coefficient, the
+        refractive index becomes complex :math:`n + ik`, where :math:`k` is
+        related to the absorption coefficient :math:`\\mu_{a}` as
+        :math:`\\mu_{a} = 4 \\pi k / \\lambda_0`, where :math:`\\lambda_0`
+        is the wavelength of light in vacuum.
         '''
         if ripolystyrene is None:
             ripolystyrene = ri.polystyrene.default(wavelength)
@@ -88,10 +96,10 @@ class MieNormalPolystyrene(MieNormal):
         wavelength: float
             Wavelength of light (m).
         ripolystyrene: float
-            Refrective index of polystyrene at the specified wavelength.
+            Refractive index of polystyrene at the specified wavelength.
             If None, the builtin polystyrene refractive index is used.
         riliquid: float
-            Refrective index of the liquid phase (water by default).
+            Refractive index of the liquid phase (water by default).
             If None, the builtin refractive index of water is used.
         clip: float
             Distribution/diameter range used to estimate the phase function
@@ -147,11 +155,11 @@ class MieFractalPolystyrene(MieFractal):
             a range [5e-9, 30e-6] m is used.
 
         ripolystyrene: float
-            Refrective index of polystyrene at the specified wavelength.
+            Refractive index of polystyrene at the specified wavelength.
             If None, the builtin polystyrene refractive index is used.
 
         riliquid: float
-            Refrective index of the liquid phase (water by default).
+            Refractive index of the liquid phase (water by default).
             If None, the builtin refractive index of water is used.
 
         nd: int

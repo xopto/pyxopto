@@ -40,7 +40,7 @@ class Andreia(Absorption):
         super().__init__()
 
     def __call__(self, wavelength: float or np.ndarray,
-                 gamma: float or np.ndarray, t: float) \
+                 gamma: float or np.ndarray, t: float = None) \
                      -> np.ndarray or float:
         '''
         Computes the baseline absorption coefficient (1/m) of epidermis.
@@ -83,6 +83,8 @@ class Andreia(Absorption):
         if wavelength is None:
             wavelength = DEFAULT_WAVELENGTHS
         pp.semilogy(wavelength, self(wavelength, gamma), label=self.material)
+        if show:
+            pp.show()
 
 
 andreia = Andreia()

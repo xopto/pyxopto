@@ -87,14 +87,16 @@ class Material(mcobject.McObject):
             '/**',
             ' * @brief Evaluates to the material reduced scattering coefficient.',
             ' * @param[in] pmaterial Pointer to a material object.',
+            ' * @param[in] pdir Propagation direction vector.',
             ' */',
-            '#define mc_material_mus(pmaterial) ((pmaterial)->mus)',
+            '#define mc_material_mus(pmaterial, pdir) ((pmaterial)->mus)',
             '',
             '/**',
             ' * @brief Evaluates to the material absorption coefficient.',
             ' * @param[in] pmaterial Pointer to a material object.',
+            ' * @param[in] pdir Propagation direction vector.',
             ' */',
-            '#define mc_material_mua(pmaterial) ((pmaterial)->mua)',
+            '#define mc_material_mua(pmaterial, pdir) ((pmaterial)->mua)',
             '',
             '/**',
             ' * @brief Evaluates to the inverse of the material absorption coefficient.',
@@ -189,7 +191,8 @@ class Material(mcobject.McObject):
             - mus: float - 
               Scattering (NOT reduced) coefficient (1/m).
             - pf: mcpf.PfBase -
-              Scattering phase function object that is derived from PhBase class.
+              Scattering phase function object that is derived from the
+              :py:class:`xopto.mcbase.mcpf.pfbase.PfBase` class.
         '''
         self._n = float(n)
         self._mua = float(mua)
