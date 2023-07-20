@@ -570,7 +570,8 @@ class AnisotropicLayer(mcobject.McObject):
             '#endif',
         ))
 
-    def __init__(self, d: float, n: float, mua: float, mus: float,
+    def __init__(self, d: float, n: float,
+                 mua: float or np.ndarray, mus: float or np.ndarray,
                  pf: mcpf.PfBase):
         '''
         Anisotropic layer object constructor.
@@ -602,9 +603,9 @@ class AnisotropicLayer(mcobject.McObject):
               Layer thickness (m).
             - n: float - 
               Index of refraction.
-            - mua: float - 
+            - mua: float or np.ndarray - 
               Absorption coefficient tensor (1/m).
-            - mus: float - 
+            - mus: float np.ndarray - 
               Scattering (NOT reduced) coefficient tensor (1/m).
             - pf: mcpf.PfBase - 
               Scattering phase function object that is derived from
@@ -726,7 +727,7 @@ class Layers(mcobject.McObject):
     The thicknesses of the topmost and bottommost layers will be automatically
     set to infinity regardless of the layer thickness set by the user.
     '''
-    def __init__(self, layers: List[AnisotropicLayer] or 'Layers'):
+    def __init__(self, layers: List[Layer or AnisotropicLayer] or 'Layers'):
         '''
         Constructs a managed sample layer stack from a list of sample layers.
 
