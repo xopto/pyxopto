@@ -406,6 +406,8 @@ class LogNormal(object):
             Position of the distribution peak (mode).
         var: float
             Distribution variance.
+        kwargs: dict
+            Keyword arguments passed to the :py:class:`LogNormal` constructor.
 
         Returns
         -------
@@ -465,6 +467,8 @@ class LogNormal(object):
             Distribution mean.
         var: float
             Distribution variance.
+        kwargs: dict
+            Keyword arguments passed to the :py:class:`LogNormal` constructor.
 
         Returns
         -------
@@ -514,10 +518,15 @@ class LogNormal(object):
             Log-normal distribution parameter :math:`\\sigma`
             (:math:`\\sigma` in :math:`p(d)`).
         clip: float
-            The range of log-normal distribution is clipped to
-            :math:`[e^{\\mu} \\cdot \\text{clip}^{-1}, e^{\\mu} \\cdot \\text{clip}]`
-            and the distribution is scaled to yield unity integral over the
-            clipped interval.
+            The range of log-normal distribution is clipped relatively to the
+            location of the distribution peak :math:`p = e^{\\mu - \\sigma^2}`
+            as :math:`[p / \\text{clip}, p \\cdot \\text{clip}]`
+            and the clipped distribution is scaled to yield a unity integral
+            over the clipped range.
+
+        Note
+        ----
+        The value of clip parameter must be greater than 1.
 
         Note
         ----
@@ -540,6 +549,9 @@ class LogNormal(object):
         >>> pp.plot(x, lnd(x))
         >>>
         '''
+        if clip < 1.0:
+            raise ValueError('Clip value must be greater than 1!')
+
         self._sigma = float(sigma)
         self._mu = float(mu)
         self._clip = float(clip)
@@ -610,7 +622,8 @@ class LogNormal(object):
         return quad(lambda x: self(x)*(x**n), *self._range)[0]
 
     def _update(self):
-        self._range = np.exp(self._mu)/self._clip, np.exp(self._mu)*self._clip
+        mode = self.mode
+        self._range = mode/self._clip, mode*self._clip
         left, right = 0.5*(1.0 + erf((np.log(self._range) - self._mu)/
                                      (self._sigma*np.sqrt(2))))
         self._cdfoffset = left
@@ -665,6 +678,10 @@ class LogNormal(object):
     def _get_range(self) -> Tuple[float, float]:
         return self._range
     range = property(_get_range, None, None, 'Distribution range.')
+
+    def _get_mode(self) -> float:
+        return np.exp(self._mu - self._sigma**2)
+    mode = property(_get_mode, None, None, 'Distribution mode (peak).')
 
     def __repr__(self):
         return 'LogNormal(mu={}, sigma={}, clip={})'.format(
@@ -1059,8 +1076,8 @@ if __name__ == '__main__':
     import numpy as np
     import matplotlib.pyplot as pp
 
-    p = LogNormal.from_peak_var(1e-6, 0.02e-6**2, clip=10.0)
-    p = LogNormal.from_mean_var(1e-6, 0.02e-6**2, clip=10.0)
+    p = LogNormal.from_peak_var(1e-6, 0.02e-6**2, clip=2.0)
+    p = LogNormal.from_mean_var(1e-6, 0.02e-6**2, clip=2.0)
     pn = Normal(1e-6, 0.02e-6)
 
     x = np.logspace(-7, -5, 10000)
