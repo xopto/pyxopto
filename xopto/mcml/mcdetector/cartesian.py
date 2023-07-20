@@ -429,7 +429,8 @@ class Cartesian(Detector):
         raw: bool
             Set to True to show the raw data. Default is False and shows the
             normalized (reflectance) content.
-        show: bool 
+        show: bool
+            Show the plot window if True.
         '''
         import matplotlib.pyplot as pp
 

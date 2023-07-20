@@ -500,7 +500,7 @@ class FluenceRzt(mcobject.McObject):
         return target
 
     def plot(self, scale: str = 'log', autoscale: bool = True,
-             show: bool = True):
+             show: bool = True, **kwargs):
         '''
         Show fluence slices or integral projections.
 
@@ -513,8 +513,15 @@ class FluenceRzt(mcobject.McObject):
             range of weights. If True, the color coding changes from slice
             to slice.
         show: bool 
+            Show the plot window if True
+        kwargs: dict
+            Optional keyword arguments passed to pyplot.imshow.
         '''
         import matplotlib.pyplot as pp
+
+        aspect = 'auto'
+        if 'aspect' in kwargs:
+            aspect = kwargs.pop('aspect')
 
         data = self.data
 
@@ -531,7 +538,7 @@ class FluenceRzt(mcobject.McObject):
             slice_label='Time', slice_valfmt='%.1f ps',
             title=title, logscale=logscale,
             extent=extent, xlabel='r', ylabel='z', origin='lower',
-            autoscale=autoscale, aspect='auto')
+            autoscale=autoscale, aspect=aspect, **kwargs)
 
         sv.fig.canvas.manager.set_window_title('FluenceRzt View')
         if show:

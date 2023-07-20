@@ -23,6 +23,7 @@
 from typing import Tuple
 
 import numpy as np
+import scipy.constants
 from xopto.mcml.mcutil import interp
 
 from xopto.mcml.mcdetector.base import Detector
@@ -81,7 +82,7 @@ class CartesianPl(Detector):
                 ('inv_dx', T.mc_fp_t),
                 ('y_min', T.mc_fp_t),
                 ('inv_dy', T.mc_fp_t),
-                ('l_min', T.mc_fp_t),
+                ('pl_min', T.mc_fp_t),
                 ('inv_dpl', T.mc_fp_t),
                 ('cos_min', T.mc_fp_t),
                 ('n_x', T.mc_size_t),
@@ -125,14 +126,14 @@ class CartesianPl(Detector):
         return '\n'.join((
             'void dbg_print_{}_detector('.format(loc),
             '		__mc_detector_mem const Mc{}Detector *detector){{'.format(Loc),
-            '	dbg_print("Mc{}Detector - Cartesian detector:");'.format(Loc),
+            '	dbg_print("Mc{}Detector - CartesianPl detector:");'.format(Loc),
             '	dbg_print_point3f(INDENT "direction:", &detector->direction);',
             '	dbg_print_float(INDENT "x_min (mm):", detector->x_min*1e3f);',
             '	dbg_print_float(INDENT "inv_dx (1/mm):", detector->inv_dx*1e-3f);',
             '	dbg_print_float(INDENT "y_min (mm):", detector->y_min*1e3f);',
             '	dbg_print_float(INDENT "inv_dy (1/mm):", detector->inv_dy*1e-3f);',
             '	dbg_print_float(INDENT "pl_min (um):", detector->pl_min*1e6f);',
-            '	dbg_print_float(INDENT "inv_dpl (1/um)", detector->inv_pl*1e-6f);',
+            '	dbg_print_float(INDENT "inv_dpl (1/um)", detector->inv_dpl*1e-6f);',
             '	dbg_print_float(INDENT "cos_min:", detector->cos_min);',
             '	dbg_print_float(INDENT "n_x:", detector->n_x);',
             '	dbg_print_float(INDENT "n_y:", detector->n_y);',
@@ -164,7 +165,7 @@ class CartesianPl(Detector):
             '	mc_fp_t pl = mcsim_optical_pathlength(mcsim);',
             '	if (detector->pl_log_scale)',
             '	    pl = mc_log(mc_fmax(pl, FP_PLMIN));',
-            '	mc_int_t index_pl = mc_int((pl - detector->pl_min)*detector->inv_dpl);',
+            '	index_pl = mc_int((pl - detector->pl_min)*detector->inv_dpl);',
             '	index_pl = mc_clip(index_pl, 0, detector->n_pl - 1);',
             '',
             '	index = (index_pl*detector->n_y + index_y)*detector->n_x + index_x;',
@@ -196,7 +197,7 @@ class CartesianPl(Detector):
         2D Cartesian reflectance/transmittance accumulator in the x-y plane.
 
         The grid of the Cartesian accumulators corresponds to a 3D numpy array
-        with the first dimension representing the optical pathlength axis,
+        with the first dimension representing the optical path length axis,
         the second dimension representing the y axis and the third dimension
         representing the x axis (reflectance[pl, y, x] or
         transmittance[pl, y, x]).
@@ -266,6 +267,14 @@ class CartesianPl(Detector):
         return self._pl_axis
     plaxis = property(_get_plaxis, None, None, 'Path length axis object.')
 
+    def _get_taxis(self) -> axis.Axis:
+        return axis.Axis(
+            self._pl_axis.start/scipy.constants.c,
+            self._pl_axis.stop/scipy.constants.c,
+            self._pl_axis.n, logscale=self._pl_axis.logscale)
+    taxis = property(_get_taxis, None, None, 'Time axis (s) derived from '
+                                             'the path length axis object.')
+
     def _get_cosmin(self) -> Tuple[float, float]:
         return self._cosmin
     def _set_cosmin(self, value: float or Tuple[float, float]):
@@ -317,32 +326,48 @@ class CartesianPl(Detector):
     def _get_pl(self):
         return self._pl_axis.centers
     pl = property(_get_pl, None, None,
-                  'Centers of the optical pathlength axis accumulators.')
+                  'Centers of the optical path length axis accumulators.')
 
     def _get_pledges(self):
         return self._pl_axis.edges
     pledges = property(_get_pledges, None, None,
-                       'Edges of the optical pathlength axis accumulators.')
+                       'Edges of the optical path length axis accumulators.')
 
     def _get_npl(self):
         return self._pl_axis.n
     npl = property(_get_npl, None, None,
-                   'Number of accumulators in the optical pathlength axis.')
+                   'Number of accumulators in the optical path length axis.')
+
+    def _get_t(self):
+        return self._pl_axis.centers*(1.0/scipy.constants.c)
+    t = property(_get_t, None, None,
+                  'Centers of the optical path length axis accumulators '
+                  'expressed in propagation time (s).')
+
+    nt = property(_get_npl, None, None,
+                  'Number of accumulators in the time axis derived from the '
+                  'optical path length axis.')
+
+    def _get_tedges(self):
+        return self._pl_axis.edges*(1.0/scipy.constants.c)
+    tedges = property(_get_tedges, None, None,
+                      'Edges (s) of the time axis accumulators derived from '
+                      'the optical path length axis.')
 
     def meshgrid(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         '''
-        Returns 3D arrays of x, y and pathlength coordinates of the centers
+        Returns 3D arrays of x, y and path length coordinates of the centers
         of accumulators that match the size of the reflectance / transmittance
         arrays.
         The grid of the Cartesian accumulators corresponds to a 2D numpy array
         with the first dimension representing the y axis, the second dimension
         representing the x axis (reflectance[y, x] or transmittance[y, x])
-        and the third dimension the optical pathlength axis.
+        and the third dimension the optical path length axis.
 
         Returns
         -------
         pl: np.ndarray
-            A 3D array of optical pathlength coordinates.
+            A 3D array of optical path length coordinates.
         x: np.ndarray
             A 3D array of x coordinates.
         y: np.ndarray
@@ -511,7 +536,7 @@ class CartesianPl(Detector):
         )
 
     def plot(self, scale: str = 'log', axis: str ='z', autoscale: bool = True,
-             show: bool = True, **kwargs):
+             raw: bool = False, show: bool = True, **kwargs):
         '''
         Show detector slices or integral projections.
 
@@ -520,14 +545,16 @@ class CartesianPl(Detector):
         scale: str
             Data scaling can be "log" for logarithmic or "lin" for linear.
         axis: str
-            The axis of slicing ("pl", "y" or "x") or a projection along the
-            selected coordinate axis ("plproj", "yproj", "xproj").
-            Alternatively, specify the projection plane as one of
-            ("xy", "xpl", or "ypl").
+            The axis of slicing ("pl", "t", "y" or "x") or ome of the
+            projection planes ("xy", "xpl", "xt", "ypl" or "yt"). Note that
+            the time axis "t" (s) is derived from the path length axis by
+            dividing the path length with the speed of light in vacuum.
         autoscale: bool
             Scale the color coding of individual slices to the corresponding
             range of weights. If True, the color coding changes from slice
             to slice.
+        raw: bool
+            Set to True to show the raw data. Default is False and shows the
         show: bool
             Show the plot window if True.
         **kwargs: dict
@@ -539,15 +566,28 @@ class CartesianPl(Detector):
         if 'aspect' in kwargs:
             aspect = kwargs.pop('aspect')
 
-        data = self.data
+        data = self.raw if raw else self.reflectance
 
-        if axis == 'xy': axis = 'plproj'
-        if axis == 'xpl': axis = 'yproj'
-        if axis == 'ypl': axis = 'xproj'
+        if axis == 'plproj': axis = 'xy'
+        if axis == 'yproj': axis = 'xpl'
+        if axis == 'xproj': axis = 'ypl'
 
-        ax = {'pl':0, 'y':1, 'x':2}.get(axis[0], 0)
-        title = 'Slice {{slice}}/{} @ {} = {{pos:.6f}}'.format(
-            data.shape[ax], axis)
+        # slicing or projection axis
+        ax = {'pl': 0, 't': 0, 'y': 1, 'x': 2,
+              'xy': 0, 'xpl': 1, 'xt': 1, 'ypl': 2, 'yt': 2}.get(axis)
+
+        # time or path length axis
+        if 'pl' in axis:
+            pl_t_axis, pl_t_label = self._pl_axis, 'pl'
+        else:
+            pl_t_axis, pl_t_label = self.taxis, 't'
+
+        if axis == 't':
+            title_fmt_str = 'Slice {{slice}}/{} @ {} = {{pos:.6g}}'
+        else:
+            title_fmt_str = 'Slice {{slice}}/{} @ {} = {{pos:.6f}}'
+        title = title_fmt_str.format(data.shape[ax], axis)
+
         logscale = scale == 'log'
 
         fig = None
@@ -555,22 +595,22 @@ class CartesianPl(Detector):
         if ax == 0:
             extent = [self._x_axis.start, self._x_axis.stop,
                       self._y_axis.start, self._y_axis.stop]
-            slices = self._z_axis.centers
+            slices = pl_t_axis.centers
             xlabel, ylabel = 'x', 'y'
         elif ax == 1:
             extent = [self._x_axis.start, self._x_axis.stop,
-                      self._z_axis.start, self._z_axis.stop]
+                      pl_t_axis.start, pl_t_axis.stop]
             slices = self._y_axis.centers
-            xlabel, ylabel = 'x', 'pl'
+            xlabel, ylabel = 'x', pl_t_label
         elif ax == 2:
             extent = [self._y_axis.start, self._y_axis.stop,
-                      self._z_axis.start, self._z_axis.stop]
+                      pl_t_axis.start, pl_t_axis.stop]
             slices = self._x_axis.centers
-            xlabel, ylabel = 'y', 'pl'
+            xlabel, ylabel = 'y', pl_t_label
 
-        window_title = 'CartesianPl SliceView - {} mode'.format(self.mode)
+        window_title = 'CartesianPl SliceView'
 
-        if axis in ('xproj', 'yproj', 'plproj'):
+        if axis in ('xy', 'xpl', 'xt', 'ypl' or 'yt'):
             import matplotlib.pyplot as pp
 
             fig = pp.figure()
@@ -586,7 +626,9 @@ class CartesianPl(Detector):
                       aspect=aspect, **kwargs)
             pp.xlabel(xlabel)
             pp.ylabel(ylabel)
-            pp.title('Integral projection along the {:s} axis'.format(axis[0]))
+            pp.title('Integral projection along the {:s} axis'.format(
+                {'xy': 'pl', 'xpl': 'y',
+                 'xt': 'y', 'ypl': 'x', 'yt': 'x'}.get(axis)))
             fig.canvas.manager.set_window_title(window_title)
             pp.tight_layout()
             if show:
@@ -595,7 +637,7 @@ class CartesianPl(Detector):
         else:
             sv = sliceview.SliceView(
                 data, axis=ax, slices=slices, title=title, logscale=logscale,
-                extent=extent, xlabel=xlabel, ylabel=ylabel, origin='lower',
+                extent=extent, xlabel=xlabel, ylabel=ylabel,
                 autoscale=autoscale, aspect=aspect, **kwargs)
             sv.fig.canvas.manager.set_window_title(window_title)
             if show:

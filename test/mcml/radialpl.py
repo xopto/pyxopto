@@ -97,4 +97,6 @@ pp.xlabel('Time (ns)')
 pp.title('Optical fiber core = 200um')
 pp.legend()
 
+pl_res.top.plot(axis='t', scale='log')
+
 pp.show()

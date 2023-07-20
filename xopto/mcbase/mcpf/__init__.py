@@ -27,6 +27,7 @@ from .pfbase import PfBase
 from .rayleigh import Rayleigh
 from .hg import Hg
 from .hg2 import Hg2
+from .hga import Hga
 from .mhg import MHg
 from .gk import Gk
 from .gk2 import Gk2

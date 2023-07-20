@@ -23,6 +23,7 @@
 from typing import Tuple
 
 import numpy as np
+import scipy.constants
 
 from xopto.mcml.mcdetector.base import Detector
 from xopto.mcml import cltypes, mcobject, mcoptions
@@ -77,7 +78,7 @@ class RadialPl(Detector):
                 ('position', T.mc_point2f_t),
                 ('r_min', T.mc_fp_t),
                 ('inv_dr', T.mc_fp_t),
-                ('l_min', T.mc_fp_t),
+                ('pl_min', T.mc_fp_t),
                 ('inv_dpl', T.mc_fp_t),
                 ('cos_min', T.mc_fp_t),
                 ('n_r', T.mc_size_t),
@@ -251,6 +252,15 @@ class RadialPl(Detector):
         return self._pl_axis
     plaxis = property(_get_plaxis, None, None, 'Path length axis object.')
 
+
+    def _get_taxis(self) -> axis.Axis:
+        return axis.Axis(
+            self._pl_axis.start/scipy.constants.c,
+            self._pl_axis.stop/scipy.constants.c,
+            self._pl_axis.n, logscale=self._pl_axis.logscale)
+    taxis = property(_get_taxis, None, None, 'Time axis (s) derived from '
+                                             'the path length axis object.')
+
     def _get_position(self) -> Tuple[float, float]:
         return self._position
     def _set_position(self, value: float or Tuple[float, float]):
@@ -298,17 +308,33 @@ class RadialPl(Detector):
     def _get_pl(self):
         return self._pl_axis.centers
     pl = property(_get_pl, None, None,
-                  'Centers of the optical pathlength axis accumulators.')
+                  'Centers of the optical path length axis accumulators.')
 
     def _get_pledges(self):
         return self._pl_axis.edges
     pledges = property(_get_pledges, None, None,
-                       'Edges of the optical pathlength axis accumulators.')
+                       'Edges of the optical path length axis accumulators.')
 
     def _get_npl(self):
         return self._pl_axis.n
     npl = property(_get_npl, None, None,
-                   'Number of accumulators in the optical pathlength axis.')
+                   'Number of accumulators in the optical path length axis.')
+
+    def _get_t(self):
+        return self._pl_axis.centers*(1.0/scipy.constants.c)
+    t = property(_get_t, None, None,
+                  'Centers of the optical path length axis accumulators '
+                  'expressed in propagation time (s).')
+
+    nt = property(_get_npl, None, None,
+                  'Number of accumulators in the time axis derived from the '
+                  'optical path length axis.')
+
+    def _get_tedges(self):
+        return self._pl_axis.edges*(1.0/scipy.constants.c)
+    tedges = property(_get_tedges, None, None,
+                      'Edges (s) of the time axis accumulators derived from '
+                      'the optical path length axis.')
 
     def _get_normalized(self) -> np.ndarray:
         return self.raw*self._inv_accumulators_area*(1.0/max(self.nphotons, 1.0))
@@ -410,6 +436,67 @@ class RadialPl(Detector):
             getattr(axis, r_axis_type)(**r_axis_data),
             getattr(axis, pl_axis_type)(**pl_axis_data), 
             **data)
+
+    def plot(self, scale: str = 'log', raw: bool = False,
+             axis: str = 'pl', show: bool = True, **kwargs):
+        '''
+        Show the detector data as a 2D image.
+
+        Parameters
+        ----------
+        scale: str
+            Data scaling can be "log" for logarithmic or "lin" for linear.
+        raw: bool
+            Set to True to show the raw data. Default is False and shows the
+            normalized (reflectance) content.
+        axis: str
+            Use "pl" to show the path lengths or "t" to show the time that is
+            computed by dividing the path length with the speed of light in
+            vacuum.
+        show: bool
+            Show the plot window if True.
+        **kwargs: dict
+            Additional keyword arguments passed to pyplot.imshow.
+        '''
+        import matplotlib.pyplot as pp
+        from matplotlib.colors import LogNorm
+
+        aspect = 'auto'
+        if 'aspect' in kwargs:
+            aspect = kwargs.pop('aspect')
+
+        if axis == 't':
+            pl_t_axis, pl_t_label = self.taxis, 'Time'
+        else:
+            pl_t_axis, pl_t_label = self.plaxis, 'Path length'
+
+        extent = [self._r_axis.start, self._r_axis.stop,
+                  pl_t_axis.start, pl_t_axis.stop]
+
+        data = self.raw if raw else self.reflectance
+        which = 'raw' if raw else 'reflectance'
+
+        imshow_norm = None
+        if scale == 'log':
+            mask = data > 0.0
+            if mask.size > 0:
+                log_safe_data = np.tile(data[mask].min(), data.shape)
+                log_safe_data[mask] = data[mask]
+                data = log_safe_data
+            imshow_norm = LogNorm(vmin=data.min(), vmax=data.max())
+
+        fig, ax = pp.subplots()
+        img = ax.imshow(data, extent=extent, origin='lower',
+                        aspect=aspect, norm=imshow_norm, **kwargs)
+        ax.set_xlabel('r')
+        ax.set_ylabel(pl_t_label)
+        colorbar = pp.colorbar(img)
+
+        fig.canvas.manager.set_window_title(
+            'RadialPl detector - {} - {}'.format(scale, which))
+
+        if show:
+            pp.show()
 
     def __str__(self):
         return 'RadialPl(raxis={}, plaxis={}, position=({}, {}), cosmin={}, '\

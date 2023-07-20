@@ -449,7 +449,7 @@ class FluenceRz(mcobject.McObject):
 
         return target
 
-    def plot(self, scale: str = 'log', show: bool = True):
+    def plot(self, scale: str = 'log', show: bool = True, **kwargs):
         '''
         Show fluence slices or integral projections.
 
@@ -458,8 +458,15 @@ class FluenceRz(mcobject.McObject):
         scale: str
             Data scaling can be "log" for logarithmic or "lin" for linear.
         show: bool 
+            Show the plot window if True
+        kwargs: dict
+            Optional keyword arguments passed to pyplot.imshow.
         '''
         import matplotlib.pyplot as pp
+
+        aspect = 'auto'
+        if 'aspect' in kwargs:
+            aspect = kwargs.pop('aspect')
 
         data = self.data
         low = data.min()
@@ -474,7 +481,7 @@ class FluenceRz(mcobject.McObject):
         extent = [self._r_axis.start, self._r_axis.stop,
                   self._z_axis.start, self._z_axis.stop]
 
-        pp.imshow(data, extent=extent, origin='lower', aspect='auto')
+        pp.imshow(data, extent=extent, origin='lower', aspect=aspect, **kwargs)
         pp.xlabel('r')
         pp.ylabel('z')
         fig.canvas.manager.set_window_title('FluenceRz View')

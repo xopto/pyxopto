@@ -210,7 +210,7 @@ class Filter(object):
     def _get_pl(self) -> tuple:
         return self._pl
     pl = property(_get_pl, None, None,
-                  'Filter of the optical pathlength as '
+                  'Filter of the optical path length as '
                   '((pl_min, pl_max), ...).')
 
     def __call__(self, trace_obj: 'Trace', update: bool = True) \
@@ -656,9 +656,9 @@ class Trace(mcobject.McObject):
               - TRACE_EVENT_ESCAPE, packet escapes the simulation domain
 
         plon: bool
-            Turn on/off tracking of the optical pathlength. If set to nonzero,
+            Turn on/off tracking of the optical path length. If set to nonzero,
             the simulator option MC_TRACK_OPTICAL_PATHLENGTH will be set
-            turning on the tracking of optical pathlength.
+            turning on the tracking of optical path length.
 
         Note
         ----
@@ -818,7 +818,7 @@ class Trace(mcobject.McObject):
     def _get_plon(self) -> bool:
         return self._plon
     plon = property(_get_plon, None, None,
-                    'State of the optical pathlength tracking.')
+                    'State of the optical path length tracking.')
 
 
     def _get_event_mask(self) -> int or None:

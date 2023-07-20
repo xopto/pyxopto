@@ -23,6 +23,8 @@
 from xopto.mcml import mcoptions
 from xopto.mcml import mcobject
 from xopto.mcml import cltypes
+from xopto.mcml import mctypes
+
 
 TOP = 'top'
 ''' Identifier of the top sample surface. '''

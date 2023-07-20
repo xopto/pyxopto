@@ -212,17 +212,17 @@ class TotalPl(Detector):
     def _get_pl(self):
         return self._pl_axis.centers
     pl = property(_get_pl, None, None,
-                  'Centers of the optical pathlength axis accumulators.')
+                  'Centers of the optical path length axis accumulators.')
 
     def _get_pledges(self):
         return self._pl_axis.edges
     pledges = property(_get_pledges, None, None,
-                       'Edges of the optical pathlength axis accumulators.')
+                       'Edges of the optical path length axis accumulators.')
 
     def _get_npl(self):
         return self._pl_axis.n
     npl = property(_get_npl, None, None,
-                   'Number of accumulators in the optical pathlength axis.')
+                   'Number of accumulators in the optical path length axis.')
 
     def cl_pack(self, mc: mcobject.McObject, target: cltypes.Structure = None) \
             -> cltypes.Structure:
@@ -509,17 +509,17 @@ class TotalLutPl(Detector):
     def _get_pl(self):
         return self._pl_axis.centers
     pl = property(_get_pl, None, None,
-                  'Centers of the optical pathlength axis accumulators.')
+                  'Centers of the optical path length axis accumulators.')
 
     def _get_pledges(self):
         return self._pl_axis.edges
     pledges = property(_get_pledges, None, None,
-                       'Edges of the optical pathlength axis accumulators.')
+                       'Edges of the optical path length axis accumulators.')
 
     def _get_npl(self):
         return self._pl_axis.n
     npl = property(_get_npl, None, None,
-                   'Number of accumulators in the optical pathlength axis.')
+                   'Number of accumulators in the optical path length axis.')
 
     def cl_pack(self, mc: mcobject.McObject, target: cltypes.Structure = None) \
             -> cltypes.Structure:

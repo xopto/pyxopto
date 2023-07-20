@@ -504,7 +504,7 @@ class FluenceCyl(mcobject.McObject):
         return target
 
     def plot(self, scale: str = 'log', axis: str ='z', autoscale: bool = True,
-             show: bool = True):
+             show: bool = True, **kwargs):
         '''
         Show fluence slices or integral projections.
 
@@ -522,8 +522,15 @@ class FluenceCyl(mcobject.McObject):
             range of weights. If True, the color coding changes from slice
             to slice.
         show: bool 
+            Show the plot window if True
+        kwargs: dict
+            Optional keyword arguments passed to pyplot.imshow.
         '''
         from xopto.util import sliceview
+
+        aspect = 'auto'
+        if 'aspect' in kwargs:
+            aspect = kwargs.pop('aspect')
 
         data = self.data
 
@@ -568,7 +575,8 @@ class FluenceCyl(mcobject.McObject):
                 else:
                     data_slice = np.log(data_slice + 1.0)
 
-            pp.imshow(data_slice, extent=extent, origin='lower', aspect='auto')
+            pp.imshow(data_slice, extent=extent, origin='lower',
+                      aspect=aspect, **kwargs)
             pp.xlabel(xlabel)
             pp.ylabel(ylabel)
             pp.title('Integral projection along the {:s} axis'.format(axis[0]))
@@ -590,7 +598,7 @@ class FluenceCyl(mcobject.McObject):
                 polar=polar,
                 title=title, logscale=logscale,
                 extent=extent, xlabel=xlabel, ylabel=ylabel, origin='lower',
-                autoscale=autoscale, R=R, Fi=Fi, aspect='auto')
+                autoscale=autoscale, R=R, Fi=Fi, aspect=aspect, **kwargs)
             sv.fig.canvas.manager.set_window_title(window_title)
             if show:
                 sv.show()
