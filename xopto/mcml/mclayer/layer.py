@@ -311,6 +311,58 @@ class Layer(mcobject.McObject):
         self._pf = pf
     pf = property(_get_pf, _set_pf, None, 'Phase function object.')
 
+    def cl_pack(self, mc: mcobject.McObject, target: cltypes.Structure = None) \
+            -> cltypes.Structure:
+        '''
+        Pack the layers into an OpenCL data type. The OpenCL data
+        type is returned by the :py:meth:`Layers.cl_type` method.
+
+        Parameters
+        ----------
+        mc: mcobject.McObject
+            Monte Carlo simulator instance.
+        target: cltypes.Structure
+            A structure representing a layer in the MC simulator.
+
+        Returns
+        -------
+        target: cltypes.Structure
+            Structure received as an input argument or a new
+            instance if the input argument target is None.
+
+        Note
+        ----
+        This method only packs the fields that do not depend on the
+        properties of the other/neighboring layers in the stack
+        (PACKS thickness, n, mua, mus, inv_mut, and mua_inv_mut, but
+        DOES NOT PACK top, bottom, cos_critical_top, and cos_critical_bottom).
+        '''
+        if target is None:
+            target_type = self.fetch_cl_type(mc)
+            target = target_type()
+
+        mut = self.mua + self.mus
+        if mut > 0.0:
+            inv_mut = 1.0/mut
+        else:
+            inv_mut = float('inf')
+
+        if self.mus == 0.0:
+            mua_inv_mut = 1.0
+        else:
+            mua_inv_mut = self.mua*inv_mut
+
+        target.thickness = self.d
+        target.n = self.n
+        target.mua = self.mua
+        target.mus = self.mus
+        target.inv_mut = inv_mut
+        target.mua_inv_mut = mua_inv_mut
+
+        self.pf.cl_pack(mc, target.pf)
+
+        return target
+
     def todict(self) -> dict:
         '''
         Export object to a dict.
@@ -561,10 +613,10 @@ class AnisotropicLayer(mcobject.McObject):
             '			prefix "ccbottom: %.9f\\n", \\',
             '					(player)->thickness, (player)->top, (player)->bottom, (player)->n, \\',
             '					(player)->cos_critical_top, (player)->cos_critical_bottom); \\',
-            '			dbg_print_matrix3f(prefix "mua:", &(player)->mua_tensor); \\',
-            '			dbg_print_matrix3f(prefix "mus:", &(player)->mus_tensor); \\',
-            '			dbg_print_matrix3f(prefix "mut:", &(player)->mut_tensor); \\',
-            '			{ McPf const _dbg_pf=(player)->pf; dbg_print_pf(&_dbg_pf); };',
+            '	dbg_print_matrix3f(prefix "mua:", &(player)->mua_tensor); \\',
+            '	dbg_print_matrix3f(prefix "mus:", &(player)->mus_tensor); \\',
+            '	dbg_print_matrix3f(prefix "mut:", &(player)->mut_tensor); \\',
+            '	{ McPf const _dbg_pf=(player)->pf; dbg_print_pf(&_dbg_pf); };',
             '#else',
             '#define dbg_print_layer(player, label) ;',
             '#endif',
@@ -680,6 +732,46 @@ class AnisotropicLayer(mcobject.McObject):
         self._pf = pf
     pf = property(_get_pf, _set_pf, None,
                   'Scattering phase function object.')
+
+    def cl_pack(self, mc: mcobject.McObject, target: cltypes.Structure = None) \
+            -> cltypes.Structure:
+        '''
+        Pack the layers into an OpenCL data type. The OpenCL data
+        type is returned by the :py:meth:`Layers.cl_type` method.
+
+        Parameters
+        ----------
+        mc: mcobject.McObject
+            Monte Carlo simulator instance.
+        target: cltypes.Structure
+            A structure representing a layer in the MC simulator.
+
+        Returns
+        -------
+        target: cltypes.Structure
+            Structure received as an input argument or a new
+            instance if the input argument target is None.
+
+        Note
+        ----
+        This method only packs the fields that do not depend on the
+        properties of the other/neighboring layers in the stack
+        (PACKS thickness, n, mua, mus, and mut, but
+        DOES NOT PACK top, bottom, cos_critical_top, and cos_critical_bottom).
+        '''
+        if target is None:
+            target_type = self.fetch_cl_type(mc)
+            target = target_type()
+
+        target.thickness = self.d
+        target.n = self.n
+        target.mua.fromarray(self.mua)
+        target.mus.fromarray(self.mus)
+        target.mut.fromarray(self.mua + self.mus)
+
+        self.pf.cl_pack(mc, target.pf)
+
+        return target
 
     def todict(self) -> dict:
         '''
@@ -883,6 +975,13 @@ class Layers(mcobject.McObject):
         target: cltypes.Structure
             Filled structure received as an input argument or a new
             instance if the input argument target is None.
+
+        Note
+        ----
+        This method only packs the fields that depend on the
+        properties of the other/neighboring layers in the stack
+        (PACKS top, bottom, cos_critical_top, cos_critical_bottom, but
+        USES the LAYER instance to PACK all the remaining fields).
         '''
 
         num_layers = len(self._layers)
@@ -892,6 +991,9 @@ class Layers(mcobject.McObject):
             target = target_type()
 
         for index, layer in enumerate(self._layers):
+            # pack the properties that do not depend on neighboring layers
+            layer.cl_pack(mc, target[index])
+
             cc_top = cc_bottom = 0.0
             if index > 0:
                 cc_top = boundary.cos_critical(
@@ -900,7 +1002,7 @@ class Layers(mcobject.McObject):
                 cc_bottom = boundary.cos_critical(
                     layer.n, self._layers[index + 1].n)
 
-            target[index].thickness = layer.d
+            # target[index].thickness = layer.d
             if index == 0:
                 target[index].top = -float('inf')
                 target[index].bottom = 0.0
@@ -912,28 +1014,9 @@ class Layers(mcobject.McObject):
             else:
                 target[index].top = target[index - 1].bottom.value
                 target[index].bottom = target[index - 1].bottom.value + layer.d
-            target[index].n = layer.n
+
             target[index].cos_critical_top = cc_top
             target[index].cos_critical_bottom = cc_bottom
-
-            if isinstance(layer, AnisotropicLayer):
-                target[index].mua.fromarray(layer.mua)
-                target[index].mus.fromarray(layer.mus)
-                target[index].mut.fromarray(layer.mua + layer.mus)
-            else:
-                mut = layer.mua + layer.mus
-                if mut > 0.0:
-                    inv_mut = 1.0/mut
-                else:
-                    inv_mut = float('inf')
-                if layer.mus == 0.0:
-                    mua_inv_mut = 1.0
-                else:
-                    mua_inv_mut = layer.mua*inv_mut
-                target[index].mua = layer.mua
-                target[index].mus = layer.mus
-                target[index].inv_mut = inv_mut
-                target[index].mua_inv_mut = mua_inv_mut
 
             layer.pf.cl_pack(mc, target[index].pf)
 

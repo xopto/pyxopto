@@ -21,8 +21,10 @@
 ################################# End license ##################################
 
 from typing import List, Tuple
-from xopto.mcbase.mcpf.pfbase import PfBase
 
+import numpy as np
+
+from xopto.mcbase.mcpf.pfbase import PfBase
 from xopto.mcml import mcobject
 from xopto.mcml import mctypes
 from xopto.mcml.mcutil import boundary
@@ -90,6 +92,7 @@ def ray_cylinder_intersection(r: float,
     d2 = (-b + D)/(2.0*a)
 
     return d1, d2
+
 
 class Layer(mcobject.McObject):
     '''
@@ -320,7 +323,7 @@ class Layer(mcobject.McObject):
 
         Note
         ----
-        The inner layer boundary bellongs to the layer, but the outer does not.
+        The inner layer boundary belongs to the layer, but the outer does not.
         '''
         self._d = float(d)
         self._n = float(n)
@@ -363,6 +366,61 @@ class Layer(mcobject.McObject):
         self._pf = pf
     pf = property(_get_pf, _set_pf, None, 'Phase function object.')
 
+    def cl_pack(self, mc: mcobject.McObject, target: cltypes.Structure = None) \
+            -> cltypes.Structure:
+        '''
+        Pack the layers into an OpenCL data type. The OpenCL data
+        type is returned by the :py:meth:`Layers.cl_type` method.
+
+        Parameters
+        ----------
+        mc: mcobject.McObject
+            Monte Carlo simulator instance.
+        target: cltypes.Structure
+            A structure representing a layer in the MC simulator.
+
+        Returns
+        -------
+        target: cltypes.Structure
+            Structure received as an input argument or a new
+            instance if the input argument target is None.
+
+        Note
+        ----
+        This method only packs the fields that do not depend on the
+        properties of the other/neighboring layers in the stack
+        (PACKS diameter, n, mua, mus, inv_mut, and mua_inv_mut, but
+        DOES NOT PACK r_inner, r_outer, cos_critical_inner, and
+        cos_critical_outer).
+        '''
+        self.check()
+
+        if target is None:
+            target_type = self.fetch_cl_type(mc)
+            target = target_type()
+
+        mut = self.mua + self.mus
+        if mut > 0.0:
+            inv_mut = 1.0/mut
+        else:
+            inv_mut = float('inf')
+
+        if self.mus == 0.0:
+            mua_inv_mut = 1.0
+        else:
+            mua_inv_mut = self.mua*inv_mut
+
+        target.diameter = self.d
+        target.n = self.n
+        target.mua = self.mua
+        target.mus = self.mus
+        target.inv_mut = inv_mut
+        target.mua_inv_mut = mua_inv_mut
+
+        self.pf.cl_pack(mc, target.pf)
+
+        return target
+
     def todict(self) -> dict:
         '''
         Export object to a dict.
@@ -395,6 +453,418 @@ class Layer(mcobject.McObject):
         return  '{:s} # id 0x{:>08X}.'.format(self.__str__(), id(self))
 
 
+
+class AnisotropicLayer(mcobject.McObject):
+    '''
+    Class that represents a single sample anisotropic layer.
+    '''
+
+    def cl_type(self, mc: mcobject.McObject) -> cltypes.Structure:
+        '''
+        Returns a structure data type that is used to represent one
+        anisotropic layer instance in the OpenCL kernel of the Monte Carlo
+        simulator.
+
+        Parameters
+        ----------
+        mc: mcobject.McObject
+            Monte Carlo simulator instance.
+
+        Returns
+        -------
+        opencl_t: ClLayer
+            OpenCL Structure that represents a layer. 
+        '''
+        T = mc.types
+        class ClAnisotropicLayer(cltypes.Structure):
+            _fields_ = [
+                ('r_inner', T.mc_fp_t),
+                ('r_outer', T.mc_fp_t),
+                ('n', T.mc_fp_t),
+                ('cos_critical_inner', T.mc_fp_t),
+                ('cos_critical_outer', T.mc_fp_t),
+                ('mus', T.mc_matrix3f_t),
+                ('mua', T.mc_matrix3f_t),
+                ('mut', T.mc_matrix3f_t),
+                ('pf', self.pf.fetch_cl_type(mc))
+            ]
+
+        return ClAnisotropicLayer
+
+    @staticmethod
+    def cl_declaration(mc: mcobject.McObject) -> str:
+        '''
+        Structure and related API that defines a layer in the Monte Carlo simulator.
+        '''
+        return '\n'.join((
+            '/**',
+            ' * @brief Data type describing a single sample layer.',
+            ' * @note The members of this object are constant and do not change during the simulation.',
+            ' * @{',
+            ' */',
+            'struct MC_STRUCT_ATTRIBUTES McLayer {',
+            '	mc_fp_t r_inner;					/**< Radius of the inner boundary. */',
+            '	mc_fp_t r_outer;					/**< Radius of the outer boundary. */',
+            '	mc_fp_t n;							/**< Layer index of refraction. */',
+            '	mc_fp_t cos_critical_inner;			/**< Total internal reflection angle cosine for the inner boundary. */',
+            '	mc_fp_t cos_critical_outer;			/**< Total internal reflection angle cosine for the outer boundary. */',
+            '	mc_fp_t mus;						/**< Scattering coefficient tensor. */',
+            '	mc_fp_t mua;						/**< Absorption coefficient tensor. */',
+            '	mc_fp_t mut;						/**< Total attenuation coefficient tensor. */',
+            '	McPf pf;							/**< Scattering phase function parameters. */',
+            '};',
+            '/**',
+            ' * @}',
+            ' */',
+            '/** @brief Data type representing a sample layer. */',
+            'typedef struct McLayer McLayer;',
+            '',
+            '/**',
+            ' * @brief Evaluates to the radius of the inner boundary.',
+            ' * @param[in] player Pointer to a layer object.',
+            ' */',
+            '#define mc_layer_r_inner(player) ((player)->r_inner)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the radius of the outer boundary.',
+            ' * @param[in] player Pointer to a layer object.',
+            ' */',
+            '#define mc_layer_r_outer(player) ((player)->r_outer)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the z coordinate of the top layer surface.',
+            ' * @param[in] player Pointer to a layer object.',
+            ' */',
+            '#define mc_layer_top(player) ((player)->top)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the z coordinate of the bottom layer surface.',
+            ' * @param[in] player Pointer to a layer object.',
+            ' */',
+            '#define mc_layer_bottom(player) ((player)->bottom)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the layer refractive index.',
+            ' * @param[in] player Pointer to a layer object.',
+            ' */',
+            ' #define mc_layer_n(player) ((player)->n)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the critical cosine (total internal reflection)',
+            ' *        at the inner layer boundary.',
+            ' * @details If the absolute cosine of the angle of incidence',
+            ' *          (with respect to z axis) is less than the critical cosine,',
+            ' @          the incident packet is reflected at the boundary.',
+            ' * @param[in] player Pointer to a layer object.',
+            ' */',
+            ' #define mc_layer_cc_inner(player) ((player)->cos_critical_inner)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the critical cosine (total internal reflection)',
+            ' *        at the outer layer boundary.',
+            ' * @details If the absolute cosine of the angle of incidence',
+            ' *          (with respect to z axis) is less than the critical cosine, the',
+            ' *          incident packet is reflected from the boundary.',
+            ' * @param[in] player Pointer to a layer object.',
+            ' */',
+            ' #define mc_layer_cc_outer(player) ((player)->cos_critical_outer)',
+            '',
+            '',
+            '/**',
+            ' * @brief Evaluates to a pointer to the scattering coefficient tensor.',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' */',
+            '#define mc_layer_mus_tensor(player) (&(player)->mus_tensor)',
+            '',
+            '/**',
+            ' * @brief Evaluates to a pointer to the absorption coefficient tensor.',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' */',
+            '#define mc_layer_mua_tensor(player) (&(player)->mua_tensor)',
+            '',
+            '/**',
+            ' * @brief Evaluates to a pointer to the total attenuation coefficient tensor.',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' */',
+            '#define mc_layer_mut_tensor(player) (&(player)->mut_tensor)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the scattering coefficient along',
+            ' *        the given propagation direction.',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' * @param[in] pdir   Propagation direction vector.',
+            ' */',
+            '#define mc_layer_mus(player, pdir) tensor3f_project(mc_layer_mus_tensor(player), pdir)',
+            '',
+            '/**',
+            '* @brief Evaluates to the absorption coefficient along',
+            ' *       the given propagation direction.',
+            '* @param[in] player Pointer to a layer instance.',
+            '* @param[in] pdir   Propagation direction vector.',
+            '*/',
+            '#define mc_layer_mua(player, pdir) tensor3f_project(mc_layer_mua_tensor(player), pdir)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the total attenuation coefficient along',
+            ' *        the given propagation direction.',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' * @param[in] pdir   Propagation direction vector.',
+            ' */',
+            '#define mc_layer_mut(player, pdir) tensor3f_project(mc_layer_mut_tensor(player), pdir)',
+            '',
+            '/**',
+            ' * @brief Evaluates to the absorption coefficient of the layer multiplied',
+            ' *        by the reciprocal of the total attenuation coefficient along',
+            ' *        the given propagation direction.',
+            ' * @param[in] player Pointer to a layer object.',
+            ' * @param[in] pdir   Propagation direction vector.',
+            ' *',
+            ' * @returns   Absorption coefficient multiplied by the reciprocal',
+            ' *            value of the total attenuation coefficient along the',
+            ' *            given propagation direction.',
+            ' */',
+            'static inline mc_fp_t mc_layer_mua_inv_mut(__constant McLayer const *player, mc_point3f_t const *pdir) {',
+            '	mc_fp_t mua = mc_layer_mua(player, pdir);',
+            '	mc_fp_t mut = mc_layer_mut(player, pdir);',
+            '',
+            '	return (mua != FP_0) ? ((mut != FP_0) ? mc_fdiv(mua, mut) : FP_INF) : FP_0;',
+            '};',
+            '',
+            '/**',
+            ' * @brief Evaluates to the reciprocal value of the total attenuation',
+            ' *        coefficient along the given propagation direction.',
+            ' * @param[in] player Pointer to a layer object.',
+            ' * @param[in] pdir   Propagation direction vector.',
+            ' *',
+            ' * @returns   Reciprocal value of the total attenuation coefficient',
+            ' *            along the given propagation direction.',
+            ' */',
+            'static inline mc_fp_t mc_layer_inv_mut(__constant McLayer const *player, mc_point3f_t const *pdir) {',
+            '	mc_fp_t mut = mc_layer_mut(player, pdir);',
+            '',
+            '	return (mut != FP_0) ? mc_reciprocal(mut) : FP_INF;',
+            '};',
+            '',
+            '#if MC_ENABLE_DEBUG || defined(__DOXYGEN__)',
+            '/**',
+            ' * @brief Print one sample layer.',
+            ' * param[in] prefix Can be used to pass indent string for the layer parameters."',
+            ' * @param[in] player Pointer to a layer instance.',
+            ' */',
+            '#define dbg_print_layer(player, prefix) \\',
+            '	printf( \\',
+            '		prefix "r_inner: %.9f\\n" \\',
+            '		prefix "r_outer: %.9f\\n" \\',
+            '		prefix "n: %.9f\\n" \\',
+            '		prefix "cos_critical_inner: %.9f\\n" \\',
+            '		prefix "cos_critical_outer: %.9f\\n" \\',
+            '				(player)->r_inner, (player)->r_outer, (player)->n, \\',
+            '				(player)->cos_critical_inner, (player)->cos_critical_outer); \\',
+            '	dbg_print_matrix3f(prefix "mua:", &(player)->mua_tensor); \\',
+            '	dbg_print_matrix3f(prefix "mus:", &(player)->mus_tensor); \\',
+            '	dbg_print_matrix3f(prefix "mut:", &(player)->mut_tensor); \\',
+            '	{ McPf const _dbg_pf=(player)->pf; dbg_print_pf(&_dbg_pf);};',
+            '',
+            '#else',
+            '#define dbg_print_layer(player, label) ;',
+            '#endif',
+        ))
+
+    def __init__(self, d: float, n: float,
+                 mua: float or np.ndarray, mus: float or np.ndarray,
+                 pf: mcpf.PfBase):
+        '''
+        Anisotropic layer object constructor.
+
+        Parameters
+        ----------
+        d: float
+            Layer diameter (m).
+        n: float
+            Index of refraction.
+        mua: float or np.ndarray
+            Absorption coefficient tensor (1/m). A scalar float value for an
+            isotropic material. A vector of length 3 for the diagonal elements
+            of the tensor (non-diagonal elements are set to 0).
+            A numpy array of shape (3, 3) for the complete tensor.
+        mus: float
+            Scattering coefficient tensor (1/m). A scalar float value for
+            an isotropic material. A vector of length 3 if only the diagonal
+            elements of the tensor are nonzero (non-diagonal elements are set to 0).
+            A numpy array of shape (3, 3) for the complete tensor.
+        pf: mcpf.PfBase
+            Scattering phase function object that is derived from the
+            :py:class:`xopto.mcbase.mcpf.pfbase.PfBase` class.
+
+
+        The physical properties of the layer can be read or changed through
+        member properties:
+
+            - d: float - 
+              Layer diameter (m).
+            - n: float - 
+              Index of refraction.
+            - mua: float or np.ndarray - 
+              Absorption coefficient tensor (1/m).
+            - mus: float np.ndarray - 
+              Scattering (NOT reduced) coefficient tensor (1/m).
+            - pf: mcpf.PfBase - 
+              Scattering phase function object that is derived from the
+              :py:class:`xopto.mcbase.mcpf.pfbase.PfBase` class.
+
+        Note
+        ----
+        The inner layer boundary belongs to the layer, but the outer does not.
+        '''
+        self._d = float(d)
+        self._n = float(n)
+        self._mua = np.zeros((3, 3))
+        self._mus = np.zeros((3, 3))
+        self._pf = pf
+
+        self._set_mua(mua)
+        self._set_mus(mus)
+
+    def _set_d(self, d: float):
+        self._d = float(d)
+    def _get_d(self) -> float:
+        return self._d
+    d = property(_get_d, _set_d, None, 'Layer diameter (m).')
+
+    def _set_n(self, n: float):
+        self._n = float(n)
+    def _get_n(self) -> float:
+        return self._n
+    n = property(_get_n, _set_n, None, 'Refractive index of the layer.')
+
+    def _set_mua(self, mua: float or np.ndarray):
+        if isinstance(mua, (float, int)):
+            self._mua[0, 0] = mua 
+            self._mua[1, 1] = mua 
+            self._mua[2, 2] = mua
+        elif len(mua) == 3:
+            self._mua[0, 0] = mua[0] 
+            self._mua[1, 1] = mua[1] 
+            self._mua[2, 2] = mua[2] 
+        else:
+            self._mua[:] = mua
+
+    def _get_mua(self) -> np.ndarray:
+        return self._mua
+    mua = property(_get_mua, _set_mua, None,
+                   'Absorption coefficient tensor (3x3) of the layer (1/m).')
+
+    def _set_mus(self, mus: float or np.ndarray):
+        if isinstance(mus, (float, int)):
+            self._mus[0, 0] = mus 
+            self._mus[1, 1] = mus 
+            self._mus[2, 2] = mus
+        elif len(mus) == 3:
+            self._mus[0, 0] = mus[0] 
+            self._mus[1, 1] = mus[1] 
+            self._mus[2, 2] = mus[2] 
+        else:
+            self._mus[:] = mus
+    def _get_mus(self) -> np.ndarray:
+        return self._mus
+    mus = property(_get_mus, _set_mus, None,
+                   'Scattering coefficient tensor (3x3) of the layer (1/m).')
+
+    def _get_pf(self) -> mcpf.PfBase:
+        return self._pf
+    def _set_pf(self, pf: mcpf.PfBase):
+        if type(self._pf) != type(pf):
+            raise ValueError('The scattering phase function type '\
+                             'of the layer must not change!')
+        self._pf = pf
+    pf = property(_get_pf, _set_pf, None, 'Phase function object.')
+
+    def cl_pack(self, mc: mcobject.McObject, target: cltypes.Structure = None) \
+            -> cltypes.Structure:
+        '''
+        Pack the layers into an OpenCL data type. The OpenCL data
+        type is returned by the :py:meth:`Layers.cl_type` method.
+
+        Parameters
+        ----------
+        mc: mcobject.McObject
+            Monte Carlo simulator instance.
+        target: cltypes.Structure
+            A structure representing a layer in the MC simulator.
+
+        Returns
+        -------
+        target: cltypes.Structure
+            Structure received as an input argument or a new
+            instance if the input argument target is None.
+
+        Note
+        ----
+        This method only packs the fields that do not depend on the
+        properties of the other/neighboring layers in the stack
+        (PACKS diameter, n, mua, mus, inv_mut, and mua_inv_mut, but
+        DOES NOT PACK r_inner, r_outer, cos_critical_inner, and
+        cos_critical_outer).
+        '''
+        self.check()
+
+        if target is None:
+            target_type = self.fetch_cl_type(mc)
+            target = target_type()
+
+        mut = self.mua + self.mus
+        if mut > 0.0:
+            inv_mut = 1.0/mut
+        else:
+            inv_mut = float('inf')
+
+        if self.mus == 0.0:
+            mua_inv_mut = 1.0
+        else:
+            mua_inv_mut = self.mua*inv_mut
+
+        target.diameter = self.d
+        target.n = self.n
+        target.mua.fromarray(self.mua)
+        target.mus.fromarray(self.mus)
+        target.mut.fromarray(self.mua + self.mus)
+        self.pf.cl_pack(mc, target.pf)
+
+        return target
+
+    def todict(self) -> dict:
+        '''
+        Export object to a dict.
+        '''
+        return {'d':self._d, 'n':self._n, 'mua':self._mua, 'mus':self._mus,
+                'pf':self._pf.todict(), 'type':'AnisotropicLayer'}
+
+    @classmethod
+    def fromdict(cls, data: dict) -> 'AnisotropicLayer':
+        '''
+        Create a new object from dict. The dict keys must match
+        the parameter names defined by the constructor.
+        '''
+        data_ = dict(data)
+        t = data_.pop('type')
+        if t != 'Layer':
+            raise ValueError('Cannot create an AnisotropicLayer instance '
+                             'from the data!')
+        pf_data = data_.pop('pf')
+        if not hasattr(mcpf, pf_data['type']):
+            raise TypeError('Scattering phase function "{}" '
+                            'not implemented'.format(pf_data['type']))
+        pf_type = getattr(mcpf, pf_data['type'])
+        return cls(pf=pf_type.fromdict(pf_data), **data_)
+
+    def __str__(self):
+        return 'AnisotropicLayer(d={}, n={}, mua={}, mus={}, pf={})'.format(
+            self._d, self._n, self._mua, self._mus, self._pf)
+
+    def __repr__(self):
+        return  '{:s} # id 0x{:>08X}.'.format(self.__str__(), id(self))
+
+
 class Layers(mcobject.McObject):
     '''
     Class that represents a stack of concentric layers forming the sample.
@@ -409,10 +879,10 @@ class Layers(mcobject.McObject):
     will be automatically set to infinity regardless of the layer diameter
     set by the user.
     '''
-    def __init__(self, layers: List[Layer] or 'Layers'):
+    def __init__(self, layers: List[Layer or AnisotropicLayer] or 'Layers'):
         '''
         Constructs a managed sample layer stack from a list of sample layers.
-        The outermost layer that sourrounds the sample must be specified first,
+        The outermost layer that surrounds the sample must be specified first,
         followed by the sample layer from the outermost to the innermost.
 
         Note
@@ -437,10 +907,10 @@ class Layers(mcobject.McObject):
 
         Parameters
         ----------
-        layers: list or Layers
+        layers: List[Layer or AnisotropicLayer]
             A list of sample layers. Requires at least 2 items!
         '''
-        self._pf_type = None
+        self._layer_type = self._pf_type = None
 
         if isinstance(layers, Layers):
             self._layers = layers.tolist()
@@ -461,12 +931,20 @@ class Layers(mcobject.McObject):
 
         if self._pf_type is None:
             self._pf_type = type(self._layers[1].pf)
+        if self._layer_type is None:
+            self._layer_type = type(self._layers[0])
 
         d_prev = float('inf')
         for layer_index, layer in enumerate(self._layers):
             if not isinstance(layer, Layer):
                 raise TypeError('All layers must be instances of Layer '
                                 'but found {:s}!'.format(type(layer).__name__))
+            if self._layer_type != type(layer):
+                raise TypeError(
+                    'All the sample layers must use the same type!'
+                    'Found {} and {}!'.format(
+                        self._layer_type.__name__, layer.__class__.__name__))
+
             if type(layer.pf) != self._pf_type:
                 raise TypeError(
                     'All the sample layer must use the same scattering phase '
@@ -477,10 +955,10 @@ class Layers(mcobject.McObject):
                                  'monotonically decreasing!')
                 d_prev = layer.d
 
-    def layer(self, index: int) -> Layer:
+    def layer(self, index: int) -> Layer or AnisotropicLayer:
         '''
         Returns layer at the specified index. Note that the first layer
-        (index 0) represents the medium sourounding the sample.
+        (index 0) represents the medium surrounding the sample.
         '''
         return self._layers[index]
 
@@ -511,7 +989,7 @@ class Layers(mcobject.McObject):
     def diameter(self) -> float:
         '''
         Diameter of the layer stack excluding the outermost layer that
-        sourrounds the sample.
+        surrounds the sample.
 
         Returns
         -------
@@ -574,6 +1052,13 @@ class Layers(mcobject.McObject):
         target: cltypes.Structure
             Filled structure received as an input argument or a new
             instance if the input argument target is None.
+
+        Note
+        ----
+        This method only packs the fields that depend on the
+        properties of the other/neighboring layers in the stack
+        (PACKS r_inner, r_outer, cos_critical_inner, cos_critical_outer, but
+        USES the LAYER instance to PACK all the remaining fields).
         '''
         self.check()
 
@@ -584,6 +1069,9 @@ class Layers(mcobject.McObject):
             target = target_type()
 
         for index, layer in enumerate(self._layers):
+            # pack the properties that do not depend on neighboring layers
+            layer.cl_pack(mc, target[index])
+
             cc_outer = cc_inner = 0.0
             if index > 0:
                 cc_outer = boundary.cos_critical(
@@ -592,17 +1080,6 @@ class Layers(mcobject.McObject):
                 cc_inner = boundary.cos_critical(
                     layer.n, self._layers[index + 1].n)
 
-            mut = layer.mua + layer.mus
-            if mut > 0.0:
-                inv_mut = 1.0/mut
-            else:
-                inv_mut = float('inf')
-            if layer.mus == 0.0:
-                mua_inv_mut = 1.0
-            else:
-                mua_inv_mut = layer.mua*inv_mut
-
-            target[index].diameter = layer.d
             if index == 0:
                 target[index].r_outer = float('inf')
                 target[index].r_inner = self._layers[1].d*0.5
@@ -612,13 +1089,9 @@ class Layers(mcobject.McObject):
                     target[index].r_inner = self._layers[index + 1].d*0.5
                 else:
                     target[index].r_inner = 0.0
-            target[index].n = layer.n
+
             target[index].cos_critical_outer = cc_outer
             target[index].cos_critical_inner = cc_inner
-            target[index].mua = layer.mua
-            target[index].mus = layer.mus
-            target[index].inv_mut = inv_mut
-            target[index].mua_inv_mut = mua_inv_mut
 
             layer.pf.cl_pack(mc, target[index].pf)
 
@@ -678,13 +1151,13 @@ class Layers(mcobject.McObject):
         return {'layers': [layer.todict() for layer in self._layers],
                 'type': 'Layers'}
 
-    def tolist(self) -> List[Layer]:
+    def tolist(self) -> List[Layer or AnisotropicLayer]:
         '''
         Returns a weak copy of the list of managed layers.
 
         Returns
         -------
-        layers: list[layers]
+        layers: List[Layer or AnisotropicLayer]
             List of managed layers
         '''
         return list(self._layers)
@@ -700,7 +1173,14 @@ class Layers(mcobject.McObject):
         if T != 'Layers':
             raise ValueError(
             'Cannot create a Layers instance from the given data!')
-        layers = [Layer.fromdict(item) for item in data_.pop('layers')]
+
+        layers = []
+        for item in data_.pop('layers'):
+            T = {'Layer': Layer,
+                 'AnisotropicLayer': AnisotropicLayer}.get(item.get('type'))
+
+            layers.append(T.fromdict(item))
+
         return cls(layers=layers, **data_)
 
     def __getitem__(self, what):

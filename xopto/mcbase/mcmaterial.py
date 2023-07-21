@@ -87,7 +87,7 @@ class Material(mcobject.McObject):
             ' #define mc_material_n(pmaterial) ((pmaterial)->n)',
             '',
             '/**',
-            ' * @brief Evaluates to the material reduced scattering coefficient.',
+            ' * @brief Evaluates to the material scattering coefficient.',
             ' * @param[in] pmaterial Pointer to a material object.',
             ' * @param[in] pdir Propagation direction vector.',
             ' */',
