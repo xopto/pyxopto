@@ -393,8 +393,6 @@ class Layer(mcobject.McObject):
         DOES NOT PACK r_inner, r_outer, cos_critical_inner, and
         cos_critical_outer).
         '''
-        self.check()
-
         if target is None:
             target_type = self.fetch_cl_type(mc)
             target = target_type()
@@ -806,8 +804,6 @@ class AnisotropicLayer(mcobject.McObject):
         DOES NOT PACK r_inner, r_outer, cos_critical_inner, and
         cos_critical_outer).
         '''
-        self.check()
-
         if target is None:
             target_type = self.fetch_cl_type(mc)
             target = target_type()
