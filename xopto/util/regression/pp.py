@@ -1313,7 +1313,7 @@ class PreprocessorItem:
             else:
                 selector.append(T(**item_data))
         data['sequence'] = sequence
-        data['selector'] = selector
+        data['selector'] = tuple(selector) if selector else None
         type_name = data.pop('type')
         T = globals().get(type_name, cls)
         return T(**data)
