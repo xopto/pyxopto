@@ -108,7 +108,7 @@ class McRunHelper:
                                 'into a single file.')
 
         parser.add_argument('-p', '--packets', dest='packets',
-                            type=int, default=int(packets),
+                            type=float, default=int(packets),
                             help='Number of packets to launch in each simulation.')
 
         parser.add_argument('--root-dir', dest='root_dir',
@@ -130,7 +130,7 @@ class McRunHelper:
         args = parser.parse_args()
 
         return {'first': args.first, 'n': args.number, 'batch': args.batch,
-                'packets': args.packets, 'root_dir': args.root_dir,
+                'packets': int(args.packets), 'root_dir': args.root_dir,
                 'mc_dir': args.mc_dir, 'processed_dir': args.processed_dir,
                 'device': args.device if args.device else None,
                 'device_index': args.device_index, 'verbose': args.verbose}
@@ -236,8 +236,8 @@ class McRunHelper:
         detector :py:class:`~xopto.mcml.mcdetector.total.Total`
         '''
         return mc.mcdetector.Detectors(
-            top=mc.mcdetector.Radial(0.0, 5.0, 500),
-            bottom=mc.mcdetector.Radial(0.0, 5.0, 500),
+            top=mc.mcdetector.Radial(mc.mcdetector.Axis(0.0, 5.0, 500)),
+            bottom=mc.mcdetector.Radial(mc.mcdetector.Axis(0.0, 5.0, 500)),
             specular=mc.mcdetector.Total()
         )
 
