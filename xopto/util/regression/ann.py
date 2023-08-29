@@ -695,7 +695,7 @@ class Model:
         print()
 
         if optimizer is None:
-            optimizer =  tensorflow.keras.optimizers.Adam(lr=lr)
+            optimizer =  tensorflow.keras.optimizers.Adam(learning_rate=lr)
 
         start_training_timestamp = time.perf_counter()
         self._model.compile(optimizer=optimizer, loss=loss,
