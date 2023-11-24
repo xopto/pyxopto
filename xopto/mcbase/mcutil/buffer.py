@@ -128,7 +128,8 @@ class BufferAllocator:
         return self._dtype
     dtype = property(_get_dtype, None, None, 'Allocator data type.')
 
-    def allocate(self, owner: any, shape: Tuple[int], download=True) -> int:
+    def allocate(self, owner: any, shape: Tuple[int], download=True) \
+            -> BufferAllocation:
         '''
         Allocate a new data buffer for the owner. The allocations
         cannot be cleared individually. Each owner can allocate
