@@ -26,6 +26,6 @@ from .line import Line
 from .uniformbeam import UniformBeam
 from .gaussianbeam import GaussianBeam
 from .fiber import UniformFiber, LambertianFiber, UniformFiberLut
-from .voxel import IsotropicVoxel
+from .voxel import IsotropicVoxel, IsotropicVoxels
 
 from xopto.mcml.mcutil.lut import EmissionLut

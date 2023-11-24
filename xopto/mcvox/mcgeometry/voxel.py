@@ -247,13 +247,13 @@ class Voxels(mcobject.McObject):
         Returns
         -------
         index: (int, int, int)
-            A tuple of indices into the voxel array.
+            A tuple of indices into the voxel array (ind_x, ind_y, ind_z).
         '''
         indx = int((position[0] - self.top_left[0])//self._voxel_size[0])
         indy = int((position[1] - self.top_left[1])//self._voxel_size[1])
         indz = int((position[2] - self.top_left[2])//self._voxel_size[2])
 
-        return (indz, indy, indx)
+        return (indx, indy, indz)
 
     def center(self, index: Tuple[int, int, int]) -> \
             Tuple[float, float, float]:
@@ -268,7 +268,7 @@ class Voxels(mcobject.McObject):
         Returns
         -------
         position: (float, float, float)
-            A tuple of indices into the voxel array.
+            A tuple (x_center, y_center, z_center).
         '''
         x = self.top_left[0] + (index[0] + 0.5)*self._voxel_size[0]
         y = self.top_left[1] + (index[1] + 0.5)*self._voxel_size[1]
@@ -283,16 +283,16 @@ class Voxels(mcobject.McObject):
         Parameters
         ----------
         index: (int, int, int)
-            Index into the voxel array.
+            Index into the voxel array organized as (x, y, z).
 
         Returns
         -------
         valid: bool
             True if index is valid.
         '''
-        return (self.shape[0] > index[0] >= 0) and \
+        return (self.shape[2] > index[0] >= 0) and \
                (self.shape[1] > index[1] >= 0) and \
-               (self.shape[2] > index[2] >= 0)
+               (self.shape[0] > index[2] >= 0)
 
     def contains(self, position: Tuple[float, float, float]) -> bool:
         '''
