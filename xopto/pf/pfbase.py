@@ -631,7 +631,7 @@ class PfBase:
         randnum = np.linspace(0.0, 1.0, npts)
 
         index = 0.5*(params[0]/(randnum - params[2]) - params[1] + 1.0)*(lut.size - 1)
-        first = np.clip((np.floor(index)).astype(np.int), 0, lut.size - 1)
+        first = np.clip((np.floor(index)).astype(int), 0, lut.size - 1)
         second = np.clip(first + 1, 0, lut.size - 1)
         dx = index - first
 
