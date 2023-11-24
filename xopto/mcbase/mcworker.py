@@ -1065,7 +1065,7 @@ class ClWorkerStandardBufferLutMixin:
                                           download=download)
 
     def cl_allocate_rw_float_buffer(self, owner: any, shape: tuple,
-                                    download: bool = True) -> BufferAllocator:
+                                    download: bool = True) -> BufferAllocation:
         '''
         Allocate a new read-write floating-point buffer with OpenCL type mc_fp_t.
 
@@ -1089,7 +1089,7 @@ class ClWorkerStandardBufferLutMixin:
                                           download=download)
 
     def cl_allocate_rw_int_buffer(self, owner: any, shape: tuple,
-                                  download: bool = True) -> BufferAllocator:
+                                  download: bool = True) -> BufferAllocation:
         '''
         Allocate a new read-write integer buffer with OpenCL type mc_int_t.
 
