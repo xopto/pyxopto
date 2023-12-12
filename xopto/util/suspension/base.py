@@ -20,6 +20,7 @@ class Suspension:
             particle_ri: float or Callable[[float, float], float] = None,
             medium_ri: float or Callable[[float, float], float] = None,
             particle_density: float or Callable[[float], float] = None,
+            medium_density: float or Callable[[float], float] = None,
             particle_mua: float or Callable[[float, float], float] = 0.0,
             medium_mua: float or Callable[[float, float], float] = 0.0,
             solid_content: float = 10.0, nd: int or None = 100):
@@ -64,6 +65,12 @@ class Suspension:
             A callable that takes temperature or a fixed
             floating-point value that is independent of temperature.
             Default implementation of the polystyrene density
+            is used by default.
+        medium_density: float or Callable[[float], float]
+            Density of the medium surrounding the particles (kg/m3).
+            A callable that takes temperature or a fixed
+            floating-point value that is independent of temperature.
+            Default implementation of the water density
             is used by default.
         particle_mua: float or Callable[[float, float], float]:
             Absorption coefficient (1/m) of the suspended particles.
@@ -136,6 +143,9 @@ class Suspension:
         if particle_density is None:
             particle_density = density.polystyrene.default
 
+        if medium_density is None:
+            medium_density = density.water.default
+
         if isinstance(particle_ri, (float, int)):
             particle_ri_value = float(particle_ri)
             particle_ri = lambda w, t: particle_ri_value
@@ -156,11 +166,16 @@ class Suspension:
             particle_density_value = float(particle_density)
             particle_density = lambda t: particle_density_value
 
+        if isinstance(medium_density, (float, int)):
+            medium_density_value = float(medium_density)
+            medium_density = lambda t: medium_density_value
+
         self._particle_ri = particle_ri
         self._medium_ri = medium_ri
         self._particle_mua = particle_mua
         self._medium_mua = medium_mua
         self._particle_density = particle_density
+        self._medium_density = medium_density
         self._pd = pd
 
         # this will initialize self._number_density
@@ -658,6 +673,25 @@ class Suspension:
         '''
         return self._particle_density(temperature)
 
+    def medium_density(self, temperature: float = 293.15) -> float:
+        '''
+        Computes and returns the density (kg/m3) of the medium at the given
+        temperature.
+
+        Parameters
+        -----------
+        wavelength: float
+            Wavelength of light.
+        temperature: float
+            Suspension temperature (K).
+
+        Returns
+        -------
+        ri: float
+            Density (kg/m3) of the medium at the given temperature.
+        '''
+        return self._medium_density(temperature)
+
     def make_mus(self, mus: float, volume: float,
                  wavelength: float, temperature: float = 293.15) \
                     -> Tuple[float, 'Suspension']:
@@ -899,12 +933,120 @@ class Suspension:
 
         return total_volume, diluted_suspension
 
+    def dilute_volume(self, take: float, dilute: float,
+                      temperature: float = 293.15) -> 'Suspension':
+        '''
+        Dilute the given volume of this suspension (m3) to the target
+        volume (m3).
+
+        Parameters
+        ----------
+        take: float
+            Volume (m3) of this suspension that will be diluted to the
+            specified volume.
+        dilute: float
+            Diluted volume (m3). Must be greater than the taken volume.
+        temperature: float
+            temperature of the suspension (K).
+
+        Returns
+        -------
+        suspension: Suspension
+            Diluted suspension.
+        '''
+        if dilute < take:
+            raise ValueError('Diluted suspension volume must not be smaller '
+                             'than the take volume!')
+        # solid content units % wt/v or 1 g/100 ml or 10 g/l or 10 kg/m3
+        solid_mass = self.solid_content(temperature)*10.0*take
+        diluted_solid_content = solid_mass/(dilute*10.0)
+
+        diluted_suspension = Suspension(self)
+        diluted_suspension.set_solid_content(diluted_solid_content, temperature)
+
+        return diluted_suspension
+
+    def dilute_mass(self, take: float, dilute: float,
+                    temperature: float = 293.15) -> 'Suspension':
+        '''
+        Dilute the given mass of this suspension (kg) to the target
+        mass (kg).
+
+        Parameters
+        ----------
+        take: float
+            Mass (kg) of this suspension that will be diluted to the
+            specified mass.
+        dilute: float
+            Diluted mass (kg). Must be greater than the taken mass.
+        temperature: float
+            temperature of the suspension (K).
+
+        Returns
+        -------
+        suspension: Suspension
+            Diluted suspension.
+        '''
+        if dilute < take:
+            raise ValueError('Diluted suspension mass must not be smaller '
+                             'than the take mass!')
+        # solid content units % wt/v or 1 g/100 ml or 10 g/l or 10 kg/m3
+        v_take = self.volume(take, temperature)
+        solid_mass = self.solid_content(temperature)*10.0*v_take
+
+        v_dilute = solid_mass/self._particle_density(temperature) + \
+                  (dilute - solid_mass)/self._medium_density(temperature)
+
+        return self.dilute_volume(v_take, v_dilute)
+
     def _get_cache(self) -> Tuple[cache.ObjCache, cache.LutCache]:
         return self._pf_cache, self._mcpf_lut_cache
     cache = property(_get_cache, None, None,
                     'Returns the scattering phase function and '
                     'corresponding MC lookup table cache objects as tuple '
                     '(pf_cache, mcpf_cache).')
+
+    def mass(self, volume: float, temperature: float = 293.15) -> float:
+        '''
+        Compute mass (kg) of the given suspension volume (m3).
+
+        Parameters
+        ----------
+        volume: float
+            Suspension volume (m3).
+        temperature: float
+            temperature of the suspension (K).
+
+        Returns
+        -------
+        mass: float
+            Mass (kg) of the given suspension volume,
+        '''
+        k_medium = self.medium_volume_fraction(temperature)
+
+        return volume*k_medium*self._medium_density(temperature) + \
+               volume*(1.0 - k_medium)*self._particle_density(temperature)
+
+    def volume(self, mass: float, temperature: float = 293.15) -> float:
+        '''
+        Compute volume (m3) of the given suspension mass (kg).
+
+        Parameters
+        ----------
+        mass: float
+            Suspension volume (m3).
+        temperature: float
+            temperature of the suspension (K).
+
+        Returns
+        -------
+        volume: float
+            Volume (m3) of the given suspension mass,
+        '''
+        k_medium = self.medium_volume_fraction(temperature)
+
+        return mass/(k_medium*self._medium_density(temperature) + 
+                     (1.0 - k_medium)*self._particle_density(temperature))
 
     def save_cache(self, filename: str or io.IOBase):
         '''
