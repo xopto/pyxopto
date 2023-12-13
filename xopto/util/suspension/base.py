@@ -999,7 +999,7 @@ class Suspension:
 
         return self.dilute_volume(v_take, v_dilute)
 
-    def sequential_dilution(
+    def sequential_dilution_recipe(
             self,
             dilutions: Tuple['Suspension', ...],
             volumes: Tuple[float, ...],
@@ -1009,7 +1009,8 @@ class Suspension:
                 Tuple[int, ...]
             ]:
         '''
-        Create a sequential dilution recipe for the given diluted suspensions.
+        Create a sequential dilution recipe for the given tuple of diluted
+        suspensions.
 
         Parameters
         ----------
@@ -1062,7 +1063,7 @@ class Suspension:
             diluted, v_diluted = fromSuspension, volume + v_take
 
         return tuple(volumeRecipe[::-1]), tuple(massRecipe[::-1]), \
-            tuple(dilutions.index(s[0]) for s in sortedDilutions[::-1])
+               tuple(dilutions.index(s[0]) for s in sortedDilutions[::-1])
 
     def _get_cache(self) -> Tuple[cache.ObjCache, cache.LutCache]:
         return self._pf_cache, self._mcpf_lut_cache
