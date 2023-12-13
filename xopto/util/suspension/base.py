@@ -1046,7 +1046,7 @@ class Suspension:
         Dilution starts with this suspension.
         '''
         sortedDilutions = list(zip(dilutions, volumes))
-        sortedDilutions.sort(key=lambda x: x[0].solid_content())
+        sortedDilutions.sort(key=lambda x: x[0].solid_content(temperature))
         volumeRecipe = []
         massRecipe = []
         diluted, v_diluted = sortedDilutions[0]
