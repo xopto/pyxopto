@@ -999,6 +999,71 @@ class Suspension:
 
         return self.dilute_volume(v_take, v_dilute)
 
+    def sequential_dilution(
+            self,
+            dilutions: Tuple['Suspension', ...],
+            volumes: Tuple[float, ...],
+            temperature: float = 293.15) -> Tuple[
+                Tuple[Tuple[float, float], ...],
+                Tuple[Tuple[float, float], ...],
+                Tuple[int, ...]
+            ]:
+        '''
+        Create a sequential dilution recipe for the given diluted suspensions.
+
+        Parameters
+        ----------
+        dilutions: Tuple[Suspension, ...]
+            Diluted suspensions. The suspensions can be listed in an arbitrary
+            order, but the solid content of any diluted suspensions must not
+            exceed the solid content of this suspension.
+            The length of the dilutions and volumes tuple must be the same.
+        volumes: Tuple[float, ..]
+            Required volumes (m3) of the diluted suspensions.
+            The length of the dilutions and volumes tuple must be the same.
+
+        Returns
+        -------
+        volume_recipe: Tuple[Tuple[float, float], ...]
+            Dilution recipe as a tuple of volumes ((take, dilute), ...) (m3),
+            where take is the volume (m3) to take from the previous suspension
+            in the sequence (starting with this suspension) and dilution
+            the volume (m3) up to which the taken suspension sample should be
+            diluted.
+        mass_recipe: Tuple[Tuple[float, float], ...]
+            Dilution recipe as a tuple of masses ((take, dilute), ...) (kg),
+            where take is the mass (kg) to take from the previous suspension
+            in the sequence (starting with this suspension) and dilution
+            the mass (kg) up to which the taken suspension sample should be
+            diluted.
+        argsort: Tuple[ind, ...]
+            Sorting indices into the dilutions argument tuple that produces an
+            ordered sequence of diluted suspensions matching
+            the volume_recipe and mass_recipe arguments.
+
+        Note
+        ----
+        Dilution starts with this suspension.
+        '''
+        sortedDilutions = list(zip(dilutions, volumes))
+        sortedDilutions.sort(key=lambda x: x[0].solid_content())
+        volumeRecipe = []
+        massRecipe = []
+        diluted, v_diluted = sortedDilutions[0]
+        suspensionSequence = sortedDilutions[1:]
+        suspensionSequence.append((self, 0.0))
+        for fromSuspension, volume in suspensionSequence:
+            v_take, _ = fromSuspension.make_solid_content(
+                diluted.solid_content(), v_diluted, temperature=temperature)
+            m_take = fromSuspension.mass(v_take, temperature=temperature)
+            m_diluted = diluted.mass(v_diluted, temperature=temperature)
+            volumeRecipe.append((v_take, v_diluted))
+            massRecipe.append((m_take, m_diluted))
+            diluted, v_diluted = fromSuspension, volume + v_take
+
+        return tuple(volumeRecipe[::-1]), tuple(massRecipe[::-1]), \
+            tuple(dilutions.index(s[0]) for s in sortedDilutions[::-1])
+
     def _get_cache(self) -> Tuple[cache.ObjCache, cache.LutCache]:
         return self._pf_cache, self._mcpf_lut_cache
     cache = property(_get_cache, None, None,
