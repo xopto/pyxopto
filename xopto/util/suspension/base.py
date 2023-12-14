@@ -244,7 +244,7 @@ class Suspension:
             (1% wt/v equals 1 g/100 ml, i.e. 1 g of particles per 100 ml
             of suspension).
         temperature: float
-            Suspension temperature (K)
+            Suspension temperature (K).
 
         Note
         -----
@@ -709,7 +709,7 @@ class Suspension:
         wavelength: float
             Wavelength of light (m).
         temperature: float
-            temperature of the suspension (K).
+            Suspension temperature (K).
 
         Returns
         -------
@@ -749,7 +749,7 @@ class Suspension:
         wavelength: float
             Wavelength of light (m).
         temperature: float
-            temperature of the suspension (K).
+            Suspension temperature (K).
 
         Returns
         -------
@@ -790,7 +790,7 @@ class Suspension:
         wavelength: float
             Wavelength of light (m).
         temperature: float
-            temperature of the suspension (K).
+            Suspension temperature (K).
 
         Returns
         -------
@@ -831,7 +831,7 @@ class Suspension:
         wavelength: float
             Wavelength of light (m).
         temperature: float
-            temperature of the suspension (K).
+            Suspension temperature (K).
 
         Returns
         -------
@@ -871,7 +871,7 @@ class Suspension:
         volume: float
             Volume of the target suspension (m3).
         temperature: float
-            temperature of the suspension (K).
+            Suspension temperature (K).
 
         Returns
         -------
@@ -910,7 +910,7 @@ class Suspension:
         volume: float
             Volume taken from this suspension (m3).
         temperature: float
-            temperature of the suspension (K).
+            Suspension temperature (K).
 
         Returns
         -------
@@ -947,7 +947,7 @@ class Suspension:
         dilute: float
             Diluted volume (m3). Must be greater than the taken volume.
         temperature: float
-            temperature of the suspension (K).
+            Suspension temperature (K).
 
         Returns
         -------
@@ -980,7 +980,7 @@ class Suspension:
         dilute: float
             Diluted mass (kg). Must be greater than the taken mass.
         temperature: float
-            temperature of the suspension (K).
+            Suspension temperature (K).
 
         Returns
         -------
@@ -1022,6 +1022,8 @@ class Suspension:
         volumes: Tuple[float, ..]
             Required volumes (m3) of the diluted suspensions.
             The length of the dilutions and volumes tuple must be the same.
+        temperature: float
+            Suspension temperature (K).
 
         Returns
         -------
@@ -1065,12 +1067,95 @@ class Suspension:
         return tuple(volumeRecipe[::-1]), tuple(massRecipe[::-1]), \
                tuple(dilutions.index(s[0]) for s in sortedDilutions[::-1])
 
-    def _get_cache(self) -> Tuple[cache.ObjCache, cache.LutCache]:
-        return self._pf_cache, self._mcpf_lut_cache
-    cache = property(_get_cache, None, None,
-                    'Returns the scattering phase function and '
-                    'corresponding MC lookup table cache objects as tuple '
-                    '(pf_cache, mcpf_cache).')
+    def apply_sequential_volume_dilution_recipe(
+            self, recipe: Tuple[Tuple[float, float], ...],
+            temperature: float = 293.15) \
+                -> Tuple[Tuple['Suspension', ...], Tuple[float, ...]]:
+        '''
+        Apply a sequential volume dilution recipe.
+
+        Parameters
+        -------
+        recipe: Tuple[Tuple[float, float], ...]
+            Dilution recipe as a tuple of volumes ((take, dilute), ...) (m3),
+            where take is the volume (m3) to take from the previous suspension
+            in the sequence (starting with this suspension) and dilution
+            the volume (m3) up to which the taken suspension sample should be
+            diluted.
+        temperature: float
+            Suspension temperature (K).
+
+        Returns
+        ----------
+        dilutions: Tuple[Suspension, ...]
+            Diluted suspensions produced by the recipe.
+        volumes: Tuple[float, ..]
+            Final available volumes (m3) of each diluted suspensions.
+
+        Note
+        ----
+        Dilution starts with this suspension.
+        '''
+        dilutions = []
+        volumes = []
+        suspension = self
+        for v_take, v_dilute in recipe:
+            suspension = suspension.dilute_volume(
+                    v_take, v_dilute, temperature=temperature)
+            dilutions.append(suspension)
+            volumes.append(v_dilute)
+
+        for index, (r1, r2) in enumerate(zip(recipe[:-1], recipe[1:])):
+            _, v_dilute1 = r1
+            v_take2, _ = r2
+            volumes[index] = v_dilute1 - v_take2
+
+        return tuple(dilutions), tuple(volumes)
+
+    def apply_sequential_mass_dilution_recipe(
+            self, recipe: Tuple[Tuple[float, float], ...],
+            temperature: float = 293.15) \
+                -> Tuple[Tuple['Suspension', ...], Tuple[float, ...]]:
+        '''
+        Apply a sequential volume dilution recipe.
+
+        Parameters
+        -------
+        recipe: Tuple[Tuple[float, float], ...]
+            Dilution recipe as a tuple of masses ((take, dilute), ...) (kg),
+            where take is the mass (kg) to take from the previous suspension
+            in the sequence (starting with this suspension) and dilution
+            the mass (kg) up to which the taken suspension sample should be
+            diluted.
+        temperature: float
+            Suspension temperature (K).
+
+        Returns
+        ----------
+        dilutions: Tuple[Suspension, ...]
+            Diluted suspensions produced by the recipe.
+        masses: Tuple[float, ..]
+            Final available masses (m3) of each diluted suspensions.
+
+        Note
+        ----
+        Dilution starts with this suspension.
+        '''
+        dilutions = []
+        masses = []
+        suspension = self
+        for m_take, m_dilute in recipe:
+            suspension = suspension.dilute_mass(
+                    m_take, m_dilute, temperature=temperature)
+            dilutions.append(suspension)
+            masses.append(m_dilute)
+
+        for index, (r1, r2) in enumerate(zip(recipe[:-1], recipe[1:])):
+            _, m_dilute1 = r1
+            m_take2, _ = r2
+            masses[index] = m_dilute1 - m_take2
+
+        return tuple(dilutions), tuple(masses)
 
     def mass(self, volume: float, temperature: float = 293.15) -> float:
         '''
@@ -1081,7 +1166,7 @@ class Suspension:
         volume: float
             Suspension volume (m3).
         temperature: float
-            temperature of the suspension (K).
+            Suspension temperature (K).
 
         Returns
         -------
@@ -1102,7 +1187,7 @@ class Suspension:
         mass: float
             Suspension volume (m3).
         temperature: float
-            temperature of the suspension (K).
+            Suspension temperature (K).
 
         Returns
         -------
@@ -1161,3 +1246,10 @@ class Suspension:
         else:
             self._pf_cache = cache.ObjCache.load(fid)
             self._mcpf_lut_cache = cache.LutCache.load(fid)
+
+    def _get_cache(self) -> Tuple[cache.ObjCache, cache.LutCache]:
+        return self._pf_cache, self._mcpf_lut_cache
+    cache = property(_get_cache, None, None,
+                    'Returns the scattering phase function and '
+                    'corresponding MC lookup table cache objects as tuple '
+                    '(pf_cache, mcpf_cache).')
