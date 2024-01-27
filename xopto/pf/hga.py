@@ -48,14 +48,16 @@ class Hga(PfBase):
             self._g[0, 0] = g
             self._g[1, 1] = g
             self._g[2, 2] = g
-        elif len(g) == 3:
-            g = np.clip(g, -1.0 + eps, 1.0 - eps)
-            self._g[0, 0] = g[0]
-            self._g[1, 1] = g[1]
-            self._g[2, 2] = g[2]
         else:
-            g = np.clip(g, -1.0 + eps, 1.0 - eps)
-            self._g[:] = g
+            g = np.asarray(g, dtype=float)
+            if g.size == 3:
+                g = np.clip(g, -1.0 + eps, 1.0 - eps)
+                self._g[0, 0] = g[0]
+                self._g[1, 1] = g[1]
+                self._g[2, 2] = g[2]
+            else:
+                g = np.clip(g, -1.0 + eps, 1.0 - eps)
+                self._g[:] = g
 
     def tensor(self) -> np.ndarray:
         '''
