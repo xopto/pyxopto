@@ -89,7 +89,9 @@ class GaussianBeam(Source):
             '	mc_point3f_t direction;',
             '	mc_point2f_t sigma;',
             '	mc_fp_t clip;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_source(__mc_source_mem const McSource *src);',
         ))
 
     @staticmethod

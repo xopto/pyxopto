@@ -91,7 +91,9 @@ class TopGeometryFiber(mcobject.McObject):
             '	mc_fp_t cladding_radius;',
             '	mc_fp_t core_n;',
             '	mc_fp_t cladding_n;',
-            '};'
+            '};',
+            '',
+            'void print_top_geometry(__mc_geometry_mem const McComplexSurfaceTop *geo);',
         ))
 
     @staticmethod
@@ -231,7 +233,9 @@ class UniformFiber(Source):
             '	mc_fp_t radius;',
             '	mc_fp_t cos_min;',
             '	mc_fp_t n;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_source(__mc_source_mem const McSource *src);',
         ))
 
     @staticmethod
@@ -575,7 +579,9 @@ class LambertianFiber(UniformFiber):
             '	mc_fp_t radius;',
             '	mc_fp_t na;',
             '	mc_fp_t n;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_source(__mc_source_mem const McSource *src);',
         ))
 
     @staticmethod
@@ -796,7 +802,9 @@ class UniformFiberLut(Source):
             '	mc_fp_t radius;',
             '	mc_fp_t n;',
             '	mc_fp_lut_t lut;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_source(__mc_source_mem const McSource *src);',
         ))
 
     @staticmethod
