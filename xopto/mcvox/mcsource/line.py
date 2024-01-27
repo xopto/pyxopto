@@ -75,7 +75,9 @@ class Line(Source):
             '	mc_point3f_t direction_sample;',
             '	mc_point3f_t direction_reflected;',
             '	mc_fp_t reflectance;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_source(__mc_source_mem const McSource *src);',
         ))
 
     @staticmethod

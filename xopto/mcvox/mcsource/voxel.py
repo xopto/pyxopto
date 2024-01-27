@@ -58,7 +58,9 @@ class IsotropicVoxel(Source):
             'struct MC_STRUCT_ATTRIBUTES McSource {',
             '	mc_point3f_t position;',
             '	mc_point3_t voxel;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_source(__mc_source_mem const McSource *src);',
         ))
 
     @staticmethod
@@ -68,7 +70,7 @@ class IsotropicVoxel(Source):
         '''
         return '\n'.join((
             'void dbg_print_source(__mc_source_mem const McSource *src){',
-            '	printf("IsotropicVoxel source:\\n");',
+            '	dbg_print("IsotropicVoxel source:");',
             '	dbg_print_point3f(INDENT "position:", &src->position);',
             '	dbg_print_point3(INDENT  "voxel   :", &src->voxel);',
             '};',
@@ -225,7 +227,9 @@ class IsotropicVoxels(Source):
             '	mc_point3f_t position;',
             '	mc_size_t n;',
             '	mc_size_t offset;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_source(__mc_source_mem const McSource *src);',
         ))
 
     @staticmethod
@@ -239,7 +243,7 @@ class IsotropicVoxels(Source):
         '''
         return '\n'.join((
             'void dbg_print_source(__mc_source_mem const McSource *src){',
-            '	printf("IsotropicVoxel source:\\n");',
+            '	dbg_print("IsotropicVoxel source:");',
             '	dbg_print_point3(INDENT "n:", &src->position);',
             '	dbg_print_size_t(INDENT "n:", src->n);',
             '	dbg_print_size_t(INDENT  "offset   :", &src->offset);',

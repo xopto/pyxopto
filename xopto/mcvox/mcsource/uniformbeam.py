@@ -81,7 +81,9 @@ class UniformBeam(mcobject.McObject):
             '	mc_point3f_t position;',
             '	mc_point3f_t direction;',
             '	mc_point2f_t radius;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_source(__mc_source_mem const McSource *src);',
         ))
 
     @staticmethod
@@ -91,7 +93,7 @@ class UniformBeam(mcobject.McObject):
         '''
         return  '\n'.join((
             'void dbg_print_source(__mc_source_mem const McSource *src){',
-            '	printf("UniformBeam source:\\n");',
+            '	dbg_print("UniformBeam source:");',
             '	printf(INDENT "position: (%.3f, %.3f, %.3f) mm\\n",',
             '		src->position.x*1e3f, src->position.y*1e3f, src->position.z*1e3f);',
             '	printf(INDENT "direction: (%.3f, %.3f, %.3f)\\n",',

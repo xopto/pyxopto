@@ -54,7 +54,9 @@ class IsotropicPoint(Source):
         return '\n'.join((
             'struct MC_STRUCT_ATTRIBUTES McSource {',
             '	mc_point3f_t position;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_source(__mc_source_mem const McSource *src);',
         ))
 
     @staticmethod
@@ -64,7 +66,7 @@ class IsotropicPoint(Source):
         '''
         return '\n'.join((
             'void dbg_print_source(__mc_source_mem const McSource *src){',
-            '	printf("IsotropicPoint source:\\n");',
+            '	dbg_print("IsotropicPoint source:");',
             '	dbg_print_point3f(INDENT "position   :", &src->position);',
             '	dbg_print_size_t(INDENT  "layer_index:", src->layer_index);',
             '};',
