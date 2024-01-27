@@ -26,6 +26,7 @@ from .pfbase import PfBase
 
 from .rayleigh import Rayleigh
 from .hg import Hg
+from .hgdir import HgDir
 from .hg2 import Hg2
 from .hga import Hga
 from .mhg import MHg

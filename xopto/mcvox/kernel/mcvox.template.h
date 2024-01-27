@@ -1398,17 +1398,29 @@ inline mc_fp_t mcsim_random_single(McSim *psim);
 */
 inline void mcsim_scatter(McSim *psim);
 
+#if defined(MC_PF_SAMPLE_DIRECTION)
 /**
  * @brief Implementation of the scattering phase function.
+ * 
+ * @param[in, out] psim    Simulator state.
+ * @param[out] dir         Propagation direction after scattering.
  *
- * @param[in, out] psim    Simulator satate.
+ * @note Scattering phase functions (their source code) are implemented in python modules.
+ */
+inline void mcsim_pf_sample_dir(McSim *psim, mc_point3f_t *dir);
+#else
+/**
+ * @brief Implementation of the scattering phase function.
+ * 
+ * @param[in, out] psim    Simulator state.
  * @param[out] azimuth     Azimuth scattering angle. Is usually a uniformly
  *                         distributed number from interval [0.0, 2*pi]
  * @return Deflection angle cosine.
  *
- * @note Scattering phase functions are implemented in python modules.
+ * @note Scattering phase functions (their source code) are implemented in python modules.
  */
-inline mc_fp_t mcsim_sample_pf(McSim *psim, mc_fp_t *azimuth);
+inline mc_fp_t mcsim_pf_sample_angles(McSim *psim, mc_fp_t *azimuth);
+#endif
 
 /**
  * @} // end @addtogroup mc_scattering

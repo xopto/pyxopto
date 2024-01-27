@@ -69,7 +69,9 @@ class Rayleigh(PfBase):
             '	mc_fp_t gamma;',
             '	mc_fp_t a;',
             '	mc_fp_t b;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_pf(const McPf *pf);',
         ))
 
     @staticmethod
@@ -85,7 +87,7 @@ class Rayleigh(PfBase):
             '	dbg_print_float(INDENT "b:", pf->b);',
             '};',
             '',
-            'inline mc_fp_t mcsim_sample_pf(McSim *mcsim, mc_fp_t *azimuth){',
+            'inline mc_fp_t mcsim_pf_sample_angles(McSim *mcsim, mc_fp_t *azimuth){',
             '	mc_fp_t tmp, cos_theta;',
             '	mc_fp_t gamma = mcsim_current_pf(mcsim)->gamma;',
             '	mc_fp_t a = mcsim_current_pf(mcsim)->a;',

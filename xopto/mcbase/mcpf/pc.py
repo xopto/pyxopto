@@ -61,7 +61,9 @@ class Pc(PfBase):
         return '\n'.join((
             'struct MC_STRUCT_ATTRIBUTES McPf{',
             '	mc_fp_t n;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_pf(const McPf *pf);',
         ))
 
     @staticmethod
@@ -75,7 +77,7 @@ class Pc(PfBase):
             '	dbg_print_float(INDENT "n:", pf->n);',
             '};',
             '',
-            'inline mc_fp_t mcsim_sample_pf(McSim *mcsim, mc_fp_t *azimuth){',
+            'inline mc_fp_t mcsim_pf_sample_angles(McSim *mcsim, mc_fp_t *azimuth){',
             '	mc_fp_t tmp, cos_theta;',
             '	mc_fp_t n = mcsim_current_pf(mcsim)->n;',
             '',

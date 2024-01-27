@@ -2090,7 +2090,7 @@ inline void mcsim_scatter(McSim *psim);
  *
  * @note Scattering phase functions (their source code) are implemented in python modules.
  */
-inline mc_fp_t mcsim_sample_pf(McSim *psim, mc_fp_t *azimuth);
+inline mc_fp_t mcsim_pf_sample_angles(McSim *psim, mc_fp_t *azimuth);
 
 /**
  * @} // end @addtogroup mc_scattering
@@ -2759,7 +2759,7 @@ inline void mcsim_scatter(McSim *psim){
 	mc_point3f_t *dir = mcsim_direction(psim);
 
 	/* sample the scattering phase functions */
-	cosTheta = mcsim_sample_pf(psim, &fi);
+	cosTheta = mcsim_pf_sample_angles(psim, &fi);
 
 	sinTheta = mc_sqrt(FP_1 - cosTheta*cosTheta);
 

@@ -80,7 +80,8 @@ class Gk(PfBase):
             '	mc_fp_t inv_a;',
             '	mc_fp_t a1;',
             '	mc_fp_t a2;',
-            '};'
+            '};',
+            'void dbg_print_pf(const McPf *pf);',
         ))
 
     @staticmethod
@@ -98,7 +99,7 @@ class Gk(PfBase):
             '	dbg_print_float(INDENT "a2:", pf->a2);',
             '};',
             '',
-            'inline mc_fp_t mcsim_sample_pf(McSim *mcsim, mc_fp_t *azimuth){',
+            'inline mc_fp_t mcsim_pf_sample_angles(McSim *mcsim, mc_fp_t *azimuth){',
             '	mc_fp_t tmp, cos_theta;',
             '	mc_fp_t g = mcsim_current_pf(mcsim)->g;',
             '	mc_fp_t a = mcsim_current_pf(mcsim)->a;',

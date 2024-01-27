@@ -61,7 +61,9 @@ class Hg(PfBase):
         return  '\n'.join((
             'struct MC_STRUCT_ATTRIBUTES McPf{',
             '	mc_fp_t g;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_pf(const McPf *pf);',
         ))
 
     @staticmethod
@@ -75,7 +77,7 @@ class Hg(PfBase):
             '	dbg_print_float(INDENT "g:", pf->g);',
             '};',
             '',
-            'inline mc_fp_t mcsim_sample_pf(McSim *mcsim, mc_fp_t *azimuth){',
+            'inline mc_fp_t mcsim_pf_sample_angles(McSim *mcsim, mc_fp_t *azimuth){',
             '	mc_fp_t k, cos_theta;',
             '	mc_fp_t g = mcsim_current_pf(mcsim)->g;',
             '',

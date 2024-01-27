@@ -1084,6 +1084,17 @@ inline mc_fp_t mcsim_random_single(McSim *psim);
 */
 inline void mcsim_scatter(McSim *psim);
 
+#if defined(MC_PF_SAMPLE_DIRECTION)
+/**
+ * @brief Implementation of the scattering phase function.
+ * 
+ * @param[in,out] psim     Simulator state.
+ * @param[out] dir         Propagation direction after scattering.
+ *
+ * @note Scattering phase functions (their source code) are implemented in python modules.
+ */
+inline void mcsim_pf_sample_dir(McSim *psim, mc_point3f_t *dir);
+#else
 /**
  * @brief Implementation of the scattering phase function.
  *
@@ -1094,7 +1105,8 @@ inline void mcsim_scatter(McSim *psim);
  *
  * @note Scattering phase functions are implemented in python modules.
  */
-inline mc_fp_t mcsim_sample_pf(McSim *psim, mc_fp_t *azimuth);
+inline mc_fp_t mcsim_pf_sample_angles(McSim *psim, mc_fp_t *azimuth);
+#endif
 
 /**
  * @} // end @addtogroup mc_scattering

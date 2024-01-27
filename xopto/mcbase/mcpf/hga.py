@@ -20,6 +20,7 @@
 # along with PyXOpto. If not, see <https://www.gnu.org/licenses/>.
 ################################# End license ##################################
 
+from typing import Tuple
 import numpy as np
 
 from .pfbase import PfBase, cltypes, McObject
@@ -63,7 +64,9 @@ class Hga(PfBase):
         return  '\n'.join((
             'struct MC_STRUCT_ATTRIBUTES McPf{',
             '	mc_matrix3f_t g;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_pf(const McPf *pf);',
         ))
 
     @staticmethod
@@ -76,7 +79,7 @@ class Hga(PfBase):
             '	dbg_print_matrix3f("Hga scattering phase function:", &pf->g);',
             '};',
             '',
-            'inline mc_fp_t mcsim_sample_pf(McSim *mcsim, mc_fp_t *azimuth){',
+            'inline mc_fp_t mcsim_pf_sample_angles(McSim *mcsim, mc_fp_t *azimuth){',
             '	mc_fp_t k, cos_theta;',
             '	mc_fp_t g = tensor3f_project(',
             '		&mcsim_current_pf(mcsim)->g, mcsim_direction(mcsim));',
@@ -96,13 +99,13 @@ class Hga(PfBase):
             '};'
         ))
 
-    def __init__(self, g: float):
+    def __init__(self, g: float or Tuple[float, float, float] or np.ndarray):
         '''
         Henyey-Greenstein scattering phase function object constructor.
 
         Parameters
         ----------
-        g: np.ndarray
+        g: float or Tuple[float, float, float] or np.ndarray
             Anisotropy tensor.
         '''
         super().__init__()
@@ -117,13 +120,15 @@ class Hga(PfBase):
             self._g[0, 0] = g
             self._g[1, 1] = g
             self._g[2, 2] = g
-        elif len(g) == 3:
-            g = np.clip(g, -1.0, 1.0)
-            self._g[0, 0] = g[0] 
-            self._g[1, 1] = g[1] 
-            self._g[2, 2] = g[2] 
         else:
-            self._g[:] = min(max(g, -1.0), 1.0)
+            g = np.asarray(g, dtype=float)
+            if g.size == 3:
+                g = np.clip(g, -1.0, 1.0)
+                self._g[0, 0] = g[0] 
+                self._g[1, 1] = g[1] 
+                self._g[2, 2] = g[2] 
+            else:
+                self._g[:] = min(max(g, -1.0), 1.0)
 
     g = property(_get_g, _set_g, None, 'Anisotropy tensor.')
 
@@ -138,7 +143,7 @@ class Hga(PfBase):
         pf: xopto.pf.hga.Hga
             Instance of the related utility scattering phase function.
         '''
-        return None
+        return hga.Hga(self._g)
 
     def cl_pack(self, mc: McObject, target: cltypes.Structure = None) \
             -> cltypes.Structure:

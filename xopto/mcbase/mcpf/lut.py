@@ -102,7 +102,9 @@ class Lut(PfBase):
             '	mc_fp_t c;',
             '	mc_size_t offset;',
             '	mc_size_t size;',
-            '};'
+            '};',
+            '',
+            'void dbg_print_pf(const McPf *pf);',
         ))
 
     @staticmethod
@@ -120,7 +122,7 @@ class Lut(PfBase):
             '	dbg_print_size_t(INDENT "size:",  pf->size);',
             '};',
             '',
-            'inline mc_fp_t mcsim_sample_pf(McSim *mcsim, mc_fp_t *azimuth){',
+            'inline mc_fp_t mcsim_pf_sample_angles(McSim *mcsim, mc_fp_t *azimuth){',
             '	mc_fp_t fp_index, fp_index_floor, d;',
             '   size_t index;',
             '	mc_fp_t a = mcsim_current_pf(mcsim)->a;',

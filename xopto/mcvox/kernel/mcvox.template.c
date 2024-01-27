@@ -469,12 +469,18 @@ static inline void mcsim_trace_finalize(McSim *psim){
 *          and associated states photon packet states.
 */
 inline void mcsim_scatter(McSim *psim){
+	#if defined(MC_PF_SAMPLE_DIRECTION)
+	mc_point3f_t new_dir;
+	mcsim_pf_sample_dir(psim, &new_dir);
+	mcsim_set_direction(psim, &new_dir);
+	#else
 	mc_fp_t fi, cos_theta;
 
 	/* sample the scattering phase functions */
-	cos_theta = mcsim_sample_pf(psim, &fi);
+	cos_theta = mcsim_pf_sample_angles(psim, &fi);
 
 	scatter_direction(mcsim_direction(psim), cos_theta, fi);
+	#endif
 };
 /*################# End scattering handling implementation ###################*/
 
