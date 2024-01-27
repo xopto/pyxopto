@@ -2220,6 +2220,16 @@ inline int mc_slotf_contains_ex(mc_fp_t cx, mc_fp_t cy,
 	mc_fp_t width, mc_fp_t height, mc_fp_t x, mc_fp_t y);
 
 /**
+  * @brief Projects a 3x3 tensor along the given direction as p*T*p'.
+  * @param[in] T      Pointer to a tensor T (mc_matrix3f_t).
+  * @param[in] p      Pointer to a direction vector (mc_point3f_t).
+  */
+#define tensor3f_project(T, p) \
+	((p)->x*((T)->a_11*(p)->x + (T)->a_12*(p)->y + (T)->a_13*(p)->z) + \
+	(p)->y*((T)->a_21*(p)->x + (T)->a_22*(p)->y + (T)->a_23*(p)->z) + \
+	(p)->z*((T)->a_31*(p)->x + (T)->a_32*(p)->y + (T)->a_33*(p)->z))
+
+/**
  * @} // end @addtogroup mc_vector_and_matrix_types
  */
 /*##################### End vector/matrix declarations #######################*/

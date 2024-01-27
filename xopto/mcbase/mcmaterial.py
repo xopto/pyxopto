@@ -138,6 +138,21 @@ class Material(mcobject.McObject):
             ' * @param[in] pmaterial Pointer to a material object.',
             ' */',
             '#define mc_material_pf(pmaterial) (&((pmaterial)->pf))',
+            '',
+            '#if MC_ENABLE_DEBUG || defined(__DOXYGEN__)',
+            'static inline void dbg_print_material(__mc_material_mem McMaterial const *material){',
+            '	dbg_print("McMaterial:");',
+            '	dbg_print_float(INDENT "n:", material->n);',
+            '	dbg_print_float(INDENT "mus:", material->mus);',
+            '	dbg_print_float(INDENT "mua:", material->mua);',
+            '	dbg_print_float(INDENT "inv_mut:", material->inv_mut);',
+            '	dbg_print_float(INDENT "mua_inv_mut:", material->mua_inv_mut);',
+            '	McPf const dbg_pf = material->pf;',
+            '	dbg_print_pf(&dbg_pf);',
+            '};',
+            '#else',
+            '#define dbg_print_material(pmaterial) ;',
+            '#endif',
         ))
 
     def cl_options(self, mc: mcobject.McObject) -> str:
@@ -152,19 +167,6 @@ class Material(mcobject.McObject):
         '''
         return '\n'.join((
             self.pf.fetch_cl_implementation(mc),
-            '',
-            '#if MC_ENABLE_DEBUG || defined(__DOXYGEN__)',
-            'void dbg_print_material(__mc_material_mem McMaterial const *material){',
-            '	dbg_print("McMaterial:");',
-            '	dbg_print_float(INDENT "n:", material->n);',
-            '	dbg_print_float(INDENT "mus:", material->mus);',
-            '	dbg_print_float(INDENT "mua:", material->mua);',
-            '	dbg_print_float(INDENT "inv_mut:", material->inv_mut);',
-            '	dbg_print_float(INDENT "mua_inv_mut:", material->mua_inv_mut);',
-            '	McPf const dbg_pf = material->pf;',
-            '	dbg_print_pf(&dbg_pf);',
-            '};',
-            '#endif',
         ))
 
     def __init__(self, n: float, mua: float, mus: float, pf: mcpf.PfBase):
@@ -356,16 +358,6 @@ class AnisotropicMaterial(mcobject.McObject):
             '};'
             '',
             '/**',
-            ' * @brief Projects a 3x3 tensor along the given direction as p*T*p\'.',
-            ' * @param[in] T      Pointer to a tensor T (mc_matrix3f_t).',
-            ' * @param[in] p      Pointer to a direction vector (mc_point3f_t).',
-            ' */',
-            '#define tensor3f_project(T, p) \\',
-            '	((p)->x*((T)->a_11*(p)->x + (T)->a_12*(p)->y + (T)->a_13*(p)->z) + \\',
-            '	 (p)->y*((T)->a_21*(p)->x + (T)->a_22*(p)->y + (T)->a_23*(p)->z) + \\',
-            '	 (p)->z*((T)->a_31*(p)->x + (T)->a_32*(p)->y + (T)->a_33*(p)->z))',
-            '',
-            '/**',
             ' * @brief Evaluates to the material refractive index.',
             ' * @param[in] pmaterial Pointer to a material object.',
             ' */',
@@ -412,7 +404,7 @@ class AnisotropicMaterial(mcobject.McObject):
             ' */',
             'static inline mc_fp_t mc_material_inv_mua(__constant McMaterial const *pmaterial, mc_point3f_t const *pdir) {',
             '	mc_fp_t mua = mc_material_mua(pmaterial, pdir);',
-            '	return (mua != FP_0) ? mc_fdiv(FP_1, mua) : FP_INF)',
+            '	return (mua != FP_0) ? mc_fdiv(FP_1, mua) : FP_INF;',
             '};',
             '',
             '/**',
@@ -422,17 +414,6 @@ class AnisotropicMaterial(mcobject.McObject):
             ' * @param[in] pdir         Propagation direction vector.',
             ' */',
             '#define mc_material_mut(pmaterial, pdir) tensor3f_project(mc_material_mut_tensor(pmaterial), pdir)',
-            'static inline mc_fp_t mc_material_inv_mut(__constant McMaterial const *pmaterial, mc_point3f_t const *pdir) {',
-            '	mc_fp_t mut = mc_material_mut(pmaterial, pdir);',
-            '	return (mut != FP_0) ? mc_fdiv(FP_1, mut) : FP_INF)',
-            '};',
-            '',
-            '/**',
-            ' * @brief Evaluates to the reciprocal of the total attenuation coefficient, i.e.',
-            ' *		  reciprocal of the sum of the material absorption and scattering coefficients.',
-            ' * @param[in] pmaterial Pointer to a material object.',
-            ' * @param[in] pdir Propagation direction vector.',
-            ' */',
             '',
             '/**',
             ' * @brief Evaluates to the absorption coefficient of the material multiplied',
@@ -445,7 +426,7 @@ class AnisotropicMaterial(mcobject.McObject):
             ' *            value of the total attenuation coefficient along the',
             ' *            given propagation direction.',
             ' */',
-            'static inline mc_fp_t mc_material_mua_inv_mut(__constant McMaterial const *pmaterial, mc_point3f_t const *pdir) {',
+            'static inline mc_fp_t mc_material_mua_inv_mut(__mc_material_mem McMaterial const *pmaterial, mc_point3f_t const *pdir) {',
             '	mc_fp_t mua = mc_material_mua(pmaterial, pdir);',
             '	mc_fp_t mut = mc_material_mut(pmaterial, pdir);',
             '',
@@ -461,7 +442,7 @@ class AnisotropicMaterial(mcobject.McObject):
             ' * @returns   Reciprocal value of the total attenuation coefficient',
             ' *            along the given propagation direction.',
             ' */',
-            'static inline mc_fp_t mc_material_inv_mut(__constant McMaterial const *pmaterial, mc_point3f_t const *pdir) {',
+            'static inline mc_fp_t mc_material_inv_mut(__mc_material_mem McMaterial const *pmaterial, mc_point3f_t const *pdir) {',
             '	mc_fp_t mut = mc_material_mut(pmaterial, pdir);',
             '',
             '	return (mut != FP_0) ? mc_reciprocal(mut) : FP_INF;',
@@ -480,21 +461,17 @@ class AnisotropicMaterial(mcobject.McObject):
             ' * param[in] prefix Can be used to pass indent string for the material parameters."',
             ' * @param[in] pmaterial    Pointer to a material instance.',
             ' */',
-            '#define dbg_print_material(pmaterial, prefix) \\',
-            '	printf(prefix "d: %.9f\\n" \\',
-            '			prefix "top: %.9f\\n" \\',
-            '			prefix "bottom: %.9f\\n" \\',
-            '			prefix "n: %.9f\\n" \\',
-            '			prefix "cctop: %.9f\\n" \\',
-            '			prefix "ccbottom: %.9f\\n", \\',
-            '					(pmaterial)->thickness, (pmaterial)->top, (pmaterial)->bottom, (pmaterial)->n, \\',
-            '					(pmaterial)->cos_critical_top, (pmaterial)->cos_critical_bottom); \\',
-            '			dbg_print_matrix3f(prefix "mua:", &(pmaterial)->mua_tensor); \\',
-            '			dbg_print_matrix3f(prefix "mus:", &(pmaterial)->mus_tensor); \\',
-            '			dbg_print_matrix3f(prefix "mut:", &(pmaterial)->mut_tensor); \\',
-            '			{ McPf const _dbg_pf=(pmaterial)->pf; dbg_print_pf(&_dbg_pf); };',
+            'void dbg_print_material(__mc_material_mem McMaterial const *material){',
+            '	dbg_print("McMaterial:");',
+            '	dbg_print_float(INDENT "n:", material->n);',
+            '	dbg_print_matrix3f(INDENT "mua:", &(material)->mua_tensor);',
+            '	dbg_print_matrix3f(INDENT "mus:", &(material)->mus_tensor);',
+            '	dbg_print_matrix3f(INDENT "mut:", &(material)->mut_tensor);',
+            '	McPf const dbg_pf = material->pf;',
+            '	dbg_print_pf(&dbg_pf);',
+            '};',
             '#else',
-            '#define dbg_print_matrial(pmaterial, label) ;',
+            '#define dbg_print_material(material) ;',
             '#endif',
         ))
 
@@ -528,7 +505,7 @@ class AnisotropicMaterial(mcobject.McObject):
             isotropic material. A vector of length 3 for the diagonal elements
             of the tensor (non-diagonal elements are set to 0).
             A numpy array of shape (3, 3) for the complete tensor.
-        mus: float
+        mus: float or np.ndarray
             Scattering coefficient tensor (1/m). A scalar float value for
             an isotropic material. A vector of length 3 if only the diagonal
             elements of the tensor are nonzero (non-diagonal elements are set to 0).
@@ -551,8 +528,10 @@ class AnisotropicMaterial(mcobject.McObject):
               :py:class:`xopto.mcbase.mcpf.pfbase.PfBase` class.
         '''
         self._n = float(n)
-        self._mua = float(mua)
-        self._mus = float(mus)
+        self._mua = np.zeros((3, 3))
+        self._mus = np.zeros((3, 3))
+        self._set_mua(mua)
+        self._set_mus(mus)
         self._pf = pf
 
     def _set_n(self, n: float):
@@ -563,15 +542,17 @@ class AnisotropicMaterial(mcobject.McObject):
 
     def _set_mua(self, mua: float or np.ndarray):
         if isinstance(mua, (float, int)):
-            self._mua[0, 0] = mua 
-            self._mua[1, 1] = mua 
+            self._mua[0, 0] = mua
+            self._mua[1, 1] = mua
             self._mua[2, 2] = mua
-        elif len(mua) == 3:
-            self._mua[0, 0] = mua[0] 
-            self._mua[1, 1] = mua[1] 
-            self._mua[2, 2] = mua[2] 
         else:
-            self._mua[:] = mua
+            mua = np.asarray(mua, dtype=float)
+            if mua.size == 3:
+                self._mua[0, 0] = mua[0]
+                self._mua[1, 1] = mua[1]
+                self._mua[2, 2] = mua[2]
+            else:
+                self._mua[:] = mua
  
     def _get_mua(self) -> np.ndarray:
         return self._mua
@@ -580,15 +561,17 @@ class AnisotropicMaterial(mcobject.McObject):
 
     def _set_mus(self, mus: float or np.ndarray):
         if isinstance(mus, (float, int)):
-            self._mus[0, 0] = mus 
-            self._mus[1, 1] = mus 
+            self._mus[0, 0] = mus
+            self._mus[1, 1] = mus
             self._mus[2, 2] = mus
-        elif len(mus) == 3:
-            self._mus[0, 0] = mus[0] 
-            self._mus[1, 1] = mus[1] 
-            self._mus[2, 2] = mus[2] 
         else:
-            self._mus[:] = mus
+            mus = np.asarray(mus, dtype=float)
+            if mus.size == 3:
+                self._mus[0, 0] = mus[0]
+                self._mus[1, 1] = mus[1]
+                self._mus[2, 2] = mus[2]
+            else:
+                self._mus[:] = mus
     def _get_mus(self) -> np.ndarray:
         return self._mus
     mus = property(_get_mus, _set_mus, None,
@@ -721,9 +704,10 @@ class Materials(mcobject.McObject):
             self._material_type = type(self._materials[0])
 
         for material in self._materials:
-            if not isinstance(material, Material):
+            if not isinstance(material, (Material, AnisotropicMaterial)):
                 raise TypeError('All materials must be instances of Material '
-                                'but found {:s}!'.format(type(material).__name__))
+                                'or AnisotropicMaterial but found {:s}!'.format(
+                                    type(material).__name__))
             if self._material_type != type(material):
                 raise TypeError(
                     'All the sample materials must use the same type!'

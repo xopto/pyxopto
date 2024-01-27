@@ -737,15 +737,17 @@ class AnisotropicLayer(mcobject.McObject):
 
     def _set_mua(self, mua: float or np.ndarray):
         if isinstance(mua, (float, int)):
-            self._mua[0, 0] = mua 
-            self._mua[1, 1] = mua 
+            self._mua[0, 0] = mua
+            self._mua[1, 1] = mua
             self._mua[2, 2] = mua
-        elif len(mua) == 3:
-            self._mua[0, 0] = mua[0] 
-            self._mua[1, 1] = mua[1] 
-            self._mua[2, 2] = mua[2] 
         else:
-            self._mua[:] = mua
+            mua = np.asarray(mua, dtype=float)
+            if mua.size == 3:
+                self._mua[0, 0] = mua[0]
+                self._mua[1, 1] = mua[1]
+                self._mua[2, 2] = mua[2]
+            else:
+                self._mua[:] = mua
 
     def _get_mua(self) -> np.ndarray:
         return self._mua
@@ -754,15 +756,17 @@ class AnisotropicLayer(mcobject.McObject):
 
     def _set_mus(self, mus: float or np.ndarray):
         if isinstance(mus, (float, int)):
-            self._mus[0, 0] = mus 
-            self._mus[1, 1] = mus 
+            self._mus[0, 0] = mus
+            self._mus[1, 1] = mus
             self._mus[2, 2] = mus
-        elif len(mus) == 3:
-            self._mus[0, 0] = mus[0] 
-            self._mus[1, 1] = mus[1] 
-            self._mus[2, 2] = mus[2] 
         else:
-            self._mus[:] = mus
+            mus = np.asarray(mus, dtype=float)
+            if mus.size == 3:
+                self._mus[0, 0] = mus[0]
+                self._mus[1, 1] = mus[1]
+                self._mus[2, 2] = mus[2]
+            else:
+                self._mus[:] = mus
     def _get_mus(self) -> np.ndarray:
         return self._mus
     mus = property(_get_mus, _set_mus, None,
