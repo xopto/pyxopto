@@ -27,12 +27,20 @@ Material
 ========
 
 Each voxel of the volume can be assigned a different material. Materials are
-defined as instances of :py:class:`xopto.mcbase.mcmaterial.Material`.
+defined as instances of :py:class:`xopto.mcbase.mcmaterial.Material` or
+:py:class:`xopto.mcbase.mcmaterial.AnisotropicMaterial`.
 The constructor takes several parameters that define the optical properties of
 the material.
 
 1. The refractive index is defined by parameter :code:`n`.
 2. The scattering coefficient is defined by parameter :code:`mus` (m :superscript:`-1`).
+   For isotropic material instances (:py:class:`xopto.mcbase.mcmaterial.Material`) this is
+   a scalar value. For anisotropic material instances
+   (:py:class:`xopto.mcbase.mcmaterial.AnisotropicMaterial`) this is a 3x3 tensor.
+   The scattering coefficient tensor can be initialized from a scalar value
+   (all the diagonal elements are set to this value and the scattering becomes 
+   isotropic) or a vector of three values that are assigned to the diagonal
+   elements of the tensor.
 3. The absorption coefficient is defined by parameter :code:`mua` (m :superscript:`-1`).
 4. The scattering phase function is defined by parameter :code:`pf` that can
    be any instance of :py:class:`xopto.mcbase.mcpf.pfbase.PfBase`.
@@ -49,7 +57,8 @@ with anisotropy 0.9.
     material = mc.mcmaterial.Material(n=1.33, mua=1.0e2, mus=50.0e2, pf=mc.mcpf.Hg(0.9))
 
 All the optical properties of a material that were set
-through the constructor :py:meth:`~xopto.mcbase.mcmaterial.Material`
+through the constructor :py:meth:`~xopto.mcbase.mcmaterial.Material` or
+:py:meth:`~xopto.mcbase.mcmaterial.AnisotropicMaterial`
 can be later changed through accessing the instance properties. In case of
 the scattering phase function, first access the 
 :py:attr:`~xopto.mcbase.mcmaterial.Material.pf` material property
@@ -67,8 +76,15 @@ function from this example exposes only the anisotropy
 
 The individual materials are then combined into a list through
 :py:meth:`~xopto.mcbase.mcmaterial.Materials`. The constructor takes
-a list of :py:class:`~xopto.mcbase.mcmaterial.Material`. The created
+a list of :py:class:`~xopto.mcbase.mcmaterial.Material` or a list of 
+:py:class:`~xopto.mcbase.mcmaterial.AnisotropicMaterial`. The created
 instance manages the transfer of data between the host and the OpenCL device.
+
+.. note::
+    All material instances that are combined into
+    :py:meth:`~xopto.mcbase.mcmaterial.Materials` must be of the
+    same type (:py:class:`~xopto.mcbase.mcmaterial.Material` or
+    :py:class:`~xopto.mcbase.mcmaterial.AnisotropicMaterial`).
 
 .. code-block:: python
 

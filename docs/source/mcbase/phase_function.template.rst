@@ -36,6 +36,12 @@ used scattering phase functions:
 * :py:class:`xopto.mcbase.mcpf.hg.Hg` implements the Henyey-Greenstein
   scattering phase function
 
+* :py:class:`xopto.mcbase.mcpf.hg.Hga` implements the anisotropic
+  Henyey-Greenstein scattering phase function
+
+* :py:class:`xopto.mcbase.mcpf.hg.HgDir` implements the directional
+  Henyey-Greenstein scattering phase function
+
 * :py:class:`xopto.mcbase.mcpf.hg2.Hg2` implements a dual Henyey-Greenstein
   scattering phase function, i.e. a linear combination of two 
   :py:class:`~xopto.mcbase.mcpf.hg.Hg` scattering phase functions where

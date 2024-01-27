@@ -37,14 +37,30 @@ layer stacks can be found in the :py:mod:`xopto.mcml.mclayer.layer` module. The
 module is for convenience also imported into the main simulator module
 :py:mod:`xopto.mcml.mc`.
 
-A layer is an instance of :py:class:`xopto.mcml.mclayer.layer.Layer`. The
-constructor takes several parameters that define the geometry and
+An isotropic layer is an instance of :py:class:`xopto.mcml.mclayer.layer.Layer`
+while an anisotropic layer is an instance of
+:py:class:`xopto.mcml.mclayer.layer.AnisotropicLayer`.
+The constructor takes several parameters that define the geometry and
 optical properties of the layer material.
 
 1. The layer thickness is defined by parameter :code:`d` (m).
 2. The refractive index is defined by parameter :code:`n`.
 3. The scattering coefficient is defined by parameter :code:`mus` (m :superscript:`-1`).
+   For isotropic layer instances (:py:class:`xopto.mcml.mclayer.layer.Layer`) this is
+   a scalar value. For anisotropic layer instances
+   (:py:class:`xopto.mcml.mclayer.layer.AnisotropicLayer`) this is a 3x3 tensor.
+   The scattering coefficient tensor can be initialized from a scalar value
+   (all the diagonal elements are set to this value and the scattering becomes 
+   isotropic) or a vector of three values that are assigned to the diagonal
+   elements of the tensor.
 4. The absorption coefficient is defined by parameter :code:`mua` (m :superscript:`-1`).
+   For isotropic layer instances (:py:class:`xopto.mcml.mclayer.layer.Layer`) this is
+   a scalar value. For anisotropic layer instances
+   (:py:class:`xopto.mcml.mclayer.layer.AnisotropicLayer`) this is a 3x3 tensor.
+   The absorption coefficient tensor can be initialized from a scalar value
+   (all the diagonal elements are set to this value and the absorption becomes 
+   isotropic) or a vector of three values that are assigned to the diagonal
+   elements of the tensor.
 5. The scattering phase function is defined by parameter :code:`pf` that can
    be any instance of :py:class:`xopto.mcbase.mcpf.pfbase.PfBase`.
 
@@ -81,6 +97,11 @@ The individual layers are then combined into a stack through the
 :py:meth:`~xopto.mcml.mclayer.layer.Layers`. The constructor takes a list
 of :py:class:`~xopto.mcml.mclayer.layer.Layer`. The created instance
 manages the transfer of data between the host and the OpenCL device.
+
+.. note::
+    All layer instances that are combined into a layer stack must be of the
+    same type (:py:class:`xopto.mcml.mclayer.layer.Layer` or
+    :py:class:`xopto.mcml.mclayer.layer.AnisotropicLayer`).
 
 .. code-block:: python
 
