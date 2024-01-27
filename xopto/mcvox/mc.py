@@ -89,7 +89,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
             pass
 
     def __init__(self, voxels: mcgeometry.Voxels,
-                 materials: mcmaterial.Materials or List[mcmaterial.Material],
+                 materials: mcmaterial.Materials or List[mcmaterial.Material or mcmaterial.AnisotropicMaterial],
                  source: mcsource.Source,
                  detectors: mcdetector.Detectors = None,
                  trace: mctrace.Trace = None,
@@ -119,7 +119,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
         voxels: mcgeometry.Voxels
             Object representing the voxelized ample volume.
 
-        materials: mcmaterial.Materials or list[mcmaterial.Material]
+        materials: mcmaterial.Materials or list[mcmaterial.Material or mcmaterial.AnisotropicMaterial]
             Object representing sample Materials or a python list of materials.
             The list must contain at least one material. The first material
             in the list represents the medium that surrounds the voxelized
@@ -1180,9 +1180,9 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
 
         # upload the trace data
         trace_len = self.cl_rw_int_allocator.allocations(trace)[0]
-        self.cl_allocation_upload(trace_len, trace.n_to_cl(mc))
+        self.cl_allocation_upload(trace_len, trace.n_to_cl(self))
         trace_data = self.cl_rw_float_allocator.allocations(trace)[0]
-        self.cl_allocation_upload(trace_data, trace.data_to_cl(mc))
+        self.cl_allocation_upload(trace_data, trace.data_to_cl(self))
 
         # limit the maximum number of threads that can be concurrently run on
         # the OpenCL device - limited by the available number of rng seeds
@@ -1291,7 +1291,7 @@ class Mc(mcworker.ClWorkerStandardBufferLutMixin, mcworker.ClWorkerRngMixin,
 
     def _get_materials(self) -> mcmaterial.Materials:
         return self._materials
-    def _set_materials(self, materials: mcmaterial.Materials or List[mcmaterial.Material]):
+    def _set_materials(self, materials: mcmaterial.Materials or List[mcmaterial.Material or mcmaterial.AnisotropicMaterial]):
         self._materials = mcmaterial.Materials(materials)
     materials = property(_get_materials, _set_materials, None, 'Materials.')
 
