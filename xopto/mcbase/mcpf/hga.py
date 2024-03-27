@@ -128,7 +128,7 @@ class Hga(PfBase):
                 self._g[1, 1] = g[1] 
                 self._g[2, 2] = g[2] 
             else:
-                self._g[:] = min(max(g, -1.0), 1.0)
+                self._g[:] = np.clip(g, -1.0, 1.0)
 
     g = property(_get_g, _set_g, None, 'Anisotropy tensor.')
 
